@@ -1,0 +1,20 @@
+syntax: glob
+*.pyc
+*.mat
+*.msh
+*.obj
+*.aux
+*.log
+*.out
+*.pdf
+*.toc
+*.orig
+*.o
+*.dia~
+*.dia.autosave
+.DS_Store
+
+lib/
+bin/
+swig/
+build/
