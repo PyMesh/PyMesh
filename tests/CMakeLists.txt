@@ -20,3 +20,6 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 ADD_EXECUTABLE(example EXCLUDE_FROM_ALL ${SRC_FILES})
 TARGET_LINK_LIBRARIES(example mesh)
 
+# Bundle all target under the name test.
+# To build all tests, just "make tests"
+ADD_CUSTOM_TARGET(tests DEPENDS example)
