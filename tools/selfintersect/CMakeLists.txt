@@ -1,0 +1,82 @@
+SET(CGAL_FLAGS "-frounding-math")
+SET(CMAKE_CXX_FLAGS ${CGAL_FLAGS})
+SET(CMAKE_LIBRARY_PATH /opt/local/lib ${CMAKE_LIBRARY_PATH})
+
+# General lib locations
+LINK_DIRECTORIES(/opt/local/lib)
+
+# Setup IGL
+SET(IGL /Users/qingnanzhou/Research/sources/libigl/)
+INCLUDE_DIRECTORIES(${IGL}/include)
+LINK_DIRECTORIES(${IGL}/lib)
+SET(IGL_LIBRARIES igl iglmatlab)
+
+# Include Eigen
+IF (DEFINED ENV{EIGEN_INC})
+    SET(EIGEN_BASE $ENV{EIGEN_INC}/eigen3)
+ELSE (DEFINED ENV{EIGEN_INC})
+    SET(EIGEN_BASE "/opt/local/include/eigen3")
+ENDIF (DEFINED ENV{EIGEN_INC})
+INCLUDE_DIRECTORIES("/opt/local/include")
+INCLUDE_DIRECTORIES(${EIGEN_BASE})
+INCLUDE_DIRECTORIES(${EIGEN_BASE}/Eigen)
+INCLUDE_DIRECTORIES(${EIGEN_BASE}/unsupported)
+ADD_DEFINITIONS(-DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET)
+
+# Inlclude CGAL
+FIND_PACKAGE(CGAL REQUIRED)
+INCLUDE_DIRECTORIES(${CGAL_INCLUDE_DIRS})
+
+# Include boost
+FIND_PACKAGE(boost REQUIRED)
+INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})
+
+SET(sources 
+    src/SelfIntersectMesh.cpp
+    src/collapse_small_triangles.cpp
+    src/parse_rhs.cpp
+    src/selfintersect.cpp)
+SET(main_cpp selfintersect_main.cpp)
+
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/selfintersect/src)
+
+ADD_LIBRARY(lib_selfintersect ${sources})
+SET_TARGET_PROPERTIES(lib_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")
+TARGET_LINK_LIBRARIES(lib_selfintersect
+    ${CGAL_LIBRARIES} CGAL CGAL_Core
+    ${IGL_LIBRARIES}
+    ${BOOST_LIBRARIES}
+    gmp mpfr boost_thread-mt boost_system-mt)
+
+ADD_EXECUTABLE(exe_selfintersect ${main_cpp})
+SET_TARGET_PROPERTIES(exe_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")
+TARGET_LINK_LIBRARIES(exe_selfintersect lib_selfintersect)
+
+
+set(SWG_FILES PySelfintersect.i)
+
+# Add swig wrapper for the library
+FIND_PACKAGE(SWIG REQUIRED)
+INCLUDE(${SWIG_USE_FILE})
+
+# Find python
+IF ((NOT DEFINED ENV{PYTHON_INCLUDE_PATH}) OR (NOT DEFINED ENV{PYTHON_LIBRARIES}))
+    FIND_PACKAGE(PythonLibs)
+ELSE ((NOT DEFINED ENV{PYTHON_INCLUDE_PATH}) OR (NOT DEFINED ENV{PYTHON_LIBRARIES}))
+    SET(PYTHON_INCLUDE_PATH $ENV{PYTHON_INCLUDE_PATH})
+    SET(PYTHON_LIBRARIES $ENV{PYTHON_LIBRARIES})
+ENDIF ((NOT DEFINED ENV{PYTHON_INCLUDE_PATH}) OR (NOT DEFINED ENV{PYTHON_LIBRARIES}))
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
+
+# Find numpy
+FIND_PACKAGE("NumPy")
+INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
+
+# Add eigen wrapper
+INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
+
+# Generate wrapper for python
+SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
+SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
+SWIG_ADD_MODULE(PySelfintersect python ${SWG_FILES})
+SWIG_LINK_LIBRARIES(PySelfintersect ${PYTHON_LIBRARIES} lib_selfintersect)
