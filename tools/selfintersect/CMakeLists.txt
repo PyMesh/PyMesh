@@ -9,7 +9,7 @@ LINK_DIRECTORIES(/opt/local/lib)
 SET(IGL /Users/qingnanzhou/Research/sources/libigl/)
 INCLUDE_DIRECTORIES(${IGL}/include)
 LINK_DIRECTORIES(${IGL}/lib)
-SET(IGL_LIBRARIES igl iglmatlab)
+ADD_DEFINITIONS(-DIGL_HEADER_ONLY)
 
 # Include Eigen
 IF (DEFINED ENV{EIGEN_INC})
@@ -44,7 +44,6 @@ ADD_LIBRARY(lib_selfintersect ${sources})
 SET_TARGET_PROPERTIES(lib_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")
 TARGET_LINK_LIBRARIES(lib_selfintersect
     ${CGAL_LIBRARIES} CGAL CGAL_Core
-    ${IGL_LIBRARIES}
     ${BOOST_LIBRARIES}
     gmp mpfr boost_thread-mt boost_system-mt)
 
