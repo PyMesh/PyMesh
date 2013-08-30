@@ -30,6 +30,9 @@ LINK_DIRECTORIES(${LIBRARY_OUTPUT_PATH})
 # Include customized FindPackage scripts
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+# Set eigen wrapper path
+SET(EIGEN_WRAPPER_PATH ${PROJECT_SOURCE_DIR}/eigen_wrapper)
+
 # Process code in each subdirectories
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(tools)
