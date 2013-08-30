@@ -50,4 +50,12 @@ void selfintersect_python(
 }
 
 void SelfIntersectionResolver::resolve() {
+    SelfintersectParam params;
+    Eigen::MatrixXi IF;
+    Eigen::MatrixXd vertices;
+    Eigen::MatrixXi faces;
+
+    selfintersect(m_vertices, m_faces, params, vertices, faces, IF);
+    m_vertices = vertices;
+    m_faces = faces;
 }
