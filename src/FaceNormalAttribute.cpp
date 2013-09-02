@@ -23,7 +23,7 @@ void FaceNormalAttribute::compute_from_mesh(Mesh& mesh) {
 
 Vector3F FaceNormalAttribute::compute_triangle_normal(Mesh& mesh, size_t i) {
     VectorI face = mesh.get_face(i);
-    assert(len(face) == 3);
+    assert(face.size() == 3);
 
     Vector3F v[3] = {
         mesh.get_vertex(face[0]),
