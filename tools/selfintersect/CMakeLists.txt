@@ -43,6 +43,7 @@ IF (DEFINED ENV{BOOST_INC})
 ELSE (DEFINED ENV{BOOST_INC})
     FIND_PACKAGE(boost REQUIRED)
     INCLUDE_DIRECTORIES(${BOOST_INCLUDE_DIRS})
+    SET(BOOST_LIBRARIES ${BOOST_LIBRARIES} boost_thread-mt)
 ENDIF (DEFINED ENV{BOOST_INC})
 
 # MPFR
@@ -63,6 +64,7 @@ ADD_LIBRARY(lib_selfintersect SHARED ${sources})
 SET_TARGET_PROPERTIES(lib_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")
 TARGET_LINK_LIBRARIES(lib_selfintersect
     ${CGAL_LIBRARIES} CGAL CGAL_Core
+    ${BOOST_LIBRARIES}
     gmp mpfr)
 
 ADD_EXECUTABLE(exe_selfintersect ${main_cpp})

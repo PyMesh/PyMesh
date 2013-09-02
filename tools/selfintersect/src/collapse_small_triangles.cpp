@@ -21,7 +21,7 @@ void collapse_small_triangles(
   using namespace std;
 
   // Compute bounding box diagonal length
-  double bbd = bounding_box_diagonal(V,F);
+  double bbd = bounding_box_diagonal(V);
   MatrixXd l;
   edge_lengths(V,F,l);
   VectorXd dblA;
