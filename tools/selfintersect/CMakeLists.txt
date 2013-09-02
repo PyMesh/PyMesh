@@ -1,4 +1,4 @@
-SET(CGAL_FLAGS "-frounding-math -fPIC")
+SET(CGAL_FLAGS "-frounding-math")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CGAL_FLAGS}")
 SET(CMAKE_LIBRARY_PATH /opt/local/lib ${CMAKE_LIBRARY_PATH})
 
@@ -59,7 +59,7 @@ SET(main_cpp selfintersect_main.cpp)
 
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/selfintersect/src)
 
-ADD_LIBRARY(lib_selfintersect ${sources})
+ADD_LIBRARY(lib_selfintersect SHARED ${sources})
 SET_TARGET_PROPERTIES(lib_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")
 TARGET_LINK_LIBRARIES(lib_selfintersect
     ${CGAL_LIBRARIES} CGAL CGAL_Core
