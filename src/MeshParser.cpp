@@ -5,6 +5,7 @@
 #include "Exception.h"
 #include "OBJParser.h"
 #include "MSHParser.h"
+#include "STLParser.h"
 #include "IOUtils.h"
 
 using namespace Zhou;
@@ -17,6 +18,8 @@ MeshParser* MeshParser::create_parser(const std::string& filename) {
         parser= new OBJParser();
     } else if (ext == ".msh") {
         parser = new MSHParser();
+    } else if (ext == ".stl") {
+        parser = new STLParser();
     } else {
         std::cerr << "Error: extention (" << ext << ") is not supported"
             << std::endl;
