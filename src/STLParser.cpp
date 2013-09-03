@@ -311,7 +311,6 @@ void STLParser::merge_identical_vertices() {
         vertex_array[count] = &*itr;
         count++;
     }
-    hash_grid->print_hash_efficiency();
 
     count=0;
     size_t v_count=0;
