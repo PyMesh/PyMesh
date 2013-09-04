@@ -21,9 +21,6 @@ FILE(GLOB INC_FILES *.h)
 
 # Add executable and library
 ADD_LIBRARY(Mesh SHARED ${SRC_FILES} ${INC_FILES})
-#TARGET_LINK_LIBRARIES(Mesh ${UMFPACK_LIBRARIES} ${CHOLMOD_LIBRARIES}
-#    ${BLAS_LIBRARIES} ${OTHER_LIBRARIES})
-
 
 
 # Add swig interface files

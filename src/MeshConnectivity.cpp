@@ -157,9 +157,10 @@ void MeshConnectivity::init_vertex_adjacencies(Mesh* mesh) {
 }
 
 void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
-    size_t num_vertices = mesh->get_num_vertices();
-    size_t num_faces = mesh->get_num_faces();
-    size_t num_voxels = mesh->get_num_voxels();
+    const size_t num_vertices = mesh->get_num_vertices();
+    const size_t num_faces = mesh->get_num_faces();
+    const size_t num_voxels = mesh->get_num_voxels();
+    const size_t vertex_per_face = mesh->get_vertex_per_face();
 
     std::vector<IndexSet> neighbor_faces(num_faces);
     std::vector<IndexSet> neighbor_voxels(num_faces);
@@ -168,10 +169,12 @@ void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
         Vector3I face = mesh->get_face(i);
         IndexSet& face_neighbors = neighbor_faces[i];
 
+        assert(face.size() == vertex_per_face);
         std::map<int, int> face_counter;
-        for (size_t j=0; j<face.size(); j++) {
+        for (size_t j=0; j<vertex_per_face; j++) {
             VectorI neighbors = get_vertex_adjacent_faces(face[j]);
-            for (size_t k=0; k<neighbors.size(); k++) {
+            size_t num_neighbors = neighbors.size();
+            for (size_t k=0; k<num_neighbors; k++) {
                 if (face_counter.find(neighbors[k]) == face_counter.end()) {
                     face_counter[neighbors[k]] = 1;
                 } else {
@@ -192,9 +195,10 @@ void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
         IndexSet& face_neighbors = neighbor_voxels[i];
 
         std::map<int, int> voxel_counter;
-        for (size_t j=0; j<face.size(); j++) {
+        for (size_t j=0; j<vertex_per_face; j++) {
             VectorI neighbors = get_vertex_adjacent_voxels(face[j]);
-            for (size_t k=0; k<neighbors.size(); k++) {
+            size_t num_neighbors = neighbors.size();
+            for (size_t k=0; k<num_neighbors; k++) {
                 if (voxel_counter.find(neighbors[k]) == voxel_counter.end()) {
                     voxel_counter[neighbors[k]] = 1;
                 } else {
@@ -224,6 +228,7 @@ void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
     size_t num_vertices = mesh->get_num_vertices();
     size_t num_faces = mesh->get_num_faces();
     size_t num_voxels = mesh->get_num_voxels();
+    size_t vertex_per_voxel = mesh->get_vertex_per_voxel();
 
     std::vector<IndexSet> neighbor_faces(num_voxels);
     std::vector<IndexSet> neighbor_voxels(num_voxels);
@@ -232,10 +237,12 @@ void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
         VectorI voxel = mesh->get_voxel(i);
         IndexSet& voxel_neighbors = neighbor_faces[i];
 
+        assert(voxel.size() == vertex_per_voxel);
         std::map<int, int> face_counter;
-        for (size_t j=0; j<voxel.size(); j++) {
+        for (size_t j=0; j<vertex_per_voxel; j++) {
             VectorI neighbors = get_vertex_adjacent_faces(voxel[j]);
-            for (size_t k=0; k<neighbors.size(); k++) {
+            size_t num_neighbors = neighbors.size();
+            for (size_t k=0; k<num_neighbors; k++) {
                 if (face_counter.find(neighbors[k]) == face_counter.end()) {
                     face_counter[neighbors[k]] = 1;
                 } else {
@@ -256,9 +263,10 @@ void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
         IndexSet& voxel_neighbors = neighbor_voxels[i];
 
         std::map<int, int> voxel_counter;
-        for (size_t j=0; j<voxel.size(); j++) {
+        for (size_t j=0; j<vertex_per_voxel; j++) {
             VectorI neighbors = get_vertex_adjacent_voxels(voxel[j]);
-            for (size_t k=0; k<neighbors.size(); k++) {
+            size_t num_neighbors = neighbors.size();
+            for (size_t k=0; k<num_neighbors; k++) {
                 if (voxel_counter.find(neighbors[k]) == voxel_counter.end()) {
                     voxel_counter[neighbors[k]] = 1;
                 } else {
