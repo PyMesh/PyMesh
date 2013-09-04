@@ -11,6 +11,7 @@
 #include <exception>
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 #ifdef MEX
 #  include <mex.h>
@@ -565,6 +566,7 @@ void SelfIntersectMesh::projected_delaunay(
   CDT_plus_2 & cdt)
 {
   using namespace std;
+  typedef std::vector<Point_3> PointVec;
   // http://www.cgal.org/Manual/3.2/doc_html/cgal_manual/Triangulation_2/Chapter_main.html#Section_2D_Triangulations_Constrained_Plus
   // Plane of triangle A
   Plane_3 P(A.vertex(0),A.vertex(1),A.vertex(2));
@@ -600,6 +602,17 @@ void SelfIntersectMesh::projected_delaunay(
       cdt.insert_constraint(P.to_2d(itri->vertex(0)),P.to_2d(itri->vertex(1)));
       cdt.insert_constraint(P.to_2d(itri->vertex(1)),P.to_2d(itri->vertex(2)));
       cdt.insert_constraint(P.to_2d(itri->vertex(2)),P.to_2d(itri->vertex(0)));
+    } else if (const PointVec* ipvec = CGAL::object_cast<PointVec>(&obj))
+    {
+        // Handle coplanar triangle intersection that is a polygon.
+        for (PointVec::const_iterator itr = ipvec->begin(); itr != ipvec->end(); itr++) {
+            PointVec::const_iterator jtr = itr;
+            jtr++;
+            if (jtr == ipvec->end())
+                jtr=ipvec->begin();
+            const Point_3& p = *itr;
+            cdt.insert_constraint(P.to_2d(*itr), P.to_2d(*jtr));
+        }
     }else
     {
       cerr<<"What the fuck is this object?!"<<endl;
