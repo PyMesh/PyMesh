@@ -29,3 +29,10 @@ class RuntimeError : public PyMeshException {
             PyMeshException(description) {}
         virtual ~RuntimeError() throw() {}
 };
+
+class NotImplementedError : public PyMeshException {
+    public:
+        NotImplementedError(const std::string& description) :
+            PyMeshException(description) {}
+        virtual ~NotImplementedError() throw() {}
+};
