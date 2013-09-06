@@ -171,10 +171,7 @@ SelfIntersectMesh::SelfIntersectMesh(
             const Point_3 pi(V(i,0), V(i,1), V(i,2));
             const Point_3 pj(V(j,0), V(j,1), V(j,2));
             // Skip if vit_point_3 is not on the edge (pi, pj)
-            if (cross_product(pi - vit_point_3, pj - vit_point_3)
-                .squared_length() != 0) {
-                continue;
-            }
+            if (!collinear(vit_point_3, pi, pj)) continue;
             // Be sure that i<j
             if(i>j)
             {
@@ -512,6 +509,8 @@ bool SelfIntersectMesh::double_shared_vertex(
         }
         count_intersection(fa, fb);
         return true;
+    } else if (const Segment_3* seg = CGAL::object_cast<Segment_3>(&result_1)){
+        std::cerr << "One of the triangles must be degenerated." << std::endl;
     }
     if (const Point_3* p = CGAL::object_cast<Point_3>(&result_2)) {
         if (!params.detect_only) {
@@ -522,6 +521,8 @@ bool SelfIntersectMesh::double_shared_vertex(
         }
         count_intersection(fa, fb);
         return true;
+    } else if (const Segment_3* seg = CGAL::object_cast<Segment_3>(&result_2)){
+        std::cerr << "One of the triangles must be degenerated." << std::endl;
     }
     return false;
 }
