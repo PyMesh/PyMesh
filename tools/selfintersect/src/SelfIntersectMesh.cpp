@@ -168,6 +168,13 @@ SelfIntersectMesh::SelfIntersectMesh(
             // Index of F's eth edge in V
             int i = F(f,(e+1)%3);
             int j = F(f,(e+2)%3);
+            const Point_3 pi(V(i,0), V(i,1), V(i,2));
+            const Point_3 pj(V(j,0), V(j,1), V(j,2));
+            // Skip if vit_point_3 is not on the edge (pi, pj)
+            if (cross_product(pi - vit_point_3, pj - vit_point_3)
+                .squared_length() != 0) {
+                continue;
+            }
             // Be sure that i<j
             if(i>j)
             {
@@ -588,7 +595,7 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
     double_shared_vertex(A,B,fa,fb,
             va[0],vb[0], va[1], vb[1]);
   }
-  assert(total_shared_vertices<=1);
+  //assert(total_shared_vertices<=1);
   if(total_shared_vertices==1)
   {
     //assert(va>=0 && va<3);
