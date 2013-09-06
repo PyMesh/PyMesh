@@ -405,11 +405,15 @@ bool SelfIntersectMesh::single_shared_vertex(
   //  // And point must be at shared vertex
   //  assert(CGAL::object_cast<Point_3>(&result));
   //}
-  if(single_shared_vertex(A,B,fa,fb,va))
-  {
-    return true;
-  }
-  return single_shared_vertex(B,A,fb,fa,vb);
+  //
+  //if(single_shared_vertex(A,B,fa,fb,va))
+  //{
+  //  return true;
+  //}
+  //return single_shared_vertex(B,A,fb,fa,vb);
+  bool r1 = single_shared_vertex(A,B,fa,fb,va);
+  bool r2 = single_shared_vertex(B,A,fb,fa,vb);
+  return r1 || r2;
 }
 
 bool SelfIntersectMesh::single_shared_vertex(
@@ -457,6 +461,64 @@ bool SelfIntersectMesh::single_shared_vertex(
   return false;
 }
 
+bool SelfIntersectMesh::double_shared_vertex(
+        const Triangle_3 & A,
+        const Triangle_3 & B,
+        const int fa,
+        const int fb,
+        const int va1,
+        const int vb1,
+        const int va2,
+        const int vb2
+        ) {
+    int va3=-1;
+    int vb3=-1;
+    for (int i=0; i<3; i++) {
+        if (i != va1 && i != va2)
+            va3 = i;
+        if (i != vb1 && i != vb2)
+            vb3 = i;
+    }
+
+    Segment_3 ea_13(A.vertex(va1), A.vertex(va3));
+    Segment_3 ea_23(A.vertex(va2), A.vertex(va3));
+    Segment_3 eb_13(B.vertex(vb1), B.vertex(vb3));
+    Segment_3 eb_23(B.vertex(vb2), B.vertex(vb3));
+    CGAL::Object result_1 = CGAL::intersection(ea_13, eb_23);
+    CGAL::Object result_2 = CGAL::intersection(ea_23, eb_13);
+    CGAL::Object result_3 = CGAL::intersection(ea_13, eb_13);
+    CGAL::Object result_4 = CGAL::intersection(ea_23, eb_23);
+
+    if (const Segment_3* seg = CGAL::object_cast<Segment_3>(&result_3)) {
+        std::cerr << "oh crap!!" << std::endl;
+    }
+    if (const Segment_3* seg = CGAL::object_cast<Segment_3>(&result_4)) {
+        std::cerr << "oh crap!" << std::endl;
+    }
+
+    if (const Point_3* p = CGAL::object_cast<Point_3>(&result_1)) {
+        if (!params.detect_only) {
+            CGAL::Object tri = CGAL::make_object(
+                    Triangle_3(A.vertex(va1), A.vertex(va2), *p));
+            F_objects[fa].push_back(tri);
+            F_objects[fb].push_back(tri);
+        }
+        count_intersection(fa, fb);
+        return true;
+    }
+    if (const Point_3* p = CGAL::object_cast<Point_3>(&result_2)) {
+        if (!params.detect_only) {
+            CGAL::Object tri = CGAL::make_object(
+                    Triangle_3(A.vertex(va1), A.vertex(va2), *p));
+            F_objects[fa].push_back(tri);
+            F_objects[fb].push_back(tri);
+        }
+        count_intersection(fa, fb);
+        return true;
+    }
+    return false;
+}
+
 void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
 {
   using namespace std;
@@ -467,6 +529,10 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
   const Triangle_3 & B = *b.handle();
   // I'm not going to deal with degenerate triangles, though at some point we
   // should
+  if (a.handle()->is_degenerate() || b.handle()->is_degenerate()) {
+      cerr << "degenerated triangle" << std::endl;
+      return;
+  }
   assert(!a.handle()->is_degenerate());
   assert(!b.handle()->is_degenerate());
   // Number of combinatorially shared vertices
@@ -476,7 +542,9 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
   int geo_shared_vertices = 0;
   // Keep track of shared vertex indices (we only handles single shared
   // vertices as a special case, so just need last/first/only ones)
-  int va=-1,vb=-1;
+  int va[3] = {-1, -1, -1};
+  int vb[3] = {-1, -1, -1};
+  size_t share_count=0;
   int ea,eb;
   for(ea=0;ea<3;ea++)
   {
@@ -485,13 +553,15 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
       if(F(fa,ea) == F(fb,eb))
       {
         comb_shared_vertices++;
-        va = ea;
-        vb = eb;
+        va[share_count] = ea;
+        vb[share_count] = eb;
+        share_count++;
       }else if(A.vertex(ea) == B.vertex(eb))
       {
         geo_shared_vertices++;
-        va = ea;
-        vb = eb;
+        va[share_count] = ea;
+        vb[share_count] = eb;
+        share_count++;
       }
     }
   }
@@ -511,17 +581,25 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
   if(total_shared_vertices == 2)
   {
     // Single shared edge --> no intersection
-    goto done;
+    assert(va[0] >= 0 && va[0] < 3);
+    assert(vb[0] >= 0 && vb[0] < 3);
+    assert(va[1] >= 0 && va[1] < 3);
+    assert(vb[1] >= 0 && vb[1] < 3);
+    double_shared_vertex(A,B,fa,fb,
+            va[0],vb[0], va[1], vb[1]);
   }
   assert(total_shared_vertices<=1);
   if(total_shared_vertices==1)
   {
-    assert(va>=0 && va<3);
-    assert(vb>=0 && vb<3);
+    //assert(va>=0 && va<3);
+    //assert(vb>=0 && vb<3);
 //#ifndef NDEBUG
 //    CGAL::Object result =
 //#endif
-    single_shared_vertex(A,B,fa,fb,va,vb);
+    assert(va[0] >= 0 && va[0] < 3);
+    assert(vb[0] >= 0 && vb[0] < 3);
+    single_shared_vertex(A,B,fa,fb,va[0],vb[0]);
+    //single_shared_vertex(A,B,fa,fb,va,vb);
 //#ifndef NDEBUG
 //    if(!CGAL::object_cast<Segment_3 >(&result))
 //    {

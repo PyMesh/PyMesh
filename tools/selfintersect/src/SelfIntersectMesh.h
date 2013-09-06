@@ -111,6 +111,16 @@ class SelfIntersectMesh
         const int fb,
         const int va);
 
+    bool double_shared_vertex(
+            const Triangle_3 & A,
+            const Triangle_3 & B,
+            const int fa,
+            const int fb,
+            const int va1,
+            const int vb1,
+            const int va2,
+            const int vb2);
+
   public:
     // Callback function called during box self intersections test. Means boxes
     // a and b intersect. This method then checks if the triangles in each box
