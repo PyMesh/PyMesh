@@ -7,3 +7,4 @@
 %include MeshFactory.i
 %include MeshWriter.i
 %include OBJWriter.i
+%include HashGrid.i

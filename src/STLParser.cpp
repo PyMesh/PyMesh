@@ -317,7 +317,7 @@ void STLParser::merge_identical_vertices() {
     for (VertexList::iterator itr = m_vertices.begin();
             itr != m_vertices.end(); itr++) {
         if (index_map[count] == -1) {
-            const VertexSet* nearby_vts = hash_grid->get(*itr);
+            const VertexSet* nearby_vts = hash_grid->get_items(*itr);
             assert(nearby_vts != NULL);
             for (VertexSet::const_iterator jtr = nearby_vts->begin();
                     jtr != nearby_vts->end(); jtr++) {

@@ -63,12 +63,28 @@ bool HashGrid::occupied(int obj_id, const Vector3F& coordinates) const {
 	return i!=itr->second.end();
 }
 
-const HashGrid::HashItem* HashGrid::get(const Vector3F& coordinates) {
+const HashGrid::HashItem* HashGrid::get_items(const Vector3F& coordinates) {
     HashKey key = convert_to_key(coordinates);
     HashMap::const_iterator itr = m_hashMap.find(key);
     if (itr == m_hashMap.end()) return NULL;
 
     return &(itr->second);
+}
+
+VectorI HashGrid::get_items_as_array(const Vector3F& coordinates) {
+    const HashGrid::HashItem* item = get_items(coordinates);
+    VectorI result;
+    assert(result.size() == 0);
+    if (item == NULL) return result;
+
+    result.resize(item->size());
+    size_t count=0;
+    for (HashGrid::HashItem::const_iterator itr = item->begin();
+            itr != item->end(); itr++) {
+        result[count] = *itr;
+        count++;
+    }
+    return result;
 }
 
 HashGrid::HashKey HashGrid::convert_to_key(const Vector3F& value) const {

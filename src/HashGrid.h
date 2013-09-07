@@ -55,7 +55,8 @@ class HashGrid {
 
         size_t bucket_count() const { return m_hashMap.bucket_count(); }
         size_t size() const { return m_hashMap.size(); }
-        const HashItem* get(const Vector3F& cooridnates);
+        const HashItem* get_items(const Vector3F& coordinates);
+        VectorI get_items_as_array(const Vector3F& coordinates);
         void print_hash_efficiency() const;
 
     private:
