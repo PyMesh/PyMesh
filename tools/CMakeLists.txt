@@ -35,4 +35,8 @@ INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 
 ADD_SUBDIRECTORY(selfintersect)
+ADD_SUBDIRECTORY(windingnumber)
 ADD_SUBDIRECTORY(MeshUtils)
+
+# Bundle all tools together
+ADD_CUSTOM_TARGET(tools DEPENDS  windingnumber selfintersect MeshUtils)
