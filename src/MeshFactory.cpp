@@ -29,6 +29,18 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
     return *this;
 }
 
+MeshFactory& MeshFactory::load_data(VectorF& vertices, VectorI& faces, VectorI& voxels,
+        size_t num_vertex_per_face, size_t num_vertex_per_voxel) {
+    m_mesh->set_geometry(Mesh::GeometryPtr(new MeshGeometry()));
+    Mesh::GeometryPtr geometry = m_mesh->get_geometry();
+    geometry->get_vertices() = vertices;
+    geometry->get_faces() = faces;
+    geometry->get_voxels() = voxels;
+    geometry->set_vertex_per_face(num_vertex_per_face);
+    geometry->set_vertex_per_voxel(num_vertex_per_voxel);
+    return *this;
+}
+
 MeshFactory& MeshFactory::with_connectivity() {
     Mesh::ConnectivityPtr connectivity(new MeshConnectivity());
     connectivity->initialize(m_mesh);
