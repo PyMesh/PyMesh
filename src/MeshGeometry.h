@@ -15,10 +15,13 @@ class MeshGeometry {
 
     public:
         VectorF& get_vertices() { return m_vertices; }
+        void set_vertices(const VectorF& vertices)  { m_vertices = vertices; }
 
         VectorI& get_faces() { return m_faces; }
+        void set_faces(const VectorI& faces) { m_faces = faces; }
 
         VectorI& get_voxels() { return m_voxels; }
+        void set_voxels(const VectorI& voxels) { m_voxels = voxels; }
 
         int get_vertex_per_face() const { return m_vertex_per_face; }
         void set_vertex_per_face(int v) { m_vertex_per_face = v; }
