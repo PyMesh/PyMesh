@@ -1,15 +1,18 @@
 #include "MSHParser.h"
 
 #include <map>
+#include <vector>
+#include <iostream>
 
 #include "MshLoader.h"
 #include "Triplet.h"
+#include "Exception.h"
 
 using namespace Zhou;
 
 bool MSHParser::parse(const std::string& filename) {
     m_loader = LoaderPtr(new MshLoader(filename));
-    extract_surface_from_volume();
+    extract_faces_and_voxels();
     return true;
 }
 
@@ -19,12 +22,11 @@ size_t MSHParser::num_vertices() const {
 }
 
 size_t MSHParser::num_faces() const {
-    return m_faces.size();
+    return m_faces.size() / 3;
 }
 
 size_t MSHParser::num_voxels() const {
-    const VectorI& voxels = m_loader->get_elements();
-    return voxels.size() / m_loader->get_nodes_per_element();
+    return m_voxels.size() / 4;
 }
 
 size_t MSHParser::num_attributes() const {
@@ -53,17 +55,12 @@ void MSHParser::export_vertices(Float* buffer) {
 }
 
 void MSHParser::export_faces(int* buffer) {
-    size_t counter = 0;
-    size_t face_degree = vertex_per_face();
-    for (FaceList::const_iterator itr = m_faces.begin();
-            itr != m_faces.end(); itr++) {
-        std::copy(itr->data(), itr->data() + face_degree, &buffer[counter]);
-        counter += face_degree;
-    }
+    const VectorI& faces = m_faces;
+    std::copy(faces.data(), faces.data() + faces.size(), buffer);
 }
 
 void MSHParser::export_voxels(int* buffer) {
-    const VectorI& voxels = m_loader->get_elements();
+    const VectorI& voxels = m_voxels;
     std::copy(voxels.data(), voxels.data() + voxels.size(), buffer);
 }
 
@@ -72,8 +69,9 @@ void MSHParser::export_attribute(const std::string& name, Float* buffer) {
     std::copy(attribute.data(), attribute.data() + attribute.size(), buffer);
 }
 
+// TODO: only tet mesh supported so far
 size_t MSHParser::vertex_per_voxel() const {
-    return m_loader->get_nodes_per_element();
+    return 4;
 }
 
 // TODO: only triangle mesh supported so far
@@ -81,8 +79,23 @@ size_t MSHParser::vertex_per_face() const {
     return 3;
 }
 
+void MSHParser::extract_faces_and_voxels() {
+    size_t nodes_per_element = m_loader->get_nodes_per_element();
+    if (nodes_per_element == 3) {
+        std::cout << "surface" << std::endl;
+        m_faces = m_loader->get_elements();
+        std::cout << m_faces << std::endl;
+    } else if (nodes_per_element == 4) {
+        std::cout << "volume" << std::endl;
+        m_voxels = m_loader->get_elements();
+        extract_surface_from_volume();
+    } else {
+        throw NotImplementedError("Only triangle and tet mesh is supported.");
+    }
+}
+
 void MSHParser::extract_surface_from_volume() {
-    const VectorI& voxels = m_loader->get_elements();
+    const VectorI& voxels = m_voxels;
     size_t num_vertex_per_voxel = vertex_per_voxel();
     typedef std::map<Triplet, int> FaceCounter;
     FaceCounter face_counter;
@@ -107,13 +120,20 @@ void MSHParser::extract_surface_from_volume() {
         }
     }
 
+    std::vector<int> vertex_buffer;
     for (FaceCounter::const_iterator itr = face_counter.begin();
             itr!=face_counter.end(); itr++) {
         assert(itr->second == 1 or itr->second == 2);
         if (itr->second == 1) {
-            m_faces.push_back(itr->first.get_ori_data());
+            const Vector3I& f = itr->first.get_ori_data();
+            vertex_buffer.push_back(f[0]);
+            vertex_buffer.push_back(f[1]);
+            vertex_buffer.push_back(f[2]);
         }
     }
+
+    m_faces.resize(vertex_buffer.size());
+    std::copy(vertex_buffer.begin(), vertex_buffer.end(), m_faces.data());
 }
 
 const VectorF& MSHParser::get_attribute(const std::string& name) const {
