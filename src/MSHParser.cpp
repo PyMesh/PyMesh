@@ -2,7 +2,6 @@
 
 #include <map>
 #include <vector>
-#include <iostream>
 
 #include "MshLoader.h"
 #include "Triplet.h"
@@ -82,11 +81,8 @@ size_t MSHParser::vertex_per_face() const {
 void MSHParser::extract_faces_and_voxels() {
     size_t nodes_per_element = m_loader->get_nodes_per_element();
     if (nodes_per_element == 3) {
-        std::cout << "surface" << std::endl;
         m_faces = m_loader->get_elements();
-        std::cout << m_faces << std::endl;
     } else if (nodes_per_element == 4) {
-        std::cout << "volume" << std::endl;
         m_voxels = m_loader->get_elements();
         extract_surface_from_volume();
     } else {
