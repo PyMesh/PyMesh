@@ -1,4 +1,7 @@
 #include "WindingNumber.h"
+
+#include <cmath>
+
 #include "AABB.h"
 #include "BoundingTree.h"
 #include "winding_number.h"
@@ -13,7 +16,7 @@ VectorF WindingNumber::compute(const MatrixF& V, const MatrixI& F, const MatrixF
     VectorF result(num_points);
     for (size_t i=0; i<num_points; i++) {
         const Vector3F& p = P.row(i);
-        result[i] = hier.winding_number(p);
+        result[i] = hier.winding_number(p) / (4 * M_PI);
     }
     return result;
 }
