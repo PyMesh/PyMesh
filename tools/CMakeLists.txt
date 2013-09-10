@@ -16,7 +16,8 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
 
 # Add swig wrapper for the library
 FIND_PACKAGE(SWIG REQUIRED)
-INCLUDE(${SWIG_USE_FILE})
+#INCLUDE(${SWIG_USE_FILE})
+INCLUDE(UseSWIG)
 
 # Find python
 IF ((NOT DEFINED ENV{PYTHON_INCLUDE_PATH}) OR (NOT DEFINED ENV{PYTHON_LIBRARIES}))
@@ -37,6 +38,7 @@ INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 ADD_SUBDIRECTORY(selfintersect)
 ADD_SUBDIRECTORY(windingnumber)
 ADD_SUBDIRECTORY(MeshUtils)
+ADD_SUBDIRECTORY(tetgen)
 
 # Bundle all tools together
-ADD_CUSTOM_TARGET(tools DEPENDS  windingnumber selfintersect MeshUtils)
+ADD_CUSTOM_TARGET(tools DEPENDS  windingnumber selfintersect MeshUtils tetgen)
