@@ -1,6 +1,5 @@
 SET(CGAL_FLAGS "-frounding-math")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CGAL_FLAGS}")
-#SET(CMAKE_LIBRARY_PATH /opt/local/lib ${CMAKE_LIBRARY_PATH})
 
 # General lib locations
 LINK_DIRECTORIES(/opt/local/lib)

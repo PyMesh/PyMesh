@@ -17,12 +17,14 @@ Vector3F Mesh::get_vertex(size_t i) {
     return get_vertices().segment<3>(i*3);
 }
 
-Vector3I Mesh::get_face(size_t i) {
-    return get_faces().segment<3>(i*3);
+VectorI Mesh::get_face(size_t i) {
+    size_t stride = get_vertex_per_face();
+    return get_faces().segment(i*stride, stride);
 }
 
 VectorI Mesh::get_voxel(size_t i) {
-    return get_voxels().segment(i, get_vertex_per_voxel());
+    size_t stride = get_vertex_per_voxel();
+    return get_voxels().segment(i*stride, stride);
 }
 
 VectorF& Mesh::get_vertices() {

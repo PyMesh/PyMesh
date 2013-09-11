@@ -62,7 +62,7 @@ class Mesh {
         }
 
         Vector3F get_vertex(size_t i);
-        Vector3I get_face(size_t i);
+        VectorI get_face(size_t i);
         VectorI  get_voxel(size_t i);
 
         VectorF& get_vertices();

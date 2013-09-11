@@ -105,7 +105,8 @@ void MeshConnectivity::init_vertex_adjacencies(Mesh* mesh) {
 
 
     for (size_t i=0; i<num_faces; i++) {
-        Vector3I face = mesh->get_face(i);
+        VectorI face = mesh->get_face(i);
+        assert(face.size() == 3);
         neighbor_vertices[face[0]].insert(face[1]);
         neighbor_vertices[face[0]].insert(face[2]);
         neighbor_vertices[face[1]].insert(face[0]);
@@ -120,6 +121,7 @@ void MeshConnectivity::init_vertex_adjacencies(Mesh* mesh) {
 
     for (size_t i=0; i<num_voxels; i++) {
         VectorI voxel = mesh->get_voxel(i);
+        assert(voxel.size() == 4);
         neighbor_vertices[voxel[0]].insert(voxel[1]);
         neighbor_vertices[voxel[0]].insert(voxel[2]);
         neighbor_vertices[voxel[0]].insert(voxel[3]);
@@ -166,7 +168,7 @@ void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
     std::vector<IndexSet> neighbor_voxels(num_faces);
 
     for (size_t i=0; i<num_faces; i++) {
-        Vector3I face = mesh->get_face(i);
+        VectorI face = mesh->get_face(i);
         IndexSet& face_neighbors = neighbor_faces[i];
 
         assert(face.size() == vertex_per_face);
@@ -191,7 +193,7 @@ void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
     }
 
     for (size_t i=0; i<num_faces; i++) {
-        Vector3I face = mesh->get_face(i);
+        VectorI face = mesh->get_face(i);
         IndexSet& face_neighbors = neighbor_voxels[i];
 
         std::map<int, int> voxel_counter;

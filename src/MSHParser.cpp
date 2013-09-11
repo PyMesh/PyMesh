@@ -101,6 +101,7 @@ void MSHParser::extract_surface_from_volume() {
         // TODO: only tet mesh is handled.
         // Note that the order of vertices below are predefined by MSH format,
         // each face should have normal pointing outward.
+        assert(voxel.size() == 4);
         Triplet voxel_faces[4] = {
             Triplet(voxel[0], voxel[2], voxel[1]),
             Triplet(voxel[0], voxel[1], voxel[3]),
@@ -121,7 +122,9 @@ void MSHParser::extract_surface_from_volume() {
             itr!=face_counter.end(); itr++) {
         assert(itr->second == 1 or itr->second == 2);
         if (itr->second == 1) {
-            const Vector3I& f = itr->first.get_ori_data();
+            const VectorI& f = itr->first.get_ori_data();
+            // TODO: only triangles is handled.
+            assert(f.size() == 3);
             vertex_buffer.push_back(f[0]);
             vertex_buffer.push_back(f[1]);
             vertex_buffer.push_back(f[2]);
