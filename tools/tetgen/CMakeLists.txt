@@ -13,7 +13,7 @@ SET(SRC_FILES tetgen_wrapper.cpp)
 SET(INC_FILES tetgen_wrapper.h)
 SET(MAIN_FILE main.cpp)
 
-ADD_LIBRARY(tetgen_wrapper ${SRC_FILES} ${INC_FILES})
+ADD_LIBRARY(tetgen_wrapper SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(tetgen_wrapper Mesh tet)
 
 ADD_EXECUTABLE(tetgen_test ${MAIN_FILE})

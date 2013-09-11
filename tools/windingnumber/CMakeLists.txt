@@ -2,7 +2,11 @@
 LINK_DIRECTORIES(/opt/local/lib)
 
 # Setup IGL
-SET(IGL /Users/qingnanzhou/Research/sources/libigl/)
+IF (DEFINED ENV{LIBIGL_PATH})
+    SET(IGL $ENV{LIBIGL_PATH})
+ELSE (DEFINED ENV{LIBIGL_PATH})
+    SET(IGL "/opt/local/")
+ENDIF (DEFINED ENV{LIBIGL_PATH})
 INCLUDE_DIRECTORIES(${IGL}/include)
 LINK_DIRECTORIES(${IGL}/lib)
 ADD_DEFINITIONS(-DIGL_HEADER_ONLY)
@@ -40,7 +44,7 @@ SET(SRC_FILES
 SET(MAIN_FILE main.cpp)
 
 
-ADD_LIBRARY(lib_windingnumber ${SRC_FILES})
+ADD_LIBRARY(lib_windingnumber SHARED ${SRC_FILES})
 SET_TARGET_PROPERTIES(lib_windingnumber PROPERTIES OUTPUT_NAME "windingnumber")
 
 ADD_EXECUTABLE(exe_windingnumber ${MAIN_FILE})
