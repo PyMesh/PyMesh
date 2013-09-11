@@ -1,3 +1,4 @@
+#pragma once
 #include "BoundingTree.h"
 
 enum SplitMethod
