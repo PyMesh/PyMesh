@@ -1,7 +1,3 @@
-# Set compiler
-SET(CMAKE_C_COMPILER "gcc")
-SET(CMAKE_CXX_COMPILER "g++")
-
 # Include directories to search for source.
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 
