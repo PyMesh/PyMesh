@@ -2,6 +2,7 @@
 #include "SelfIntersectMesh.h"
 #include <igl/C_STR.h>
 #include <list>
+#include <iostream>
 
 #ifdef MEX
 #  include <mex.h>
@@ -51,11 +52,36 @@ void selfintersect_python(
 
 void SelfIntersectionResolver::resolve() {
     SelfintersectParam params;
-    Eigen::MatrixXi IF;
     Eigen::MatrixXd vertices;
     Eigen::MatrixXi faces;
 
-    selfintersect(m_vertices, m_faces, params, vertices, faces, IF);
+    SelfIntersectMesh SIM = SelfIntersectMesh(
+            m_vertices, m_faces, params, vertices, faces);
+
+    typedef std::list<int> FaceIdxList;
+    const FaceIdxList& lIF = SIM.get_lIF();
+    assert(lIF.size()%2 == 0);
+
+    Eigen::MatrixXi& IF = m_intersecting_faces;
+    IF.resize(lIF.size()/2,2);
+
+    size_t count=0;
+    for (FaceIdxList::const_iterator itr = lIF.begin();
+            itr != lIF.end(); itr++) {
+        IF(count/2, count%2) = *itr;
+        count++;
+    }
+
+
     m_vertices = vertices;
     m_faces = faces;
+
+    size_t cur_num_faces = m_faces.rows();
+    size_t num_new_faces = SIM.get_number_of_new_faces();
+    assert(cur_num_faces >= num_new_faces);
+    size_t base_count = cur_num_faces - num_new_faces;
+    m_new_face_idx.resize(num_new_faces);
+    for (size_t i=0; i<num_new_faces; i++) {
+        m_new_face_idx[i] = base_count + i;
+    }
 }

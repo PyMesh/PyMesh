@@ -70,6 +70,7 @@ SelfIntersectMesh::SelfIntersectMesh(
   offensive(F.rows(),false),
   offending_index(F.rows(),-1),
   offending(),
+  num_new_faces(0),
   edge2faces(),
   params(params)
 {
@@ -248,6 +249,7 @@ SelfIntersectMesh::SelfIntersectMesh(
   }
 #endif
   // Append faces
+  num_new_faces = NF_count;
   FF.resize(F.rows()-offending.size()+NF_count,3);
   // First append non-offending original faces
   // There's an Eigen way to do this in one line but I forget
@@ -597,7 +599,7 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
             va[0],vb[0], va[1], vb[1]);
   }
   //assert(total_shared_vertices<=1);
-  if(total_shared_vertices==1)
+  else if(total_shared_vertices==1)
   {
     //assert(va>=0 && va<3);
     //assert(vb>=0 && vb<3);

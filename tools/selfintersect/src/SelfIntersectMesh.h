@@ -25,6 +25,7 @@ class SelfIntersectMesh
     std::vector<bool> offensive;
     std::vector<int> offending_index;
     std::vector<int> offending;
+    size_t num_new_faces;
     // Make a short name for the edge map's key
     typedef std::pair<int,int> EMK;
     // Make a short name for the type stored at each edge, the edge map's value
@@ -149,5 +150,6 @@ class SelfIntersectMesh
     // Getters:
   public:
     const std::list<int>& get_lIF() const{ return lIF;}
+    size_t get_number_of_new_faces() const { return num_new_faces; }
 };
 #endif

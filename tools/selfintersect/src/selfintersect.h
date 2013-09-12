@@ -52,10 +52,18 @@ class SelfIntersectionResolver {
         void resolve();
         Eigen::MatrixXd get_vertices() { return m_vertices; }
         Eigen::MatrixXi get_faces() { return m_faces; }
+        Eigen::MatrixXi get_intersecting_faces() {
+            return m_intersecting_faces;
+        }
+        Eigen::MatrixXi get_new_face_indices() {
+            return m_new_face_idx;
+        }
 
     private:
         Eigen::MatrixXd m_vertices;
         Eigen::MatrixXi m_faces;
+        Eigen::MatrixXi m_intersecting_faces;
+        Eigen::VectorXi m_new_face_idx;
 };
 
 #endif
