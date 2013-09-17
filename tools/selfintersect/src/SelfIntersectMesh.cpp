@@ -7,6 +7,8 @@
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 
+#include <CGAL/centroid.h>
+
 #include <algorithm>
 #include <exception>
 #include <cassert>
@@ -693,13 +695,14 @@ void SelfIntersectMesh::projected_delaunay(
     } else if (const PointVec* ipvec = CGAL::object_cast<PointVec>(&obj))
     {
         // Handle coplanar triangle intersection that is a polygon.
+        Point_3 centroid = CGAL::centroid(ipvec->begin(), ipvec->end());
         for (PointVec::const_iterator itr = ipvec->begin(); itr != ipvec->end(); itr++) {
             PointVec::const_iterator jtr = itr;
             jtr++;
             if (jtr == ipvec->end())
                 jtr=ipvec->begin();
-            const Point_3& p = *itr;
             cdt.insert_constraint(P.to_2d(*itr), P.to_2d(*jtr));
+            cdt.insert_constraint(P.to_2d(*itr), P.to_2d(centroid));
         }
     }else
     {
