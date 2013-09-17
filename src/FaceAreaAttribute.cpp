@@ -3,6 +3,7 @@
 #include <cassert>
 #include <iostream>
 #include "Mesh.h"
+#include "Exception.h"
 
 void FaceAreaAttribute::compute_from_mesh(Mesh& mesh) {
     size_t num_faces = mesh.get_num_faces();
@@ -17,6 +18,7 @@ void FaceAreaAttribute::compute_from_mesh(Mesh& mesh) {
         }
     } else {
         std::cerr << "Face with " << num_vertex_per_face << " is not supported yet." << std::endl;
+        throw NotImplementedError("Only triangle faces are supported.");
         return;
     }
 }
