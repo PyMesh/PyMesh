@@ -104,6 +104,14 @@ class SelfIntersectMesh
         const int fb,
         const int va,
         const int vb);
+
+    bool single_shared_vertex_old(
+        const Triangle_3 & A,
+        const Triangle_3 & B,
+        const int fa,
+        const int fb,
+        const int va,
+        const int vb);
     // Helper handling one direction
     bool single_shared_vertex(
         const Triangle_3 & A,
@@ -113,6 +121,16 @@ class SelfIntersectMesh
         const int va);
 
     bool double_shared_vertex(
+            const Triangle_3 & A,
+            const Triangle_3 & B,
+            const int fa,
+            const int fb,
+            const int va1,
+            const int vb1,
+            const int va2,
+            const int vb2);
+
+    bool double_shared_vertex_old(
             const Triangle_3 & A,
             const Triangle_3 & B,
             const int fa,

@@ -15,6 +15,9 @@
 #include <iostream>
 #include <vector>
 
+#include "TriangleIntersection.h"
+#include "SelfIntersection.h"
+
 #ifdef MEX
 #  include <mex.h>
 #  undef assert
@@ -80,6 +83,7 @@ SelfIntersectMesh::SelfIntersectMesh(
   using namespace Eigen;
   // Compute and process self intersections
   mesh_to_triangles(V,F,T);
+  Triangles result_T;
   // http://www.cgal.org/Manual/latest/doc_html/cgal_manual/Box_intersection_d/Chapter_main.html#Section_63.5 
   // Create the corresponding vector of bounding boxes
   std::vector<Box> boxes;
@@ -231,6 +235,12 @@ SelfIntersectMesh::SelfIntersectMesh(
         fit != cdt[o].finite_faces_end();
         ++fit)
       {
+        Triangle_3 tri(
+                P[o].to_3d(fit->vertex(0)->point()),
+                P[o].to_3d(fit->vertex(1)->point()),
+                P[o].to_3d(fit->vertex(2)->point()));
+        result_T.push_back(tri);
+        assert(!tri.is_degenerate());
         NF[o](i,0) = v2i[fit->vertex(0)];
         NF[o](i,1) = v2i[fit->vertex(1)];
         NF[o](i,2) = v2i[fit->vertex(2)];
@@ -292,6 +302,42 @@ SelfIntersectMesh::SelfIntersectMesh(
       i++;
     }
   }
+
+#ifndef NDEBUG
+  SelfIntersection validator(V, F);
+  validator.set_mesh(result_T);
+  bool no_self_intersection = validator.validate();
+  if (!no_self_intersection) {
+      std::cerr << "not all selfintersections are resolved..." << std::endl;
+      std::vector<Triangle_3> triangles;
+      for (Triangles::iterator itr=result_T.begin(); itr!=result_T.end(); itr++) {
+          triangles.push_back(*itr);
+      }
+
+      Eigen::MatrixXi offending_triangles = validator.get_offending_triangles();
+      size_t num_pairs = std::min(1, int(offending_triangles.rows()));
+      for (size_t i=0; i<num_pairs; i++) {
+          Triangle_3& bad_t1 = triangles[offending_triangles(i,0)];
+          Triangle_3& bad_t2 = triangles[offending_triangles(i,1)];
+          for (size_t vi=0; vi<3; vi++) {
+              std::cout.precision(12);
+              std::cout << "v "
+                  << CGAL::to_double(bad_t1[vi][0].exact()) << " "
+                  << CGAL::to_double(bad_t1[vi][1].exact()) << " "
+                  << CGAL::to_double(bad_t1[vi][2].exact()) << std::endl;
+          }
+          for (size_t vi=0; vi<3; vi++) {
+              std::cout.precision(12);
+              std::cout << "v "
+                  << CGAL::to_double(bad_t2[vi][0].exact()) << " "
+                  << CGAL::to_double(bad_t2[vi][1].exact()) << " "
+                  << CGAL::to_double(bad_t2[vi][2].exact()) << std::endl;
+          }
+          std::cout << "f 1 2 3" << std::endl;
+          std::cout << "f 4 5 6" << std::endl;
+      }
+  }
+#endif
 
   // Q: Does this give the same result as TETGEN?
   // A: For the cow and beast, yes.
@@ -392,6 +438,23 @@ bool SelfIntersectMesh::intersect(
 }
 
 bool SelfIntersectMesh::single_shared_vertex(
+        const Triangle_3 & A,
+        const Triangle_3 & B,
+        const int fa,
+        const int fb,
+        const int va,
+        const int vb) {
+    bool result = TriangleIntersection::detect(A, B, false);
+    if (result) {
+        CGAL::Object intersection = TriangleIntersection::resolve(A, B, false);
+        F_objects[fa].push_back(intersection);
+        F_objects[fb].push_back(intersection);
+        count_intersection(fa, fb);
+    }
+    return result;
+}
+
+bool SelfIntersectMesh::single_shared_vertex_old(
   const Triangle_3 & A,
   const Triangle_3 & B,
   const int fa,
@@ -470,6 +533,26 @@ bool SelfIntersectMesh::single_shared_vertex(
 }
 
 bool SelfIntersectMesh::double_shared_vertex(
+        const Triangle_3 & A,
+        const Triangle_3 & B,
+        const int fa,
+        const int fb,
+        const int va1,
+        const int vb1,
+        const int va2,
+        const int vb2
+        ) {
+    bool result = TriangleIntersection::detect(A, B, false);
+    if (result && !params.detect_only) {
+        CGAL::Object intersection = TriangleIntersection::resolve(A, B, false);
+        F_objects[fa].push_back(intersection);
+        F_objects[fb].push_back(intersection);
+        count_intersection(fa, fb);
+    }
+    return result;
+}
+
+bool SelfIntersectMesh::double_shared_vertex_old(
         const Triangle_3 & A,
         const Triangle_3 & B,
         const int fa,
@@ -597,7 +680,7 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
     assert(vb[0] >= 0 && vb[0] < 3);
     assert(va[1] >= 0 && va[1] < 3);
     assert(vb[1] >= 0 && vb[1] < 3);
-    double_shared_vertex(A,B,fa,fb,
+    double_shared_vertex_old(A,B,fa,fb,
             va[0],vb[0], va[1], vb[1]);
   }
   //assert(total_shared_vertices<=1);
@@ -610,7 +693,7 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
 //#endif
     assert(va[0] >= 0 && va[0] < 3);
     assert(vb[0] >= 0 && vb[0] < 3);
-    single_shared_vertex(A,B,fa,fb,va[0],vb[0]);
+    single_shared_vertex_old(A,B,fa,fb,va[0],vb[0]);
     //single_shared_vertex(A,B,fa,fb,va,vb);
 //#ifndef NDEBUG
 //    if(!CGAL::object_cast<Segment_3 >(&result))
