@@ -77,7 +77,8 @@ void SelfIntersection::validate_box_intersection(
 }
 
 std::vector<Box> SelfIntersection::get_triangle_bboxes() {
-    std::vector<Box> boxes(m_mesh.size());
+    std::vector<Box> boxes;
+    boxes.reserve(m_mesh.size());
     for (TrianglesIterator itr = m_mesh.begin();
             itr != m_mesh.end(); itr++) {
         boxes.push_back(Box(itr->bbox(), itr));
