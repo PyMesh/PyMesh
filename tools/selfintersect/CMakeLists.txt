@@ -42,7 +42,9 @@ SET(sources
     src/SelfIntersectMesh.cpp
     src/collapse_small_triangles.cpp
     src/parse_rhs.cpp
-    src/selfintersect.cpp)
+    src/selfintersect.cpp
+    src/TriangleIntersection.cpp
+    src/SelfIntersection.cpp)
 SET(main_cpp selfintersect_main.cpp)
 
 # Include this directory

@@ -33,6 +33,7 @@ typedef CGAL::Point_3<Kernel>    Point_3;
 typedef CGAL::Segment_3<Kernel>  Segment_3; 
 typedef CGAL::Triangle_3<Kernel> Triangle_3; 
 typedef CGAL::Plane_3<Kernel>    Plane_3;
+typedef CGAL::Vector_3<Kernel>   Vector_3;
 
 // 2D Primitives
 typedef CGAL::Point_2<Kernel>    Point_2;
