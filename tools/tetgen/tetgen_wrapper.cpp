@@ -22,15 +22,20 @@ TetgenWrapper::TetgenWrapper(const VectorF& vertices, const VectorI& faces,
 }
 
 
-void TetgenWrapper::tetgen(const std::string& opt) {
+int TetgenWrapper::tetgen(const std::string& opt) {
     tetgenio in = create_tetgen_mesh(m_ori_vertices, m_ori_faces);
     tetgenio out;
 
-    tetrahedralize(const_cast<char*>(opt.c_str()), &in, &out);
+    try {
+        tetrahedralize(const_cast<char*>(opt.c_str()), &in, &out);
+    } catch (int error_code) {
+        return error_code;
+    }
 
     extract_vertices(out);
     extract_faces(out);
     extract_voxels(out);
+    return 0;
 }
 
 void TetgenWrapper::extract_vertices(tetgenio& mesh) {

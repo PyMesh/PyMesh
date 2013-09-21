@@ -25,7 +25,11 @@ int main(int argc, char* argv[]) {
     //TetgenWrapper tetgen(*in);
     TetgenWrapper tetgen(vertices, faces, 3);
     std::string opt("qpa0.01");
-    tetgen.tetgen(opt);
+    int err_code = tetgen.tetgen(opt);
+
+    if (err_code != 0) {
+        throw err_code;
+    }
 
     VectorF tet_vertices = tetgen.get_vertices();
     VectorI tet_faces = tetgen.get_faces();

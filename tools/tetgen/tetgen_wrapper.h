@@ -13,7 +13,7 @@ class TetgenWrapper {
                 size_t num_vertex_per_face);
 
     public:
-        void tetgen(const std::string& opt);
+        int tetgen(const std::string& opt);
 
         VectorF get_vertices() { return m_tet_vertices; }
         VectorI get_faces() { return m_tet_faces; }
