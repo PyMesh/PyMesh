@@ -24,20 +24,41 @@ HashGrid::HashGrid(Float cell_size) :
 
 bool HashGrid::insert(int obj_id, const Vector3F& coordinates) {
     HashKey key = convert_to_key(coordinates);
-    HashMap::iterator itr = m_hashMap.find(key);
-    if (itr == m_hashMap.end()) {
-        HashItem item;
-#if HASH_TYPE==2
-        item.set_empty_key(-1);
-#endif
-#if HASH_TYPE!=0
-        item.set_deleted_key(-2);
-#endif
-        item.insert(obj_id);
-        m_hashMap.insert(HashMap::value_type(key, item));
-    } else {
-        return itr->second.insert(obj_id).second;
+    return insert_key(obj_id, key);
+}
+
+bool HashGrid::insert_shape(int obj_id, const MatrixF& shape) {
+    assert(shape.cols() == 3);
+    Float X_min = shape.col(0).minCoeff();
+    Float Y_min = shape.col(1).minCoeff();
+    Float Z_min = shape.col(2).minCoeff();
+    Float X_max = shape.col(0).maxCoeff();
+    Float Y_max = shape.col(1).maxCoeff();
+    Float Z_max = shape.col(2).maxCoeff();
+    HashKey min_key = convert_to_key(X_min, Y_min, Z_min);
+    HashKey max_key = convert_to_key(X_max, Y_max, Z_max);
+
+    bool success = true;
+    for (HashKey::ValueType x=min_key[0]; x<=max_key[0]; x+=1) {
+        for (HashKey::ValueType y=min_key[1]; y<=max_key[1]; y+=1) {
+            for (HashKey::ValueType z=min_key[2]; z<=max_key[2]; z+=1) {
+                HashKey cur_key(x, y, z);
+                bool r = insert_key(obj_id, cur_key);
+                success &= r;
+            }
+        }
     }
+    return success;
+}
+
+bool HashGrid::insert_batch(int obj_id, const MatrixF& points) {
+    size_t num_pts = points.rows();
+    bool success = true;
+    for (size_t i=0; i<num_pts; i++) {
+        bool r = insert(obj_id, points.row(i));
+        success &= r;
+    }
+    return success;
 }
 
 bool HashGrid::remove(int obj_id, const Vector3F& cooridnates) {
@@ -87,12 +108,29 @@ VectorI HashGrid::get_items_as_array(const Vector3F& coordinates) {
     return result;
 }
 
-HashGrid::HashKey HashGrid::convert_to_key(const Vector3F& value) const {
+HashGrid::HashKey HashGrid::convert_to_key(Float x, Float y, Float z) const {
     HashKey key(
-            int(value[0] / m_cell_size),
-            int(value[1] / m_cell_size),
-            int(value[2] / m_cell_size));
+            int(x / m_cell_size),
+            int(y / m_cell_size),
+            int(z / m_cell_size));
     return key;
+}
+
+bool HashGrid::insert_key(int obj_id, HashGrid::HashKey& key) {
+    HashMap::iterator itr = m_hashMap.find(key);
+    if (itr == m_hashMap.end()) {
+        HashItem item;
+#if HASH_TYPE==2
+        item.set_empty_key(-1);
+#endif
+#if HASH_TYPE!=0
+        item.set_deleted_key(-2);
+#endif
+        item.insert(obj_id);
+        return m_hashMap.insert(HashMap::value_type(key, item)).second;
+    } else {
+        return itr->second.insert(obj_id).second;
+    }
 }
 
 void HashGrid::print_hash_efficiency() const {

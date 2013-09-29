@@ -50,6 +50,8 @@ class HashGrid {
 
     public:
         bool insert(int obj_id, const Vector3F& coordinates);
+        bool insert_shape(int obj_id, const MatrixF& shape);
+        bool insert_batch(int obj_id, const MatrixF& shape);
         bool remove(int obj_id, const Vector3F& coordinates);
         bool occupied(int obj_id, const Vector3F& coordinates) const;
 
@@ -60,7 +62,11 @@ class HashGrid {
         void print_hash_efficiency() const;
 
     private:
-        HashKey convert_to_key(const Vector3F& value) const;
+        HashKey convert_to_key(const Vector3F& value) const {
+            return convert_to_key(value[0], value[1], value[2]);
+        }
+        HashKey convert_to_key(Float x, Float y, Float z) const;
+        bool insert_key(int obj_id, HashKey& key);
 
     private:
         HashMap m_hashMap;

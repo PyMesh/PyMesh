@@ -7,7 +7,8 @@ namespace Zhou {
 template <typename T, int dim>
 class VectorHashKey {
     public:
-        typedef Eigen::Matrix<T, dim, 1> VectorType;
+        typedef T ValueType;
+        typedef Eigen::Matrix<ValueType, dim, 1> VectorType;
     public:
         VectorHashKey() : m_data(VectorType::Zero(dim)) {}
         VectorHashKey(const VectorType& coord) : m_data(coord) {}
@@ -16,7 +17,7 @@ class VectorHashKey {
             return m_data == other.m_data;
         }
 
-        T operator[](size_t i) const {
+        ValueType operator[](size_t i) const {
             assert(i<dim);
             return m_data[i];
         }
