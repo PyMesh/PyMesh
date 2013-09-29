@@ -4,3 +4,4 @@
 %include EigenTypedef.i
 %include ExceptionConverter.i
 %include AttributeUtils.i
+%include TriangleMetric.i
