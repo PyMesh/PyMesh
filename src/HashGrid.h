@@ -51,14 +51,14 @@ class HashGrid {
     public:
         bool insert(int obj_id, const Vector3F& coordinates);
         bool insert_shape(int obj_id, const MatrixF& shape);
-        bool insert_batch(int obj_id, const MatrixF& shape);
+        bool insert_batch(int obj_id, const MatrixF& points);
         bool remove(int obj_id, const Vector3F& coordinates);
         bool occupied(int obj_id, const Vector3F& coordinates) const;
 
         size_t bucket_count() const { return m_hashMap.bucket_count(); }
         size_t size() const { return m_hashMap.size(); }
         const HashItem* get_items(const Vector3F& coordinates);
-        VectorI get_items_as_array(const Vector3F& coordinates);
+        VectorI get_items_near_point(const Vector3F& coordinates);
         void print_hash_efficiency() const;
 
     private:

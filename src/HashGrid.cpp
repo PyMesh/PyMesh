@@ -92,7 +92,7 @@ const HashGrid::HashItem* HashGrid::get_items(const Vector3F& coordinates) {
     return &(itr->second);
 }
 
-VectorI HashGrid::get_items_as_array(const Vector3F& coordinates) {
+VectorI HashGrid::get_items_near_point(const Vector3F& coordinates) {
     const HashGrid::HashItem* item = get_items(coordinates);
     VectorI result;
     assert(result.size() == 0);
