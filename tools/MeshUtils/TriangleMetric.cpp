@@ -34,6 +34,11 @@ void TriangleMetric::update(const Point& p1, const Point& p2, const Point& p3,
 	m_tris[1][2] = p6;
 }
 
+void TriangleMetric::update(const MatrixF& tri1, const MatrixF& tri2) {
+    update( tri1.row(0), tri1.row(1), tri1.row(2),
+            tri2.row(0), tri2.row(1), tri2.row(2));
+}
+
 Real TriangleMetric::runLinCanny(Point& p1, Point& p2) {
 	bool done = false;
 	Real min_dist = std::numeric_limits<Real>::max() - 1;

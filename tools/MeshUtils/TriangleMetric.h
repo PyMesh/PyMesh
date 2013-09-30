@@ -20,6 +20,7 @@ class TriangleMetric {
 	public:
 		void update(const Point& p1, const Point& p2, const Point& p3,
 				const Point& p4, const Point& p5, const Point& p6);
+                void update(const MatrixF& tri1, const MatrixF& tri2);
 
 		Real getClosestPts(Point& p1, Point& p2) {
 			if (use_lin_canny) {
@@ -28,6 +29,10 @@ class TriangleMetric {
 				return oldCodeWrapper(p1, p2);
 			}
 		}
+                Real getDistance() {
+                    Point p1,p2;
+                    return getClosestPts(p1, p2);
+                }
 
 	private:
 		Real runLinCanny(Point& p1, Point& p2);
