@@ -11,26 +11,43 @@ class BoundingBoxes {
         BoundingBoxes(const MatrixF& vertices, const MatrixI& faces);
 
     public:
-        void check_overlap();
+        /**
+         * Find all face pairs that "maybe" touching.
+         * "Touching" means the distance between them is < threshold.
+         * "Maybe" indicates false positive is possible.  Not all faces found
+         * are actually touching, but all touching faces should be found.
+         */
+        void check_touching_faces(Float threshold);
+
+        /**
+         * Clear previous computed results.
+         */
         void clear();
-        VectorI get_overlapping_obj_indices(size_t id) const;
+
+        /**
+         * Return the indices of faces that could be "touching".
+         */
+        VectorI get_touching_face_indices(size_t id) const;
 
     public:
         // Callback function.
-        void mark_as_overlap(const TrianglesIterator& b1, const TrianglesIterator& b2) {
+        void mark_as_touching(const TrianglesIterator& b1, const TrianglesIterator& b2) {
             size_t id1 = b1 - m_mesh.begin();
             size_t id2 = b2 - m_mesh.begin();
-            m_overlap_array[id1].push_back(id2);
-            m_overlap_array[id2].push_back(id1);
+            m_touching_faces[id1].push_back(id2);
+            m_touching_faces[id2].push_back(id1);
         }
 
     private:
-        std::vector<Box> get_triangle_bboxes();
+        /**
+         * Note bboxes are expanded by threshold.
+         */
+        std::vector<Box> get_triangle_bboxes(Float threshold);
 
     private:
         typedef std::vector<size_t> IndexArray;
         typedef std::vector<std::vector<size_t> > IndexArraies;
 
-        IndexArraies m_overlap_array;
+        IndexArraies m_touching_faces;
         Triangles m_mesh;
 };

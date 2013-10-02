@@ -5,8 +5,8 @@
 #include <boost/bind.hpp>
 
 namespace BoundingBoxesHelper {
-    void mark_as_overlap(BoundingBoxes* self, const Box& a, const Box& b) {
-        self->mark_as_overlap(a.handle(), b.handle());
+    void mark_as_touching(BoundingBoxes* self, const Box& a, const Box& b) {
+        self->mark_as_touching(a.handle(), b.handle());
     }
 }
 
@@ -32,38 +32,46 @@ BoundingBoxes::BoundingBoxes(const MatrixF& vertices, const MatrixI& faces) {
     }
 }
 
-void BoundingBoxes::check_overlap() {
+void BoundingBoxes::check_touching_faces(Float threshold) {
     clear();
-    std::vector<Box> boxes = get_triangle_bboxes();
+    std::vector<Box> boxes = get_triangle_bboxes(threshold);
     boost::function<void(const Box& a, const Box& b)> cb =
-        boost::bind(BoundingBoxesHelper::mark_as_overlap, this, _1, _2);
+        boost::bind(BoundingBoxesHelper::mark_as_touching, this, _1, _2);
     CGAL::box_self_intersection_d(boxes.begin(), boxes.end(), cb);
 }
 
 void BoundingBoxes::clear() {
-    m_overlap_array.resize(m_mesh.size());
-    for (IndexArraies::iterator itr = m_overlap_array.begin();
-            itr != m_overlap_array.end(); itr++) {
+    m_touching_faces.resize(m_mesh.size());
+    for (IndexArraies::iterator itr = m_touching_faces.begin();
+            itr != m_touching_faces.end(); itr++) {
         itr->clear();
     }
 }
 
-VectorI BoundingBoxes::get_overlapping_obj_indices(size_t id) const {
-    const IndexArray& overlapping_indices = m_overlap_array.at(id);
-    size_t num_indices = overlapping_indices.size();
+VectorI BoundingBoxes::get_touching_face_indices(size_t id) const {
+    const IndexArray& touching_indices = m_touching_faces.at(id);
+    size_t num_indices = touching_indices.size();
     VectorI result(num_indices);
-    std::copy(overlapping_indices.begin(), overlapping_indices.end(),
+    std::copy(touching_indices.begin(), touching_indices.end(),
             result.data());
     return result;
 }
 
-std::vector<Box> BoundingBoxes::get_triangle_bboxes() {
+std::vector<Box> BoundingBoxes::get_triangle_bboxes(Float threshold) {
     size_t num_faces = m_mesh.size();
     std::vector<Box> boxes;
     boxes.reserve(num_faces);
     size_t count;
     for (TrianglesIterator itr=m_mesh.begin(); itr!=m_mesh.end(); itr++) {
-        boxes.push_back(Box(itr->bbox(), itr));
+        CGAL::Bbox_3 bbox = itr->bbox();
+        CGAL::Bbox_3 expanded_bbox(
+                bbox.xmin() - threshold,
+                bbox.ymin() - threshold,
+                bbox.zmin() - threshold,
+                bbox.xmax() + threshold,
+                bbox.ymax() + threshold,
+                bbox.zmax() + threshold);
+        boxes.push_back(Box(expanded_bbox, itr));
         count++;
     }
     return boxes;
