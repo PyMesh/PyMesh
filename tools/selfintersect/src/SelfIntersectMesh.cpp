@@ -680,7 +680,9 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
     assert(vb[0] >= 0 && vb[0] < 3);
     assert(va[1] >= 0 && va[1] < 3);
     assert(vb[1] >= 0 && vb[1] < 3);
-    double_shared_vertex_old(A,B,fa,fb,
+    //double_shared_vertex_old(A,B,fa,fb,
+    //        va[0],vb[0], va[1], vb[1]);
+    double_shared_vertex(A,B,fa,fb,
             va[0],vb[0], va[1], vb[1]);
   }
   //assert(total_shared_vertices<=1);
@@ -693,7 +695,8 @@ void SelfIntersectMesh::box_intersect(const Box& a, const Box& b)
 //#endif
     assert(va[0] >= 0 && va[0] < 3);
     assert(vb[0] >= 0 && vb[0] < 3);
-    single_shared_vertex_old(A,B,fa,fb,va[0],vb[0]);
+    //single_shared_vertex_old(A,B,fa,fb,va[0],vb[0]);
+    single_shared_vertex(A,B,fa,fb,va[0],vb[0]);
     //single_shared_vertex(A,B,fa,fb,va,vb);
 //#ifndef NDEBUG
 //    if(!CGAL::object_cast<Segment_3 >(&result))

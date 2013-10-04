@@ -49,6 +49,8 @@ BoundingBoxes::BoundingBoxes(const MatrixF& vertices, const MatrixI& faces) : m_
                 pts[faces(i, 2)]);
         m_mesh.push_back(tri);
     }
+
+    Zhou::TriangleMetric::setUseLinCanny(false);
 }
 
 void BoundingBoxes::check_touching_faces(Float threshold, bool approximate) {
