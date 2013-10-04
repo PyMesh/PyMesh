@@ -1,14 +1,14 @@
 #ifndef CGAL_INCLUDES_H
 #define CGAL_INCLUDES_H
 
-#ifdef INEXACT_CONSTRUCTION
+//#ifdef INEXACT_CONSTRUCTION
 // Use this for faster testing, but inexact meshing
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
-#else
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
-#endif
+//#else
+//#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+//typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
+//#endif
 
 // Triangle triangle intersection
 #include <CGAL/intersections.h>

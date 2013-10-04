@@ -35,11 +35,14 @@ FILE(GLOB INC_FILES *.h)
 # Include this directory
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
+# Include MeshUtils directory
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/MeshUtils)
+
 ADD_LIBRARY(cgal_wrapper SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(cgal_wrapper
     ${CGAL_LIBRARIES} CGAL CGAL_Core
     ${BOOST_LIBRARIES}
-    gmp mpfr)
+    gmp mpfr lib_MeshUtils)
 
 SET(SWG_FILES PyCGAL.i)
 

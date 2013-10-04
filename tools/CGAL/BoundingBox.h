@@ -17,7 +17,7 @@ class BoundingBoxes {
          * "Maybe" indicates false positive is possible.  Not all faces found
          * are actually touching, but all touching faces should be found.
          */
-        void check_touching_faces(Float threshold);
+        void check_touching_faces(Float threshold, bool approximate=false);
 
         /**
          * Clear previous computed results.
@@ -38,6 +38,9 @@ class BoundingBoxes {
             m_touching_faces[id2].push_back(id1);
         }
 
+        void review_touching_triangle_pairs(
+                const TrianglesIterator& b1, const TrianglesIterator& b2);
+
     private:
         /**
          * Note bboxes are expanded by threshold.
@@ -50,4 +53,6 @@ class BoundingBoxes {
 
         IndexArraies m_touching_faces;
         Triangles m_mesh;
+
+        Float m_threshold;
 };
