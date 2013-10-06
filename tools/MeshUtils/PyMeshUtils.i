@@ -5,3 +5,5 @@
 %include ExceptionConverter.i
 %include AttributeUtils.i
 %include TriangleMetric.i
+%include ObtuseTriangleRemoval.i
+%include ShortEdgeRemoval.i
