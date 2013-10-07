@@ -7,3 +7,4 @@
 %include TriangleMetric.i
 %include ObtuseTriangleRemoval.i
 %include ShortEdgeRemoval.i
+%include MeshUtils.i
