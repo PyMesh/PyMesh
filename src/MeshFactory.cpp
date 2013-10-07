@@ -1,8 +1,8 @@
 #include "MeshFactory.h"
 #include <cassert>
 #include <tr1/memory>
-#include <exception>
 
+#include "Exception.h"
 #include "Mesh.h"
 #include "MeshAttributes.h"
 #include "MeshConnectivity.h"
@@ -41,10 +41,27 @@ MeshFactory& MeshFactory::load_data(VectorF& vertices, VectorI& faces, VectorI& 
     return *this;
 }
 
-MeshFactory& MeshFactory::with_connectivity() {
-    Mesh::ConnectivityPtr connectivity(new MeshConnectivity());
-    connectivity->initialize(m_mesh);
-    m_mesh->set_connectivity(connectivity);
+MeshFactory& MeshFactory::with_connectivity(std::string& conn_type) {
+    // Valid conn_type are: vertex, face, voxel, all
+    // Using minimal prefix to distinguish them.
+    if (conn_type.size() < 2) {
+        conn_type = std::string("all");
+    }
+
+    if (conn_type[0] == 'v' && conn_type[1] == 'e') {
+        m_mesh->enable_vertex_connectivity();
+    } else if (conn_type[0] == 'v' && conn_type[1] == 'o') {
+        m_mesh->enable_voxel_connectivity();
+    } else if (conn_type[0] == 'e') {
+        m_mesh->enable_face_connectivity();
+    } else if (conn_type[0] == 'a') {
+        m_mesh->enable_connectivity();
+    } else {
+        std::string err = "unknown connectivity type ";
+        err += conn_type;
+        throw RuntimeError(err);
+    }
+
     return *this;
 }
 

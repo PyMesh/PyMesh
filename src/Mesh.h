@@ -73,6 +73,11 @@ class Mesh {
         int get_vertex_per_voxel() const;
 
         // Connectivity access
+        void enable_connectivity();
+        void enable_vertex_connectivity();
+        void enable_face_connectivity();
+        void enable_voxel_connectivity();
+
         VectorI get_vertex_adjacent_vertices(size_t vi) const;
         VectorI get_vertex_adjacent_faces(size_t vi) const;
         VectorI get_vertex_adjacent_voxels(size_t vi) const;

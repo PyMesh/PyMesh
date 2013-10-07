@@ -20,7 +20,7 @@ class MeshConnectivity {
         VectorI get_voxel_adjacent_faces(size_t Vi) const;
         VectorI get_voxel_adjacent_voxels(size_t Vi) const;
 
-    protected:
+    public:
         void init_vertex_adjacencies(Mesh* mesh);
         void init_face_adjacencies(Mesh* mesh);
         void init_voxel_adjacencies(Mesh* mesh);

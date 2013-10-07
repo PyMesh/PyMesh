@@ -47,6 +47,23 @@ int Mesh::get_vertex_per_voxel() const {
     return m_geometry->get_vertex_per_voxel();
 }
 
+void Mesh::enable_connectivity() {
+    enable_vertex_connectivity();
+    enable_face_connectivity();
+    enable_voxel_connectivity();
+}
+
+void Mesh::enable_vertex_connectivity() {
+    m_connectivity->init_vertex_adjacencies(this);
+}
+
+void Mesh::enable_face_connectivity() {
+    m_connectivity->init_face_adjacencies(this);
+}
+
+void Mesh::enable_voxel_connectivity() {
+    m_connectivity->init_voxel_adjacencies(this);
+}
 
 VectorI Mesh::get_vertex_adjacent_vertices(size_t vi) const {
     return m_connectivity->get_vertex_adjacent_vertices(vi);
