@@ -8,3 +8,4 @@
 %include ObtuseTriangleRemoval.i
 %include ShortEdgeRemoval.i
 %include MeshUtils.i
+%include MeshSeparator.i
