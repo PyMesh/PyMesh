@@ -21,9 +21,15 @@ class MeshConnectivity {
         VectorI get_voxel_adjacent_voxels(size_t Vi) const;
 
     public:
+        bool vertex_adjacencies_computed() const;
+        bool face_adjacencies_computed() const;
+        bool voxel_adjacencies_computed() const;
+
         void init_vertex_adjacencies(Mesh* mesh);
         void init_face_adjacencies(Mesh* mesh);
         void init_voxel_adjacencies(Mesh* mesh);
+
+        void clear();
 
     protected:
         VectorI m_vertex_adjacency;

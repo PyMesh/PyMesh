@@ -94,7 +94,21 @@ VectorI MeshConnectivity::get_voxel_adjacent_voxels(size_t Vi) const {
 }
 
 
+bool MeshConnectivity::vertex_adjacencies_computed() const {
+    return m_vertex_adjacency_idx.size() > 0;
+}
+
+bool MeshConnectivity::face_adjacencies_computed() const {
+    return m_face_adjacency_idx.size() > 0;
+}
+
+bool MeshConnectivity::voxel_adjacencies_computed() const {
+    return m_voxel_adjacency_idx.size() > 0;
+}
+
 void MeshConnectivity::init_vertex_adjacencies(Mesh* mesh) {
+    if (vertex_adjacencies_computed()) return;
+
     size_t num_vertices = mesh->get_num_vertices();
     size_t num_faces = mesh->get_num_faces();
     size_t num_voxels = mesh->get_num_voxels();
@@ -159,6 +173,10 @@ void MeshConnectivity::init_vertex_adjacencies(Mesh* mesh) {
 }
 
 void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
+    if (face_adjacencies_computed()) return;
+    if (!vertex_adjacencies_computed())
+        init_vertex_adjacencies(mesh);
+
     const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
     const size_t num_voxels = mesh->get_num_voxels();
@@ -227,6 +245,10 @@ void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
 }
 
 void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
+    if (voxel_adjacencies_computed()) return;
+    if (!vertex_adjacencies_computed())
+        init_vertex_adjacencies(mesh);
+
     size_t num_vertices = mesh->get_num_vertices();
     size_t num_faces = mesh->get_num_faces();
     size_t num_voxels = mesh->get_num_voxels();
@@ -294,4 +316,22 @@ void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
             m_voxel_face_adjacency_idx);
 }
 
+void MeshConnectivity::clear() {
+    m_vertex_adjacency.resize(0);
+    m_vertex_adjacency_idx.resize(0);
+    m_vertex_face_adjacency.resize(0);
+    m_vertex_face_adjacency_idx.resize(0);
+    m_vertex_voxel_adjacency.resize(0);
+    m_vertex_voxel_adjacency_idx.resize(0);
+
+    m_face_adjacency.resize(0);
+    m_face_adjacency_idx.resize(0);
+    m_face_voxel_adjacency.resize(0);
+    m_face_voxel_adjacency_idx.resize(0);
+
+    m_voxel_adjacency.resize(0);
+    m_voxel_adjacency_idx.resize(0);
+    m_voxel_face_adjacency.resize(0);
+    m_voxel_face_adjacency_idx.resize(0);
+}
 

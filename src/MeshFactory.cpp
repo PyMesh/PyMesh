@@ -41,24 +41,22 @@ MeshFactory& MeshFactory::load_data(VectorF& vertices, VectorI& faces, VectorI& 
     return *this;
 }
 
-MeshFactory& MeshFactory::with_connectivity(std::string& conn_type) {
+MeshFactory& MeshFactory::with_connectivity(const std::string& conn_type) {
     // Valid conn_type are: vertex, face, voxel, all
     // Using minimal prefix to distinguish them.
-    if (conn_type.size() < 2) {
-        conn_type = std::string("all");
-    }
-
-    if (conn_type[0] == 'v' && conn_type[1] == 'e') {
+    const size_t l = conn_type.size();
+    if (l >= 2 && conn_type[0] == 'v' && conn_type[1] == 'e') {
         m_mesh->enable_vertex_connectivity();
-    } else if (conn_type[0] == 'v' && conn_type[1] == 'o') {
+    } else if (l >= 2 && conn_type[0] == 'v' && conn_type[1] == 'o') {
         m_mesh->enable_voxel_connectivity();
-    } else if (conn_type[0] == 'e') {
+    } else if (l >= 1 && conn_type[0] == 'f') {
         m_mesh->enable_face_connectivity();
-    } else if (conn_type[0] == 'a') {
+    } else if (l >= 1 && conn_type[0] == 'a') {
         m_mesh->enable_connectivity();
     } else {
-        std::string err = "unknown connectivity type ";
+        std::string err = "unknown connectivity type (";
         err += conn_type;
+        err += ")";
         throw RuntimeError(err);
     }
 
