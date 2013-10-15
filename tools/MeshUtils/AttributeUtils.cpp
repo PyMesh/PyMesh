@@ -48,6 +48,9 @@ VectorF convert_voxel_attribute_to_vertex_attribute(
     const size_t stride = attr_size / num_voxels;
 
     const VectorI& voxels = mesh.get_voxels();
+    if (!mesh.has_attribute("voxel_volume")) {
+        mesh.add_attribute("voxel_volume");
+    }
     const VectorF& weights = mesh.get_attribute("voxel_volume");
 
     VectorF result = VectorF::Zero(num_vertices * stride);
