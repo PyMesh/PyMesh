@@ -19,3 +19,6 @@ typedef Eigen::Matrix4d Matrix4F;
 typedef Eigen::MatrixXi MatrixI;
 typedef Eigen::Matrix3i Matrix3I;
 typedef Eigen::Matrix4i Matrix4I;
+
+typedef Eigen::Matrix<int  , Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixIr;
+typedef Eigen::Matrix<Float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFr;

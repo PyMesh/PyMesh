@@ -292,3 +292,25 @@ Know problems:
 %EigenTypeMap(Eigen::Matrix3i)
 %EigenTypeMap(Eigen::Matrix4i)
 %EigenTypeMap(Eigen::MatrixXi)
+
+/**
+  The following typemap statements map types defined in EigenTypedef.h.
+**/
+%EigenTypeMap(Vector2F)
+%EigenTypeMap(Vector3F)
+%EigenTypeMap(Vector4F)
+%EigenTypeMap(VectorF)
+%EigenTypeMap(Matrix3F)
+%EigenTypeMap(Matrix4F)
+%EigenTypeMap(MatrixF)
+%EigenTypeMap(MatrixFr)
+
+%EigenTypeMap(Vector2I)
+%EigenTypeMap(Vector3I)
+%EigenTypeMap(Vector4I)
+%EigenTypeMap(VectorI)
+%EigenTypeMap(Matrix3I)
+%EigenTypeMap(Matrix4I)
+%EigenTypeMap(MatrixI)
+%EigenTypeMap(MatrixIr)
+

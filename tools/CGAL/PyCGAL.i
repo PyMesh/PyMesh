@@ -1,6 +1,6 @@
 %module PyCGAL
 %include numpy_setup.i
-%include eigen.i
 %include EigenTypedef.i
+%include eigen.i
 %include ExceptionConverter.i
 %include BoundingBox.i
