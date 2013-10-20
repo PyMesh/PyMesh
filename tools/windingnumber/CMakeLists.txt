@@ -26,25 +26,29 @@ ADD_DEFINITIONS(-DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET)
 # Find OpenMP
 FIND_PACKAGE( OpenMP REQUIRED)
 if(OPENMP_FOUND)
-    message("OPENMP FOUND")
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+else(OPENMP_FOUND)
+    MESSAGE("OpenMP not found")
 endif()
 
+# Find OpenCL
+FIND_PACKAGE(OpenCL REQUIRED)
+IF (OPENCL_FOUND)
+    INCLUDE_DIRECTORIES(${OPENCL_INCLUDE_DIRS})
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+ELSE(OPENCL_FOUND)
+    MESSAGE("OpenCL not found")
+ENDIF()
+
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-SET(SRC_FILES
-    AABB.cpp
-    BoundingTree.cpp
-    exterior_edges.cpp
-    main.cpp
-    tesselate_boundary.cpp
-    winding_number.cpp
-    WindingNumber.cpp)
+FILE(GLOB SRC_FILES *.cpp *.c)
+FILE(GLOB INC_FILES *.h)
 SET(MAIN_FILE main.cpp)
 
-
-ADD_LIBRARY(lib_windingnumber SHARED ${SRC_FILES})
+ADD_LIBRARY(lib_windingnumber SHARED ${SRC_FILES} ${INC_FILES})
+TARGET_LINK_LIBRARIES(lib_windingnumber ${OPENCL_LIBRARIES})
 SET_TARGET_PROPERTIES(lib_windingnumber PROPERTIES OUTPUT_NAME "windingnumber")
 
 ADD_EXECUTABLE(exe_windingnumber ${MAIN_FILE})
@@ -56,7 +60,7 @@ set(SWG_FILES PyWindingNumber.i)
 # Generate wrapper for python
 SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
 SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-SWIG_ADD_MODULE(PyWindingNumber python ${SWG_FILES})
+SWIG_ADD_MODULE(PyWindingNumber python ${SWG_FILES} ${INC_FILES})
 SWIG_LINK_LIBRARIES(PyWindingNumber ${PYTHON_LIBRARIES} lib_windingnumber)
 
 # Boudle exe, lib, swig wrapper into a single target.

@@ -1,15 +1,16 @@
 #pragma once
-#include "EigenTypedef.h"
-#include "AABB.h"
+#include <EigenTypedef.h>
 
 class WindingNumber {
     public:
-        WindingNumber(const MatrixF& V, const MatrixI& F);
+        virtual void init(const MatrixFr& V, const MatrixIr& F) {
+            m_vertices = V;
+            m_faces = F;
+        }
 
-    public:
-        VectorF compute(const MatrixF& P);
+        virtual VectorF compute(const MatrixFr& P)=0;
 
-        //static VectorF compute(const MatrixF& V, const MatrixI& F, const MatrixF& P);
-    private:
-        AABB<Vector3F> m_hierarchy;
+    protected:
+        MatrixFr m_vertices;
+        MatrixIr m_faces;
 };
