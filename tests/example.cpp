@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     timer.tik("factory created");
     factory.load_file(argv[1]);
     timer.tik("file loaded");
-    factory.with_connectivity();
+    factory.with_connectivity("all");
     timer.tik("connectivity");
     factory.with_attribute("vertex_normal");
     timer.tik("normal");
