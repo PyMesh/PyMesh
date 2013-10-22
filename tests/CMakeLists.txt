@@ -20,6 +20,19 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 ADD_EXECUTABLE(example EXCLUDE_FROM_ALL ${SRC_FILES})
 TARGET_LINK_LIBRARIES(example mesh)
 
+# Find googletest
+FIND_PACKAGE(GTest REQUIRED)
+INCLUDE_DIRECTORIES(${GTEST_INCLUDE_DIRS})
+
+# Enumerate source files
+FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
+FILE(GLOB TEST_INC_FILES *_test.h)
+
+ENABLE_TESTING()
+ADD_EXECUTABLE(unit_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(unit_tests ${GTEST_BOTH_LIBRARIES})
+ADD_TEST(all_tests unit_tests)
+
 # Bundle all target under the name test.
 # To build all tests, just "make tests"
-ADD_CUSTOM_TARGET(tests DEPENDS example)
+ADD_CUSTOM_TARGET(tests DEPENDS example unit_tests)
