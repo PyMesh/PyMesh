@@ -16,6 +16,7 @@ class OpenCLWrapper {
         void init_context();
         void init_queue();
         void init_program(const std::string& prog);
+        void init_program_from_file(const std::string& kernel_file);
         void build_program();
 
         void init_kernel(const std::string& kernel_name);

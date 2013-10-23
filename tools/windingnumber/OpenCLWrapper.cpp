@@ -44,6 +44,11 @@ void OpenCLWrapper::init_program(const std::string& prog) {
     CHECK_CL_ERROR(err, "clCreateProgramWithSource");
 }
 
+void OpenCLWrapper::init_program_from_file(const std::string& kernel_file) {
+    std::string kernel_code = read_file(kernel_file);
+    init_program(kernel_code);
+}
+
 void OpenCLWrapper::build_program() {
     //const char compiler_flags[] = "-cl-finite-math-only";
     const char compiler_flags[] = "";
