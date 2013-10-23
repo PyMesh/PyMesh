@@ -4,7 +4,7 @@
 #include <Exception.h>
 
 WindingNumberWithOpenCL::WindingNumberWithOpenCL() {
-    std::string proj_path = Environment::get("PYMESH_PATH");
+    std::string proj_path = Environment::get_required("PYMESH_PATH");
     kernel_file = proj_path +
         "/tools/windingnumber/opencl_kernels/winding_number.cl";
 }
