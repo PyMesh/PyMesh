@@ -5,7 +5,7 @@
 
 WindingNumberWithOpenCL::WindingNumberWithOpenCL() {
     std::string proj_path = Environment::get_required("PYMESH_PATH");
-    kernel_file = proj_path +
+    m_kernel_file = proj_path +
         "/tools/windingnumber/opencl_kernels/winding_number.cl";
 }
 
@@ -14,7 +14,7 @@ void WindingNumberWithOpenCL::init(const MatrixFr& V, const MatrixIr& F) {
     init_device(false);
     init_context();
     init_queue();
-    init_program_from_file(kernel_file);
+    init_program_from_file(m_kernel_file);
     build_program();
     init_kernel("compute_winding_number");
 

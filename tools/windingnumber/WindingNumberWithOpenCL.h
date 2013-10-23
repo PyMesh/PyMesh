@@ -21,7 +21,7 @@ class WindingNumberWithOpenCL : public WindingNumber, public OpenCLWrapper {
         }
 
     private:
-        std::string kernel_file;
+        std::string m_kernel_file;
         size_t m_num_vertices;
         size_t m_num_faces;
         cl_mem m_vertex_buf;
