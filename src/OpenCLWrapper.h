@@ -7,7 +7,7 @@ extern "C" {
 
 class OpenCLWrapper {
     public:
-        OpenCLWrapper();
+        OpenCLWrapper(bool profile=false);
         virtual ~OpenCLWrapper();
 
     protected:
@@ -68,6 +68,8 @@ class OpenCLWrapper {
         void write_to_buffer(cl_mem buf,
                 size_t offset, size_t num_bytes, void* data);
 
+        void attach_profile_callback(cl_event& event);
+
 
 
     private:
@@ -81,4 +83,6 @@ class OpenCLWrapper {
         cl_program     m_program;
         cl_kernel      m_kernel;
         cl_command_queue m_queue;
+
+        bool           m_profile;
 };

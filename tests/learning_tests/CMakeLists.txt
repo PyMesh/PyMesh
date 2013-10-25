@@ -6,7 +6,7 @@ FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
 FILE(GLOB TEST_INC_FILES *_test.h)
 
 ADD_EXECUTABLE(learning_unit_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(learning_unit_tests ${GTEST_BOTH_LIBRARIES})
+TARGET_LINK_LIBRARIES(learning_unit_tests Mesh ${GTEST_BOTH_LIBRARIES})
 ADD_CUSTOM_COMMAND(TARGET learning_unit_tests POST_BUILD COMMAND learning_unit_tests)
 SET(learning_test_dep learning_unit_tests)
 

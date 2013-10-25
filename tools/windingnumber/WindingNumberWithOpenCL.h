@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
+#include <OpenCLWrapper.h>
 #include "WindingNumber.h"
-#include "OpenCLWrapper.h"
 
 class WindingNumberWithOpenCL : public WindingNumber, public OpenCLWrapper {
     public:
