@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
+#include <vector>
 extern "C" {
 #include "cl-helper.h"
 }
@@ -23,12 +23,16 @@ class OpenCLWrapper {
         void execute_kernel(size_t num_work_items);
 
         size_t get_kernel_work_group_size() const;
+        void set_kernel_work_group_size(size_t v) {
+            m_work_group_size = v;
+        }
+
         size_t get_num_work_groups(size_t total_num_work_items) const;
 
     protected:
         // Buffer creation methods
-        typedef std::tr1::shared_ptr<float> FloatArray;
-        typedef std::tr1::shared_ptr<int> IntArray;
+        typedef std::vector<float> FloatArray;
+        typedef std::vector<int>   IntArray;
 
         cl_mem create_buffer(size_t num_bytes, void* raw_data=NULL);
         cl_mem create_empty_float_buffer(size_t num_entries) {
@@ -37,9 +41,9 @@ class OpenCLWrapper {
 
         template<typename T>
         cl_mem create_float_buffer(size_t num_entries, const T* data) {
-            FloatArray raw_data = FloatArray(new float[num_entries]);
-            std::copy(data, data+num_entries, raw_data.get());
-            return create_buffer(sizeof(float)*num_entries, raw_data.get());
+            FloatArray raw_data = FloatArray(num_entries);
+            std::copy(data, data+num_entries, raw_data.begin());
+            return create_buffer(sizeof(float)*num_entries, raw_data.data());
         }
 
         // Overload to handle float array
@@ -51,8 +55,8 @@ class OpenCLWrapper {
         template<typename T>
         cl_mem create_int_buffer(size_t num_entries, const T* data) {
             IntArray raw_data = IntArray(new int[num_entries]);
-            std::copy(data, data+num_entries, raw_data.get());
-            return create_buffer(sizeof(int)*num_entries, raw_data.get());
+            std::copy(data, data+num_entries, raw_data.data());
+            return create_buffer(sizeof(int)*num_entries, raw_data.data());
         }
 
         // Overload to handle int array
@@ -84,5 +88,7 @@ class OpenCLWrapper {
         cl_kernel      m_kernel;
         cl_command_queue m_queue;
 
+    private:
         bool           m_profile;
+        size_t         m_work_group_size;
 };

@@ -42,30 +42,30 @@ VectorF WindingNumberWithOpenCL::compute(const MatrixFr& P) {
     FloatArray wind_num_array = pad_floats(num_work_items, 0, NULL);
 
     cl_mem point_buffer = create_float_buffer(
-            num_work_items * 3, point_array.get());
+            num_work_items * 3, point_array.data());
     cl_mem wind_num_buffer = create_empty_float_buffer(num_work_items);
     
-    SET_6_KERNEL_ARGS(m_kernel, 
+    SET_7_KERNEL_ARGS(m_kernel, 
             m_num_vertices, m_vertex_buf,
             m_num_faces, m_face_buf,
-            point_buffer, wind_num_buffer);
+            num_pts, point_buffer, wind_num_buffer);
     execute_kernel(num_work_items);
 
     read_from_buffer(wind_num_buffer, 0, num_work_items * sizeof(float),
-            wind_num_array.get());
+            wind_num_array.data());
     VectorF result(num_pts);
-    std::copy(wind_num_array.get(), wind_num_array.get()+num_pts, result.data());
+    std::copy(wind_num_array.begin(), wind_num_array.begin()+num_pts, result.data());
 
     return result;
 }
 
 WindingNumberWithOpenCL::FloatArray WindingNumberWithOpenCL::pad_floats(
         size_t desired_size, size_t num_entries, const Float* data) {
-    FloatArray array(new float[desired_size]);
+    FloatArray array(desired_size);
     if (num_entries > 0) {
-        std::copy(data, data + num_entries, array.get());
+        std::copy(data, data + num_entries, array.begin());
     }
-    std::fill(array.get()+num_entries, array.get()+desired_size, 0);
+    std::fill(array.begin()+num_entries, array.end(), 0);
     return array;
 }
 

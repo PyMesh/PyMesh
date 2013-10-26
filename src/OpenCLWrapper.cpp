@@ -91,7 +91,7 @@ namespace OpenCLWrapperHelper {
 
 using namespace OpenCLWrapperHelper;
 
-OpenCLWrapper::OpenCLWrapper(bool profile) : m_profile(profile) {
+OpenCLWrapper::OpenCLWrapper(bool profile) : m_profile(profile), m_work_group_size(0) {
 }
 
 OpenCLWrapper::~OpenCLWrapper() {
@@ -153,12 +153,12 @@ void OpenCLWrapper::build_program() {
             NULL);
     if (err != 0) {
         std::cout << "OpenCL build failed..." << std::endl;
-        char buffer[1024];
+        char buffer[1024*8];
         clGetProgramBuildInfo(
                 m_program,
                 m_device,
                 CL_PROGRAM_BUILD_LOG,
-                1024,
+                1024*8,
                 buffer,
                 NULL);
         std::cout << buffer << std::endl;
@@ -199,6 +199,8 @@ void OpenCLWrapper::write_to_buffer(
 }
 
 size_t OpenCLWrapper::get_kernel_work_group_size() const {
+    if (m_work_group_size > 0) return m_work_group_size;
+
     size_t work_group_size;
     CALL_CL_GUARDED(clGetKernelWorkGroupInfo, (
                 m_kernel, m_device,
