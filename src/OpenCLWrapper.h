@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <map>
 extern "C" {
 #include "cl-helper.h"
 }
@@ -19,15 +20,17 @@ class OpenCLWrapper {
         void init_program_from_file(const std::string& kernel_file);
         void build_program();
 
-        void init_kernel(const std::string& kernel_name);
-        void execute_kernel(size_t num_work_items);
+        // Init and exec kernel
+        void init_kernels();
+        void set_kernel(const std::string& kernel_name);
+        void execute_kernel(size_t dim,
+                size_t* global_work_size, size_t* local_work_size);
 
-        size_t get_kernel_work_group_size() const;
-        void set_kernel_work_group_size(size_t v) {
-            m_work_group_size = v;
-        }
-
-        size_t get_num_work_groups(size_t total_num_work_items) const;
+        // Query kernel info
+        size_t get_max_work_group_size() const;
+        size_t get_preferred_work_group_size_multiple() const;
+        cl_ulong get_kernel_local_mem_size() const;
+        cl_ulong get_kernel_private_mem_size() const;
 
     protected:
         // Buffer creation methods
@@ -81,10 +84,12 @@ class OpenCLWrapper {
         std::string read_file(const std::string& filename);
 
     protected:
+        typedef std::map<std::string, cl_kernel> KernelMap;
         cl_platform_id m_platform;
         cl_device_id   m_device;
         cl_context     m_context;
         cl_program     m_program;
+        KernelMap      m_kernels;
         cl_kernel      m_kernel;
         cl_command_queue m_queue;
 

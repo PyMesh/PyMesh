@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "gtest_test.h"
 #include "opencl_vector_test.h"
+#include "opencl_race_condition.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

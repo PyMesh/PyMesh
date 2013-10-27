@@ -1,97 +1,13 @@
 #include "OpenCLWrapper.h"
 #include <fstream>
 #include <iostream>
-#include <Exception.h>
 
-namespace OpenCLWrapperHelper {
-    std::string get_event_type(cl_event event) {
-        cl_command_type type;
-        CALL_CL_GUARDED(clGetEventInfo,
-                (event, CL_EVENT_COMMAND_TYPE, sizeof(type), &type, NULL));
-        std::string result;
-        switch (type) {
-            case CL_COMMAND_NDRANGE_KERNEL:
-                result = "NDRANGE_KERNEL";
-                break;
-            case CL_COMMAND_TASK:
-                result = "TASK";
-                break;
-            case CL_COMMAND_NATIVE_KERNEL:
-                result = "NATIVE_KERNEL";
-                break;
-            case CL_COMMAND_READ_BUFFER:
-                result = "READ_BUFFER";
-                break;
-            case CL_COMMAND_WRITE_BUFFER:
-                result = "WRITE_BUFFER";
-                break;
-            case CL_COMMAND_COPY_BUFFER:
-                result =  "COPY_BUFFER";
-                break;
-            case CL_COMMAND_READ_IMAGE:
-                result =  "READ_IMAGE";
-                break;
-            case CL_COMMAND_WRITE_IMAGE:
-                result =  "WRITE_IMAGE";
-                break;
-            case CL_COMMAND_COPY_IMAGE:
-                result =  "COPY_IMAGE";
-                break;
-            case CL_COMMAND_COPY_BUFFER_TO_IMAGE:
-                result =  "COPY_BUFFER_TO_IMAGE";
-                break;
-            case CL_COMMAND_COPY_IMAGE_TO_BUFFER:
-                result =  "COPY_IMAGE_TO_BUFFER";
-                break;
-            case CL_COMMAND_MAP_BUFFER:
-                result =  "MAP_BUFFER";
-                break;
-            case CL_COMMAND_MAP_IMAGE:
-                result =  "MAP_IMAGE";
-                break;
-            case CL_COMMAND_UNMAP_MEM_OBJECT:
-                result =  "UNMAP_MEM_OBJECT";
-                break;
-            case CL_COMMAND_MARKER:
-                result =  "MARKER";
-                break;
-            case CL_COMMAND_ACQUIRE_GL_OBJECTS:
-                result =  "ACQUIRE_GL_OBJECTS";
-                break;
-            case CL_COMMAND_RELEASE_GL_OBJECTS:
-                result = "RELEASE_GL_OBJECTS";
-                break;
-        }
-        return result;
-    }
-
-    void print_profile(cl_event event, cl_int status, void* data) {
-        cl_long t_enqueue, t_submit, t_start, t_end;
-        CALL_CL_GUARDED(clGetEventProfilingInfo,
-                (event, CL_PROFILING_COMMAND_QUEUED,
-                sizeof(t_enqueue), &t_enqueue, NULL));
-        CALL_CL_GUARDED(clGetEventProfilingInfo,
-                (event, CL_PROFILING_COMMAND_SUBMIT,
-                sizeof(t_submit), &t_submit, NULL));
-        CALL_CL_GUARDED(clGetEventProfilingInfo,
-                (event, CL_PROFILING_COMMAND_START,
-                sizeof(t_start), &t_start, NULL));
-        CALL_CL_GUARDED(clGetEventProfilingInfo,
-                (event, CL_PROFILING_COMMAND_END,
-                sizeof(t_end), &t_end, NULL));
-        std::cout << get_event_type(event) << "  status: " << status << std::endl;
-        std::cout << "time on queue : "
-            << (t_submit - t_enqueue) / 1.0e9 << "s" << std::endl;
-        std::cout << "time submision: "
-            << (t_start - t_submit) / 1.0e9 << "s" << std::endl;
-        std::cout << "time execution: "
-            << (t_end - t_start) / 1.0e9 << "s" << std::endl;
-    }
-}
+#include "Exception.h"
+#include "OpenCLWrapperHelper.h"
 
 using namespace OpenCLWrapperHelper;
 
-OpenCLWrapper::OpenCLWrapper(bool profile) : m_profile(profile), m_work_group_size(0) {
+OpenCLWrapper::OpenCLWrapper(bool profile) : m_profile(profile) {
 }
 
 OpenCLWrapper::~OpenCLWrapper() {
@@ -141,8 +57,8 @@ void OpenCLWrapper::init_program_from_file(const std::string& kernel_file) {
 }
 
 void OpenCLWrapper::build_program() {
-    //const char compiler_flags[] = "-cl-finite-math-only";
-    const char compiler_flags[] = "";
+    const char compiler_flags[] = "-cl-finite-math-only";
+    //const char compiler_flags[] = "";
     cl_int err;
     err = clBuildProgram(
             m_program,
@@ -165,7 +81,24 @@ void OpenCLWrapper::build_program() {
     }
 }
 
-void OpenCLWrapper::init_kernel(const std::string& kernel_name) {
+void OpenCLWrapper::init_kernels() {
+    m_kernels.clear();
+    cl_uint num_kernels;
+    CALL_CL_GUARDED(clCreateKernelsInProgram, (m_program, 0, NULL, &num_kernels));
+    std::vector<cl_kernel> kernels(num_kernels);
+    CALL_CL_GUARDED(clCreateKernelsInProgram, (m_program, num_kernels, kernels.data(), NULL));
+    for (std::vector<cl_kernel>::iterator itr = kernels.begin();
+            itr != kernels.end(); itr++) {
+        size_t name_len;
+        CALL_CL_GUARDED(clGetKernelInfo, (*itr, CL_KERNEL_FUNCTION_NAME, 0, NULL, &name_len));
+        char* name = new char[name_len];
+        CALL_CL_GUARDED(clGetKernelInfo, (*itr, CL_KERNEL_FUNCTION_NAME, name_len, name, NULL));
+        m_kernels[std::string(name)] = *itr;
+        delete [] name;
+    }
+}
+
+void OpenCLWrapper::set_kernel(const std::string& kernel_name) {
     cl_int err;
     m_kernel = clCreateKernel(m_program, kernel_name.c_str(), &err);
     CHECK_CL_ERROR(err, "clCreateKernel");
@@ -198,33 +131,53 @@ void OpenCLWrapper::write_to_buffer(
     attach_profile_callback(complete_event);
 }
 
-size_t OpenCLWrapper::get_kernel_work_group_size() const {
-    if (m_work_group_size > 0) return m_work_group_size;
-
-    size_t work_group_size;
+size_t OpenCLWrapper::get_max_work_group_size() const {
+    size_t max_work_group_size;
     CALL_CL_GUARDED(clGetKernelWorkGroupInfo, (
                 m_kernel, m_device,
                 CL_KERNEL_WORK_GROUP_SIZE,
-                sizeof(size_t), &work_group_size,
+                sizeof(size_t), &max_work_group_size,
                 NULL));
-    return work_group_size;
+    return max_work_group_size;
 }
 
-size_t OpenCLWrapper::get_num_work_groups(
-        size_t total_num_work_items) const {
-    size_t work_group_size = get_kernel_work_group_size();
-    size_t num_workgroups = total_num_work_items / work_group_size;
-    if (total_num_work_items % work_group_size > 0)
-        num_workgroups ++;
-    return num_workgroups;
+size_t OpenCLWrapper::get_preferred_work_group_size_multiple() const {
+    size_t preferred_multiple;
+    CALL_CL_GUARDED(clGetKernelWorkGroupInfo, (
+                m_kernel, m_device,
+                CL_KERNEL_PREFERRED_WORK_GROUP_SIZE_MULTIPLE,
+                sizeof(size_t), &preferred_multiple,
+                NULL));
+    return preferred_multiple;
 }
 
-void OpenCLWrapper::execute_kernel(size_t num_work_items) {
+cl_ulong OpenCLWrapper::get_kernel_local_mem_size() const {
+    cl_ulong local_size;
+    CALL_CL_GUARDED(clGetKernelWorkGroupInfo, (
+                m_kernel, m_device,
+                CL_KERNEL_LOCAL_MEM_SIZE,
+                sizeof(size_t), &local_size,
+                NULL));
+    return local_size;
+}
+
+cl_ulong OpenCLWrapper::get_kernel_private_mem_size() const {
+    cl_ulong private_size;
+    CALL_CL_GUARDED(clGetKernelWorkGroupInfo, (
+                m_kernel, m_device,
+                CL_KERNEL_PRIVATE_MEM_SIZE,
+                sizeof(size_t), &private_size,
+                NULL));
+    return private_size;
+}
+
+void OpenCLWrapper::execute_kernel(size_t dim,
+        size_t* global_work_size,
+        size_t* local_work_size) {
     cl_event complete_event;
-    size_t work_group_size = get_kernel_work_group_size();
     CALL_CL_GUARDED(clEnqueueNDRangeKernel, (
-                m_queue, m_kernel,
-                1, NULL, &num_work_items, &work_group_size,
+                m_queue, m_kernel, dim,
+                NULL, global_work_size, local_work_size,
                 0, NULL, &complete_event));
     attach_profile_callback(complete_event);
     CALL_CL_GUARDED(clFinish, (m_queue));
