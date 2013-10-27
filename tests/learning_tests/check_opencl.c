@@ -2,7 +2,7 @@
 
 void print_platform_devices(cl_platform_id platform) {
     cl_uint num_devices;
-    CALL_CL_GUARDED(clGetDeviceIDs, (platform, CL_DEVICE_TYPE_ALL, 1, NULL, &num_devices));
+    CALL_CL_GUARDED(clGetDeviceIDs, (platform, CL_DEVICE_TYPE_ALL, 0, NULL, &num_devices));
     cl_device_id* devices = malloc(sizeof(cl_device_id) * num_devices);
     CALL_CL_GUARDED(clGetDeviceIDs, (platform, CL_DEVICE_TYPE_ALL, num_devices, devices, NULL));
 
