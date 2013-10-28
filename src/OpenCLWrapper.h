@@ -41,6 +41,11 @@ class OpenCLWrapper {
         cl_mem create_empty_float_buffer(size_t num_entries) {
             return create_buffer(sizeof(float) * num_entries);
         }
+        cl_mem create_zero_float_buffer(size_t num_entries) {
+            FloatArray raw_data = FloatArray(num_entries);
+            std::fill(raw_data.begin(), raw_data.end(), 0);
+            return create_buffer(sizeof(float)*num_entries, raw_data.data());
+        }
 
         template<typename T>
         cl_mem create_float_buffer(size_t num_entries, const T* data) {
@@ -58,7 +63,7 @@ class OpenCLWrapper {
         template<typename T>
         cl_mem create_int_buffer(size_t num_entries, const T* data) {
             IntArray raw_data = IntArray(new int[num_entries]);
-            std::copy(data, data+num_entries, raw_data.data());
+            std::copy(data, data+num_entries, raw_data.begin());
             return create_buffer(sizeof(int)*num_entries, raw_data.data());
         }
 

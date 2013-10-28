@@ -57,7 +57,7 @@ void OpenCLWrapper::init_program_from_file(const std::string& kernel_file) {
 }
 
 void OpenCLWrapper::build_program() {
-    const char compiler_flags[] = "-cl-finite-math-only";
+    const char compiler_flags[] = "-cl-finite-math-only -cl-opt-disable";
     //const char compiler_flags[] = "";
     cl_int err;
     err = clBuildProgram(

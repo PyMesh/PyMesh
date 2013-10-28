@@ -26,7 +26,7 @@ class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
             compute_num_work_items(vector_width);
             FloatArray data = generate_data(vector_width);
             m_input = create_float_buffer(m_num_work_items * vector_width, data.data());
-            m_output = create_empty_float_buffer(m_num_work_items * vector_width);
+            m_output = create_zero_float_buffer(m_num_work_items * vector_width);
 
             SET_2_KERNEL_ARGS(m_kernel, m_input, m_output);
         }
@@ -109,4 +109,16 @@ TEST_F(OpenCLVectorTest, Vector16ArrayTest) {
     validate_results(16);
 }
 
+// This test is designed to fail.
+TEST_F(OpenCLVectorTest, Vector3ArrayTest) {
+    set_kernel("square_vec3");
+    prepare_kernel(3);
+    execute_kernel(1, &m_num_work_items, NULL);
+    float r[8];
+    read_from_buffer(m_output, 0, sizeof(float)*8, &r);
+    ASSERT_FLOAT_EQ(0, r[0]);
+    ASSERT_FLOAT_EQ(1, r[1]);
+    ASSERT_FLOAT_EQ(4, r[2]);
+    ASSERT_GE(fabs(9.0 - r[3]), 1e-3);
+}
 

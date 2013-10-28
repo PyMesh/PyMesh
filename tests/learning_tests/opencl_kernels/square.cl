@@ -22,3 +22,19 @@ __kernel void square_vec16(__global float16* data, __global float16* results) {
     size_t id = get_global_id(0);
     results[id] = data[id] * data[id];
 }
+
+/**
+ * This kernel would fail because float3 is 16 bytes aligned.  Assumes the input
+ * C array is like the following:
+ *   d0  d1  d2  d3  d4  d5  d6  d7  ...
+ *   \        /      \        /
+ *    data[0]         data[1]
+ * Note that d3, d7, ... is skipped.
+ * Eventually, this kernel will access invalid memory and caused a seg fault.
+ * To test it, we only perform the task for the two vectors.
+ */
+__kernel void square_vec3(__global float3* data, __global float3* results) {
+    size_t id = get_global_id(0);
+    if (id <= 1)
+        results[id] = data[id] * data[id];
+}
