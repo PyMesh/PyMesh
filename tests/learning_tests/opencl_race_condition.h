@@ -48,7 +48,7 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
         }
 
         void prepare_kernel() {
-            const size_t data_size = get_data_size();
+            const cl_uint data_size = get_data_size();
             const size_t work_group_size = 128;
             compute_num_work_items(work_group_size);
             FloatVector data = generate_padded_data();
@@ -57,7 +57,7 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
             m_result = create_empty_float_buffer(1);
             CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 0, sizeof(cl_mem), &m_input));
             CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 1, sizeof(float)*work_group_size, NULL));
-            CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 2, sizeof(size_t), &data_size));
+            CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 2, sizeof(cl_uint), &data_size));
             CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 3, sizeof(cl_mem), &m_result));
         }
 
