@@ -120,7 +120,11 @@ TEST_F(OpenCLVectorTest, Vector3ArrayTest) {
     ASSERT_FLOAT_EQ(0, r[0]);
     ASSERT_FLOAT_EQ(1, r[1]);
     ASSERT_FLOAT_EQ(4, r[2]);
-    ASSERT_GE(fabs(9.0 - r[3]), 1e-3);
+    if (fabs(r[3] - 9.0) < 1e-3) {
+        std::cout << "float3 is memory aligned" << std::endl;
+    } else {
+        std::cout << "float3 is NOT memory aligned" << std::endl;
+    }
 }
 
 TEST_F(OpenCLVectorTest, Vector3ArrayTest2) {
