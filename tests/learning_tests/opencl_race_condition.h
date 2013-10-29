@@ -1,4 +1,5 @@
 #pragma once
+#include <numeric>
 #include <string>
 #include <vector>
 #include <tr1/memory>
@@ -49,23 +50,23 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
 
         void prepare_kernel() {
             const cl_uint data_size = get_data_size();
-            const size_t work_group_size = 128;
-            compute_num_work_items(work_group_size);
+            m_work_group_size = get_max_work_group_size();
+            compute_num_work_items(m_work_group_size);
             FloatVector data = generate_padded_data();
-            m_num_work_items = work_group_size;
             m_input = create_float_buffer(data_size, data.data());
-            m_result = create_empty_float_buffer(1);
+            m_result = create_empty_float_buffer(m_num_work_groups);
             CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 0, sizeof(cl_mem), &m_input));
-            CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 1, sizeof(float)*work_group_size, NULL));
+            CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 1, sizeof(float)*m_work_group_size, NULL));
             CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 2, sizeof(cl_uint), &data_size));
             CALL_CL_GUARDED(clSetKernelArg, (m_kernel, 3, sizeof(cl_mem), &m_result));
         }
 
         void validate_results() {
-            FloatPtr result(new float);
-            read_from_buffer(m_result, 0, sizeof(float), result.get());
+            FloatVector result(m_num_work_groups);
+            read_from_buffer(m_result, 0, sizeof(float)*m_num_work_groups, result.data());
+            float sum = std::accumulate(result.begin(), result.end(), 0);
             float expected_result = (0+1023) * 1024 / 2;
-            ASSERT_FLOAT_EQ(expected_result, *result);
+            ASSERT_FLOAT_EQ(expected_result, sum);
         }
 
         FloatVector generate_data() {
@@ -95,16 +96,18 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
 
         size_t compute_num_work_items(size_t work_group_size) {
             const size_t data_size = get_data_size();
-            size_t num_work_groups = data_size / work_group_size;
+            m_num_work_groups = data_size / work_group_size;
             if (data_size % work_group_size > 0)
-                num_work_groups ++;
-            m_num_work_items = num_work_groups * work_group_size;
+                m_num_work_groups ++;
+            m_num_work_items = m_num_work_groups * work_group_size;
         }
 
     protected:
         cl_mem m_input;
         cl_mem m_result;
         size_t m_num_work_items;
+        size_t m_num_work_groups;
+        size_t m_work_group_size;
 };
 
 TEST_F(OpenCLRaceConditionTest, RaceCondition) {
@@ -117,6 +120,6 @@ TEST_F(OpenCLRaceConditionTest, RaceCondition) {
 TEST_F(OpenCLRaceConditionTest, NonRaceCondition) {
     set_kernel("sum");
     prepare_kernel();
-    execute_kernel(1, &m_num_work_items, NULL);
+    execute_kernel(1, &m_num_work_items, &m_work_group_size);
     validate_results();
 }

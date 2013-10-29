@@ -33,6 +33,7 @@ __kernel void sum(__global float* data, __local float* tmp_data, uint n, __globa
     }
 
     if (local_id == 0) {
-        *result = tmp_data[0];
+        size_t group_id = get_group_id(0);
+        result[group_id] = tmp_data[0];
     }
 }
