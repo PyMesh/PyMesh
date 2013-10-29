@@ -1,4 +1,5 @@
 #pragma once
+#include <cmath>
 #include <string>
 #include <tr1/memory>
 #include <Environment.h>
@@ -11,7 +12,7 @@ class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
             std::string kernel_file = root_dir + "/tests/learning_tests/opencl_kernels/square.cl";
 
             init_platform();
-            init_device(false);
+            init_device(true);
             init_context();
             init_queue();
             init_program_from_file(kernel_file);

@@ -16,7 +16,7 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
                 "/tests/learning_tests/opencl_kernels/race_condition.cl";
 
             init_platform();
-            init_device(false);
+            init_device(true);
             init_context();
             init_queue();
             init_program_from_file(kernel_file);
