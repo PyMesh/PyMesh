@@ -68,16 +68,21 @@ void OpenCLWrapper::build_program() {
             NULL,
             NULL);
     if (err != 0) {
-        std::cout << "OpenCL build failed..." << std::endl;
-        char buffer[1024*8];
+        const size_t BUFFER_SIZE = 1024*8;
+        char buffer[BUFFER_SIZE];
+        char build_options[BUFFER_SIZE];
         clGetProgramBuildInfo(
-                m_program,
-                m_device,
+                m_program, m_device,
+                CL_PROGRAM_BUILD_OPTIONS,
+                BUFFER_SIZE, build_options, NULL);
+        clGetProgramBuildInfo(
+                m_program, m_device,
                 CL_PROGRAM_BUILD_LOG,
-                1024*8,
-                buffer,
-                NULL);
-        std::cout << buffer << std::endl;
+                BUFFER_SIZE, buffer, NULL);
+        std::cerr << "Build options: \"" << build_options << "\""
+            << std::endl;
+        std::cerr << "Error message: " << buffer << std::endl;
+        throw RuntimeError("OpenCL failed to build program!");
     }
 }
 

@@ -38,3 +38,18 @@ __kernel void square_vec3(__global float3* data, __global float3* results) {
     if (id <= 1)
         results[id] = data[id] * data[id];
 }
+
+/**
+ * Explicitly construct float3 from data.
+ */
+__kernel void square_vec3_explicit(__global float* data, __global float* results) {
+    size_t id = get_global_id(0);
+    float3 x = (float3)(
+            data[id*3 + 0],
+            data[id*3 + 1],
+            data[id*3 + 2]);
+    float3 y = x*x;
+    results[id*3 + 0] = y.s0;
+    results[id*3 + 1] = y.s1;
+    results[id*3 + 2] = y.s2;
+}

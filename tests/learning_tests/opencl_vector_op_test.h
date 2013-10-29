@@ -4,11 +4,11 @@
 #include <Environment.h>
 #include <OpenCLWrapper.h>
 
-class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
+class OpenCLVectorOps: public ::testing::Test, public OpenCLWrapper {
     protected:
         virtual void SetUp() {
             std::string root_dir = Environment::get_required("PYMESH_PATH");
-            std::string kernel_file = root_dir + "/tests/learning_tests/opencl_kernels/square.cl";
+            std::string kernel_file = root_dir + "/tests/learning_tests/opencl_kernels/array_mult_scalar.cl";
 
             init_platform();
             init_device(false);
@@ -39,7 +39,7 @@ class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
             for (size_t i=0; i<data_size; i++) {
                 float x = i;
                 float& y = result[i];
-                ASSERT_FLOAT_EQ(x*x, y);
+                ASSERT_FLOAT_EQ(x*2, y);
             }
         }
 
@@ -74,58 +74,16 @@ class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
         cl_mem m_output;
 };
 
-TEST_F(OpenCLVectorTest, ScalarArrayTest) {
-    set_kernel("square");
+TEST_F(OpenCLVectorOps, MultBy2) {
+    set_kernel("multby2");
     prepare_kernel(1);
     execute_kernel(1, &m_num_work_items, NULL);
     validate_results(1);
 }
 
-TEST_F(OpenCLVectorTest, Vector2ArrayTest) {
-    set_kernel("square_vec2");
+TEST_F(OpenCLVectorOps, MultBy2v2) {
+    set_kernel("multby2_v2");
     prepare_kernel(2);
     execute_kernel(1, &m_num_work_items, NULL);
     validate_results(2);
 }
-
-TEST_F(OpenCLVectorTest, Vector4ArrayTest) {
-    set_kernel("square_vec4");
-    prepare_kernel(4);
-    execute_kernel(1, &m_num_work_items, NULL);
-    validate_results(4);
-}
-
-TEST_F(OpenCLVectorTest, Vector8ArrayTest) {
-    set_kernel("square_vec8");
-    prepare_kernel(8);
-    execute_kernel(1, &m_num_work_items, NULL);
-    validate_results(8);
-}
-
-TEST_F(OpenCLVectorTest, Vector16ArrayTest) {
-    set_kernel("square_vec16");
-    prepare_kernel(16);
-    execute_kernel(1, &m_num_work_items, NULL);
-    validate_results(16);
-}
-
-// This test is designed to fail.
-TEST_F(OpenCLVectorTest, Vector3ArrayTest) {
-    set_kernel("square_vec3");
-    prepare_kernel(3);
-    execute_kernel(1, &m_num_work_items, NULL);
-    float r[8];
-    read_from_buffer(m_output, 0, sizeof(float)*8, &r);
-    ASSERT_FLOAT_EQ(0, r[0]);
-    ASSERT_FLOAT_EQ(1, r[1]);
-    ASSERT_FLOAT_EQ(4, r[2]);
-    ASSERT_GE(fabs(9.0 - r[3]), 1e-3);
-}
-
-TEST_F(OpenCLVectorTest, Vector3ArrayTest2) {
-    set_kernel("square_vec3_explicit");
-    prepare_kernel(3);
-    execute_kernel(1, &m_num_work_items, NULL);
-    validate_results(3);
-}
-
