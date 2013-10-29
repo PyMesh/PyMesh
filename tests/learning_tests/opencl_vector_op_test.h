@@ -17,6 +17,8 @@ class OpenCLVectorOps: public ::testing::Test, public OpenCLWrapper {
             init_program_from_file(kernel_file);
             build_program();
             init_kernels();
+
+            //cat_program();
         }
 
         virtual void TearDown() {
@@ -65,7 +67,7 @@ class OpenCLVectorOps: public ::testing::Test, public OpenCLWrapper {
         }
 
         size_t get_data_size() const {
-            return 1024 * 1024;
+            return 1024;
         }
 
     protected:
@@ -87,3 +89,10 @@ TEST_F(OpenCLVectorOps, MultBy2v2) {
     execute_kernel(1, &m_num_work_items, NULL);
     validate_results(2);
 }
+
+//TEST_F(OpenCLVectorOps, DisableLargeKernel) {
+//    set_kernel("multby2_v3");
+//    prepare_kernel(8);
+//    execute_kernel(1, &m_num_work_items, NULL);
+//    validate_results(8);
+//}
