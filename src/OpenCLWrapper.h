@@ -11,6 +11,10 @@ class OpenCLWrapper {
         OpenCLWrapper(bool profile=false);
         virtual ~OpenCLWrapper();
 
+        void profile_tasks(bool v) {
+            m_profile = v;
+        }
+
     protected:
         void init_platform();
         void init_device(bool use_cpu);
@@ -62,7 +66,7 @@ class OpenCLWrapper {
 
         template<typename T>
         cl_mem create_int_buffer(size_t num_entries, const T* data) {
-            IntArray raw_data = IntArray(new int[num_entries]);
+            IntArray raw_data = IntArray(num_entries);
             std::copy(data, data+num_entries, raw_data.begin());
             return create_buffer(sizeof(int)*num_entries, raw_data.data());
         }
@@ -82,6 +86,9 @@ class OpenCLWrapper {
 
         void attach_profile_callback(cl_event& event);
 
+    protected:
+        // Debugging methods
+        void cat_program();
 
 
     private:

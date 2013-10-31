@@ -195,6 +195,17 @@ void OpenCLWrapper::attach_profile_callback(cl_event& event) {
     }
 }
 
+void OpenCLWrapper::cat_program() {
+    size_t program_size;
+    CALL_CL_GUARDED(clGetProgramInfo,
+            (m_program, CL_PROGRAM_SOURCE, 0, NULL, &program_size));
+    char* program = new char[program_size];
+    CALL_CL_GUARDED(clGetProgramInfo,
+            (m_program, CL_PROGRAM_SOURCE, program_size, program, NULL));
+    std::cout << program << std::endl;
+    delete [] program;
+}
+
 cl_mem OpenCLWrapper::allocate_memory_on_device(size_t num_bytes) const {
     cl_int err;
     cl_mem_flags flags = CL_MEM_READ_WRITE;
