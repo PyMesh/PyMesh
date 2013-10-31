@@ -176,9 +176,60 @@ cl_ulong OpenCLWrapper::get_kernel_private_mem_size() const {
     return private_size;
 }
 
+cl_ulong OpenCLWrapper::get_device_global_mem_size() const {
+    cl_ulong glob_mem_size;
+    CALL_CL_GUARDED(clGetDeviceInfo, (
+                m_device, CL_DEVICE_GLOBAL_MEM_SIZE,
+                sizeof(glob_mem_size), &glob_mem_size, NULL));
+    return glob_mem_size;
+}
+
+cl_ulong OpenCLWrapper::get_device_global_cache_size() const {
+    cl_ulong glob_cache_size;
+    CALL_CL_GUARDED(clGetDeviceInfo, (
+                m_device, CL_DEVICE_GLOBAL_MEM_CACHE_SIZE,
+                sizeof(glob_cache_size), &glob_cache_size, NULL));
+    return glob_cache_size;
+}
+
+cl_uint  OpenCLWrapper::get_device_global_cacheline_size() const {
+    cl_uint glob_cacheline_size;
+    CALL_CL_GUARDED(clGetDeviceInfo, (
+                m_device, CL_DEVICE_GLOBAL_MEM_CACHELINE_SIZE,
+                sizeof(glob_cacheline_size), &glob_cacheline_size, NULL));
+    return glob_cacheline_size;
+}
+
+cl_ulong OpenCLWrapper::get_device_const_mem_size() const {
+    cl_ulong const_mem_size;
+    CALL_CL_GUARDED(clGetDeviceInfo, (
+                m_device, CL_DEVICE_MAX_CONSTANT_BUFFER_SIZE,
+                sizeof(const_mem_size), &const_mem_size, NULL));
+    return const_mem_size;
+}
+
+cl_ulong OpenCLWrapper::get_device_local_mem_size() const {
+    cl_ulong local_mem_size;
+    CALL_CL_GUARDED(clGetDeviceInfo, (
+                m_device, CL_DEVICE_LOCAL_MEM_SIZE,
+                sizeof(local_mem_size), &local_mem_size, NULL));
+    return local_mem_size;
+}
+
+bool OpenCLWrapper::excess_usage_of_local_mem() const {
+    cl_ulong usage_private = get_kernel_private_mem_size();
+    cl_ulong usage_local = get_kernel_local_mem_size();
+    cl_ulong avail_local = get_device_local_mem_size();
+    return usage_private > avail_local || usage_local > avail_local;
+}
+
 void OpenCLWrapper::execute_kernel(size_t dim,
         size_t* global_work_size,
         size_t* local_work_size) {
+    if (excess_usage_of_local_mem()) {
+        throw RuntimeError("Local local memory excceeds device resource");
+    }
+
     cl_event complete_event;
     CALL_CL_GUARDED(clEnqueueNDRangeKernel, (
                 m_queue, m_kernel, dim,

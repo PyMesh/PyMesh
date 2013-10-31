@@ -36,6 +36,16 @@ class OpenCLWrapper {
         cl_ulong get_kernel_local_mem_size() const;
         cl_ulong get_kernel_private_mem_size() const;
 
+        // Query device info
+        cl_ulong get_device_global_mem_size() const;
+        cl_ulong get_device_global_cache_size() const;
+        cl_uint  get_device_global_cacheline_size() const;
+        cl_ulong get_device_const_mem_size() const;
+        cl_ulong get_device_local_mem_size() const;
+
+        // Check kernels
+        bool excess_usage_of_local_mem() const;
+
     protected:
         // Buffer creation methods
         typedef std::vector<float> FloatArray;

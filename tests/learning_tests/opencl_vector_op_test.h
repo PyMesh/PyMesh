@@ -11,7 +11,7 @@ class OpenCLVectorOps: public ::testing::Test, public OpenCLWrapper {
             std::string kernel_file = root_dir + "/tests/learning_tests/opencl_kernels/array_mult_scalar.cl";
 
             init_platform();
-            init_device(true);
+            init_device(false);
             init_context();
             init_queue();
             init_program_from_file(kernel_file);
