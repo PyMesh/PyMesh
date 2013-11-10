@@ -1,5 +1,5 @@
 
-#define N 512
+#define N 512*1024
 __kernel void multby2_v3(__global float* data, __global float* results) {
     size_t id = get_global_id(0);
     float8 tmp[N];

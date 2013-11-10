@@ -11,7 +11,7 @@ class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
             std::string root_dir = Environment::get_required("PYMESH_PATH");
             m_kernel_path = root_dir + "/tests/learning_tests/opencl_kernels/";
             init_platform();
-            init_device(false);
+            init_device(true);
             init_context();
             init_queue();
         }
