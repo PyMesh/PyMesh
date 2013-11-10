@@ -1,11 +1,12 @@
 #pragma once
+#include <cmath>
 #include <string>
 #include <tr1/memory>
 #include <Environment.h>
 #include <Exception.h>
 #include <OpenCLWrapper.h>
 
-class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
+class OpenCLArctan2Test : public ::testing::Test, public OpenCLWrapper {
     protected:
         virtual void SetUp() {
             std::string root_dir = Environment::get_required("PYMESH_PATH");
@@ -42,10 +43,12 @@ class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
         void prepare_kernel() {
             FloatArray data = generate_data();
             const size_t padded_size = m_num_work_items * m_vector_width;
-            m_input = create_float_buffer(padded_size, data.data());
+            m_input_1 = create_float_buffer(padded_size, data.data());
+            //m_input_2 = create_float_buffer(padded_size, data.data());
+            m_input_2 = create_zero_float_buffer(padded_size);
             m_output = create_zero_float_buffer(padded_size);
 
-            SET_2_KERNEL_ARGS(m_kernel, m_input, m_output);
+            SET_3_KERNEL_ARGS(m_kernel, m_input_1, m_input_2, m_output);
         }
 
         void run_kernel() {
@@ -58,7 +61,7 @@ class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
             read_from_buffer(m_output, 0, sizeof(float) * data_size, result.data());
 
             for (size_t i=0; i<data_size; i++) {
-                ASSERT_FLOAT_EQ(i*2, result[i]);
+                ASSERT_FLOAT_EQ(atan2(i*2, 0), result[i]);
             }
         }
 
@@ -73,57 +76,28 @@ class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
         }
 
         size_t get_data_size() const {
-            return 1024;
+            return 1024*1024;
         }
 
     private:
         std::string m_kernel_path;
         size_t m_num_work_items;
         size_t m_vector_width;
-        cl_mem m_input;
+        cl_mem m_input_1;
+        cl_mem m_input_2;
         cl_mem m_output;
 };
 
-TEST_F(OpenCLMultiplyTest, Standard) {
-    load_program("multby2.cl");
-    set_kernel("multby2");
+TEST_F(OpenCLArctan2Test, ScalarArray) {
+    load_program("arctan2_v1.cl");
+    set_kernel("arctan2_v1");
     set_vector_width(1);
     test_kernel();
 }
 
-TEST_F(OpenCLMultiplyTest, WithVector) {
-    load_program("multby2_v2.cl");
-    set_kernel("multby2_v2");
-    set_vector_width(2);
-    test_kernel();
-}
-
-TEST_F(OpenCLMultiplyTest, RegisterSpill) {
-    load_program("multby2_v3.cl");
-    set_kernel("multby2_v3");
+TEST_F(OpenCLArctan2Test, VectorArray) {
+    load_program("arctan2_v2.cl");
+    set_kernel("arctan2_v2");
     set_vector_width(8);
-    ASSERT_THROW(test_kernel(), RuntimeError);
-}
-
-/**
- * Note that this test checks what happens when array out of bound bug happens.
- * The behavior is really **undefined**.  The code might return without error or
- * it might crash.  There is nothing to assert.
- */
-TEST_F(OpenCLMultiplyTest, DISABLED_OutOfBound) {
-    load_program("multby2_v4.cl");
-    set_kernel("multby2_v4");
-    set_vector_width(1);
     test_kernel();
 }
-
-TEST_F(OpenCLMultiplyTest, LocalMemory) {
-    load_program("multby2_v5.cl");
-    set_kernel("multby2_v5");
-    set_vector_width(1);
-    test_kernel();
-}
-
-
-
-
