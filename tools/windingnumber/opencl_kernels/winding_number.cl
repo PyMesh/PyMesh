@@ -1,5 +1,4 @@
-
-__kernel void compute_winding_number(
+__kernel void compute_winding_number_old(
         const uint num_vertices,
         __global const float* vertices,
         const uint num_faces,
@@ -74,22 +73,36 @@ __kernel void test(__global uint* result) {
 
 __kernel void compute_solid_angles(
         const uint num_vertices,
-        __global const float3* vertices,
+        __global const float* vertices,
         const uint num_faces,
-        __global const int3* faces,
+        __global const int* faces,
         const uint num_pts,
-        __global const float3* points,
+        __global const float* points,
         __global float* winding_numbers) {
     const int id = get_global_id(0);
     const size_t fid = id / num_pts;
     const size_t pid = id % num_pts;
-    winding_numbers[pid] = points[pid].s0;
-    /*
     if (fid < num_faces) {
-        float3 p  = points[pid];
-        float3 v1 = vertices[faces[fid].s0];
-        float3 v2 = vertices[faces[fid].s1];
-        float3 v3 = vertices[faces[fid].s2];
+        float3 p = (float3)(
+                points[pid*3 + 0],
+                points[pid*3 + 1],
+                points[pid*3 + 2]);
+        int3 f = (int3)(
+                faces[fid*3 + 0],
+                faces[fid*3 + 1],
+                faces[fid*3 + 2]);
+        float3 v1 = (float3)(
+                vertices[f.s0*3 + 0],
+                vertices[f.s0*3 + 1],
+                vertices[f.s0*3 + 2]);
+        float3 v2 = (float3)(
+                vertices[f.s1*3 + 0],
+                vertices[f.s1*3 + 1],
+                vertices[f.s1*3 + 2]);
+        float3 v3 = (float3)(
+                vertices[f.s2*3 + 0],
+                vertices[f.s2*3 + 1],
+                vertices[f.s2*3 + 2]);
         float3 a = v1 - p;
         float3 b = v2 - p;
         float3 c = v3 - p;
@@ -105,7 +118,59 @@ __kernel void compute_solid_angles(
         angle /= 4 * M_PI_F;
         winding_numbers[pid] += angle;
     }
-    */
 }
 
 
+__kernel void compute_winding_number(
+        const uint num_vertices,
+        __global const float* vertices,
+        const uint num_faces,
+        __global const int* faces,
+        const uint num_pts,
+        __global const float* points,
+        __global float* winding_numbers) {
+    const int id = get_global_id(0);
+    float3 p = (float3)(
+            points[id*3 + 0],
+            points[id*3 + 1],
+            points[id*3 + 2]);
+    float total_solid_angle = 0;
+
+    for (size_t i=0; i<num_faces; i++) {
+        int3 v_idx = (int3)(
+                faces[i*3 + 0],
+                faces[i*3 + 1],
+                faces[i*3 + 2]);
+        float3 v1 = (float3)(
+                vertices[v_idx.s0*3 + 0],
+                vertices[v_idx.s0*3 + 1],
+                vertices[v_idx.s0*3 + 2]);
+        float3 v2 = (float3)(
+                vertices[v_idx.s1*3 + 0],
+                vertices[v_idx.s1*3 + 1],
+                vertices[v_idx.s1*3 + 2]);
+        float3 v3 = (float3)(
+                vertices[v_idx.s2*3 + 0],
+                vertices[v_idx.s2*3 + 1],
+                vertices[v_idx.s2*3 + 2]);
+        float3 a = v1 - p;
+        float3 b = v2 - p;
+        float3 c = v3 - p;
+        float a_norm = length(a);
+        float b_norm = length(b);
+        float c_norm = length(c);
+        float a_dot_b = dot(a, b);
+        float b_dot_c = dot(b, c);
+        float c_dot_a = dot(c, a);
+        float det = dot(a, cross(b, c));
+        float denominator =
+            a_norm * b_norm * c_norm +
+            a_dot_b * c_norm +
+            b_dot_c * a_norm +
+            c_dot_a * b_norm;
+        float angle = atan2(det, denominator) * 2;
+        total_solid_angle += angle;
+    }
+    total_solid_angle /= (4 * M_PI_F);
+    winding_numbers[id] = total_solid_angle;
+}

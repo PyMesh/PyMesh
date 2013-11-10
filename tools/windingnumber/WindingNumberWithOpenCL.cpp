@@ -72,6 +72,8 @@ size_t WindingNumberWithOpenCL::compute_work_load_partition(
         size_t* global_size, size_t* local_size) {
     dim = 1;
     size_t base_size = get_preferred_work_group_size_multiple();
+    size_t max_size = get_max_work_group_size();
+    base_size = (max_size / base_size) * base_size;
     size_t multiples = num_items / base_size;
     if (num_items % base_size > 0) {
         multiples ++;

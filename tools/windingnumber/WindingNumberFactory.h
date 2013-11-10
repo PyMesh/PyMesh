@@ -6,6 +6,7 @@
 #include "WindingNumberWithHierarchy.h"
 #include "WindingNumberWithOpenCL.h"
 #include "WindingNumberWithOpenCL2.h"
+#include "WindingNumberWithOpenCL3.h"
 
 namespace WindingNumberFactory {
     WindingNumber* WindingNumberCalculator(const std::string& method) {
@@ -15,6 +16,8 @@ namespace WindingNumberFactory {
             return new WindingNumberWithOpenCL();
         } else if (method == "opencl2") {
             return new WindingNumberWithOpenCL2();
+        } else if (method == "opencl3") {
+            return new WindingNumberWithOpenCL3();
         } else {
             throw RuntimeError(
                     std::string("Unknow winding number computation method.")
