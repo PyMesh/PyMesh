@@ -73,9 +73,10 @@ void MeshFactory::initialize_vertices(MeshParser* parser) {
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();
 
     VectorF& vertices = geometry->get_vertices();
-    vertices.resize(parser->num_vertices() * 3);
+    vertices.resize(parser->num_vertices() * parser->dim());
 
     parser->export_vertices(vertices.data());
+    geometry->set_dim(parser->dim());
 }
 
 void MeshFactory::initialize_faces(MeshParser* parser) {

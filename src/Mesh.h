@@ -47,21 +47,12 @@ class Mesh {
 
     public:
         // Geometry access
-        size_t get_dim() { return 3; }
-        size_t get_num_vertices() {
-            return get_vertices().size() / 3;
-        }
-        size_t get_num_faces() {
-            return get_faces().size() / 3;
-        }
-        size_t get_num_voxels() {
-            if (get_vertex_per_voxel() == 0)
-                return 0;
-            else 
-                return get_voxels().size() / get_vertex_per_voxel();
-        }
+        size_t get_dim() const;
+        size_t get_num_vertices() const;
+        size_t get_num_faces() const;
+        size_t get_num_voxels() const;
 
-        Vector3F get_vertex(size_t i);
+        VectorF get_vertex(size_t i);
         VectorI get_face(size_t i);
         VectorI  get_voxel(size_t i);
 
@@ -104,8 +95,7 @@ class Mesh {
     protected:
         GeometryPtr     get_geometry() { return m_geometry; }
         ConnectivityPtr get_connectivity() { return m_connectivity; }
-        AttributesPtr   get_attributes() {
-            return m_attributes; }
+        AttributesPtr   get_attributes() { return m_attributes; }
 
         void set_geometry(GeometryPtr geometry);
         void set_connectivity(ConnectivityPtr connectivity);

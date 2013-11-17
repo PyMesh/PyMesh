@@ -1,6 +1,7 @@
 #include "Mesh.h"
 
 #include <tr1/memory>
+#include <iostream>
 
 #include "EigenTypedef.h"
 #include "MeshAttributes.h"
@@ -13,8 +14,25 @@ Mesh::Mesh() {
     m_attributes   = AttributesPtr  (new MeshAttributes());
 }
 
-Vector3F Mesh::get_vertex(size_t i) {
-    return get_vertices().segment<3>(i*3);
+size_t Mesh::get_dim() const {
+    return m_geometry->get_dim();
+}
+
+size_t Mesh::get_num_vertices() const {
+    return m_geometry->get_num_vertices();
+}
+
+size_t Mesh::get_num_faces() const {
+    return m_geometry->get_num_faces();
+}
+
+size_t Mesh::get_num_voxels() const {
+    return m_geometry->get_num_voxels();
+}
+
+VectorF Mesh::get_vertex(size_t i) {
+    const size_t dim = get_dim();
+    return get_vertices().segment(i*dim, dim);
 }
 
 VectorI Mesh::get_face(size_t i) {

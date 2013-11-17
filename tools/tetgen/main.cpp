@@ -35,12 +35,13 @@ int main(int argc, char* argv[]) {
     VectorI tet_faces = tetgen.get_faces();
     VectorI tet_voxels = tetgen.get_voxels();
 
+    const size_t dim = 3;
     const size_t num_vertex_per_face = 3;
     const size_t num_vertex_per_voxel = 4;
 
     MeshWriter* writer = MeshWriter::create_writer(std::string(argv[2]));
     writer->write(tet_vertices, tet_faces, tet_voxels, 
-            num_vertex_per_face, num_vertex_per_voxel);
+            dim, num_vertex_per_face, num_vertex_per_voxel);
     return 0;
 }
 

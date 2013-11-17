@@ -46,12 +46,12 @@ void MSHWriter::write_mesh(Mesh& mesh) {
 }
 
 void MSHWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
-        size_t vertex_per_face, size_t vertex_per_voxel) {
+        size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
     Zhou::MshSaver saver(m_filename, true);
     if (voxels.size() == 0) {
-        write_geometry(saver, vertices, faces, vertex_per_face);
+        write_geometry(saver, vertices, faces, dim, vertex_per_face);
     } else {
-        write_geometry(saver, vertices, voxels, vertex_per_voxel);
+        write_geometry(saver, vertices, voxels, dim, vertex_per_voxel);
     }
     if (m_attr_names.size() != 0) {
         std::cerr << "Warning: all attributes are ignored." << std::endl;
@@ -70,6 +70,7 @@ void MSHWriter::write_surface_mesh(Mesh& mesh) {
     write_geometry(saver,
             mesh.get_vertices(),
             mesh.get_faces(),
+            dim,
             vertex_per_face);
 
     for (AttrNames::const_iterator itr = m_attr_names.begin();
@@ -81,7 +82,7 @@ void MSHWriter::write_surface_mesh(Mesh& mesh) {
         }
 
         VectorF& attr = mesh.get_attribute(*itr);
-        write_attribute(saver, *itr, attr, num_vertices, num_faces);
+        write_attribute(saver, *itr, attr, dim, num_vertices, num_faces);
     }
 }
 
@@ -101,6 +102,7 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
     write_geometry(saver,
             mesh.get_vertices(),
             mesh.get_voxels(),
+            dim,
             vertex_per_voxel);
 
     for (AttrNames::const_iterator itr = m_attr_names.begin();
@@ -112,29 +114,29 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
         }
 
         VectorF& attr = mesh.get_attribute(*itr);
-        write_attribute(saver, *itr, attr, num_vertices, num_voxels);
+        write_attribute(saver, *itr, attr, dim, num_vertices, num_voxels);
     }
 }
 
 void MSHWriter::write_geometry(Zhou::MshSaver& saver, VectorF& vertices,
-        VectorI& elements, size_t vertex_per_element) {
+        VectorI& elements, size_t dim, size_t vertex_per_element) {
     if (vertex_per_element == 4) {
         correct_tet_orientation(vertices, elements);
     }
-    saver.save_mesh(vertices, elements, 3, vertex_per_element);
+    saver.save_mesh(vertices, elements, dim, vertex_per_element);
 }
 
 void MSHWriter::write_attribute(Zhou::MshSaver& saver, const std::string& name,
-        VectorF& value, size_t num_vertices, size_t num_elements) {
+        VectorF& value, size_t dim, size_t num_vertices, size_t num_elements) {
     size_t attr_size = value.size();
 
     if (attr_size == num_vertices) {
         saver.save_scalar_field(name, value);
-    } else if (attr_size == num_vertices * 3) {
+    } else if (attr_size == num_vertices * dim) {
         saver.save_vector_field(name, value);
     } else if (attr_size == num_elements) {
         saver.save_elem_scalar_field(name, value);
-    } else if (attr_size == num_elements * 3) {
+    } else if (attr_size == num_elements * dim) {
         saver.save_elem_vector_field(name, value);
     } else {
         std::cerr << "Unknow attribute type." << std::endl;

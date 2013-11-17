@@ -7,6 +7,8 @@
 
 #include "EigenTypedef.h"
 
+OBJParser::OBJParser() : m_dim(0), m_vertex_per_face(3) { }
+
 bool OBJParser::parse(const std::string& filename) {
     const size_t LINE_SIZE = 256;
     char line[LINE_SIZE];
@@ -57,17 +59,18 @@ size_t OBJParser::get_attribute_size(const std::string& name) const {
         std::cerr << "Attribute " << name << " does not exist." << std::endl;
         return 0;
     }
-    return m_vertex_normals.size() * 3;
+    return m_vertex_normals.size() * m_dim;
 }
 
 void OBJParser::export_vertices(Float* buffer) {
+    const size_t dim = m_dim;
     size_t count=0;
     for (VertexList::const_iterator vi=m_vertices.begin();
             vi != m_vertices.end(); vi++) {
-        const Vector3F& v = *vi;
-        buffer[count*3  ] = v[0];
-        buffer[count*3+1] = v[1];
-        buffer[count*3+2] = v[2];
+        const VectorF& v = *vi;
+        for (size_t i=0; i<dim; i++) {
+            buffer[dim * count + i] = v[i];
+        }
         count++;
     }
 }
@@ -104,13 +107,14 @@ void OBJParser::export_attribute(const std::string& name, Float* buffer) {
         return;
     }
 
+    const size_t dim = m_dim;
     size_t count=0;
     for (NormalList::const_iterator ni = m_vertex_normals.begin();
             ni != m_vertex_normals.end(); ni++) {
-        const Vector3F& normal = *ni;
-        buffer[count*3  ] = normal[0];
-        buffer[count*3+1] = normal[1];
-        buffer[count*3+2] = normal[2];
+        const VectorF& normal = *ni;
+        for (size_t i=0; i<dim; i++) {
+            buffer[dim * count + i] = normal[i];
+        }
         count++;
     }
 }
@@ -127,21 +131,26 @@ bool OBJParser::attribute_exists(const std::string& name) const {
 
 bool OBJParser::parse_vertex_line(char* line) {
     char header[8];
-    Float x,y,z,w;
-    size_t n = sscanf(line, "%s %lf %lf %lf %lf", header, &x, &y, &z, &w);
-    if (n < 4) return false;
+    Float data[4];
+    size_t n = sscanf(line, "%s %lf %lf %lf %lf", header,
+            &data[0], &data[1], &data[2], &data[3]);
+    if (n < 3) return false;
 
     // Check to handle homogeneous coordinates.
     if (n == 5) {
-        x = x/w;
-        y = y/w;
-        z = z/w;
+        data[0] /= data[3];
+        data[1] /= data[3];
+        data[2] /= data[3];
+        n -= 1;
     }
+    if (m_dim == 0) { m_dim = n-1; }
+    else if (m_dim != n-1) { return false; }
 
+    Eigen::Map<VectorF> coord(data, m_dim);
     if (header[1] == '\0')
-        m_vertices.push_back(Vector3F(x,y,z));
+        m_vertices.push_back(coord);
     else if (header[1] == 'n')
-        m_vertex_normals.push_back(Vector3F(x,y,z));
+        m_vertex_normals.push_back(coord);
     return true;
 }
 

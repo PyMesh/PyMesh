@@ -98,7 +98,7 @@ TEST_F(OpenCLMultiplyTest, WithVector) {
     test_kernel();
 }
 
-TEST_F(OpenCLMultiplyTest, RegisterSpill) {
+TEST_F(OpenCLMultiplyTest, DISABLED_RegisterSpill) {
     load_program("multby2_v3.cl");
     set_kernel("multby2_v3");
     set_vector_width(8);

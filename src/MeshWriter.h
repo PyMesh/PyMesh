@@ -26,7 +26,7 @@ class MeshWriter {
 
         virtual void write_mesh(Mesh& mesh)=0;
         virtual void write(VectorF& vertices, VectorI& faces, VectorI& voxels,
-                size_t vertex_per_face, size_t vertex_per_voxel)=0;
+                size_t dim, size_t vertex_per_face, size_t vertex_per_voxel)=0;
 
     public:
         void set_output_filename(const std::string& filename) {

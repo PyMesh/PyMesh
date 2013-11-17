@@ -31,6 +31,7 @@ class MeshParser {
         virtual void export_voxels(int* buffer)=0;
         virtual void export_attribute(const std::string& name, Float* buffer)=0;
 
+        virtual size_t dim() const {return 3;}
         virtual size_t vertex_per_voxel() const {return 0;}
         virtual size_t vertex_per_face() const  {return 3;}
 };
