@@ -17,7 +17,7 @@ class MeshFactory {
         MeshFactory();
         MeshFactory& load_file(const std::string& filename);
         MeshFactory& load_data(VectorF& vertices, VectorI& faces, VectorI& voxels,
-                size_t num_vertex_per_face, size_t num_vertex_per_voxel);
+                size_t dim, size_t num_vertex_per_face, size_t num_vertex_per_voxel);
         MeshFactory& with_connectivity(const std::string& conn_type);
         MeshFactory& with_attribute(const std::string& attr_name);
         Mesh* create() { return m_mesh; }
