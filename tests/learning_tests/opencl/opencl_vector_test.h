@@ -8,8 +8,8 @@
 class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
     protected:
         virtual void SetUp() {
-            std::string root_dir = Environment::get_required("PYMESH_PATH");
-            std::string kernel_file = root_dir + "/tests/learning_tests/opencl_kernels/square.cl";
+            std::string kernel_dir = KERNEL_DIR;
+            std::string kernel_file = kernel_dir + "square.cl";
 
             init_platform();
             init_device(true);

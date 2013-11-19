@@ -11,9 +11,8 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
         typedef std::vector<float> FloatVector;
         typedef std::tr1::shared_ptr<float> FloatPtr;
         virtual void SetUp () {
-            std::string root_dir = Environment::get_required("PYMESH_PATH");
-            std::string kernel_file = root_dir +
-                "/tests/learning_tests/opencl_kernels/race_condition.cl";
+            std::string kernel_path = KERNEL_DIR;
+            std::string kernel_file = kernel_path + "race_condition.cl";
 
             init_platform();
             init_device(true);
