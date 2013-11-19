@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <list>
 #include <map>
 extern "C" {
 #include "cl-helper.h"
@@ -29,6 +30,9 @@ class OpenCLWrapper {
         void set_kernel(const std::string& kernel_name);
         void execute_kernel(size_t dim,
                 size_t* global_work_size, size_t* local_work_size);
+
+        // Release all resources
+        void release_resources();
 
         // Query kernel info
         size_t get_max_work_group_size() const;
@@ -107,6 +111,7 @@ class OpenCLWrapper {
 
     protected:
         typedef std::map<std::string, cl_kernel> KernelMap;
+        typedef std::list<cl_mem> MemList;
         cl_platform_id m_platform;
         cl_device_id   m_device;
         cl_context     m_context;
@@ -114,6 +119,7 @@ class OpenCLWrapper {
         KernelMap      m_kernels;
         cl_kernel      m_kernel;
         cl_command_queue m_queue;
+        MemList        m_buffers;
 
     private:
         bool           m_profile;

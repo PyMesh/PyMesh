@@ -10,8 +10,7 @@ using namespace OpenCLWrapperHelper;
 OpenCLWrapper::OpenCLWrapper(bool profile) : m_profile(profile) {
 }
 
-OpenCLWrapper::~OpenCLWrapper() {
-}
+OpenCLWrapper::~OpenCLWrapper() { }
 
 void OpenCLWrapper::init_platform() {
     CALL_CL_GUARDED(clGetPlatformIDs, (1, &m_platform, NULL));
@@ -113,6 +112,7 @@ cl_mem OpenCLWrapper::create_buffer(size_t num_bytes, void* raw_data) {
     cl_mem buf = allocate_memory_on_device(num_bytes);
     if (raw_data != NULL)
         write_to_buffer(buf, 0, num_bytes, raw_data);
+    m_buffers.push_back(buf);
     return buf;
 }
 
@@ -237,6 +237,20 @@ void OpenCLWrapper::execute_kernel(size_t dim,
                 0, NULL, &complete_event));
     attach_profile_callback(complete_event);
     CALL_CL_GUARDED(clFinish, (m_queue));
+}
+
+void OpenCLWrapper::release_resources() {
+    for (MemList::iterator itr=m_buffers.begin();
+            itr!=m_buffers.end(); itr++) {
+        CALL_CL_GUARDED(clReleaseMemObject, (*itr));
+    }
+    for (KernelMap::iterator itr=m_kernels.begin();
+            itr!=m_kernels.end(); itr++) {
+        CALL_CL_GUARDED(clReleaseKernel, (itr->second));
+    }
+    CALL_CL_GUARDED(clReleaseProgram, (m_program));
+    CALL_CL_GUARDED(clReleaseCommandQueue, (m_queue));
+    CALL_CL_GUARDED(clReleaseContext, (m_context));
 }
 
 void OpenCLWrapper::attach_profile_callback(cl_event& event) {

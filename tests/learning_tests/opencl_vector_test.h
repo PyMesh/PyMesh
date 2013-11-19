@@ -21,6 +21,7 @@ class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
         }
 
         virtual void TearDown() {
+            release_resources();
         }
 
         void prepare_kernel(size_t vector_width) {

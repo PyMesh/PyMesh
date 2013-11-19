@@ -16,6 +16,10 @@ class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
             init_queue();
         }
 
+        virtual void TearDown() {
+            release_resources();
+        }
+
         void load_program(const std::string& kernel_file) {
             init_program_from_file(m_kernel_path + kernel_file);
             build_program();

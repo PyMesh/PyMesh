@@ -25,6 +25,7 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
         }
 
         virtual void TearDown() {
+            release_resources();
         }
 
         void prepare_kernel_under_race_condition() {
