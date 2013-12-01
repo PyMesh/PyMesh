@@ -6,7 +6,7 @@
 WindingNumberWithOpenCL2::WindingNumberWithOpenCL2() : OpenCLWrapper(true), m_vector_width(1) {
     std::string proj_path = Environment::get_required("PYMESH_PATH");
     m_kernel_file = proj_path +
-        "/tools/windingnumber/opencl_kernels/solid_angle.cl";
+        "/tools/windingnumber/opencl_kernels/solid_angle2.cl";
 }
 
 void WindingNumberWithOpenCL2::init(const MatrixFr& V, const MatrixIr& F) {
@@ -45,37 +45,45 @@ VectorF WindingNumberWithOpenCL2::compute(const MatrixFr& P) {
     size_t num_pts = P.rows();
     size_t dim, global_size[3], local_size[3];
     size_t num_work_items;
-    num_work_items = compute_work_load_partition(num_pts * m_num_faces, dim, global_size, local_size);
-    std::cout << dim << " " << global_size[0] << " " << local_size[0] << std::endl;
+    num_work_items = compute_work_load_partition(num_pts, m_num_faces, dim, global_size, local_size);
 
     FloatArray pts_array = align_to_memory(P);
-    pts_array.resize(num_work_items * 4 * m_vector_width, 0);
-    FloatArray solid_angle_array(num_work_items * m_vector_width, 0);
+    pts_array.resize(global_size[1] * 4 * m_vector_width, 0);
+    FloatArray winding_num(global_size[1] * m_vector_width, 0);
 
     cl_mem point_buffer = create_float_buffer(
             pts_array.size(), pts_array.data());
-    cl_mem solid_angle_buffer = create_zero_float_buffer(num_work_items * m_vector_width);
+    cl_mem winding_num_buffer = create_zero_float_buffer(
+            global_size[1] * m_vector_width);
 
     SET_5_KERNEL_ARGS(m_kernel, 
             m_vertex_buf, m_num_faces,
-            num_pts, point_buffer, solid_angle_buffer);
+            num_pts, point_buffer, winding_num_buffer);
     execute_kernel(dim, global_size, local_size);
 
-    read_from_buffer(solid_angle_buffer, 0, num_work_items * sizeof(float) * m_vector_width,
-            solid_angle_array.data());
+    read_from_buffer(winding_num_buffer, 0, winding_num.size() * sizeof(float),
+            winding_num.data());
     VectorF result = VectorF::Zero(num_pts);
-    for (size_t i=0; i<m_num_faces; i++) {
-        for (size_t j=0; j<num_pts; j++) {
-            result[j] += solid_angle_array[i*num_pts + j];
-        }
-    }
+    std::copy(winding_num.begin(), winding_num.begin() + num_pts, result.data());
 
     return result / (4 * M_PI);
 }
 
 size_t WindingNumberWithOpenCL2::compute_work_load_partition(
-        size_t num_items, size_t& dim,
-        size_t* global_size, size_t* local_size) {
+        size_t num_pts, size_t num_faces,
+        size_t& dim, size_t* global_size, size_t* local_size) {
+    dim = 2;
+    const size_t vector_width = m_vector_width;
+    global_size[1] = (num_pts + vector_width - 1) / vector_width;
+    global_size[0] = num_faces;
+    local_size[1] = 1;
+    local_size[0] = 1;
+    return global_size[0] * global_size[1];
+
+
+
+
+    /*
     dim = 1;
     const size_t vector_width = m_vector_width;
     size_t base_size = get_preferred_work_group_size_multiple();
@@ -92,6 +100,7 @@ size_t WindingNumberWithOpenCL2::compute_work_load_partition(
     global_size[0] = base_size * multiples;
     local_size[0] = base_size;
     return global_size[0];
+    */
 }
 
 WindingNumberWithOpenCL2::FloatArray WindingNumberWithOpenCL2::unpack_vertex_data(

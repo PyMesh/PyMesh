@@ -6,12 +6,12 @@
 WindingNumberWithOpenCL3::WindingNumberWithOpenCL3() : OpenCLWrapper(true), m_vector_width(4) {
     std::string proj_path = Environment::get_required("PYMESH_PATH");
     m_kernel_file = proj_path +
-        "/tools/windingnumber/opencl_kernels/winding_number_v4.cl";
+        "/tools/windingnumber/opencl_kernels/winding_number_v4_small.cl";
 }
 
 void WindingNumberWithOpenCL3::init(const MatrixFr& V, const MatrixIr& F) {
     init_platform();
-    init_device(false);
+    init_device(true);
     init_context();
     init_queue();
     init_program_from_file(m_kernel_file);
@@ -43,10 +43,13 @@ VectorF WindingNumberWithOpenCL3::compute(const MatrixFr& P) {
     if (!is_row_major(P))
         throw RuntimeError("Point matrix must be row major!");
     size_t num_pts = P.rows();
+    std::cout << "num pts: " << num_pts << std::endl;
     size_t dim, global_size[3], local_size[3];
     size_t num_work_items;
     num_work_items = compute_work_load_partition(num_pts, dim, global_size, local_size);
     std::cout << dim << " " << global_size[0] << " " << local_size[0] << std::endl;
+    std::cout << "pts buffer size: " << num_work_items * 4 * m_vector_width << std::endl;
+    std::cout << "num faces: " << m_num_faces << std::endl;
 
     FloatArray pts_array = align_to_memory(P);
     pts_array.resize(num_work_items * 4 * m_vector_width, 0);
@@ -56,10 +59,10 @@ VectorF WindingNumberWithOpenCL3::compute(const MatrixFr& P) {
             pts_array.size(), pts_array.data());
     cl_mem wind_num_buffer = create_zero_float_buffer(num_work_items * m_vector_width);
 
-    SET_5_KERNEL_ARGS(m_kernel, 
+    SET_4_KERNEL_ARGS(m_kernel, 
             m_vertex_buf, m_num_faces,
-            num_pts, point_buffer, wind_num_buffer);
-    execute_kernel(dim, global_size, NULL);
+            point_buffer, wind_num_buffer);
+    execute_kernel(dim, global_size, local_size);
 
     read_from_buffer(wind_num_buffer, 0, num_work_items * sizeof(float) * m_vector_width,
             wind_num_array.data());
@@ -116,7 +119,8 @@ size_t WindingNumberWithOpenCL3::compute_work_load_partition(
     const size_t vector_width = m_vector_width;
     size_t base_size = get_preferred_work_group_size_multiple();
     size_t max_size = get_max_work_group_size();
-    base_size = (max_size / base_size) * base_size;
+    //base_size = (max_size / base_size) * base_size;
+    base_size = 1;
 
     size_t num_vector_items = num_items / vector_width;
     if (num_items % vector_width > 0)

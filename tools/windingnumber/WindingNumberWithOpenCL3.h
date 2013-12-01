@@ -6,7 +6,9 @@
 class WindingNumberWithOpenCL3 : public WindingNumber, public OpenCLWrapper {
     public:
         WindingNumberWithOpenCL3();
-        virtual ~WindingNumberWithOpenCL3() {}
+        virtual ~WindingNumberWithOpenCL3() {
+            release_resources();
+        }
 
     public:
         virtual void init(const MatrixFr& V, const MatrixIr& F);

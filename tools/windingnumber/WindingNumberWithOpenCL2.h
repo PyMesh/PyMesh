@@ -13,8 +13,9 @@ class WindingNumberWithOpenCL2 : public WindingNumber, public OpenCLWrapper {
         virtual VectorF compute(const MatrixFr& P);
 
     private:
-        size_t compute_work_load_partition(size_t num_items, size_t& dim,
-                size_t* global_size, size_t* local_size);
+        size_t compute_work_load_partition(
+                size_t num_pts, size_t num_faces,
+                size_t& dim, size_t* global_size, size_t* local_size);
         template<typename Derived>
         bool is_row_major(const Eigen::MatrixBase<Derived>& M) {
             return M.IsRowMajor;

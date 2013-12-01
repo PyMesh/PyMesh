@@ -1,7 +1,6 @@
 __kernel void compute_winding_number_v4(
         __global const float4* vertices,
         const uint num_faces,
-        const uint num_pts,
         __global const float4* points,
         __global float* winding_numbers) {
     const int id = get_global_id(0);
