@@ -6,6 +6,8 @@
 #include <MeshFactory.h>
 #include <Environment.h>
 
+using ::testing::Contains;
+
 class MeshTest : public ::testing::Test {
     protected:
         typedef std::tr1::shared_ptr<Mesh> MeshPtr;
@@ -20,10 +22,26 @@ class MeshTest : public ::testing::Test {
         }
 
     protected:
+        template <typename T>
+        std::vector<T> to_vector(size_t size, const T* data) {
+            return std::vector<T>(data, data+size);
+        }
+
+        void check_vertex_in_face_are_adjacent(const MeshPtr& mesh);
+        void check_vertex_in_voxel_are_adjacent(const MeshPtr& mesh);
+        void check_vertex_face_adjacency(const MeshPtr& mesh);
+        void check_vertex_voxel_adjacency(const MeshPtr& mesh);
+        void check_face_face_adjacency_is_symmetric(const MeshPtr& mesh);
+        void check_voxel_voxel_adjacency_is_symmetric(const MeshPtr& mesh);
+        void check_face_voxel_adjacency(const MeshPtr& mesh);
+        void check_voxel_face_adjacency(const MeshPtr& mesh);
+
+    protected:
         MeshPtr m_cube_tri;
         MeshPtr m_cube_tet;
         MeshPtr m_square_tri;
 };
+#include "MeshTest.inl"
 
 TEST_F(MeshTest, Dim) {
     ASSERT_EQ(3, m_cube_tri->get_dim());
@@ -141,9 +159,50 @@ TEST_F(MeshTest, LastVoxel) {
     ASSERT_EQ(8-1, cube_tet_last[3]);
 }
 
-//TEST_F(MeshTest, VertexAdjVertex) {
-//    const VectorI& cube_tri_first = m_cube_tri->get_face(0);
-//}
+TEST_F(MeshTest, VertexAdjVertex) {
+    check_vertex_in_face_are_adjacent(m_cube_tri);
+    check_vertex_in_face_are_adjacent(m_cube_tet);
+    check_vertex_in_face_are_adjacent(m_square_tri);
+    check_vertex_in_voxel_are_adjacent(m_cube_tri);
+    check_vertex_in_voxel_are_adjacent(m_cube_tet);
+    check_vertex_in_voxel_are_adjacent(m_square_tri);
+}
+
+TEST_F(MeshTest, VertexAdjFace) {
+    check_vertex_face_adjacency(m_cube_tri);
+    check_vertex_face_adjacency(m_cube_tet);
+    check_vertex_face_adjacency(m_square_tri);
+}
+
+TEST_F(MeshTest, VertexAdjVoxel) {
+    check_vertex_voxel_adjacency(m_cube_tri);
+    check_vertex_voxel_adjacency(m_cube_tet);
+    check_vertex_voxel_adjacency(m_square_tri);
+}
+
+TEST_F(MeshTest, FaceAdjFaceSymmetric) {
+    check_face_face_adjacency_is_symmetric(m_cube_tri);
+    check_face_face_adjacency_is_symmetric(m_cube_tet);
+    check_face_face_adjacency_is_symmetric(m_square_tri);
+}
+
+TEST_F(MeshTest, VoxelAdjVoxelSymmetric) {
+    check_voxel_voxel_adjacency_is_symmetric(m_cube_tri);
+    check_voxel_voxel_adjacency_is_symmetric(m_cube_tet);
+    check_voxel_voxel_adjacency_is_symmetric(m_square_tri);
+}
+
+TEST_F(MeshTest, FaceAdjVoxel) {
+    check_face_voxel_adjacency(m_cube_tri);
+    check_face_voxel_adjacency(m_cube_tet);
+    check_face_voxel_adjacency(m_square_tri);
+}
+
+TEST_F(MeshTest, VoxelAdjFace) {
+    check_voxel_face_adjacency(m_cube_tri);
+    check_voxel_face_adjacency(m_cube_tet);
+    check_voxel_face_adjacency(m_square_tri);
+}
 
 
 

@@ -3,7 +3,7 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 
 # Enumerate source files
 FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
-FILE(GLOB TEST_INC_FILES *_test.h)
+FILE(GLOB TEST_INC_FILES *_test.h *.inl)
 
 # Google sparse/dense hash
 IF (DEFINED ENV{GOOGLEHASH_INCLUDES})

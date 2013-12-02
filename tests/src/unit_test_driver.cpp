@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 #include "MeshTest.h"
 #include "TripletTest.h"
 #include "HashGridTest.h"
