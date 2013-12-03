@@ -69,7 +69,7 @@ void MshSaver::save_scalar_field(const std::string& fieldname, const VectorF& fi
 }
 
 void MshSaver::save_vector_field(const std::string& fieldname, const VectorF& field) {
-    assert(field.size() == 3 * m_num_nodes);
+    assert(field.size() == m_dim * m_num_nodes);
     fout << "$NodeData" << std::endl;
     fout << "1" << std::endl; // num string tags.
     fout << "\"" << fieldname << "\"" << std::endl;
@@ -144,7 +144,7 @@ void MshSaver::save_elem_scalar_field(const std::string& fieldname, const Vector
 }
 
 void MshSaver::save_elem_vector_field(const std::string& fieldname, const VectorF& field) {
-    assert(field.size() == m_num_elements * 3);
+    assert(field.size() == m_num_elements * m_dim);
     fout << "$ElementData" << std::endl;
     fout << 1 << std::endl; // num string tags.
     fout << "\"" << fieldname << "\"" << std::endl;
