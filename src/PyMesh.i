@@ -1,10 +1,9 @@
 %module PyMesh
-%include ExceptionConverter.i
+%include Core/ExceptionConverter.i
 %include numpy_setup.i
-%include EigenTypedef.i
+%include Core/EigenTypedef.i
 %include eigen.i
 %include Mesh.i
 %include MeshFactory.i
-%include MeshWriter.i
-%include OBJWriter.i
-%include HashGrid.i
+%include IO/MeshWriter.i
+%include Misc/HashGrid.i

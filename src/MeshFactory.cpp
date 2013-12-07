@@ -2,12 +2,12 @@
 #include <cassert>
 #include <tr1/memory>
 
-#include "Exception.h"
-#include "Mesh.h"
-#include "MeshAttributes.h"
-#include "MeshConnectivity.h"
-#include "MeshGeometry.h"
-#include "MeshParser.h"
+#include <Attributes/MeshAttributes.h>
+#include <Connectivity/MeshConnectivity.h>
+#include <Core/Exception.h>
+#include <Geometry/MeshGeometry.h>
+#include <IO/MeshParser.h>
+#include <Mesh.h>
 
 MeshFactory::MeshFactory() {
     m_mesh = new Mesh();

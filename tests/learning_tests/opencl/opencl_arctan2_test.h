@@ -2,8 +2,9 @@
 #include <cmath>
 #include <string>
 #include <tr1/memory>
-#include <Exception.h>
-#include <OpenCLWrapper.h>
+
+#include <Core/Exception.h>
+#include <Misc/OpenCLWrapper.h>
 
 class OpenCLArctan2Test : public ::testing::Test, public OpenCLWrapper {
     protected:

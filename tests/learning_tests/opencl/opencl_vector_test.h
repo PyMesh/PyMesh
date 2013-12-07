@@ -2,8 +2,8 @@
 #include <cmath>
 #include <string>
 #include <tr1/memory>
-#include <Environment.h>
-#include <OpenCLWrapper.h>
+#include <Misc/Environment.h>
+#include <Misc/OpenCLWrapper.h>
 
 class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
     protected:

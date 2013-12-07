@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
 #include "MeshTest.h"
-#include "TripletTest.h"
-#include "HashGridTest.h"
-#include "OBJParserTest.h"
+#include "IO/OBJParserTest.h"
+#include "Misc/TripletTest.h"
+#include "Misc/HashGridTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

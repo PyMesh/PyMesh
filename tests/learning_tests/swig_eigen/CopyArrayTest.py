@@ -30,3 +30,16 @@ class CopyArrayTest(unittest.TestCase):
         self.copy_obj.set_i_data(self.int_array);
         data = self.copy_obj.get_i_data();
         self.assertItemsEqual(self.int_array, data);
+
+    def test_update_f_data(self):
+        self.copy_obj.set_f_data(self.float_array);
+        data = self.copy_obj.get_f_data();
+        data[0] = -1;
+        self.assertEqual(-1, self.copy_obj.get_f_data()[0]);
+
+    #def test_const_f_data(self):
+    #    self.copy_obj.set_f_data(self.float_array);
+    #    data = self.copy_obj.get_f_data();
+    #    print(data.flags)
+    #    data[0] = -1;
+

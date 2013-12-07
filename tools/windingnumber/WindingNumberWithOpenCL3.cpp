@@ -1,7 +1,7 @@
 #include "WindingNumberWithOpenCL3.h"
 #include <iostream>
-#include <Environment.h>
-#include <Exception.h>
+#include <Core/Exception.h>
+#include <Misc/Environment.h>
 
 WindingNumberWithOpenCL3::WindingNumberWithOpenCL3() : OpenCLWrapper(true), m_vector_width(4) {
     std::string proj_path = Environment::get_required("PYMESH_PATH");

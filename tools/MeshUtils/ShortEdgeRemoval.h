@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
-#include <EdgeMap.h>
 
-#include "EigenTypedef.h"
+#include <Core/EigenTypedef.h>
+
+#include "EdgeMap.h"
 
 class ShortEdgeRemoval {
     public:

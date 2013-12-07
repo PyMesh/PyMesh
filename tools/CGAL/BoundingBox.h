@@ -3,7 +3,8 @@
 #include <vector>
 #include <set>
 
-#include "EigenTypedef.h"
+#include <Core/EigenTypedef.h>
+
 #include "CGAL_includes.h"
 
 class BoundingBoxes {

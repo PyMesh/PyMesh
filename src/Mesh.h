@@ -4,7 +4,7 @@
 #include <vector>
 #include <tr1/memory>
 
-#include "EigenTypedef.h"
+#include <Core/EigenTypedef.h>
 
 class MeshAttributes;
 class MeshConnectivity;

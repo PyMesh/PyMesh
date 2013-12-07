@@ -4,8 +4,8 @@
 #include <list>
 #include <queue>
 
-#include <EigenTypedef.h>
-#include <Exception.h>
+#include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 #include "Edge.h"
 #include "EdgeMap.h"

@@ -1,9 +1,10 @@
 #pragma once
 
-#include <EigenTypedef.h>
-#include <Environment.h>
+#include <Core/EigenTypedef.h>
+#include <Misc/Environment.h>
 #include <Mesh.h>
 #include <MeshFactory.h>
+
 #include <BoundingBox.h>
 
 class BoundingBoxTest : public ::testing::Test {

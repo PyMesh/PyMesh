@@ -1,5 +1,5 @@
 #pragma once
-#include "EigenTypedef.h"
+#include <Core/EigenTypedef.h>
 
 namespace Zhou {
     MatrixI extract_exterior_faces(const MatrixI& voxels);

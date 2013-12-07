@@ -1,8 +1,9 @@
 #include "tetgen_wrapper.h"
 #include <iostream>
 #include <tetgen.h>
-#include "Exception.h"
-#include "Mesh.h"
+
+#include <Core/Exception.h>
+#include <Mesh.h>
 
 //TetgenWrapper::TetgenWrapper(Mesh& surface) :
 //    m_ori_vertices(surface.get_vertices()),

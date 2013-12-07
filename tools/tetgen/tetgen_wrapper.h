@@ -2,7 +2,7 @@
 #include <string>
 #include <tetgen.h>
 
-#include "EigenTypedef.h"
+#include <Core/EigenTypedef.h>
 
 class Mesh;
 

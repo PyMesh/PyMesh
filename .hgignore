@@ -1,7 +1,6 @@
 syntax: glob
 *.pyc
 *.mat
-*.msh
 *.aux
 *.log
 *.out
