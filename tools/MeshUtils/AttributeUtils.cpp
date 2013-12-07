@@ -3,9 +3,9 @@
 #include <map>
 #include <iostream>
 
-#include "Mesh.h"
-#include "Exception.h"
-#include "Triplet.h"
+#include <Mesh.h>
+#include <Core/Exception.h>
+#include <Misc/Triplet.h>
 
 using namespace Zhou;
 

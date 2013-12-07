@@ -3,8 +3,8 @@
 #include <map>
 #include <vector>
 
-#include <Triplet.h>
-#include <Exception.h>
+#include <Core/Exception.h>
+#include <Misc/Triplet.h>
 
 using namespace Zhou;
 

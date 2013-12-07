@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
-#include <Exception.h>
+
+#include <Core/Exception.h>
 
 #include "WindingNumber.h"
 #include "WindingNumberWithHierarchy.h"

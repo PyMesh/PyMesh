@@ -1,10 +1,12 @@
 #include "TriangleIntersection.h"
-#include "CGAL_includes.hpp"
-#include "Exception.h"
 #include <cassert>
 #include <vector>
 #include <cmath>
 #include <iostream>
+
+#include <Core/Exception.h>
+
+#include "CGAL_includes.hpp"
 
 namespace TriangleIntersectionHelper {
     std::vector<int > get_shared_vertices(

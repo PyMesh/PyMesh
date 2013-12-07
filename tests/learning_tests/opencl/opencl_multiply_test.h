@@ -1,9 +1,10 @@
 #pragma once
 #include <string>
 #include <tr1/memory>
-#include <Environment.h>
-#include <Exception.h>
-#include <OpenCLWrapper.h>
+
+#include <Core/Exception.h>
+#include <Misc/Environment.h>
+#include <Misc/OpenCLWrapper.h>
 
 class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
     protected:

@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
-#include <EigenTypedef.h>
-#include <EdgeMap.h>
+#include <Core/EigenTypedef.h>
+
+#include "EdgeMap.h"
 
 class ObtuseTriangleRemoval {
     public:

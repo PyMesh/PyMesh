@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include <EigenTypedef.h>
+#include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
 #include "EdgeMap.h"

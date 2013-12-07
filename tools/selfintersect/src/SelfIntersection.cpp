@@ -1,10 +1,11 @@
 #include "SelfIntersection.h"
-#include "Exception.h"
 
 #include <boost/function.hpp>
 #include <boost/bind.hpp>
 #include <cassert>
 #include <iostream>
+
+#include <Core/Exception.h>
 
 #include "TriangleIntersection.h"
 

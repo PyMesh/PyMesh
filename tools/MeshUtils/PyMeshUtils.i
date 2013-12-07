@@ -1,8 +1,8 @@
 %module PyMeshUtils
 %include numpy_setup.i
-%include EigenTypedef.i
+%include Core/EigenTypedef.i
 %include eigen.i
-%include ExceptionConverter.i
+%include Core/ExceptionConverter.i
 %include AttributeUtils.i
 %include TriangleMetric.i
 %include ObtuseTriangleRemoval.i

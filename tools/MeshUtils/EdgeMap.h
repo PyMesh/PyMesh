@@ -3,8 +3,10 @@
 #include <vector>
 #include <limits>
 #include <google/dense_hash_map>
+
+#include <Core/Exception.h>
+
 #include "Edge.h"
-#include "Exception.h"
 
 template <typename T>
 class EdgeMap {

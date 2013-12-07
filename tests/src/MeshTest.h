@@ -4,7 +4,7 @@
 
 #include <Mesh.h>
 #include <MeshFactory.h>
-#include <Environment.h>
+#include <Misc/Environment.h>
 
 using ::testing::Contains;
 

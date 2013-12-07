@@ -3,10 +3,10 @@
 #include <tr1/memory>
 #include <iostream>
 
-#include "EigenTypedef.h"
-#include "MeshAttributes.h"
-#include "MeshConnectivity.h"
-#include "MeshGeometry.h"
+#include <Attributes/MeshAttributes.h>
+#include <Connectivity/MeshConnectivity.h>
+#include <Core/EigenTypedef.h>
+#include <Geometry/MeshGeometry.h>
 
 Mesh::Mesh() {
     m_geometry     = GeometryPtr    (new MeshGeometry());

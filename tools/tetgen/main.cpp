@@ -1,9 +1,11 @@
 #include <iostream>
 #include <string>
-#include "EigenTypedef.h"
-#include "Mesh.h"
-#include "MeshFactory.h"
-#include "MeshWriter.h"
+
+#include <Core/EigenTypedef.h>
+#include <Mesh.h>
+#include <MeshFactory.h>
+#include <IO/MeshWriter.h>
+
 #include "tetgen_wrapper.h"
 
 void print_usage(char* exe_name) {

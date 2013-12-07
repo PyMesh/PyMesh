@@ -2,10 +2,11 @@
 
 #include <cmath>
 
+#include <Misc/cl-helper.h>
+
 #include "AABB.h"
 #include "BoundingTree.h"
 #include "winding_number.h"
-#include "cl-helper.h"
 
 #ifndef WINDING_NUMBER_OMP_MIN_VALUE
 #  define WINDING_NUMBER_OMP_MIN_VALUE 1000
