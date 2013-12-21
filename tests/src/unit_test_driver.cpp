@@ -3,6 +3,7 @@
 
 #include "MeshTest.h"
 #include "IO/OBJParserTest.h"
+#include "IO/OBJWriterTest.h"
 #include "Misc/TripletTest.h"
 #include "Misc/HashGridTest.h"
 
