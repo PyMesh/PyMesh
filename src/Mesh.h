@@ -54,11 +54,19 @@ class Mesh {
 
         VectorF get_vertex(size_t i);
         VectorI get_face(size_t i);
-        VectorI  get_voxel(size_t i);
+        VectorI get_voxel(size_t i);
+
+        VectorF get_vertex(size_t i) const;
+        VectorI get_face(size_t i) const;
+        VectorI get_voxel(size_t i) const;
 
         VectorF& get_vertices();
         VectorI& get_faces();
         VectorI& get_voxels();
+
+        const VectorF& get_vertices() const;
+        const VectorI& get_faces() const;
+        const VectorI& get_voxels() const;
 
         int get_vertex_per_face() const;
         int get_vertex_per_voxel() const;
@@ -80,10 +88,11 @@ class Mesh {
         VectorI get_voxel_adjacent_voxels(size_t Vi) const;
 
         // Attribute access
-        bool has_attribute(const std::string& attr_name);
+        bool has_attribute(const std::string& attr_name) const;
         void add_attribute(const std::string& attr_name);
         void remove_attribute(const std::string& attr_name);
         VectorF& get_attribute(const std::string& attr_name);
+        const VectorF& get_attribute(const std::string& attr_name) const;
         void set_attribute(const std::string& attr_name, VectorF& attr_value);
         std::vector<std::string> get_attribute_names() const;
 

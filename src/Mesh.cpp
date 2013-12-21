@@ -45,6 +45,21 @@ VectorI Mesh::get_voxel(size_t i) {
     return get_voxels().segment(i*stride, stride);
 }
 
+VectorF Mesh::get_vertex(size_t i) const {
+    const size_t dim = get_dim();
+    return get_vertices().segment(i*dim, dim);
+}
+
+VectorI Mesh::get_face(size_t i) const {
+    size_t stride = get_vertex_per_face();
+    return get_faces().segment(i*stride, stride);
+}
+
+VectorI Mesh::get_voxel(size_t i) const {
+    size_t stride = get_vertex_per_voxel();
+    return get_voxels().segment(i*stride, stride);
+}
+
 VectorF& Mesh::get_vertices() {
     return m_geometry->get_vertices();
 }
@@ -54,6 +69,18 @@ VectorI& Mesh::get_faces() {
 }
 
 VectorI& Mesh::get_voxels() {
+    return m_geometry->get_voxels();
+}
+
+const VectorF& Mesh::get_vertices() const {
+    return m_geometry->get_vertices();
+}
+
+const VectorI& Mesh::get_faces() const {
+    return m_geometry->get_faces();
+}
+
+const VectorI& Mesh::get_voxels() const {
     return m_geometry->get_voxels();
 }
 
@@ -111,7 +138,7 @@ VectorI Mesh::get_voxel_adjacent_voxels(size_t Vi) const {
     return m_connectivity->get_voxel_adjacent_voxels(Vi);
 }
 
-bool Mesh::has_attribute(const std::string& attr_name) {
+bool Mesh::has_attribute(const std::string& attr_name) const {
     return m_attributes->has_attribute(attr_name);
 }
 
@@ -124,6 +151,10 @@ void Mesh::remove_attribute(const std::string& attr_name) {
 }
 
 VectorF& Mesh::get_attribute(const std::string& attr_name) {
+    return m_attributes->get_attribute(attr_name);
+}
+
+const VectorF& Mesh::get_attribute(const std::string& attr_name) const {
     return m_attributes->get_attribute(attr_name);
 }
 
