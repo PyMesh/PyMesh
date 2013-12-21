@@ -42,12 +42,12 @@ void OBJWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
         fout << std::endl;
     }
 
-    size_t num_faces = faces.size() / 3;
+    size_t num_faces = faces.size() / vertex_per_face;
     for (size_t i=0; i<num_faces; i++) {
         VectorI f = faces.segment(i*vertex_per_face, vertex_per_face);
         fout << "f ";
         for (size_t j=0; j<vertex_per_face; j++) {
-            fout << f[j] << " ";
+            fout << f[j] + 1 << " ";
         }
         fout << std::endl;
     }
