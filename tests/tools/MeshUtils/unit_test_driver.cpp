@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
-#include "ShortEdgeRemovalTest.h"
+#include "BoundaryEdgesTest.h"
+#include "BoundaryFacesTest.h"
 #include "IndexHeapTest.h"
+#include "ShortEdgeRemovalTest.h"
 #include "TripletMapTest.h"
 
 int main(int argc, char** argv) {

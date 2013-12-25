@@ -32,6 +32,9 @@ void BoundaryFaces::extract_boundary(const Mesh& mesh) {
     const size_t num_vertex_per_voxel = mesh.get_vertex_per_voxel();
     const size_t num_voxels = mesh.get_num_voxels();
 
+    if (num_voxels == 0) {
+        throw RuntimeError("Mesh has zero voxels!");
+    }
     if (num_vertex_per_voxel != 4) {
         throw NotImplementedError("Only tet mesh is supported");
     }
