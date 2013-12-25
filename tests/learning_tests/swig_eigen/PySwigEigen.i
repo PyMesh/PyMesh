@@ -4,3 +4,5 @@
 %include eigen.i
 %include Core/ExceptionConverter.i
 %include CopyTest.i
+%include ZSparseMatrix.i
+%include ZSparseMatrixTest.i
