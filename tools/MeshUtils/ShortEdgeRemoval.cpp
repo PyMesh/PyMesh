@@ -1,123 +1,202 @@
 #include "ShortEdgeRemoval.h"
+
+#include <algorithm>
+#include <iostream>
+#include <limits>
+#include <set>
+
+#include <Core/Exception.h>
+
 #include "IndexHeap.h"
 
-ShortEdgeRemoval::ShortEdgeRemoval(MatrixF& vertices, MatrixI& faces)
-        : m_vertices(vertices), m_faces(faces) {}
+const size_t ShortEdgeRemoval::UNMAPPED = std::numeric_limits<size_t>::max();
 
-size_t ShortEdgeRemoval::run(Float threshold) {
-    init_vertex_map();
-    compute_edge_lengths();
-
-    size_t num_collapsed = collapse(threshold);
-    return num_collapsed;
+ShortEdgeRemoval::ShortEdgeRemoval(MatrixFr& vertices, MatrixIr& faces) :
+    m_vertices(vertices),
+    m_faces(faces),
+    m_num_collapsed(0),
+    m_heap(false) {
+        const size_t vertex_per_face = m_faces.cols();
+        if (vertex_per_face != 3) {
+            throw NotImplementedError("Only triangle faces are supported!");
+        }
 }
 
-MatrixF ShortEdgeRemoval::get_vertices() {
-    const size_t num_old_v = m_vertices.rows();
-    const size_t num_new_v = m_new_vertices.size();
-    const size_t num_vertices = num_old_v + num_new_v;
-    MatrixF vertices(num_vertices, 3);
-    vertices.topRows(num_old_v) = m_vertices;
-    for (size_t i=0; i<num_new_v; i++) {
-        vertices.row(i+num_old_v) = m_new_vertices[i];
+size_t ShortEdgeRemoval::run(Float threshold) {
+    init();
+    do {
+        collapse(threshold);
+        update();
+    } while (get_num_faces() > 0 && min_edge_length() <= threshold);
+    return m_num_collapsed;
+}
+
+MatrixFr ShortEdgeRemoval::get_vertices() const {
+    const size_t dim = get_dim();
+    const size_t num_vertices = get_num_vertices();
+    const size_t num_ori_vertices = m_vertices.rows();
+    const size_t num_new_vertices = m_new_vertices.size();
+    MatrixFr vertices(num_vertices, dim);
+    std::copy(m_vertices.data(), m_vertices.data() + m_vertices.size(),
+            vertices.data());
+    for (size_t i=0; i<num_new_vertices; i++) {
+        vertices.row(num_ori_vertices + i) = m_new_vertices[i];
     }
     return vertices;
 }
 
-MatrixI ShortEdgeRemoval::get_faces() {
-    const size_t num_ori_faces = m_faces.rows();
-    std::vector<Vector3I> mod_faces;
-    mod_faces.reserve(num_ori_faces);
-    for (size_t i=0; i<num_ori_faces; i++) {
-        Vector3I f(
-                m_vertex_map[m_faces(i, 0)],
-                m_vertex_map[m_faces(i, 1)],
-                m_vertex_map[m_faces(i, 2)]);
-        if (f[0] != f[1] && f[0] != f[2] && f[1] != f[2]) {
-            mod_faces.push_back(f);
-        }
-    }
+MatrixIr ShortEdgeRemoval::get_faces() const {
+    return m_faces;
+}
 
-    const size_t num_faces = mod_faces.size();
-    MatrixI faces(num_faces, 3);
-    for (size_t i=0; i<num_faces; i++) {
-        faces.row(i) = mod_faces[i];
-    }
-    return faces;
+void ShortEdgeRemoval::init() {
+    init_vertex_map();
+    init_edges();
+    init_edge_length_heap();
+}
+
+void ShortEdgeRemoval::update() {
+    update_faces();
+    init_vertex_map();
+    init_edges();
+    init_edge_length_heap();
 }
 
 void ShortEdgeRemoval::init_vertex_map() {
-    const size_t num_vertices = m_vertices.rows();
-    m_vertex_map.reserve(num_vertices);
-    for (size_t i=0; i<num_vertices; i++) {
-        m_vertex_map.push_back(i);
-    }
+    const size_t num_vertices = get_num_vertices();
+    m_vertex_map.resize(num_vertices);
+    std::fill(m_vertex_map.begin(), m_vertex_map.end(), UNMAPPED);
 }
 
-void ShortEdgeRemoval::compute_edge_lengths() {
+void ShortEdgeRemoval::init_edges() {
+    std::set<Edge> edges;
     const size_t num_faces = m_faces.rows();
-    m_edges.clear();
-    m_edges.reserve(num_faces * 3);
-    m_edge_lengths.clear();
-    m_edge_lengths.reserve(num_faces * 3);
+    const size_t vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {
-        Edge e1(m_faces(i, 0), m_faces(i, 1));
-        Edge e2(m_faces(i, 1), m_faces(i, 2));
-        Edge e3(m_faces(i, 2), m_faces(i, 0));
+        for (size_t j=0; j<vertex_per_face; j++) {
+            size_t v1_idx = m_faces(i, j);
+            size_t v2_idx = m_faces(i, (j+1) % vertex_per_face);
+            if (v1_idx != v2_idx)
+                edges.insert(Edge(v1_idx, v2_idx));
+        }
+    }
 
-        m_edges.push_back(e1);
-        m_edges.push_back(e2);
-        m_edges.push_back(e3);
+    const size_t num_edges = edges.size();
+    m_edges.resize(num_edges);
+    std::copy(edges.begin(), edges.end(), m_edges.begin());
+}
 
-        Float l1 = compute_edge_length(e1);
-        Float l2 = compute_edge_length(e2);
-        Float l3 = compute_edge_length(e3);
+void ShortEdgeRemoval::init_edge_length_heap() {
+    const size_t num_edges = m_edges.size();
+    std::vector<Float> edge_lengths(num_edges);
+    for (size_t i=0; i<num_edges; i++) {
+        edge_lengths[i] = compute_edge_length(m_edges[i]);
+    }
+    m_heap.init(edge_lengths);
+}
 
-        m_edge_lengths.push_back(l1);
-        m_edge_lengths.push_back(l2);
-        m_edge_lengths.push_back(l3);
+void ShortEdgeRemoval::update_faces() {
+    const size_t num_faces = m_faces.rows();
+    const size_t vertex_per_face = m_faces.cols();
+    const size_t num_entries = num_faces * vertex_per_face;
+
+    std::vector<size_t> faces;
+    for (size_t i=0; i<num_faces; i++) {
+        VectorI face = m_faces.row(i);
+        for (size_t j=0; j<vertex_per_face; j++) {
+            size_t mapped_idx = m_vertex_map[face[j]];
+            if (mapped_idx != UNMAPPED)
+                face[j] = m_vertex_map[face[j]];
+        }
+        if (face[0] == face[1] ||
+            face[1] == face[2] ||
+            face[2] == face[0])
+            continue;
+        faces.insert(faces.end(), face.data(), face.data() + vertex_per_face);
+    }
+
+    m_faces.resize(faces.size() / vertex_per_face, vertex_per_face);
+    std::copy(faces.begin(), faces.end(), m_faces.data());
+}
+
+void ShortEdgeRemoval::collapse(Float threshold) {
+    while (!m_heap.empty()) {
+        size_t edge_idx = m_heap.top();
+        Float edge_len = m_heap.top_value();
+        m_heap.pop();
+
+        if (edge_len > threshold) break;
+        if (!edge_is_valid(edge_idx)) continue;
+
+        collapse_edge(edge_idx);
     }
 }
 
-size_t ShortEdgeRemoval::collapse(Float threshold) {
-    size_t num_collapsed = 0;
-    IndexHeap<Float> candidates(m_edge_lengths, false);
-    while (!candidates.empty()) {
-        size_t ext_idx = candidates.top();
-        candidates.pop();
-
-        if (m_edge_lengths[ext_idx] > threshold) break;
-        if (!can_be_collapsed(ext_idx)) continue;
-
-        collapse_edge(ext_idx);
-        num_collapsed ++;
-    }
-    return num_collapsed;
+bool ShortEdgeRemoval::edge_is_valid(size_t edge_idx) const {
+    const Edge& edge = m_edges[edge_idx];
+    size_t v1_idx = edge.get_ori_data()[0];
+    size_t v2_idx = edge.get_ori_data()[1];
+    return m_vertex_map[v1_idx] == UNMAPPED &&
+           m_vertex_map[v2_idx] == UNMAPPED;
 }
 
-bool ShortEdgeRemoval::can_be_collapsed(size_t ext_idx) const {
-    const Edge& e = m_edges[ext_idx];
-    return  (m_vertex_map.at(e.m_v1) == e.m_v1)
-        and (m_vertex_map.at(e.m_v2) == e.m_v2);
-}
+void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
+    const Edge& e = m_edges[edge_idx];
+    const size_t dim = m_vertices.cols();
+    const size_t num_ori_vertices = m_vertices.rows();
+    const size_t num_new_vertices = m_new_vertices.size();
+    const size_t i1 = e.get_ori_data()[0];
+    const size_t i2 = e.get_ori_data()[1];
+    const VectorF v1 = get_vertex(i1);
+    const VectorF v2 = get_vertex(i2);
 
-void ShortEdgeRemoval::collapse_edge(size_t ext_idx) {
-    const Edge& e = m_edges[ext_idx];
-    const size_t i1 = e.m_v1;
-    const size_t i2 = e.m_v2;
-    Vector3F v1 = m_vertices.row(i1);
-    Vector3F v2 = m_vertices.row(i2);
-    Vector3F v_mid = 0.5 * (v1 + v2);
+    VectorF v_mid = 0.5 * (v1 + v2);
     m_new_vertices.push_back(v_mid);
 
-    size_t idx_mid = m_vertices.rows() + m_new_vertices.size() - 1;
+    size_t idx_mid = num_ori_vertices + num_new_vertices;
     m_vertex_map[i1] = idx_mid;
     m_vertex_map[i2] = idx_mid;
+
+    m_num_collapsed++;
+}
+
+VectorF ShortEdgeRemoval::get_vertex(size_t i) const {
+    const size_t num_ori_vertices = m_vertices.rows();
+    if (i<num_ori_vertices) {
+        return m_vertices.row(i);
+    } else {
+        i -= num_ori_vertices;
+        assert(i < m_new_vertices.size());
+        return m_new_vertices[i];
+    }
+}
+
+Float ShortEdgeRemoval::min_edge_length() const {
+    if (m_heap.size() <= 0)
+        throw RuntimeError("Edge heap is empty!");
+    return m_heap.top_value();
 }
 
 Float ShortEdgeRemoval::compute_edge_length(const Edge& e) const {
-    const Vector3F& v1 = m_vertices.row(e.m_v1);
-    const Vector3F& v2 = m_vertices.row(e.m_v2);
+    size_t i1 = e.get_ori_data()[0];
+    size_t i2 = e.get_ori_data()[1];
+    VectorF v1 = get_vertex(i1);
+    VectorF v2 = get_vertex(i2);
     return (v1 - v2).norm();
+}
+
+size_t ShortEdgeRemoval::get_num_vertices() const {
+    const size_t num_ori_vertices = m_vertices.rows();
+    const size_t num_new_vertices = m_new_vertices.size();
+    const size_t num_vertices = num_ori_vertices + num_new_vertices;
+    return num_vertices;
+}
+
+size_t ShortEdgeRemoval::get_num_faces() const {
+    return m_faces.rows();
+}
+
+size_t ShortEdgeRemoval::get_dim() const {
+    return m_vertices.cols();
 }
 

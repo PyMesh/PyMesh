@@ -6,9 +6,9 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
+#include <Misc/Triplet.h>
 
-#include "Edge.h"
-#include "EdgeMap.h"
+#include "TripletMap.h"
 
 MeshSeparator::MeshSeparator(const MatrixI& faces) : m_faces(faces) {
     compute_face_connectivity();

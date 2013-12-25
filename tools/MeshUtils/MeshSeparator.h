@@ -4,7 +4,7 @@
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
-#include "EdgeMap.h"
+#include "TripletMap.h"
 
 class MeshSeparator {
     public:
@@ -27,7 +27,8 @@ class MeshSeparator {
         MatrixI m_faces;
         std::vector<bool> m_visited;
 
-        typedef EdgeMap<size_t> EdgeMapI;
+        typedef Triplet Edge;
+        typedef TripletMap<size_t> EdgeMapI;
         typedef EdgeMapI::ValueType AdjFaces;
         EdgeMapI m_edge_map;
 };

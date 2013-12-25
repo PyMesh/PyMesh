@@ -1,0 +1,66 @@
+#pragma once
+
+#include <limits>
+#include <vector>
+
+#include <google/dense_hash_map>
+
+#include <Core/Exception.h>
+#include <Misc/Triplet.h>
+
+template <typename T>
+class TripletMap {
+    public:
+        struct TripletHashFunc {
+            int operator() (const Triplet& trip) const {
+                return trip.hash();
+            }
+        };
+
+        typedef std::vector<T> ValueType;
+        typedef google::dense_hash_map<Triplet, ValueType, TripletHashFunc> TripletHashMap;
+        typedef typename TripletHashMap::iterator iterator;
+        typedef typename TripletHashMap::const_iterator const_iterator;
+
+    public:
+        TripletMap() {
+            int infinity = std::numeric_limits<int>::max();
+            m_map.set_empty_key(Triplet(infinity, infinity, infinity));
+        }
+
+        void insert(const Triplet& t, T val) {
+            iterator itr = m_map.find(t);
+            if (itr == m_map.end()) {
+                ValueType item;
+                item.push_back(val);
+                m_map[t] = item;
+            } else {
+                m_map[t].push_back(val);
+            }
+        }
+
+        ValueType& operator[] (const Triplet& t) {
+            return m_map[t];
+        }
+
+        const ValueType& get(const Triplet& t) const {
+            const_iterator itr = m_map.find(t);
+            if (itr == m_map.end())
+                throw RuntimeError("Key not found");
+            return itr->second;
+        }
+
+        void clear() {
+            m_map.clear();
+        }
+
+    public:
+        iterator begin() { return m_map.begin(); }
+        const_iterator begin() const { return m_map.begin(); }
+
+        iterator end() { return m_map.end(); }
+        const_iterator end() const { return m_map.end(); }
+
+    private:
+        TripletHashMap m_map;
+};

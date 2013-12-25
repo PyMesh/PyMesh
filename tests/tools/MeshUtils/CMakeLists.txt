@@ -1,5 +1,6 @@
 # Include headers
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
 
 # Enumerate source files
 FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)

@@ -1,4 +1,5 @@
 #pragma once
+#include <cassert>
 #include <vector>
 #include <algorithm>
 
@@ -20,16 +21,29 @@ class IndexHeap {
         };
 
     public:
-        IndexHeap(const std::vector<T>& data, bool max_heap = true) : m_data(data), m_comp(this, max_heap) {
-            m_indices.resize(m_data.size());
-            for (size_t i=0; i<m_data.size(); i++) { m_indices[i] = i; }
+        IndexHeap(bool max_heap = true) : m_comp(this, max_heap) { }
 
-            std::make_heap(m_indices.begin(), m_indices.end(), m_comp);
+        IndexHeap(const std::vector<T>& data, bool max_heap = true) : m_comp(this, max_heap) {
+            init(data);
         }
 
     public:
+        void init(const std::vector<T>& data) {
+            m_data = data;
+            size_t data_size = m_data.size();
+            m_indices.resize(data_size);
+            for (size_t i=0; i<data_size; i++) { m_indices[i] = i; }
+            std::make_heap(m_indices.begin(), m_indices.end(), m_comp);
+        }
+
         size_t top() const {
+            assert(!m_indices.empty());
+            assert(m_indices.front() < m_data.size());
             return m_indices.front();
+        }
+        
+        T top_value() const {
+            return m_data[top()];
         }
 
         void pop() {
@@ -46,7 +60,7 @@ class IndexHeap {
         }
 
     private:
-        const std::vector<T>& m_data;
+        std::vector<T> m_data;
         std::vector<size_t> m_indices;
         IndexComp m_comp;
 };

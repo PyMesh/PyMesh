@@ -55,7 +55,9 @@ ADD_SUBDIRECTORY(windingnumber)
 ADD_SUBDIRECTORY(MeshUtils)
 ADD_SUBDIRECTORY(tetgen)
 ADD_SUBDIRECTORY(CGAL)
+#ADD_SUBDIRECTORY(Assembler)
 
 # Bundle all tools together
 ADD_CUSTOM_TARGET(tools DEPENDS  windingnumber selfintersect MeshUtils tetgen
     cgal)
+#    cgal assembler)

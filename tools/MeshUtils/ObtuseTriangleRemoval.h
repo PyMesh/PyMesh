@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 #include <Core/EigenTypedef.h>
+#include <Misc/Triplet.h>
 
-#include "EdgeMap.h"
+#include "TripletMap.h"
 
 class ObtuseTriangleRemoval {
     public:
@@ -25,7 +26,8 @@ class ObtuseTriangleRemoval {
         Vector3F project(size_t ext_idx);
 
     private:
-        typedef EdgeMap<size_t> EdgeMapI;
+        typedef Triplet Edge;
+        typedef TripletMap<size_t> EdgeMapI;
         typedef EdgeMapI::ValueType AdjFaces;
 
         std::vector<Float> m_face_angles;

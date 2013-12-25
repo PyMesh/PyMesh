@@ -185,8 +185,8 @@ Vector3F ObtuseTriangleRemoval::project(size_t ext_idx) {
     size_t f_idx = ext_idx / 3;
     size_t opp_idx = m_opp_vertices[ext_idx];
     Edge& e = m_edges[ext_idx];
-    Vector3F v1 = m_vertices.row(e.m_v1);
-    Vector3F v2 = m_vertices.row(e.m_v2);
+    Vector3F v1 = m_vertices.row(e.get_ori_data()[0]);
+    Vector3F v2 = m_vertices.row(e.get_ori_data()[1]);
     Vector3F v3 = m_vertices.row(m_faces(f_idx, opp_idx));
 
     Vector3F e1 = v2 - v1;
