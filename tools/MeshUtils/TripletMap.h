@@ -54,6 +54,14 @@ class TripletMap {
             m_map.clear();
         }
 
+        bool empty() const {
+            return m_map.empty();
+        }
+
+        size_t size() const {
+            return m_map.size();
+        }
+
     public:
         iterator begin() { return m_map.begin(); }
         const_iterator begin() const { return m_map.begin(); }
