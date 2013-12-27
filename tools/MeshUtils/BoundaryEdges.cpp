@@ -1,5 +1,6 @@
 #include "BoundaryEdges.h"
 #include <algorithm>
+#include <cassert>
 #include <vector>
 
 #include <Mesh.h>
@@ -21,7 +22,13 @@ MatrixIr BoundaryEdges::get_boundaries() const {
 }
 
 VectorI BoundaryEdges::get_boundary(size_t bi) const {
+    assert(bi < m_boundaries.rows());
     return m_boundaries.row(bi);
+}
+
+size_t BoundaryEdges::get_boundary_element(size_t bi) const {
+    assert(bi < m_boundary_faces.size());
+    return m_boundary_faces[bi];
 }
 
 void BoundaryEdges::extract_boundary(const Mesh& mesh) {
@@ -44,14 +51,20 @@ void BoundaryEdges::extract_boundary(const Mesh& mesh) {
     }
 
     std::vector<size_t> boundaries;
+    std::vector<size_t> boundary_faces;
     for (EdgeFaceMap::const_iterator itr=edge_face_map.begin();
             itr != edge_face_map.end(); itr++) {
         if (itr->second.size() == 1) {
             boundaries.push_back(itr->first.get_ori_data()[0]);
             boundaries.push_back(itr->first.get_ori_data()[1]);
+            boundary_faces.push_back(itr->second[0]);
         }
     }
 
     m_boundaries.resize(boundaries.size() / 2, 2);
     std::copy(boundaries.begin(), boundaries.end(), m_boundaries.data());
+    m_boundary_faces.resize(boundary_faces.size());
+    std::copy(boundary_faces.begin(), boundary_faces.end(),
+            m_boundary_faces.data());
 }
+

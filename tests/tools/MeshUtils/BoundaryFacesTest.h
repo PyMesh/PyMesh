@@ -49,6 +49,21 @@ TEST_F(BoundaryFacesTest, CubeBoundary) {
     }
 }
 
+TEST_F(BoundaryFacesTest, BoundaryElementsContainsBoundary) {
+    load_mesh("cube.msh");
+    BoundaryEdges bd(*m_mesh.get());
+    const size_t num_boundaries = bd.get_num_boundaries();
+    for (size_t i=0; i<num_boundaries; i++) {
+        VectorI face = bd.get_boundary(i);
+        size_t voxel_idx = bd.get_boundary_element(i);
+        VectorI voxel = m_mesh->get_voxel(voxel_idx);
+        std::set<size_t> voxel_v_set(voxel.data(), voxel.data()+voxel.size());
+        for (size_t j=0; j<face.size(); j++) {
+            ASSERT_FALSE(voxel_v_set.find(face[j]) == voxel_v_set.end());
+        }
+    }
+}
+
 TEST_F(BoundaryFacesTest, ZeroVoxel) {
     load_mesh("cube.obj");
     ASSERT_THROW(BoundaryFaces bd(*m_mesh.get()), RuntimeError);

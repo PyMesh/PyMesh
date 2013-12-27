@@ -14,4 +14,5 @@ class Boundary {
         virtual size_t get_num_boundaries() const =0;
         virtual MatrixIr get_boundaries() const =0;
         virtual VectorI get_boundary(size_t bi) const =0;
+        virtual size_t get_boundary_element(size_t bi) const =0;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <set>
 #include <tr1/memory>
 
 #include <Core/Exception.h>
@@ -44,6 +45,20 @@ TEST_F(BoundaryEdgesTest, SquareBoundary) {
             Float min_coordinate = *std::min_element(vertex.data(), vertex.data() + vertex.size());
             ASSERT_FLOAT_EQ(1.0, std::max(fabs(min_coordinate), fabs(max_coordinate)));
         }
+    }
+}
+
+TEST_F(BoundaryEdgesTest, BoundaryElementsContainsBoundary) {
+    load_mesh("square_2D.obj");
+    BoundaryEdges bd(*m_mesh.get());
+    const size_t num_boundaries = bd.get_num_boundaries();
+    for (size_t i=0; i<num_boundaries; i++) {
+        VectorI edge = bd.get_boundary(i);
+        size_t face_idx = bd.get_boundary_element(i);
+        VectorI face = m_mesh->get_face(face_idx);
+        std::set<size_t> face_v_set(face.data(), face.data() + face.size());
+        ASSERT_FALSE(face_v_set.find(edge[0]) == face_v_set.end());
+        ASSERT_FALSE(face_v_set.find(edge[1]) == face_v_set.end());
     }
 }
 
