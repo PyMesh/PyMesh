@@ -25,14 +25,19 @@ void FaceAreaAttribute::compute_from_mesh(Mesh& mesh) {
 }
 
 Float FaceAreaAttribute::compute_triangle_area(Mesh& mesh, size_t face_idx) {
+    const size_t dim = mesh.get_dim();
     VectorI face = mesh.get_face(face_idx);
     assert(face.size() == 3);
 
     Vector3F v[3] = {
-        mesh.get_vertex(face[0]),
-        mesh.get_vertex(face[1]),
-        mesh.get_vertex(face[2])
+        Vector3F::Zero(),
+        Vector3F::Zero(),
+        Vector3F::Zero()
     };
+
+    v[0].segment(0, dim) = mesh.get_vertex(face[0]);
+    v[1].segment(0, dim) = mesh.get_vertex(face[1]);
+    v[2].segment(0, dim) = mesh.get_vertex(face[2]);
 
     Float area = ((v[2] - v[0]).cross(v[1] - v[0])).norm() * 0.5;
     return area;

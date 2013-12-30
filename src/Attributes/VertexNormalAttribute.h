@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "MeshAttribute.h"
 
 class VertexNormalAttribute : public MeshAttribute {
@@ -12,4 +14,5 @@ class VertexNormalAttribute : public MeshAttribute {
 
     private:
         void compute_vertex_normals(Mesh& mesh);
+        const VectorF& get_attribute(Mesh& mesh, const std::string& attr_name);
 };
