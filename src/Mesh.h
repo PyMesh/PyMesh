@@ -29,6 +29,7 @@ class Mesh {
     public:
         // Use MeshFactory class to create mesh object.
         friend class MeshFactory;
+        typedef std::tr1::shared_ptr<Mesh> Ptr;
 
     protected:
         /**
