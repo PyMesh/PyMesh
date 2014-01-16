@@ -1,7 +1,9 @@
 #pragma once
 #include <string>
 #include <Core/EigenTypedef.h>
-class Mesh;
+
+#include "Mesh.h"
+
 class MeshParser;
 
 /**
@@ -21,6 +23,7 @@ class MeshFactory {
         MeshFactory& with_connectivity(const std::string& conn_type);
         MeshFactory& with_attribute(const std::string& attr_name);
         Mesh* create() { return m_mesh; }
+        Mesh::Ptr create_shared() { return Mesh::Ptr(m_mesh); }
 
     private:
         // Disable evil copy constructors.
