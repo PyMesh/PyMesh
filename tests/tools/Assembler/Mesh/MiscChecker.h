@@ -1,0 +1,15 @@
+#pragma once
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+#include <Assembler/Mesh/FEMeshAdaptor.h>
+
+using ::testing::Contains;
+
+namespace MiscChecker {
+    typedef FEMeshAdaptor::Ptr FEMeshPtr;
+
+    void check_normals(FEMeshPtr mesh);
+    void check_volumes(FEMeshPtr mesh);
+    void check_areas(FEMeshPtr mesh);
+}

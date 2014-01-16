@@ -1,0 +1,10 @@
+This directory contains the ground truth matrices corresponding to the test
+meshes.  The file names follow the convention [mesh_name]_[matrix_name].mat
+
+Each matrix is generated using separate codes with the following material
+properties:
+
+Young's modulus = 1
+Poisson ratio   = 0
+
+Qingnan (James) Zhou
