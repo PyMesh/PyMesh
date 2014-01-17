@@ -124,8 +124,8 @@ TEST_F(MeshTest, FirstFace) {
     ASSERT_EQ(6-1, cube_tri_first[1]);
     ASSERT_EQ(2-1, cube_tri_first[2]);
     const VectorI& square_tri_first = m_square_tri->get_face(0);
-    ASSERT_EQ(2-1, square_tri_first[0]);
-    ASSERT_EQ(1-1, square_tri_first[1]);
+    ASSERT_EQ(1-1, square_tri_first[0]);
+    ASSERT_EQ(2-1, square_tri_first[1]);
     ASSERT_EQ(3-1, square_tri_first[2]);
 }
 
@@ -138,8 +138,8 @@ TEST_F(MeshTest, LastFace) {
     const VectorI& square_tri_last = m_square_tri->get_face(
             m_square_tri->get_num_faces() - 1);
     ASSERT_EQ(4-1, square_tri_last[0]);
-    ASSERT_EQ(2-1, square_tri_last[1]);
-    ASSERT_EQ(3-1, square_tri_last[2]);
+    ASSERT_EQ(3-1, square_tri_last[1]);
+    ASSERT_EQ(2-1, square_tri_last[2]);
 }
 
 TEST_F(MeshTest, FirstVoxel) {
