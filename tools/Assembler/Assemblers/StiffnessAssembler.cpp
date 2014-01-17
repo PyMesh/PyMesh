@@ -47,5 +47,7 @@ ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
 
     ZSparseMatrix K(num_nodes * dim, num_nodes * dim);
     K.setFromTriplets(entries.begin(), entries.end());
+    K *= material->get_density();
+
     return K;
 }
