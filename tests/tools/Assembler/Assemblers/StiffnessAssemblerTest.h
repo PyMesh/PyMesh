@@ -44,7 +44,7 @@ class StiffnessAssemblerTest : public ::testing::Test {
         FESettingPtr load_setting(const std::string& filename) {
             MeshPtr mesh = load_mesh(filename);
             return FESettingFactory(mesh)
-                .with_material("TestMaterial")
+                .with_material("test_material")
                 .create();
         }
 
@@ -53,24 +53,16 @@ class StiffnessAssemblerTest : public ::testing::Test {
         Assembler::Ptr m_assembler;
 };
 
-TEST_F(StiffnessAssemblerTest, Size) {
+TEST_F(StiffnessAssemblerTest, TetSize) {
     FESettingPtr setting = load_setting("tet.msh");
     ZSparseMatrix K = m_assembler->assemble(setting);
     ASSERT_EQ(12, K.rows());
     ASSERT_EQ(12, K.cols());
 }
 
-TEST_F(StiffnessAssemblerTest, Entries) {
-    FESettingPtr setting = load_setting("tet.msh");
+TEST_F(StiffnessAssemblerTest, SquareSize) {
+    FESettingPtr setting = load_setting("square_2D.obj");
     ZSparseMatrix K = m_assembler->assemble(setting);
-    ASSERT_FLOAT_EQ(0.144337722129181, K.coeff(0, 0));
-    ASSERT_FLOAT_EQ(-0.048112608063777, K.coeff(3, 0));
-    ASSERT_FLOAT_EQ(0.240562529208718, K.coeff(11, 11));
+    ASSERT_EQ(8, K.rows());
+    ASSERT_EQ(8, K.cols());
 }
-
-TEST_F(StiffnessAssemblerTest, FrobeniousNorm) {
-    FESettingPtr setting = load_setting("tet.msh");
-    ZSparseMatrix K = m_assembler->assemble(setting);
-    ASSERT_FLOAT_EQ(0.942809221566362, K.norm());
-}
-

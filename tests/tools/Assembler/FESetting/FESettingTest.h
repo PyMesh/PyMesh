@@ -44,7 +44,7 @@ class FESettingTest : public ::testing::Test {
 TEST_F(FESettingTest, Creation) {
     MeshPtr mesh = load_mesh("cube.msh");
     FESettingPtr setting = FESettingFactory(mesh)
-        .with_material("TestMaterial")
+        .with_material("test_material")
         .create();
 
     ASSERT_EQ(3, setting->get_mesh()->getDim());

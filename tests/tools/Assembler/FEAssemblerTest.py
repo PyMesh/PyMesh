@@ -22,6 +22,7 @@ class FEAssemblerTest(unittest.TestCase):
         self.data_dir = os.path.join(PYMESH_PATH, "tests/data/");
         self.ground_truth_dir = os.path.join(PYMESH_PATH,
                 "tests/tools/Assembler/ground_truth/");
+        self.material_name = "test_material";
 
     def load_mesh(self, mesh_file):
         mesh_file = os.path.join(self.data_dir, mesh_file);
@@ -69,14 +70,14 @@ class FEAssemblerTest(unittest.TestCase):
 
     def test_stiffness_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh);
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
         K = self.format(assembler.assemble("stiffness"));
         K_ground_truth = self.load_matrix("tet_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);
 
     def test_stiffness_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh);
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
         K = self.format(assembler.assemble("stiffness"));
         K_ground_truth = self.load_matrix("square_2D_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);

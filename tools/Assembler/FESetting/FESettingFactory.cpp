@@ -18,7 +18,7 @@ FESettingFactory::FESettingFactory(FESettingFactory::MeshPtr mesh) {
 FESettingFactory& FESettingFactory::with_material(
         const std::string& material_name) {
     size_t dim = m_mesh->getDim();
-    if (material_name == "TestMaterial") {
+    if (material_name == "test_material") {
         m_material = Material::create_isotropic(dim, 1.0, 1.0, 0.0);
     } else {
         std::stringstream err_msg;
