@@ -7,20 +7,22 @@
 #include <Mesh.h>
 
 void VoxelVolumeAttribute::compute_from_mesh(Mesh& mesh) {
-    size_t num_voxels = mesh.get_num_voxels();
-    size_t num_vertex_per_voxel = mesh.get_vertex_per_voxel();
+    const size_t num_voxels = mesh.get_num_voxels();
+    const size_t num_vertex_per_voxel = mesh.get_vertex_per_voxel();
 
     VectorF& volumes = m_values;
     volumes = VectorF::Zero(num_voxels);
 
-    if (num_vertex_per_voxel == 4) {
-        for (size_t i=0; i<num_voxels; i++) {
-            volumes[i] = compute_tet_volume(mesh, i);
+    if (num_voxels > 0) {
+        if (num_vertex_per_voxel == 4) {
+            for (size_t i=0; i<num_voxels; i++) {
+                volumes[i] = compute_tet_volume(mesh, i);
+            }
+        } else {
+            std::cerr << "Unknown voxel type with " << num_vertex_per_voxel
+                << " per voxel." << std::endl;
+            return;
         }
-    } else {
-        std::cerr << "Unknown voxel type with " << num_vertex_per_voxel
-            << " per voxel." << std::endl;
-        return;
     }
 }
 

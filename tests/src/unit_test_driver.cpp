@@ -6,6 +6,7 @@
 #include "IO/OBJWriterTest.h"
 #include "Misc/TripletTest.h"
 #include "Misc/HashGridTest.h"
+#include "Attributes/VoxelVolumeAttributeTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
