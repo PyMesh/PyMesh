@@ -67,10 +67,21 @@ class FEAssemblerTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, diff.max());
         self.assertAlmostEqual(0.0, diff.min());
 
-    def test_stiffness(self):
+    def test_stiffness_tet(self):
         mesh = self.load_mesh("tet.msh");
         assembler = PyAssembler.FEAssembler(mesh);
         K = self.format(assembler.assemble("stiffness"));
         K_ground_truth = self.load_matrix("tet_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);
+
+    def test_stiffness_square(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = PyAssembler.FEAssembler(mesh);
+        K = self.format(assembler.assemble("stiffness"));
+        K_ground_truth = self.load_matrix("square_2D_stiffness.mat", "K");
+        self.assertMatrixEqual(K_ground_truth, K);
+
+
+
+
 
