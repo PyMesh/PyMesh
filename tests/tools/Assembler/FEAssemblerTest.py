@@ -82,6 +82,20 @@ class FEAssemblerTest(unittest.TestCase):
         K_ground_truth = self.load_matrix("square_2D_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);
 
+    def test_mass_tet(self):
+        mesh = self.load_mesh("tet.msh");
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        M = self.format(assembler.assemble("mass"));
+        M_ground_truth = self.load_matrix("tet_mass.mat", "M");
+        self.assertMatrixEqual(M_ground_truth, M);
+
+    def test_mass_square(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        M = self.format(assembler.assemble("mass"));
+        M_ground_truth = self.load_matrix("square_2D_mass.mat", "M");
+        self.assertMatrixEqual(M_ground_truth, M);
+
 
 
 

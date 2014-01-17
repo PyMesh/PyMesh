@@ -6,6 +6,7 @@
 #include "ShapeFunctions/IntegratorTest.h"
 #include "FESetting/FESettingTest.h"
 #include "Assemblers/StiffnessAssemblerTest.h"
+#include "Assemblers/MassAssemblerTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
