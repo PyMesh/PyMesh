@@ -65,3 +65,25 @@ TEST_F(MassAssemblerTest, SquareSize) {
     ASSERT_EQ(4, M.cols());
 }
 
+TEST_F(MassAssemblerTest, TetPositiveEntries) {
+    FESettingPtr setting = load_setting("tet.msh");
+    ZSparseMatrix M = m_assembler->assemble(setting);
+    size_t nz_entries = M.get_value_size();
+    ASSERT_GT(nz_entries, 0);
+    const Float* values = M.valuePtr();
+    for (size_t i=0; i<nz_entries; i++) {
+        ASSERT_GT(values[i], 0.0);
+    }
+}
+
+TEST_F(MassAssemblerTest, SquarePositiveEntries) {
+    FESettingPtr setting = load_setting("square_2D.obj");
+    ZSparseMatrix M = m_assembler->assemble(setting);
+    size_t nz_entries = M.get_value_size();
+    ASSERT_GT(nz_entries, 0);
+    const Float* values = M.valuePtr();
+    for (size_t i=0; i<nz_entries; i++) {
+        ASSERT_GT(values[i], 0.0);
+    }
+}
+

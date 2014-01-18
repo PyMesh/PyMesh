@@ -66,3 +66,22 @@ TEST_F(StiffnessAssemblerTest, SquareSize) {
     ASSERT_EQ(8, K.rows());
     ASSERT_EQ(8, K.cols());
 }
+
+TEST_F(StiffnessAssemblerTest, TetPositiveDiagonal) {
+    FESettingPtr setting = load_setting("tet.msh");
+    ZSparseMatrix K = m_assembler->assemble(setting);
+    for (size_t i=0; i<K.rows(); i++) {
+        ASSERT_GT(K.coeff(i, i), 0.0);
+    }
+}
+
+TEST_F(StiffnessAssemblerTest, SquarePositiveDiagonal) {
+    FESettingPtr setting = load_setting("square_2D.obj");
+    ZSparseMatrix K = m_assembler->assemble(setting);
+    for (size_t i=0; i<K.rows(); i++) {
+        ASSERT_GT(K.coeff(i, i), 0.0);
+    }
+}
+
+
+
