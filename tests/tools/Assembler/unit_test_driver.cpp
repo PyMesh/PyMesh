@@ -8,6 +8,7 @@
 #include "Assemblers/StiffnessAssemblerTest.h"
 #include "Assemblers/MassAssemblerTest.h"
 #include "Assemblers/LumpedMassAssemblerTest.h"
+#include "Assemblers/LaplacianAssemblerTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
