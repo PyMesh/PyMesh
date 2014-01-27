@@ -94,6 +94,10 @@ size_t TriangleMesh::getNbrBoundaryFaces() const {
     return m_boundary_edges.rows();
 }
 
+size_t TriangleMesh::getNodePerBoundaryFace() const {
+    return 2;
+}
+
 VectorI TriangleMesh::getBoundaryFace(size_t bfi) const {
     assert(bfi < getNbrBoundaryFaces());
     return m_boundary_edges.row(bfi);

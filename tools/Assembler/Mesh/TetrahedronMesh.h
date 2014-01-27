@@ -34,6 +34,7 @@ class TetrahedronMesh : public FEMeshAdaptor {
 
         // Boundary faces queries
         virtual size_t getNbrBoundaryFaces() const;
+        virtual size_t getNodePerBoundaryFace() const;
         virtual VectorI getBoundaryFace(size_t bfi) const; // Return array of vi
         virtual Float   getBoundaryFaceArea(size_t bfi) const;
         virtual VectorF getBoundaryFaceNormal(size_t bfi) const;

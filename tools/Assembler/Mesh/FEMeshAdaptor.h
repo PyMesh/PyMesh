@@ -38,6 +38,7 @@ class FEMeshAdaptor {
 
         // Boundary faces queries
         virtual size_t getNbrBoundaryFaces() const=0;
+        virtual size_t getNodePerBoundaryFace() const=0;
         virtual VectorI getBoundaryFace(size_t bfi) const=0; // Return array of vi
         virtual Float   getBoundaryFaceArea(size_t bfi) const=0;
         virtual VectorF getBoundaryFaceNormal(size_t bfi) const=0;

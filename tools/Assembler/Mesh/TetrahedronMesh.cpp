@@ -95,6 +95,11 @@ size_t TetrahedronMesh::getNbrBoundaryFaces() const {
     return m_mesh->get_num_faces();
 }
 
+size_t TetrahedronMesh::getNodePerBoundaryFace() const {
+    assert(m_mesh->get_vertex_per_face() == 3);
+    return m_mesh->get_vertex_per_face();
+}
+
 VectorI TetrahedronMesh::getBoundaryFace(size_t bfi) const {
     assert(bfi < getNbrBoundaryFaces());
     return m_mesh->get_face(bfi);
