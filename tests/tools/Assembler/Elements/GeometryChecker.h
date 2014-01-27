@@ -1,0 +1,20 @@
+#pragma once
+#include <tr1/memory>
+#include <iostream>
+
+#include <gtest/gtest.h>
+#include <gmock/gmock.h>
+
+#include <Assembler/Elements/Elements.h>
+#include <Mesh.h>
+
+using ::testing::Contains;
+
+namespace GeometryChecker {
+    typedef Elements::Ptr ElementsPtr;
+    typedef Mesh::Ptr MeshPtr;
+
+    void check_nodes(ElementsPtr m1, MeshPtr m2);
+    void check_face_elements(ElementsPtr m1, MeshPtr m2);
+    void check_voxel_elements(ElementsPtr m1, MeshPtr m2);
+}
