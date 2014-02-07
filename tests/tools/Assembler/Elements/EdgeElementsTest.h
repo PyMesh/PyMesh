@@ -92,25 +92,7 @@ TEST_F(EdgeElementsTest, CheckElementsEntries) {
     MeshPtr square = load_mesh("square_2D.obj");
     ElementsPtr square_elem = adapt(square);
 
-    /* square.obj vertex order:
-     *   1---0
-     *   |   |
-     *   3---2
-     */
-    const size_t ground_truth[4][2] = {
-        {1, 2},
-        {0, 3},
-        {0, 3},
-        {1, 2}
-    };
-
-    for (size_t i=0; i<4; i++) {
-        VectorI elem = square_elem->getElement(i);
-
-        ASSERT_EQ(2, elem.size());
-        ASSERT_TRUE(
-                elem[1] == ground_truth[elem[0]][0] ||
-                elem[1] == ground_truth[elem[0]][1]);
-    }
+    using namespace GeometryChecker;
+    check_edge_elements(square_elem, square);
 }
 

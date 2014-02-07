@@ -9,6 +9,7 @@
 #include <MeshFactory.h>
 
 #include <Assembler/Elements/Elements.h>
+#include "GeometryChecker.h"
 
 class ElementsTest : public ::testing::Test {
     protected:
@@ -46,6 +47,12 @@ TEST_F(ElementsTest, VolumeMesh) {
     ElementsPtr boundary_elements = adapt_bd(mesh);
     ASSERT_EQ(6, volume_elements->getNbrElements());
     ASSERT_EQ(12, boundary_elements->getNbrElements());
+
+    using namespace GeometryChecker;
+    check_nodes(volume_elements, mesh);
+    check_voxel_elements(volume_elements, mesh);
+    check_nodes(boundary_elements, mesh);
+    check_face_elements(boundary_elements, mesh);
 }
 
 TEST_F(ElementsTest, 2DMesh) {
@@ -54,6 +61,12 @@ TEST_F(ElementsTest, 2DMesh) {
     ElementsPtr boundary_elements = adapt_bd(mesh);
     ASSERT_EQ(2, volume_elements->getNbrElements());
     ASSERT_EQ(4, boundary_elements->getNbrElements());
+
+    using namespace GeometryChecker;
+    check_nodes(volume_elements, mesh);
+    check_face_elements(volume_elements, mesh);
+    check_nodes(boundary_elements, mesh);
+    check_edge_elements(boundary_elements, mesh);
 }
 
 TEST_F(ElementsTest, SurfaceMesh) {
@@ -62,5 +75,11 @@ TEST_F(ElementsTest, SurfaceMesh) {
     ElementsPtr boundary_elements = adapt_bd(mesh);
     ASSERT_EQ(12, volume_elements->getNbrElements());
     ASSERT_EQ(0, boundary_elements->getNbrElements());
+
+    using namespace GeometryChecker;
+    check_nodes(volume_elements, mesh);
+    check_face_elements(volume_elements, mesh);
+    check_nodes(boundary_elements, mesh);
+    check_edge_elements(boundary_elements, mesh);
 }
 

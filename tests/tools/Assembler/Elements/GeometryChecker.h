@@ -16,5 +16,6 @@ namespace GeometryChecker {
 
     void check_nodes(ElementsPtr m1, MeshPtr m2);
     void check_face_elements(ElementsPtr m1, MeshPtr m2);
+    void check_edge_elements(ElementsPtr m1, MeshPtr m2);
     void check_voxel_elements(ElementsPtr m1, MeshPtr m2);
 }
