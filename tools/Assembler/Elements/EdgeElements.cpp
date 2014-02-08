@@ -6,6 +6,7 @@
 EdgeElements::EdgeElements(Mesh::Ptr mesh) : m_mesh(mesh) {
     check_mesh();
     extract_boundary_edges();
+    compute_edge_lengths();
 }
 
 size_t EdgeElements::getDim() const {
@@ -28,6 +29,11 @@ size_t EdgeElements::getNbrElements() const {
     return m_edges.rows();
 }
 
+size_t EdgeElements::getNodePerElement() const {
+    // Edge always contains 2 nodes.
+    return 2;
+}
+
 VectorI EdgeElements::getElements() const {
     const size_t num_entries = m_edges.rows() * m_edges.cols();
     VectorI edges(num_entries);
@@ -37,6 +43,10 @@ VectorI EdgeElements::getElements() const {
 
 VectorI EdgeElements::getElement(size_t ei) const {
     return m_edges.row(ei);
+}
+
+Float EdgeElements::getElementVolume(size_t ei) const {
+    return m_edge_lengths[ei];
 }
 
 void EdgeElements::check_mesh() {
@@ -49,3 +59,15 @@ void EdgeElements::extract_boundary_edges() {
     Boundary::Ptr boundary = Boundary::extract_surface_boundary(*m_mesh.get());
     m_edges = boundary->get_boundaries();
 }
+
+void EdgeElements::compute_edge_lengths() {
+    size_t num_elements = getNbrElements();
+    m_edge_lengths.resize(num_elements);
+    for (size_t i=0; i<num_elements; i++) {
+        VectorI edge = getElement(i);
+        VectorF v1 = getNode(edge[0]);
+        VectorF v2 = getNode(edge[1]);
+        m_edge_lengths[i] = (v1 - v2).norm();
+    }
+}
+

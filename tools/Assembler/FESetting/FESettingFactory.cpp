@@ -5,13 +5,15 @@
 
 #include <Core/Exception.h>
 
+#include <Assembler/Elements/Elements.h>
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/Mesh/FEMeshFactory.h>
 #include <Assembler/ShapeFunctions/Integrator.h>
 #include <Assembler/Materials/Material.h>
 
 FESettingFactory::FESettingFactory(FESettingFactory::MeshPtr mesh) {
-    m_mesh = FEMeshFactory::adapt(mesh);
+    m_mesh = Elements::adapt(mesh);
+    //m_mesh = FEMeshFactory::adapt(mesh);
     m_integrator = Integrator::create(m_mesh);
 }
 

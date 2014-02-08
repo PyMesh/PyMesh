@@ -26,12 +26,20 @@ size_t TetrahedronElements::getNbrElements() const {
     return m_mesh->get_num_voxels();
 }
 
+size_t TetrahedronElements::getNodePerElement() const {
+    return 4;
+}
+
 VectorI TetrahedronElements::getElements() const {
     return m_mesh->get_voxels();
 }
 
 VectorI TetrahedronElements::getElement(size_t ei) const {
     return m_mesh->get_voxel(ei);
+}
+
+Float TetrahedronElements::getElementVolume(size_t ei) const {
+    return m_mesh->get_attribute("voxel_volume")[ei];
 }
 
 void TetrahedronElements::check_mesh() {

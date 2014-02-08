@@ -16,14 +16,18 @@ class EdgeElements : public Elements {
         virtual VectorF getNode(size_t vi) const;
 
         virtual size_t getNbrElements() const;
+        virtual size_t getNodePerElement() const;
         virtual VectorI getElements() const;
         virtual VectorI getElement(size_t ei) const;
+        virtual Float getElementVolume(size_t ei) const;
 
     private:
         void check_mesh();
         void extract_boundary_edges();
+        void compute_edge_lengths();
 
     private:
         Mesh::Ptr m_mesh;
         MatrixIr m_edges;
+        VectorF m_edge_lengths;
 };

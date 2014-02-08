@@ -1,8 +1,9 @@
 #include "MeshAttributes.h"
 
-#include <iostream>
+#include <sstream>
 
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 #include "MeshAttribute.h"
 #include "MeshAttributeFactory.h"
@@ -26,9 +27,9 @@ void MeshAttributes::add_attribute(const std::string& name, Mesh& mesh) {
 void MeshAttributes::remove_attribute(const std::string& name) {
     AttributeMap::iterator itr = m_attributes.find(name);
     if (itr == m_attributes.end()) {
-        std::cerr << "Warning: Attribute \"" << name << "\" does not exist."
-            << std::endl;
-        return;
+        std::stringstream err_msg;
+        err_msg << "Attribute \"" << name << "\" does not exist.";
+        throw RuntimeError(err_msg.str());
     }
     m_attributes.erase(itr);
 }
@@ -36,8 +37,9 @@ void MeshAttributes::remove_attribute(const std::string& name) {
 VectorF& MeshAttributes::get_attribute(const std::string& name) {
     AttributeMap::iterator itr = m_attributes.find(name);
     if (itr == m_attributes.end()) {
-        std::cerr << "Attribute \"" << name << "\" does not exist yet."
-            << std::endl;
+        std::stringstream err_msg;
+        err_msg << "Attribute \"" << name << "\" does not exist.";
+        throw RuntimeError(err_msg.str());
     }
     return itr->second->get_values();
 }
@@ -46,10 +48,9 @@ void MeshAttributes::set_attribute(const std::string& name, VectorF& value) {
     MeshAttribute::Ptr attr;
     AttributeMap::iterator itr = m_attributes.find(name);
     if (itr == m_attributes.end()) {
-        std::cerr << "Cannot set non-exist attribute \"" << name << "\""
-            << std::endl;
-        assert(false);
-        return;
+        std::stringstream err_msg;
+        err_msg << "Attribute \"" << name << "\" does not exist.";
+        throw RuntimeError(err_msg.str());
     } else {
         attr = itr->second;
     }

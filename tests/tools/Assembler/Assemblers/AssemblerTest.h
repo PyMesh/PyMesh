@@ -10,13 +10,12 @@
 
 #include <Assembler/FESetting/FESettingFactory.h>
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/Assemblers/Assembler.h>
 
 class AssemblerTest : public ::testing::Test {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-        typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        typedef FESetting::MeshPtr MeshPtr;
+        typedef FESetting::FEMeshPtr FEMeshPtr;
         typedef FESetting::Ptr FESettingPtr;
 
         virtual void SetUp() {

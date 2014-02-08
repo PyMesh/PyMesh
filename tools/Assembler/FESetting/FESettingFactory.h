@@ -6,11 +6,11 @@
 
 class FESettingFactory {
     public:
-        typedef Mesh::Ptr MeshPtr;
-        typedef FEMeshAdaptor::Ptr FEMeshPtr;
         typedef FESetting::Ptr FESettingPtr;
-        typedef Integrator::Ptr IntegratorPtr;
-        typedef Material::Ptr MaterialPtr;
+        typedef FESetting::MeshPtr MeshPtr;
+        typedef FESetting::FEMeshPtr FEMeshPtr;
+        typedef FESetting::IntegratorPtr IntegratorPtr;
+        typedef FESetting::MaterialPtr MaterialPtr;
 
         FESettingFactory(MeshPtr mesh);
         FESettingFactory& with_material(const std::string& material_name);

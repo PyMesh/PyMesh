@@ -4,6 +4,7 @@
 
 #include <Core/EigenTypedef.h>
 
+#include <Assembler/Elements/Elements.h>
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/ShapeFunctions/ShapeFunction.h>
 #include <Assembler/Materials/Material.h>
@@ -11,7 +12,8 @@
 class Integrator {
     public:
         typedef std::tr1::shared_ptr<Integrator> Ptr;
-        typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        //typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        typedef Elements::Ptr FEMeshPtr;
         typedef ShapeFunction::Ptr ShapeFuncPtr;
 
         static Ptr create(FEMeshPtr mesh);

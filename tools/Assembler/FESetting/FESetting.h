@@ -4,6 +4,7 @@
 
 #include <Mesh.h>
 
+#include <Assembler/Elements/Elements.h>
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/ShapeFunctions/Integrator.h>
 #include <Assembler/Materials/Material.h>
@@ -12,7 +13,8 @@ class FESetting {
     public:
         typedef std::tr1::shared_ptr<FESetting> Ptr;
         typedef Mesh::Ptr MeshPtr;
-        typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        typedef Elements::Ptr FEMeshPtr;
+        //typedef FEMeshAdaptor::Ptr FEMeshPtr;
         typedef Integrator::Ptr IntegratorPtr;
         typedef Material::Ptr MaterialPtr;
 

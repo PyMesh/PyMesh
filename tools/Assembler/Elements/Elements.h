@@ -24,6 +24,8 @@ class Elements {
 
         // Elements
         virtual size_t getNbrElements() const=0;
+        virtual size_t getNodePerElement() const=0;
         virtual VectorI getElements() const=0;
         virtual VectorI getElement(size_t ei) const=0;
+        virtual Float getElementVolume(size_t ei) const=0;
 };

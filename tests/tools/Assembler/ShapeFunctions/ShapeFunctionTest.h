@@ -6,14 +6,13 @@
 #include <Mesh.h>
 #include <MeshFactory.h>
 
-#include <Assembler/Mesh/FEMeshAdaptor.h>
-#include <Assembler/Mesh/FEMeshFactory.h>
+#include <Assembler/Elements/Elements.h>
 #include <Assembler/ShapeFunctions/ShapeFunction.h>
 
 class ShapeFunctionTest : public ::testing::Test {
     protected:
         typedef Mesh::Ptr MeshPtr;
-        typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        typedef Elements::Ptr FEMeshPtr;
         typedef ShapeFunction::Ptr ShapeFuncPtr;
         void SetUp() {
             std::string project_dir = Environment::get("PYMESH_PATH");
@@ -22,7 +21,7 @@ class ShapeFunctionTest : public ::testing::Test {
 
         FEMeshPtr load_mesh(const std::string& filename) {
             std::string mesh_file = m_data_dir + filename;
-            return FEMeshFactory::adapt(
+            return Elements::adapt(
                     MeshPtr(
                         MeshFactory()
                         .load_file(mesh_file)

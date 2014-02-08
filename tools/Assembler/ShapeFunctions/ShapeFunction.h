@@ -6,6 +6,7 @@
 #include <Core/EigenTypedef.h>
 
 #include <Assembler/Mesh/FEMeshAdaptor.h>
+#include <Assembler/Elements/Elements.h>
 
 /**
  * Shape function represent the basis function of the finite element space for
@@ -14,7 +15,8 @@
 class ShapeFunction {
     public:
         typedef std::tr1::shared_ptr<ShapeFunction> Ptr;
-        typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        //typedef FEMeshAdaptor::Ptr FEMeshPtr;
+        typedef Elements::Ptr FEMeshPtr;
 
         static Ptr create(FEMeshPtr mesh, const std::string& func_type);
 
