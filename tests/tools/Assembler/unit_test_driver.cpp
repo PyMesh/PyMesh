@@ -4,6 +4,7 @@
 #include "Mesh/TetrahedronMeshTest.h"
 #include "ShapeFunctions/ShapeFunctionTest.h"
 #include "ShapeFunctions/IntegratorTest.h"
+#include "ShapeFunctions/FEBasisTest.h"
 #include "FESetting/FESettingTest.h"
 #include "Assemblers/StiffnessAssemblerTest.h"
 #include "Assemblers/MassAssemblerTest.h"
