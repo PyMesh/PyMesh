@@ -124,4 +124,18 @@ class FEAssemblerTest(unittest.TestCase):
         L_ground_truth = self.load_matrix("square_2D_laplacian.mat", "L");
         self.assertMatrixEqual(L_ground_truth, L);
 
+    def test_displacement_strain_tet(self):
+        mesh = self.load_mesh("tet.msh");
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        B = self.format(assembler.assemble("displacement_strain"));
+        B_ground_truth = self.load_matrix("tet_displacement_strain.mat", "B");
+        self.assertMatrixEqual(B_ground_truth, B);
+
+    def test_displacement_strain_square(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        B = self.format(assembler.assemble("displacement_strain"));
+        B_ground_truth = self.load_matrix("square_2D_displacement_strain.mat", "B");
+        self.assertMatrixEqual(B_ground_truth, B);
+
 
