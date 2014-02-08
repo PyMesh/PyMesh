@@ -8,13 +8,12 @@
 #include <Assembler/Elements/Elements.h>
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/Mesh/FEMeshFactory.h>
-#include <Assembler/ShapeFunctions/Integrator.h>
+#include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 
 FESettingFactory::FESettingFactory(FESettingFactory::MeshPtr mesh) {
     m_mesh = Elements::adapt(mesh);
-    //m_mesh = FEMeshFactory::adapt(mesh);
-    m_integrator = Integrator::create(m_mesh);
+    m_basis = FEBasisPtr(new FEBasis(m_mesh));
 }
 
 FESettingFactory& FESettingFactory::with_material(
@@ -34,12 +33,12 @@ FESettingFactory::FESettingPtr FESettingFactory::create() {
     if (!m_mesh) {
         throw RuntimeError("Mesh is not initialized");
     }
-    if (!m_integrator) {
-        throw RuntimeError("Integrator is not initialized");
+    if (!m_basis) {
+        throw RuntimeError("Basis is not initialized");
     }
     if (!m_material) {
         throw RuntimeError("Material is not initialized");
     }
 
-    return FESettingPtr(new FESetting(m_mesh, m_integrator, m_material));
+    return FESettingPtr(new FESetting(m_mesh, m_basis, m_material));
 }

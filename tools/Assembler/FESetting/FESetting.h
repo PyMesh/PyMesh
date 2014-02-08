@@ -6,7 +6,7 @@
 
 #include <Assembler/Elements/Elements.h>
 #include <Assembler/Mesh/FEMeshAdaptor.h>
-#include <Assembler/ShapeFunctions/Integrator.h>
+#include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 
 class FESetting {
@@ -14,21 +14,19 @@ class FESetting {
         typedef std::tr1::shared_ptr<FESetting> Ptr;
         typedef Mesh::Ptr MeshPtr;
         typedef Elements::Ptr FEMeshPtr;
-        //typedef FEMeshAdaptor::Ptr FEMeshPtr;
-        typedef Integrator::Ptr IntegratorPtr;
+        typedef FEBasis::Ptr FEBasisPtr;
         typedef Material::Ptr MaterialPtr;
 
     public:
-        FESetting(FEMeshPtr mesh, IntegratorPtr integrator,
-                MaterialPtr material) :
-            m_mesh(mesh), m_integrator(integrator), m_material(material) {}
+        FESetting(FEMeshPtr mesh, FEBasisPtr basis, MaterialPtr material) :
+            m_mesh(mesh), m_basis(basis), m_material(material) {}
 
         FEMeshPtr get_mesh() { return m_mesh; }
-        IntegratorPtr get_integrator() { return m_integrator; }
+        FEBasisPtr get_basis() { return m_basis; }
         MaterialPtr get_material() { return m_material; }
 
     protected:
         FEMeshPtr m_mesh;
-        IntegratorPtr m_integrator;
+        FEBasisPtr m_basis;
         MaterialPtr m_material;
 };

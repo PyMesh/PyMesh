@@ -6,21 +6,21 @@
 #include <Core/EigenTypedef.h>
 
 //#include <Assembler/Mesh/FEMeshAdaptor.h>
-#include <Assembler/ShapeFunctions/Integrator.h>
+#include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
 #include <Assembler/Math/ZSparseMatrix.h>
 
 ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
-    typedef FESetting::IntegratorPtr IntegratorPtr;
+    typedef FESetting::FEBasisPtr FEBasisPtr;
     typedef FESetting::MaterialPtr MaterialPtr;
 
     typedef Eigen::Triplet<Float> T;
     std::vector<T> entries;
 
     FEMeshPtr mesh = setting->get_mesh();
-    IntegratorPtr integrator = setting->get_integrator();
+    FEBasisPtr basis = setting->get_basis();
     MaterialPtr material = setting->get_material();
 
     const size_t dim = mesh->getDim();
@@ -33,7 +33,7 @@ ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
 
         for (size_t j=0; j<nodes_per_element; j++) {
             for (size_t k=0; k<nodes_per_element; k++) {
-                MatrixF coeff = integrator->integrate_material_contraction(
+                MatrixF coeff = basis->integrate_material_contraction(
                             i, j, k, material);
                 for (size_t l=0; l<dim; l++) {
                     for (size_t n=0; n<dim; n++) {

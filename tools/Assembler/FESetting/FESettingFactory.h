@@ -9,7 +9,7 @@ class FESettingFactory {
         typedef FESetting::Ptr FESettingPtr;
         typedef FESetting::MeshPtr MeshPtr;
         typedef FESetting::FEMeshPtr FEMeshPtr;
-        typedef FESetting::IntegratorPtr IntegratorPtr;
+        typedef FESetting::FEBasisPtr FEBasisPtr;
         typedef FESetting::MaterialPtr MaterialPtr;
 
         FESettingFactory(MeshPtr mesh);
@@ -18,6 +18,6 @@ class FESettingFactory {
 
     private:
         FEMeshPtr m_mesh;
-        IntegratorPtr m_integrator;
+        FEBasisPtr m_basis;
         MaterialPtr m_material;
 };

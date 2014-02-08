@@ -8,12 +8,14 @@
 
 #include <Assembler/Elements/Elements.h>
 #include <Assembler/ShapeFunctions/Integrator.h>
+#include <Assembler/ShapeFunctions/ShapeFunction.h>
 
 class IntegratorTest : public ::testing::Test {
     protected:
         typedef Mesh::Ptr MeshPtr;
         typedef Elements::Ptr FEMeshPtr;
         typedef Integrator::Ptr IntegratorPtr;
+        typedef ShapeFunction::Ptr ShapeFuncPtr;
         void SetUp() {
             std::string project_dir = Environment::get("PYMESH_PATH");
             m_data_dir = project_dir + "/tests/data/";
@@ -31,6 +33,13 @@ class IntegratorTest : public ::testing::Test {
                         .with_attribute("face_area")
                         .with_attribute("voxel_volume")
                         .create()));
+        }
+
+        IntegratorPtr create_integrator(FEMeshPtr mesh) {
+            ShapeFuncPtr shape_func =
+                ShapeFunction::create(mesh, "linear");
+            IntegratorPtr integrator = Integrator::create(mesh, shape_func);
+            return integrator;
         }
 
         Vector3F convert(const VectorF& v) {
@@ -52,7 +61,7 @@ class IntegratorTest : public ::testing::Test {
 
 TEST_F(IntegratorTest, FuncOverTriangle) {
     FEMeshPtr mesh = load_mesh("square_2D.obj");
-    IntegratorPtr integrator = Integrator::create(mesh);
+    IntegratorPtr integrator = create_integrator(mesh);
     const size_t num_element = mesh->getNbrElements();
     for (size_t i=0; i<num_element; i++) {
         Float area = mesh->getElementVolume(i);
@@ -73,7 +82,7 @@ TEST_F(IntegratorTest, FuncOverTriangle) {
 
 TEST_F(IntegratorTest, FuncOverTetrahedron) {
     FEMeshPtr mesh = load_mesh("cube.msh");
-    IntegratorPtr integrator = Integrator::create(mesh);
+    IntegratorPtr integrator = create_integrator(mesh);
     const size_t num_element = mesh->getNbrElements();
     for (size_t i=0; i<num_element; i++) {
         Float volume = mesh->getElementVolume(i);
@@ -102,7 +111,7 @@ TEST_F(IntegratorTest, FuncOverTetrahedron) {
 
 TEST_F(IntegratorTest, GradOverTriangle) {
     FEMeshPtr mesh = load_mesh("square_2D.obj");
-    IntegratorPtr integrator = Integrator::create(mesh);
+    IntegratorPtr integrator = create_integrator(mesh);
     const size_t num_element = mesh->getNbrElements();
     for (size_t i=0; i<num_element; i++) {
         // Check against cotangent weights.
@@ -124,7 +133,7 @@ TEST_F(IntegratorTest, GradOverTriangle) {
 
 TEST_F(IntegratorTest, GradOverTetrahedronSymmetry) {
     FEMeshPtr mesh = load_mesh("tet.msh");
-    IntegratorPtr integrator = Integrator::create(mesh);
+    IntegratorPtr integrator = create_integrator(mesh);
 
     // Check phi_i * phi_j == phi_j * phi_i.
     ASSERT_FLOAT_EQ(integrator->integrate_grad(0, 0, 1), integrator->integrate_grad(0, 1, 0));
@@ -140,7 +149,7 @@ TEST_F(IntegratorTest, GradOverTetrahedronSymmetry) {
 
 TEST_F(IntegratorTest, MaterialContractionTriangle) {
     FEMeshPtr mesh = load_mesh("square_2D.obj");
-    IntegratorPtr integrator = Integrator::create(mesh);
+    IntegratorPtr integrator = create_integrator(mesh);
     Material::Ptr material = Material::create_isotropic(2, 1.0, 1.0, 0.0);
 
     const size_t num_element = mesh->getNbrElements();
@@ -168,7 +177,7 @@ TEST_F(IntegratorTest, MaterialContractionTriangle) {
 
 TEST_F(IntegratorTest, MaterialContractionTetrahedron) {
     FEMeshPtr mesh = load_mesh("tet.msh");
-    IntegratorPtr integrator = Integrator::create(mesh);
+    IntegratorPtr integrator = create_integrator(mesh);
     Material::Ptr material = Material::create_isotropic(3, 1.0, 1.0, 0.0);
 
     const size_t num_element = mesh->getNbrElements();

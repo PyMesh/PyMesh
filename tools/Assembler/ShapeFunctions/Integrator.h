@@ -12,11 +12,10 @@
 class Integrator {
     public:
         typedef std::tr1::shared_ptr<Integrator> Ptr;
-        //typedef FEMeshAdaptor::Ptr FEMeshPtr;
         typedef Elements::Ptr FEMeshPtr;
         typedef ShapeFunction::Ptr ShapeFuncPtr;
 
-        static Ptr create(FEMeshPtr mesh);
+        static Ptr create(FEMeshPtr mesh, ShapeFuncPtr);
 
     public:
         /**
