@@ -8,6 +8,7 @@
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/FESetting/FESetting.h>
 #include <Assembler/Math/ZSparseMatrix.h>
+#include <Assembler/Math/MatrixOrder.h>
 
 ZSparseMatrix DisplacementStrainAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
@@ -23,7 +24,7 @@ ZSparseMatrix DisplacementStrainAssembler::assemble(FESettingPtr setting) {
     const size_t num_nodes = mesh->getNbrNodes();
     const size_t num_elements = mesh->getNbrElements();
     const size_t nodes_per_element = mesh->getNodePerElement();
-    MatrixI order = get_entry_order(dim);
+    MatrixI order = MatrixOrder::get_order(dim);
     size_t num_entries_per_element = dim * (dim+1) / 2;
 
     for (size_t i=0; i<num_elements; i++) {
@@ -54,25 +55,4 @@ ZSparseMatrix DisplacementStrainAssembler::assemble(FESettingPtr setting) {
     ZSparseMatrix B(num_elements * num_entries_per_element, num_nodes * dim);
     B.setFromTriplets(entries.begin(), entries.end());
     return B;
-}
-
-MatrixI DisplacementStrainAssembler::get_entry_order(size_t dim) {
-    MatrixI order(dim, dim);
-    switch (dim) {
-        case 2:
-            order << 0, 2,
-                     2, 1;
-            break;
-        case 3:
-            order << 0, 3, 4,
-                     3, 1, 5,
-                     4, 5, 2;
-            break;
-        default:
-            std::stringstream err_msg;
-            err_msg << "Displacement to strain matrix is not implemented for "
-                << dim << "D space.";
-            throw NotImplementedError(err_msg.str());
-    }
-    return order;
 }

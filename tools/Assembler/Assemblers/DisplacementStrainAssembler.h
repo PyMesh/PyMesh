@@ -6,7 +6,4 @@
 class DisplacementStrainAssembler : public Assembler {
     public:
         virtual ZSparseMatrix assemble(FESettingPtr setting);
-
-    private:
-        MatrixI get_entry_order(size_t dim);
 };
