@@ -9,6 +9,7 @@
 #include "LumpedMassAssembler.h"
 #include "LaplacianAssembler.h"
 #include "DisplacementStrainAssembler.h"
+#include "ElasticityTensorAssembler.h"
 
 Assembler::Ptr Assembler::create(const std::string& matrix_name) {
     if (matrix_name == "stiffness") {
@@ -21,6 +22,8 @@ Assembler::Ptr Assembler::create(const std::string& matrix_name) {
         return Ptr(new LaplacianAssembler());
     } else if (matrix_name == "displacement_strain") {
         return Ptr(new DisplacementStrainAssembler());
+    } else if (matrix_name == "elasticity_tensor") {
+        return Ptr(new ElasticityTensorAssembler());
     } else {
         std::stringstream err_msg;
         err_msg << "Assembling " << matrix_name << " is not supported yet.";

@@ -11,6 +11,7 @@
 #include "Assemblers/LumpedMassAssemblerTest.h"
 #include "Assemblers/LaplacianAssemblerTest.h"
 #include "Assemblers/DisplacementStrainAssemblerTest.h"
+#include "Assemblers/ElasticityTensorAssemblerTest.h"
 #include "Elements/ElementsTest.h"
 #include "Elements/TetrahedronElementsTest.h"
 #include "Elements/TriangleElementsTest.h"
