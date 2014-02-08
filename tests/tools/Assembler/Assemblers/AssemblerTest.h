@@ -31,11 +31,6 @@ class AssemblerTest : public ::testing::Test {
             return MeshPtr(
                     MeshFactory()
                     .load_file(mesh_file)
-                    .with_connectivity("all")
-                    .with_attribute("face_normal")
-                    .with_attribute("vertex_normal")
-                    .with_attribute("face_area")
-                    .with_attribute("voxel_volume")
                     .create());
         }
 

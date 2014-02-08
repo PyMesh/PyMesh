@@ -52,4 +52,7 @@ void TetrahedronElements::check_mesh() {
     if (m_mesh->get_vertex_per_voxel() != 4) {
         throw RuntimeError("Mesh is not a tetrahedron mesh.");
     }
+    if (!m_mesh->has_attribute("voxel_volume")) {
+        m_mesh->add_attribute("voxel_volume");
+    }
 }

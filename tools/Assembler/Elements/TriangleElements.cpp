@@ -49,4 +49,7 @@ void TriangleElements::check_mesh() {
     if (m_mesh->get_vertex_per_face() != 3) {
         throw RuntimeError("Mesh is not a triangle mesh.");
     }
+    if (!m_mesh->has_attribute("face_area")) {
+        m_mesh->add_attribute("face_area");
+    }
 }
