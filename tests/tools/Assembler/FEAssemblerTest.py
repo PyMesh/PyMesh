@@ -152,4 +152,17 @@ class FEAssemblerTest(unittest.TestCase):
         C_ground_truth = self.load_matrix("square_2D_elasticity_tensor.mat", "C");
         self.assertMatrixEqual(C_ground_truth, C);
 
+    def test_rigid_motion_tet(self):
+        mesh = self.load_mesh("tet.msh");
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        Ru = self.format(assembler.assemble("rigid_motion"));
+        Ru_ground_truth = self.load_matrix("tet_rigid_motion.mat", "Ru");
+        self.assertMatrixEqual(Ru_ground_truth, Ru);
+
+    def test_rigid_motion_square(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        Ru = self.format(assembler.assemble("rigid_motion"));
+        Ru_ground_truth = self.load_matrix("square_2D_rigid_motion.mat", "Ru");
+        self.assertMatrixEqual(Ru_ground_truth, Ru);
 
