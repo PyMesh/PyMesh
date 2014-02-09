@@ -4,6 +4,7 @@
 #include "IndexHeapTest.h"
 #include "ShortEdgeRemovalTest.h"
 #include "TripletMapTest.h"
+#include "AttributeUtilsTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
