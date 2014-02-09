@@ -9,3 +9,4 @@
 %include ShortEdgeRemoval.i
 %include MeshUtils.i
 %include MeshSeparator.i
+%include Boundary.i
