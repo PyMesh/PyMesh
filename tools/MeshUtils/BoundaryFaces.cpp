@@ -34,6 +34,10 @@ size_t BoundaryFaces::get_boundary_element(size_t bi) const {
     return m_boundary_voxels[bi];
 }
 
+size_t BoundaryFaces::get_num_boundary_nodes() const {
+    return m_boundary_nodes.size();
+}
+
 VectorI BoundaryFaces::get_boundary_nodes() const {
     return m_boundary_nodes;
 }

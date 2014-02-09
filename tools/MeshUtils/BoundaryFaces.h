@@ -11,6 +11,8 @@ class BoundaryFaces : public Boundary {
         virtual MatrixIr get_boundaries() const;
         virtual VectorI get_boundary(size_t bi) const;
         virtual size_t get_boundary_element(size_t bi) const;
+
+        virtual size_t get_num_boundary_nodes() const;
         virtual VectorI get_boundary_nodes() const;
 
     private:
