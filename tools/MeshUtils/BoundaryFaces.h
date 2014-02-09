@@ -11,11 +11,14 @@ class BoundaryFaces : public Boundary {
         virtual MatrixIr get_boundaries() const;
         virtual VectorI get_boundary(size_t bi) const;
         virtual size_t get_boundary_element(size_t bi) const;
+        virtual VectorI get_boundary_nodes() const;
 
     private:
         void extract_boundary(const Mesh& mesh);
+        void extract_boundary_nodes();
 
     private:
         MatrixIr m_boundaries;
         VectorI m_boundary_voxels;
+        VectorI m_boundary_nodes;
 };

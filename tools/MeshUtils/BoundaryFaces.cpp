@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <vector>
+#include <set>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -12,6 +13,7 @@
 
 BoundaryFaces::BoundaryFaces(const Mesh& mesh) {
     extract_boundary(mesh);
+    extract_boundary_nodes();
 }
 
 size_t BoundaryFaces::get_num_boundaries() const {
@@ -30,6 +32,10 @@ VectorI BoundaryFaces::get_boundary(size_t bi) const {
 size_t BoundaryFaces::get_boundary_element(size_t bi) const {
     assert(bi < m_boundary_voxels.size());
     return m_boundary_voxels[bi];
+}
+
+VectorI BoundaryFaces::get_boundary_nodes() const {
+    return m_boundary_nodes;
 }
 
 void BoundaryFaces::extract_boundary(const Mesh& mesh) {
@@ -77,4 +83,13 @@ void BoundaryFaces::extract_boundary(const Mesh& mesh) {
     m_boundary_voxels.resize(boundary_voxels.size());
     std::copy(boundary_voxels.begin(), boundary_voxels.end(),
             m_boundary_voxels.data());
+}
+
+void BoundaryFaces::extract_boundary_nodes() {
+    size_t num_entries = m_boundaries.rows() * m_boundaries.cols();
+    std::set<size_t> vertex_set(m_boundaries.data(),
+            m_boundaries.data() + num_entries);
+    m_boundary_nodes.resize(vertex_set.size());
+    std::copy(vertex_set.begin(), vertex_set.end(),
+            m_boundary_nodes.data());
 }

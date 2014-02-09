@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <string>
 #include <set>
 #include <tr1/memory>
@@ -59,6 +60,21 @@ TEST_F(BoundaryEdgesTest, BoundaryElementsContainsBoundary) {
         std::set<size_t> face_v_set(face.data(), face.data() + face.size());
         ASSERT_FALSE(face_v_set.find(edge[0]) == face_v_set.end());
         ASSERT_FALSE(face_v_set.find(edge[1]) == face_v_set.end());
+    }
+}
+
+TEST_F(BoundaryEdgesTest, BoundaryNodes) {
+    load_mesh("square_2D.obj");
+    BoundaryEdges bd(*m_mesh.get());
+    VectorI bd_nodes = bd.get_boundary_nodes();
+    size_t num_bd_nodes = bd_nodes.size();
+
+    ASSERT_EQ(4, num_bd_nodes);
+
+    // Check that all nodes are boundary nodes.
+    std::sort(bd_nodes.data(), bd_nodes.data() + num_bd_nodes);
+    for (size_t i=0; i<bd_nodes.size(); i++) {
+        ASSERT_EQ(i, bd_nodes[i]);
     }
 }
 

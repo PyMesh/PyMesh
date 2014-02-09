@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <iostream>
 #include <string>
 #include <tr1/memory>
@@ -51,7 +52,7 @@ TEST_F(BoundaryFacesTest, CubeBoundary) {
 
 TEST_F(BoundaryFacesTest, BoundaryElementsContainsBoundary) {
     load_mesh("cube.msh");
-    BoundaryEdges bd(*m_mesh.get());
+    BoundaryFaces bd(*m_mesh.get());
     const size_t num_boundaries = bd.get_num_boundaries();
     for (size_t i=0; i<num_boundaries; i++) {
         VectorI face = bd.get_boundary(i);
@@ -61,6 +62,21 @@ TEST_F(BoundaryFacesTest, BoundaryElementsContainsBoundary) {
         for (size_t j=0; j<face.size(); j++) {
             ASSERT_FALSE(voxel_v_set.find(face[j]) == voxel_v_set.end());
         }
+    }
+}
+
+TEST_F(BoundaryFacesTest, BoundaryNodes) {
+    load_mesh("cube.msh");
+    BoundaryFaces bd(*m_mesh.get());
+    VectorI bd_nodes = bd.get_boundary_nodes();
+    const size_t num_bd_nodes = bd_nodes.size();
+
+    ASSERT_EQ(8, num_bd_nodes);
+
+    // Check that all nodes are boundary nodes.
+    std::sort(bd_nodes.data(), bd_nodes.data() + num_bd_nodes);
+    for (size_t i=0; i<bd_nodes.size(); i++) {
+        ASSERT_EQ(i, bd_nodes[i]);
     }
 }
 

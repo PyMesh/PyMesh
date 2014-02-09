@@ -2,6 +2,7 @@
 #include <algorithm>
 #include <cassert>
 #include <vector>
+#include <set>
 
 #include <Mesh.h>
 #include <Misc/Triplet.h>
@@ -11,6 +12,7 @@
 
 BoundaryEdges::BoundaryEdges(const Mesh& mesh) {
     extract_boundary(mesh);
+    extract_boundary_nodes();
 }
 
 size_t BoundaryEdges::get_num_boundaries() const {
@@ -29,6 +31,10 @@ VectorI BoundaryEdges::get_boundary(size_t bi) const {
 size_t BoundaryEdges::get_boundary_element(size_t bi) const {
     assert(bi < m_boundary_faces.size());
     return m_boundary_faces[bi];
+}
+
+VectorI BoundaryEdges::get_boundary_nodes() const {
+    return m_boundary_nodes;
 }
 
 void BoundaryEdges::extract_boundary(const Mesh& mesh) {
@@ -66,5 +72,14 @@ void BoundaryEdges::extract_boundary(const Mesh& mesh) {
     m_boundary_faces.resize(boundary_faces.size());
     std::copy(boundary_faces.begin(), boundary_faces.end(),
             m_boundary_faces.data());
+}
+
+void BoundaryEdges::extract_boundary_nodes() {
+    size_t num_entries = m_boundaries.rows() * m_boundaries.cols();
+    std::set<size_t> vertex_set(m_boundaries.data(),
+            m_boundaries.data() + num_entries);
+    m_boundary_nodes.resize(vertex_set.size());
+    std::copy(vertex_set.begin(), vertex_set.end(),
+            m_boundary_nodes.data());
 }
 
