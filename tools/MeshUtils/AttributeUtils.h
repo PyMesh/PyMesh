@@ -9,18 +9,18 @@ namespace AttributeUtils {
     VectorF convert_to_vertex_attribute(
             Mesh& mesh, const VectorF& attribute);
 
-    VectorF convert_to_vertex_attribute(
+    VectorF convert_to_vertex_attribute_from_name(
             Mesh& mesh, const std::string& attribute_name);
 
     VectorF convert_to_face_attribute(
             Mesh& mesh, const VectorF& attribute);
 
-    VectorF convert_to_face_attribute(
+    VectorF convert_to_face_attribute_from_name(
             Mesh& mesh, const std::string& attribute_name);
 
     VectorF convert_to_voxel_attribute(
             Mesh& mesh, const VectorF& attribute);
 
-    VectorF convert_to_voxel_attribute(
+    VectorF convert_to_voxel_attribute_from_name(
             Mesh& mesh, const std::string& attribute_name);
 }

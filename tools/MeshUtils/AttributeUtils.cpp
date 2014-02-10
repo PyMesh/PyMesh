@@ -180,7 +180,7 @@ VectorF AttributeUtils::convert_to_vertex_attribute(Mesh& mesh, const VectorF& a
     }
 }
 
-VectorF AttributeUtils::convert_to_vertex_attribute(Mesh& mesh,
+VectorF AttributeUtils::convert_to_vertex_attribute_from_name(Mesh& mesh,
         const std::string& attribute_name) {
     const VectorF& attr = mesh.get_attribute(attribute_name);
     return convert_to_vertex_attribute(mesh, attr);
@@ -207,7 +207,7 @@ VectorF AttributeUtils::convert_to_face_attribute(Mesh& mesh, const VectorF& att
     }
 }
 
-VectorF AttributeUtils::convert_to_face_attribute(Mesh& mesh,
+VectorF AttributeUtils::convert_to_face_attribute_from_name(Mesh& mesh,
         const std::string& attribute_name) {
     const VectorF& attr = mesh.get_attribute(attribute_name);
     return convert_to_face_attribute(mesh, attr);
@@ -236,7 +236,7 @@ VectorF AttributeUtils::convert_to_voxel_attribute(Mesh& mesh,
     }
 }
 
-VectorF AttributeUtils::convert_to_voxel_attribute(Mesh& mesh,
+VectorF AttributeUtils::convert_to_voxel_attribute_from_name(Mesh& mesh,
         const std::string& attribute_name) {
     const VectorF& attr = mesh.get_attribute(attribute_name);
     return convert_to_voxel_attribute(mesh, attr);
