@@ -38,6 +38,14 @@ class FEAssemblerTest(unittest.TestCase):
         factory.with_attribute("voxel_volume");
         return factory.create_shared();
 
+    def create_assembler(self, mesh):
+        return PyAssembler.FEAssembler.create_from_name(mesh, self.material_name);
+
+    def create_assembler_from_material(self, mesh):
+        material = PyAssembler.Material.create_isotropic(
+                mesh.get_dim(), 1.0, 1.0, 0.0);
+        return PyAssembler.FEAssembler.create(mesh, material);
+
     def load_matrix(self, filename, matrix_name):
         filename = os.path.join(self.ground_truth_dir, filename);
         matrix = loadmat(filename)[matrix_name];
@@ -68,100 +76,108 @@ class FEAssemblerTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, diff.max());
         self.assertAlmostEqual(0.0, diff.min());
 
+    def test_creation(self):
+        mesh = self.load_mesh("tet.msh");
+        assembler_1 = self.create_assembler(mesh);
+        assembler_2 = self.create_assembler_from_material(mesh);
+        K1 = self.format(assembler_1.assemble("stiffness"));
+        K2 = self.format(assembler_2.assemble("stiffness"));
+        self.assertMatrixEqual(K1, K2);
+
     def test_stiffness_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         K = self.format(assembler.assemble("stiffness"));
         K_ground_truth = self.load_matrix("tet_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);
 
     def test_stiffness_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         K = self.format(assembler.assemble("stiffness"));
         K_ground_truth = self.load_matrix("square_2D_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);
 
     def test_mass_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         M = self.format(assembler.assemble("mass"));
         M_ground_truth = self.load_matrix("tet_mass.mat", "M");
         self.assertMatrixEqual(M_ground_truth, M);
 
     def test_mass_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         M = self.format(assembler.assemble("mass"));
         M_ground_truth = self.load_matrix("square_2D_mass.mat", "M");
         self.assertMatrixEqual(M_ground_truth, M);
 
     def test_lumped_mass_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         M = self.format(assembler.assemble("lumped_mass"));
         M_ground_truth = self.load_matrix("tet_lumped_mass.mat", "M");
         self.assertMatrixEqual(M_ground_truth, M);
 
     def test_lumped_mass_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         M = self.format(assembler.assemble("lumped_mass"));
         M_ground_truth = self.load_matrix("square_2D_lumped_mass.mat", "M");
         self.assertMatrixEqual(M_ground_truth, M);
 
     def test_laplacian_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         L = self.format(assembler.assemble("laplacian"));
         L_ground_truth = self.load_matrix("tet_laplacian.mat", "L");
         self.assertMatrixEqual(L_ground_truth, L);
 
     def test_laplaican_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         L = self.format(assembler.assemble("laplacian"));
         L_ground_truth = self.load_matrix("square_2D_laplacian.mat", "L");
         self.assertMatrixEqual(L_ground_truth, L);
 
     def test_displacement_strain_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         B = self.format(assembler.assemble("displacement_strain"));
         B_ground_truth = self.load_matrix("tet_displacement_strain.mat", "B");
         self.assertMatrixEqual(B_ground_truth, B);
 
     def test_displacement_strain_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         B = self.format(assembler.assemble("displacement_strain"));
         B_ground_truth = self.load_matrix("square_2D_displacement_strain.mat", "B");
         self.assertMatrixEqual(B_ground_truth, B);
 
     def test_elasticity_tensor_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         C = self.format(assembler.assemble("elasticity_tensor"));
         C_ground_truth = self.load_matrix("tet_elasticity_tensor.mat", "C");
         self.assertMatrixEqual(C_ground_truth, C);
 
     def test_elasticity_tensor_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         C = self.format(assembler.assemble("elasticity_tensor"));
         C_ground_truth = self.load_matrix("square_2D_elasticity_tensor.mat", "C");
         self.assertMatrixEqual(C_ground_truth, C);
 
     def test_rigid_motion_tet(self):
         mesh = self.load_mesh("tet.msh");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         Ru = self.format(assembler.assemble("rigid_motion"));
         Ru_ground_truth = self.load_matrix("tet_rigid_motion.mat", "Ru");
         self.assertMatrixEqual(Ru_ground_truth, Ru);
 
     def test_rigid_motion_square(self):
         mesh = self.load_mesh("square_2D.obj");
-        assembler = PyAssembler.FEAssembler(mesh, self.material_name);
+        assembler = self.create_assembler(mesh);
         Ru = self.format(assembler.assemble("rigid_motion"));
         Ru_ground_truth = self.load_matrix("square_2D_rigid_motion.mat", "Ru");
         self.assertMatrixEqual(Ru_ground_truth, Ru);

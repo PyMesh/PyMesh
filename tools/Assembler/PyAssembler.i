@@ -5,3 +5,4 @@
 %include Core/ExceptionConverter.i
 %include Math/ZSparseMatrix.i
 %include FEAssembler.i
+%include Materials/Material.i

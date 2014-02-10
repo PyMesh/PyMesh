@@ -4,9 +4,25 @@
 #include <Assembler/FESetting/FESetting.h>
 #include <Assembler/FESetting/FESettingFactory.h>
 
+FEAssembler::FEAssembler FEAssembler::create(
+        Mesh::Ptr mesh, Material::Ptr material) {
+    return FEAssembler(mesh, material);
+}
+
+FEAssembler::FEAssembler FEAssembler::create_from_name(
+        Mesh::Ptr mesh, const std::string& name) {
+    return FEAssembler(mesh, name);
+}
+
 FEAssembler::FEAssembler(Mesh::Ptr mesh, const std::string& material_name) {
     FESettingFactory factory(mesh);
     factory.with_material(material_name);
+    m_setting = factory.create();
+}
+
+FEAssembler::FEAssembler(Mesh::Ptr mesh, Material::Ptr material) {
+    FESettingFactory factory(mesh);
+    factory.with_material(material);
     m_setting = factory.create();
 }
 

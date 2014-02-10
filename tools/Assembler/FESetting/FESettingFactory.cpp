@@ -27,11 +27,28 @@ FESettingFactory& FESettingFactory::with_material(
         VectorF axis = VectorF::Zero(dim);
         axis[0] = 1;
         m_material = Material::create_periodic(mat1, mat2, axis, 1.0);
+    } else if (material_name == "homogenized_material") {
+        if (dim == 3) {
+            throw NotImplementedError("Homogenized material is not supported in 3D");
+        }
+        size_t tensor_size = dim * dim;
+        MatrixF C(tensor_size, tensor_size);
+        C << 4.0/3.0,     0.0,     0.0, 7.0/5.0,
+             0.0    ,     0.0,     0.0,     0.0,
+             0.0    ,     0.0,     0.0,     0.0,
+             7.0/5.0,     0.0,     0.0, 3.0/2.0;
+        m_material = Material::create(1.0, C);
     } else {
         std::stringstream err_msg;
-        err_msg << "Material " << material_name << " is not supported.";
+        err_msg << "Material \"" << material_name << "\" is not supported.";
         throw NotImplementedError(err_msg.str());
     }
+    return *this;
+}
+
+FESettingFactory& FESettingFactory::with_material(
+        MaterialPtr material) {
+    m_material = material;
     return *this;
 }
 

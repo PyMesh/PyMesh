@@ -14,6 +14,7 @@ class FESettingFactory {
 
         FESettingFactory(MeshPtr mesh);
         FESettingFactory& with_material(const std::string& material_name);
+        FESettingFactory& with_material(MaterialPtr material);
         FESettingPtr create();
 
     private:
