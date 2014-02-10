@@ -30,6 +30,8 @@ ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
 
     for (size_t i=0; i<num_elements; i++) {
         const VectorI elem = mesh->getElement(i);
+        VectorF coord = mesh->getElementCenter(i);
+        Float density = material->get_density(coord);
 
         for (size_t j=0; j<nodes_per_element; j++) {
             for (size_t k=0; k<nodes_per_element; k++) {
@@ -38,7 +40,7 @@ ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
                 for (size_t l=0; l<dim; l++) {
                     for (size_t n=0; n<dim; n++) {
                         entries.push_back(
-                                T(elem[j]*dim+l, elem[k]*dim+n, coeff(l, n)));
+                                T(elem[j]*dim+l, elem[k]*dim+n, coeff(l, n) * density));
                     }
                 }
             }
@@ -47,7 +49,6 @@ ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
 
     ZSparseMatrix K(num_nodes * dim, num_nodes * dim);
     K.setFromTriplets(entries.begin(), entries.end());
-    K *= material->get_density();
 
     return K;
 }

@@ -29,17 +29,18 @@ ZSparseMatrix LaplacianAssembler::assemble(FESettingPtr setting) {
 
     for (size_t i=0; i<num_elements; i++) {
         const VectorI elem = mesh->getElement(i);
+        VectorF coord = mesh->getElementCenter(i);
+        Float density = material->get_density(coord);
 
         for (size_t j=0; j<nodes_per_element; j++) {
             for (size_t k=0; k<nodes_per_element; k++) {
                 Float grad_prod = basis->integrate_grad_grad(i, j, k);
-                entries.push_back(T(elem[j], elem[k], grad_prod));
+                entries.push_back(T(elem[j], elem[k], grad_prod * density));
             }
         }
     }
 
     ZSparseMatrix L(num_nodes, num_nodes);
     L.setFromTriplets(entries.begin(), entries.end());
-    L *= material->get_density();
     return L;
 }

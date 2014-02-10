@@ -21,6 +21,12 @@ FESettingFactory& FESettingFactory::with_material(
     size_t dim = m_mesh->getDim();
     if (material_name == "test_material") {
         m_material = Material::create_isotropic(dim, 1.0, 1.0, 0.0);
+    } else if (material_name == "periodic_material") {
+        MaterialPtr mat1 = Material::create_isotropic(dim, 1.0, 1.0, 0.0);
+        MaterialPtr mat2 = Material::create_isotropic(dim, 1.0, 2.0, 0.0);
+        VectorF axis = VectorF::Zero(dim);
+        axis[0] = 1;
+        m_material = Material::create_periodic(mat1, mat2, axis, 1.0);
     } else {
         std::stringstream err_msg;
         err_msg << "Material " << material_name << " is not supported.";

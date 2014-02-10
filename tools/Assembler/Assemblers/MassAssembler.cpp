@@ -27,18 +27,19 @@ ZSparseMatrix MassAssembler::assemble(FESettingPtr setting) {
 
     for (size_t i=0; i<num_elements; i++) {
         const VectorI elem = mesh->getElement(i);
+        VectorF coord = mesh->getElementCenter(i);
+        Float density = material->get_density(coord);
 
         for (size_t j=0; j<nodes_per_element; j++) {
             for (size_t k=0; k<nodes_per_element; k++) {
                 Float val = basis->integrate_func_func(i, j, k);
-                entries.push_back(T(elem[j], elem[k], val));
+                entries.push_back(T(elem[j], elem[k], val * density));
             }
         }
     }
 
     ZSparseMatrix M(num_nodes, num_nodes);
     M.setFromTriplets(entries.begin(), entries.end());
-    M *= material->get_density();
 
     return M;
 }

@@ -27,9 +27,11 @@ ZSparseMatrix LumpedMassAssembler::assemble(FESettingPtr setting) {
         const VectorI elem = mesh->getElement(i);
         const Float ave_vol =
             mesh->getElementVolume(i) / nodes_per_element;
+        VectorF coord = mesh->getElementCenter(i);
+        Float density = material->get_density(coord);
 
         for (size_t j=0; j<nodes_per_element; j++) {
-            entries.push_back(T(elem[j], elem[j], ave_vol));
+            entries.push_back(T(elem[j], elem[j], ave_vol * density));
         }
     }
 
