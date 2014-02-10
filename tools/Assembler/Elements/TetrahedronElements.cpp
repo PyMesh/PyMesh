@@ -42,6 +42,15 @@ Float TetrahedronElements::getElementVolume(size_t ei) const {
     return m_mesh->get_attribute("voxel_volume")[ei];
 }
 
+VectorF TetrahedronElements::getElementCenter(size_t ei) const {
+    VectorI elem = m_mesh->get_voxel(ei);
+    VectorF v1 = m_mesh->get_vertex(elem[0]);
+    VectorF v2 = m_mesh->get_vertex(elem[1]);
+    VectorF v3 = m_mesh->get_vertex(elem[2]);
+    VectorF v4 = m_mesh->get_vertex(elem[3]);
+    return 0.25 * (v1 + v2 + v3 + v4);
+}
+
 void TetrahedronElements::check_mesh() {
     if (m_mesh->get_dim() != 3) {
         throw RuntimeError("Tetrahedron mesh must be in R^3.");

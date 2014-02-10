@@ -20,6 +20,7 @@ class TetrahedronElements : public Elements {
         virtual VectorI getElements() const;
         virtual VectorI getElement(size_t ei) const;
         virtual Float getElementVolume(size_t ei) const;
+        virtual VectorF getElementCenter(size_t ei) const;
 
     private:
         void check_mesh();

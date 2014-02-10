@@ -20,6 +20,7 @@ ZSparseMatrix ElasticityTensorAssembler::assemble(FESettingPtr setting) {
 
     for (size_t i=0; i<num_elements; i++) {
         size_t base = i * num_entries_per_element;
+        VectorF coord = mesh->getElementCenter(i);
         for (size_t j=0; j<dim; j++) {
             for (size_t k=j; k<dim; k++) {
                 size_t tensor_row = order(j, k);
@@ -28,7 +29,7 @@ ZSparseMatrix ElasticityTensorAssembler::assemble(FESettingPtr setting) {
                         size_t tensor_col = order(m, n);
                         entries.push_back(T(
                                     base + tensor_row, base + tensor_col,
-                                    material->get_material_tensor(j, k, m, n)));
+                                    material->get_material_tensor(j, k, m, n, coord)));
                     }
                 }
             }

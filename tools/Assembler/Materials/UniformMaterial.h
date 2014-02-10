@@ -10,9 +10,13 @@ class UniformMaterial : public Material {
         UniformMaterial(Float density, const MatrixF& material_tensor);
 
         virtual Float get_material_tensor(
-                size_t i, size_t j, size_t k, size_t l) const;
+                size_t i, size_t j, size_t k, size_t l, VectorF coord) const;
 
-        virtual MatrixF strain_to_stress(const MatrixF& strain) const;
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const;
+
+        virtual Float get_density(VectorF coord) const {
+            return m_density;
+        }
 
         virtual Float get_density() const {
             return m_density;

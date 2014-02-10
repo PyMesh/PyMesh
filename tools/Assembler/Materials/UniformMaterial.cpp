@@ -15,13 +15,14 @@ UniformMaterial::UniformMaterial(
 }
 
 Float UniformMaterial::get_material_tensor(
-        size_t i, size_t j, size_t k, size_t l) const {
+        size_t i, size_t j, size_t k, size_t l, VectorF coord) const {
     size_t row = i * m_dim + k;
     size_t col = j * m_dim + l;
     return m_material_tensor.coeff(row, col);
 }
 
-MatrixF UniformMaterial::strain_to_stress(const MatrixF& strain) const {
+MatrixF UniformMaterial::strain_to_stress(const MatrixF& strain,
+        VectorF coord) const {
     const size_t rows = strain.rows();
     const size_t cols = strain.cols();
     MatrixF stress = MatrixF::Zero(rows, cols);

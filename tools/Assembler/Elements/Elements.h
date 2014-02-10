@@ -28,4 +28,5 @@ class Elements {
         virtual VectorI getElements() const=0;
         virtual VectorI getElement(size_t ei) const=0;
         virtual Float getElementVolume(size_t ei) const=0;
+        virtual VectorF getElementCenter(size_t ei) const=0;
 };

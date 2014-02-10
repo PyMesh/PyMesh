@@ -42,6 +42,14 @@ Float TriangleElements::getElementVolume(size_t ei) const {
     return m_mesh->get_attribute("face_area")[ei];
 }
 
+VectorF TriangleElements::getElementCenter(size_t ei) const {
+    VectorI elem = m_mesh->get_face(ei);
+    VectorF v1 = m_mesh->get_vertex(elem[0]);
+    VectorF v2 = m_mesh->get_vertex(elem[1]);
+    VectorF v3 = m_mesh->get_vertex(elem[2]);
+    return (v1 + v2 + v3)  / 3.0;
+}
+
 void TriangleElements::check_mesh() {
     if (m_mesh->get_num_faces() == 0) {
         throw RuntimeError("Mesh contains zero faces.");

@@ -45,40 +45,41 @@ MatrixF LinearTetrahedronIntegrator::integrate_material_contraction(
         size_t elem_idx, size_t local_func_i, size_t local_func_j,
         const Material::Ptr material) {
     MatrixF coeff(3, 3);
+    VectorF coord = m_mesh->getElementCenter(elem_idx);
 
     for (size_t i=0; i<3; i++) {
         for (size_t k=0; k<3; k++) {
             MatrixF C(3, 3);
 
             C(0, 0) = 0.5 * (
-                    material->get_material_tensor(i, 0, k, 0) +
-                    material->get_material_tensor(i, 0, 0, k));
+                    material->get_material_tensor(i, 0, k, 0, coord) +
+                    material->get_material_tensor(i, 0, 0, k, coord));
             C(0, 1) = 0.5 * (
-                    material->get_material_tensor(i, 0, k, 1) +
-                    material->get_material_tensor(i, 0, 1, k));
+                    material->get_material_tensor(i, 0, k, 1, coord) +
+                    material->get_material_tensor(i, 0, 1, k, coord));
             C(0, 2) = 0.5 * (
-                    material->get_material_tensor(i, 0, k, 2) +
-                    material->get_material_tensor(i, 0, 2, k));
+                    material->get_material_tensor(i, 0, k, 2, coord) +
+                    material->get_material_tensor(i, 0, 2, k, coord));
 
             C(1, 0) = 0.5 * (
-                    material->get_material_tensor(i, 1, k, 0) +
-                    material->get_material_tensor(i, 1, 0, k));
+                    material->get_material_tensor(i, 1, k, 0, coord) +
+                    material->get_material_tensor(i, 1, 0, k, coord));
             C(1, 1) = 0.5 * (
-                    material->get_material_tensor(i, 1, k, 1) +
-                    material->get_material_tensor(i, 1, 1, k));
+                    material->get_material_tensor(i, 1, k, 1, coord) +
+                    material->get_material_tensor(i, 1, 1, k, coord));
             C(1, 2) = 0.5 * (
-                    material->get_material_tensor(i, 1, k, 2) +
-                    material->get_material_tensor(i, 1, 2, k));
+                    material->get_material_tensor(i, 1, k, 2, coord) +
+                    material->get_material_tensor(i, 1, 2, k, coord));
 
             C(2, 0) = 0.5 * (
-                    material->get_material_tensor(i, 2, k, 0) +
-                    material->get_material_tensor(i, 2, 0, k));
+                    material->get_material_tensor(i, 2, k, 0, coord) +
+                    material->get_material_tensor(i, 2, 0, k, coord));
             C(2, 1) = 0.5 * (
-                    material->get_material_tensor(i, 2, k, 1) +
-                    material->get_material_tensor(i, 2, 1, k));
+                    material->get_material_tensor(i, 2, k, 1, coord) +
+                    material->get_material_tensor(i, 2, 1, k, coord));
             C(2, 2) = 0.5 * (
-                    material->get_material_tensor(i, 2, k, 2) +
-                    material->get_material_tensor(i, 2, 2, k));
+                    material->get_material_tensor(i, 2, k, 2, coord) +
+                    material->get_material_tensor(i, 2, 2, k, coord));
 
             coeff(i, k) = integrate_grad_C(elem_idx, local_func_i, local_func_j, C);
         }

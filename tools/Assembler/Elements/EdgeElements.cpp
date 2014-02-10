@@ -49,6 +49,12 @@ Float EdgeElements::getElementVolume(size_t ei) const {
     return m_edge_lengths[ei];
 }
 
+VectorF EdgeElements::getElementCenter(size_t ei) const {
+    VectorF v1 = m_mesh->get_vertex(m_edges(ei, 0));
+    VectorF v2 = m_mesh->get_vertex(m_edges(ei, 1));
+    return 0.5 * (v1 + v2);
+}
+
 void EdgeElements::check_mesh() {
     if (m_mesh->get_num_faces() == 0) {
         throw RuntimeError("Mesh contains no face!");

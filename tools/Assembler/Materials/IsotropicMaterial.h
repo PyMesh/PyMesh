@@ -31,7 +31,7 @@ class IsotropicMaterial<2> : public UniformMaterial {
                            2, 1;
         }
 
-        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l) const {
+        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const {
             const size_t row = m_index_map(i, j);
             const size_t col = m_index_map(k, l);
             if (row == col && ((i != k) || (j != l))) {
@@ -41,7 +41,7 @@ class IsotropicMaterial<2> : public UniformMaterial {
             }
         }
 
-        virtual MatrixF strain_to_stress(const MatrixF& strain) const {
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const {
             assert(strain.rows() == 2);
             assert(strain.cols() == 2);
             assert(strain == strain.transpose());
@@ -82,7 +82,8 @@ class IsotropicMaterial<3> : public UniformMaterial {
                            4, 5, 2;
         }
 
-        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l) const {
+        virtual Float get_material_tensor(
+                size_t i, size_t j, size_t k, size_t l, VectorF coord) const {
             size_t row = m_index_map(i, j);
             size_t col = m_index_map(k, l);
             if (row == col && ((i != k) || (j != l))) {
@@ -92,7 +93,7 @@ class IsotropicMaterial<3> : public UniformMaterial {
             }
         }
 
-        virtual MatrixF strain_to_stress(const MatrixF& strain) const {
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const {
             assert(strain.rows() == 3);
             assert(strain.cols() == 3);
             assert(strain == strain.transpose());
