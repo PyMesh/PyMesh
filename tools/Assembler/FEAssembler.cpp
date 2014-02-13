@@ -4,12 +4,12 @@
 #include <Assembler/FESetting/FESetting.h>
 #include <Assembler/FESetting/FESettingFactory.h>
 
-FEAssembler::FEAssembler FEAssembler::create(
+FEAssembler FEAssembler::create(
         Mesh::Ptr mesh, Material::Ptr material) {
     return FEAssembler(mesh, material);
 }
 
-FEAssembler::FEAssembler FEAssembler::create_from_name(
+FEAssembler FEAssembler::create_from_name(
         Mesh::Ptr mesh, const std::string& name) {
     return FEAssembler(mesh, name);
 }
