@@ -13,6 +13,7 @@ class VertexNormalAttribute : public MeshAttribute {
         virtual void compute_from_mesh(Mesh& mesh);
 
     private:
-        void compute_vertex_normals(Mesh& mesh);
+        void compute_vertex_normals_from_face(Mesh& mesh);
+        void compute_vertex_normals_from_edge(Mesh& mesh);
         const VectorF& get_attribute(Mesh& mesh, const std::string& attr_name);
 };

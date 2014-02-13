@@ -1,8 +1,9 @@
 #include "FaceNormalAttribute.h"
 
-#include <iostream>
+#include <sstream>
 
 #include <Mesh.h>
+#include <Core/Exception.h>
 
 void FaceNormalAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();
@@ -10,15 +11,23 @@ void FaceNormalAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_vertex_per_face = mesh.get_vertex_per_face();
 
     VectorF& normals = m_values;
-    normals = VectorF::Zero(num_faces * 3);
+    normals = VectorF::Zero(num_faces * 3); // Face normal is always in 3D
 
-    if (num_vertex_per_face == 3) {
-        for (size_t i=0; i<num_faces; i++) {
-            normals.segment<3>(i*3) = compute_triangle_normal(mesh, i);
+    if (dim == 3 || dim == 2) {
+        if (num_vertex_per_face == 3) {
+            for (size_t i=0; i<num_faces; i++) {
+                normals.segment<3>(i*3) = compute_triangle_normal(mesh, i);
+            }
+        } else {
+            std::stringstream err_msg;
+            err_msg << "Normal computation of face with "
+                << num_vertex_per_face << " is not supported.";
+            throw NotImplementedError(err_msg.str());
         }
     } else {
-        std::cerr << "Face with " << num_vertex_per_face << " is not supported yet." << std::endl;
-        return;
+        std::stringstream err_msg;
+        err_msg << "Dimension " << dim << " is not supported.";
+        throw RuntimeError(err_msg.str());
     }
 }
 

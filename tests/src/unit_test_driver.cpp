@@ -7,6 +7,7 @@
 #include "Misc/TripletTest.h"
 #include "Misc/HashGridTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
+#include "Attributes/VertexNormalAttributeTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
