@@ -73,8 +73,9 @@ class FEAssemblerTest(unittest.TestCase):
 
     def assertMatrixEqual(self, M1, M2):
         diff = M1 - M2;
-        self.assertAlmostEqual(0.0, diff.max());
-        self.assertAlmostEqual(0.0, diff.min());
+        if diff.nnz > 0:
+            self.assertAlmostEqual(0.0, np.max(diff.data));
+            self.assertAlmostEqual(0.0, np.min(diff.data));
 
     def test_creation(self):
         mesh = self.load_mesh("tet.msh");
