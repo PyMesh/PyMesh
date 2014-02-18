@@ -17,6 +17,8 @@
 #include "Elements/TetrahedronElementsTest.h"
 #include "Elements/TriangleElementsTest.h"
 #include "Elements/EdgeElementsTest.h"
+#include "Materials/MaterialTest.h"
+#include "Materials/UniformMaterialTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
