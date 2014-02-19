@@ -2,9 +2,10 @@
 #include <Core/Exception.h>
 
 PeriodicMaterial::PeriodicMaterial(Material::Ptr mat1, Material::Ptr mat2,
-        VectorF axis, Float period) : m_axis(axis), m_period(period){
-    m_materials.push_back(mat1);
-    m_materials.push_back(mat2);
+        VectorF axis, Float period, Float ratio) :
+    m_axis(axis), m_period(period), m_ratio(ratio) {
+        m_materials.push_back(mat1);
+        m_materials.push_back(mat2);
 }
 
 Float PeriodicMaterial::get_material_tensor(
@@ -36,8 +37,10 @@ size_t PeriodicMaterial::choose_material(VectorF coord) const {
     if (frac_part < 0) {
         frac_part = 1.0 + frac_part;
     }
-    size_t idx = size_t(frac_part * num_materials);
-    if (idx >= num_materials)
-        idx = num_materials - 1;
-    return idx;
+
+    if (frac_part <= m_ratio) {
+        return 0;
+    } else {
+        return 1;
+    }
 }

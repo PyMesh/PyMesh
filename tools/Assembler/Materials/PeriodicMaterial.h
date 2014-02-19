@@ -5,7 +5,7 @@
 class PeriodicMaterial : public Material {
     public:
         PeriodicMaterial(Material::Ptr mat1, Material::Ptr mat2,
-                VectorF axis, Float period);
+                VectorF axis, Float period, Float ratio);
 
         virtual Float get_material_tensor(
                 size_t i, size_t j, size_t k, size_t l, VectorF coord) const;
@@ -23,6 +23,7 @@ class PeriodicMaterial : public Material {
 
     protected:
         Float m_period;
+        Float m_ratio;
         VectorF m_axis;
         std::vector<Material::Ptr> m_materials;
 };

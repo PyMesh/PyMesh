@@ -26,7 +26,7 @@ FESettingFactory& FESettingFactory::with_material(
         MaterialPtr mat2 = Material::create_isotropic(dim, 1.0, 2.0, 0.0);
         VectorF axis = VectorF::Zero(dim);
         axis[0] = 1;
-        m_material = Material::create_periodic(mat1, mat2, axis, 1.0);
+        m_material = Material::create_periodic(mat1, mat2, axis, 1.0, 0.5);
     } else if (material_name == "homogenized_material") {
         if (dim == 3) {
             throw NotImplementedError("Homogenized material is not supported in 3D");
