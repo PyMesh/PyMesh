@@ -33,6 +33,11 @@ TEST_F(MaterialTest, UniformMaterialCreation3D) {
 
     MaterialPtr mat = Material::create(m_density, tensor);
     ASSERT_FLOAT_EQ(m_density, mat->get_density());
+    for (size_t i=0; i<3; i++) {
+        size_t row = i*3+i;
+        size_t col = i*3+i;
+        ASSERT_FLOAT_EQ(row*9+col, mat->get_material_tensor(i,i,i,i, m_origin));
+    }
 }
 
 TEST_F(MaterialTest, UniformMaterialCreation2D) {
@@ -45,4 +50,32 @@ TEST_F(MaterialTest, UniformMaterialCreation2D) {
 
     MaterialPtr mat = Material::create(m_density, tensor);
     ASSERT_FLOAT_EQ(m_density, mat->get_density());
+    for (size_t i=0; i<2; i++) {
+        size_t row = i*2+i;
+        size_t col = i*2+i;
+        ASSERT_FLOAT_EQ(row*4+col, mat->get_material_tensor(i,i,i,i, m_origin));
+    }
 }
+
+TEST_F(MaterialTest, IsotropicMaterialCreation3D) {
+    Float young = 1.0;
+    Float poisson = 0.0;
+    MaterialPtr mat = Material::create_isotropic(3, m_density, young, poisson);
+    ASSERT_FLOAT_EQ(m_density, mat->get_density());
+    for (size_t i=0; i<3; i++) {
+        ASSERT_FLOAT_EQ(1.0, mat->get_material_tensor(i,i,i,i, m_origin));
+    }
+}
+
+TEST_F(MaterialTest, IsotropicMaterialCreation2D) {
+    Float young = 1.0;
+    Float poisson = 0.0;
+    MaterialPtr mat = Material::create_isotropic(2, m_density, young, poisson);
+    ASSERT_FLOAT_EQ(m_density, mat->get_density());
+    for (size_t i=0; i<2; i++) {
+        ASSERT_FLOAT_EQ(1.0, mat->get_material_tensor(i,i,i,i, m_origin));
+    }
+}
+
+
+

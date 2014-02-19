@@ -2,12 +2,17 @@
 #include "UniformMaterial.h"
 
 #include <iostream>
+#include <sstream>
 #include <Core/Exception.h>
 
 template<size_t dim>
 class IsotropicMaterial : public UniformMaterial {
     public:
-        IsotropicMaterial(Float density, Float young_modulus, Float poisson_ratio);
+        IsotropicMaterial(Float density, Float young_modulus, Float poisson_ratio) {
+            std::stringstream err_msg;
+            err_msg << "Isotropic material in " << dim << "D is not supported.";
+            throw NotImplementedError(err_msg.str());
+        }
 };
 
 template<>

@@ -19,6 +19,7 @@
 #include "Elements/EdgeElementsTest.h"
 #include "Materials/MaterialTest.h"
 #include "Materials/UniformMaterialTest.h"
+#include "Materials/IsotropicMaterialTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
