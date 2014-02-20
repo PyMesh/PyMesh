@@ -62,9 +62,9 @@ void PeriodicMaterial::check_validity() const {
         throw RuntimeError(err_msg.str());
     }
 
-    if (m_phase > 1.0 || m_phase < 0.0) {
+    if (m_phase > 1.0 || m_phase < -1.0) {
         std::stringstream err_msg;
-        err_msg << "Starting phase (" << m_phase << ") is not in [0,1]";
+        err_msg << "Starting phase (" << m_phase << ") is not in [-1,1]";
         throw RuntimeError(err_msg.str());
     }
 }

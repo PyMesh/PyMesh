@@ -9,7 +9,7 @@ class PeriodicMaterial : public Material {
          * @param axis    axis of periodicity (i.e. orthogonal to laminations).
          * @param period
          * @param ratio   material ratio of mat1 (between 0 and 1).
-         * @param phase   starting phase shift of the period (between 0 and 1).
+         * @param phase   starting phase shift of the period (between -1 and 1).
          */
         PeriodicMaterial(Material::Ptr mat1, Material::Ptr mat2,
                 VectorF axis, Float period, Float ratio, Float phase);
