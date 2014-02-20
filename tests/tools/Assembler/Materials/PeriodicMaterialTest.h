@@ -88,9 +88,6 @@ TEST_F(PeriodicMaterialTest, 2DRank2) {
     Vector2F axis_1(1.0, 0.0);
     Vector2F axis_2(0.0, 1.0);
 
-    axis_1.normalize();
-    axis_2.normalize();
-
     Float period_1 = 2.0;
     Float period_2 = 1.0;
     Float ratio_1 = 0.5;
@@ -120,10 +117,6 @@ TEST_F(PeriodicMaterialTest, 3DRank3) {
     Vector3F axis_1(1.0, 0.0, 0.0);
     Vector3F axis_2(1.0, 1.0, 0.0);
     Vector3F axis_3(0.0, 0.0, 0.5);
-
-    axis_1.normalize();
-    axis_2.normalize();
-    axis_3.normalize();
 
     Float period_1 = 3.0;
     Float period_2 = 2.0;

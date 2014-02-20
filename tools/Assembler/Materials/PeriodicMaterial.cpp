@@ -6,6 +6,7 @@ PeriodicMaterial::PeriodicMaterial(Material::Ptr mat1, Material::Ptr mat2,
     m_axis(axis), m_period(period), m_ratio(ratio) {
         m_materials.push_back(mat1);
         m_materials.push_back(mat2);
+        m_axis.normalize();
 }
 
 Float PeriodicMaterial::get_material_tensor(
