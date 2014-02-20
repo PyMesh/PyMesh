@@ -39,8 +39,9 @@ class PeriodicMaterialTest : public ::testing::Test {
         }
 
         MaterialPtr create_periodic(MaterialPtr mat1, MaterialPtr mat2,
-                VectorF axis, Float period, Float ratio) {
-            return MaterialPtr(new PeriodicMaterial(mat1, mat2, axis, period, ratio));
+                VectorF axis, Float period, Float ratio, Float phase=0.0) {
+            return MaterialPtr(new PeriodicMaterial(mat1, mat2, axis,
+                        period, ratio, phase));
         }
 
         void ASSERT_MATERIAL_EQ(const size_t dim, MaterialPtr mat1, MaterialPtr mat2, VectorF coord) {
@@ -78,9 +79,27 @@ TEST_F(PeriodicMaterialTest, 2DRank1) {
     Vector2F sample_1 = axis_1 * period_1 * ratio_1 * 0.5;
     Vector2F sample_2 = axis_1 * period_1 * (ratio_1 + (1.0 - ratio_1) * 0.5);
 
-    // Sample 1 should gives material 1 back.
     ASSERT_MATERIAL_EQ(2, mat1, laminate, sample_1);
     ASSERT_MATERIAL_EQ(2, mat2, laminate, sample_2);
+}
+
+TEST_F(PeriodicMaterialTest, Rank1Phase) {
+    Vector2F axis_1(1, 0);
+    Float period_1 = 2.0;
+    Float ratio_1 = 0.5;
+    Float phase_1 = 0.25;
+
+    MaterialPtr mat1 = create_uniform(2, 1.0);
+    MaterialPtr mat2 = create_uniform(2, 2.0);
+
+    MaterialPtr laminate = create_periodic(mat1, mat2, axis_1,
+            period_1, ratio_1, phase_1);
+
+    Vector2F sample_1(0.0, 0.0);
+    Vector2F sample_2 = axis_1 * period_1 * (phase_1 + 0.5 * ratio_1);
+
+    ASSERT_MATERIAL_EQ(2, mat2, laminate, sample_1);
+    ASSERT_MATERIAL_EQ(2, mat1, laminate, sample_2);
 }
 
 TEST_F(PeriodicMaterialTest, 2DRank2) {

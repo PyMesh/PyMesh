@@ -16,6 +16,7 @@ Material::Ptr Material::create_isotropic(
 }
 
 Material::Ptr Material::create_periodic(
-        Material::Ptr mat1, Material::Ptr mat2, VectorF axis, Float period, Float ratio) {
-    return Ptr(new PeriodicMaterial(mat1, mat2, axis, period, ratio));
+        Material::Ptr mat1, Material::Ptr mat2, VectorF axis,
+        Float period, Float ratio, Float phase) {
+    return Ptr(new PeriodicMaterial(mat1, mat2, axis, period, ratio, phase));
 }
