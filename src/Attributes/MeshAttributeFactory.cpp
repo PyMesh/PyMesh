@@ -7,6 +7,8 @@
 #include "FaceNormalAttribute.h"
 #include "MeshAttribute.h"
 #include "VertexAreaAttribute.h"
+#include "VertexLaplacianAttribute.h"
+#include "VertexMeanCurvatureAttribute.h"
 #include "VertexNormalAttribute.h"
 #include "VertexVolumeAttribute.h"
 #include "VoxelCentroidAttribute.h"
@@ -21,6 +23,12 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "vertex_area") {
         MeshAttribute::Ptr attr(new VertexAreaAttribute(name));
+        return attr;
+    } else if (name == "vertex_laplacian") {
+        MeshAttribute::Ptr attr(new VertexLaplacianAttribute(name));
+        return attr;
+    } else if (name == "vertex_mean_curvature") {
+        MeshAttribute::Ptr attr(new VertexMeanCurvatureAttribute(name));
         return attr;
     } else if (name == "edge_length") {
         MeshAttribute::Ptr attr(new EdgeLengthAttribute(name));

@@ -8,6 +8,8 @@
 #include "Misc/HashGridTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
 #include "Attributes/VertexNormalAttributeTest.h"
+#include "Attributes/VertexMeanCurvatureAttributeTest.h"
+#include "Attributes/VertexLaplacianAttributeTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
