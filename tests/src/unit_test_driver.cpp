@@ -7,6 +7,7 @@
 #include "Misc/TripletTest.h"
 #include "Misc/HashGridTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
+#include "Attributes/VertexGaussianCurvatureAttributeTest.h"
 #include "Attributes/VertexNormalAttributeTest.h"
 #include "Attributes/VertexMeanCurvatureAttributeTest.h"
 #include "Attributes/VertexLaplacianAttributeTest.h"
