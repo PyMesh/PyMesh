@@ -77,5 +77,60 @@ TEST_F(MaterialTest, IsotropicMaterialCreation2D) {
     }
 }
 
+TEST_F(MaterialTest, SymmetricMaterialCreation3D) {
+    MatrixF tensor(6, 6);
+    for (size_t i=0; i<6; i++) {
+        for (size_t j=i; j<6; j++) {
+            tensor(i,j) = i*j;
+            tensor(j,i) = i*j;
+        }
+    }
+    MaterialPtr mat = Material::create_symmetric(m_density, tensor);
+    for (size_t i=0; i<3; i++) {
+        ASSERT_FLOAT_EQ(Float(i*i), mat->get_material_tensor(i,i,i,i, m_origin));
+    }
+}
 
+TEST_F(MaterialTest, SymmetricMaterialCreation2D) {
+    MatrixF tensor(3, 3);
+    for (size_t i=0; i<3; i++) {
+        for (size_t j=i; j<3; j++) {
+            tensor(i,j) = i*j;
+            tensor(j,i) = i*j;
+        }
+    }
+    MaterialPtr mat = Material::create_symmetric(m_density, tensor);
+    for (size_t i=0; i<2; i++) {
+        ASSERT_FLOAT_EQ(Float(i*i), mat->get_material_tensor(i,i,i,i, m_origin));
+    }
+}
 
+TEST_F(MaterialTest, OrthotropicMaterialCreation3D) {
+    const size_t dim = 3;
+    size_t num_young = dim;
+    size_t num_poisson = dim*(dim-1);
+    size_t num_shear = dim*(dim-1)/2;
+    VectorF young = VectorF::Ones(num_young);
+    VectorF poisson = VectorF::Zero(num_poisson);
+    VectorF shear = VectorF::Ones(num_shear);
+
+    MaterialPtr mat = Material::create_orthotropic(m_density, young, poisson, shear);
+    for (size_t i=0; i<dim; i++) {
+        ASSERT_FLOAT_EQ(1.0, mat->get_material_tensor(i,i,i,i, m_origin));
+    }
+}
+
+TEST_F(MaterialTest, OrthotropicMaterialCreation2D) {
+    const size_t dim = 2;
+    size_t num_young = dim;
+    size_t num_poisson = dim*(dim-1);
+    size_t num_shear = dim*(dim-1)/2;
+    VectorF young = VectorF::Ones(num_young);
+    VectorF poisson = VectorF::Zero(num_poisson);
+    VectorF shear = VectorF::Ones(num_shear);
+
+    MaterialPtr mat = Material::create_orthotropic(m_density, young, poisson, shear);
+    for (size_t i=0; i<dim; i++) {
+        ASSERT_FLOAT_EQ(1.0, mat->get_material_tensor(i,i,i,i, m_origin));
+    }
+}

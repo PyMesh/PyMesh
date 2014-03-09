@@ -18,9 +18,11 @@
 #include "Elements/TriangleElementsTest.h"
 #include "Elements/EdgeElementsTest.h"
 #include "Materials/MaterialTest.h"
-#include "Materials/UniformMaterialTest.h"
 #include "Materials/IsotropicMaterialTest.h"
+#include "Materials/OrthotropicMaterialTest.h"
 #include "Materials/PeriodicMaterialTest.h"
+#include "Materials/SymmetricMaterialTest.h"
+#include "Materials/UniformMaterialTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

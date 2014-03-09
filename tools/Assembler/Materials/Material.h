@@ -9,6 +9,11 @@ class Material {
         typedef std::tr1::shared_ptr<Material> Ptr;
         static Ptr create(Float density, const MatrixF& material_tensor);
         static Ptr create_isotropic(size_t dim, Float desnity, Float young, Float poisson);
+        static Ptr create_symmetric(Float density, const MatrixF& material_matrix);
+        static Ptr create_orthotropic(Float density,
+                const VectorF& young_modulus,
+                const VectorF& poisson_ratio,
+                const VectorF& shear_modulus);
         static Ptr create_periodic(Ptr mat1, Ptr mat2, VectorF axis,
                 Float period, Float ratio, Float phase);
 

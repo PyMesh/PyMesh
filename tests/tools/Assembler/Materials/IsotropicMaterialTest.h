@@ -43,9 +43,16 @@ TEST_F(IsotropicMaterialTest, 3D) {
         for (size_t j=0; j<3; j++) {
             for (size_t k=0; k<3; k++) {
                 for (size_t l=0; l<3; l++) {
-                    if (i == k && j == l) {
+                    if (i == j && k == l && i == k) {
+                        // Corresponding diagonal entries
                         ASSERT_FLOAT_EQ(1.0, mat->get_material_tensor(i,j,k,l, m_origin));
+                    } else if ((i == k && j == l) || (i == l && j == k)) {
+                        // Corresponding off diagonal entries
+                        ASSERT_FLOAT_EQ(1.0,
+                                mat->get_material_tensor(i,j,k,l, m_origin) +
+                                mat->get_material_tensor(i,j,l,k, m_origin));
                     } else {
+                        // Non-corresponding entries
                         ASSERT_FLOAT_EQ(0.0, mat->get_material_tensor(i,j,k,l, m_origin));
                     }
                 }
@@ -60,8 +67,12 @@ TEST_F(IsotropicMaterialTest, 2D) {
         for (size_t j=0; j<2; j++) {
             for (size_t k=0; k<2; k++) {
                 for (size_t l=0; l<2; l++) {
-                    if (i == k && j == l) {
+                    if (i == j && k == l && i == k) {
                         ASSERT_FLOAT_EQ(1.0, mat->get_material_tensor(i,j,k,l, m_origin));
+                    } else if ((i == k && j == l) || (i == l && j == k)) {
+                        ASSERT_FLOAT_EQ(1.0,
+                                mat->get_material_tensor(i,j,k,l, m_origin) +
+                                mat->get_material_tensor(i,j,l,k,m_origin));
                     } else {
                         ASSERT_FLOAT_EQ(0.0, mat->get_material_tensor(i,j,k,l, m_origin));
                     }

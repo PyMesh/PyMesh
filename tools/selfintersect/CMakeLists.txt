@@ -56,7 +56,7 @@ SET_TARGET_PROPERTIES(lib_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")
 TARGET_LINK_LIBRARIES(lib_selfintersect
     ${CGAL_LIBRARIES} CGAL CGAL_Core
     ${BOOST_LIBRARIES}
-    gmp mpfr)
+    gmp mpfr pthread)
 
 ADD_EXECUTABLE(exe_selfintersect ${main_cpp})
 SET_TARGET_PROPERTIES(exe_selfintersect PROPERTIES OUTPUT_NAME "selfintersect")

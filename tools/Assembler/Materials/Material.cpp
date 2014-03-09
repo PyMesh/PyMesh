@@ -1,7 +1,10 @@
 #include "Material.h"
-#include "UniformMaterial.h"
+
 #include "IsotropicMaterial.h"
+#include "OrthotropicMaterial.h"
 #include "PeriodicMaterial.h"
+#include "SymmetricMaterial.h"
+#include "UniformMaterial.h"
 
 Material::Ptr Material::create(Float density, const MatrixF& material_tensor) {
     return Ptr(new UniformMaterial(density, material_tensor));
@@ -13,6 +16,24 @@ Material::Ptr Material::create_isotropic(
         return Ptr(new IsotropicMaterial<2>(density, young, poisson));
     else if (dim == 3)
         return Ptr(new IsotropicMaterial<3>(density, young, poisson));
+}
+
+Material::Ptr Material::create_symmetric(Float density, const MatrixF& material_matrix) {
+    return Ptr(new SymmetricMaterial(density, material_matrix));
+}
+
+Material::Ptr Material::create_orthotropic(Float density, 
+        const VectorF& young_modulus,
+        const VectorF& poisson_ratio,
+        const VectorF& shear_modulus) {
+    const size_t dim = young_modulus.size();
+    if (dim == 2) {
+        return Ptr(new OrthotropicMaterial<2>(
+                    density, young_modulus, poisson_ratio, shear_modulus));
+    } else if (dim == 3) {
+        return Ptr(new OrthotropicMaterial<3>(
+                    density, young_modulus, poisson_ratio, shear_modulus));
+    }
 }
 
 Material::Ptr Material::create_periodic(
