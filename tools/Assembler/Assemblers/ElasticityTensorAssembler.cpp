@@ -27,9 +27,11 @@ ZSparseMatrix ElasticityTensorAssembler::assemble(FESettingPtr setting) {
                 for (size_t m=0; m<dim; m++) {
                     for (size_t n=0; n<dim; n++) {
                         size_t tensor_col = order(m, n);
-                        entries.push_back(T(
-                                    base + tensor_row, base + tensor_col,
-                                    material->get_material_tensor(j, k, m, n, coord)));
+                        Float entry = material->get_material_tensor(j,k,m,n,coord);
+                        if (entry != 0.0) {
+                            entries.push_back(T(base + tensor_row,
+                                        base + tensor_col, entry));
+                        }
                     }
                 }
             }
