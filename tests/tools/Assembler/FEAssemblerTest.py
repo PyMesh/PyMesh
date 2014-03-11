@@ -99,6 +99,36 @@ class FEAssemblerTest(unittest.TestCase):
         K_ground_truth = self.load_matrix("square_2D_stiffness.mat", "K");
         self.assertMatrixEqual(K_ground_truth, K);
 
+    def test_stiffness_decomposition_tet(self):
+        mesh = self.load_mesh("tet.msh");
+        assembler = self.create_assembler(mesh);
+        K = self.format(assembler.assemble("stiffness"));
+        B = self.format(assembler.assemble("displacement_strain"));
+        D = self.format(assembler.assemble("elasticity_tensor"));
+        dia_entries = np.ones(D.shape[0]);
+        for i in range(3, D.shape[0], 6):
+            dia_entries[i] = 2.0;
+            dia_entries[i+1] = 2.0;
+            dia_entries[i+2] = 2.0;
+        C = scipy.sparse.diags(dia_entries, 0);
+        areas = mesh.get_attribute("voxel_volume").ravel();
+        A = scipy.sparse.diags(np.repeat(areas, 6), 0);
+        self.assertMatrixEqual(K, B.T*A*C*D*B);
+
+    def test_stiffness_decomposition_square(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = self.create_assembler(mesh);
+        K = self.format(assembler.assemble("stiffness"));
+        B = self.format(assembler.assemble("displacement_strain"));
+        D = self.format(assembler.assemble("elasticity_tensor"));
+        dia_entries = np.ones(D.shape[0]);
+        for i in range(2, D.shape[0], 3):
+            dia_entries[i] = 2.0;
+        C = scipy.sparse.diags(dia_entries, 0);
+        areas = mesh.get_attribute("face_area").ravel();
+        A = scipy.sparse.diags(np.repeat(areas, 3), 0);
+        self.assertMatrixEqual(K, B.T*A*C*D*B);
+
     def test_mass_tet(self):
         mesh = self.load_mesh("tet.msh");
         assembler = self.create_assembler(mesh);
