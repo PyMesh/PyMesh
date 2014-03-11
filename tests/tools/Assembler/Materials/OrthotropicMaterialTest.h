@@ -26,7 +26,7 @@ class OrthotropicMaterialTest : public ::testing::Test {
 
             VectorF young = VectorF::Ones(num_young);
             VectorF poisson = VectorF::Zero(num_poisson);
-            VectorF shear = VectorF::Ones(num_shear);
+            VectorF shear = VectorF::Ones(num_shear) * 0.5;
 
             if (dim == 2) {
                 return MaterialPtr(new OrthotropicMaterial<2>(m_density, young, poisson, shear));
