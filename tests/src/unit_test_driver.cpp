@@ -6,6 +6,7 @@
 #include "IO/OBJWriterTest.h"
 #include "Misc/TripletTest.h"
 #include "Misc/HashGridTest.h"
+#include "Attributes/FaceCentroidAttributeTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
 #include "Attributes/VertexGaussianCurvatureAttributeTest.h"
 #include "Attributes/VertexNormalAttributeTest.h"
