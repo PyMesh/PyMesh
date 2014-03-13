@@ -17,15 +17,27 @@ class IsotropicMaterialTest : public ::testing::Test {
             m_ones = VectorF::Ones(3);
         }
 
-        MaterialPtr create(size_t dim) {
-            m_young = 1.0;
-            m_poisson = 0.0;
+        MaterialPtr create(size_t dim, Float young=1.0, Float poisson=0.0) {
+            m_young = young;
+            m_poisson = poisson;
             if (dim == 2) {
                 return MaterialPtr(
                         new IsotropicMaterial<2>(m_density, m_young, m_poisson));
             } else if (dim == 3) {
                 return MaterialPtr(
                         new IsotropicMaterial<3>(m_density, m_young, m_poisson));
+            }
+        }
+
+        void assert_matrix_eq(const MatrixF& m1, const MatrixF& m2) {
+            ASSERT_EQ(m1.rows(), m2.rows());
+            ASSERT_EQ(m1.cols(), m2.cols());
+            const size_t rows = m1.rows();
+            const size_t cols = m1.cols();
+            for (size_t i=0; i<rows; i++) {
+                for (size_t j=0; j<cols; j++) {
+                    ASSERT_NEAR(m1(i,j), m2(i,j), 1e-6);
+                }
             }
         }
 
@@ -102,5 +114,70 @@ TEST_F(IsotropicMaterialTest, StrainToStress) {
     ASSERT_FLOAT_EQ(strain(2,0), stress(2,0));
     ASSERT_FLOAT_EQ(strain(2,1), stress(2,1));
     ASSERT_FLOAT_EQ(strain(2,2), stress(2,2));
+}
+
+TEST_F(IsotropicMaterialTest, InverseTensor2D) {
+    // The stress to strain tensor also have a closed formula for the isotropic
+    // case.  In this test, we check if it is the inverse of strain to stress
+    // tensor.
+    Float young = 9.0;
+    Float poisson = -0.9;
+    MaterialPtr mat = create(2, young, poisson);
+
+    // Formula of S from
+    // https://www.efunda.com/formulae/solid_mechanics/mat_mechanics/hooke_isotropic.cfm
+    MatrixF S(3, 3);
+    S <<     1.0 / young, -poisson / young,                 0.0,
+        -poisson / young,      1.0 / young,                 0.0,
+                     0.0,              0.0, (1+poisson) / young;
+
+    MatrixF C = MatrixF::Zero(3,3);
+    C(0,0) = mat->get_material_tensor(0,0,0,0,m_origin);
+    C(1,1) = mat->get_material_tensor(1,1,1,1,m_origin);
+    C(2,2) = mat->get_material_tensor(0,1,0,1,m_origin) +
+             mat->get_material_tensor(0,1,1,0,m_origin);
+    C(0,1) = mat->get_material_tensor(0,0,1,1,m_origin);
+    C(1,0) = mat->get_material_tensor(1,1,0,0,m_origin);
+
+    MatrixF I = S * C;
+    MatrixF Id = MatrixF::Identity(3, 3);
+    assert_matrix_eq(Id, I);
+}
+
+TEST_F(IsotropicMaterialTest, InverseTensor3D) {
+    Float young = 9.0;
+    Float poisson = -0.9;
+    MaterialPtr mat = create(3, young, poisson);
+
+    // Formula of S from
+    // https://www.efunda.com/formulae/solid_mechanics/mat_mechanics/hooke_isotropic.cfm
+    MatrixF S(6, 6);
+    S <<     1.0 / young, -poisson / young, -poisson / young,                 0.0, 0.0, 0.0,
+        -poisson / young,      1.0 / young, -poisson / young,                 0.0, 0.0, 0.0,
+        -poisson / young, -poisson / young,      1.0 / young,                 0.0, 0.0, 0.0,
+                     0.0,              0.0,              0.0, (1+poisson) / young, 0.0, 0.0,
+                     0.0,              0.0,              0.0, 0.0, (1+poisson) / young, 0.0,
+                     0.0,              0.0,              0.0, 0.0, 0.0, (1+poisson) / young;
+
+    MatrixF C = MatrixF::Zero(6,6);
+    C(0,0) = mat->get_material_tensor(0,0,0,0,m_origin);
+    C(1,1) = mat->get_material_tensor(1,1,1,1,m_origin);
+    C(2,2) = mat->get_material_tensor(2,2,2,2,m_origin);
+    C(3,3) = mat->get_material_tensor(0,1,0,1,m_origin) +
+             mat->get_material_tensor(0,1,1,0,m_origin);
+    C(4,4) = mat->get_material_tensor(0,2,0,2,m_origin) +
+             mat->get_material_tensor(0,2,2,0,m_origin);
+    C(5,5) = mat->get_material_tensor(1,2,1,2,m_origin) +
+             mat->get_material_tensor(1,2,2,1,m_origin);
+    C(0,1) = mat->get_material_tensor(0,0,1,1,m_origin);
+    C(1,0) = mat->get_material_tensor(1,1,0,0,m_origin);
+    C(0,2) = mat->get_material_tensor(0,0,2,2,m_origin);
+    C(2,0) = mat->get_material_tensor(2,2,0,0,m_origin);
+    C(1,2) = mat->get_material_tensor(1,1,2,2,m_origin);
+    C(2,1) = mat->get_material_tensor(2,2,1,1,m_origin);
+
+    MatrixF I = S * C;
+    MatrixF Id = MatrixF::Identity(6, 6);
+    assert_matrix_eq(Id, I);
 }
 

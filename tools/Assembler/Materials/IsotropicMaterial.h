@@ -23,8 +23,20 @@ class IsotropicMaterial<2> : public SymmetricMaterial {
             m_density = density;
             m_material_tensor = MatrixF(3, 3);
 
+            // The stress to strain tensor, S, has the form:
+            //     1   [ 1 -v   0 ]
+            // S = - * [-v  1   0 ]
+            //     E   [ 0  0 1+v ]
+            //
+            // Inverting it, C = S^-1, gives
+            //       E     [ 1  v   0 ]
+            // C = ----- * [ v  1   0 ]
+            //     1-v^2   [ 0  0 1-v ]
+            //
+            // lambda and mu are derived from here.
+
             Float lambda = young_modulus * poisson_ratio /
-                ((1.0 + poisson_ratio) * (1.0 - 2.0 * poisson_ratio));
+                ((1.0 + poisson_ratio) * (1.0 - poisson_ratio));
             Float mu = young_modulus / (2.0 + 2.0 * poisson_ratio);
             m_material_tensor
                 << lambda + 2*mu, lambda       , 0.0 ,
