@@ -27,7 +27,7 @@ bool HashGrid::insert(int obj_id, const Vector3F& coordinates) {
     return insert_key(obj_id, key);
 }
 
-bool HashGrid::insert_shape(int obj_id, const MatrixF& shape) {
+bool HashGrid::insert_bbox(int obj_id, const MatrixF& shape) {
     assert(shape.cols() == 3);
     Float X_min = shape.col(0).minCoeff();
     Float Y_min = shape.col(1).minCoeff();

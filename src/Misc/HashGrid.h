@@ -50,7 +50,7 @@ class HashGrid {
 
     public:
         bool insert(int obj_id, const Vector3F& coordinates);
-        bool insert_shape(int obj_id, const MatrixF& shape);
+        bool insert_bbox(int obj_id, const MatrixF& shape);
         bool insert_batch(int obj_id, const MatrixF& points);
         bool remove(int obj_id, const Vector3F& coordinates);
         bool occupied(int obj_id, const Vector3F& coordinates) const;
