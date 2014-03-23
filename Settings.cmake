@@ -6,7 +6,7 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 SET(CMAKE_BUILD_TYPE Release)
 
 # Create 64 bits binary.  32 bits support is dropped.
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -std=c++11")
 SET(CMAKE_LIBRARY_PATH /opt/local/lib ${CMAKE_LIBRARY_PATH})
 
 # Set output directories
