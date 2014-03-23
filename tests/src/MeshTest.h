@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
 
 #include <Mesh.h>
 #include <MeshFactory.h>
@@ -10,7 +9,7 @@ using ::testing::Contains;
 
 class MeshTest : public ::testing::Test {
     protected:
-        typedef std::tr1::shared_ptr<Mesh> MeshPtr;
+        typedef Mesh::Ptr MeshPtr;
         virtual void SetUp() {
             std::string project_dir = Environment::get("PYMESH_PATH");
             std::string cube_tri_file   = project_dir + "/tests/data/cube.obj";

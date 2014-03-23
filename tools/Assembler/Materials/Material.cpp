@@ -1,5 +1,8 @@
 #include "Material.h"
 
+#include <sstream>
+#include <Core/Exception.h>
+
 #include "IsotropicMaterial.h"
 #include "OrthotropicMaterial.h"
 #include "PeriodicMaterial.h"
@@ -16,6 +19,11 @@ Material::Ptr Material::create_isotropic(
         return Ptr(new IsotropicMaterial<2>(density, young, poisson));
     else if (dim == 3)
         return Ptr(new IsotropicMaterial<3>(density, young, poisson));
+    else {
+        std::stringstream err_msg;
+        err_msg << "Unsupported dimension: " << dim;
+        throw NotImplementedError(err_msg.str());
+    }
 }
 
 Material::Ptr Material::create_symmetric(Float density, const MatrixF& material_matrix) {
@@ -33,6 +41,10 @@ Material::Ptr Material::create_orthotropic(Float density,
     } else if (dim == 3) {
         return Ptr(new OrthotropicMaterial<3>(
                     density, young_modulus, poisson_ratio, shear_modulus));
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Unsupported dimension: " << dim;
+        throw NotImplementedError(err_msg.str());
     }
 }
 

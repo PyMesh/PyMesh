@@ -1,7 +1,5 @@
 #include "MeshAttributeFactory.h"
 
-#include <tr1/memory>
-
 #include "EdgeLengthAttribute.h"
 #include "FaceAreaAttribute.h"
 #include "FaceCentroidAttribute.h"

@@ -1,5 +1,4 @@
 #pragma once
-#include <tr1/memory>
 #include <iostream>
 
 #include <gtest/gtest.h>

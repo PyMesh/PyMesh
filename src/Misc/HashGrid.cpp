@@ -5,6 +5,8 @@
 #include <limits>
 #include <iostream>
 
+#include <Core/Exception.h>
+
 using namespace Zhou;
 
 HashGrid::Ptr HashGrid::create(Float cell_size) {
@@ -56,6 +58,22 @@ bool HashGrid::insert_batch(int obj_id, const MatrixF& points) {
     bool success = true;
     for (size_t i=0; i<num_pts; i++) {
         bool r = insert(obj_id, points.row(i));
+        success &= r;
+    }
+    return success;
+}
+
+bool HashGrid::insert_multiple(const VectorI& obj_ids, const MatrixF& points) {
+    size_t num_pts = points.rows();
+    if (obj_ids.size() != num_pts) {
+        std::stringstream err_msg;
+        err_msg << "Number of object IDs does not match number of points: "
+            << obj_ids.size() << " != " << num_pts;
+        throw RuntimeError(err_msg.str());
+    }
+    bool success = true;
+    for (size_t i=0; i<num_pts; i++) {
+        bool r = insert(obj_ids[i], points.row(i));
         success &= r;
     }
     return success;

@@ -1,5 +1,5 @@
 #pragma once
-#include <tr1/memory>
+#include <memory>
 #include "WindingNumber.h"
 #include "AABB.h"
 
@@ -13,6 +13,6 @@ class WindingNumberWithHierarchy : public WindingNumber {
 
     private:
         typedef AABB<Vector3F> Hierarchy;
-        typedef std::tr1::shared_ptr<Hierarchy> HierarchyPtr;
+        typedef std::shared_ptr<Hierarchy> HierarchyPtr;
         HierarchyPtr m_hierarchy;
 };

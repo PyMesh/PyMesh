@@ -1,12 +1,12 @@
 #pragma once
-#include <ext/hash_map>
-#include <ext/hash_set>
+#include <unordered_map>
+#include <unordered_set>
 #include <google/sparse_hash_map>
 #include <google/sparse_hash_set>
 #include <google/dense_hash_map>
 #include <google/dense_hash_set>
 #include <list>
-#include <tr1/memory>
+#include <memory>
 #include <iostream>
 
 #include <Core/EigenTypedef.h>
@@ -22,7 +22,7 @@ namespace Zhou {
 
 class HashGrid {
     public:
-        typedef std::tr1::shared_ptr<HashGrid> Ptr;
+        typedef std::shared_ptr<HashGrid> Ptr;
         static Ptr create(Float cell_size=1.0);
 
     private:
@@ -52,6 +52,7 @@ class HashGrid {
         bool insert(int obj_id, const Vector3F& coordinates);
         bool insert_bbox(int obj_id, const MatrixF& shape);
         bool insert_batch(int obj_id, const MatrixF& points);
+        bool insert_multiple(const VectorI& obj_ids, const MatrixF& points);
         bool remove(int obj_id, const Vector3F& coordinates);
         bool occupied(int obj_id, const Vector3F& coordinates) const;
 

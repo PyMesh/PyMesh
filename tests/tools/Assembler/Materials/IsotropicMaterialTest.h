@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <sstream>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -26,6 +27,10 @@ class IsotropicMaterialTest : public ::testing::Test {
             } else if (dim == 3) {
                 return MaterialPtr(
                         new IsotropicMaterial<3>(m_density, m_young, m_poisson));
+            } else {
+                std::stringstream err_msg;
+                err_msg << "Unsupported dimension: " << dim;
+                throw NotImplementedError(err_msg.str());
             }
         }
 

@@ -1,13 +1,13 @@
 #pragma once
 
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
 class Elements {
     public:
-        typedef std::tr1::shared_ptr<Elements> Ptr;
+        typedef std::shared_ptr<Elements> Ptr;
 
     public:
         // Factories

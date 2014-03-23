@@ -6,7 +6,6 @@ ELSE (DEFINED ENV{EIGEN_INC})
 ENDIF (DEFINED ENV{EIGEN_INC})
 INCLUDE_DIRECTORIES("/opt/local/include")
 INCLUDE_DIRECTORIES(${EIGEN_BASE})
-INCLUDE_DIRECTORIES(${EIGEN_BASE}/Eigen)
 INCLUDE_DIRECTORIES(${EIGEN_BASE}/unsupported)
 ADD_DEFINITIONS(-DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET)
 
@@ -58,6 +57,10 @@ ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(Assembler)
 
 # Bundle all tools together
-ADD_CUSTOM_TARGET(tools DEPENDS  windingnumber selfintersect MeshUtils tetgen
-    cgal assembler)
-#        cgal)
+ADD_CUSTOM_TARGET(tools DEPENDS
+    #windingnumber
+    selfintersect
+    MeshUtils
+    tetgen
+    cgal
+    assembler)

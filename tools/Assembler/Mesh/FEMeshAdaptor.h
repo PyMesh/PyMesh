@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -9,7 +9,7 @@
  */
 class FEMeshAdaptor {
     public:
-        typedef std::tr1::shared_ptr<FEMeshAdaptor> Ptr;
+        typedef std::shared_ptr<FEMeshAdaptor> Ptr;
 
     public:
         virtual ~FEMeshAdaptor() {}

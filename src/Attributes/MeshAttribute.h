@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -13,7 +13,7 @@ class Mesh;
  */
 class MeshAttribute {
     public:
-        typedef std::tr1::shared_ptr<MeshAttribute> Ptr;
+        typedef std::shared_ptr<MeshAttribute> Ptr;
 
     public:
         MeshAttribute(const std::string& name) : m_name(name) {}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -11,7 +11,7 @@
 
 class Integrator {
     public:
-        typedef std::tr1::shared_ptr<Integrator> Ptr;
+        typedef std::shared_ptr<Integrator> Ptr;
         typedef Elements::Ptr FEMeshPtr;
         typedef ShapeFunction::Ptr ShapeFuncPtr;
 

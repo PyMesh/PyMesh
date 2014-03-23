@@ -1,12 +1,12 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
 class Material {
     public:
-        typedef std::tr1::shared_ptr<Material> Ptr;
+        typedef std::shared_ptr<Material> Ptr;
         static Ptr create(Float density, const MatrixF& material_tensor);
         static Ptr create_isotropic(size_t dim, Float desnity, Float young, Float poisson);
         static Ptr create_symmetric(Float density, const MatrixF& material_matrix);

@@ -1,5 +1,6 @@
 #pragma once
 #include <exception>
+#include <string>
 
 class PyMeshException : public std::exception {
     public:

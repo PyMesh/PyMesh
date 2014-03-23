@@ -2,14 +2,13 @@
 #include <numeric>
 #include <string>
 #include <vector>
-#include <tr1/memory>
 #include <Misc/Environment.h>
 #include <Misc/OpenCLWrapper.h>
 
 class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
     protected:
         typedef std::vector<float> FloatVector;
-        typedef std::tr1::shared_ptr<float> FloatPtr;
+        typedef std::shared_ptr<float> FloatPtr;
         virtual void SetUp () {
             std::string kernel_path = KERNEL_DIR;
             std::string kernel_file = kernel_path + "race_condition.cl";
@@ -94,7 +93,7 @@ class OpenCLRaceConditionTest : public ::testing::Test, public OpenCLWrapper {
             return 1024;
         }
 
-        size_t compute_num_work_items(size_t work_group_size) {
+        void compute_num_work_items(size_t work_group_size) {
             const size_t data_size = get_data_size();
             m_num_work_groups = data_size / work_group_size;
             if (data_size % work_group_size > 0)

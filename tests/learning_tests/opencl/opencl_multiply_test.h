@@ -1,6 +1,5 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
 
 #include <Core/Exception.h>
 #include <Misc/Environment.h>

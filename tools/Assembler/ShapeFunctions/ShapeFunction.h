@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tr1/memory>
+#include <memory>
 #include <string>
 
 #include <Core/EigenTypedef.h>
@@ -14,7 +14,7 @@
  */
 class ShapeFunction {
     public:
-        typedef std::tr1::shared_ptr<ShapeFunction> Ptr;
+        typedef std::shared_ptr<ShapeFunction> Ptr;
         //typedef FEMeshAdaptor::Ptr FEMeshPtr;
         typedef Elements::Ptr FEMeshPtr;
 

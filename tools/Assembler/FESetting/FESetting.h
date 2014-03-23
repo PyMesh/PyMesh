@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tr1/memory>
+#include <memory>
 
 #include <Mesh.h>
 
@@ -11,7 +11,7 @@
 
 class FESetting {
     public:
-        typedef std::tr1::shared_ptr<FESetting> Ptr;
+        typedef std::shared_ptr<FESetting> Ptr;
         typedef Mesh::Ptr MeshPtr;
         typedef Elements::Ptr FEMeshPtr;
         typedef FEBasis::Ptr FEBasisPtr;

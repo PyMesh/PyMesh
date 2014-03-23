@@ -1,5 +1,5 @@
 #pragma once
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -7,7 +7,7 @@ class Mesh;
 
 class Boundary {
     public:
-        typedef std::tr1::shared_ptr<Boundary> Ptr;
+        typedef std::shared_ptr<Boundary> Ptr;
         static Ptr extract_surface_boundary(const Mesh& mesh);
         static Ptr extract_volume_boundary(const Mesh& mesh);
 

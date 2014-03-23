@@ -11,7 +11,7 @@ ADD_SUBDIRECTORY(Assembler)
 
 ADD_CUSTOM_TARGET(tools_tests DEPENDS
     selfintersect_tests
-    windingnumber_tests
+    #windingnumber_tests
     MeshUtils_tests
     tetgen_tests
     cgal_tests

@@ -25,7 +25,7 @@ size_t ObtuseTriangleRemoval::run(Float max_angle_allowed) {
     compute_opposite_vertices();
     compute_edge_face_adjacency();
 
-    split_obtuse_triangles(max_angle_allowed);
+    return split_obtuse_triangles(max_angle_allowed);
 }
 
 MatrixF ObtuseTriangleRemoval::get_vertices() {

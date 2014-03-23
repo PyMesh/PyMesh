@@ -32,6 +32,10 @@ class OrthotropicMaterialTest : public ::testing::Test {
                 return MaterialPtr(new OrthotropicMaterial<2>(m_density, young, poisson, shear));
             } else if (dim == 3) {
                 return MaterialPtr(new OrthotropicMaterial<3>(m_density, young, poisson, shear));
+            } else {
+                std::stringstream err_msg;
+                err_msg << "Unsupported dimension: " << dim;
+                throw NotImplementedError(err_msg.str());
             }
         }
 

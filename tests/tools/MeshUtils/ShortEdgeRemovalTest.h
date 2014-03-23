@@ -1,7 +1,6 @@
 #pragma once
 #include <algorithm>
 #include <string>
-#include <tr1/memory>
 
 #include <MeshUtils/ShortEdgeRemoval.h>
 

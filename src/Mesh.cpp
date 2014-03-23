@@ -1,6 +1,5 @@
 #include "Mesh.h"
 
-#include <tr1/memory>
 #include <iostream>
 
 #include <Attributes/MeshAttributes.h>

@@ -1,7 +1,6 @@
 #pragma once
 #include <cmath>
 #include <string>
-#include <tr1/memory>
 #include <Misc/Environment.h>
 #include <Misc/OpenCLWrapper.h>
 

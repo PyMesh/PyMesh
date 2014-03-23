@@ -146,6 +146,7 @@ bool STLParser::parse_ascii(const std::string& filename) {
     }
 
     fin.close();
+    return success;
 }
 
 bool STLParser::parse_ascii_facet(std::ifstream& fin) {

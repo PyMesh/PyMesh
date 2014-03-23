@@ -17,8 +17,8 @@
 
 class TriangleMeshTest : public ::testing::Test {
     protected:
-        typedef std::tr1::shared_ptr<Mesh> MeshPtr;
-        typedef std::tr1::shared_ptr<FEMeshAdaptor> FEMeshPtr;
+        typedef std::shared_ptr<Mesh> MeshPtr;
+        typedef std::shared_ptr<FEMeshAdaptor> FEMeshPtr;
         virtual void SetUp() {
             std::string project_dir = Environment::get("PYMESH_PATH");
             m_data_dir = project_dir + "/tests/data/";

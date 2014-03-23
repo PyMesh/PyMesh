@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -29,7 +29,7 @@ class Mesh {
     public:
         // Use MeshFactory class to create mesh object.
         friend class MeshFactory;
-        typedef std::tr1::shared_ptr<Mesh> Ptr;
+        typedef std::shared_ptr<Mesh> Ptr;
 
     protected:
         /**
@@ -98,9 +98,9 @@ class Mesh {
         std::vector<std::string> get_attribute_names() const;
 
     public:
-        typedef std::tr1::shared_ptr<MeshGeometry>     GeometryPtr;
-        typedef std::tr1::shared_ptr<MeshConnectivity> ConnectivityPtr;
-        typedef std::tr1::shared_ptr<MeshAttributes>   AttributesPtr;
+        typedef std::shared_ptr<MeshGeometry>     GeometryPtr;
+        typedef std::shared_ptr<MeshConnectivity> ConnectivityPtr;
+        typedef std::shared_ptr<MeshAttributes>   AttributesPtr;
 
     protected:
         GeometryPtr     get_geometry() { return m_geometry; }

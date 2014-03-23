@@ -1,6 +1,5 @@
 #include "MeshFactory.h"
 #include <cassert>
-#include <tr1/memory>
 
 #include <Attributes/MeshAttributes.h>
 #include <Connectivity/MeshConnectivity.h>

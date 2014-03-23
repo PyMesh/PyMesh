@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include <IO/MeshWriter.h>
 #include <Misc/Environment.h>
@@ -9,8 +9,8 @@
 
 class OBJWriterTest : public ::testing::Test {
     protected:
-        typedef std::tr1::shared_ptr<Mesh> MeshPtr;
-        typedef std::tr1::shared_ptr<MeshWriter> WriterPtr;
+        typedef std::shared_ptr<Mesh> MeshPtr;
+        typedef std::shared_ptr<MeshWriter> WriterPtr;
 
         virtual void SetUp() {
             std::string proj_root =

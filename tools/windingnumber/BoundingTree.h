@@ -1,7 +1,8 @@
 #ifndef BOUNDINGTREE_H
 #define BOUNDINGTREE_H
-#include <list>
+#include <Eigen/Core>
 #include <Eigen/Dense>
+#include <list>
 enum WindingNumberMethod
 {
   EXACT_WINDING_NUMBER_METHOD = 0,

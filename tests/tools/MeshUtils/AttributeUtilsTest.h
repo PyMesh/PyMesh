@@ -2,7 +2,6 @@
 
 #include <string>
 #include <set>
-#include <tr1/memory>
 
 #include <Core/Exception.h>
 #include <Mesh.h>
@@ -13,7 +12,7 @@
 
 class AttributeUtilsTest : public ::testing::Test {
     protected:
-        typedef std::tr1::shared_ptr<Mesh> MeshPtr;
+        typedef Mesh::Ptr MeshPtr;
         virtual void SetUp() {
             std::string project_dir = Environment::get("PYMESH_PATH");
             m_data_dir = project_dir + "/tests/data/";

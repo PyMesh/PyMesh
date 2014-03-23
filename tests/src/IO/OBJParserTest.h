@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include <tr1/memory>
+#include <memory>
 #include <IO/MeshParser.h>
 #include <Misc/Environment.h>
 
@@ -13,14 +13,14 @@ class OBJParserTest : public ::testing::Test {
         }
 
         void parse(const std::string& mesh_file) {
-            m_parser = std::tr1::shared_ptr<MeshParser>(MeshParser::create_parser(mesh_file));
+            m_parser = std::shared_ptr<MeshParser>(MeshParser::create_parser(mesh_file));
             bool result = m_parser->parse(mesh_file);
             ASSERT_TRUE(result);
         }
 
     protected:
         std::string m_data_dir;
-        std::tr1::shared_ptr<MeshParser> m_parser;
+        std::shared_ptr<MeshParser> m_parser;
 };
 
 TEST_F(OBJParserTest, ParseCube) {

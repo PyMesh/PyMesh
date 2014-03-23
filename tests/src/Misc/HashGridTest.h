@@ -70,6 +70,19 @@ TEST_F(HashGridTest, InsertBatch) {
     ASSERT_NOT_IN_HASH(0, Vector3F(0.5, 0.5, 0.0));
 }
 
+TEST_F(HashGridTest, InsertMultiple) {
+    MatrixF triangle(3,3);
+    triangle << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0;
+    Vector3I idx(1,2,3);
+    m_grid->insert_multiple(idx, triangle);
+    ASSERT_EQ(3, m_grid->size());
+    ASSERT_IN_HASH(idx[0], triangle.row(0));
+    ASSERT_IN_HASH(idx[1], triangle.row(1));
+    ASSERT_IN_HASH(idx[2], triangle.row(2));
+}
+
 TEST_F(HashGridTest, Remove) {
     Vector3F origin = Vector3F::Zero();
     Vector3F ones = Vector3F::Ones();

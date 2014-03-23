@@ -1,6 +1,6 @@
 #pragma once
 
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 #include <Assembler/Elements/Elements.h>
@@ -16,7 +16,7 @@
  */
 class FEBasis {
     public:
-        typedef std::tr1::shared_ptr<FEBasis> Ptr;
+        typedef std::shared_ptr<FEBasis> Ptr;
         typedef Material::Ptr MaterialPtr;
         typedef ShapeFunction::Ptr ShapeFunctionPtr;
         typedef Integrator::Ptr IntegratorPtr;

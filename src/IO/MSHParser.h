@@ -4,7 +4,7 @@
 #include <vector>
 #include <list>
 #include <string>
-#include <tr1/memory>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -40,7 +40,7 @@ class MSHParser : public MeshParser {
         void extract_surface_from_volume();
         const VectorF& get_attribute(const std::string& name) const;
 
-        typedef std::tr1::shared_ptr<Zhou::MshLoader> LoaderPtr;
+        typedef std::shared_ptr<Zhou::MshLoader> LoaderPtr;
         LoaderPtr m_loader;
 
         VectorI m_faces;
