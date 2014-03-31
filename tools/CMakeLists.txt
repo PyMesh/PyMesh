@@ -49,18 +49,18 @@ INCLUDE_DIRECTORIES(${NUMPY_INCLUDE_DIRS})
 # Add eigen wrapper
 INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 
-ADD_SUBDIRECTORY(selfintersect)
-ADD_SUBDIRECTORY(windingnumber)
+#ADD_SUBDIRECTORY(selfintersect)
+#ADD_SUBDIRECTORY(windingnumber)
 ADD_SUBDIRECTORY(MeshUtils)
-ADD_SUBDIRECTORY(tetgen)
-ADD_SUBDIRECTORY(CGAL)
+#ADD_SUBDIRECTORY(tetgen)
+#ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(Assembler)
 
 # Bundle all tools together
 ADD_CUSTOM_TARGET(tools DEPENDS
     #windingnumber
-    selfintersect
+    #selfintersect
     MeshUtils
-    tetgen
-    cgal
+    #tetgen
+    #cgal
     assembler)
