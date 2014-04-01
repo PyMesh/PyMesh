@@ -55,6 +55,7 @@ ADD_SUBDIRECTORY(MeshUtils)
 #ADD_SUBDIRECTORY(tetgen)
 #ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(Assembler)
+ADD_SUBDIRECTORY(EigenUtils)
 
 # Bundle all tools together
 ADD_CUSTOM_TARGET(tools DEPENDS
@@ -63,4 +64,5 @@ ADD_CUSTOM_TARGET(tools DEPENDS
     MeshUtils
     #tetgen
     #cgal
-    assembler)
+    assembler
+    EigenUtils)

@@ -8,6 +8,7 @@ ADD_SUBDIRECTORY(MeshUtils)
 #ADD_SUBDIRECTORY(tetgen)
 #ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(Assembler)
+ADD_SUBDIRECTORY(EigenUtils)
 
 ADD_CUSTOM_TARGET(tools_tests DEPENDS
     #selfintersect_tests
@@ -15,4 +16,5 @@ ADD_CUSTOM_TARGET(tools_tests DEPENDS
     MeshUtils_tests
     #tetgen_tests
     #cgal_tests
-    assembler_tests)
+    assembler_tests
+    EigenUtils_tests)

@@ -1,0 +1,11 @@
+# Include headers
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/EigenUtils/)
+
+# Enumerate source files
+FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
+FILE(GLOB TEST_INC_FILES *_test.h)
+
+ADD_EXECUTABLE(EigenUtils_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(EigenUtils_tests Mesh lib_EigenUtils ${GTEST_BOTH_LIBRARIES})
+ADD_CUSTOM_COMMAND(TARGET EigenUtils_tests POST_BUILD COMMAND EigenUtils_tests)
