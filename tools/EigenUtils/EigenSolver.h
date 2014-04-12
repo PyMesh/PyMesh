@@ -9,7 +9,7 @@ class EigenSolver {
     public:
         EigenSolver() {}
 
-        void compute(MatrixF matrix);
+        void compute(const MatrixF& matrix);
 
         void compute_batch_symmetric(size_t dim, VectorF matrices);
 

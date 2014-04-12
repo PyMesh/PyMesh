@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Core/Exception.h>
 
-void EigenSolver::compute(MatrixF matrix) {
+void EigenSolver::compute(const MatrixF& matrix) {
     m_solver.compute(matrix);
     m_eigen_values = m_solver.eigenvalues().real();
     m_eigen_vectors = m_solver.eigenvectors().real();
