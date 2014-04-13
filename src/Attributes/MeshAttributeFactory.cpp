@@ -5,6 +5,7 @@
 #include "FaceCentroidAttribute.h"
 #include "FaceCircumCenterAttribute.h"
 #include "FaceNormalAttribute.h"
+#include "FaceVoronoiAreaAttribute.h"
 #include "MeshAttribute.h"
 #include "VertexAreaAttribute.h"
 #include "VertexLaplacianAttribute.h"
@@ -48,6 +49,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "face_normal") {
         MeshAttribute::Ptr attr(new FaceNormalAttribute(name));
+        return attr;
+    } else if (name == "face_voronoi_area") {
+        MeshAttribute::Ptr attr(new FaceVoronoiAreaAttribute(name));
         return attr;
     } else if (name == "voxel_volume") {
         MeshAttribute::Ptr attr(new VoxelVolumeAttribute(name));

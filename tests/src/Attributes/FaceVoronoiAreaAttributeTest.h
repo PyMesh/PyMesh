@@ -1,0 +1,96 @@
+#pragma once
+
+#include <string>
+#include <cmath>
+#include <Misc/Environment.h>
+
+class FaceVoronoiAreaAttributeTest : public ::testing::Test {
+    protected:
+        typedef Mesh::Ptr MeshPtr;
+
+        virtual void SetUp() {
+            std::string proj_root =
+                Environment::get_required("PYMESH_PATH");
+            m_data_dir = proj_root + "/tests/data/";
+        }
+
+        MeshPtr load_mesh(const std::string& filename) {
+            std::string mesh_file = m_data_dir + filename;
+            return MeshPtr(
+                    MeshFactory()
+                    .load_file(mesh_file)
+                    .with_attribute("face_area")
+                    .with_attribute("face_voronoi_area")
+                    .create());
+        }
+
+    protected:
+        std::string m_data_dir;
+};
+
+TEST_F(FaceVoronoiAreaAttributeTest, 2D) {
+    MeshPtr square = load_mesh("square_2D.obj");
+    ASSERT_EQ(3, square->get_vertex_per_face());
+    ASSERT_TRUE(square->has_attribute("face_voronoi_area"));
+    ASSERT_TRUE(square->has_attribute("face_area"));
+
+    const VectorF & areas = square->get_attribute("face_area");
+    const VectorF& voronoi_areas = square->get_attribute("face_voronoi_area");
+
+    const size_t num_faces = square->get_num_faces();
+    for (size_t i=0; i<num_faces; i++) {
+        Float area = areas[i];
+        VectorF voronoi_area = voronoi_areas.segment(i*3,3);
+        ASSERT_TRUE(std::isfinite(voronoi_area[0]));
+        ASSERT_TRUE(std::isfinite(voronoi_area[1]));
+        ASSERT_TRUE(std::isfinite(voronoi_area[2]));
+        ASSERT_FLOAT_EQ(area, voronoi_area.sum());
+    }
+}
+
+TEST_F(FaceVoronoiAreaAttributeTest, 3D) {
+    MeshPtr cube = load_mesh("cube.msh");
+    ASSERT_EQ(3, cube->get_vertex_per_face());
+    ASSERT_TRUE(cube->has_attribute("face_voronoi_area"));
+    ASSERT_TRUE(cube->has_attribute("face_area"));
+
+    const VectorF & areas = cube->get_attribute("face_area");
+    const VectorF& voronoi_areas = cube->get_attribute("face_voronoi_area");
+
+    const size_t num_faces = cube->get_num_faces();
+    for (size_t i=0; i<num_faces; i++) {
+        Float area = areas[i];
+        VectorF voronoi_area = voronoi_areas.segment(i*3,3);
+        ASSERT_TRUE(std::isfinite(voronoi_area[0]));
+        ASSERT_TRUE(std::isfinite(voronoi_area[1]));
+        ASSERT_TRUE(std::isfinite(voronoi_area[2]));
+        ASSERT_FLOAT_EQ(area, voronoi_area.sum());
+    }
+}
+
+TEST_F(FaceVoronoiAreaAttributeTest, 3Dtet) {
+    MeshPtr tet = load_mesh("tet.obj");
+    ASSERT_EQ(3, tet->get_vertex_per_face());
+    ASSERT_TRUE(tet->has_attribute("face_voronoi_area"));
+    ASSERT_TRUE(tet->has_attribute("face_area"));
+
+    const VectorF & areas = tet->get_attribute("face_area");
+    const VectorF& voronoi_areas = tet->get_attribute("face_voronoi_area");
+
+    const size_t num_faces = tet->get_num_faces();
+    for (size_t i=0; i<num_faces; i++) {
+        Float area = areas[i];
+        VectorF voronoi_area = voronoi_areas.segment(i*3,3);
+
+        ASSERT_TRUE(std::isfinite(voronoi_area[0]));
+        ASSERT_TRUE(std::isfinite(voronoi_area[1]));
+        ASSERT_TRUE(std::isfinite(voronoi_area[2]));
+
+        // By symmetry, voronoi area is 1/3 of the total area.
+        ASSERT_FLOAT_EQ(1.0/3.0, voronoi_area[0] / area);
+        ASSERT_FLOAT_EQ(1.0/3.0, voronoi_area[1] / area);
+        ASSERT_FLOAT_EQ(1.0/3.0, voronoi_area[2] / area);
+
+        ASSERT_FLOAT_EQ(area, voronoi_area.sum());
+    }
+}

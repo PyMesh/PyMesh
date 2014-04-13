@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cmath>
 
 #include <Misc/Environment.h>
 
@@ -31,6 +32,11 @@ class FaceCircumCenterAttributeTest : public ::testing::Test {
             Float d1 = (center - p1).norm();
             Float d2 = (center - p2).norm();
             Float d3 = (center - p3).norm();
+
+            ASSERT_TRUE(std::isfinite(d1));
+            ASSERT_TRUE(std::isfinite(d2));
+            ASSERT_TRUE(std::isfinite(d3));
+
             ASSERT_FLOAT_EQ(d1, d2);
             ASSERT_FLOAT_EQ(d1, d3);
         }

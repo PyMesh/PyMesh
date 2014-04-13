@@ -2,6 +2,7 @@
 
 #include <Mesh.h>
 #include <Core/Exception.h>
+#include <iostream>
 
 void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();
@@ -36,9 +37,9 @@ void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         Float sq_l1 = e1.squaredNorm();
         Float sq_l2 = e2.squaredNorm();
 
-        Float cot_0 = e2.cross(-e1).norm() / e2.dot(-e1);
-        Float cot_1 = e0.cross(-e2).norm() / e0.dot(-e2);
-        Float cot_2 = e1.cross(-e0).norm() / e1.dot(-e0);
+        Float cot_0 = e2.dot(-e1) / e2.cross(-e1).norm();
+        Float cot_1 = e0.dot(-e2) / e0.cross(-e2).norm();
+        Float cot_2 = e1.dot(-e0) / e1.cross(-e0).norm();
 
         circum_centers.segment(i*dim, dim) =
             v0 * sq_l0 * cot_0 +
