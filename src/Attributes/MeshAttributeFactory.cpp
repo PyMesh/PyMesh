@@ -3,6 +3,7 @@
 #include "EdgeLengthAttribute.h"
 #include "FaceAreaAttribute.h"
 #include "FaceCentroidAttribute.h"
+#include "FaceCircumCenterAttribute.h"
 #include "FaceNormalAttribute.h"
 #include "MeshAttribute.h"
 #include "VertexAreaAttribute.h"
@@ -41,6 +42,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "face_centroid") {
         MeshAttribute::Ptr attr(new FaceCentroidAttribute(name));
+        return attr;
+    } else if (name == "face_circumcenter") {
+        MeshAttribute::Ptr attr(new FaceCircumCenterAttribute(name));
         return attr;
     } else if (name == "face_normal") {
         MeshAttribute::Ptr attr(new FaceNormalAttribute(name));
