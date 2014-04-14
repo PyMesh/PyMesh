@@ -47,6 +47,8 @@ class MeshGeometry {
                 return 0;
         }
 
+        void extract_faces_from_voxels();
+
     protected:
         size_t m_dim;
         size_t m_vertex_per_face;
