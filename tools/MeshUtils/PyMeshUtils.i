@@ -10,3 +10,4 @@
 %include MeshUtils.i
 %include MeshSeparator.i
 %include Boundary.i
+%include PointLocator.i

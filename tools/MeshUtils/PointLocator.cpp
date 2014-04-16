@@ -44,6 +44,11 @@ void PointLocator::locate(const MatrixFr& points) {
     }
 }
 
+void PointLocator::clear() {
+    m_voxel_idx.resize(0);
+    m_barycentric_coords.resize(0,0);
+}
+
 void PointLocator::init_elements() {
     const size_t dim = m_mesh->get_dim();
 
