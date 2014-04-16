@@ -5,6 +5,7 @@
 #include "ShortEdgeRemovalTest.h"
 #include "TripletMapTest.h"
 #include "AttributeUtilsTest.h"
+#include "PointLocatorTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

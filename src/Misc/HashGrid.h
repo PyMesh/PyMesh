@@ -49,23 +49,21 @@ class HashGrid {
 #endif
 
     public:
-        bool insert(int obj_id, const Vector3F& coordinates);
+        bool insert(int obj_id, const VectorF& coordinates);
         bool insert_bbox(int obj_id, const MatrixF& shape);
         bool insert_batch(int obj_id, const MatrixF& points);
         bool insert_multiple(const VectorI& obj_ids, const MatrixF& points);
-        bool remove(int obj_id, const Vector3F& coordinates);
-        bool occupied(int obj_id, const Vector3F& coordinates) const;
+        bool remove(int obj_id, const VectorF& coordinates);
+        bool occupied(int obj_id, const VectorF& coordinates) const;
 
         size_t bucket_count() const { return m_hashMap.bucket_count(); }
         size_t size() const { return m_hashMap.size(); }
-        const HashItem* get_items(const Vector3F& coordinates);
-        VectorI get_items_near_point(const Vector3F& coordinates);
+        const HashItem* get_items(const VectorF& coordinates);
+        VectorI get_items_near_point(const VectorF& coordinates);
         void print_hash_efficiency() const;
 
     private:
-        HashKey convert_to_key(const Vector3F& value) const {
-            return convert_to_key(value[0], value[1], value[2]);
-        }
+        HashKey convert_to_key(const VectorF& value) const;
         HashKey convert_to_key(Float x, Float y, Float z) const;
         bool insert_key(int obj_id, HashKey& key);
 

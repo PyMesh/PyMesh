@@ -24,19 +24,23 @@ HashGrid::HashGrid(Float cell_size) :
 #endif
 }
 
-bool HashGrid::insert(int obj_id, const Vector3F& coordinates) {
+bool HashGrid::insert(int obj_id, const VectorF& coordinates) {
     HashKey key = convert_to_key(coordinates);
     return insert_key(obj_id, key);
 }
 
 bool HashGrid::insert_bbox(int obj_id, const MatrixF& shape) {
-    assert(shape.cols() == 3);
+    assert(shape.cols() == 3 || shape.cols() == 2);
     Float X_min = shape.col(0).minCoeff();
     Float Y_min = shape.col(1).minCoeff();
-    Float Z_min = shape.col(2).minCoeff();
+    Float Z_min = 0.0;
     Float X_max = shape.col(0).maxCoeff();
     Float Y_max = shape.col(1).maxCoeff();
-    Float Z_max = shape.col(2).maxCoeff();
+    Float Z_max = 0.0;
+    if (shape.cols() == 3) {
+        Z_min = shape.col(2).minCoeff();
+        Z_max = shape.col(2).maxCoeff();
+    }
     HashKey min_key = convert_to_key(X_min, Y_min, Z_min);
     HashKey max_key = convert_to_key(X_max, Y_max, Z_max);
 
@@ -79,7 +83,7 @@ bool HashGrid::insert_multiple(const VectorI& obj_ids, const MatrixF& points) {
     return success;
 }
 
-bool HashGrid::remove(int obj_id, const Vector3F& cooridnates) {
+bool HashGrid::remove(int obj_id, const VectorF& cooridnates) {
     HashKey key = convert_to_key(cooridnates);
     HashMap::iterator itr = m_hashMap.find(key);
     if (itr == m_hashMap.end()) return false;
@@ -92,7 +96,7 @@ bool HashGrid::remove(int obj_id, const Vector3F& cooridnates) {
     return num_erased != 0;
 }
 
-bool HashGrid::occupied(int obj_id, const Vector3F& coordinates) const {
+bool HashGrid::occupied(int obj_id, const VectorF& coordinates) const {
 	HashKey key = convert_to_key(coordinates);
 
 	HashMap::const_iterator itr = m_hashMap.find(key);
@@ -102,7 +106,7 @@ bool HashGrid::occupied(int obj_id, const Vector3F& coordinates) const {
 	return i!=itr->second.end();
 }
 
-const HashGrid::HashItem* HashGrid::get_items(const Vector3F& coordinates) {
+const HashGrid::HashItem* HashGrid::get_items(const VectorF& coordinates) {
     HashKey key = convert_to_key(coordinates);
     HashMap::const_iterator itr = m_hashMap.find(key);
     if (itr == m_hashMap.end()) return NULL;
@@ -110,7 +114,7 @@ const HashGrid::HashItem* HashGrid::get_items(const Vector3F& coordinates) {
     return &(itr->second);
 }
 
-VectorI HashGrid::get_items_near_point(const Vector3F& coordinates) {
+VectorI HashGrid::get_items_near_point(const VectorF& coordinates) {
     const HashGrid::HashItem* item = get_items(coordinates);
     VectorI result;
     assert(result.size() == 0);
@@ -124,6 +128,19 @@ VectorI HashGrid::get_items_near_point(const Vector3F& coordinates) {
         count++;
     }
     return result;
+}
+
+HashGrid::HashKey HashGrid::convert_to_key(const VectorF& value) const {
+    switch (value.size()) {
+        case 2:
+            return convert_to_key(value[0], value[1], 0.0);
+            break;
+        case 3:
+            return convert_to_key(value[0], value[1], value[2]);
+            break;
+        default:
+            throw NotImplementedError("Only 2D and 3D hash grid are supported.");
+    }
 }
 
 HashGrid::HashKey HashGrid::convert_to_key(Float x, Float y, Float z) const {
