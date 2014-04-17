@@ -13,6 +13,7 @@ PointLocator::PointLocator(Mesh::Ptr mesh) : m_mesh(mesh) {
 }
 
 void PointLocator::locate(const MatrixFr& points) {
+    const Float eps = 1e-6;
     const size_t num_pts = points.rows();
     m_voxel_idx = VectorI::Zero(num_pts);
     m_barycentric_coords = MatrixFr::Zero(num_pts, m_vertex_per_element);
@@ -28,8 +29,8 @@ void PointLocator::locate(const MatrixFr& points) {
         for (size_t j=0; j<num_candidates; j++) {
             barycentric_coord = compute_barycentric_coord(
                     v, candidate_elems[j]);
-            if ((barycentric_coord.array() <= 1.0).all() &&
-                    (barycentric_coord.array() >= 0.0).all()) {
+            if ((barycentric_coord.array() <= 1.0 + eps).all() &&
+                    (barycentric_coord.array() >= 0.0 - eps).all()) {
                 m_voxel_idx[i] = candidate_elems[j];
                 found = true;
                 break;
