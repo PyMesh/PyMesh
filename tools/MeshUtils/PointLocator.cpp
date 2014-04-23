@@ -1,6 +1,7 @@
 #include "PointLocator.h"
 
 #include <cassert>
+#include <limits>
 #include <sstream>
 
 #include <Core/Exception.h>
@@ -23,25 +24,37 @@ void PointLocator::locate(const MatrixFr& points) {
         VectorI candidate_elems = m_grid->get_items_near_point(v);
 
         VectorF barycentric_coord;
+        VectorF best_barycentric_coord;
 
         bool found = false;
+        Float least_negative_coordinate = -std::numeric_limits<Float>::max();
         const size_t num_candidates = candidate_elems.size();
         for (size_t j=0; j<num_candidates; j++) {
             barycentric_coord = compute_barycentric_coord(
                     v, candidate_elems[j]);
-            if ((barycentric_coord.array() <= 1.0 + eps).all() &&
-                    (barycentric_coord.array() >= 0.0 - eps).all()) {
-                m_voxel_idx[i] = candidate_elems[j];
+            Float min_barycentric_coord = barycentric_coord.minCoeff();
+            if (min_barycentric_coord > least_negative_coordinate) {
                 found = true;
-                break;
+                least_negative_coordinate = min_barycentric_coord;
+                m_voxel_idx[i] = candidate_elems[j];
+                best_barycentric_coord = barycentric_coord;
+                if (min_barycentric_coord >= -eps) {
+                    break;
+                }
             }
         }
+
         if (!found) {
             std::stringstream err_msg;
-            err_msg << "Point (" << v << ") is not inside of any voxels";
+            err_msg << "Point ( ";
+            for (size_t i=0; i<m_mesh->get_dim(); i++) {
+                err_msg << v[i] << " ";
+            }
+            err_msg << ") is not inside of any voxels" << std::endl;
             throw RuntimeError(err_msg.str());
         }
-        m_barycentric_coords.row(i) = barycentric_coord;
+
+        m_barycentric_coords.row(i) = best_barycentric_coord;
     }
 }
 

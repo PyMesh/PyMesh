@@ -9,6 +9,10 @@ class PointLocator {
     public:
         PointLocator(Mesh::Ptr mesh);
 
+        /**
+         * Determine the voxel enclosing each point.  Compute barycentric
+         * coordinates as a byproduct.
+         */
         void locate(const MatrixFr& points);
 
         VectorI get_enclosing_voxels() const {

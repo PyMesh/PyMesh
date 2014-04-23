@@ -67,7 +67,7 @@ class PointLocatorTest : public ::testing::Test {
             }
 
             Float dist = (p - target).norm();
-            ASSERT_FLOAT_EQ(0.0, dist);
+            ASSERT_NEAR(0.0, dist, 1e-6);
         }
 
     protected:
@@ -121,6 +121,76 @@ TEST_F(PointLocatorTest, Outside) {
     size_t num_pts = pts.rows();
 
     ASSERT_THROW(locator.locate(pts), RuntimeError);
+}
+
+TEST_F(PointLocatorTest, SlightlyOutside) {
+    MeshPtr mesh = load_mesh("cube.msh");
+    PointLocator locator(mesh);
+    MatrixF pts = MatrixF::Ones(1, 3) * 1.01;
+    size_t num_pts = pts.rows();
+
+    locator.locate(pts);
+    VectorI elem_indices = locator.get_enclosing_voxels();
+    MatrixF barycentric_coords = locator.get_barycentric_coords();
+
+    ASSERT_EQ(num_pts, elem_indices.size());
+    ASSERT_EQ(num_pts, barycentric_coords.rows());
+
+    for (size_t i=0; i<num_pts; i++) {
+        VectorI voxel = mesh->get_voxel(elem_indices[i]);
+        check_barycentric_coord(mesh, pts.row(i), voxel,
+                barycentric_coords.row(i));
+        ASSERT_GE(0.0, barycentric_coords.row(i).minCoeff());
+    }
+}
+
+TEST_F(PointLocatorTest, MidFacePts) {
+    MeshPtr mesh = load_mesh("cube.msh");
+    mesh->add_attribute("face_centroid");
+    PointLocator locator(mesh);
+    VectorF centroids = mesh->get_attribute("face_centroid");
+    MatrixF pts(mesh->get_num_faces(), 3);
+    size_t num_pts = pts.rows();
+    for (size_t i=0; i<num_pts; i++) {
+        pts.row(i) = centroids.segment(i*3, 3);
+    }
+
+    locator.locate(pts);
+    VectorI elem_indices = locator.get_enclosing_voxels();
+    MatrixF barycentric_coords = locator.get_barycentric_coords();
+
+    ASSERT_EQ(num_pts, elem_indices.size());
+    ASSERT_EQ(num_pts, barycentric_coords.rows());
+
+    for (size_t i=0; i<num_pts; i++) {
+        VectorI voxel = mesh->get_voxel(elem_indices[i]);
+        check_barycentric_coord(mesh, pts.row(i), voxel,
+                barycentric_coords.row(i));
+    }
+}
+
+TEST_F(PointLocatorTest, MeshVertices) {
+    MeshPtr mesh = load_mesh("tet.msh");
+    PointLocator locator(mesh);
+    VectorF centroids = mesh->get_vertices();
+    MatrixF pts(mesh->get_num_vertices(), 3);
+    size_t num_pts = pts.rows();
+    for (size_t i=0; i<num_pts; i++) {
+        pts.row(i) = centroids.segment(i*3, 3);
+    }
+
+    locator.locate(pts);
+    VectorI elem_indices = locator.get_enclosing_voxels();
+    MatrixF barycentric_coords = locator.get_barycentric_coords();
+
+    ASSERT_EQ(num_pts, elem_indices.size());
+    ASSERT_EQ(num_pts, barycentric_coords.rows());
+
+    for (size_t i=0; i<num_pts; i++) {
+        VectorI voxel = mesh->get_voxel(elem_indices[i]);
+        check_barycentric_coord(mesh, pts.row(i), voxel,
+                barycentric_coords.row(i));
+    }
 }
 
 TEST_F(PointLocatorTest, ZeroElements) {
