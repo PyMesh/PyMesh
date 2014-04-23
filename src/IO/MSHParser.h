@@ -37,7 +37,8 @@ class MSHParser : public MeshParser {
 
     protected:
         void extract_faces_and_voxels();
-        void extract_surface_from_volume();
+        void extract_surface_from_tets();
+        void extract_surface_from_hexs();
         const VectorF& get_attribute(const std::string& name) const;
 
         typedef std::shared_ptr<Zhou::MshLoader> LoaderPtr;
@@ -45,4 +46,6 @@ class MSHParser : public MeshParser {
 
         VectorI m_faces;
         VectorI m_voxels;
+        size_t m_vertex_per_face;
+        size_t m_vertex_per_voxel;
 };

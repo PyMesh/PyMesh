@@ -1,10 +1,12 @@
 #include "MSHParser.h"
 
 #include <map>
+#include <sstream>
 #include <vector>
 
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 #include "MshLoader.h"
 
@@ -22,11 +24,11 @@ size_t MSHParser::num_vertices() const {
 }
 
 size_t MSHParser::num_faces() const {
-    return m_faces.size() / 3;
+    return m_faces.size() / vertex_per_face();
 }
 
 size_t MSHParser::num_voxels() const {
-    return m_voxels.size() / 4;
+    return m_voxels.size() / vertex_per_voxel();
 }
 
 size_t MSHParser::num_attributes() const {
@@ -71,29 +73,44 @@ void MSHParser::export_attribute(const std::string& name, Float* buffer) {
 
 // TODO: only tet mesh supported so far
 size_t MSHParser::vertex_per_voxel() const {
-    return 4;
+    return m_vertex_per_voxel;
 }
 
 // TODO: only triangle mesh supported so far
 size_t MSHParser::vertex_per_face() const {
-    return 3;
+    return m_vertex_per_face;
 }
 
 void MSHParser::extract_faces_and_voxels() {
-    size_t nodes_per_element = m_loader->get_nodes_per_element();
-    if (nodes_per_element == 3) {
-        m_faces = m_loader->get_elements();
-    } else if (nodes_per_element == 4) {
-        m_voxels = m_loader->get_elements();
-        extract_surface_from_volume();
-    } else {
-        throw NotImplementedError("Only triangle and tet mesh is supported.");
+    const size_t element_type = m_loader->get_element_type();
+    switch (element_type) {
+        case 2: // Triangle
+            m_vertex_per_face = 3;
+            m_vertex_per_voxel = 0;
+            m_faces = m_loader->get_elements();
+            break;
+        case 4: // Tetrahedron
+            m_vertex_per_face = 3;
+            m_vertex_per_voxel = 4;
+            m_voxels = m_loader->get_elements();
+            extract_surface_from_tets();
+            break;
+        case 5: // Hexahedron
+            m_vertex_per_face = 4;
+            m_vertex_per_voxel = 8;
+            m_voxels = m_loader->get_elements();
+            extract_surface_from_hexs();
+            break;
+        default:
+            std::stringstream err_msg;
+            err_msg << "Unsupported msh element type: " << element_type;
+            throw NotImplementedError(err_msg.str());
     }
 }
 
-void MSHParser::extract_surface_from_volume() {
+void MSHParser::extract_surface_from_tets() {
     const VectorI& voxels = m_voxels;
-    size_t num_vertex_per_voxel = vertex_per_voxel();
+    const size_t num_vertex_per_voxel = vertex_per_voxel();
     typedef std::map<Triplet, int> FaceCounter;
     FaceCounter face_counter;
 
@@ -129,6 +146,48 @@ void MSHParser::extract_surface_from_volume() {
             vertex_buffer.push_back(f[0]);
             vertex_buffer.push_back(f[1]);
             vertex_buffer.push_back(f[2]);
+        }
+    }
+
+    m_faces.resize(vertex_buffer.size());
+    std::copy(vertex_buffer.begin(), vertex_buffer.end(), m_faces.data());
+}
+
+void MSHParser::extract_surface_from_hexs() {
+    const VectorI& voxels = m_voxels;
+    const size_t num_vertex_per_voxel = vertex_per_voxel();
+    assert(num_vertex_per_voxel == 8);
+    typedef std::map<Multiplet, int> FaceCounter;
+    FaceCounter face_counter;
+
+    for (size_t i=0; i<voxels.size(); i+=num_vertex_per_voxel) {
+        const VectorI voxel = voxels.segment(i, num_vertex_per_voxel);
+        Multiplet voxel_faces[6] = {
+            Multiplet(voxel[0], voxel[4], voxel[7], voxel[3]),
+            Multiplet(voxel[1], voxel[2], voxel[6], voxel[5]),
+            Multiplet(voxel[2], voxel[3], voxel[7], voxel[6]),
+            Multiplet(voxel[0], voxel[1], voxel[5], voxel[4]),
+            Multiplet(voxel[0], voxel[3], voxel[2], voxel[1]),
+            Multiplet(voxel[4], voxel[5], voxel[6], voxel[7])
+        };
+        for (size_t j=0; j<6; j++) {
+            if (face_counter.find(voxel_faces[j]) == face_counter.end()) {
+                face_counter[voxel_faces[j]] = 1;
+            } else {
+                face_counter[voxel_faces[j]] += 1;
+            }
+        }
+    }
+
+    std::vector<int> vertex_buffer;
+    for (FaceCounter::const_iterator itr = face_counter.begin();
+            itr!=face_counter.end(); itr++) {
+        if (itr->second == 1) {
+            const VectorI& f = itr->first.get_ori_data();
+            vertex_buffer.push_back(f[0]);
+            vertex_buffer.push_back(f[1]);
+            vertex_buffer.push_back(f[2]);
+            vertex_buffer.push_back(f[3]);
         }
     }
 

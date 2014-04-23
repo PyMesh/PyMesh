@@ -130,11 +130,11 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     std::vector<int> elements;
     std::vector<int> element_idx;
     size_t nodes_per_element;
+    int glob_elem_type = -1;
 
     if (m_binary) {
         eat_white_space(fin);
         int elem_read = 0;
-        int glob_elem_type = -1;
         while (elem_read < num_elements) {
             // Parse element header.
             int elem_type, num_elems, num_tags;
@@ -147,7 +147,7 @@ void MshLoader::parse_elements(std::ifstream& fin) {
             if (glob_elem_type == -1) {
                 glob_elem_type = elem_type;
             } else if (glob_elem_type != elem_type) {
-                std::cerr << "Error: all elements must have the save type." << std::endl;
+                std::cerr << "Error: all elements must have the same type." << std::endl;
                 throw NOT_IMPLEMENTED;
                 return;
             }
@@ -175,7 +175,6 @@ void MshLoader::parse_elements(std::ifstream& fin) {
             elem_read += num_elems;
         }
     } else {
-        int glob_elem_type = -1;
         for (size_t i=0; i<num_elements; i++) {
             // Parse per element header
             int elem_num, elem_type, num_tags;
@@ -193,7 +192,7 @@ void MshLoader::parse_elements(std::ifstream& fin) {
             if (glob_elem_type == -1) {
                 glob_elem_type = elem_type;
             } else if (glob_elem_type != elem_type) {
-                std::cerr << "Error: all elements must have the save type." << std::endl;
+                std::cerr << "Error: all elements must have the same type." << std::endl;
                 throw NOT_IMPLEMENTED;
                 return;
             }
@@ -217,6 +216,7 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     }
 
     m_nodes_per_element = nodes_per_element;
+    m_element_type = glob_elem_type;
 }
 
 void MshLoader::parse_node_field(std::ifstream& fin) {

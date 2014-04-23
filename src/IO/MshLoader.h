@@ -43,6 +43,10 @@ namespace Zhou {
                 return m_nodes_per_element;
             }
 
+            size_t get_element_type() const {
+                return m_element_type;
+            }
+
 
         public:
             enum ErrorCode {
@@ -65,6 +69,7 @@ namespace Zhou {
             bool m_binary;
             size_t m_data_size;
             size_t m_nodes_per_element;
+            size_t m_element_type;
             VectorF m_nodes;
             VectorI m_elements;
             FieldMap m_node_fields;
