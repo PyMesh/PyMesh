@@ -83,8 +83,8 @@ bool HashGrid::insert_multiple(const VectorI& obj_ids, const MatrixF& points) {
     return success;
 }
 
-bool HashGrid::remove(int obj_id, const VectorF& cooridnates) {
-    HashKey key = convert_to_key(cooridnates);
+bool HashGrid::remove(int obj_id, const VectorF& coordinates) {
+    HashKey key = convert_to_key(coordinates);
     HashMap::iterator itr = m_hashMap.find(key);
     if (itr == m_hashMap.end()) return false;
 
@@ -115,15 +115,37 @@ const HashGrid::HashItem* HashGrid::get_items(const VectorF& coordinates) {
 }
 
 VectorI HashGrid::get_items_near_point(const VectorF& coordinates) {
-    const HashGrid::HashItem* item = get_items(coordinates);
-    VectorI result;
-    assert(result.size() == 0);
-    if (item == NULL) return result;
+    HashGrid::HashItem nearby_set;
+#if HASH_TYPE==2
+    nearby_set.set_empty_key(-1);
+#endif
+#if HASH_TYPE!=0
+    nearby_set.set_deleted_key(-2);
+#endif
 
-    result.resize(item->size());
-    size_t count=0;
-    for (HashGrid::HashItem::const_iterator itr = item->begin();
-            itr != item->end(); itr++) {
+    const Float half_cell_size = m_cell_size * 0.5;
+    VectorF offset(3);
+    VectorF point = VectorF::Zero(3);
+    point.segment(0, coordinates.size()) = coordinates;
+    for (int i=-1; i<2; i++) {
+        offset[0] = i * half_cell_size;
+        for (int j=-1; j<2; j++) {
+            offset[1] = j * half_cell_size;
+            for (int k=-1; k<2; k++) {
+                offset[2] = k * half_cell_size;
+                const VectorF p = point + offset;
+                const HashGrid::HashItem* item = get_items(p);
+                if (item != NULL) {
+                    nearby_set.insert(item->begin(), item->end());
+                }
+            }
+        }
+    }
+
+    VectorI result(nearby_set.size());
+    size_t count = 0;
+    for (HashGrid::HashItem::const_iterator itr = nearby_set.begin();
+            itr != nearby_set.end(); itr++) {
         result[count] = *itr;
         count++;
     }

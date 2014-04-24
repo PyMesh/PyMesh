@@ -115,3 +115,20 @@ TEST_F(HashGridTest, GetItems) {
     VectorI near_one = m_grid->get_items_near_point(one);
     ASSERT_EQ(0, near_one.size());
 }
+
+TEST_F(HashGridTest, CloseByPoints) {
+    const Float eps = 1e-6;
+    Vector3F origin = Vector3F::Zero();
+    Vector3F one = Vector3F::Ones();
+    Vector3F p1 = one - one * eps;
+    Vector3F p2 = one + one * eps;
+    m_grid->insert(1, p1);
+    m_grid->insert(2, p2);
+    VectorI near_one = m_grid->get_items_near_point(one);
+    std::vector<int> near_one_vec(near_one.data(),
+            near_one.data() + near_one.size());
+    ASSERT_EQ(2, near_one.size());
+    ASSERT_THAT(near_one_vec, Contains(1));
+    ASSERT_THAT(near_one_vec, Contains(2));
+}
+
