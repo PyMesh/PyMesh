@@ -11,3 +11,4 @@
 %include MeshSeparator.i
 %include Boundary.i
 %include PointLocator.i
+%include Subdivision.i

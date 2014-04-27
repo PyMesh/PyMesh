@@ -6,6 +6,7 @@
 #include "TripletMapTest.h"
 #include "AttributeUtilsTest.h"
 #include "PointLocatorTest.h"
+#include "SimpleSubdivisionTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
