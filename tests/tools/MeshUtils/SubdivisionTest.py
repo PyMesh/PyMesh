@@ -26,6 +26,17 @@ class SubdivisionTest(unittest.TestCase):
 
         factory = PyMesh.MeshFactory();
         factory.load_file(mesh_file);
+        factory.with_attribute("face_area");
+        return factory.create();
+
+    def form_mesh(self, vertices, faces):
+        factory = PyMesh.MeshFactory();
+        factory.load_data(
+                vertices.ravel(order="C"),
+                faces.ravel(order="C"),
+                np.array([]),
+                vertices.shape[1], faces.shape[1], 4);
+        factory.with_attribute("face_area");
         return factory.create();
 
     def test_simple_subdivision(self):
@@ -43,3 +54,20 @@ class SubdivisionTest(unittest.TestCase):
 
         self.assertEqual(10, sub_vertices.shape[0]);
         self.assertEqual(16, sub_faces.shape[0]);
+
+    def test_const_total_area(self):
+        mesh = self.load_mesh("cube.obj");
+        vertices = mesh.get_vertices().reshape((-1,3));
+        faces = mesh.get_faces().reshape((-1, 3));
+        area = np.sum(mesh.get_attribute("face_area"));
+
+        sub = PyMeshUtils.Subdivision.create("simple");
+        sub.subdivide(vertices, faces, 1);
+
+        sub_mesh = self.form_mesh(sub.get_vertices(), sub.get_faces());
+        sub_area = np.sum(sub_mesh.get_attribute("face_area"));
+
+        self.assertAlmostEqual(area, sub_area);
+
+
+

@@ -56,6 +56,7 @@ void SimpleSubdivision::subdivide_face(size_t fi) {
 VectorI SimpleSubdivision::compute_mid_edge_points(const VectorI& face) {
     typedef std::map<Triplet, size_t>::const_iterator MapItr;
     const size_t num_vertex_per_face = face.size();
+    const size_t base_index = m_vertices.rows();
     VectorI mid_edge_indices(num_vertex_per_face);
     for (size_t j=0; j<num_vertex_per_face; j++) {
         size_t curr = j;
@@ -69,8 +70,8 @@ VectorI SimpleSubdivision::compute_mid_edge_points(const VectorI& face) {
         MapItr itr = m_mid_edge_points_map.find(edge);
         if (itr == m_mid_edge_points_map.end()) {
             size_t idx = m_mid_edge_points.size();
-            mid_edge_indices[j] = idx;
-            m_mid_edge_points_map[edge] = idx;
+            mid_edge_indices[j] = base_index + idx;
+            m_mid_edge_points_map[edge] = base_index + idx;
             m_mid_edge_points.push_back(mid);
         } else {
             mid_edge_indices[j] = itr->second;
