@@ -13,6 +13,20 @@
  */
 class SymmetricMaterial : public UniformMaterial {
     public:
+        /**
+         * The material matrix should take engineer strain and map to
+         * stress.  Mathematically:
+         *
+         *      [stress_00]       [strain_00            ]
+         *      [stress_11]       [strain_11            ]
+         *      [stress_22] = C * [strain_22            ]
+         *      [stress_01]       [strain_01 + strain_10]
+         *      [stress_02]       [strain_02 + strain_20]
+         *      [stress_12]       [strain_12 + strain_21]
+         *
+         * This way allows the matrix C to be symmetric.  In contrast the matrix
+         * that maps true strain to stress is not symmetric in general.
+         */
         SymmetricMaterial(Float density, const MatrixF& material_matrix) {
             m_density = density;
             m_material_tensor = material_matrix;
@@ -31,13 +45,7 @@ class SymmetricMaterial : public UniformMaterial {
         virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const {
             const size_t row = m_index_map(i,j);
             const size_t col = m_index_map(k,l);
-            //if (row == col && ((i != k) || (j != l))) {
-                // Handles the case C_abba with a != b.
-            if (row == col && (i != j || (k != l))) {
-                return m_material_tensor.coeff(row, col) * 0.5;
-            } else {
-                return m_material_tensor.coeff(row, col);
-            }
+            return m_material_tensor.coeff(row, col);
         }
 
         virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const {
@@ -74,7 +82,7 @@ class SymmetricMaterial : public UniformMaterial {
             assert(strain.rows() == 2);
             assert(strain.cols() == 2);
             assert(strain == strain.transpose());
-            Vector3F v_strain(strain(0, 0), strain(1, 1), strain(0, 1));
+            Vector3F v_strain(strain(0, 0), strain(1, 1), strain(0, 1) + strain(1, 0));
             Vector3F v_stress = m_material_tensor * v_strain;
             MatrixF stress(2, 2);
             stress << v_stress[0], v_stress[2],
@@ -87,7 +95,10 @@ class SymmetricMaterial : public UniformMaterial {
             assert(strain.cols() == 3);
             assert(strain == strain.transpose());
             VectorF v_strain(6);
-            v_strain << strain(0, 0), strain(1, 1), strain(2, 2), strain(0, 1), strain(0, 2) , strain(1, 2);
+            v_strain << strain(0, 0), strain(1, 1), strain(2, 2),
+                     strain(0, 1) + strain(1, 0),
+                     strain(0, 2) + strain(2, 0),
+                     strain(1, 2) + strain(2, 1);
             VectorF v_stress = m_material_tensor * v_strain;
             MatrixF stress(3, 3);
             stress << v_stress[0], v_stress[3], v_stress[4],

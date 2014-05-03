@@ -38,10 +38,14 @@ class IsotropicMaterial<2> : public SymmetricMaterial {
             Float lambda = young_modulus * poisson_ratio /
                 ((1.0 + poisson_ratio) * (1.0 - poisson_ratio));
             Float mu = young_modulus / (2.0 + 2.0 * poisson_ratio);
+
+            // By the definition of symmetric material, the material tensor maps
+            // from engineer strain to stress.  I.e. we need to scale C[2,2] by
+            // 0.5
             m_material_tensor
                 << lambda + 2*mu, lambda       , 0.0 ,
                    lambda       , lambda + 2*mu, 0.0 ,
-                   0.0          , 0.0          , 2*mu;
+                   0.0          , 0.0          , 1*mu;
         }
 };
 
@@ -53,16 +57,22 @@ class IsotropicMaterial<3> : public SymmetricMaterial {
             m_density = density;
             m_material_tensor = MatrixF(6, 6);
 
+            // Lambda and mu are derived based on
+            // https://www.efunda.com/formulae/solid_mechanics/mat_mechanics/hooke_isotropic.cfm
             Float lambda = young_modulus * poisson_ratio /
                 ((1.0 + poisson_ratio) * (1.0 - 2.0 * poisson_ratio));
             Float mu = young_modulus / (2.0 + 2.0 * poisson_ratio);
+
+            // By the definition of symmetric material, the material tensor maps
+            // from engineer strain to stress.  I.e. we need to scale C[3,3],
+            // C[4,4] and C[5,5] by 0.5
             m_material_tensor
                 << lambda + 2*mu, lambda       , lambda       , 0.0 , 0.0 , 0.0 ,
                    lambda       , lambda + 2*mu, lambda       , 0.0 , 0.0 , 0.0 ,
                    lambda       , lambda       , lambda + 2*mu, 0.0 , 0.0 , 0.0 ,
-                   0.0          , 0.0          , 0.0          , 2*mu, 0.0 , 0.0 ,
-                   0.0          , 0.0          , 0.0          , 0.0 , 2*mu, 0.0 ,
-                   0.0          , 0.0          , 0.0          , 0.0 , 0.0 , 2*mu;
+                   0.0          , 0.0          , 0.0          , 1*mu, 0.0 , 0.0 ,
+                   0.0          , 0.0          , 0.0          , 0.0 , 1*mu, 0.0 ,
+                   0.0          , 0.0          , 0.0          , 0.0 , 0.0 , 1*mu;
         }
 };
 

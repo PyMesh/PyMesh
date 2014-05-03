@@ -68,7 +68,7 @@ class OrthotropicMaterial<2> : public SymmetricMaterial {
 
             S << 1.0 / young_x, -poisson_xy / young_y, 0.0,
               -poisson_yx / young_x, 1.0 / young_y, 0.0,
-              0.0, 0.0, 0.5 / shear_xy;
+              0.0, 0.0, 1.0 / shear_xy;
             m_material_tensor = S.inverse();
         }
 };
@@ -123,9 +123,9 @@ class OrthotropicMaterial<3> : public SymmetricMaterial {
               1.0 / young_z,
               0.0, 0.0, 0.0,
 
-              0.0, 0.0, 0.0, 0.5 / shear_xy, 0.0, 0.0,
-              0.0, 0.0, 0.0, 0.0, 0.5 / shear_zx, 0.0,
-              0.0, 0.0, 0.0, 0.0, 0.0, 0.5 / shear_yz;
+              0.0, 0.0, 0.0, 1.0 / shear_xy, 0.0, 0.0,
+              0.0, 0.0, 0.0, 0.0, 1.0 / shear_zx, 0.0,
+              0.0, 0.0, 0.0, 0.0, 0.0, 1.0 / shear_yz;
 
             m_material_tensor = S.inverse();
         }

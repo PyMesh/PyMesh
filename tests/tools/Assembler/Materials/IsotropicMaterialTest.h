@@ -186,3 +186,56 @@ TEST_F(IsotropicMaterialTest, InverseTensor3D) {
     assert_matrix_eq(Id, I);
 }
 
+TEST_F(IsotropicMaterialTest, Energy2D) {
+    Float young = 0.5;
+    Float poisson = 0.3;
+    MaterialPtr mat = create(2, young, poisson);
+
+    MatrixF strain(2, 2);
+    strain << 1.0, 0.2,
+              0.2, 2.0;
+    MatrixF stress = mat->strain_to_stress(strain, m_origin);
+    Float energy = (strain.array() * stress.array()).sum();
+
+    Float true_energy = 0.0;
+    for (size_t i=0; i<2; i++) {
+        for (size_t j=0; j<2; j++) {
+            for (size_t k=0; k<2; k++) {
+                for (size_t l=0; l<2; l++) {
+                    true_energy += mat->get_material_tensor(i,j,k,l, m_origin)
+                        * strain(i,j) * strain(k,l);
+                }
+            }
+        }
+    }
+
+    ASSERT_FLOAT_EQ(true_energy, energy);
+}
+
+TEST_F(IsotropicMaterialTest, Energy3D) {
+    Float young = 0.5;
+    Float poisson = 0.3;
+    MaterialPtr mat = create(3, young, poisson);
+
+    MatrixF strain(3, 3);
+    strain << 1.0, 0.2, 0.3,
+              0.2, 2.0, 0.4,
+              0.3, 0.4, 3.0;
+    MatrixF stress = mat->strain_to_stress(strain, m_origin);
+    Float energy = (strain.array() * stress.array()).sum();
+
+    Float true_energy = 0.0;
+    for (size_t i=0; i<3; i++) {
+        for (size_t j=0; j<3; j++) {
+            for (size_t k=0; k<3; k++) {
+                for (size_t l=0; l<3; l++) {
+                    true_energy += mat->get_material_tensor(i,j,k,l, m_origin)
+                        * strain(i,j) * strain(k,l);
+                }
+            }
+        }
+    }
+
+    ASSERT_FLOAT_EQ(true_energy, energy);
+}
+
