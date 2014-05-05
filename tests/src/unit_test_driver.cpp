@@ -12,6 +12,7 @@
 #include "Attributes/FaceCircumCenterAttributeTest.h"
 #include "Attributes/FaceVoronoiAreaAttributeTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
+#include "Attributes/VoxelCentroidAttributeTest.h"
 #include "Attributes/VertexGaussianCurvatureAttributeTest.h"
 #include "Attributes/VertexNormalAttributeTest.h"
 #include "Attributes/VertexMeanCurvatureAttributeTest.h"

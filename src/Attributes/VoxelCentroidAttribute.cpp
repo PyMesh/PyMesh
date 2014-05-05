@@ -3,7 +3,8 @@
 #include <Mesh.h>
 
 void VoxelCentroidAttribute::compute_from_mesh(Mesh& mesh) {
-    size_t num_voxels = mesh.get_num_voxels();
+    const size_t num_voxels = mesh.get_num_voxels();
+    const size_t vertex_per_voxel = mesh.get_vertex_per_voxel();
 
     VectorF& centroids = m_values;
     centroids.resize(num_voxels*3);
@@ -12,10 +13,10 @@ void VoxelCentroidAttribute::compute_from_mesh(Mesh& mesh) {
         VectorI voxel = mesh.get_voxel(i);
 
         Vector3F centroid = Vector3F::Zero();
-        for (size_t j=0; j<voxel.size(); j++) {
+        for (size_t j=0; j<vertex_per_voxel; j++) {
             centroid += mesh.get_vertex(voxel[j]);
         }
-        centroid /= voxel.size();
+        centroid /= vertex_per_voxel;
 
         centroids.segment<3>(i*3) = centroid;
     }
