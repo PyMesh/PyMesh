@@ -1,0 +1,98 @@
+\documentclass[12pt,letter]{article}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,urlcolor=blue,linkcolor=black}
+\setlength{\parindent}{0in}
+
+\newcommand{\dd}{\ensuremath{\;\textrm{d}}}
+\renewcommand{\Re}{\ensuremath{\mathbb{R}}}
+
+%%%%%%%%==Margin Settings==%%%%%%%%
+\textwidth 6.5in
+\textheight 9.0in
+\topmargin -0.5in
+\headheight 0.0in
+\evensidemargin -0.0in
+\oddsidemargin -0.0in
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\begin{center}
+Stiffness Matrix Assembly\\
+Qingnan Zhou
+\end{center}
+\vspace{0.2in}
+Goal: Assemble finite element stiffness matrix, $K$, such that energy $E = u^T K u$.\\
+
+Let $\phi_I, \phi_J : \Re^3 \rightarrow \Re$ be the shape functions at vertex
+$I$ and vertex $J$ respectively.  The displacement vector field $u$ can be
+approximated by the linear combination of shape functions in the following way:
+$$
+u = \sum_{I} u_I \phi_I = \left[
+\begin{array}{c}
+u_{Ix} \phi_I \\
+u_{Iy} \phi_I \\
+u_{Iz} \phi_I \\
+\end{array}
+\right]
+$$
+In index notation,
+$$
+[\nabla u]_{ij} = \sum_{I} u_{Ii} \frac{\partial \phi_I}{\partial x_j}
+$$
+
+The corresponding strain, $\epsilon$ has the form:
+$$
+\epsilon = \frac{1}{2} (\nabla u + \nabla u^T)
+$$
+In index notation,
+$$
+[\epsilon]_{i,j} = \sum_{I} \frac{1}{2} \left(u_{Ii} \frac{\partial \phi_I}{\partial x_j} +
+u_{Ij} \frac{\partial \phi_I}{\partial x_i}\right)
+$$
+
+Therefore, we have
+
+\begin{align*}
+E &= \epsilon : C : \epsilon \\
+  &= \sum_{ijkl} \frac{1}{4} \left( \sum_{I} \left(
+  u_{Ii} \frac{\partial \phi_I}{\partial x_j} +
+  u_{Ij} \frac{\partial \phi_I}{\partial x_i} +
+  \right)
+  C_{ijkl}
+  \sum_{J} \left(
+  u_{Jk} \frac{\partial \phi_J}{\partial x_l} +
+  u_{Jl} \frac{\partial \phi_J}{\partial x_k} +
+  \right)
+  \right)\\
+  &= \frac{1}{4} \sum_{IJ} \left( \sum_{ijkl} \left(
+  u_{Ii} \frac{\partial \phi_I}{\partial x_j} +
+  u_{Ij} \frac{\partial \phi_I}{\partial x_i} +
+  \right)
+  C_{ijkl}
+  \left(
+  u_{Jk} \frac{\partial \phi_J}{\partial x_l} +
+  u_{Jl} \frac{\partial \phi_J}{\partial x_k} +
+  \right)
+  \right)\\
+  &= \frac{1}{4} \sum_{IJ} \left( \sum_{ijkl}
+  u_{Ii} \frac{\partial \phi_I}{\partial x_j}
+  u_{Jk} \frac{\partial \phi_J}{\partial x_l}
+  \left(
+  C_{ijkl} + C_{jikl} + C_{ijlk} + C_{jilk}
+  \right)
+  \right)\\
+  &= \sum_{IJ} u_I^T K_{IJ} u_J
+\end{align*}
+where $K_{IJ}$ is $3 \times 3$ block of stiffness matrix $K$ that corresponds to
+degrees of freedom of vertex $I$ and $J$.  In index notation, it is defined as
+$$
+[K_{IJ}]_{ik} = \frac{1}{4}
+( C_{ijkl} + C_{jikl} + C_{ijlk} + C_{jilk} )
+\frac{\partial \phi_I}{\partial x_j} \frac{\partial \phi_J}{\partial x_l}
+$$
+
+
+\end{document}
