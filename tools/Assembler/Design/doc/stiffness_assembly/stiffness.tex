@@ -89,9 +89,10 @@ E &= \epsilon : C : \epsilon \\
 where $K_{IJ}$ is $3 \times 3$ block of stiffness matrix $K$ that corresponds to
 degrees of freedom of vertex $I$ and $J$.  In index notation, it is defined as
 $$
-[K_{IJ}]_{ik} = \frac{1}{4}
+[K_{IJ}]_{ik} = \sum_{jl} \left(\frac{1}{4}
 ( C_{ijkl} + C_{jikl} + C_{ijlk} + C_{jilk} )
 \frac{\partial \phi_I}{\partial x_j} \frac{\partial \phi_J}{\partial x_l}
+\right)
 $$
 
 
