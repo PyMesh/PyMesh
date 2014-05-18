@@ -2,9 +2,7 @@
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
 
-#ADD_SUBDIRECTORY(opencl)
+ADD_SUBDIRECTORY(opencl)
 ADD_SUBDIRECTORY(swig_eigen)
 
-ADD_CUSTOM_TARGET(learning_tests DEPENDS
-    #opencl_tests
-    swig_eigen_tests)
+ADD_CUSTOM_TARGET(learning_tests DEPENDS opencl_tests swig_eigen_tests)
