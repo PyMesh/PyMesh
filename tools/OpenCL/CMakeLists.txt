@@ -1,0 +1,32 @@
+# General lib locations
+LINK_DIRECTORIES(/opt/local/lib)
+
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
+
+# Find OpenCL
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99")
+IF (DEFINED ENV{OPENCL_ROOT})
+    INCLUDE_DIRECTORIES($ENV{OPENCL_INC})
+    LINK_DIRECTORIES($ENV{OPENCL_LIB})
+    SET(OPENCL_LIBRARIES OpenCL)
+ELSE (DEFINED ENV{OPENCL_ROOT})
+    FIND_PACKAGE(OpenCL REQUIRED)
+    IF (OPENCL_FOUND)
+        INCLUDE_DIRECTORIES(${OPENCL_INCLUDE_DIRS})
+    ELSE(OPENCL_FOUND)
+        MESSAGE("OpenCL not found")
+    ENDIF()
+ENDIF(DEFINED ENV{OPENCL_ROOT})
+
+
+FILE(GLOB SRC_FILES *.cpp *.c)
+FILE(GLOB INC_FILES *.h)
+
+ADD_LIBRARY(lib_opencl_wrapper SHARED ${SRC_FILES} ${INC_FILES})
+TARGET_LINK_LIBRARIES(lib_opencl_wrapper ${OPENCL_LIBRARIES})
+SET_TARGET_PROPERTIES(lib_opencl_wrapper PROPERTIES OUTPUT_NAME "opencl_wrapper")
+
+# Boudle lib into a single target.
+# To build it, one can just "make opencl_wrapper"
+ADD_CUSTOM_TARGET(opencl_wrapper DEPENDS lib_opencl_wrapper)

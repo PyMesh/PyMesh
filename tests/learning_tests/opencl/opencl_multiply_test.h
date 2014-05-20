@@ -3,7 +3,7 @@
 
 #include <Core/Exception.h>
 #include <Misc/Environment.h>
-#include <Misc/OpenCLWrapper.h>
+#include <OpenCL/OpenCLWrapper.h>
 
 class OpenCLMultiplyTest : public ::testing::Test, public OpenCLWrapper {
     protected:

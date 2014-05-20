@@ -2,7 +2,7 @@
 #include <cmath>
 #include <string>
 #include <Misc/Environment.h>
-#include <Misc/OpenCLWrapper.h>
+#include <OpenCL/OpenCLWrapper.h>
 
 class OpenCLVectorTest : public ::testing::Test, public OpenCLWrapper {
     protected:

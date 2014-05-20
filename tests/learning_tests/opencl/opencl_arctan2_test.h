@@ -3,7 +3,7 @@
 #include <string>
 
 #include <Core/Exception.h>
-#include <Misc/OpenCLWrapper.h>
+#include <OpenCL/OpenCLWrapper.h>
 
 class OpenCLArctan2Test : public ::testing::Test, public OpenCLWrapper {
     protected:
