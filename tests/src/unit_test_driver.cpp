@@ -2,6 +2,7 @@
 #include <gmock/gmock.h>
 
 #include "MeshTest.h"
+#include "MeshFactoryTest.h"
 #include "IO/OBJParserTest.h"
 #include "IO/OBJWriterTest.h"
 #include "IO/MSHParserTest.h"
