@@ -1,5 +1,6 @@
 #include "MeshFactory.h"
 #include <cassert>
+#include <sstream>
 
 #include <Attributes/MeshAttributes.h>
 #include <Connectivity/MeshConnectivity.h>
@@ -16,7 +17,11 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
     MeshParser* parser = MeshParser::create_parser(filename);
     assert(parser != NULL);
     bool success = parser->parse(filename);
-    assert(success);
+    if (!success) {
+        std::stringstream err_msg;
+        err_msg << "Parsing " << filename << " has failed.";
+        throw RuntimeError(err_msg.str());
+    }
 
     m_mesh->set_geometry(Mesh::GeometryPtr(new MeshGeometry()));
     initialize_vertices(parser);

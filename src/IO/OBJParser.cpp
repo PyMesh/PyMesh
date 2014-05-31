@@ -3,9 +3,11 @@
 #include <cassert>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <list>
 
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 OBJParser::OBJParser() : m_dim(0), m_vertex_per_face(3) { }
 
@@ -15,9 +17,9 @@ bool OBJParser::parse(const std::string& filename) {
 
     std::ifstream fin(filename.c_str());
     if (!fin.is_open()) {
-        std::cerr << "Error: failed to open file \"" << filename << "\""
-            << std::endl;
-        return false;
+        std::stringstream err_msg;
+        err_msg << "failed to open file \"" << filename << "\"";
+        throw IOError(err_msg.str());
     }
 
     bool success;

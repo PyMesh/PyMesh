@@ -1,6 +1,7 @@
 #include "MeshParser.h"
 
 #include <iostream>
+#include <sstream>
 
 #include <Core/Exception.h>
 #include "OBJParser.h"
@@ -21,9 +22,10 @@ MeshParser* MeshParser::create_parser(const std::string& filename) {
     } else if (ext == ".stl") {
         parser = new STLParser();
     } else {
-        std::cerr << "Error: extention (" << ext << ") is not supported"
+        std::stringstream err_msg;
+        err_msg << "Error: extention (" << ext << ") is not supported"
             << std::endl;
-        throw IOError("Invalid file extention.");
+        throw IOError(err_msg.str());
     }
     return parser;
 }

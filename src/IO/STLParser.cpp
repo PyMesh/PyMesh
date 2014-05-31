@@ -2,10 +2,12 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <limits>
 
 #include <Misc/HashGrid.h>
+#include <Core/Exception.h>
 
 #include "IOUtils.h"
 
@@ -17,9 +19,9 @@ bool STLParser::parse(const std::string& filename) {
 
     std::ifstream fin(filename.c_str());
     if (!fin.is_open()) {
-        std::cerr << "Error: failed to open file \"" << filename << "\""
-            << std::endl;
-        return false;
+        std::stringstream err_msg;
+        err_msg << "failed to open file \"" << filename << "\"";
+        throw IOError(err_msg.str());
     }
 
     fin.getline(line, LINE_SIZE);

@@ -1,12 +1,21 @@
 #include "MshLoader.h"
 
 #include <iostream>
+#include <sstream>
 #include <vector>
+
+#include <Core/Exception.h>
 
 using namespace Zhou;
 
 MshLoader::MshLoader(const std::string& filename) {
     std::ifstream fin(filename.c_str(), std::ios::in | std::ios::binary);
+
+    if (!fin.is_open()) {
+        std::stringstream err_msg;
+        err_msg << "failed to open file \"" << filename << "\"";
+        throw IOError(err_msg.str());
+    }
     // Parse header
     std::string buf;
     double version;

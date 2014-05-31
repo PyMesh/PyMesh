@@ -46,6 +46,16 @@ class MeshFactoryTest : public ::testing::Test {
         std::string m_data_dir;
 };
 
+TEST_F(MeshFactoryTest, NonExistFile) {
+    std::string non_exists_obj_name = "non_exist.obj";
+    std::string non_exists_stl_name = "non_exist.stl";
+    std::string non_exists_msh_name = "non_exist.msh";
+
+    ASSERT_THROW(load_mesh(non_exists_obj_name), IOError);
+    ASSERT_THROW(load_mesh(non_exists_stl_name), IOError);
+    ASSERT_THROW(load_mesh(non_exists_msh_name), IOError);
+}
+
 TEST_F(MeshFactoryTest, LoadFile) {
     std::string cube_tri_name = "cube.obj";
     std::string cube_tet_name = "cube.msh";
