@@ -19,7 +19,7 @@ template<>
 class IsotropicMaterial<2> : public SymmetricMaterial {
     public:
         IsotropicMaterial(Float density, Float young_modulus, Float poisson_ratio) {
-            initialize_2D();
+            initialize(2);
             m_density = density;
             m_material_tensor = MatrixF(3, 3);
 
@@ -53,7 +53,7 @@ template<>
 class IsotropicMaterial<3> : public SymmetricMaterial {
     public:
         IsotropicMaterial(Float density, Float young_modulus, Float poisson_ratio) {
-            initialize_3D();
+            initialize(3);
             m_density = density;
             m_material_tensor = MatrixF(6, 6);
 

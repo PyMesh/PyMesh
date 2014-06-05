@@ -49,9 +49,9 @@ void EigenSolver::compute_batch_symmetric_3x3(const VectorF& matrices) {
         const VectorF& entries = matrices.segment(i*flatten_size, flatten_size);
         MatrixF M(dim, dim);
         size_t base_idx = i*flatten_size;
-        M << matrices[base_idx  ], matrices[base_idx+3], matrices[base_idx+4],
-             matrices[base_idx+3], matrices[base_idx+1], matrices[base_idx+5],
-             matrices[base_idx+4], matrices[base_idx+5], matrices[base_idx+2];
+        M << matrices[base_idx  ], matrices[base_idx+5], matrices[base_idx+4],
+             matrices[base_idx+5], matrices[base_idx+1], matrices[base_idx+3],
+             matrices[base_idx+4], matrices[base_idx+3], matrices[base_idx+2];
         m_solver.compute(M);
         m_eigen_values.segment(i*dim, dim) = m_solver.eigenvalues().real();
         m_eigen_vectors.block(i*dim, 0, dim, dim) =

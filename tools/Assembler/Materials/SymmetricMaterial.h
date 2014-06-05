@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include <Core/Exception.h>
+#include <Assembler/Math/MatrixOrder.h>
 
 /**
  * Symmetric material class assumes full symmetry in the material tensor.
@@ -20,9 +21,9 @@ class SymmetricMaterial : public UniformMaterial {
          *      [stress_00]       [strain_00            ]
          *      [stress_11]       [strain_11            ]
          *      [stress_22] = C * [strain_22            ]
-         *      [stress_01]       [strain_01 + strain_10]
-         *      [stress_02]       [strain_02 + strain_20]
          *      [stress_12]       [strain_12 + strain_21]
+         *      [stress_02]       [strain_02 + strain_20]
+         *      [stress_01]       [strain_01 + strain_10]
          *
          * This way allows the matrix C to be symmetric.  In contrast the matrix
          * that maps true strain to stress is not symmetric in general.
@@ -31,9 +32,9 @@ class SymmetricMaterial : public UniformMaterial {
             m_density = density;
             m_material_tensor = material_matrix;
             if (m_material_tensor.rows() == 6) {
-                initialize_3D();
+                initialize(3);
             } else if (m_material_tensor.rows() == 3) {
-                initialize_2D();
+                initialize(2);
             } else {
                 std::stringstream err_msg;
                 err_msg << "Material matrix size " << m_material_tensor.rows()
@@ -63,19 +64,9 @@ class SymmetricMaterial : public UniformMaterial {
     protected:
         SymmetricMaterial() {}
 
-        void initialize_2D() {
-            m_dim = 2;
-            m_index_map.resize(2, 2);
-            m_index_map << 0, 2,
-                           2, 1;
-        }
-
-        void initialize_3D() {
-            m_dim = 3;
-            m_index_map.resize(3,3);
-            m_index_map << 0, 3, 4,
-                           3, 1, 5,
-                           4, 5, 2;
+        void initialize(size_t dim) {
+            m_dim = dim;
+            m_index_map = MatrixOrder::get_order(dim);
         }
 
         MatrixF strain_to_stress_2D(const MatrixF& strain) const {
@@ -96,17 +87,17 @@ class SymmetricMaterial : public UniformMaterial {
             assert(strain == strain.transpose());
             VectorF v_strain(6);
             v_strain << strain(0, 0), strain(1, 1), strain(2, 2),
-                     strain(0, 1) + strain(1, 0),
+                     strain(1, 2) + strain(2, 1),
                      strain(0, 2) + strain(2, 0),
-                     strain(1, 2) + strain(2, 1);
+                     strain(0, 1) + strain(1, 0);
             VectorF v_stress = m_material_tensor * v_strain;
             MatrixF stress(3, 3);
-            stress << v_stress[0], v_stress[3], v_stress[4],
-                      v_stress[3], v_stress[1], v_stress[5],
-                      v_stress[4], v_stress[5], v_stress[2];
+            stress << v_stress[0], v_stress[5], v_stress[4],
+                      v_stress[5], v_stress[1], v_stress[3],
+                      v_stress[4], v_stress[3], v_stress[2];
             return stress;
         }
 
     protected:
-        MatrixF m_index_map;
+        MatrixI m_index_map;
 };

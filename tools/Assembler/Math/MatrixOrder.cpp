@@ -7,12 +7,12 @@ MatrixI MatrixOrder::get_order(size_t dim) {
     switch (dim) {
         case 2:
             order << 0, 2,
-                  2, 1;
+                     2, 1;
             break;
         case 3:
-            order << 0, 3, 4,
-                  3, 1, 5,
-                  4, 5, 2;
+            order << 0, 5, 4,
+                     5, 1, 3,
+                     4, 3, 2;
             break;
         default:
             std::stringstream err_msg;

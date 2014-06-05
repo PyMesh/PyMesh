@@ -51,7 +51,7 @@ class OrthotropicMaterial<2> : public SymmetricMaterial {
          */
         OrthotropicMaterial(Float density, const VectorF& young_modulus,
                 const VectorF& poisson_ratio, const VectorF& shear_modulus) {
-            initialize_2D();
+            initialize(2);
             m_density = density;
             check_material_parameters(m_dim, young_modulus, poisson_ratio, shear_modulus);
 
@@ -86,7 +86,7 @@ class OrthotropicMaterial<3> : public SymmetricMaterial {
          */
         OrthotropicMaterial(Float density, const VectorF& young_modulus,
                 const VectorF& poisson_ratio, const VectorF& shear_modulus) {
-            initialize_3D();
+            initialize(3);
             m_density = density;
             check_material_parameters(m_dim, young_modulus, poisson_ratio, shear_modulus);
 
@@ -123,9 +123,9 @@ class OrthotropicMaterial<3> : public SymmetricMaterial {
               1.0 / young_z,
               0.0, 0.0, 0.0,
 
-              0.0, 0.0, 0.0, 1.0 / shear_xy, 0.0, 0.0,
+              0.0, 0.0, 0.0, 1.0 / shear_yz, 0.0, 0.0,
               0.0, 0.0, 0.0, 0.0, 1.0 / shear_zx, 0.0,
-              0.0, 0.0, 0.0, 0.0, 0.0, 1.0 / shear_yz;
+              0.0, 0.0, 0.0, 0.0, 0.0, 1.0 / shear_xy;
 
             m_material_tensor = S.inverse();
         }
