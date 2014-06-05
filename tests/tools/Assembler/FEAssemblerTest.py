@@ -199,6 +199,25 @@ class FEAssemblerTest(unittest.TestCase):
         C_ground_truth = self.load_matrix("square_2D_elasticity_tensor.mat", "C");
         self.assertMatrixEqual(C_ground_truth, C);
 
+    def test_engineer_strain_stress_tet(self):
+        mesh = self.load_mesh("tet.msh");
+        assembler = self.create_assembler(mesh);
+        C  = self.format(assembler.assemble("elasticity_tensor"));
+        Ce = self.format(assembler.assemble("engineer_strain_stress"));
+        doubler_diag = np.tile([1.0, 1.0, 1.0, 2.0, 2.0, 2.0],
+                mesh.get_num_voxels());
+        doubler = scipy.sparse.diags(doubler_diag, 0);
+        self.assertMatrixEqual(doubler * C, Ce);
+
+    def test_engineer_strain_stress_square(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = self.create_assembler(mesh);
+        C  = self.format(assembler.assemble("elasticity_tensor"));
+        Ce = self.format(assembler.assemble("engineer_strain_stress"));
+        doubler_diag = np.tile([1.0, 1.0, 2.0], mesh.get_num_faces());
+        doubler = scipy.sparse.diags(doubler_diag, 0);
+        self.assertMatrixEqual(doubler * C, Ce);
+
     def test_rigid_motion_tet(self):
         mesh = self.load_mesh("tet.msh");
         assembler = self.create_assembler(mesh);

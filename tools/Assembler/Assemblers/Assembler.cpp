@@ -10,6 +10,7 @@
 #include "LaplacianAssembler.h"
 #include "DisplacementStrainAssembler.h"
 #include "ElasticityTensorAssembler.h"
+#include "EngineerStrainStressAssembler.h"
 #include "RigidMotionAssembler.h"
 
 Assembler::Ptr Assembler::create(const std::string& matrix_name) {
@@ -25,6 +26,8 @@ Assembler::Ptr Assembler::create(const std::string& matrix_name) {
         return Ptr(new DisplacementStrainAssembler());
     } else if (matrix_name == "elasticity_tensor") {
         return Ptr(new ElasticityTensorAssembler());
+    } else if (matrix_name == "engineer_strain_stress") {
+        return Ptr(new EngineerStrainStressAssembler());
     } else if (matrix_name == "rigid_motion") {
         return Ptr(new RigidMotionAssembler());
     } else {
