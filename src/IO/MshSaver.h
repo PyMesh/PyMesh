@@ -18,6 +18,7 @@ namespace Zhou {
             void save_vector_field(const std::string& fieldname, const VectorF& field);
             void save_elem_scalar_field(const std::string& fieldname, const VectorF& field);
             void save_elem_vector_field(const std::string& fieldname, const VectorF& field);
+            void save_elem_tensor_field(const std::string& fieldname, const VectorF& field);
 
         public:
             enum ErrorCode {

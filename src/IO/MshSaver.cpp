@@ -190,6 +190,76 @@ void MshSaver::save_elem_vector_field(const std::string& fieldname, const Vector
     fout.flush();
 }
 
+void MshSaver::save_elem_tensor_field(const std::string& fieldname, const VectorF& field) {
+    assert(field.size() == m_num_elements * m_dim * (m_dim - 1));
+    fout << "$ElementData" << std::endl;
+    fout << 1 << std::endl; // num string tags.
+    fout << "\"" << fieldname << "\"" << std::endl;
+    fout << "1" << std::endl; // num real tags.
+    fout << "0.0" << std::endl; // time value.
+    fout << "3" << std::endl; // num int tags.
+    fout << "0" << std::endl; // the time step
+    fout << "9" << std::endl; // 9-component tensor field.
+    fout << m_num_elements << std::endl; // number of elements
+
+    const Float zero = 0.0;
+    if (m_binary) {
+        for (size_t i=0; i<m_num_elements; i++) {
+            int elem_idx = i+1;
+            fout.write((char*)&elem_idx, sizeof(int));
+            if (m_dim == 3) {
+                const VectorF& val = field.segment(i*6, 6);
+                Float tensor[9] = {
+                    val[0], val[5], val[4],
+                    val[5], val[1], val[3],
+                    val[4], val[3], val[2] };
+                fout.write((char*)tensor, sizeof(Float) * 9);
+            } else if (m_dim == 2) {
+                const VectorF& val = field.segment(i*3, 3);
+                Float tensor[9] = {
+                    val[0], val[2], zero,
+                    val[2], val[1], zero,
+                      zero,   zero, zero };
+                fout.write((char*)tensor, sizeof(Float)*9);
+            }
+        }
+    } else {
+        for (size_t i=0; i<m_num_elements; i++) {
+            int elem_idx = i+1;
+            if (m_dim == 3) {
+                const VectorF& val = field.segment(i*6, 6);
+                fout << elem_idx
+                    << " " << val[0]
+                    << " " << val[5]
+                    << " " << val[6]
+                    << " " << val[5]
+                    << " " << val[1]
+                    << " " << val[3]
+                    << " " << val[4]
+                    << " " << val[3]
+                    << " " << val[2]
+                    << std::endl;
+            } else if (m_dim == 2) {
+                const VectorF& val = field.segment(i*3, 3);
+                fout << elem_idx
+                    << " " << val[0]
+                    << " " << val[2]
+                    << " " << zero
+                    << " " << val[2]
+                    << " " << val[1]
+                    << " " << zero
+                    << " " << zero 
+                    << " " << zero 
+                    << " " << zero 
+                    << std::endl;
+            }
+        }
+    }
+
+    fout << "$EndElementData" << std::endl;
+    fout.flush();
+}
+
 void MshSaver::save_binary_mesh(const VectorF& nodes, const VectorI& elements,
         size_t nodes_per_element) {
     m_num_nodes = nodes.size() / m_dim;
