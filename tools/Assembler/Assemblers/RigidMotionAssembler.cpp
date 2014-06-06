@@ -35,14 +35,14 @@ ZSparseMatrix RigidMotionAssembler::assemble(FESettingPtr setting) {
     if (dim == 2) {
         rot_degrees = 1;
         for (size_t i=0; i<num_nodes; i++) {
-            VectorF x = mesh->getNode(i);
+            VectorF x = mesh->getNode(i) * node_weight[i];
             entries.push_back(T(dim  , i*dim  , -x[1]));
             entries.push_back(T(dim  , i*dim+1,  x[0]));
         }
     } else {
         rot_degrees = 3;
         for (size_t i=0; i<num_nodes; i++) {
-            VectorF x = mesh->getNode(i);
+            VectorF x = mesh->getNode(i) * node_weight[i];
             entries.push_back(T(dim  , i*dim+1, -x[2]));
             entries.push_back(T(dim  , i*dim+2,  x[1]));
             entries.push_back(T(dim+1, i*dim  ,  x[2]));

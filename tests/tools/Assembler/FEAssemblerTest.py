@@ -218,19 +218,37 @@ class FEAssemblerTest(unittest.TestCase):
         doubler = scipy.sparse.diags(doubler_diag, 0);
         self.assertMatrixEqual(doubler * C, Ce);
 
-    @unittest.skip("ground truth outdated")
-    def test_rigid_motion_tet(self):
+    def test_rigid_motion_under_stretch_tet(self):
         mesh = self.load_mesh("tet.msh");
+        mesh.add_attribute("vertex_volume");
         assembler = self.create_assembler(mesh);
         Ru = self.format(assembler.assemble("rigid_motion"));
-        Ru_ground_truth = self.load_matrix("tet_rigid_motion.mat", "Ru");
-        self.assertMatrixEqual(Ru_ground_truth, Ru);
 
-    @unittest.skip("ground truth outdated")
-    def test_rigid_motion_square(self):
+        dim = mesh.get_dim();
+        num_vertices = mesh.get_num_vertices();
+        vertices = mesh.get_vertices().reshape((num_vertices, -1));
+        vertex_volumes = mesh.get_attribute("vertex_volume").ravel();
+        center_of_mass = np.average(vertices, axis=0, weights=vertex_volumes);
+        uniform_stretch = (vertices - center_of_mass).ravel(order="C");
+
+        rigid_motion = (Ru * uniform_stretch).ravel();
+        self.assertAlmostEqual(0.0, np.amax(rigid_motion));
+        self.assertAlmostEqual(0.0, np.amin(rigid_motion));
+
+    def test_rigid_motion_under_uniform_stretch_square(self):
         mesh = self.load_mesh("square_2D.obj");
+        mesh.add_attribute("vertex_area");
         assembler = self.create_assembler(mesh);
         Ru = self.format(assembler.assemble("rigid_motion"));
-        Ru_ground_truth = self.load_matrix("square_2D_rigid_motion.mat", "Ru");
-        self.assertMatrixEqual(Ru_ground_truth, Ru);
+
+        dim = mesh.get_dim();
+        num_vertices = mesh.get_num_vertices();
+        vertices = mesh.get_vertices().reshape((num_vertices, -1));
+        vertex_areas = mesh.get_attribute("vertex_area").ravel();
+        center_of_mass = np.average(vertices, axis=0, weights=vertex_areas);
+        uniform_stretch = (vertices - center_of_mass).ravel(order="C");
+
+        rigid_motion = (Ru * uniform_stretch).ravel();
+        self.assertAlmostEqual(0.0, np.amax(rigid_motion));
+        self.assertAlmostEqual(0.0, np.amin(rigid_motion));
 
