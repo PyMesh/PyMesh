@@ -30,9 +30,9 @@ TEST_F(RigidMotionAssemblerTest, TetTranslation) {
     VectorF translation = VectorF::Ones(Ru.cols());
     VectorF result = Ru * translation;
 
-    ASSERT_FLOAT_EQ(4.0, result[0]); // 4 vertices, each tranlsated by 1
-    ASSERT_FLOAT_EQ(4.0, result[1]);
-    ASSERT_FLOAT_EQ(4.0, result[2]);
+    ASSERT_FLOAT_EQ(1.0, result[0]);
+    ASSERT_FLOAT_EQ(1.0, result[1]);
+    ASSERT_FLOAT_EQ(1.0, result[2]);
     ASSERT_NEAR(0.0, result[3], 1e-5);
     ASSERT_NEAR(0.0, result[4], 1e-5);
     ASSERT_NEAR(0.0, result[5], 1e-5);
@@ -44,8 +44,8 @@ TEST_F(RigidMotionAssemblerTest, SquareTranslation) {
     VectorF translation = VectorF::Ones(Ru.cols());
     VectorF result = Ru * translation;
 
-    ASSERT_FLOAT_EQ(4.0, result[0]); // 4 vertices, each tranlsated by 1
-    ASSERT_FLOAT_EQ(4.0, result[1]);
+    ASSERT_FLOAT_EQ(1.0, result[0]);
+    ASSERT_FLOAT_EQ(1.0, result[1]);
     ASSERT_NEAR(0.0, result[2], 1e-5);
 }
 

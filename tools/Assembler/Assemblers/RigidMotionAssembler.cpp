@@ -10,11 +10,23 @@ ZSparseMatrix RigidMotionAssembler::assemble(FESettingPtr setting) {
 
     const size_t dim = mesh->getDim();
     const size_t num_nodes = mesh->getNbrNodes();
+    const size_t num_elements = mesh->getNbrElements();
+    const size_t node_per_element = mesh->getNodePerElement();
+
+    VectorF node_weight = VectorF::Zero(num_nodes);
+    for (size_t i=0; i<num_elements; i++) {
+        VectorI elem = mesh->getElement(i);
+        Float volume = mesh->getElementVolume(i);
+        for (size_t j=0; j<node_per_element; j++) {
+            node_weight[elem[j]] += volume / node_per_element;
+        }
+    }
+    node_weight /= node_weight.sum();
 
     // Translation part
     for (size_t i=0; i<num_nodes; i++) {
         for (size_t j=0; j<dim; j++) {
-            entries.push_back(T(j,i*dim+j, 1.0));
+            entries.push_back(T(j,i*dim+j, node_weight[i]));
         }
     }
 
