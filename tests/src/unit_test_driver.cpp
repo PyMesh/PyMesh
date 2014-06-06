@@ -6,6 +6,7 @@
 #include "IO/OBJParserTest.h"
 #include "IO/OBJWriterTest.h"
 #include "IO/MSHParserTest.h"
+#include "IO/PLYParserTest.h"
 #include "Misc/TripletTest.h"
 #include "Misc/MultipletTest.h"
 #include "Misc/HashGridTest.h"
