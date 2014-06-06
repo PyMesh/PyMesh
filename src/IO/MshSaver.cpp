@@ -231,7 +231,7 @@ void MshSaver::save_elem_tensor_field(const std::string& fieldname, const Vector
                 fout << elem_idx
                     << " " << val[0]
                     << " " << val[5]
-                    << " " << val[6]
+                    << " " << val[4]
                     << " " << val[5]
                     << " " << val[1]
                     << " " << val[3]

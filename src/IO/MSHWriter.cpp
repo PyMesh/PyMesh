@@ -136,12 +136,12 @@ void MSHWriter::write_attribute(Zhou::MshSaver& saver, const std::string& name,
     } else if (attr_size == num_vertices * dim) {
         saver.save_vector_field(name, value);
     } else if (attr_size == num_vertices * dim * (dim-1)) {
-        throw NotImplementedError("Per vertex tensor field is not supported.");
+        throw NotImplementedError("Per-vertex tensor field is not supported.");
     } else if (attr_size == num_elements) {
         saver.save_elem_scalar_field(name, value);
     } else if (attr_size == num_elements * dim) {
         saver.save_elem_vector_field(name, value);
-    } else if (attr_size == num_elements * dim * (dim-1)) {
+    } else if (attr_size == num_elements * (dim * (dim + 1)) / 2) {
         saver.save_elem_tensor_field(name, value);
     } else {
         throw NotImplementedError("Unknown attribute type");
