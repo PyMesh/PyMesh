@@ -191,7 +191,7 @@ void MshSaver::save_elem_vector_field(const std::string& fieldname, const Vector
 }
 
 void MshSaver::save_elem_tensor_field(const std::string& fieldname, const VectorF& field) {
-    assert(field.size() == m_num_elements * m_dim * (m_dim - 1));
+    assert(field.size() == m_num_elements * m_dim * (m_dim + 1) / 2);
     fout << "$ElementData" << std::endl;
     fout << 1 << std::endl; // num string tags.
     fout << "\"" << fieldname << "\"" << std::endl;
