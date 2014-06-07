@@ -20,15 +20,28 @@ bool MSHParser::parse(const std::string& filename) {
 
 size_t MSHParser::num_vertices() const {
     const VectorF& vertices = m_loader->get_nodes();
+    assert(vertices.size() % 3 == 0);
     return vertices.size() / 3;
 }
 
 size_t MSHParser::num_faces() const {
-    return m_faces.size() / vertex_per_face();
+    const size_t face_size = m_faces.size();
+    const size_t v_per_face = vertex_per_face();
+    assert(face_size % v_per_face == 0);
+    return face_size / v_per_face;
 }
 
 size_t MSHParser::num_voxels() const {
-    return m_voxels.size() / vertex_per_voxel();
+    const size_t voxel_size = m_voxels.size();
+    const size_t v_per_voxel = vertex_per_voxel();
+
+    if (voxel_size == 0)
+        return 0;
+    else {
+        assert(v_per_voxel > 0);
+        assert(voxel_size % v_per_voxel== 0);
+        return voxel_size / v_per_voxel;
+    }
 }
 
 size_t MSHParser::num_attributes() const {
