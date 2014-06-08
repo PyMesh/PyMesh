@@ -9,6 +9,7 @@
 #include "IOUtils.h"
 #include "MSHWriter.h"
 #include "OBJWriter.h"
+#include "PLYWriter.h"
 
 using namespace Zhou;
 
@@ -19,6 +20,8 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
         writer = new OBJWriter();
     } else if (ext == ".msh") {
         writer = new MSHWriter();
+    } else if (ext == ".ply") {
+        writer = new PLYWriter();
     } else {
         std::cerr << "Error: extention (" << ext << ") is not supported"
             << std::endl;

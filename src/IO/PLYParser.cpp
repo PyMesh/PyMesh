@@ -23,6 +23,17 @@ namespace PLYParserHelper {
         }
     }
 
+    std::string form_attribute_name(const std::string& elem_name,
+            const std::string& prop_name) {
+        std::string attr_name;
+        if (prop_name == "vertex_indices") {
+            attr_name = elem_name + "_" + prop_name;
+        } else {
+            attr_name = prop_name;
+        }
+        return attr_name;
+    }
+
     int ply_parser_call_back(p_ply_argument argument) {
         p_ply_element elem;
         p_ply_property prop;
@@ -138,14 +149,6 @@ void PLYParser::export_attribute(const std::string& name, Float* buffer) {
     std::copy(attr.begin(), attr.end(), buffer);
 }
 
-size_t PLYParser::vertex_per_voxel() const {
-    return m_vertex_per_voxel;
-}
-
-size_t PLYParser::vertex_per_face() const {
-    return m_vertex_per_face;
-}
-
 void PLYParser::add_property(const std::string& elem_name,
         const std::string& prop_name, size_t size) {
     if (elem_name == "vertex") {
@@ -156,13 +159,24 @@ void PLYParser::add_property(const std::string& elem_name,
         m_num_voxels = size;
     }
 
-    std::string attr_name = elem_name + "_" + prop_name;
-    m_attributes[attr_name] = std::vector<Float>();
+    // Property name "vertex_indices" is the only property name that could
+    // appear multiple times in a ply file under different elements.  PyMesh
+    // requires all other property names to be unique.
+    std::string attr_name = form_attribute_name(elem_name, prop_name);
+    AttributeMap::const_iterator itr = m_attributes.find(attr_name);
+    if (itr == m_attributes.end()) {
+        m_attributes[attr_name] = std::vector<Float>();
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Duplicated property name: " << prop_name << std::endl;
+        err_msg << "PyMesh requires unique custom property names";
+        throw IOError(err_msg.str());
+    }
 }
 
 void PLYParser::add_property_value(const std::string& elem_name,
         const std::string& prop_name, Float value) {
-    std::string attr_name = elem_name + "_" + prop_name;
+    std::string attr_name = form_attribute_name(elem_name, prop_name);
     AttributeMap::iterator itr = m_attributes.find(attr_name);
     if (itr == m_attributes.end()) {
         throw_attribute_not_found_exception(attr_name);
@@ -173,9 +187,9 @@ void PLYParser::add_property_value(const std::string& elem_name,
 
 void PLYParser::init_vertices() {
     std::string field_names[] = {
-        std::string("vertex_x"),
-        std::string("vertex_y"),
-        std::string("vertex_z") };
+        std::string("x"),
+        std::string("y"),
+        std::string("z") };
 
     AttributeMap::const_iterator iterators[3];
     m_dim = 0;

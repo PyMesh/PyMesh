@@ -15,6 +15,10 @@ class PLYParser : public MeshParser {
 
         virtual bool parse(const std::string& filename);
 
+        virtual size_t dim() const { return m_dim; }
+        virtual size_t vertex_per_face() const { return m_vertex_per_face; }
+        virtual size_t vertex_per_voxel() const { return m_vertex_per_voxel; }
+
         virtual size_t num_vertices() const;
         virtual size_t num_faces() const;
         virtual size_t num_voxels() const;
@@ -27,9 +31,6 @@ class PLYParser : public MeshParser {
         virtual void export_faces(int* buffer);
         virtual void export_voxels(int* buffer);
         virtual void export_attribute(const std::string& name, Float* buffer);
-
-        virtual size_t vertex_per_voxel() const;
-        virtual size_t vertex_per_face() const;
 
     public:
         void add_property(const std::string& elem_name,
