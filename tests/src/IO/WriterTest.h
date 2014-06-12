@@ -71,8 +71,8 @@ class WriterTest : public ::testing::Test {
             const VectorF& attr2 = mesh2->get_attribute(attr_name);
             ASSERT_EQ(attr1.size(), attr2.size());
             VectorF diff = attr1 - attr2;
-            ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
-            ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
+            ASSERT_NEAR(0.0, diff.minCoeff(), 1e-6);
+            ASSERT_NEAR(0.0, diff.maxCoeff(), 1e-6);
         }
 
         void assert_eq_voxel_tensor_attribute(MeshPtr mesh1, MeshPtr mesh2,
@@ -92,8 +92,8 @@ class WriterTest : public ::testing::Test {
                 MatrixF tensor1 = unflatten_tensor(val1);
                 MatrixF tensor2 = unflatten_tensor(val2);
                 MatrixF diff = tensor1 - tensor2;
-                ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
-                ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
+                ASSERT_NEAR(0.0, diff.minCoeff(), 1e-6);
+                ASSERT_NEAR(0.0, diff.maxCoeff(), 1e-6);
             }
         }
 

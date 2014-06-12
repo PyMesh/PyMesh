@@ -98,10 +98,10 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
     const size_t num_vertices = mesh.get_num_vertices();
     assert(num_vertices > 0);
     assert_success(ply_add_element(ply, "vertex", num_vertices));
-    assert_success(ply_add_scalar_property(ply, "x", PLY_DOUBLE));
-    assert_success(ply_add_scalar_property(ply, "y", PLY_DOUBLE));
+    assert_success(ply_add_scalar_property(ply, "x", PLY_FLOAT));
+    assert_success(ply_add_scalar_property(ply, "y", PLY_FLOAT));
     if (dim == 3) {
-        assert_success(ply_add_scalar_property(ply, "z", PLY_DOUBLE));
+        assert_success(ply_add_scalar_property(ply, "z", PLY_FLOAT));
     }
 
     for (NameArray::const_iterator itr = m_vertex_attr_names.begin();
@@ -110,9 +110,9 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_vertex_size = attr.size() / num_vertices;
         if (per_vertex_size == 1) {
-            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_DOUBLE));
+            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_FLOAT));
         } else {
-            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_DOUBLE));
+            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_FLOAT));
         }
     }
 }
@@ -130,9 +130,9 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_face_size = attr.size() / num_faces;
         if (per_face_size == 1) {
-            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_DOUBLE));
+            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_FLOAT));
         } else {
-            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_DOUBLE));
+            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_FLOAT));
         }
     }
 }
@@ -150,9 +150,9 @@ void PLYWriter::add_voxel_elements_header(Mesh& mesh, p_ply& ply) {
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_voxel_size = attr.size() / num_voxels;
         if (per_voxel_size == 1) {
-            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_DOUBLE));
+            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_FLOAT));
         } else {
-            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_DOUBLE));
+            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_FLOAT));
         }
     }
 }
