@@ -109,10 +109,14 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
         const std::string& name = *itr;
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_vertex_size = attr.size() / num_vertices;
+        e_ply_type ply_type = PLY_FLOAT;
+        if (name == "red" || name == "green" || name == "blue") {
+            ply_type = PLY_UCHAR;
+        }
         if (per_vertex_size == 1) {
-            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_FLOAT));
+            assert_success(ply_add_scalar_property(ply, name.c_str(), ply_type));
         } else {
-            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_FLOAT));
+            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, ply_type));
         }
     }
 }
@@ -129,10 +133,14 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
         const std::string& name = *itr;
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_face_size = attr.size() / num_faces;
+        e_ply_type ply_type = PLY_FLOAT;
+        if (name == "red" || name == "green" || name == "blue") {
+            ply_type = PLY_UCHAR;
+        }
         if (per_face_size == 1) {
-            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_FLOAT));
+            assert_success(ply_add_scalar_property(ply, name.c_str(), ply_type));
         } else {
-            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_FLOAT));
+            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, ply_type));
         }
     }
 }
@@ -149,10 +157,14 @@ void PLYWriter::add_voxel_elements_header(Mesh& mesh, p_ply& ply) {
         const std::string& name = *itr;
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_voxel_size = attr.size() / num_voxels;
+        e_ply_type ply_type = PLY_FLOAT;
+        if (name == "red" || name == "green" || name == "blue") {
+            ply_type = PLY_UCHAR;
+        }
         if (per_voxel_size == 1) {
-            assert_success(ply_add_scalar_property(ply, name.c_str(), PLY_FLOAT));
+            assert_success(ply_add_scalar_property(ply, name.c_str(), ply_type));
         } else {
-            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, PLY_FLOAT));
+            assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR, ply_type));
         }
     }
 }
