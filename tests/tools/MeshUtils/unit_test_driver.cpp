@@ -7,6 +7,7 @@
 #include "AttributeUtilsTest.h"
 #include "PointLocatorTest.h"
 #include "SimpleSubdivisionTest.h"
+#include "DuplicatedVertexRemovalTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
