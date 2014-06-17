@@ -25,6 +25,10 @@ class FESetting {
         FEBasisPtr get_basis() { return m_basis; }
         MaterialPtr get_material() { return m_material; }
 
+        void set_material(MaterialPtr material) {
+            m_material = material;
+        }
+
     protected:
         FEMeshPtr m_mesh;
         FEBasisPtr m_basis;

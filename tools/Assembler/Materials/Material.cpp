@@ -3,6 +3,7 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+#include "ElementWiseIsotropicMaterial.h"
 #include "IsotropicMaterial.h"
 #include "OrthotropicMaterial.h"
 #include "PeriodicMaterial.h"
@@ -53,3 +54,11 @@ Material::Ptr Material::create_periodic(
         Float period, Float ratio, Float phase) {
     return Ptr(new PeriodicMaterial(mat1, mat2, axis, period, ratio, phase));
 }
+
+Material::Ptr Material::create_element_wise_isotropic(Float density, Mesh::Ptr mesh,
+        const std::string& young_field_name,
+        const std::string& poisson_field_name) {
+    return Ptr(new ElementWiseIsotropicMaterial(density, mesh,
+                young_field_name, poisson_field_name));
+}
+

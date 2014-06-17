@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <Core/EigenTypedef.h>
+#include <Mesh.h>
 
 class Material {
     public:
@@ -16,9 +17,15 @@ class Material {
                 const VectorF& shear_modulus);
         static Ptr create_periodic(Ptr mat1, Ptr mat2, VectorF axis,
                 Float period, Float ratio, Float phase);
+        static Ptr create_element_wise_isotropic(Float density, Mesh::Ptr mesh,
+                const std::string& young_field_name,
+                const std::string& poisson_field_name);
 
+    public:
         virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const=0;
         virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const=0;
         virtual Float get_density(VectorF coord) const=0;
         virtual Float get_density() const=0;
+
+        virtual void update() {}
 };
