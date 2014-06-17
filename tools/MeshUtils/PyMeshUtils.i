@@ -12,3 +12,5 @@
 %include Boundary.i
 %include PointLocator.i
 %include Subdivision.i
+%include DuplicatedVertexRemoval.i
+%include IsolatedVertexRemoval.i

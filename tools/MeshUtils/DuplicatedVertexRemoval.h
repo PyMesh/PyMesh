@@ -1,5 +1,4 @@
-#pragma
-#include <vector>
+#pragma once
 #include <Core/EigenTypedef.h>
 
 /**

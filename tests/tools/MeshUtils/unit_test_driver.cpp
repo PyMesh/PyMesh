@@ -2,6 +2,7 @@
 #include "BoundaryEdgesTest.h"
 #include "BoundaryFacesTest.h"
 #include "IndexHeapTest.h"
+#include "IsolatedVertexRemovalTest.h"
 #include "ShortEdgeRemovalTest.h"
 #include "TripletMapTest.h"
 #include "AttributeUtilsTest.h"
