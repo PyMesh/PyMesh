@@ -19,6 +19,7 @@
 #include "Elements/TriangleElementsTest.h"
 #include "Elements/EdgeElementsTest.h"
 #include "Materials/ElementWiseIsotropicMaterialTest.h"
+#include "Materials/ElementWiseSymmetricMaterialTest.h"
 #include "Materials/IsotropicMaterialTest.h"
 #include "Materials/MaterialTest.h"
 #include "Materials/OrthotropicMaterialTest.h"

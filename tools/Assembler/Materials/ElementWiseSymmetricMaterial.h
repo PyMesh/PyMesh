@@ -22,7 +22,5 @@ class ElementWiseSymmetricMaterial : public ElementWiseMaterial {
         void update_3D();
 
     private:
-        typedef Material::Ptr MaterialPtr;
-        std::vector<MaterialPtr> m_materials;
         const std::string m_matrix_field_name;
 };
