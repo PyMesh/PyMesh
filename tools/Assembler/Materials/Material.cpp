@@ -4,6 +4,7 @@
 #include <Core/Exception.h>
 
 #include "ElementWiseIsotropicMaterial.h"
+#include "ElementWiseSymmetricMaterial.h"
 #include "IsotropicMaterial.h"
 #include "OrthotropicMaterial.h"
 #include "PeriodicMaterial.h"
@@ -62,3 +63,8 @@ Material::Ptr Material::create_element_wise_isotropic(Float density, Mesh::Ptr m
                 young_field_name, poisson_field_name));
 }
 
+Material::Ptr Material::create_element_wise_symmetric(Float density, Mesh::Ptr mesh,
+        const std::string& matrix_field_name) {
+    return Ptr(new ElementWiseSymmetricMaterial(density, mesh,
+                matrix_field_name));
+}

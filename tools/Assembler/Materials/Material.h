@@ -3,6 +3,7 @@
 #include <memory>
 
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 #include <Mesh.h>
 
 class Material {
@@ -20,6 +21,8 @@ class Material {
         static Ptr create_element_wise_isotropic(Float density, Mesh::Ptr mesh,
                 const std::string& young_field_name,
                 const std::string& poisson_field_name);
+        static Ptr create_element_wise_symmetric(Float density, Mesh::Ptr mesh,
+                const std::string& matrix_field_nmae);
 
     public:
         virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const=0;
@@ -27,5 +30,5 @@ class Material {
         virtual Float get_density(VectorF coord) const=0;
         virtual Float get_density() const=0;
 
-        virtual void update() {}
+        virtual void update() {throw NotImplementedError("updata() is not implemented by subclasses."); }
 };
