@@ -8,16 +8,10 @@
 
 #include <Assembler/Materials/IsotropicMaterial.h>
 
-class IsotropicMaterialTest : public ::testing::Test {
+#include "MaterialTest.h"
+
+class IsotropicMaterialTest : public MaterialTest {
     protected:
-        typedef Material::Ptr MaterialPtr;
-
-        virtual void SetUp() {
-            m_density = 1.0;
-            m_origin = VectorF::Zero(3);
-            m_ones = VectorF::Ones(3);
-        }
-
         MaterialPtr create(size_t dim, Float young=1.0, Float poisson=0.0) {
             m_young = young;
             m_poisson = poisson;
@@ -34,22 +28,7 @@ class IsotropicMaterialTest : public ::testing::Test {
             }
         }
 
-        void assert_matrix_eq(const MatrixF& m1, const MatrixF& m2) {
-            ASSERT_EQ(m1.rows(), m2.rows());
-            ASSERT_EQ(m1.cols(), m2.cols());
-            const size_t rows = m1.rows();
-            const size_t cols = m1.cols();
-            for (size_t i=0; i<rows; i++) {
-                for (size_t j=0; j<cols; j++) {
-                    ASSERT_NEAR(m1(i,j), m2(i,j), 1e-6);
-                }
-            }
-        }
-
     protected:
-        Float m_density;
-        VectorF m_origin;
-        VectorF m_ones;
         Float m_young;
         Float m_poisson;
 };

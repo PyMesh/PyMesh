@@ -4,20 +4,60 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
+#include <Misc/Environment.h>
+#include <Mesh.h>
+#include <MeshFactory.h>
 
 #include <Assembler/Materials/Material.h>
 
 class MaterialTest : public ::testing::Test {
     protected:
         typedef Material::Ptr MaterialPtr;
+        typedef Mesh::Ptr MeshPtr;
 
         virtual void SetUp() {
+            std::string project_dir = Environment::get("PYMESH_PATH");
+            m_data_dir = project_dir + "/tests/data/";
             m_density = 1.0;
             m_origin = VectorF::Zero(3);
             m_ones = VectorF::Ones(3);
         }
 
+        MeshPtr load_mesh(const std::string& filename) {
+            std::string mesh_file = m_data_dir + filename;
+            return MeshFactory()
+                    .load_file(mesh_file)
+                    .create_shared();
+        }
+
+        void assert_material_eq(MaterialPtr mat1, MaterialPtr mat2, size_t dim, const VectorF& coord) {
+            for (size_t i=0; i<dim; i++) {
+                for (size_t j=0; j<dim; j++) {
+                    for (size_t k=0; k<dim; k++) {
+                        for (size_t l=0; l<dim; l++) {
+                            ASSERT_FLOAT_EQ(
+                                    mat1->get_material_tensor(i,j,k,l,coord),
+                                    mat2->get_material_tensor(i,j,k,l,coord));
+                        }
+                    }
+                }
+            }
+        }
+
+        void assert_matrix_eq(const MatrixF& m1, const MatrixF& m2) {
+            ASSERT_EQ(m1.rows(), m2.rows());
+            ASSERT_EQ(m1.cols(), m2.cols());
+            const size_t rows = m1.rows();
+            const size_t cols = m1.cols();
+            for (size_t i=0; i<rows; i++) {
+                for (size_t j=0; j<cols; j++) {
+                    ASSERT_NEAR(m1(i,j), m2(i,j), 1e-6);
+                }
+            }
+        }
+
     protected:
+        std::string m_data_dir;
         Float m_density;
         VectorF m_origin;
         VectorF m_ones;

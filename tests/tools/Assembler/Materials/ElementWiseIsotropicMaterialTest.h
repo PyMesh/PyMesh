@@ -13,41 +13,9 @@
 #include <Assembler/Materials/IsotropicMaterial.h>
 #include <Assembler/Materials/Material.h>
 
-class ElementWiseIsotropicMaterialTest : public ::testing::Test {
-    protected:
-        typedef Material::Ptr MaterialPtr;
-        typedef Mesh::Ptr MeshPtr;
+#include "MaterialTest.h"
 
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-            m_density = 1.0;
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshFactory()
-                    .load_file(mesh_file)
-                    .create_shared();
-        }
-
-        void assert_material_eq(MaterialPtr mat1, MaterialPtr mat2, size_t dim, const VectorF& coord) {
-            for (size_t i=0; i<dim; i++) {
-                for (size_t j=0; j<dim; j++) {
-                    for (size_t k=0; k<dim; k++) {
-                        for (size_t l=0; l<dim; l++) {
-                            ASSERT_FLOAT_EQ(
-                                    mat1->get_material_tensor(i,j,k,l,coord),
-                                    mat2->get_material_tensor(i,j,k,l,coord));
-                        }
-                    }
-                }
-            }
-        }
-
-    protected:
-        std::string m_data_dir;
-        Float m_density;
+class ElementWiseIsotropicMaterialTest : public MaterialTest {
 };
 
 TEST_F(ElementWiseIsotropicMaterialTest, 2D) {

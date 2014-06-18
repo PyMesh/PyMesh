@@ -8,16 +8,10 @@
 #include <Assembler/Materials/UniformMaterial.h>
 #include <Assembler/Materials/PeriodicMaterial.h>
 
-class PeriodicMaterialTest : public ::testing::Test {
+#include "MaterialTest.h"
+
+class PeriodicMaterialTest : public MaterialTest {
     protected:
-        typedef Material::Ptr MaterialPtr;
-
-        virtual void SetUp() {
-            m_density = 1.0;
-            m_origin = VectorF::Zero(3);
-            m_ones = VectorF::Ones(3);
-        }
-
         void init_material_tensor(size_t dim, Float val) {
             size_t tensor_size = dim*dim;
             m_material_tensor = MatrixF(tensor_size, tensor_size);
@@ -44,25 +38,7 @@ class PeriodicMaterialTest : public ::testing::Test {
                         period, ratio, phase));
         }
 
-        void ASSERT_MATERIAL_EQ(const size_t dim, MaterialPtr mat1, MaterialPtr mat2, VectorF coord) {
-            ASSERT_FLOAT_EQ(mat1->get_density(coord), mat2->get_density(coord));
-            for (size_t i=0; i<dim; i++) {
-                for (size_t j=0; j<dim; j++) {
-                    for (size_t k=0; k<dim; k++) {
-                        for (size_t l=0; l<dim; l++) {
-                            ASSERT_FLOAT_EQ(
-                                    mat1->get_material_tensor(i,j,k,l,coord),
-                                    mat2->get_material_tensor(i,j,k,l,coord));
-                        }
-                    }
-                }
-            }
-        }
-
     protected:
-        Float m_density;
-        VectorF m_origin;
-        VectorF m_ones;
         MatrixF m_material_tensor;
 };
 
@@ -79,8 +55,8 @@ TEST_F(PeriodicMaterialTest, 2DRank1) {
     Vector2F sample_1 = axis_1 * period_1 * ratio_1 * 0.5;
     Vector2F sample_2 = axis_1 * period_1 * (ratio_1 + (1.0 - ratio_1) * 0.5);
 
-    ASSERT_MATERIAL_EQ(2, mat1, laminate, sample_1);
-    ASSERT_MATERIAL_EQ(2, mat2, laminate, sample_2);
+    assert_material_eq(mat1, laminate, 2, sample_1);
+    assert_material_eq(mat2, laminate, 2, sample_2);
 }
 
 TEST_F(PeriodicMaterialTest, Rank1Phase) {
@@ -98,8 +74,8 @@ TEST_F(PeriodicMaterialTest, Rank1Phase) {
     Vector2F sample_1(0.0, 0.0);
     Vector2F sample_2 = axis_1 * period_1 * (phase_1 + 0.5 * ratio_1);
 
-    ASSERT_MATERIAL_EQ(2, mat2, laminate, sample_1);
-    ASSERT_MATERIAL_EQ(2, mat1, laminate, sample_2);
+    assert_material_eq(mat2, laminate, 2, sample_1);
+    assert_material_eq(mat1, laminate, 2, sample_2);
 }
 
 TEST_F(PeriodicMaterialTest, 2DRank2) {
@@ -125,10 +101,10 @@ TEST_F(PeriodicMaterialTest, 2DRank2) {
     Vector2F sample_4 = mid_point + axis_1 * period_1 * (1 - ratio_1) * 0.5
         + axis_2 * period_2 * (1 - ratio_2) * 0.5;
 
-    ASSERT_MATERIAL_EQ(2, mat1, laminate_2, sample_1);
-    ASSERT_MATERIAL_EQ(2, mat2, laminate_2, sample_2);
-    ASSERT_MATERIAL_EQ(2, mat2, laminate_2, sample_3);
-    ASSERT_MATERIAL_EQ(2, mat2, laminate_2, sample_4);
+    assert_material_eq(mat1, laminate_2, 2, sample_1);
+    assert_material_eq(mat2, laminate_2, 2, sample_2);
+    assert_material_eq(mat2, laminate_2, 2, sample_3);
+    assert_material_eq(mat2, laminate_2, 2, sample_4);
 }
 
 TEST_F(PeriodicMaterialTest, 3DRank3) {
@@ -160,9 +136,9 @@ TEST_F(PeriodicMaterialTest, 3DRank3) {
     Vector3F inc_2 = axis_2 * period_2 * (1.0 - ratio_2) * 0.5;
     Vector3F inc_3 = axis_3 * period_3 * (1.0 - ratio_3) * 0.5;
 
-    ASSERT_MATERIAL_EQ(3, mat1, laminate_3, m_origin);
-    ASSERT_MATERIAL_EQ(3, mat2, laminate_3, base_1 + inc_1);
-    ASSERT_MATERIAL_EQ(3, mat2, laminate_3, base_2 + inc_2);
-    ASSERT_MATERIAL_EQ(3, mat2, laminate_3, base_3 + inc_3);
+    assert_material_eq(mat1, laminate_3, 3, m_origin);
+    assert_material_eq(mat2, laminate_3, 3, base_1 + inc_1);
+    assert_material_eq(mat2, laminate_3, 3, base_2 + inc_2);
+    assert_material_eq(mat2, laminate_3, 3, base_3 + inc_3);
 }
 

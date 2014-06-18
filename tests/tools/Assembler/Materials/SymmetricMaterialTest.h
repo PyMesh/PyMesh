@@ -7,16 +7,10 @@
 
 #include <Assembler/Materials/SymmetricMaterial.h>
 
-class SymmetricMaterialTest : public ::testing::Test {
+#include "MaterialTest.h"
+
+class SymmetricMaterialTest : public MaterialTest {
     protected:
-        typedef Material::Ptr MaterialPtr;
-
-        virtual void SetUp() {
-            m_density = 1.0;
-            m_origin = VectorF::Zero(3);
-            m_ones = VectorF::Ones(3);
-        }
-
         MaterialPtr create_identity_material_tensor(size_t dim) {
             size_t flattened_size = dim * (dim+1) / 2;
             MatrixF identity = MatrixF::Identity(flattened_size, flattened_size);
@@ -39,16 +33,6 @@ class SymmetricMaterialTest : public ::testing::Test {
             return MaterialPtr(new SymmetricMaterial(m_density, tensor));
         }
 
-        void ASSERT_MATRIX_EQ(const MatrixF& mat1, const MatrixF& mat2) {
-            ASSERT_EQ(mat1.rows(), mat2.rows());
-            ASSERT_EQ(mat1.cols(), mat2.cols());
-            for (size_t i=0; i<mat1.rows(); i++) {
-                for (size_t j=0; j<mat1.cols(); j++) {
-                    ASSERT_FLOAT_EQ(mat1(i,j), mat2(i,j));
-                }
-            }
-        }
-
         void ASSERT_SYMMETRY(size_t dim, MaterialPtr mat) {
             for (size_t i=0; i<dim; i++) {
                 for (size_t j=0; j<dim; j++) {
@@ -68,11 +52,6 @@ class SymmetricMaterialTest : public ::testing::Test {
                 }
             }
         }
-
-    protected:
-        Float m_density;
-        VectorF m_origin;
-        VectorF m_ones;
 };
 
 TEST_F(SymmetricMaterialTest, 2D) {
@@ -82,7 +61,7 @@ TEST_F(SymmetricMaterialTest, 2D) {
     strain << 1, 2,
               2, 3;
     MatrixF stress = mat->strain_to_stress(strain, m_origin);
-    ASSERT_MATRIX_EQ(strain, stress);
+    assert_matrix_eq(strain, stress);
 }
 
 TEST_F(SymmetricMaterialTest, 3D) {
@@ -93,7 +72,7 @@ TEST_F(SymmetricMaterialTest, 3D) {
               4, 2, 6,
               5, 6, 3;
     MatrixF stress = mat->strain_to_stress(strain, m_origin);
-    ASSERT_MATRIX_EQ(strain, stress);
+    assert_matrix_eq(strain, stress);
 }
 
 TEST_F(SymmetricMaterialTest, Symmetry) {

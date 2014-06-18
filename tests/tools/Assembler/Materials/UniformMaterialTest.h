@@ -7,16 +7,10 @@
 
 #include <Assembler/Materials/UniformMaterial.h>
 
-class UniformMaterialTest : public ::testing::Test {
+#include "MaterialTest.h"
+
+class UniformMaterialTest : public MaterialTest {
     protected:
-        typedef Material::Ptr MaterialPtr;
-
-        virtual void SetUp() {
-            m_density = 1.0;
-            m_origin = VectorF::Zero(3);
-            m_ones = VectorF::Ones(3);
-        }
-
         void init_material_tensor(size_t dim) {
             size_t tensor_size = dim*dim;
             m_material_tensor = MatrixF(tensor_size, tensor_size);
@@ -38,9 +32,6 @@ class UniformMaterialTest : public ::testing::Test {
         }
 
     protected:
-        Float m_density;
-        VectorF m_origin;
-        VectorF m_ones;
         MatrixF m_material_tensor;
 };
 
