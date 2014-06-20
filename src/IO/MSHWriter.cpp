@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <Core/Exception.h>
 #include <Mesh.h>
@@ -144,7 +145,10 @@ void MSHWriter::write_attribute(Zhou::MshSaver& saver, const std::string& name,
     } else if (attr_size == num_elements * (dim * (dim + 1)) / 2) {
         saver.save_elem_tensor_field(name, value);
     } else {
-        throw NotImplementedError("Unknown attribute type");
+        std::stringstream err_msg;
+        err_msg << "Attribute " << name << " has length " << attr_size << std::endl;
+        err_msg << "Unable to interpret the attribute type.";
+        throw NotImplementedError(err_msg.str());
     }
 }
 
