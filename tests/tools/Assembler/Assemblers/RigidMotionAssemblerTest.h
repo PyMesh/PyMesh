@@ -29,10 +29,11 @@ TEST_F(RigidMotionAssemblerTest, TetTranslation) {
     ZSparseMatrix Ru = m_assembler->assemble(setting);
     VectorF translation = VectorF::Ones(Ru.cols());
     VectorF result = Ru * translation;
+    const size_t num_vertices = setting->get_mesh()->getNbrNodes();
 
-    ASSERT_FLOAT_EQ(1.0, result[0]);
-    ASSERT_FLOAT_EQ(1.0, result[1]);
-    ASSERT_FLOAT_EQ(1.0, result[2]);
+    ASSERT_FLOAT_EQ(1.0, result[0] / num_vertices);
+    ASSERT_FLOAT_EQ(1.0, result[1] / num_vertices);
+    ASSERT_FLOAT_EQ(1.0, result[2] / num_vertices);
     ASSERT_NEAR(0.0, result[3], 1e-5);
     ASSERT_NEAR(0.0, result[4], 1e-5);
     ASSERT_NEAR(0.0, result[5], 1e-5);
@@ -43,9 +44,10 @@ TEST_F(RigidMotionAssemblerTest, SquareTranslation) {
     ZSparseMatrix Ru = m_assembler->assemble(setting);
     VectorF translation = VectorF::Ones(Ru.cols());
     VectorF result = Ru * translation;
+    const size_t num_vertices = setting->get_mesh()->getNbrNodes();
 
-    ASSERT_FLOAT_EQ(1.0, result[0]);
-    ASSERT_FLOAT_EQ(1.0, result[1]);
+    ASSERT_FLOAT_EQ(1.0, result[0] / num_vertices);
+    ASSERT_FLOAT_EQ(1.0, result[1] / num_vertices);
     ASSERT_NEAR(0.0, result[2], 1e-5);
 }
 

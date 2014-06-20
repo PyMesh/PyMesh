@@ -252,3 +252,12 @@ class FEAssemblerTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, np.amax(rigid_motion));
         self.assertAlmostEqual(0.0, np.amin(rigid_motion));
 
+    def test_rigid_motion_in_stiffness_null_space(self):
+        mesh = self.load_mesh("square_2D.obj");
+        assembler = self.create_assembler(mesh);
+        Ru = self.format(assembler.assemble("rigid_motion"));
+        K = self.format(assembler.assemble("stiffness"));
+
+        result = K * Ru.T;
+        self.assertAlmostEqual(0.0, result.min());
+        self.assertAlmostEqual(0.0, result.max());
