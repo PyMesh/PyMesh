@@ -143,12 +143,7 @@ VectorI HashGrid::get_items_near_point(const VectorF& coordinates) {
     }
 
     VectorI result(nearby_set.size());
-    size_t count = 0;
-    for (HashGrid::HashItem::const_iterator itr = nearby_set.begin();
-            itr != nearby_set.end(); itr++) {
-        result[count] = *itr;
-        count++;
-    }
+    std::copy(nearby_set.begin(), nearby_set.end(), result.data());
     return result;
 }
 
