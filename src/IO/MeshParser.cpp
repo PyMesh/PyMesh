@@ -10,12 +10,10 @@
 #include "PLYParser.h"
 #include "IOUtils.h"
 
-using namespace Zhou;
-
 // Static factory method
 MeshParser* MeshParser::create_parser(const std::string& filename) {
     MeshParser* parser = NULL;
-    std::string ext = get_extention(filename);
+    std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
         parser= new OBJParser();
     } else if (ext == ".msh") {

@@ -7,8 +7,6 @@
 
 #include <Core/Exception.h>
 
-using namespace Zhou;
-
 HashGrid::Ptr HashGrid::create(Float cell_size) {
     return Ptr(new HashGrid(cell_size));
 }

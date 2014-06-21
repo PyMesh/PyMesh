@@ -50,7 +50,7 @@ BoundingBoxes::BoundingBoxes(const MatrixF& vertices, const MatrixI& faces) : m_
         m_mesh.push_back(tri);
     }
 
-    Zhou::TriangleMetric::setUseLinCanny(false);
+    TriangleMetric::setUseLinCanny(false);
 }
 
 void BoundingBoxes::check_touching_faces(Float threshold, bool approximate) {
@@ -94,7 +94,7 @@ void BoundingBoxes::review_touching_triangle_pairs(
     size_t id1 = b1 - m_mesh.begin();
     size_t id2 = b2 - m_mesh.begin();
 
-    Zhou::TriangleMetric metric;
+    TriangleMetric metric;
     metric.update(CGAL2Eigen(t1), CGAL2Eigen(t2));
     Float dist = metric.getDistance();
     if (dist < m_threshold) {

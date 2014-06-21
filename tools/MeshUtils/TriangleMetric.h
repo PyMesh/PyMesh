@@ -2,8 +2,6 @@
 
 #include <Core/EigenTypedef.h>
 
-namespace Zhou {
-
 typedef Vector3F Point;
 typedef Vector3F Vector;
 typedef Float    Real;
@@ -100,4 +98,3 @@ class TriangleMetric {
 		static const Real epsilon;
 		static bool use_lin_canny;
 };
-}

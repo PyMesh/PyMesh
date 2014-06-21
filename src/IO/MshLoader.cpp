@@ -6,8 +6,6 @@
 
 #include <Core/Exception.h>
 
-using namespace Zhou;
-
 MshLoader::MshLoader(const std::string& filename) {
     std::ifstream fin(filename.c_str(), std::ios::in | std::ios::binary);
 

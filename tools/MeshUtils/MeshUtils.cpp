@@ -6,9 +6,9 @@
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
 
-using namespace Zhou;
+using namespace MeshUtils;
 
-MatrixI Zhou::extract_exterior_faces(const MatrixI& voxels) {
+MatrixI MeshUtils::extract_exterior_faces(const MatrixI& voxels) {
     if (voxels.cols() != 4) {
         throw NotImplementedError("Only tet mesh is supported");
     }

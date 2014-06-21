@@ -10,8 +10,7 @@
 #include <Core/Exception.h>
 
 #include "IOUtils.h"
-
-using namespace Zhou;
+using namespace IOUtils;
 
 bool STLParser::parse(const std::string& filename) {
     const size_t LINE_SIZE = 256;
@@ -302,9 +301,9 @@ void STLParser::merge_identical_vertices() {
     Float diagonal_length = compute_bbox_diagonal_length();
     size_t num_vertices = m_vertices.size();
 
-    typedef Zhou::HashGrid::HashItem VertexSet;
-    Zhou::HashGrid::Ptr hash_grid =
-        Zhou::HashGrid::create(1e-3 * diagonal_length);
+    typedef HashGrid::HashItem VertexSet;
+    HashGrid::Ptr hash_grid =
+        HashGrid::create(1e-3 * diagonal_length);
 
     size_t count=0;
     std::vector<int> index_map(num_vertices, -1);

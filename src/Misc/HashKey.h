@@ -4,7 +4,6 @@
 
 #include <Core/EigenTypedef.h>
 
-namespace Zhou {
 template <typename T, int dim>
 class VectorHashKey {
     public:
@@ -68,4 +67,3 @@ class Vector3FHashKey : public VectorHashKey<Float, 3> {
                 size_t(m_data[2]*p3);
         }
 };
-}

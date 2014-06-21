@@ -5,6 +5,7 @@
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 #include <MeshUtils/PointLocator.h>
+#include <Misc/HashGrid.h>
 
 #include "Material.h"
 
@@ -13,10 +14,7 @@ class ElementWiseMaterial : public Material {
         typedef Mesh::Ptr MeshPtr;
         typedef Material::Ptr MaterialPtr;
 
-        ElementWiseMaterial(Float density, MeshPtr material_mesh) :
-            m_density(density),
-            m_material_mesh(material_mesh),
-            m_locator(material_mesh) {}
+        ElementWiseMaterial(Float density, MeshPtr material_mesh);
         virtual ~ElementWiseMaterial() {}
 
     public:
@@ -26,11 +24,15 @@ class ElementWiseMaterial : public Material {
         virtual Float get_density() const { return m_density; }
 
     protected:
+        Float compute_cell_size();
+        void initialize_2D_grid();
+        void initialize_3D_grid();
         VectorI look_up_voxels(const VectorF& coords) const;
 
     protected:
         MeshPtr m_material_mesh;
         Float m_density;
         std::vector<MaterialPtr> m_materials;
-        mutable PointLocator m_locator;
+        //mutable PointLocator m_locator;
+        HashGrid::Ptr m_grid;
 };

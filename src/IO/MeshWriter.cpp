@@ -11,11 +11,9 @@
 #include "OBJWriter.h"
 #include "PLYWriter.h"
 
-using namespace Zhou;
-
 MeshWriter* MeshWriter::create_writer(const std::string& filename) {
     MeshWriter* writer = NULL;
-    std::string ext = get_extention(filename);
+    std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
         writer = new OBJWriter();
     } else if (ext == ".msh") {

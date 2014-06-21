@@ -7,7 +7,7 @@ DuplicatedVertexRemoval::DuplicatedVertexRemoval(MatrixFr& vertices, MatrixIr& f
     m_vertices(vertices), m_faces(faces) {}
 
 size_t DuplicatedVertexRemoval::run(Float tol) {
-    Zhou::HashGrid::Ptr grid = Zhou::HashGrid::create(tol);
+    HashGrid::Ptr grid = HashGrid::create(tol);
     const size_t num_vertices = m_vertices.rows();
     const size_t num_faces = m_faces.rows();
     const size_t dim = m_vertices.cols();

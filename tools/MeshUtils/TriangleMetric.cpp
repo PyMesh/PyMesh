@@ -3,8 +3,6 @@
 #include <iostream>
 #include <limits>
 
-using namespace Zhou;
-
 namespace TriangleMetricHelper {
     Real operator*(const Vector& v1, const Vector& v2) {
         return v1.dot(v2);

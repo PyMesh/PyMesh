@@ -18,8 +18,6 @@
 //   2: Google dense hash.
 #define HASH_TYPE 2
 
-namespace Zhou {
-
 class HashGrid {
     public:
         typedef std::shared_ptr<HashGrid> Ptr;
@@ -71,5 +69,3 @@ class HashGrid {
         HashMap m_hashMap;
         Float m_cell_size;
 };
-
-}

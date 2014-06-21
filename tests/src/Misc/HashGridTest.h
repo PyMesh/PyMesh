@@ -4,7 +4,7 @@
 class HashGridTest : public ::testing::Test {
     protected:
         virtual void SetUp() {
-            m_grid = Zhou::HashGrid::create(0.5);
+            m_grid = HashGrid::create(0.5);
         }
 
         void ASSERT_IN_HASH(int obj_id, const VectorF& coord) {
@@ -16,7 +16,7 @@ class HashGridTest : public ::testing::Test {
         }
 
     protected:
-        Zhou::HashGrid::Ptr m_grid;
+        HashGrid::Ptr m_grid;
 };
 
 TEST_F(HashGridTest, Empty) {
@@ -25,7 +25,7 @@ TEST_F(HashGridTest, Empty) {
 
 TEST_F(HashGridTest, Empty2) {
     Vector3F origin = Vector3F::Zero();
-    const Zhou::HashGrid::HashItem* items = m_grid->get_items(origin);
+    const HashGrid::HashItem* items = m_grid->get_items(origin);
     ASSERT_EQ(NULL, items);
 }
 
@@ -35,7 +35,7 @@ TEST_F(HashGridTest, Insert) {
     m_grid->insert(0, origin);
     m_grid->insert(1, origin);
     m_grid->insert(0, origin);
-    const Zhou::HashGrid::HashItem* items = m_grid->get_items(origin);
+    const HashGrid::HashItem* items = m_grid->get_items(origin);
     ASSERT_EQ(2, items->size());
     ASSERT_IN_HASH(0, origin);
     ASSERT_IN_HASH(1, origin);
@@ -90,7 +90,7 @@ TEST_F(HashGridTest, Remove) {
     m_grid->insert(1, origin);
     m_grid->insert(2, origin);
     m_grid->remove(2, origin);
-    const Zhou::HashGrid::HashItem* items = m_grid->get_items(origin);
+    const HashGrid::HashItem* items = m_grid->get_items(origin);
     ASSERT_EQ(2, items->size());
     ASSERT_IN_HASH(0, origin);
     ASSERT_IN_HASH(1, origin);

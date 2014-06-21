@@ -8,9 +8,7 @@
 
 #include <Core/EigenTypedef.h>
 
-namespace Zhou {
 class MshLoader;
-}
 
 class MSHParser : public MeshParser {
     public:
@@ -41,7 +39,7 @@ class MSHParser : public MeshParser {
         void extract_surface_from_hexs();
         const VectorF& get_attribute(const std::string& name) const;
 
-        typedef std::shared_ptr<Zhou::MshLoader> LoaderPtr;
+        typedef std::shared_ptr<MshLoader> LoaderPtr;
         LoaderPtr m_loader;
 
         VectorI m_faces;

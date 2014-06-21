@@ -14,6 +14,9 @@ class FEAssembler {
 
     public:
         ZSparseMatrix assemble(const std::string& matrix_name);
+        void set_material(Material::Ptr material) {
+            m_setting->set_material(material);
+        }
 
     private:
         FEAssembler(Mesh::Ptr mesh, const std::string& material_name);

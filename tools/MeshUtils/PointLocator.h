@@ -42,7 +42,7 @@ class PointLocator {
         MatrixF m_barycentric_solvers;
         MatrixF m_last_vertices;
 
-        Zhou::HashGrid::Ptr m_grid;
+        HashGrid::Ptr m_grid;
 
         VectorI m_voxel_idx;
         MatrixFr m_barycentric_coords;
