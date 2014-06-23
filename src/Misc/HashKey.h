@@ -12,6 +12,7 @@ class VectorHashKey {
     public:
         VectorHashKey() : m_data(VectorType::Zero(dim)) {}
         VectorHashKey(const VectorType& coord) : m_data(coord) {}
+        VectorHashKey(ValueType v) : m_data(VectorType::Ones(dim) * v) {}
 
         bool operator==(const VectorHashKey& other) const {
             return m_data == other.m_data;

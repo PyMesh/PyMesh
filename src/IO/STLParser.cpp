@@ -301,7 +301,6 @@ void STLParser::merge_identical_vertices() {
     Float diagonal_length = compute_bbox_diagonal_length();
     size_t num_vertices = m_vertices.size();
 
-    typedef HashGrid::HashItem VertexSet;
     HashGrid::Ptr hash_grid =
         HashGrid::create(1e-3 * diagonal_length);
 
@@ -320,14 +319,14 @@ void STLParser::merge_identical_vertices() {
     for (VertexList::iterator itr = m_vertices.begin();
             itr != m_vertices.end(); itr++) {
         if (index_map[count] == -1) {
-            const VertexSet* nearby_vts = hash_grid->get_items(*itr);
-            assert(nearby_vts != NULL);
-            for (VertexSet::const_iterator jtr = nearby_vts->begin();
-                    jtr != nearby_vts->end(); jtr++) {
-                Float dist = (*itr - *vertex_array[*jtr]).norm();
+            VectorI nearby_vts = hash_grid->get_items_near_point(*itr);
+            const size_t num_nearby_vts = nearby_vts.size();
+            assert(num_nearby_vts > 0);
+            for (size_t i=0; i<num_nearby_vts; i++) {
+                Float dist = (*itr - *vertex_array[nearby_vts[i]]).norm();
                 if (dist == 0) {
-                    assert(*jtr >= count);
-                    index_map[*jtr] = v_count;
+                    assert(nearby_vts[i] >= count);
+                    index_map[nearby_vts[i]] = v_count;
                 }
             }
             v_count++;

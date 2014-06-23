@@ -25,8 +25,8 @@ TEST_F(HashGridTest, Empty) {
 
 TEST_F(HashGridTest, Empty2) {
     Vector3F origin = Vector3F::Zero();
-    const HashGrid::HashItem* items = m_grid->get_items(origin);
-    ASSERT_EQ(NULL, items);
+    const VectorI items = m_grid->get_items_near_point(origin);
+    ASSERT_EQ(0, items.size());
 }
 
 TEST_F(HashGridTest, Insert) {
@@ -35,8 +35,8 @@ TEST_F(HashGridTest, Insert) {
     m_grid->insert(0, origin);
     m_grid->insert(1, origin);
     m_grid->insert(0, origin);
-    const HashGrid::HashItem* items = m_grid->get_items(origin);
-    ASSERT_EQ(2, items->size());
+    const VectorI items = m_grid->get_items_near_point(origin);
+    ASSERT_EQ(2, items.size());
     ASSERT_IN_HASH(0, origin);
     ASSERT_IN_HASH(1, origin);
     ASSERT_NOT_IN_HASH(0, ones);
@@ -90,8 +90,8 @@ TEST_F(HashGridTest, Remove) {
     m_grid->insert(1, origin);
     m_grid->insert(2, origin);
     m_grid->remove(2, origin);
-    const HashGrid::HashItem* items = m_grid->get_items(origin);
-    ASSERT_EQ(2, items->size());
+    const VectorI items = m_grid->get_items_near_point(origin);
+    ASSERT_EQ(2, items.size());
     ASSERT_IN_HASH(0, origin);
     ASSERT_IN_HASH(1, origin);
     ASSERT_NOT_IN_HASH(0, ones);
