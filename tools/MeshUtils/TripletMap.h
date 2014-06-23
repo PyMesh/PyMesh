@@ -3,7 +3,8 @@
 #include <limits>
 #include <vector>
 
-#include <google/dense_hash_map>
+//#include <google/dense_hash_map>
+#include <unordered_map>
 
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
@@ -18,14 +19,14 @@ class TripletMap {
         };
 
         typedef std::vector<T> ValueType;
-        typedef google::dense_hash_map<Triplet, ValueType, TripletHashFunc> TripletHashMap;
+        typedef std::unordered_map<Triplet, ValueType, TripletHashFunc> TripletHashMap;
         typedef typename TripletHashMap::iterator iterator;
         typedef typename TripletHashMap::const_iterator const_iterator;
 
     public:
         TripletMap() {
             int infinity = std::numeric_limits<int>::max();
-            m_map.set_empty_key(Triplet(infinity, infinity, infinity));
+            //m_map.set_empty_key(Triplet(infinity, infinity, infinity));
         }
 
         void insert(const Triplet& t, T val) {
