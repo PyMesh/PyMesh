@@ -7,10 +7,13 @@ typedef struct timeval timestamp_type;
 
 static void get_timestamp(timestamp_type *t)
 {
-  //gettimeofday(t, NULL);
+#ifdef __APPLE__
   rusage usage;
   getrusage(RUSAGE_SELF, &usage);
   timeradd(&usage.ru_utime, &usage.ru_stime, t);
+#else
+  gettimeofday(t, NULL);
+#endif
 }
 
 static double timestamp_diff_in_seconds(timestamp_type start, timestamp_type end)
