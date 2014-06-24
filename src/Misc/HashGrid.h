@@ -6,8 +6,13 @@
 
 class HashGrid {
     public:
+        enum ImplementationType {
+            DEFAULT=0,
+            SPARSE_HASH=1,
+            DENSE_HASH=2
+        };
         typedef std::shared_ptr<HashGrid> Ptr;
-        static Ptr create(Float cell_size=1.0);
+        static Ptr create(Float cell_size=1.0, ImplementationType impl_type=DENSE_HASH);
 
     protected:
         HashGrid(Float cell_size) : m_cell_size(cell_size) {}

@@ -1,12 +1,16 @@
 #ifdef __APPLE__
 
 #include <sys/time.h>
+#include <iostream>
 
 typedef struct timeval timestamp_type;
 
 static void get_timestamp(timestamp_type *t)
 {
-  gettimeofday(t, NULL);
+  //gettimeofday(t, NULL);
+  rusage usage;
+  getrusage(RUSAGE_SELF, &usage);
+  timeradd(&usage.ru_utime, &usage.ru_stime, t);
 }
 
 static double timestamp_diff_in_seconds(timestamp_type start, timestamp_type end)
