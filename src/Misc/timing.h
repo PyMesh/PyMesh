@@ -1,4 +1,4 @@
-#ifdef __APPLE__
+#if defined(__APPLE__) || defined(__linux) || defined(__unix)
 
 #include <sys/time.h>
 #include <iostream>
