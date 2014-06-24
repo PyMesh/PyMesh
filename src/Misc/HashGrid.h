@@ -12,7 +12,7 @@ class HashGrid {
             DENSE_HASH=2
         };
         typedef std::shared_ptr<HashGrid> Ptr;
-        static Ptr create(Float cell_size=1.0, ImplementationType impl_type=DENSE_HASH);
+        static Ptr create(Float cell_size=1.0, size_t dim=3, ImplementationType impl_type=DENSE_HASH);
 
     protected:
         HashGrid(Float cell_size) : m_cell_size(cell_size) {}

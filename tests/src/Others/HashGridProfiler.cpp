@@ -22,7 +22,7 @@ void test_std_hash(const MatrixFr& points, Float cell_size) {
     const size_t num_pts = points.rows();
 
     Timer timer("Standard hash");
-    HashGrid::Ptr grid = HashGrid::create(cell_size, HashGrid::DEFAULT);
+    HashGrid::Ptr grid = HashGrid::create(cell_size, 3, HashGrid::DEFAULT);
     timer.tik("creation");
     for (size_t i=0; i<num_pts; i++) {
         grid->insert(i, points.row(i));
@@ -36,7 +36,7 @@ void test_dense_hash(const MatrixFr& points, Float cell_size) {
     const size_t num_pts = points.rows();
 
     Timer timer("Google dense hash");
-    HashGrid::Ptr grid = HashGrid::create(cell_size, HashGrid::DENSE_HASH);
+    HashGrid::Ptr grid = HashGrid::create(cell_size, 3, HashGrid::DENSE_HASH);
     timer.tik("creation");
     for (size_t i=0; i<num_pts; i++) {
         grid->insert(i, points.row(i));
@@ -50,7 +50,7 @@ void test_sparse_hash(const MatrixFr& points, Float cell_size) {
     const size_t num_pts = points.rows();
 
     Timer timer("Google sparse hash");
-    HashGrid::Ptr grid = HashGrid::create(cell_size, HashGrid::SPARSE_HASH);
+    HashGrid::Ptr grid = HashGrid::create(cell_size, 3, HashGrid::SPARSE_HASH);
     timer.tik("creation");
     for (size_t i=0; i<num_pts; i++) {
         grid->insert(i, points.row(i));

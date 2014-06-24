@@ -22,8 +22,9 @@
  */
 template<int DIM, int HashType>
 struct HashMapTrait {
-    //typedef VectorHashKey<int, DIM> HashKey;
-    typedef Vector3IHashKey HashKey;
+    static const int dim = DIM;
+    typedef VectorHashKey<int, DIM> HashKey;
+    //typedef Vector3IHashKey HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {
@@ -44,8 +45,9 @@ struct HashMapTrait {
  */
 template<int DIM>
 struct HashMapTrait<DIM, 1> {
-    //typedef VectorHashKey<int, DIM> HashKey;
-    typedef Vector3IHashKey HashKey;
+    static const int dim = DIM;
+    typedef VectorHashKey<int, DIM> HashKey;
+    //typedef Vector3IHashKey HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {
@@ -78,8 +80,9 @@ struct HashMapTrait<DIM, 1> {
  */
 template<int DIM>
 struct HashMapTrait<DIM, 2> {
-    //typedef VectorHashKey<int, DIM> HashKey;
-    typedef Vector3IHashKey HashKey;
+    static const int dim = DIM;
+    typedef VectorHashKey<int, DIM> HashKey;
+    //typedef Vector3IHashKey HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {

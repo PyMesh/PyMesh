@@ -115,7 +115,7 @@ void PointLocator::init_hash_grid() {
     const size_t num_elements = m_elements.size() / m_vertex_per_element;
 
     Float cell_size = compute_cell_size();
-    m_grid = HashGrid::create(cell_size);
+    m_grid = HashGrid::create(cell_size, dim);
 
     MatrixF elem_vtx(m_vertex_per_element, dim);
     for (size_t i=0; i<num_elements; i++) {

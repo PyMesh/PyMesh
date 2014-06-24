@@ -1,8 +1,11 @@
 #pragma once
+#include <algorithm>
 #include <cassert>
 #include <iostream>
+#include <initializer_list>
 
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 template <typename T, int dim>
 class VectorHashKey {
@@ -13,6 +16,11 @@ class VectorHashKey {
         VectorHashKey() : m_data(VectorType::Zero(dim)) {}
         VectorHashKey(const VectorType& coord) : m_data(coord) {}
         VectorHashKey(ValueType v) : m_data(VectorType::Ones(dim) * v) {}
+        VectorHashKey(std::initializer_list<T> args) {
+            assert(args.size() == dim);
+            std::copy(args.begin(), args.end(), m_data.data());
+        }
+        virtual ~VectorHashKey() {}
 
         bool operator==(const VectorHashKey& other) const {
             return m_data == other.m_data;
@@ -23,48 +31,30 @@ class VectorHashKey {
             return m_data[i];
         }
 
-        virtual size_t hash() const =0;
+        virtual size_t hash() const {
+            return hash(m_data);
+        }
+
+        size_t hash(const Vector2I&) const {
+            return m_data[0]*p1 ^ m_data[1]*p2;
+        }
+
+        size_t hash(const Vector3I&) const {
+            return m_data[0]*p1 ^ m_data[1]*p2 ^ m_data[2]*p3;
+        }
+
+        const VectorType get_raw_data() const {
+            return m_data;
+        }
 
     protected:
         VectorType m_data;
+
+        // Magic primes (p1, p2, p3) from the following paper.
+        // "Optimized Spacial Hashing for Collision Detection of
+        // Deformable Objects" by Teschner et al. (VMV 2003)
+        static const int p1 = 73856093;
+        static const int p2 = 19349663;
+        static const int p3 = 83492791;
 };
 
-class Vector3IHashKey : public VectorHashKey<int, 3> {
-    public:
-        Vector3IHashKey() : VectorHashKey<int, 3>(VectorType::Zero(3)) {}
-
-        Vector3IHashKey(int x, int y=0, int z=0) :
-            VectorHashKey<int, 3>(Vector3I(x,y,z)) { }
-
-        virtual size_t hash() const {
-            // Magic primes (p1, p2, p3) from the following paper.
-            // "Optimized Spacial Hashing for Collision Detection of
-            // Deformable Objects" by Teschner et al. (VMV 2003)
-            const int p1 = 73856093;
-            const int p2 = 19349663;
-            const int p3 = 83492791;
-            return m_data[0]*p1 ^ m_data[1]*p2 ^ m_data[2]*p3;
-        }
-};
-
-class Vector3FHashKey : public VectorHashKey<Float, 3> {
-    public:
-        Vector3FHashKey() : VectorHashKey<Float, 3>(VectorType::Zero(3)) {}
-
-        Vector3FHashKey(Float x, Float y=0, Float z=0) :
-            VectorHashKey<Float, 3>(Vector3F(x,y,z)) { }
-
-        virtual size_t hash() const {
-            // Magic primes (p1, p2, p3) from the following paper.
-            // "Optimized Spacial Hashing for Collision Detection of
-            // Deformable Objects" by Teschner et al. (VMV 2003)
-            const int p1 = 73856093;
-            const int p2 = 19349663;
-            const int p3 = 83492791;
-
-            return 
-                size_t(m_data[0]*p1) ^
-                size_t(m_data[1]*p2) ^ 
-                size_t(m_data[2]*p3);
-        }
-};

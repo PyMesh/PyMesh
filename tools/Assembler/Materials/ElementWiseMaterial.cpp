@@ -59,7 +59,7 @@ void ElementWiseMaterial::initialize_2D_grid() {
     const size_t num_elem = m_material_mesh->get_num_faces();
     const Float cell_size = compute_cell_size();
 
-    m_grid = HashGrid::create(cell_size);
+    m_grid = HashGrid::create(cell_size, 2);
 
     if (!m_material_mesh->has_attribute("face_centroid")) {
         m_material_mesh->add_attribute("face_centroid");
@@ -76,7 +76,7 @@ void ElementWiseMaterial::initialize_3D_grid() {
     const size_t num_elem = m_material_mesh->get_num_voxels();
     const Float cell_size = compute_cell_size();
 
-    m_grid = HashGrid::create(cell_size);
+    m_grid = HashGrid::create(cell_size, 3);
 
     if (!m_material_mesh->has_attribute("voxel_centroid")) {
         m_material_mesh->add_attribute("voxel_centroid");

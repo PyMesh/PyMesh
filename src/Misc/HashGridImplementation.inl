@@ -1,9 +1,36 @@
 #include <cassert>
+#include <vector>
 #include <Core/Exception.h>
 
+namespace HashGridImplementationHelper {
+    std::vector<VectorI> get_surrounding_cells(const Vector2I& p) {
+        std::vector<VectorI> cells;
+        for (int i=-1; i<2; i++) {
+            for (int j=-1; j<2; j++) {
+                cells.push_back(Vector2I( p[0] + i, p[1] + j));
+            }
+        }
+        return cells;
+    }
+
+    std::vector<VectorI> get_surrounding_cells(const Vector3I& p) {
+        std::vector<VectorI> cells;
+        for (int i=-1; i<2; i++) {
+            for (int j=-1; j<2; j++) {
+                for (int k=-1; k<2; k++) {
+                    cells.push_back(Vector3I( p[0] + i, p[1] + j, p[2] + k));
+                }
+            }
+        }
+        return cells;
+    }
+}
+using namespace HashGridImplementationHelper;
+
 template<typename Trait>
-HashGridImplementation<Trait>::HashGridImplementation(Float cell_size) : HashGrid(cell_size) {
-    m_hash_map = Trait::create_map();
+HashGridImplementation<Trait>::HashGridImplementation(Float cell_size)
+    : HashGrid(cell_size) {
+        m_hash_map = Trait::create_map();
 }
 
 template<typename Trait>
@@ -15,28 +42,32 @@ bool HashGridImplementation<Trait>::insert(int obj_id, const VectorF& coordinate
 template<typename Trait>
 bool HashGridImplementation<Trait>::insert_bbox(int obj_id, const MatrixF& shape) {
     assert(shape.cols() == 3 || shape.cols() == 2);
-    Float X_min = shape.col(0).minCoeff();
-    Float Y_min = shape.col(1).minCoeff();
-    Float Z_min = 0.0;
-    Float X_max = shape.col(0).maxCoeff();
-    Float Y_max = shape.col(1).maxCoeff();
-    Float Z_max = 0.0;
-    if (shape.cols() == 3) {
-        Z_min = shape.col(2).minCoeff();
-        Z_max = shape.col(2).maxCoeff();
-    }
-    HashKey min_key = convert_to_key(X_min, Y_min, Z_min);
-    HashKey max_key = convert_to_key(X_max, Y_max, Z_max);
+    VectorF bbox_min = shape.colwise().minCoeff();
+    VectorF bbox_max = shape.colwise().maxCoeff();
+    HashKey min_key = convert_to_key(bbox_min);
+    HashKey max_key = convert_to_key(bbox_max);
 
     bool success = true;
-    for (typename HashKey::ValueType x=min_key[0]; x<=max_key[0]; x+=1) {
-        for (typename HashKey::ValueType y=min_key[1]; y<=max_key[1]; y+=1) {
-            for (typename HashKey::ValueType z=min_key[2]; z<=max_key[2]; z+=1) {
-                HashKey cur_key(x, y, z);
+    if (Trait::dim == 3) {
+        for (typename HashKey::ValueType x=min_key[0]; x<=max_key[0]; x+=1) {
+            for (typename HashKey::ValueType y=min_key[1]; y<=max_key[1]; y+=1) {
+                for (typename HashKey::ValueType z=min_key[2]; z<=max_key[2]; z+=1) {
+                    HashKey cur_key({x, y, z});
+                    bool r = insert_key(obj_id, cur_key);
+                    success &= r;
+                }
+            }
+        }
+    } else if (Trait::dim == 2) {
+        for (typename HashKey::ValueType x=min_key[0]; x<=max_key[0]; x+=1) {
+            for (typename HashKey::ValueType y=min_key[1]; y<=max_key[1]; y+=1) {
+                HashKey cur_key({x, y});
                 bool r = insert_key(obj_id, cur_key);
                 success &= r;
             }
         }
+    } else {
+        throw NotImplementedError("Only 2D and 3D are supported in HashGrid.");
     }
     return success;
 }
@@ -99,15 +130,12 @@ VectorI HashGridImplementation<Trait>::get_items_near_point(const VectorF& coord
     HashItem nearby_set = Trait::get_default_item();
     HashKey center_key = convert_to_key(coordinates);
 
-    for (int i=-1; i<2; i++) {
-        for (int j=-1; j<2; j++) {
-            for (int k=-1; k<2; k++) {
-                HashKey key(center_key[0] + i, center_key[1] + j, center_key[2] + k);
-                typename HashMap::const_iterator itr = m_hash_map->find(key);
-                if (itr != m_hash_map->end()) {
-                    nearby_set.insert(itr->second.begin(), itr->second.end());
-                }
-            }
+    std::vector<VectorI> surrounding_cells = get_surrounding_cells(center_key.get_raw_data());
+    for (auto cell_idx : surrounding_cells) {
+        HashKey key(cell_idx);
+        typename HashMap::const_iterator itr = m_hash_map->find(key);
+        if (itr != m_hash_map->end()) {
+            nearby_set.insert(itr->second.begin(), itr->second.end());
         }
     }
 
@@ -118,25 +146,7 @@ VectorI HashGridImplementation<Trait>::get_items_near_point(const VectorF& coord
 
 template<typename Trait>
 typename HashGridImplementation<Trait>::HashKey HashGridImplementation<Trait>::convert_to_key(const VectorF& value) const {
-    switch (value.size()) {
-        case 2:
-            return convert_to_key(value[0], value[1], 0.0);
-            break;
-        case 3:
-            return convert_to_key(value[0], value[1], value[2]);
-            break;
-        default:
-            throw NotImplementedError("Only 2D and 3D hash grid are supported.");
-    }
-}
-
-template<typename Trait>
-typename HashGridImplementation<Trait>::HashKey HashGridImplementation<Trait>::convert_to_key(Float x, Float y, Float z) const {
-    HashKey key(
-            int(x / m_cell_size),
-            int(y / m_cell_size),
-            int(z / m_cell_size));
-    return key;
+    return typename HashKey::VectorType((value / m_cell_size).template cast<int>());
 }
 
 template<typename Trait>

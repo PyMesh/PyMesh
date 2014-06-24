@@ -29,7 +29,6 @@ class HashGridImplementation : public HashGrid {
 
     protected:
         HashKey convert_to_key(const VectorF& value) const;
-        HashKey convert_to_key(Float x, Float y, Float z) const;
         bool insert_key(int obj_id, HashKey& key);
 
     protected:
