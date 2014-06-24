@@ -12,6 +12,7 @@
 #include "Misc/TripletTest.h"
 #include "Misc/MultipletTest.h"
 #include "Misc/HashGridTest.h"
+#include "Misc/HashKeyTest.h"
 #include "Attributes/FaceCentroidAttributeTest.h"
 #include "Attributes/FaceCircumCenterAttributeTest.h"
 #include "Attributes/FaceIndexAttributeTest.h"
