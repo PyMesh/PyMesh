@@ -1,0 +1,70 @@
+<h3>Download Source</h3>
+
+<p>To retrieve the code:</p>
+
+<pre><code>hg clone https://subversive.cims.nyu.edu/geonum/zhou/PyMesh/
+</code></pre>
+
+<p>Be sure to save the root directory of PyMesh in the environment variable
+PYMESH_PATH:</p>
+
+<pre><code>export PYMESH_PATH=/path/to/PyMesh/
+</code></pre>
+
+<p>Unit tests relies on this environment variable to load relevant libraries.</p>
+
+<h3>Dependencies</h3>
+
+<p>PyMesh depends on the following tools/libraries:</p>
+
+<ul>
+<li><a href="https://www.python.org/">Python</a> v2.7 or higher, note that Python 3.x is not tested.</li>
+<li><a href="http://www.numpy.org/">NumPy</a> v1.8 or higher</li>
+<li><a href="http://www.scipy.org/">SciPy</a> v0.13 or higher</li>
+<li><a href="http://www.swig.org/">SWIG</a></li>
+<li><a href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a></li>
+<li><a href="https://code.google.com/p/sparsehash/">SparseHash</a></li>
+</ul>
+
+<p>Optional library:</p>
+
+<ul>
+<li><a href="https://www.cgal.org/">CGAL</a></li>
+<li><a href="http://wias-berlin.de/software/tetgen/">TetGen</a></li>
+<li><a href="http://igl.ethz.ch/projects/libigl/">libigl</a></li>
+</ul>
+
+<h3>Environment Variables</h3>
+
+<p>If any of the dependent library is not installed in standard locations (/usr/local/, /opt/local), one needs to sent environment variables that points to the correct directories.  PyMesh check the following environment varaibles:</p>
+
+<ul>
+<li>EIGEN_INC: directory containing the Eigen library.</li>
+<li>GOOGLEHASH_INCLUDES: directory containing sparse hash.</li>
+<li>CGAL_PATH: path to CGAL library</li>
+<li>BOOST_INC: directory containing boost.</li>
+<li>LIBIGL_PATH: path to libigl.</li>
+</ul>
+
+<h3>Build</h3>
+
+<p>It is recommended to build out of source:</p>
+
+<pre><code>cd $PYMESH_PATH
+mkdir build
+cd build
+</code></pre>
+
+<p>To build the main PyMesh library:</p>
+
+<pre><code>make
+make src_tests
+</code></pre>
+
+<p>To build all available tools:</p>
+
+<pre><code>make tools
+make tools_tests
+</code></pre>
+
+<p>Make sure all unit tests are passed before using the library.</p>
