@@ -45,6 +45,7 @@ It is recommended to build out of source:
     cd $PYMESH_PATH
     mkdir build
     cd build
+    cmake ..
 
 To build the main PyMesh library:
 
