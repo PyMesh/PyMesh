@@ -22,7 +22,7 @@ void test_std_hash(const MatrixFr& points, Float cell_size) {
     const size_t num_pts = points.rows();
 
     Timer timer("Standard hash");
-    HashGrid::Ptr grid = HashGrid::create(cell_size, 3, HashGrid::DEFAULT);
+    HashGrid::Ptr grid = HashGrid::create(cell_size, 3, HashGrid::STL_HASH);
     timer.tik("creation");
     for (size_t i=0; i<num_pts; i++) {
         grid->insert(i, points.row(i));

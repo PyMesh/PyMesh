@@ -7,6 +7,7 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(Mesh)
 
 INCLUDE(Settings.cmake)
+INCLUDE(Options.cmake)
 
 # Process code in each subdirectories
 ADD_SUBDIRECTORY(src)

@@ -5,11 +5,6 @@
 
 #include <unordered_map>
 #include <unordered_set>
-#include <google/sparse_hash_map>
-#include <google/sparse_hash_set>
-#include <google/dense_hash_map>
-#include <google/dense_hash_set>
-
 #include <Core/EigenTypedef.h>
 
 #include "HashKey.h"
@@ -39,6 +34,12 @@ struct HashMapTrait {
     static Ptr create_map() { return Ptr(new HashMap()); }
     static HashItem get_default_item() { return HashItem(); }
 };
+
+#ifdef USE_SPARSEHASH
+#include <google/sparse_hash_map>
+#include <google/sparse_hash_set>
+#include <google/dense_hash_map>
+#include <google/dense_hash_set>
 
 /**
  * Typedefs for google sparse hash.
@@ -117,3 +118,4 @@ struct HashMapTrait<DIM, 2> {
     }
 };
 
+#endif //USE_SPARSEHASH

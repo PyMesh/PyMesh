@@ -4,15 +4,21 @@
 
 #include <Core/EigenTypedef.h>
 
+#ifdef USE_SPARSEHASH
+#define DEFAULT_HASH DENSE_HASH
+#else
+#define DEFAULT_HASH STL_HASH
+#endif
+
 class HashGrid {
     public:
         enum ImplementationType {
-            DEFAULT=0,
+            STL_HASH=0,
             SPARSE_HASH=1,
             DENSE_HASH=2
         };
         typedef std::shared_ptr<HashGrid> Ptr;
-        static Ptr create(Float cell_size=1.0, size_t dim=3, ImplementationType impl_type=DENSE_HASH);
+        static Ptr create(Float cell_size=1.0, size_t dim=3, ImplementationType impl_type=DEFAULT_HASH);
 
     protected:
         HashGrid(Float cell_size) : m_cell_size(cell_size) {}
