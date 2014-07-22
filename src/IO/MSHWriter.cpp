@@ -49,7 +49,7 @@ void MSHWriter::write_mesh(Mesh& mesh) {
 
 void MSHWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
-    MshSaver saver(m_filename, true);
+    MshSaver saver(m_filename, !m_in_ascii);
     if (voxels.size() == 0) {
         write_geometry(saver, vertices, faces, dim, vertex_per_face);
     } else {
@@ -62,7 +62,7 @@ void MSHWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
 
 
 void MSHWriter::write_surface_mesh(Mesh& mesh) {
-    MshSaver saver(m_filename, true);
+    MshSaver saver(m_filename, !m_in_ascii);
 
     size_t dim = mesh.get_dim();
     size_t num_vertices = mesh.get_num_vertices();
@@ -89,7 +89,7 @@ void MSHWriter::write_surface_mesh(Mesh& mesh) {
 }
 
 void MSHWriter::write_volume_mesh(Mesh& mesh) {
-    MshSaver saver(m_filename, true);
+    MshSaver saver(m_filename, !m_in_ascii);
 
     size_t dim = mesh.get_dim();
     size_t num_vertices = mesh.get_num_vertices();

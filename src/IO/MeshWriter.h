@@ -9,6 +9,7 @@ class Mesh;
  * Usage:
  *      MeshWriter::create_writer("test.obj")
  *              .with_attribute("vertex_normal")
+ *              .in_ascii()
  *              .write(mesh);
  * or
  *      MeshWriter::create_writer("test.obj")
@@ -23,6 +24,7 @@ class MeshWriter {
 
     public:
         virtual MeshWriter& with_attribute(const std::string& attr_name)=0;
+        virtual MeshWriter& in_ascii() { return *this; }
 
         virtual void write_mesh(Mesh& mesh)=0;
         virtual void write(VectorF& vertices, VectorI& faces, VectorI& voxels,

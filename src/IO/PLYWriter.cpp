@@ -28,7 +28,9 @@ MeshWriter& PLYWriter::with_attribute(const std::string& attr_name) {
 
 void PLYWriter::write_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();
-    p_ply ply = ply_create(m_filename.c_str(), PLY_LITTLE_ENDIAN, NULL, 0, NULL);
+    p_ply ply = ply_create(m_filename.c_str(),
+            m_in_ascii ? PLY_ASCII : PLY_LITTLE_ENDIAN,
+            NULL, 0, NULL);
     assert_success(ply != NULL);
 
     regroup_attribute_names(mesh);

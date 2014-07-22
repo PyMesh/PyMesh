@@ -10,10 +10,12 @@
 
 class PLYWriter : public MeshWriter {
     public:
+        PLYWriter() : m_in_ascii(false) {}
         virtual ~PLYWriter() {}
 
     public:
         virtual MeshWriter& with_attribute(const std::string& attr_name);
+        virtual MeshWriter& in_ascii() { m_in_ascii=true; return *this; }
         virtual void write_mesh(Mesh& mesh);
         virtual void write(VectorF& vertices, VectorI& faces, VectorI& voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel);
@@ -36,4 +38,6 @@ class PLYWriter : public MeshWriter {
         NameArray m_vertex_attr_names;
         NameArray m_face_attr_names;
         NameArray m_voxel_attr_names;
+
+        bool m_in_ascii;
 };
