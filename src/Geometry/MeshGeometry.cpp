@@ -1,6 +1,7 @@
 #include "MeshGeometry.h"
 
 #include <map>
+#include <sstream>
 #include <vector>
 
 #include <Core/Exception.h>
@@ -39,7 +40,17 @@ void MeshGeometry::extract_faces_from_voxels() {
     std::vector<int> vertex_buffer;
     for (FaceCounter::const_iterator itr = face_counter.begin();
             itr!=face_counter.end(); itr++) {
-        assert(itr->second == 1 or itr->second == 2);
+        if (itr->second != 1 && itr->second != 2) {
+            const Vector3I& triplet = itr->first.get_ori_data();
+            std::stringstream err_msg;
+            err_msg << "Non-manifold mesh detected!" << std::endl;
+            err_msg << "Face <"
+                << triplet[0] << ", "
+                << triplet[1] << ", "
+                << triplet[2] << "> has "
+                << itr->second << " adjacent volume elements";
+            throw RuntimeError(err_msg.str());
+        }
         if (itr->second == 1) {
             const VectorI& f = itr->first.get_ori_data();
             // TODO: only triangles is handled.
