@@ -9,7 +9,6 @@
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Math/ZSparseMatrix.h>
 
 ZSparseMatrix LaplacianAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;

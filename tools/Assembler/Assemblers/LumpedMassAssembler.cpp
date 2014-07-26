@@ -6,7 +6,6 @@
 
 #include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Math/ZSparseMatrix.h>
 
 ZSparseMatrix LumpedMassAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;

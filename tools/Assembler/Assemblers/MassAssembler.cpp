@@ -6,7 +6,6 @@
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Math/ZSparseMatrix.h>
 
 ZSparseMatrix MassAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;

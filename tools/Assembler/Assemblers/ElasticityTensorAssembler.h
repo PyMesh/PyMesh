@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Assembler.h"
-#include <Assembler/Math/ZSparseMatrix.h>
 
 /**
  * Assemble matrix that convert flattened strain to flattened stress.

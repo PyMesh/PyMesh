@@ -4,7 +4,7 @@
 
 #include <Mesh.h>
 
-#include <Assembler/Math/ZSparseMatrix.h>
+#include <Math/ZSparseMatrix.h>
 #include <Assembler/FESetting/FESetting.h>
 
 class FEAssembler {

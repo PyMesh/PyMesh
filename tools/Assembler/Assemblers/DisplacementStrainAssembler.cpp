@@ -7,7 +7,6 @@
 
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Math/ZSparseMatrix.h>
 #include <Assembler/Math/MatrixOrder.h>
 
 ZSparseMatrix DisplacementStrainAssembler::assemble(FESettingPtr setting) {

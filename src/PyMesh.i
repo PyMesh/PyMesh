@@ -7,3 +7,4 @@
 %include MeshFactory.i
 %include IO/MeshWriter.i
 %include Misc/HashGrid.i
+%include Math/ZSparseMatrix.i

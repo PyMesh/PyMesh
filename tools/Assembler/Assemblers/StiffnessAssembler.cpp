@@ -9,7 +9,6 @@
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Math/ZSparseMatrix.h>
 
 ZSparseMatrix StiffnessAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;

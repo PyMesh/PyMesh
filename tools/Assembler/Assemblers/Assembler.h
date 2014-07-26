@@ -3,7 +3,7 @@
 #include <memory>
 
 #include <Assembler/FESetting/FESetting.h>
-#include <Assembler/Math/ZSparseMatrix.h>
+#include <Math/ZSparseMatrix.h>
 
 class Assembler {
     public:
