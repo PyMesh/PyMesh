@@ -52,24 +52,7 @@ class FEAssemblerTest(unittest.TestCase):
         return matrix;
 
     def format(self, matrix):
-        if isinstance(matrix, PyAssembler.ZSparseMatrix):
-            rows = matrix.num_rows();
-            cols = matrix.num_cols();
-
-            inner_indices = np.ndarray(matrix.get_inner_size(), dtype=np.int32);
-            outer_indices = np.ndarray(matrix.get_outer_size(), dtype=np.int32);
-            data          = np.ndarray(matrix.get_value_size(), dtype=float);
-
-            matrix.get_inner_indices(inner_indices);
-            matrix.get_outer_indices(outer_indices);
-            matrix.get_values(data);
-
-            return scipy.sparse.csc_matrix((data, inner_indices, outer_indices),
-                    shape=(rows, cols), dtype=float);
-
-        else:
-            raise NotImplementedError("Unknown matrix format: {}".format(
-                str(type(matrix))));
+        return matrix;
 
     def assertMatrixEqual(self, M1, M2):
         diff = M1 - M2;
