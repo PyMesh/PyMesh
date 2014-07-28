@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "EigenSolverTest.h"
+#include "SparseSolverTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

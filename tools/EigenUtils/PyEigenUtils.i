@@ -4,3 +4,5 @@
 %include eigen.i
 %include Core/ExceptionConverter.i
 %include EigenSolver.i
+%include SparseSolver.i
+%include SparseSolverFactory.i

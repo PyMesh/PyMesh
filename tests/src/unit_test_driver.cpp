@@ -9,6 +9,7 @@
 #include "IO/MSHWriterTest.h"
 #include "IO/PLYParserTest.h"
 #include "IO/PLYWriterTest.h"
+#include "Math/ZSparseMatrixTest.h"
 #include "Misc/TripletTest.h"
 #include "Misc/MultipletTest.h"
 #include "Misc/HashGridTest.h"

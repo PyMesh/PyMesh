@@ -9,6 +9,7 @@ class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor> {
         typedef Eigen::SparseMatrix<Float> ParentType;
         ZSparseMatrix() {}
         ZSparseMatrix(size_t rows, size_t cols) : ParentType(rows, cols) {}
+        ZSparseMatrix(const ParentType& other) : ParentType(other) {}
 
     public:
         size_t num_rows() const { return rows(); }
@@ -40,4 +41,12 @@ class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor> {
                 np_value_array[i] = values[i];
             }
         }
+
+        /**
+         * Initialize matrix from raw data in compressed sparse column format.
+         */
+        void import_raw_csc(size_t num_rows, size_t num_cols,
+                int* inner_idx_array, size_t inner_size,
+                int* outer_idx_array, size_t outer_size,
+                Float* value_array, size_t value_size);
 };
