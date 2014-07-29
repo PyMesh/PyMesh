@@ -4,9 +4,9 @@
 
 #include <Core/EigenTypedef.h>
 
-class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor> {
+class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor, int> {
     public:
-        typedef Eigen::SparseMatrix<Float> ParentType;
+        typedef Eigen::SparseMatrix<Float, Eigen::ColMajor, int> ParentType;
         ZSparseMatrix() {}
         ZSparseMatrix(size_t rows, size_t cols) : ParentType(rows, cols) {}
         ZSparseMatrix(const ParentType& other) : ParentType(other) {}

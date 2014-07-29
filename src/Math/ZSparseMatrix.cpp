@@ -34,6 +34,7 @@ void ZSparseMatrix::import_raw_csc(
     }
 
     makeCompressed();
+    assert(isCompressed());
     assert(outer_size == get_outer_size());
     assert(inner_size == get_inner_size());
     assert(value_size == get_value_size());
@@ -62,4 +63,5 @@ void ZSparseMatrix::import_raw_coo(
     resize(num_rows, num_cols);
     setFromTriplets(entries.begin(), entries.end());
     makeCompressed();
+    assert(isCompressed());
 }

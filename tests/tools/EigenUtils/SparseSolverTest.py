@@ -17,7 +17,7 @@ import PyEigenUtils
 
 class SparseSolverTest(unittest.TestCase):
     def setUp(self):
-        self.size = 128;
+        self.size = 1024*2;
         self.matrix = scipy.sparse.diags(np.arange(self.size) + 1, 0);
         self.rhs = np.arange(self.size) + 1;
 
@@ -29,7 +29,7 @@ class SparseSolverTest(unittest.TestCase):
         x = solver.solve(self.rhs);
         self.assertAlmostEqual(0.0, norm(x - np.ones(self.size)));
 
-    @unittest.skip("debug, LLT caused a segmentation fault")
+    #@unittest.skip("debug, LLT caused a segmentation fault")
     def test_LLT(self):
         factory = PyEigenUtils.SparseSolverFactory("LLT");
         solver = factory.create();
@@ -38,7 +38,7 @@ class SparseSolverTest(unittest.TestCase):
         x = solver.solve(self.rhs);
         self.assertAlmostEqual(0.0, norm(x - np.ones(self.size)));
 
-    @unittest.skip("debug, CG caused a segmentation fault")
+    #@unittest.skip("debug, CG caused a segmentation fault")
     def test_CG(self):
         factory = PyEigenUtils.SparseSolverFactory("CG");
         solver = factory.create();
