@@ -36,14 +36,16 @@ class SparseSolverTest : public ::testing::Test {
             std::default_random_engine generator;
             std::uniform_real_distribution<Float> distribution(0.0,1.0);
 
-            const size_t size = 2;
+            const size_t size = 1024;
             std::vector<T> entries;
             for (size_t i=0; i<size; i++) {
-                for (size_t j=0; j<size; j++) {
+                for (size_t j=i; j<size; j++) {
                     if (i == j) {
-                        entries.push_back(T(i, j, 10.0+distribution(generator)));
+                        entries.push_back(T(i, j, 20.0+distribution(generator)));
                     } else {
-                        entries.push_back(T(i, j, distribution(generator)));
+                        Float val = distribution(generator);
+                        entries.push_back(T(i, j, val));
+                        entries.push_back(T(j, i, val));
                     }
                 }
             }
@@ -56,6 +58,7 @@ class SparseSolverTest : public ::testing::Test {
             ASSERT_EQ(size, m_matrix.cols());
             for (auto item : entries) {
                 ASSERT_FLOAT_EQ(item.value(), m_matrix.coeff(item.row(), item.col()));
+                //std::cout << item.row() << " " << item.col() << " " << item.value() << std::endl;
             }
         }
 
@@ -101,17 +104,17 @@ class SparseSolverTest : public ::testing::Test {
  * Eigen::SimplicialLLT gives a segmentation fault which I haven't got a chance
  * to track it down.  This test is disabled for now.
  */
-TEST_F(SparseSolverTest, DISABLED_LLT) {
+TEST_F(SparseSolverTest, LLT) {
     solve_diagonal_system("LLT");
     solve_dense_system("LLT");
 }
 
-TEST_F(SparseSolverTest, DISABLED_LDLT) {
+TEST_F(SparseSolverTest, LDLT) {
     solve_diagonal_system("LDLT");
     solve_dense_system("LDLT");
 }
 
-TEST_F(SparseSolverTest, DISABLED_CG) {
+TEST_F(SparseSolverTest, CG) {
     solve_diagonal_system("CG");
     solve_dense_system("CG");
 }
