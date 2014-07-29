@@ -92,3 +92,14 @@ TEST_F(SparseSolverTest, SparseLU) {
 
     ASSERT_VECTOR_EQ(rhs, sol);
 }
+
+TEST_F(SparseSolverTest, UmfPackLU) {
+    SolverPtr solver = create("UmfPackLU");
+    VectorF rhs = VectorF::Ones(m_matrix.rows());
+
+    solver->analyze_pattern(m_matrix);
+    solver->factorize(m_matrix);
+    VectorF sol = solver->solve(rhs);
+
+    ASSERT_VECTOR_EQ(rhs, sol);
+}

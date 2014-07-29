@@ -6,6 +6,8 @@
 #include <Core/Exception.h>
 #include "SparseSolver.h"
 
+#include <iostream>
+
 template <typename Engine>
 class SparseSolverImplementation : public SparseSolver {
     public:

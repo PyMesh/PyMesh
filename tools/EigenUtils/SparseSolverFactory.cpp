@@ -4,6 +4,7 @@
 #include <Eigen/SparseCholesky>
 #include <Eigen/IterativeLinearSolvers>
 #include <Eigen/SparseLU>
+#include <Eigen/UmfPackSupport>
 
 #include <Core/Exception.h>
 
@@ -12,16 +13,19 @@
 SparseSolverFactory::SparseSolverFactory(const std::string& solver_type) {
     if (solver_type == "LDLT") {
         m_solver = SparseSolverPtr(
-                new SparseSolverImplementation<Eigen::SimplicialLDLT<ZSparseMatrix> >);
+                new SparseSolverImplementation<Eigen::SimplicialLDLT<ZSparseMatrix::ParentType> >);
     } else if (solver_type == "LLT") {
         m_solver = SparseSolverPtr(
-                new SparseSolverImplementation<Eigen::SimplicialLLT<ZSparseMatrix> >);
+                new SparseSolverImplementation<Eigen::SimplicialLLT<ZSparseMatrix::ParentType> >);
     } else if (solver_type == "CG") {
         m_solver = SparseSolverPtr(
-                new SparseSolverImplementation<Eigen::ConjugateGradient<ZSparseMatrix> >);
+                new SparseSolverImplementation<Eigen::ConjugateGradient<ZSparseMatrix::ParentType> >);
     } else if (solver_type == "SparseLU") {
         m_solver = SparseSolverPtr(
-                new SparseSolverImplementation<Eigen::SparseLU<ZSparseMatrix> >);
+                new SparseSolverImplementation<Eigen::SparseLU<ZSparseMatrix::ParentType> >);
+    } else if (solver_type == "UmfPackLU") {
+        m_solver = SparseSolverPtr(
+                new SparseSolverImplementation<Eigen::UmfPackLU<ZSparseMatrix::ParentType> >);
     } else {
         std::stringstream err_msg;
         err_msg << "Unsupported solver type " << solver_type;

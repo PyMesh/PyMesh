@@ -48,5 +48,10 @@ class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor> {
         void import_raw_csc(size_t num_rows, size_t num_cols,
                 int* inner_idx_array, size_t inner_size,
                 int* outer_idx_array, size_t outer_size,
-                Float* value_array, size_t value_size);
+                double* value_array, size_t value_size);
+
+        void import_raw_coo(size_t num_rows, size_t num_cols,
+                int* row_indices, size_t num_row_indices,
+                int* col_indices, size_t num_col_indices,
+                double* value_array, size_t value_size);
 };

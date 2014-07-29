@@ -47,6 +47,7 @@ class SparseSolverTest(unittest.TestCase):
         x = solver.solve(self.rhs);
         #self.assertAlmostEqual(0.0, norm(x - np.ones(self.size)));
 
+    #@unittest.skip("debug")
     def test_SparseLU(self):
         factory = PyEigenUtils.SparseSolverFactory("SparseLU");
         solver = factory.create();
@@ -54,3 +55,13 @@ class SparseSolverTest(unittest.TestCase):
         solver.factorize(self.matrix);
         x = solver.solve(self.rhs);
         self.assertAlmostEqual(0.0, norm(x - np.ones(self.size)));
+
+    #@unittest.skip("debug")
+    def test_UmfPackLU(self):
+        factory = PyEigenUtils.SparseSolverFactory("UmfPackLU");
+        solver = factory.create();
+        solver.analyze_pattern(self.matrix);
+        solver.factorize(self.matrix);
+        x = solver.solve(self.rhs);
+        self.assertAlmostEqual(0.0, norm(x - np.ones(self.size)));
+
