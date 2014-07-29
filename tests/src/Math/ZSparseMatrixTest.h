@@ -16,7 +16,9 @@ class ZSparseMatrixTest : public ::testing::Test {
 
             std::vector<T> entries;
             for (size_t i=0; i<size; i++) {
-                entries.push_back(T(i, i, Float(i+1)));
+                for (size_t j=0; j<size; j++) {
+                    entries.push_back(T(i, j, Float(i+j+1)));
+                }
             }
             m_matrix.setFromTriplets(entries.begin(), entries.end());
 
@@ -24,7 +26,9 @@ class ZSparseMatrixTest : public ::testing::Test {
             ASSERT_EQ(size, m_matrix.rows());
             ASSERT_EQ(size, m_matrix.cols());
             for (size_t i=0; i<size; i++) {
-                ASSERT_FLOAT_EQ(Float(i+1), m_matrix.coeff(i, i));
+                for (size_t j=0; j<size; j++) {
+                    ASSERT_FLOAT_EQ(Float(i+j+1), m_matrix.coeff(i, j));
+                }
             }
         }
 
@@ -45,8 +49,6 @@ TEST_F(ZSparseMatrixTest, Copy) {
 }
 
 TEST_F(ZSparseMatrixTest, ImportCSC) {
-    m_matrix.insert(1, 0) = 15.0;
-    m_matrix.makeCompressed();
     const size_t inner_size = m_matrix.get_inner_size();
     const size_t outer_size = m_matrix.get_outer_size();
     const size_t value_size = m_matrix.get_value_size();
