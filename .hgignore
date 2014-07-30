@@ -11,7 +11,8 @@ syntax: glob
 *.dia.autosave
 .DS_Store
 
-lib/
-bin/
-swig/
-build/
+syntax: regexp
+^lib/
+^bin/
+^swig/
+^build/
