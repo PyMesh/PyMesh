@@ -5,6 +5,7 @@
 #include <Eigen/IterativeLinearSolvers>
 #include <Eigen/SparseLU>
 #include <Eigen/UmfPackSupport>
+#include <third_party/SparseMatrices.hh>
 
 #include <Core/Exception.h>
 
@@ -26,6 +27,9 @@ SparseSolverFactory::SparseSolverFactory(const std::string& solver_type) {
     } else if (solver_type == "UmfPackLU") {
         m_solver = SparseSolverPtr(
                 new SparseSolverImplementation<Eigen::UmfPackLU<ZSparseMatrix::ParentType> >);
+    } else if (solver_type == "UmfPack") {
+        m_solver = SparseSolverPtr(
+                new SparseSolverImplementation<UmfpackFactorizer>);
     } else {
         std::stringstream err_msg;
         err_msg << "Unsupported solver type " << solver_type;
