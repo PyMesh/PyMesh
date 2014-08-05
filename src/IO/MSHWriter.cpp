@@ -96,11 +96,6 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
     size_t num_voxels = mesh.get_num_voxels();
     size_t vertex_per_voxel = mesh.get_vertex_per_voxel();
 
-    if (vertex_per_voxel != 4) {
-        throw NotImplementedError("Only tet mesh is supported!");
-    }
-    correct_tet_orientation(mesh.get_vertices(), mesh.get_voxels());
-
     write_geometry(saver,
             mesh.get_vertices(),
             mesh.get_voxels(),
