@@ -24,12 +24,12 @@ def coo2ZSparseMatrix(mat):
 %}
 %pythonprepend SparseSolver::analyze_pattern(const ZSparseMatrix& matrix) %{
 if len(args) == 1:
-    M = csc2ZSparseMatrix(args[0]);
+    M = coo2ZSparseMatrix(args[0]);
     args = tuple([M]);
 %}
 %pythonprepend SparseSolver::factorize(const ZSparseMatrix& matrix) %{
 if len(args) == 1:
-    M = csc2ZSparseMatrix(args[0]);
+    M = coo2ZSparseMatrix(args[0]);
     args = tuple([M]);
 %}
 %include "SparseSolver.h"
