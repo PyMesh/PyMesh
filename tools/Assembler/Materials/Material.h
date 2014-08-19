@@ -21,6 +21,10 @@ class Material {
         static Ptr create_element_wise_isotropic(Float density, Mesh::Ptr mesh,
                 const std::string& young_field_name,
                 const std::string& poisson_field_name);
+        static Ptr create_element_wise_orthotropic(Float density, Mesh::Ptr mesh,
+                const std::vector<std::string>& young_field_names,
+                const std::vector<std::string>& poisson_field_names,
+                const std::vector<std::string>& shear_field_names);
         static Ptr create_element_wise_symmetric(Float density, Mesh::Ptr mesh,
                 const std::string& matrix_field_nmae);
 
