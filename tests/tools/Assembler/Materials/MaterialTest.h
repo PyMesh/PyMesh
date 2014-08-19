@@ -44,6 +44,26 @@ class MaterialTest : public ::testing::Test {
             }
         }
 
+        void assert_material_symmetry(size_t dim, MaterialPtr mat) {
+            for (size_t i=0; i<dim; i++) {
+                for (size_t j=0; j<dim; j++) {
+                    for (size_t k=0; k<dim; k++) {
+                        for (size_t l=0; l<dim; l++) {
+                            ASSERT_FLOAT_EQ(
+                                    mat->get_material_tensor(i,j,k,l, m_origin),
+                                    mat->get_material_tensor(j,i,k,l, m_origin));
+                            ASSERT_FLOAT_EQ(
+                                    mat->get_material_tensor(i,j,k,l, m_origin),
+                                    mat->get_material_tensor(i,j,l,k, m_origin));
+                            ASSERT_FLOAT_EQ(
+                                    mat->get_material_tensor(i,j,k,l, m_origin),
+                                    mat->get_material_tensor(k,l,i,j, m_origin));
+                        }
+                    }
+                }
+            }
+        }
+
         void assert_matrix_eq(const MatrixF& m1, const MatrixF& m2) {
             ASSERT_EQ(m1.rows(), m2.rows());
             ASSERT_EQ(m1.cols(), m2.cols());

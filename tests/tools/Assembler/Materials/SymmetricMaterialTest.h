@@ -33,30 +33,11 @@ class SymmetricMaterialTest : public MaterialTest {
             return MaterialPtr(new SymmetricMaterial(m_density, tensor));
         }
 
-        void ASSERT_SYMMETRY(size_t dim, MaterialPtr mat) {
-            for (size_t i=0; i<dim; i++) {
-                for (size_t j=0; j<dim; j++) {
-                    for (size_t k=0; k<dim; k++) {
-                        for (size_t l=0; l<dim; l++) {
-                            ASSERT_FLOAT_EQ(
-                                    mat->get_material_tensor(i,j,k,l, m_origin),
-                                    mat->get_material_tensor(j,i,k,l, m_origin));
-                            ASSERT_FLOAT_EQ(
-                                    mat->get_material_tensor(i,j,k,l, m_origin),
-                                    mat->get_material_tensor(i,j,l,k, m_origin));
-                            ASSERT_FLOAT_EQ(
-                                    mat->get_material_tensor(i,j,k,l, m_origin),
-                                    mat->get_material_tensor(k,l,i,j, m_origin));
-                        }
-                    }
-                }
-            }
-        }
 };
 
 TEST_F(SymmetricMaterialTest, 2D) {
     MaterialPtr mat = create_identity_material_tensor(2);
-    ASSERT_SYMMETRY(2, mat);
+    assert_material_symmetry(2, mat);
     MatrixF strain(2, 2);
     strain << 1, 2,
               2, 3;
@@ -66,7 +47,7 @@ TEST_F(SymmetricMaterialTest, 2D) {
 
 TEST_F(SymmetricMaterialTest, 3D) {
     MaterialPtr mat = create_identity_material_tensor(3);
-    ASSERT_SYMMETRY(3, mat);
+    assert_material_symmetry(3, mat);
     MatrixF strain(3, 3);
     strain << 1, 4, 5,
               4, 2, 6,
@@ -77,9 +58,9 @@ TEST_F(SymmetricMaterialTest, 3D) {
 
 TEST_F(SymmetricMaterialTest, Symmetry) {
     MaterialPtr mat_2D = create_general(2);
-    ASSERT_SYMMETRY(2, mat_2D);
+    assert_material_symmetry(2, mat_2D);
     MaterialPtr mat_3D = create_general(3);
-    ASSERT_SYMMETRY(3, mat_3D);
+    assert_material_symmetry(3, mat_3D);
 }
 
 TEST_F(SymmetricMaterialTest, Energy2D) {

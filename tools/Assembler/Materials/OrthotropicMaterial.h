@@ -25,6 +25,19 @@ namespace OrthotropicMaterialHelper {
             throw RuntimeError("Shear modulus must be positive!");
         }
     }
+
+    bool is_symmetric(const MatrixF& M) {
+        const Float TOL = 1e-6;
+        const size_t num_rows = M.rows();
+        const size_t num_cols = M.cols();
+        for (size_t i=0; i<num_rows; i++) {
+            for (size_t j=0; j<num_cols; j++) {
+                if (fabs(M(i,j) - M(j,i)) > TOL)
+                    return false;
+            }
+        }
+        return true;
+    }
 }
 
 using namespace OrthotropicMaterialHelper;
@@ -66,9 +79,12 @@ class OrthotropicMaterial<2> : public SymmetricMaterial {
             size_t tensor_size = m_dim * (m_dim + 1) / 2;
             MatrixF S = MatrixF::Zero(tensor_size, tensor_size);
 
-            S << 1.0 / young_x, -poisson_xy / young_y, 0.0,
-              -poisson_yx / young_x, 1.0 / young_y, 0.0,
+            S << 1.0 / young_x, -poisson_yx / young_y, 0.0,
+              -poisson_xy / young_x, 1.0 / young_y, 0.0,
               0.0, 0.0, 1.0 / shear_xy;
+            if (!is_symmetric(S)) {
+                throw RuntimeError("Orthotropic elasticity tensor is not symmetric!");
+            }
             m_material_tensor = S.inverse();
         }
 };
@@ -127,6 +143,9 @@ class OrthotropicMaterial<3> : public SymmetricMaterial {
               0.0, 0.0, 0.0, 0.0, 1.0 / shear_zx, 0.0,
               0.0, 0.0, 0.0, 0.0, 0.0, 1.0 / shear_xy;
 
+            if (!is_symmetric(S)) {
+                throw RuntimeError("Orthotropic elasticity tensor is not symmetric!");
+            }
             m_material_tensor = S.inverse();
         }
 

@@ -120,3 +120,31 @@ TEST_F(OrthotropicMaterialTest, Energy3D) {
     ASSERT_FLOAT_EQ(true_energy, energy);
 }
 
+TEST_F(OrthotropicMaterialTest, Symmetry2D) {
+    VectorF young(2);
+    VectorF shear(1);
+    VectorF poisson(2);
+
+    young << 1.0, 0.5;
+    shear << 2.0;
+    poisson << 1.0, 0.5;
+
+    MaterialPtr mat = MaterialPtr(new OrthotropicMaterial<2>(m_density, young, poisson, shear));
+    assert_material_symmetry(2, mat);
+}
+
+TEST_F(OrthotropicMaterialTest, Symmetry3D) {
+    VectorF young(3);
+    VectorF shear(3);
+    VectorF poisson(6);
+
+    young << 1.0, 0.5, 0.25;
+    shear << 2.0, 1.0, 0.5;
+    poisson <<
+        0.50, 0.25, // nu_yz, nu_zy
+        0.25, 1.00, // nu_zx, nu_xz
+        1.00, 0.50; // nu_xy, nu_yx
+
+    MaterialPtr mat = MaterialPtr(new OrthotropicMaterial<3>(m_density, young, poisson, shear));
+    assert_material_symmetry(3, mat);
+}
