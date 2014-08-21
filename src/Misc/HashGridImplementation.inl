@@ -99,11 +99,11 @@ bool HashGridImplementation<Trait>::insert_triangle(int obj_id, const MatrixFr& 
                 for (typename HashKey::ValueType z=min_key[2]; z<=max_key[2]; z+=1) {
                     HashKey cur_key({x, y, z});
                     VectorF grid_pt = convert_to_grid_point(cur_key);
-                    int r = triBoxOverlap(
+                    int does_overlap = triBoxOverlap(
                             grid_pt.data(),
                             cell_sizes.data(),
                             tri);
-                    if (r == 1) {
+                    if (does_overlap == 1) {
                         bool r = insert_key(obj_id, cur_key);
                         success &= r;
                     }
