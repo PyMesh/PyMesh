@@ -27,6 +27,7 @@ class HashGrid {
     public:
         virtual bool insert(int obj_id, const VectorF& coordinates)=0;
         virtual bool insert_bbox(int obj_id, const MatrixF& shape)=0;
+        virtual bool insert_triangle(int obj_id, const MatrixFr& shape)=0;
         virtual bool insert_batch(int obj_id, const MatrixFr& points)=0;
         virtual bool insert_multiple(const VectorI& obj_ids, const MatrixFr& points)=0;
         virtual bool remove(int obj_id, const VectorF& coordinate)=0;

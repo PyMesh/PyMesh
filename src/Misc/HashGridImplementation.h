@@ -16,6 +16,7 @@ class HashGridImplementation : public HashGrid {
     public:
         virtual bool insert(int obj_id, const VectorF& coordinates);
         virtual bool insert_bbox(int obj_id, const MatrixF& shape);
+        virtual bool insert_triangle(int obj_id, const MatrixFr& shape);
         virtual bool insert_batch(int obj_id, const MatrixFr& points);
         virtual bool insert_multiple(const VectorI& obj_ids, const MatrixFr& points);
         virtual bool remove(int obj_id, const VectorF& coordinate);
@@ -29,6 +30,7 @@ class HashGridImplementation : public HashGrid {
 
     protected:
         HashKey convert_to_key(const VectorF& value) const;
+        VectorF convert_to_grid_point(const HashKey& key) const;
         bool insert_key(int obj_id, HashKey& key);
 
     protected:

@@ -45,6 +45,14 @@ TEST_F(HashGridTest, Insert) {
 }
 
 TEST_F(HashGridTest, InsertBBox) {
+    // The bbox of dotted triangle occupies 9 cells.
+    // +---+---+---+
+    // | . |   |   |
+    // |-:-.---+---+
+    // | : | . |   |
+    // |-:-+---.---+
+    // | :......:. |
+    // +---+---+---+
     MatrixF triangle(3,3);
     triangle << 0.0, 0.0, 0.0,
                 1.0, 0.0, 0.0,
@@ -55,6 +63,29 @@ TEST_F(HashGridTest, InsertBBox) {
     ASSERT_IN_HASH(0, triangle.row(1));
     ASSERT_IN_HASH(0, triangle.row(2));
     ASSERT_IN_HASH(0, Vector3F(0.5, 0.5, 0.0));
+    ASSERT_IN_HASH(0, Vector3F(0.9, 0.9, 0.0));
+}
+
+TEST_F(HashGridTest, insertTriangle) {
+    // The dotted triangle occupies 8 cells.
+    // +---+---+
+    // | . |   |
+    // |-:-.---+---+
+    // | : | . |   |
+    // |-:-+---.---+
+    // | :......:. |
+    // +---+---+---+
+    MatrixF triangle(3,3);
+    triangle << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0;
+    m_grid->insert_triangle(0, triangle);
+    ASSERT_EQ(8, m_grid->size());
+    ASSERT_IN_HASH(0, triangle.row(0));
+    ASSERT_IN_HASH(0, triangle.row(1));
+    ASSERT_IN_HASH(0, triangle.row(2));
+    ASSERT_IN_HASH(0, Vector3F(0.5, 0.5, 0.0));
+    ASSERT_NOT_IN_HASH(0, Vector3F(0.9, 0.9, 0.0));
 }
 
 TEST_F(HashGridTest, InsertBatch) {
