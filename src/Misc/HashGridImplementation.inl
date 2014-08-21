@@ -6,6 +6,7 @@
 extern "C" {
 #include "tribox3.h"
 }
+#include "TriBox2D.h"
 
 namespace HashGridImplementationHelper {
     std::vector<VectorI> get_surrounding_cells(const Vector2I& p) {
@@ -111,7 +112,28 @@ bool HashGridImplementation<Trait>::insert_triangle(int obj_id, const MatrixFr& 
             }
         }
     } else if (Trait::dim == 2) {
-        throw NotImplementedError("2D version of insert_triangle is not supported yet");
+        const Float tri[3][2] = {
+            {shape(0,0), shape(0,1)},
+            {shape(1,0), shape(1,1)},
+            {shape(2,0), shape(2,1)}
+        };
+
+        Vector2F cell_sizes = Vector2F::Ones() * m_cell_size * 0.5;
+        for (typename HashKey::ValueType x=min_key[0]; x<=max_key[0]; x+=1) {
+            for (typename HashKey::ValueType y=min_key[1]; y<=max_key[1]; y+=1) {
+                HashKey cur_key({x, y});
+                VectorF grid_pt = convert_to_grid_point(cur_key);
+                int does_overlap = TriBox2D::triBoxOverlap(
+                        grid_pt.data(),
+                        cell_sizes.data(),
+                        tri);
+                if (does_overlap == 1) {
+                    bool r = insert_key(obj_id, cur_key);
+                    success &= r;
+                }
+            }
+        }
+        //throw NotImplementedError("2D version of insert_triangle is not supported yet");
     } else {
         throw NotImplementedError("Only 2D and 3D are supported in HashGrid.");
     }

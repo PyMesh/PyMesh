@@ -11,6 +11,7 @@
 #include "IO/PLYWriterTest.h"
 #include "Math/ZSparseMatrixTest.h"
 #include "Misc/TripletTest.h"
+#include "Misc/TriBox2DTest.h"
 #include "Misc/MultipletTest.h"
 #include "Misc/HashGridTest.h"
 #include "Misc/HashKeyTest.h"

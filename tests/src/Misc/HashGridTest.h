@@ -7,6 +7,10 @@ class HashGridTest : public ::testing::Test {
             m_grid = HashGrid::create(0.5);
         }
 
+        void init_2D() {
+            m_grid = HashGrid::create(0.5, 2);
+        }
+
         void ASSERT_IN_HASH(int obj_id, const VectorF& coord) {
             ASSERT_TRUE(m_grid->occupied(obj_id, coord));
         }
@@ -86,6 +90,29 @@ TEST_F(HashGridTest, insertTriangle) {
     ASSERT_IN_HASH(0, triangle.row(2));
     ASSERT_IN_HASH(0, Vector3F(0.5, 0.5, 0.0));
     ASSERT_NOT_IN_HASH(0, Vector3F(0.9, 0.9, 0.0));
+}
+
+TEST_F(HashGridTest, insertTriangle_2D) {
+    // The dotted triangle occupies 8 cells.
+    // +---+---+
+    // | . |   |
+    // |-:-.---+---+
+    // | : | . |   |
+    // |-:-+---.---+
+    // | :......:. |
+    // +---+---+---+
+    init_2D();
+    MatrixF triangle(3,2);
+    triangle << 0.0, 0.0,
+                1.0, 0.0,
+                0.0, 1.0;
+    m_grid->insert_triangle(0, triangle);
+    ASSERT_EQ(8, m_grid->size());
+    ASSERT_IN_HASH(0, triangle.row(0));
+    ASSERT_IN_HASH(0, triangle.row(1));
+    ASSERT_IN_HASH(0, triangle.row(2));
+    ASSERT_IN_HASH(0, Vector2F(0.5, 0.5));
+    ASSERT_NOT_IN_HASH(0, Vector2F(0.9, 0.9));
 }
 
 TEST_F(HashGridTest, InsertBatch) {
