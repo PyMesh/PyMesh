@@ -9,6 +9,7 @@ ADD_SUBDIRECTORY(MeshUtils)
 #ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(Assembler)
 ADD_SUBDIRECTORY(EigenUtils)
+ADD_SUBDIRECTORY(Envelope)
 ADD_SUBDIRECTORY(SparseSolver)
 
 ADD_CUSTOM_TARGET(tools_tests DEPENDS
@@ -19,4 +20,5 @@ ADD_CUSTOM_TARGET(tools_tests DEPENDS
     #cgal_tests
     assembler_tests
     EigenUtils_tests
+    envelope_tests
     SparseSolver_tests)
