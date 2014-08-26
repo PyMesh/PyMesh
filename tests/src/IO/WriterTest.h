@@ -18,6 +18,7 @@ class WriterTest : public ::testing::Test {
         MeshPtr load_mesh(const std::string& mesh_file) {
             MeshPtr mesh = MeshFactory()
                 .load_file(m_data_dir + mesh_file)
+                .drop_zero_dim()
                 .create_shared();
             return mesh;
         }
@@ -25,6 +26,7 @@ class WriterTest : public ::testing::Test {
         MeshPtr load_tmp_mesh(const std::string& mesh_file) {
             MeshPtr mesh = MeshFactory()
                 .load_file(m_tmp_dir + mesh_file)
+                .drop_zero_dim()
                 .create_shared();
             return mesh;
         }

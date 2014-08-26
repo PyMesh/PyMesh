@@ -22,7 +22,7 @@ void MshSaver::save_mesh(const VectorF& nodes, const VectorI& elements,
             nodes_per_element != 4 &&
             nodes_per_element != 8) {
         std::cerr << "Error saving msh: "
-            << "Only triangle, tet and hexahedron elements are supported!" << std::endl;
+            << "Only triangle, quad, tet and hexahedron elements are supported!" << std::endl;
         throw NOT_IMPLEMENTED;
     }
     if (dim != 2 && dim != 3) {
@@ -293,7 +293,9 @@ void MshSaver::save_binary_mesh(const VectorF& nodes, const VectorI& elements,
     int elem_type = 0;
     if (nodes_per_element == 3) {
         elem_type = 2;
-    } else if (nodes_per_element == 4) {
+    } else if (m_dim == 2 && nodes_per_element == 4) {
+        elem_type = 3;
+    } else if (m_dim == 3 && nodes_per_element == 4) {
         elem_type = 4;
     } else if (nodes_per_element == 8) {
         elem_type = 5;
@@ -348,7 +350,9 @@ void MshSaver::save_ascii_mesh(const VectorF& nodes, const VectorI& elements,
     int elem_type = 0;
     if (nodes_per_element == 3) {
         elem_type = 2;
-    } else if (nodes_per_element == 4) {
+    } else if (m_dim == 2 && nodes_per_element == 4) {
+        elem_type = 3;
+    } else if (m_dim == 3 && nodes_per_element == 4) {
         elem_type = 4;
     } else if (nodes_per_element == 8) {
         elem_type = 5;

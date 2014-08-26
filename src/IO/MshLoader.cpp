@@ -388,6 +388,9 @@ int MshLoader::num_nodes_per_elem_type(int elem_type) {
         case 2:
             nodes_per_element = 3; // Triangle
             break;
+        case 3:
+            nodes_per_element = 4; // Quad
+            break;
         case 4:
             nodes_per_element = 4; // Tet
             break;

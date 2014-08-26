@@ -38,6 +38,7 @@ class HashGrid {
 
         virtual VectorI get_items_near_point(const VectorF& coordinate)=0;
         //virtual VectorI get_items_within_radius(const VectorF& coordinate, Float radius)=0;
+        virtual MatrixFr get_occupied_cell_centers() const=0;
 
     protected:
         Float m_cell_size;

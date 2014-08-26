@@ -59,6 +59,23 @@ TEST_F(MSHWriterTest, HexMesh) {
     remove(tmp_name);
 }
 
+TEST_F(MSHWriterTest, QuadMesh) {
+    std::string filename = "quad.obj";
+    MeshPtr mesh = load_mesh(filename);
+
+    std::string tmp_name = "tmp_quad.msh";
+    MSHWriter writer;
+    writer.set_output_filename(m_tmp_dir + tmp_name);
+    writer.write_mesh(*mesh);
+
+    MeshPtr mesh2 = load_tmp_mesh(tmp_name);
+    assert_eq_vertices(mesh, mesh2);
+    assert_eq_faces(mesh, mesh2);
+    assert_eq_voxels(mesh, mesh2);
+
+    remove(tmp_name);
+}
+
 TEST_F(MSHWriterTest, VertexAttributes) {
     std::string filename = "tet.msh";
     MeshPtr mesh = load_mesh(filename);

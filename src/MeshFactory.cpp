@@ -1,5 +1,6 @@
 #include "MeshFactory.h"
 #include <cassert>
+#include <iostream>
 #include <sstream>
 
 #include <Attributes/MeshAttributes.h>
@@ -79,6 +80,11 @@ MeshFactory& MeshFactory::with_attribute(const std::string& attr_name) {
     return *this;
 }
 
+MeshFactory& MeshFactory::drop_zero_dim() {
+    compute_and_drop_zero_dim();
+    return *this;
+}
+
 void MeshFactory::initialize_vertices(MeshParser* parser) {
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();
 
@@ -124,3 +130,27 @@ void MeshFactory::initialize_attributes(MeshParser* parser) {
         attributes->set_attribute(name, attr_data);
     }
 }
+
+void MeshFactory::compute_and_drop_zero_dim() {
+    const size_t num_vertices = m_mesh->get_num_vertices();
+    int zero_dim = m_mesh->get_geometry()->project_out_zero_dim();
+    if (zero_dim < 0) return;
+    const char axis[3] = {'X', 'Y', 'Z'};
+    std::cerr << "Dropping " << axis[zero_dim]
+        << " coordinate because flat geometry." << std::endl;
+    std::vector<std::string> attr_names = m_mesh->get_attribute_names();
+    for (auto itr = attr_names.begin(); itr != attr_names.end(); itr++) {
+        VectorF& attr = m_mesh->get_attribute(*itr);
+        if (attr.size() == num_vertices * 3) {
+            VectorF reduced_attr(num_vertices * 2);
+            for (size_t i=0; i<num_vertices; i++) {
+                reduced_attr[i*2  ] = (zero_dim == 0) ?
+                    attr[i*3+1] : attr[i*3];
+                reduced_attr[i*2+1] = (zero_dim == 2) ?
+                    attr[i*3+1] : attr[i*3+2];
+            }
+            m_mesh->set_attribute(*itr, reduced_attr);
+        }
+    }
+}
+

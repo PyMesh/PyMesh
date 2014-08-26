@@ -117,7 +117,7 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
 
 void MSHWriter::write_geometry(MshSaver& saver, VectorF& vertices,
         VectorI& elements, size_t dim, size_t vertex_per_element) {
-    if (vertex_per_element == 4) {
+    if (dim == 3 && vertex_per_element == 4) {
         correct_tet_orientation(vertices, elements);
     }
     saver.save_mesh(vertices, elements, dim, vertex_per_element);

@@ -82,12 +82,10 @@ void MSHParser::export_attribute(const std::string& name, Float* buffer) {
     std::copy(attribute.data(), attribute.data() + attribute.size(), buffer);
 }
 
-// TODO: only tet mesh supported so far
 size_t MSHParser::vertex_per_voxel() const {
     return m_vertex_per_voxel;
 }
 
-// TODO: only triangle mesh supported so far
 size_t MSHParser::vertex_per_face() const {
     return m_vertex_per_face;
 }
@@ -97,6 +95,11 @@ void MSHParser::extract_faces_and_voxels() {
     switch (element_type) {
         case 2: // Triangle
             m_vertex_per_face = 3;
+            m_vertex_per_voxel = 0;
+            m_faces = m_loader->get_elements();
+            break;
+        case 3: // Quad
+            m_vertex_per_face = 4;
             m_vertex_per_voxel = 0;
             m_faces = m_loader->get_elements();
             break;

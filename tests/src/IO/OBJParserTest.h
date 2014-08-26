@@ -57,6 +57,17 @@ TEST_F(OBJParserTest, 2DSquare) {
     ASSERT_EQ(2, m_parser->dim());
 }
 
+TEST_F(OBJParserTest, Quad) {
+    std::string mesh_file = m_data_dir + "quad.obj";
+    parse(mesh_file);
+    ASSERT_EQ(4, m_parser->num_vertices());
+    ASSERT_EQ(1, m_parser->num_faces());
+    ASSERT_EQ(0, m_parser->num_voxels());
+    ASSERT_EQ(0, m_parser->vertex_per_voxel());
+    ASSERT_EQ(4, m_parser->vertex_per_face());
+    ASSERT_EQ(2, m_parser->dim());
+}
+
 TEST_F(OBJParserTest, TetCentroid) {
     std::string mesh_file = m_data_dir + "tet.obj";
     parse(mesh_file);

@@ -28,6 +28,8 @@ class HashGridImplementation : public HashGrid {
         virtual VectorI get_items_near_point(const VectorF& coordinate);
         //virtual VectorI get_items_within_radius(const VectorF& coordinate, Float radius);
 
+        virtual MatrixFr get_occupied_cell_centers() const;
+
     protected:
         HashKey convert_to_key(const VectorF& value) const;
         VectorF convert_to_grid_point(const HashKey& key) const;

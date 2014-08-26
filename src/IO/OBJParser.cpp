@@ -9,7 +9,7 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
-OBJParser::OBJParser() : m_dim(0), m_vertex_per_face(3) { }
+OBJParser::OBJParser() : m_dim(0), m_vertex_per_face(0) { }
 
 bool OBJParser::parse(const std::string& filename) {
     const size_t LINE_SIZE = 256;
@@ -81,10 +81,10 @@ void OBJParser::export_faces(int* buffer) {
     size_t count=0;
     for (FaceList::const_iterator fi=m_faces.begin();
             fi != m_faces.end(); fi++) {
-        const Vector3I& f = *fi;
-        buffer[count*3  ] = f[0];
-        buffer[count*3+1] = f[1];
-        buffer[count*3+2] = f[2];
+        const VectorI& f = *fi;
+        assert(f.size() == m_vertex_per_face);
+        std::copy(f.data(), f.data() + m_vertex_per_face,
+                buffer + count*m_vertex_per_face);
         count++;
     }
 }
@@ -188,10 +188,12 @@ bool OBJParser::parse_face_line(char* line) {
         return false;
     }
 
-    m_faces.push_back(Vector3I(idx[0], idx[1], idx[2]));
-    if (i == 4) {
-        // break quad into triangles too.
-        m_faces.push_back(Vector3I(idx[0], idx[2], idx[3]));
+    assert(m_vertex_per_face == 0 || m_vertex_per_face == i);
+    m_vertex_per_face = i;
+    if (i == 3) {
+        m_faces.push_back(Vector3I(idx[0], idx[1], idx[2]));
+    } else if (i == 4) {
+        m_faces.push_back(Vector4I(idx[0], idx[1], idx[2], idx[3]));
     }
     return true;
 }

@@ -213,6 +213,18 @@ VectorI HashGridImplementation<Trait>::get_items_near_point(const VectorF& coord
 }
 
 template<typename Trait>
+MatrixFr HashGridImplementation<Trait>::get_occupied_cell_centers() const {
+    const size_t dim = Trait::dim;
+    MatrixFr centers(size(), dim);
+    size_t count = 0;
+    for (auto itr = m_hash_map->begin(); itr != m_hash_map->end(); itr++) {
+        centers.row(count) = convert_to_grid_point(itr->first);
+        count++;
+    }
+    return centers;
+}
+
+template<typename Trait>
 typename HashGridImplementation<Trait>::HashKey HashGridImplementation<Trait>::convert_to_key(const VectorF& value) const {
     return typename HashKey::VectorType(
             (value / m_cell_size).unaryExpr(

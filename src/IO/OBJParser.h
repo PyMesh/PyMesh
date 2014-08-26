@@ -41,7 +41,7 @@ class OBJParser : public MeshParser {
         bool parse_face_line(char* line);
 
         typedef std::list<VectorF> VertexList;
-        typedef std::list<Vector3I> FaceList;
+        typedef std::list<VectorI> FaceList;
         typedef std::list<VectorI>  VoxelList;
         typedef std::list<VectorF> NormalList;
 

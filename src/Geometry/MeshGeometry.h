@@ -48,6 +48,10 @@ class MeshGeometry {
         }
 
         void extract_faces_from_voxels();
+        int project_out_zero_dim();
+    protected:
+        void extract_faces_from_tets();
+        void extract_faces_from_hexes();
 
     protected:
         size_t m_dim;
