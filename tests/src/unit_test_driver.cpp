@@ -18,6 +18,7 @@
 #include "Attributes/FaceCentroidAttributeTest.h"
 #include "Attributes/FaceCircumCenterAttributeTest.h"
 #include "Attributes/FaceIndexAttributeTest.h"
+#include "Attributes/FaceNormalAttributeTest.h"
 #include "Attributes/FaceVoronoiAreaAttributeTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
 #include "Attributes/VoxelCentroidAttributeTest.h"

@@ -18,6 +18,10 @@ void FaceNormalAttribute::compute_from_mesh(Mesh& mesh) {
             for (size_t i=0; i<num_faces; i++) {
                 normals.segment<3>(i*3) = compute_triangle_normal(mesh, i);
             }
+        } else if (num_vertex_per_face == 4) {
+            for (size_t i=0; i<num_faces; i++) {
+                normals.segment<3>(i*3) = compute_quad_normal(mesh, i);
+            }
         } else {
             std::stringstream err_msg;
             err_msg << "Normal computation of face with "
@@ -50,3 +54,26 @@ Vector3F FaceNormalAttribute::compute_triangle_normal(Mesh& mesh, size_t i) {
     normal.normalize();
     return normal;
 }
+
+Vector3F FaceNormalAttribute::compute_quad_normal(Mesh& mesh, size_t i) {
+    const size_t dim = mesh.get_dim();
+    VectorI face = mesh.get_face(i);
+    assert(face.size() == 4);
+
+    Vector3F v[4] = {
+        Vector3F::Zero(),
+        Vector3F::Zero(),
+        Vector3F::Zero(),
+        Vector3F::Zero()
+    };
+
+    v[0].segment(0, dim) = mesh.get_vertex(face[0]);
+    v[1].segment(0, dim) = mesh.get_vertex(face[1]);
+    v[2].segment(0, dim) = mesh.get_vertex(face[2]);
+    v[3].segment(0, dim) = mesh.get_vertex(face[3]);
+
+    Vector3F normal = (v[2] - v[0]).cross(v[3] - v[1]);
+    normal.normalize();
+    return normal;
+}
+

@@ -12,4 +12,5 @@ class FaceNormalAttribute : public MeshAttribute {
 
     private:
         Vector3F compute_triangle_normal(Mesh& mesh, size_t i);
+        Vector3F compute_quad_normal(Mesh& mesh, size_t i);
 };
