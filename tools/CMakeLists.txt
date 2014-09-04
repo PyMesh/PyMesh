@@ -44,6 +44,7 @@ ADD_SUBDIRECTORY(EigenUtils)
 ADD_SUBDIRECTORY(OpenCL)
 ADD_SUBDIRECTORY(SparseSolver)
 ADD_SUBDIRECTORY(Envelope)
+ADD_SUBDIRECTORY(CSG)
 
 # Bundle all tools together
 ADD_CUSTOM_TARGET(tools DEPENDS
@@ -56,4 +57,5 @@ ADD_CUSTOM_TARGET(tools DEPENDS
     opencl_wrapper
     EigenUtils
     envelope
+    csg
     SparseSolver)

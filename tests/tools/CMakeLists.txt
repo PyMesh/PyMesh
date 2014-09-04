@@ -11,6 +11,7 @@ ADD_SUBDIRECTORY(Assembler)
 ADD_SUBDIRECTORY(EigenUtils)
 ADD_SUBDIRECTORY(Envelope)
 ADD_SUBDIRECTORY(SparseSolver)
+ADD_SUBDIRECTORY(CSG)
 
 ADD_CUSTOM_TARGET(tools_tests DEPENDS
     #selfintersect_tests
@@ -21,4 +22,5 @@ ADD_CUSTOM_TARGET(tools_tests DEPENDS
     assembler_tests
     EigenUtils_tests
     envelope_tests
-    SparseSolver_tests)
+    SparseSolver_tests
+    csg_tests)
