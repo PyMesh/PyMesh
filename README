@@ -20,14 +20,22 @@ PyMesh depends on the following tools/libraries:
 * [SciPy](http://www.scipy.org/) v0.13 or higher
 * [SWIG](http://www.swig.org/)
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page)
-* [SparseHash](https://code.google.com/p/sparsehash/)
 
 Optional library:
 
+* [SparseHash](https://code.google.com/p/sparsehash/)
 * [CGAL](https://www.cgal.org/)
 * [TetGen](http://wias-berlin.de/software/tetgen/)
 * [libigl](http://igl.ethz.ch/projects/libigl/)
 * [cork](https://github.com/gilbo/cork)
+
+Most optinal libraries are detected automatically.  To disable the usage of SparseHash, use the flag "-DUSE_SPARSE_HASH=OFF" with cmake.  I.e.
+
+    cmake -DUSE_SPARSE_HASH=OFF ..
+
+instead of
+
+    cmake ..
 
 ### Environment Variables ###
 

@@ -23,17 +23,27 @@ PYMESH_PATH:</p>
 <li><a href="http://www.scipy.org/">SciPy</a> v0.13 or higher</li>
 <li><a href="http://www.swig.org/">SWIG</a></li>
 <li><a href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a></li>
-<li><a href="https://code.google.com/p/sparsehash/">SparseHash</a></li>
 </ul>
 
 <p>Optional library:</p>
 
 <ul>
+<li><a href="https://code.google.com/p/sparsehash/">SparseHash</a></li>
 <li><a href="https://www.cgal.org/">CGAL</a></li>
 <li><a href="http://wias-berlin.de/software/tetgen/">TetGen</a></li>
 <li><a href="http://igl.ethz.ch/projects/libigl/">libigl</a></li>
 <li><a href="https://github.com/gilbo/cork">cork</a></li>
 </ul>
+
+<p>Most optinal libraries are detected automatically.  To disable the usage of SparseHash, use the flag "-DUSE<em>SPARSE</em>HASH=OFF" with cmake.  I.e.</p>
+
+<pre><code>cmake -DUSE_SPARSE_HASH=OFF ..
+</code></pre>
+
+<p>instead of</p>
+
+<pre><code>cmake ..
+</code></pre>
 
 <h3>Environment Variables</h3>
 
