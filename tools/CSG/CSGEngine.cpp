@@ -1,5 +1,8 @@
 #include "CSGEngine.h"
+
+#ifdef WITH_CORK
 #include "Cork/CorkEngine.h"
+#endif
 
 #include <sstream>
 #include <iostream>
@@ -9,15 +12,22 @@
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 
-CSGEngine::Ptr CSGEngine::create(const std::string& engine_name) {
-    if (engine_name == "cork") {
-        return Ptr(new CorkEngine());
-    } else {
+namespace CSGEngineHelper {
+    void engine_not_found(const std::string& engine_name) {
         std::stringstream err_msg;
         err_msg << "CSG engine \"" << engine_name
             << "\" is not supported." << std::endl;
         throw NotImplementedError(err_msg.str());
     }
+}
+using namespace CSGEngineHelper;
+
+CSGEngine::Ptr CSGEngine::create(const std::string& engine_name) {
+#ifdef WITH_CORK
+    if (engine_name == "cork") { return Ptr(new CorkEngine()); }
+#endif
+    engine_not_found(engine_name);
+    return Ptr(NULL);
 }
 
 void CSGEngine::clean_up() {

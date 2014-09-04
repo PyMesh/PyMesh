@@ -27,6 +27,7 @@ Optional library:
 * [CGAL](https://www.cgal.org/)
 * [TetGen](http://wias-berlin.de/software/tetgen/)
 * [libigl](http://igl.ethz.ch/projects/libigl/)
+* [cork](https://github.com/gilbo/cork)
 
 ### Environment Variables ###
 
@@ -37,6 +38,7 @@ If any of the dependent library is not installed in standard locations (/usr/loc
 * CGAL_PATH: path to CGAL library
 * BOOST_INC: directory containing boost.
 * LIBIGL_PATH: path to libigl.
+* CORK_PATH: path to cork.
 
 ### Build ###
 
