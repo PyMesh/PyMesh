@@ -23,8 +23,8 @@ class CSGEngine {
             m_faces_2 = faces;
         }
 
-        const MatrixFr& get_vertices() const { return m_vertices; }
-        const MatrixIr& get_faces() const { return m_faces; }
+        const MatrixFr get_vertices() const { return m_vertices; }
+        const MatrixIr get_faces() const { return m_faces; }
         void clean_up();
 
     public:
