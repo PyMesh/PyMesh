@@ -114,3 +114,19 @@ TEST_F(SimpleSubdivisionTest, cube) {
     ASSERT_EQ(48, sub_faces.rows());
     assert_equal_centroid(vertices, sub_vertices);
 }
+
+TEST_F(SimpleSubdivisionTest, face_index) {
+    MeshPtr square = load_mesh("square_2D.obj");
+    MatrixFr vertices = extract_vertices(square);
+    MatrixIr faces = extract_faces(square);
+
+    SubDivPtr sub = create_subdivision();
+    sub->subdivide(vertices, faces, 1);
+
+    MatrixIr sub_faces = sub->get_faces();
+    VectorI face_indices = sub->get_face_indices();
+
+    ASSERT_EQ(sub_faces.rows(), face_indices.size());
+    ASSERT_EQ(0, face_indices.minCoeff());
+    ASSERT_EQ(faces.rows()-1, face_indices.maxCoeff());
+}

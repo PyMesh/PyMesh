@@ -21,8 +21,10 @@ class Subdivision {
     public:
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
+        VectorI  get_face_indices() const { return m_face_indices; }
 
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
+        VectorI  m_face_indices;
 };

@@ -1,4 +1,5 @@
 #include "SimpleSubdivision.h"
+#include <algorithm>
 #include <vector>
 #include <Core/Exception.h>
 
@@ -10,9 +11,18 @@ void SimpleSubdivision::subdivide(MatrixFr vertices, MatrixIr faces,
     }
     m_vertices = vertices;
     m_faces = faces;
+    initialize_face_indices();
 
     for (size_t i=0; i<num_iterations; i++) {
         subdivide_once();
+    }
+}
+
+void SimpleSubdivision::initialize_face_indices() {
+    const size_t num_faces = m_faces.rows();
+    m_face_indices.resize(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        m_face_indices[i] = i;
     }
 }
 
@@ -20,6 +30,7 @@ void SimpleSubdivision::subdivide_once() {
     m_mid_edge_points_map.clear();
     m_mid_edge_points.clear();
     m_subdivided_faces.clear();
+    m_subdivided_face_indices.clear();
 
     const size_t num_faces = m_faces.rows();
     for (size_t i=0; i<num_faces; i++) {
@@ -28,6 +39,7 @@ void SimpleSubdivision::subdivide_once() {
 
     update_vertices();
     update_faces();
+    update_face_indices();
 }
 
 void SimpleSubdivision::subdivide_face(size_t fi) {
@@ -51,6 +63,11 @@ void SimpleSubdivision::subdivide_face(size_t fi) {
                 mid_edge_indices[0],
                 mid_edge_indices[1],
                 mid_edge_indices[2]));
+
+    m_subdivided_face_indices.push_back(m_face_indices[fi]);
+    m_subdivided_face_indices.push_back(m_face_indices[fi]);
+    m_subdivided_face_indices.push_back(m_face_indices[fi]);
+    m_subdivided_face_indices.push_back(m_face_indices[fi]);
 }
 
 VectorI SimpleSubdivision::compute_mid_edge_points(const VectorI& face) {
@@ -102,3 +119,12 @@ void SimpleSubdivision::update_faces() {
         m_faces.row(i) = m_subdivided_faces[i];
     }
 }
+
+void SimpleSubdivision::update_face_indices() {
+    const size_t num_faces = m_subdivided_faces.size();
+    m_face_indices.resize(num_faces);
+    std::copy(m_subdivided_face_indices.begin(),
+            m_subdivided_face_indices.end(), 
+            m_face_indices.data());
+}
+
