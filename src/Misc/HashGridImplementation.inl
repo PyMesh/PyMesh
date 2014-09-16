@@ -141,6 +141,32 @@ bool HashGridImplementation<Trait>::insert_triangle(int obj_id, const MatrixFr& 
 }
 
 template<typename Trait>
+bool HashGridImplementation<Trait>::insert_multiple_triangles(
+        const VectorI& obj_ids, const MatrixFr& shape) {
+    if (shape.rows() % 3 != 0) {
+        std::stringstream err_msg;
+        err_msg << "Expect number of vertices to be multiples of 3" << std::endl;
+        err_msg << "but get " << shape.rows() << " vertices instead.";
+        throw RuntimeError(err_msg.str());
+    }
+    if (obj_ids.size() * 3 != shape.rows()) {
+        std::stringstream err_msg;
+        err_msg << "Number of ids " << obj_ids.size()
+            << " does not match the number of triangles "
+            << shape.rows() / 3;
+        throw RuntimeError(err_msg.str());
+    }
+
+    bool success = true;
+    const size_t dim = shape.cols();
+    const size_t num_faces = obj_ids.size();
+    for (size_t i=0; i<num_faces; i++) {
+        success &= insert_triangle(obj_ids[i], shape.block(i*3, 0, 3, dim));
+    }
+    return success;
+}
+
+template<typename Trait>
 bool HashGridImplementation<Trait>::insert_batch(int obj_id, const MatrixFr& points) {
     size_t num_pts = points.rows();
     bool success = true;
