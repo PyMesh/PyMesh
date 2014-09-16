@@ -45,14 +45,11 @@ MatrixFr ShortEdgeRemoval::get_vertices() const {
     return vertices;
 }
 
-MatrixIr ShortEdgeRemoval::get_faces() const {
-    return m_faces;
-}
-
 void ShortEdgeRemoval::init() {
     init_vertex_map();
     init_edges();
     init_edge_length_heap();
+    init_face_indices();
 }
 
 void ShortEdgeRemoval::update() {
@@ -66,6 +63,14 @@ void ShortEdgeRemoval::init_vertex_map() {
     const size_t num_vertices = get_num_vertices();
     m_vertex_map.resize(num_vertices);
     std::fill(m_vertex_map.begin(), m_vertex_map.end(), UNMAPPED);
+}
+
+void ShortEdgeRemoval::init_face_indices() {
+    const size_t num_faces = get_num_faces();
+    m_face_indices.resize(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        m_face_indices[i] = i;
+    }
 }
 
 void ShortEdgeRemoval::init_edges() {
@@ -101,6 +106,7 @@ void ShortEdgeRemoval::update_faces() {
     const size_t num_entries = num_faces * vertex_per_face;
 
     std::vector<size_t> faces;
+    std::vector<size_t> face_indices;
     for (size_t i=0; i<num_faces; i++) {
         VectorI face = m_faces.row(i);
         for (size_t j=0; j<vertex_per_face; j++) {
@@ -113,10 +119,14 @@ void ShortEdgeRemoval::update_faces() {
             face[2] == face[0])
             continue;
         faces.insert(faces.end(), face.data(), face.data() + vertex_per_face);
+        face_indices.push_back(m_face_indices[i]);
     }
 
     m_faces.resize(faces.size() / vertex_per_face, vertex_per_face);
     std::copy(faces.begin(), faces.end(), m_faces.data());
+
+    m_face_indices.resize(face_indices.size());
+    std::copy(face_indices.begin(), face_indices.end(), m_face_indices.data());
 }
 
 void ShortEdgeRemoval::collapse(Float threshold) {

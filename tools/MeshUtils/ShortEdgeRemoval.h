@@ -17,7 +17,8 @@ class ShortEdgeRemoval {
          */
         size_t run(Float threshold);
         MatrixFr get_vertices() const;
-        MatrixIr get_faces() const;
+        MatrixIr get_faces() const { return m_faces; }
+        VectorI  get_face_indices() const { return m_face_indices; }
 
     private:
         typedef Triplet Edge;
@@ -25,6 +26,7 @@ class ShortEdgeRemoval {
         void init();
         void update();
         void init_vertex_map();
+        void init_face_indices();
         void init_edges();
         void init_edge_length_heap();
         void update_faces();
@@ -45,6 +47,7 @@ class ShortEdgeRemoval {
 
         MatrixFr m_vertices;
         MatrixIr m_faces;
+        VectorI  m_face_indices;
 
         std::vector<VectorF> m_new_vertices;
 

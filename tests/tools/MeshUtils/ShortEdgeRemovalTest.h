@@ -45,6 +45,34 @@ class ShortEdgeRemovalTest : public ::testing::Test {
 
             ASSERT_LT(min_dist, threshold);
         }
+
+        void check_face_indices(const ShortEdgeRemoval& remover,
+                const MatrixFr& ori_vertices, const MatrixIr& ori_faces, Float threshold) {
+            const size_t dim = ori_vertices.cols();
+            MatrixFr cur_vertices = remover.get_vertices();
+            MatrixIr cur_faces = remover.get_faces();
+            VectorI face_indices = remover.get_face_indices();
+            const size_t num_faces = cur_faces.rows();
+            ASSERT_EQ(num_faces, face_indices.size());
+
+            for (size_t i=0; i<num_faces; i++) {
+                VectorI cur_face = cur_faces.row(i);
+                VectorI ori_face = ori_faces.row(face_indices[i]);
+                ASSERT_EQ(dim, cur_face.size());
+                ASSERT_EQ(dim, ori_face.size());
+                VectorF cur_centroid = VectorF::Zero(dim);
+                VectorF ori_centroid = VectorF::Zero(dim);
+                for (size_t j=0; j<dim; j++) {
+                    ASSERT_LT(cur_face[j], cur_vertices.rows());
+                    ASSERT_LT(ori_face[j], ori_vertices.rows());
+                    cur_centroid += cur_vertices.row(cur_face[j]);
+                    ori_centroid += ori_vertices.row(ori_face[j]);
+                }
+                cur_centroid /= dim;
+                ori_centroid /= dim;
+                ASSERT_LT((cur_centroid - ori_centroid).norm(), threshold);
+            }
+        }
 };
 
 TEST_F(ShortEdgeRemovalTest, SingleLargeFace) {
@@ -61,6 +89,7 @@ TEST_F(ShortEdgeRemovalTest, SingleLargeFace) {
 
     check_num_faces_left(remover, 1);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
 TEST_F(ShortEdgeRemovalTest, DegeneratedFace) {
@@ -77,6 +106,7 @@ TEST_F(ShortEdgeRemovalTest, DegeneratedFace) {
 
     check_num_faces_left(remover, 0);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
 TEST_F(ShortEdgeRemovalTest, ZeroThreshold) {
@@ -93,6 +123,7 @@ TEST_F(ShortEdgeRemovalTest, ZeroThreshold) {
 
     check_num_faces_left(remover, 0);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.0);
 }
 
 TEST_F(ShortEdgeRemovalTest, SingleFace) {
@@ -109,6 +140,7 @@ TEST_F(ShortEdgeRemovalTest, SingleFace) {
 
     check_num_faces_left(remover, 0);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
 TEST_F(ShortEdgeRemovalTest, DoubleFace) {
@@ -127,6 +159,7 @@ TEST_F(ShortEdgeRemovalTest, DoubleFace) {
 
     check_num_faces_left(remover, 1);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
 TEST_F(ShortEdgeRemovalTest, SingleTinyFace) {
@@ -143,6 +176,7 @@ TEST_F(ShortEdgeRemovalTest, SingleTinyFace) {
 
     check_num_faces_left(remover, 0);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
 TEST_F(ShortEdgeRemovalTest, DoubleTinyFace) {
@@ -161,6 +195,7 @@ TEST_F(ShortEdgeRemovalTest, DoubleTinyFace) {
 
     check_num_faces_left(remover, 0);
     check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
 TEST_F(ShortEdgeRemovalTest, TinyEdgeChain) {
@@ -190,5 +225,24 @@ TEST_F(ShortEdgeRemovalTest, TinyEdgeChain) {
     check_preserved_vertex(remover, v0, threshold);
     check_preserved_vertex(remover, v1, threshold);
     check_preserved_vertex(remover, v2, threshold);
+    check_face_indices(remover, vertices, faces, threshold);
+}
+
+TEST_F(ShortEdgeRemovalTest, FaceIndices) {
+    MatrixFr vertices(4,3);
+    vertices <<
+        0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.1;
+    MatrixIr faces(2,3);
+    faces << 0,1,2,
+             0,2,3;
+
+    ShortEdgeRemoval remover(vertices, faces);
+    remover.run(0.2);
+
+    check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
 }
 
