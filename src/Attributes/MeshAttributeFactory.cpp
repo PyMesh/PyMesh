@@ -14,6 +14,7 @@
 #include "VertexLaplacianAttribute.h"
 #include "VertexMeanCurvatureAttribute.h"
 #include "VertexNormalAttribute.h"
+#include "VertexValanceAttribute.h"
 #include "VertexVolumeAttribute.h"
 #include "VoxelCentroidAttribute.h"
 #include "VoxelIndexAttribute.h"
@@ -40,6 +41,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "vertex_index") {
         MeshAttribute::Ptr attr(new VertexIndexAttribute(name));
+        return attr;
+    } else if (name == "vertex_valance") {
+        MeshAttribute::Ptr attr(new VertexValanceAttribute(name));
         return attr;
     } else if (name == "edge_length") {
         MeshAttribute::Ptr attr(new EdgeLengthAttribute(name));
