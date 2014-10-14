@@ -12,7 +12,7 @@ class SimpleSubdivision : public Subdivision {
         virtual void subdivide(MatrixFr vertices, MatrixIr faces,
                 size_t num_iterations);
 
-    private:
+    protected:
         void initialize_face_indices();
         void subdivide_once();
         void subdivide_face(size_t fi);
@@ -21,7 +21,7 @@ class SimpleSubdivision : public Subdivision {
         void update_faces();
         void update_face_indices();
 
-    private:
+    protected:
         std::map<Triplet, size_t> m_mid_edge_points_map;
         std::vector<VectorF> m_mid_edge_points;
         std::vector<VectorI> m_subdivided_faces;

@@ -2,18 +2,18 @@
 
 #include "SubdivisionTest.h"
 
-class SimpleSubdivisionTest : public SubdivisionTest {
+class LoopSubdivisionTest : public SubdivisionTest {
     protected:
         SubDivPtr create_subdivision() {
-            return Subdivision::create("simple");
+            return Subdivision::create("loop");
         }
 };
 
-TEST_F(SimpleSubdivisionTest, creation) {
+TEST_F(LoopSubdivisionTest, creation) {
     SubDivPtr sub = create_subdivision();
 }
 
-TEST_F(SimpleSubdivisionTest, square) {
+TEST_F(LoopSubdivisionTest, square) {
     MeshPtr square = load_mesh("square_2D.obj");
     MatrixFr vertices = extract_vertices(square);
     MatrixIr faces = extract_faces(square);
@@ -31,7 +31,7 @@ TEST_F(SimpleSubdivisionTest, square) {
     assert_equal_centroid(vertices, sub_vertices);
 }
 
-TEST_F(SimpleSubdivisionTest, cube) {
+TEST_F(LoopSubdivisionTest, cube) {
     MeshPtr cube = load_mesh("cube.obj");
     MatrixFr vertices = extract_vertices(cube);
     MatrixIr faces = extract_faces(cube);
@@ -49,7 +49,7 @@ TEST_F(SimpleSubdivisionTest, cube) {
     assert_equal_centroid(vertices, sub_vertices);
 }
 
-TEST_F(SimpleSubdivisionTest, face_index) {
+TEST_F(LoopSubdivisionTest, face_index) {
     MeshPtr square = load_mesh("square_2D.obj");
     MatrixFr vertices = extract_vertices(square);
     MatrixIr faces = extract_faces(square);

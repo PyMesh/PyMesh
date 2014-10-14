@@ -8,6 +8,7 @@
 #include "AttributeUtilsTest.h"
 #include "PointLocatorTest.h"
 #include "SimpleSubdivisionTest.h"
+#include "LoopSubdivisionTest.h"
 #include "DuplicatedVertexRemovalTest.h"
 
 int main(int argc, char** argv) {
