@@ -13,8 +13,10 @@ class DuplicatedVertexRemoval {
         size_t run(Float tol);
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
+        VectorI get_index_map() const { return m_index_map; }
 
     private:
         MatrixFr m_vertices;
         MatrixIr m_faces;
+        VectorI  m_index_map;
 };

@@ -1,4 +1,5 @@
 import numpy as np
+from numpy.linalg import norm
 import os.path
 import unittest
 
@@ -42,9 +43,15 @@ class DuplicatedVertexRemovalTest(unittest.TestCase):
         remover.run(self.tol);
         result_vertices = remover.get_vertices();
         result_faces = remover.get_faces();
+        index_map = remover.get_index_map();
 
         self.assert_matrix_eq(expected_vertices, result_vertices);
         self.assert_matrix_eq(expected_faces, result_faces);
+
+        for i_old,i_new in enumerate(index_map):
+            self.assertAlmostEqual(0.0,
+                    norm(vertices[i_old] - result_vertices[i_new]),
+                    self.tol);
 
     def test_2D(self):
         mesh = self.load_mesh("square_2D.obj");
