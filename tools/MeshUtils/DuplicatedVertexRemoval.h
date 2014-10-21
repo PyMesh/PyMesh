@@ -7,7 +7,7 @@
  */
 class DuplicatedVertexRemoval {
     public:
-        DuplicatedVertexRemoval(MatrixFr& vertices, MatrixIr& faces);
+        DuplicatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces);
 
     public:
         size_t run(Float tol);

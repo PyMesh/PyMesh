@@ -3,7 +3,7 @@
 
 #include <Misc/HashGrid.h>
 
-DuplicatedVertexRemoval::DuplicatedVertexRemoval(MatrixFr& vertices, MatrixIr& faces):
+DuplicatedVertexRemoval::DuplicatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces):
     m_vertices(vertices), m_faces(faces) {}
 
 size_t DuplicatedVertexRemoval::run(Float tol) {
