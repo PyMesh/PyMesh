@@ -1,6 +1,6 @@
 #pragma once
 
-#include <ConvexHull/ConvexHullEngine.h>
+#include <ConvexHullEngine.h>
 
 class CGALConvexHull : public ConvexHullEngine {
     protected:
