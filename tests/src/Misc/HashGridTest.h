@@ -190,3 +190,54 @@ TEST_F(HashGridTest, CloseByPoints) {
     ASSERT_THAT(near_one_vec, Contains(2));
 }
 
+TEST_F(HashGridTest, InsertMultipleTriangles) {
+    // The dotted triangle occupies 8 cells.
+    // +---+---+---+
+    // | ......... |
+    // |-:-.---+-:-+
+    // | : | . | : |
+    // |-:-+---.-:-+
+    // | :......:. |
+    // +---+---+---+
+    MatrixF triangles(6,3);
+    triangles << 0.0, 0.0, 0.0,
+                 1.0, 0.0, 0.0,
+                 0.0, 1.0, 0.0,
+                 1.0, 0.0, 0.0,
+                 1.0, 1.0, 0.0,
+                 0.0, 1.0, 0.0;
+    Vector2I ids(1, 2);
+    m_grid->insert_multiple_triangles(ids, triangles);
+    VectorF p1 = triangles.block(0, 0, 3, 3).colwise().sum() / 3.0;
+    VectorF p2 = triangles.block(3, 0, 3, 3).colwise().sum() / 3.0;
+    VectorF p3 = Vector3F(0.5, 0.5, 0.0);
+
+    VectorI near_p1 = m_grid->get_items_near_point(p1);
+    VectorI near_p2 = m_grid->get_items_near_point(p2);
+    VectorI near_p3 = m_grid->get_items_near_point(p3);
+
+    ASSERT_LT(0, near_p1.size());
+    ASSERT_LT(0, near_p2.size());
+    ASSERT_LT(0, near_p3.size());
+}
+
+TEST_F(HashGridTest, InsertMultipleTriangles_2) {
+    m_grid = HashGrid::create(1e-1);
+    MatrixF triangles(3, 3);
+    triangles <<-0.25,2.02022106,-0.25,
+                -0.25,2.02022106, 0.25,
+                -0.25,2.500001  ,-0.25;
+    VectorI ids(1); ids << 1;
+    bool success = m_grid->insert_multiple_triangles(ids, triangles);
+    ASSERT_TRUE(success);
+    VectorF p1 = triangles.colwise().sum() / 3.0;
+    VectorF p2 = Vector3F(-0.25, 2.1801477, -0.08333333);
+
+    VectorI near_id_1 = m_grid->get_items_near_point(p1);
+    VectorI near_id_2 = m_grid->get_items_near_point(p2);
+    ASSERT_EQ(1, near_id_1.size());
+    ASSERT_EQ(1, near_id_1[0]);
+    ASSERT_EQ(1, near_id_2.size());
+    ASSERT_EQ(1, near_id_2[0]);
+}
+

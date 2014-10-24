@@ -81,8 +81,11 @@ bool HashGridImplementation<Trait>::insert_bbox(int obj_id, const MatrixF& shape
 template<typename Trait>
 bool HashGridImplementation<Trait>::insert_triangle(int obj_id, const MatrixFr& shape) {
     assert(shape.cols() == 3 || shape.cols() == 2);
+    const Float EPS = 1e-6;
     VectorF bbox_min = shape.colwise().minCoeff();
     VectorF bbox_max = shape.colwise().maxCoeff();
+    bbox_min.array() -= EPS;
+    bbox_max.array() += EPS;
     HashKey min_key = convert_to_key(bbox_min);
     HashKey max_key = convert_to_key(bbox_max);
 
