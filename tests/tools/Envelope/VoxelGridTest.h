@@ -25,6 +25,19 @@ class VoxelGridTest : public ::testing::Test {
                     .create());
         }
 
+        MeshPtr form_mesh(MatrixFr& vertices, MatrixIr& faces) {
+            const size_t dim = vertices.cols();
+            const size_t vertex_per_face = faces.cols();
+            VectorI voxels = VectorI::Zero(0);
+
+            VectorF flat_vertices = Eigen::Map<VectorF>(vertices.data(), vertices.rows()*vertices.cols());
+            VectorI flat_faces = Eigen::Map<VectorI>(faces.data(), faces.rows() * faces.cols());
+
+            return MeshFactory().load_data(
+                    flat_vertices, flat_faces,
+                    voxels, dim, vertex_per_face, 0).create_shared();
+        }
+
         void save_mesh(const std::string& filename, MeshPtr mesh) {
             MeshWriter* writer = MeshWriter::create_writer(filename);
             writer->write_mesh(*mesh);
@@ -136,5 +149,30 @@ TEST_F(VoxelGridTest, VoxelMesh_3D) {
     ASSERT_EQ(num_occupied_cells, hex_mesh->get_num_voxels());
 
     save_mesh("tmp_cube.msh", hex_mesh);
+}
+
+TEST_F(VoxelGridTest, Rectangle) {
+    MatrixFr vertices(4, 2);
+    vertices << 0.0, 0.0,
+               1.0, 0.0,
+               1.0, 10.0,
+                0.0, 10.0;
+    MatrixIr faces(1, 4);
+    faces << 0, 1, 2, 3;
+
+    MeshPtr mesh = form_mesh(vertices, faces);
+
+    Float cell_size = 0.5;
+    VoxelGrid<2> grid(cell_size);
+    grid.insert_mesh(mesh);
+    grid.create_grid();
+    MeshPtr rec_mesh = grid.get_voxel_mesh();
+
+    for (size_t i=0; i<4; i++) {
+        const VectorF& p = vertices.row(i);
+        ASSERT_TRUE(grid.is_inside(p));
+    }
+
+    save_mesh("tmp_rec.msh", rec_mesh);
 }
 

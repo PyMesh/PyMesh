@@ -89,10 +89,11 @@ class Grid {
         virtual Vector_f get_cell_center(size_t linear_index) const {
             Vector_f index;
             for (size_t i=DIM-1; i>0; i--) {
-                index[i] = linear_index % m_grid_size[i-1];
-                linear_index /= m_grid_size[i-1];
+                index[i] = linear_index % m_grid_size[i];
+                linear_index /= m_grid_size[i];
             }
             index[0] = linear_index;
+            assert(index[0] < m_grid_size[0]);
 
             return m_grid_base_coord + m_cell_size.cwiseProduct(index);
         }

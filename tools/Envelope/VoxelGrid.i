@@ -1,3 +1,4 @@
+%include Mesh.i
 %{
 #include "VoxelGrid.h"
 %}
