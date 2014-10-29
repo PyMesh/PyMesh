@@ -38,7 +38,7 @@ void CSGEngine::clean_up() {
 
 void CSGEngine::remove_duplicated_vertices() {
     DuplicatedVertexRemoval remover(m_vertices, m_faces);
-    size_t num_removed = remover.run(1e-3);
+    size_t num_removed = remover.run(1e-6);
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 }
