@@ -65,3 +65,24 @@ class BoundaryTest(unittest.TestCase):
             edge = set(edge.ravel());
             self.assertSetEqual(face & edge, edge);
 
+    def test_bd_nodes_raw_sqaure_raw_data(self):
+        mesh = self.load_mesh("square_2D.obj");
+        vertices = mesh.get_vertices().reshape((-1, 2), order="C");
+        faces = mesh.get_faces().reshape((-1, 3), order="C");
+        boundary = PyMeshUtils.Boundary.extract_surface_boundary_raw(vertices, faces);
+        bd_nodes = boundary.get_boundary_nodes();
+        bd_nodes = bd_nodes.ravel();
+        self.assertEqual(4, len(bd_nodes));
+        self.assertSetEqual(set(range(4)), set(bd_nodes));
+
+    def test_bd_nodes_tet_raw_data(self):
+        mesh = self.load_mesh("tet.msh");
+        vertices = mesh.get_vertices().reshape((-1, 3), order="C");
+        voxels = mesh.get_voxels().reshape((-1, 4), order="C")
+        boundary = PyMeshUtils.Boundary.extract_volume_boundary_raw(
+                vertices, voxels);
+        bd_nodes = boundary.get_boundary_nodes();
+        bd_nodes = bd_nodes.ravel();
+        self.assertEqual(4, len(bd_nodes));
+        self.assertSetEqual(set(range(4)), set(bd_nodes));
+

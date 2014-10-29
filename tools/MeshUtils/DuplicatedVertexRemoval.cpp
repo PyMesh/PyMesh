@@ -1,6 +1,8 @@
 #include "DuplicatedVertexRemoval.h"
 #include <cassert>
+#include <sstream>
 
+#include <Core/Exception.h>
 #include <Misc/HashGrid.h>
 
 DuplicatedVertexRemoval::DuplicatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces):
@@ -24,6 +26,16 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
             m_index_map[i] = count;
             count++;
         } else {
+            if (candidates.size() > 1) {
+                std::stringstream err_msg;
+                err_msg << candidates.size()
+                    << " vertices occupy a single cell" << std::endl;
+                for (size_t j=0; j<candidates.size(); j++) {
+                    err_msg << "index " << candidates[j] << ":\t<"
+                        << m_vertices.row(candidates[j]) << " >" << std::endl;
+                }
+                throw RuntimeError(err_msg.str());
+            }
             assert(candidates.size() == 1);
             m_index_map[i] = candidates[0];
             num_duplications++;

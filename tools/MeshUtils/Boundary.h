@@ -9,7 +9,9 @@ class Boundary {
     public:
         typedef std::shared_ptr<Boundary> Ptr;
         static Ptr extract_surface_boundary(const Mesh& mesh);
+        static Ptr extract_surface_boundary_raw(MatrixFr& vertices, MatrixIr& faces);
         static Ptr extract_volume_boundary(const Mesh& mesh);
+        static Ptr extract_volume_boundary_raw(MatrixFr& vertices, MatrixIr& voxels);
 
     public:
         virtual size_t get_num_boundaries() const =0;
