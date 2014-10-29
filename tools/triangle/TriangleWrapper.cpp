@@ -19,8 +19,8 @@ extern "C" {
 namespace TriangleWrapperHelper {
     std::string form_flags(Float max_area, bool split_boundary) {
         std::stringstream flags;
-        flags << "Qa" << max_area;
-        if (split_boundary) {
+        flags << "zQa" << max_area;
+        if (!split_boundary) {
             flags << "Y";
         }
         return flags.str();
