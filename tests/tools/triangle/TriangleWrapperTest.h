@@ -126,6 +126,26 @@ TEST_F(TriangleWrapperTest, Holes) {
     ASSERT_OUTSIDE(m_holes.row(0), vertices, faces);
 }
 
+TEST_F(TriangleWrapperTest, AutoHoleDetection) {
+    TriangleWrapper tri(m_vertices, m_segments);
+    tri.run(0.01, true, true);
+
+    MatrixFr vertices = tri.get_vertices();
+    MatrixIr faces = tri.get_faces();
+
+    ASSERT_GE(vertices.rows(), m_vertices.rows());
+    ASSERT_GT(faces.rows(), 0);
+
+    VectorF bbox_min = vertices.colwise().minCoeff();
+    VectorF bbox_max = vertices.colwise().maxCoeff();
+
+    ASSERT_FLOAT_EQ(0.0, bbox_min.minCoeff());
+    ASSERT_FLOAT_EQ(0.0, bbox_min.maxCoeff());
+    ASSERT_FLOAT_EQ(1.0, bbox_max.minCoeff());
+    ASSERT_FLOAT_EQ(1.0, bbox_max.maxCoeff());
+    ASSERT_OUTSIDE(m_holes.row(0), vertices, faces);
+}
+
 TEST_F(TriangleWrapperTest, 3D) {
     size_t num_pts = m_vertices.rows();
     MatrixFr vertices_3d(num_pts, 3);

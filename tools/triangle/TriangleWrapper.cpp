@@ -1,9 +1,16 @@
 #include "TriangleWrapper.h"
 
+#include <cmath>
 #include <iostream>
+#include <list>
+#include <map>
 #include <sstream>
+#include <unordered_map>
+#include <vector>
 
 #include <Core/Exception.h>
+#include <Misc/Triplet.h>
+#include <MeshUtils/IsolatedVertexRemoval.h>
 #include "DimReduction.h"
 
 #ifdef SINGLE
@@ -18,30 +25,102 @@ extern "C" {
 }
 
 namespace TriangleWrapperHelper {
-    std::string form_flags(Float max_area, bool split_boundary) {
+    const int REGION_BOUNDARY = 2;
+    std::string form_flags(Float max_area, bool split_boundary, bool refine) {
         std::stringstream flags;
-        flags << "zQpea" << max_area;
+        flags << "zQpa" << max_area;
         if (!split_boundary) {
             flags << "Y";
         }
+        if (refine) {
+            flags << "r";
+        } else {
+            flags << "en";
+        }
         return flags.str();
+    }
+
+    typedef std::list<size_t> Region;
+    typedef std::list<Region> Regions;
+
+    struct HashFunc {
+        int operator()(const Triplet& key) const {
+            return key.hash();
+        }
+    };
+    typedef std::unordered_map<Triplet, bool, HashFunc> BoundaryMarker;
+
+    Regions extract_regions(const MatrixIr& faces,
+            const MatrixIr& face_neighbors,
+            BoundaryMarker& boundary_marker) {
+        const size_t num_faces = faces.rows();
+
+        Regions regions;
+        std::vector<bool> visited(num_faces, false);
+        for (size_t i=0; i<num_faces; i++) {
+            if (visited[i]) continue;
+            Region region;
+            std::list<size_t> Q;
+
+            Q.push_back(i);
+            visited[i] = true;
+            while (!Q.empty()) {
+                size_t face_index = Q.front();
+                Q.pop_front();
+                region.push_back(face_index);
+
+                const Vector3I& face = faces.row(face_index);
+                const Vector3I& adj_faces = face_neighbors.row(face_index);
+                Triplet edges[3] = {
+                    Triplet(face[1], face[2]),
+                    Triplet(face[2], face[0]),
+                    Triplet(face[0], face[1])
+                };
+
+                for (size_t j=0; j<3; j++) {
+                    if (boundary_marker[edges[j]]) continue;
+                    if (visited[adj_faces[j]]) continue;
+                    Q.push_back(adj_faces[j]);
+                    visited[adj_faces[j]] = true;
+                }
+            }
+            regions.push_back(region);
+        }
+        return regions;
+    }
+
+    Float compute_winding_number(const VectorF& p,
+            const MatrixFr& points,
+            const MatrixIr& segments) {
+        const size_t num_segments = segments.rows();
+        Float total_angle=0;
+        for (size_t i=0; i<num_segments; i++) {
+            Vector2I segment = segments.row(i);
+            Vector2F v1 = points.row(segment[0]) - p.transpose();
+            Vector2F v2 = points.row(segment[1]) - p.transpose();
+            Float angle = atan2(
+                    v1.x()*v2.y() - v1.y()*v2.x(),
+                    v1.dot(v2));
+            total_angle += angle;
+        }
+
+        return total_angle / (2 * M_PI);
     }
 }
 
 using namespace TriangleWrapperHelper;
 
-void TriangleWrapper::run(Float max_area, bool split_boundary) {
-    std::string flags = form_flags(max_area, split_boundary);
+void TriangleWrapper::run(Float max_area, bool split_boundary, bool
+        auto_hole_detection) {
     const size_t dim = m_points.cols();
     const size_t vertex_per_segment = m_segments.cols();
+    bool do_refine = (vertex_per_segment == 3);
+    std::string flags = form_flags(max_area, split_boundary, do_refine);
     if (dim == 2) {
-        if (vertex_per_segment == 2) {
+        if (!do_refine) {
             run_triangle(m_points, m_segments, m_holes, flags);
-        } else if (vertex_per_segment == 3) {
-            flags += "r";
-            refine(m_points, m_segments, flags);
         } else {
-            throw RuntimeError("Unsupported segment type");
+            refine(m_points, m_segments, flags);
         }
     } else if (dim == 3) {
         DimReduction<3, 2> reductor(m_points);
@@ -53,13 +132,10 @@ void TriangleWrapper::run(Float max_area, bool split_boundary) {
             holes = reductor.project(m_holes);
         }
 
-        if (vertex_per_segment == 2) {
+        if (!do_refine) {
             run_triangle(pts, m_segments, holes, flags);
-        } else if (vertex_per_segment == 3) {
-            flags += "r";
-            refine(pts, m_segments, flags);
         } else {
-            throw RuntimeError("Unsupported segment type");
+            refine(pts, m_segments, flags);
         }
 
         m_vertices = reductor.unproject(m_vertices);
@@ -67,6 +143,10 @@ void TriangleWrapper::run(Float max_area, bool split_boundary) {
         std::stringstream err_msg;
         err_msg << "Unsupported dim: " << dim;
         throw NotImplementedError(err_msg.str());
+    }
+
+    if (auto_hole_detection) {
+        poke_holes();
     }
 }
 
@@ -101,7 +181,8 @@ void TriangleWrapper::run_triangle(
     in.segmentlist      = new int[num_segments * pt_per_segment];
     std::copy(segments.data(),
             segments.data() + num_segments * pt_per_segment, in.segmentlist);
-    in.segmentmarkerlist = NULL;
+    in.segmentmarkerlist = new int[num_segments];
+    for (size_t i=0; i<num_segments; i++) in.segmentmarkerlist[i] = REGION_BOUNDARY;
 
     in.numberofholes = holes.rows();
     if (num_holes > 0) {
@@ -132,15 +213,27 @@ void TriangleWrapper::run_triangle(
     m_faces.resize(out.numberoftriangles, 3);
     std::copy(out.trianglelist, out.trianglelist + out.numberoftriangles*3,
             m_faces.data());
+    m_face_neighbors.resize(out.numberoftriangles, 3);
+    std::copy(out.neighborlist, out.neighborlist + out.numberoftriangles*3,
+            m_face_neighbors.data());
+    m_edges.resize(out.numberofedges * 2);
+    std::copy(out.edgelist, out.edgelist + out.numberofedges * 2,
+            m_edges.data());
+    m_edge_marks.resize(out.numberofedges);
+    std::copy(out.edgemarkerlist, out.edgemarkerlist + out.numberofedges,
+            m_edge_marks.data());
 
     if (num_points > 0) delete [] in.pointlist;
     if (num_segments > 0) delete [] in.segmentlist;
+    if (num_segments > 0) delete [] in.segmentmarkerlist;
     if (num_holes > 0) delete [] in.holelist;
 
     if (out.numberofpoints > 0) delete [] out.pointlist;
     if (out.numberofpointattributes > 0) delete [] out.pointattributelist;
     if (out.numberoftriangles > 0) delete [] out.trianglelist;
+    if (out.numberoftriangles > 0) delete [] out.neighborlist;
     if (out.numberofsegments > 0) delete [] out.segmentlist;
+    if (out.numberofsegments > 0) delete [] out.segmentmarkerlist;
     if (out.numberofedges > 0) delete [] out.edgelist;
     if (out.numberofedges > 0) delete [] out.edgemarkerlist;
 }
@@ -211,3 +304,46 @@ void TriangleWrapper::refine(
     if (out.numberofedges > 0) delete [] out.edgelist;
     if (out.numberofedges > 0) delete [] out.edgemarkerlist;
 }
+
+void TriangleWrapper::poke_holes() {
+    const size_t num_faces = m_faces.rows();
+    const size_t num_edges = m_edge_marks.size();
+    assert(m_edges.size() == num_edges * 2);
+    BoundaryMarker boundary_markers;
+
+    for (size_t i=0; i<num_edges; i++) {
+        Triplet edge(m_edges[i*2], m_edges[i*2+1]);
+        boundary_markers.insert(
+                std::make_pair(edge, m_edge_marks[i] == REGION_BOUNDARY));
+    }
+
+    Regions regions = extract_regions(
+            m_faces, m_face_neighbors, boundary_markers);
+
+    std::list<size_t> interior_faces;
+    for (auto& region : regions) {
+        VectorI seed_face = m_faces.row(region.front());
+        VectorF seed_p = (
+                m_vertices.row(seed_face[0]) +
+                m_vertices.row(seed_face[1]) +
+                m_vertices.row(seed_face[2])) / 3.0;
+        Float wind_num = compute_winding_number(seed_p, m_points, m_segments);
+        assert(wind_num >= -1e-6);
+        if (wind_num > 0.5) {
+            interior_faces.splice(interior_faces.end(), region);
+        }
+    }
+
+    MatrixIr faces(interior_faces.size(), 3);
+    size_t count=0;
+    for (const auto& f_index : interior_faces) {
+        faces.row(count) = m_faces.row(f_index);
+        count++;
+    }
+
+    IsolatedVertexRemoval remover(m_vertices, faces);
+    remover.run();
+    m_vertices = remover.get_vertices();
+    m_faces = remover.get_faces();
+}
+
