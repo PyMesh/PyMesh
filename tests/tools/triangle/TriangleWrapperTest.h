@@ -181,7 +181,7 @@ TEST_F(TriangleWrapperTest, Refine) {
     const size_t num_faces_before = faces.rows();
 
     TriangleWrapper refiner(vertices, faces);
-    refiner.run(0.01, true);
+    refiner.run(0.01, true, false);
 
     vertices = refiner.get_vertices();
     faces = refiner.get_faces();

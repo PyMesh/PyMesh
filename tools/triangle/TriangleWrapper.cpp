@@ -146,7 +146,12 @@ void TriangleWrapper::run(Float max_area, bool split_boundary, bool
     }
 
     if (auto_hole_detection) {
-        poke_holes();
+        if (do_refine) {
+            throw RuntimeError(
+                    "Auto hole detectiong is not necessary when refining existing triangulations.");
+        } else {
+            poke_holes();
+        }
     }
 }
 
