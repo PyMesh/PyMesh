@@ -1,0 +1,25 @@
+#pragma once
+
+#include <CSG/CSGEngine.h>
+#include <clipper.hpp>
+
+class ClipperEngine : public CSGEngine {
+    public:
+        virtual ~ClipperEngine() {}
+
+    public:
+        virtual void compute_union();
+        virtual void compute_intersection();
+        virtual void compute_difference();
+        virtual void compute_symmetric_difference();
+
+    protected:
+        void clip(ClipperLib::ClipType type);
+        void initialize_if_needed();
+        void extract_boundary_loops();
+        void extract_result(const ClipperLib::Paths& paths);
+
+    protected:
+        ClipperLib::Paths m_loops_1;
+        ClipperLib::Paths m_loops_2;
+};

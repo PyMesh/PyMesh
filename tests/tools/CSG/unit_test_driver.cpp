@@ -3,6 +3,9 @@
 #ifdef WITH_CORK
 #include "Cork/CorkEngineTest.h"
 #endif
+#ifdef WITH_CLIPPER
+#include "Clipper/ClipperEngineTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

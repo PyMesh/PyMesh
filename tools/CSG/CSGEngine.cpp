@@ -3,6 +3,9 @@
 #ifdef WITH_CORK
 #include "Cork/CorkEngine.h"
 #endif
+#ifdef WITH_CLIPPER
+#include "Clipper/ClipperEngine.h"
+#endif
 
 #include <sstream>
 #include <iostream>
@@ -25,6 +28,9 @@ using namespace CSGEngineHelper;
 CSGEngine::Ptr CSGEngine::create(const std::string& engine_name) {
 #ifdef WITH_CORK
     if (engine_name == "cork") { return Ptr(new CorkEngine()); }
+#endif
+#ifdef WITH_CLIPPER
+    if (engine_name == "clipper") { return Ptr(new ClipperEngine()); }
 #endif
     engine_not_found(engine_name);
     return Ptr(NULL);
