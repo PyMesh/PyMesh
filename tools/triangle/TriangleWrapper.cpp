@@ -26,7 +26,8 @@ extern "C" {
 
 namespace TriangleWrapperHelper {
     const int REGION_BOUNDARY = 2;
-    std::string form_flags(Float max_area, bool split_boundary, bool refine) {
+    std::string form_flags(Float max_area, bool split_boundary, bool refine,
+            bool use_steiner_points) {
         std::stringstream flags;
         flags << "zQpa" << max_area;
         if (!split_boundary) {
@@ -36,6 +37,12 @@ namespace TriangleWrapperHelper {
             flags << "r";
         } else {
             flags << "en";
+        }
+        if (use_steiner_points) {
+            flags << "q";
+        } else {
+            // By default, -S set the max number of steiner points to 0.
+            flags << "S";
         }
         return flags.str();
     }
@@ -110,12 +117,13 @@ namespace TriangleWrapperHelper {
 
 using namespace TriangleWrapperHelper;
 
-void TriangleWrapper::run(Float max_area, bool split_boundary, bool
-        auto_hole_detection) {
+void TriangleWrapper::run(Float max_area, bool split_boundary,
+        bool auto_hole_detection, bool use_steiner_points) {
     const size_t dim = m_points.cols();
     const size_t vertex_per_segment = m_segments.cols();
     bool do_refine = (vertex_per_segment == 3);
-    std::string flags = form_flags(max_area, split_boundary, do_refine);
+    std::string flags = form_flags(max_area, split_boundary, do_refine,
+            use_steiner_points);
     if (dim == 2) {
         if (!do_refine) {
             run_triangle(m_points, m_segments, m_holes, flags);

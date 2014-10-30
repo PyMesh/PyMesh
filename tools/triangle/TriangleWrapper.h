@@ -23,7 +23,8 @@ class TriangleWrapper {
          */
         void run(Float max_area,
                 bool split_boundary=true,
-                bool auto_hole_detection=false);
+                bool auto_hole_detection=false,
+                bool use_steiner_points=true);
 
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
