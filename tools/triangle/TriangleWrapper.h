@@ -20,6 +20,10 @@ class TriangleWrapper {
                 const MatrixIr& segments,
                 const MatrixFr& holes,
                 const std::string& flags);
+        void refine(
+                const MatrixFr& points,
+                const MatrixIr& faces,
+                const std::string& flags);
 
     private:
         // Input data

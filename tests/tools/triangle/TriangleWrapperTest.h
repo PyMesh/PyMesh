@@ -1,6 +1,7 @@
 #pragma once
 
 #include <triangle/TriangleWrapper.h>
+#include <IO/MeshWriter.h>
 
 class TriangleWrapperTest : public ::testing::Test {
     protected:
@@ -20,12 +21,62 @@ class TriangleWrapperTest : public ::testing::Test {
                           1, 2,
                           2, 3,
                           3, 0,
-                          4, 5,
-                          5, 6,
-                          6, 7,
-                          7, 0;
+                          5, 4,
+                          6, 5,
+                          7, 6,
+                          4, 7;
             m_holes.resize(1, 2);
-            m_holes << 0.5, 0.5;
+            m_holes << 0.45, 0.5;
+        }
+
+        void save_mesh(const std::string& file_name,
+                MatrixFr& vertices, MatrixIr& faces) {
+            VectorF flat_vertices(vertices.rows() * vertices.cols());
+            std::copy(vertices.data(), vertices.data() + flat_vertices.size(), flat_vertices.data());
+            VectorI flat_faces(faces.rows() * faces.cols());
+            std::copy(faces.data(), faces.data() + flat_faces.size(), flat_faces.data());
+            VectorI flat_voxels = VectorI::Zero(0);
+            MeshWriter::create_writer(file_name)->write(
+                    flat_vertices, flat_faces, flat_voxels,
+                    vertices.cols(), faces.cols(), 4);
+        }
+
+        bool inside_triangle(const VectorF& p,
+                const VectorF& v0, const VectorF& v1, const VectorF& v2) {
+            VectorF e0 = p - v0;
+            VectorF e1 = p - v1;
+            VectorF e2 = p - v2;
+
+            Float area_01 = e0.x() * e1.y() - e0.y() * e1.x();
+            Float area_12 = e1.x() * e2.y() - e1.y() * e2.x();
+            Float area_20 = e2.x() * e0.y() - e2.y() * e0.x();
+            return ((area_01 >= 0.0) && (area_12 >= 0.0) && (area_20 >= 0.0));
+        }
+
+        void ASSERT_OUTSIDE(const VectorF& p, MatrixFr& vertices, MatrixIr& faces) {
+            const size_t num_faces = faces.rows();
+            for (size_t i=0; i<num_faces; i++) {
+                const VectorI& face = faces.row(i);
+                const VectorF& v0 = vertices.row(face[0]);
+                const VectorF& v1 = vertices.row(face[1]);
+                const VectorF& v2 = vertices.row(face[2]);
+
+                ASSERT_FALSE(inside_triangle(p, v0, v1, v2));
+            }
+        }
+
+        void ASSERT_INSIDE(const VectorF& p, MatrixFr& vertices, MatrixIr& faces) {
+            bool is_inside = false;
+            const size_t num_faces = faces.rows();
+            for (size_t i=0; i<num_faces; i++) {
+                const VectorI& face = faces.row(i);
+                const VectorF& v0 = vertices.row(face[0]);
+                const VectorF& v1 = vertices.row(face[1]);
+                const VectorF& v2 = vertices.row(face[2]);
+
+                is_inside = is_inside || inside_triangle(p, v0, v1, v2);
+            }
+            ASSERT_TRUE(is_inside);
         }
 
     protected:
@@ -51,6 +102,7 @@ TEST_F(TriangleWrapperTest, Creation) {
     ASSERT_FLOAT_EQ(0.0, bbox_min.maxCoeff());
     ASSERT_FLOAT_EQ(1.0, bbox_max.minCoeff());
     ASSERT_FLOAT_EQ(1.0, bbox_max.maxCoeff());
+    ASSERT_INSIDE(m_holes.row(0), vertices, faces);
 }
 
 TEST_F(TriangleWrapperTest, Holes) {
@@ -71,6 +123,7 @@ TEST_F(TriangleWrapperTest, Holes) {
     ASSERT_FLOAT_EQ(0.0, bbox_min.maxCoeff());
     ASSERT_FLOAT_EQ(1.0, bbox_max.minCoeff());
     ASSERT_FLOAT_EQ(1.0, bbox_max.maxCoeff());
+    ASSERT_OUTSIDE(m_holes.row(0), vertices, faces);
 }
 
 TEST_F(TriangleWrapperTest, 3D) {
@@ -96,4 +149,31 @@ TEST_F(TriangleWrapperTest, 3D) {
     ASSERT_FLOAT_EQ(0.0, bbox_min[1]);
     ASSERT_FLOAT_EQ(1.0, bbox_max[0]);
     ASSERT_FLOAT_EQ(1.0, bbox_max[1]);
+}
+
+TEST_F(TriangleWrapperTest, Refine) {
+    TriangleWrapper tri(m_vertices, m_segments);
+    tri.set_holes(m_holes);
+    tri.run(0.1, true);
+
+    MatrixFr vertices = tri.get_vertices();
+    MatrixIr faces = tri.get_faces();
+    const size_t num_faces_before = faces.rows();
+
+    TriangleWrapper refiner(vertices, faces);
+    refiner.run(0.01, true);
+
+    vertices = refiner.get_vertices();
+    faces = refiner.get_faces();
+    const size_t num_faces_after = faces.rows();
+
+    VectorF bbox_min = vertices.colwise().minCoeff();
+    VectorF bbox_max = vertices.colwise().maxCoeff();
+
+    ASSERT_GT(num_faces_after, num_faces_before);
+    ASSERT_FLOAT_EQ(0.0, bbox_min.minCoeff());
+    ASSERT_FLOAT_EQ(0.0, bbox_min.maxCoeff());
+    ASSERT_FLOAT_EQ(1.0, bbox_max.minCoeff());
+    ASSERT_FLOAT_EQ(1.0, bbox_max.maxCoeff());
+    ASSERT_OUTSIDE(m_holes.row(0), vertices, faces);
 }
