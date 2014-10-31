@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cmath>
 #include <string>
 #include <iostream>
 
@@ -150,4 +151,42 @@ TEST_F(DuplicatedVertexRemovalTest, 3D) {
     ASSERT_EQ(vertices.rows() - 1, result_vertices.rows());
     ASSERT_EQ(faces.rows(), result_faces.rows());
     ASSERT_LT(result_faces.maxCoeff(), result_vertices.rows());
+}
+
+TEST_F(DuplicatedVertexRemovalTest, very_close_points) {
+    const Float tol = 1.0 - 1e-6;
+    MatrixF vertices(3, 2);
+    vertices << 0.0, 0.0,
+                1.0, 0.0,
+                0.5, 0.5 * sqrt(3);
+    MatrixI faces(1, 3);
+    faces << 0, 1, 2;
+
+    DuplicatedVertexRemoval remover(vertices, faces);
+    remover.run(tol);
+
+    MatrixFr result_vertices = remover.get_vertices();
+    MatrixIr result_faces = remover.get_faces();
+    VectorI  index_map = remover.get_index_map();
+
+    ASSERT_EQ(3, result_vertices.rows());
+}
+
+TEST_F(DuplicatedVertexRemovalTest, not_close_enough_points) {
+    const Float tol = 1.0 + 1e-6;
+    MatrixF vertices(3, 2);
+    vertices << 0.0, 0.0,
+                1.0, 0.0,
+                0.5, 0.5 * sqrt(3);
+    MatrixI faces(1, 3);
+    faces << 0, 1, 2;
+
+    DuplicatedVertexRemoval remover(vertices, faces);
+    remover.run(tol);
+
+    MatrixFr result_vertices = remover.get_vertices();
+    MatrixIr result_faces = remover.get_faces();
+    VectorI  index_map = remover.get_index_map();
+
+    ASSERT_EQ(1, result_vertices.rows());
 }

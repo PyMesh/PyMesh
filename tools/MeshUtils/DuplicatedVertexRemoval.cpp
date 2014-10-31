@@ -21,29 +21,30 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
     for (size_t i=0; i<num_vertices; i++) {
         const VectorF& v = m_vertices.row(i);
         VectorI candidates = grid->get_items_near_point(v);
-        if (candidates.size() == 0) {
-            grid->insert(count, v);
-            m_index_map[i] = count;
-            count++;
-        } else {
-            if (candidates.size() > 1) {
-                std::stringstream err_msg;
-                err_msg << candidates.size()
-                    << " vertices occupy a single cell" << std::endl;
-                for (size_t j=0; j<candidates.size(); j++) {
-                    err_msg << "index " << candidates[j] << ":\t<"
-                        << m_vertices.row(candidates[j]) << " >" << std::endl;
-                }
-                throw RuntimeError(err_msg.str());
+        const size_t num_candidates = candidates.size();
+        if (num_candidates > 0) {
+            VectorF dists(num_candidates);
+            for (size_t j=0; j<num_candidates; j++) {
+                dists[j] = (m_vertices.row(candidates[j]) - v.transpose()).norm();
             }
-            assert(candidates.size() == 1);
-            m_index_map[i] = candidates[0];
-            num_duplications++;
+            size_t min_idx;
+            Float min_dist = dists.minCoeff(&min_idx);
+            if (min_dist < tol) {
+                m_index_map[i] = m_index_map[candidates[min_idx]];
+                num_duplications++;
+                continue;
+            }
         }
+
+        // No match, add this vertex in the book.
+        grid->insert(i, v);
+        m_index_map[i] = count;
+        count++;
     }
 
     MatrixFr vertices(count, dim);
     for (size_t i=0; i<num_vertices; i++) {
+        assert(m_index_map[i] < num_vertices && m_index_map[i] >= 0);
         vertices.row(m_index_map[i]) = m_vertices.row(i);
     }
     m_vertices = vertices;
