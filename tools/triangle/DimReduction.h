@@ -16,9 +16,12 @@ class DimReduction {
                     pts.rowwise() - m_mean.transpose(), Eigen::ComputeThinV);
             size_t rank = svd.rank();
             if (rank > TO_DIM) {
+                auto singular_vals = svd.singularValues();
                 std::stringstream err_msg;
                 err_msg << "Data is of dimention " << rank
-                    << ", cannot be reduced to dimentions " << TO_DIM;
+                    << ", cannot be reduced to dimentions " << TO_DIM
+                    << std::endl;
+                err_msg << "Singular values: " << singular_vals.transpose() << std::endl;
                 throw RuntimeError(err_msg.str());
             }
             
