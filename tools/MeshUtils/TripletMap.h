@@ -51,6 +51,14 @@ class TripletMap {
             return itr->second;
         }
 
+        iterator find(const Triplet& t) {
+            return m_map.find(t);
+        }
+
+        const_iterator find(const Triplet& t) const {
+            return m_map.find(t);
+        }
+
         void clear() {
             m_map.clear();
         }
