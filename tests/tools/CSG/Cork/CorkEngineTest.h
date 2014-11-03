@@ -265,3 +265,27 @@ TEST_F(CorkEngineTest, overlap_symmetric_difference) {
     assert_on_boundary(vertices, faces, -corner);
 }
 
+TEST_F(CorkEngineTest, open_surface) {
+    MeshPtr mesh = load_mesh("cube.obj");
+    MatrixFr box_vertices = extract_vertices(mesh);
+    MatrixIr box_faces = extract_faces(mesh);
+
+    MatrixFr tri_vertices(3, 3);
+    MatrixIr tri_faces(1, 3);
+    tri_vertices << 0.0, 0.0, 0.0,
+                    9.0, 0.0, 0.0,
+                    0.0, 9.0, 0.0;
+    tri_faces << 0, 1, 2;
+
+    CSGPtr cork_engine = CSGEngine::create("cork");
+    cork_engine->set_mesh_1(box_vertices, box_faces);
+    cork_engine->set_mesh_2(tri_vertices, tri_faces);
+    cork_engine->compute_intersection();
+
+    const MatrixFr& vertices = cork_engine->get_vertices();
+    const MatrixIr& faces = cork_engine->get_faces();
+    save_mesh("open.obj", vertices, faces);
+
+    // Cork does not handle intersecting closed surface with open surface.
+    //EXPECT_EQ(2, faces.rows());
+}
