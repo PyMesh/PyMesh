@@ -1,0 +1,15 @@
+#pragma once
+
+#include "Interpolation.h"
+
+class TrilinearInterpolation : public Interpolation {
+    public:
+        TrilinearInterpolation(const MatrixFr& control_pts);
+        virtual ~TrilinearInterpolation() {}
+
+    public:
+        VectorF interpolate(const VectorF& p) const;
+        MatrixFr interpolate_batch(const MatrixFr& pts) const;
+
+        static const Functions m_shape_functions;
+};

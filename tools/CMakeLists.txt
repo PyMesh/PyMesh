@@ -38,13 +38,16 @@ INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 #ADD_SUBDIRECTORY(windingnumber)
 ADD_SUBDIRECTORY(MeshUtils)
 #ADD_SUBDIRECTORY(tetgen)
-#ADD_SUBDIRECTORY(CGAL)
+ADD_SUBDIRECTORY(triangle)
+ADD_SUBDIRECTORY(CGAL)
+ADD_SUBDIRECTORY(ConvexHull)
 ADD_SUBDIRECTORY(Assembler)
 ADD_SUBDIRECTORY(EigenUtils)
 ADD_SUBDIRECTORY(OpenCL)
 ADD_SUBDIRECTORY(SparseSolver)
 ADD_SUBDIRECTORY(Envelope)
 ADD_SUBDIRECTORY(CSG)
+ADD_SUBDIRECTORY(Wires)
 
 # Bundle all tools together
 ADD_CUSTOM_TARGET(tools DEPENDS
@@ -52,10 +55,13 @@ ADD_CUSTOM_TARGET(tools DEPENDS
     #selfintersect
     MeshUtils
     #tetgen
-    #cgal
+    triangle
+    cgal
+    convex_hull
     assembler
     opencl_wrapper
     EigenUtils
     envelope
     csg
+    wires
     SparseSolver)
