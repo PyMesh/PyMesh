@@ -30,6 +30,8 @@ class TriangleWrapper {
         MatrixIr get_faces() const { return m_faces; }
 
     protected:
+        void process_2D_input(const std::string& flags, bool auto_hole_detection);
+
         void run_triangle(
                 const MatrixFr& points,
                 const MatrixIr& segments,

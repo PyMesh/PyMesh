@@ -197,3 +197,24 @@ TEST_F(TriangleWrapperTest, Refine) {
     ASSERT_FLOAT_EQ(1.0, bbox_max.maxCoeff());
     ASSERT_OUTSIDE(m_holes.row(0), vertices, faces);
 }
+
+TEST_F(TriangleWrapperTest, 3DWithHoles) {
+    size_t num_pts = m_vertices.rows();
+    MatrixFr vertices_3d(num_pts, 3);
+    vertices_3d.block(0,0,num_pts,2) = m_vertices;
+    vertices_3d.block(0,2,num_pts,1) = VectorF::Ones(num_pts);
+
+    MatrixFr holes(1, 3);
+    holes << m_holes(0,0), m_holes(0,1), 1.0;
+
+    TriangleWrapper tri(vertices_3d, m_segments);
+    tri.run(0.01, true, true);
+
+    MatrixFr vertices = tri.get_vertices();
+    MatrixIr faces = tri.get_faces();
+
+    ASSERT_GE(vertices.rows(), m_vertices.rows());
+    ASSERT_GT(faces.rows(), 0);
+
+    ASSERT_OUTSIDE(holes.row(0), vertices, faces);
+}

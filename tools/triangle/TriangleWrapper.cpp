@@ -124,33 +124,37 @@ void TriangleWrapper::run(Float max_area, bool split_boundary,
     bool do_refine = (vertex_per_segment == 3);
     std::string flags = form_flags(max_area, split_boundary, do_refine,
             use_steiner_points);
+
     if (dim == 2) {
-        if (!do_refine) {
-            run_triangle(m_points, m_segments, m_holes, flags);
-        } else {
-            refine(m_points, m_segments, flags);
-        }
+        process_2D_input(flags, auto_hole_detection);
     } else if (dim == 3) {
         DimReduction<3, 2> reductor(m_points);
 
-        MatrixFr pts = reductor.project(m_points);
-        MatrixFr holes;
+        m_points = reductor.project(m_points);
         if (m_holes.rows() > 0) {
             assert(m_holes.cols() == 3);
-            holes = reductor.project(m_holes);
+            m_holes = reductor.project(m_holes);
         }
 
-        if (!do_refine) {
-            run_triangle(pts, m_segments, holes, flags);
-        } else {
-            refine(pts, m_segments, flags);
-        }
-
+        process_2D_input(flags, auto_hole_detection);
         m_vertices = reductor.unproject(m_vertices);
     } else {
         std::stringstream err_msg;
         err_msg << "Unsupported dim: " << dim;
         throw NotImplementedError(err_msg.str());
+    }
+}
+
+void TriangleWrapper::process_2D_input(const std::string& flags,
+        bool auto_hole_detection) {
+    assert(m_points.cols() == 2);
+    const size_t vertex_per_segment = m_segments.cols();
+    bool do_refine = (vertex_per_segment == 3);
+
+    if (!do_refine) {
+        run_triangle(m_points, m_segments, m_holes, flags);
+    } else {
+        refine(m_points, m_segments, flags);
     }
 
     if (auto_hole_detection) {
@@ -341,8 +345,7 @@ void TriangleWrapper::poke_holes() {
                 m_vertices.row(seed_face[1]) +
                 m_vertices.row(seed_face[2])) / 3.0;
         Float wind_num = compute_winding_number(seed_p, m_points, m_segments);
-        assert(wind_num >= -1e-6);
-        if (wind_num > 0.5) {
+        if (fabs(wind_num) > 0.5) {
             interior_faces.splice(interior_faces.end(), region);
         }
     }
