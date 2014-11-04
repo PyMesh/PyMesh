@@ -6,10 +6,18 @@
 class TetgenException : public PyMeshException {
     public:
         TetgenException(int error_code) :
-            m_error_code(error_code), PyMeshException("") {}
+            m_error_code(error_code), PyMeshException("") {
+                generate_err_msg();
+            }
 
         virtual ~TetgenException() throw() {}
+
         virtual const char* what() const throw() {
+            return m_error_msg.c_str();
+        }
+
+    private:
+        void generate_err_msg() {
             std::stringstream err_msg;
             err_msg << "Tetgen Error (" << m_error_code << "): ";
             switch (m_error_code) {
@@ -35,9 +43,10 @@ class TetgenException : public PyMeshException {
                     err_msg << "Unknow tetgen error";
                     break;
             }
-            return err_msg.str().c_str();
+            m_error_msg = err_msg.str();
         }
 
     private:
         int m_error_code;
+        std::string m_error_msg;
 };
