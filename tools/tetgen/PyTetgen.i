@@ -3,4 +3,4 @@
 %include Core/EigenTypedef.i
 %include eigen.i
 %include Core/ExceptionConverter.i
-%include tetgen_wrapper.i
+%include TetgenWrapper.i

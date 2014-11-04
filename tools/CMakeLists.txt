@@ -37,7 +37,7 @@ INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 #ADD_SUBDIRECTORY(selfintersect)
 #ADD_SUBDIRECTORY(windingnumber)
 ADD_SUBDIRECTORY(MeshUtils)
-#ADD_SUBDIRECTORY(tetgen)
+ADD_SUBDIRECTORY(tetgen)
 ADD_SUBDIRECTORY(triangle)
 ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(ConvexHull)
@@ -54,7 +54,7 @@ ADD_CUSTOM_TARGET(tools DEPENDS
     #windingnumber
     #selfintersect
     MeshUtils
-    #tetgen
+    tetgen
     triangle
     cgal
     convex_hull

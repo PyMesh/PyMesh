@@ -9,7 +9,7 @@ class PyMeshException : public std::exception {
         virtual ~PyMeshException() throw() {}
 
     public:
-        const char* what() const throw() {
+        virtual const char* what() const throw() {
             return m_description.c_str();
         }
 
