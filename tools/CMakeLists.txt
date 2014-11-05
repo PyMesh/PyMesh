@@ -39,7 +39,7 @@ INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 ADD_SUBDIRECTORY(MeshUtils)
 ADD_SUBDIRECTORY(tetgen)
 ADD_SUBDIRECTORY(triangle)
-ADD_SUBDIRECTORY(CGAL)
+#ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(ConvexHull)
 ADD_SUBDIRECTORY(Assembler)
 ADD_SUBDIRECTORY(EigenUtils)
@@ -56,7 +56,7 @@ ADD_CUSTOM_TARGET(tools DEPENDS
     MeshUtils
     tetgen
     triangle
-    cgal
+    #cgal
     convex_hull
     assembler
     opencl_wrapper

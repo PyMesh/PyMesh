@@ -7,7 +7,7 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
 ADD_SUBDIRECTORY(MeshUtils)
 ADD_SUBDIRECTORY(tetgen)
 ADD_SUBDIRECTORY(triangle)
-ADD_SUBDIRECTORY(CGAL)
+#ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(ConvexHull)
 ADD_SUBDIRECTORY(Assembler)
 ADD_SUBDIRECTORY(EigenUtils)
@@ -22,7 +22,7 @@ ADD_CUSTOM_TARGET(tools_tests DEPENDS
     MeshUtils_tests
     tetgen_tests
     triangle_tests
-    cgal_tests
+    #cgal_tests
     convex_hull_tests
     assembler_tests
     EigenUtils_tests
