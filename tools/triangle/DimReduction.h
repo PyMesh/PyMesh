@@ -11,12 +11,19 @@ class DimReduction {
         typedef Eigen::Matrix<Float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixIn;
         typedef Eigen::Matrix<Float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixOut;
         DimReduction(const MatrixIn& pts) {
+            const Float EPS = 1e-12;
             m_mean = pts.colwise().sum().array() / pts.rows();
             Eigen::JacobiSVD<MatrixIn> svd(
                     pts.rowwise() - m_mean.transpose(), Eigen::ComputeThinV);
-            size_t rank = svd.rank();
+            auto singular_vals = svd.singularValues();
+            size_t rank = 0;
+            for (size_t i=0; i<FROM_DIM; i++) {
+                if (singular_vals[i] > EPS) {
+                    rank++;
+                }
+            }
+            //size_t rank = svd.rank();
             if (rank > TO_DIM) {
-                auto singular_vals = svd.singularValues();
                 std::stringstream err_msg;
                 err_msg << "Data is of dimention " << rank
                     << ", cannot be reduced to dimentions " << TO_DIM
