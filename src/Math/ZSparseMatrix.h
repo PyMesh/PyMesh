@@ -10,6 +10,11 @@ class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor, int> {
         ZSparseMatrix() {}
         ZSparseMatrix(size_t rows, size_t cols) : ParentType(rows, cols) {}
         ZSparseMatrix(const ParentType& other) : ParentType(other) {}
+        virtual ~ZSparseMatrix() { }
+        ZSparseMatrix& operator=(const ParentType& other) {
+            ParentType::operator=(other);
+            return *this;
+        }
 
     public:
         size_t num_rows() const { return rows(); }
