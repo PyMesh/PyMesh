@@ -43,6 +43,9 @@ class ConvexHullEngineTest(unittest.TestCase):
             self.assertGreater(volume, 0.0);
 
     def test_cgal_cube(self):
+        if not PyConvexHull.ConvexHullEngine.supports("cgal"):
+            return;
+
         mesh = self.load_mesh("cube.msh");
         points = mesh.get_vertices().reshape((-1, 3), order="C");
 
@@ -58,6 +61,9 @@ class ConvexHullEngineTest(unittest.TestCase):
         self.assertPositiveVolume(vertices, faces);
 
     def test_cgal_tet(self):
+        if not PyConvexHull.ConvexHullEngine.supports("cgal"):
+            return;
+
         mesh = self.load_mesh("tet.msh");
         points = mesh.get_vertices().reshape((-1, 3), order="C");
 
@@ -73,6 +79,9 @@ class ConvexHullEngineTest(unittest.TestCase):
         self.assertPositiveVolume(vertices, faces);
 
     def test_cgal_square(self):
+        if not PyConvexHull.ConvexHullEngine.supports("cgal"):
+            return;
+
         mesh = self.load_mesh("square_2d.obj");
         points = mesh.get_vertices().reshape((-1, 2), order="C");
 
@@ -88,6 +97,9 @@ class ConvexHullEngineTest(unittest.TestCase):
         self.assertPositiveVolume(vertices, faces);
 
     def test_qhull_cube(self):
+        if not PyConvexHull.ConvexHullEngine.supports("qhull"):
+            return;
+
         mesh = self.load_mesh("cube.msh");
         points = mesh.get_vertices().reshape((-1, 3), order="C");
 
@@ -103,6 +115,9 @@ class ConvexHullEngineTest(unittest.TestCase):
         self.assertPositiveVolume(vertices, faces);
 
     def test_qhull_tet(self):
+        if not PyConvexHull.ConvexHullEngine.supports("qhull"):
+            return;
+
         mesh = self.load_mesh("tet.msh");
         points = mesh.get_vertices().reshape((-1, 3), order="C");
 
@@ -118,6 +133,9 @@ class ConvexHullEngineTest(unittest.TestCase):
         self.assertPositiveVolume(vertices, faces);
 
     def test_qhull_square(self):
+        if not PyConvexHull.ConvexHullEngine.supports("qhull"):
+            return;
+
         mesh = self.load_mesh("square_2d.obj");
         points = mesh.get_vertices().reshape((-1, 2), order="C");
 

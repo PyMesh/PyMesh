@@ -16,7 +16,8 @@
 class ConvexHullEngine {
     public:
         typedef std::shared_ptr<ConvexHullEngine> Ptr;
-        static Ptr create(size_t dim, const std::string& algorithm_name);
+        static Ptr create(size_t dim, const std::string& library_name);
+        static bool supports(const std::string& library_name);
 
     public:
         virtual ~ConvexHullEngine() {}

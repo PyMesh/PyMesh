@@ -56,6 +56,17 @@ ConvexHullEngine::Ptr ConvexHullEngine::create(
     throw NotImplementedError(err_msg.str());
 }
 
+bool ConvexHullEngine::supports(
+        const std::string& library_name) {
+#ifdef WITH_QHULL
+    if ((library_name) == "qhull") return true;
+#endif
+#ifdef WITH_CGAL
+    if ((library_name) == "cgal") return true;
+#endif
+    return false;
+}
+
 void ConvexHullEngine::reorient_faces() {
     const size_t dim = m_vertices.cols();
     const size_t num_faces = m_faces.rows();
