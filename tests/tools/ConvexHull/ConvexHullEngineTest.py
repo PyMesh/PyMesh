@@ -82,7 +82,7 @@ class ConvexHullEngineTest(unittest.TestCase):
         if not PyConvexHull.ConvexHullEngine.supports("cgal"):
             return;
 
-        mesh = self.load_mesh("square_2d.obj");
+        mesh = self.load_mesh("square_2D.obj");
         points = mesh.get_vertices().reshape((-1, 2), order="C");
 
         engine = PyConvexHull.ConvexHullEngine.create(2, "cgal");
@@ -136,7 +136,7 @@ class ConvexHullEngineTest(unittest.TestCase):
         if not PyConvexHull.ConvexHullEngine.supports("qhull"):
             return;
 
-        mesh = self.load_mesh("square_2d.obj");
+        mesh = self.load_mesh("square_2D.obj");
         points = mesh.get_vertices().reshape((-1, 2), order="C");
 
         engine = PyConvexHull.ConvexHullEngine.create(2, "qhull");
