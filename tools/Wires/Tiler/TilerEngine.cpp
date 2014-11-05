@@ -11,7 +11,7 @@
 
 namespace TilerEngineHelper {
     struct hash {
-        size_t operator()(const Triplet& value) {
+        size_t operator()(const Triplet& value) const {
             return value.hash();
         }
     };
