@@ -151,7 +151,8 @@ void LoopSubdivision::register_edges(const VectorI& face, size_t base_index) {
         Triplet edge(face[i], face[(i+1)%vertex_per_face]);
         auto itr = m_edge_index_map.find(edge);
         if (itr == m_edge_index_map.end()) {
-            m_edge_index_map[edge] = base_index + m_edge_index_map.size();
+            size_t mid_edge_index = base_index + m_edge_index_map.size();
+            m_edge_index_map[edge] = mid_edge_index;
             m_boundary_edge[edge] = 1;
         } else {
             assert(m_boundary_edge.find(edge) != m_boundary_edge.end());
