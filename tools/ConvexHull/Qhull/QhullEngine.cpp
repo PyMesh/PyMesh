@@ -7,7 +7,7 @@
 
 #include <Core/Exception.h>
 extern "C" {
-#include <qhull/qhull_a.h>
+#include <qhull_a.h>
 }
 
 void QhullEngine::run(const MatrixFr& points) {
