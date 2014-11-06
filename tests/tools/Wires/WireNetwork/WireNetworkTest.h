@@ -112,3 +112,16 @@ TEST_F(WireNetworkTest, Offset) {
 
     ASSERT_VECTOR_EQ(offset, offseted_center - center);
 }
+
+TEST_F(WireNetworkTest, ScaleFit) {
+    std::string wire_file = m_data_dir + "cube.wire";
+    WireNetwork network(wire_file);
+
+    Vector3F bbox_min(-1, -2, -3);
+    Vector3F bbox_max( 1,  2,  3);
+
+    network.scale_fit(bbox_min, bbox_max);
+
+    ASSERT_FLOAT_EQ(0.0, (bbox_min - network.get_bbox_min()).norm());
+    ASSERT_FLOAT_EQ(0.0, (bbox_max - network.get_bbox_max()).norm());
+}

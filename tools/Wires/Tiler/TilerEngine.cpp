@@ -92,7 +92,7 @@ MatrixIr TilerEngine::tile_edges(size_t num_repetitions) {
 
 void TilerEngine::normalize_unit_wire(const VectorF& cell_size) {
     VectorF factors = cell_size.cwiseQuotient(
-            m_unit_wire_network.bbox_max() - m_unit_wire_network.bbox_min());
+            m_unit_wire_network.get_bbox_max() - m_unit_wire_network.get_bbox_min());
     m_unit_wire_network.center_at_origin();
     m_unit_wire_network.scale(factors);
 }

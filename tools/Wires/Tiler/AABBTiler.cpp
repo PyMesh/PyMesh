@@ -88,7 +88,7 @@ WireNetwork AABBTiler::tile() {
     const size_t num_repetitions = indices.size();
     MatrixFr tiled_vertices = tile_vertices(
             get_tiling_operators(
-            m_unit_wire_network.bbox_min(),
+            m_unit_wire_network.get_bbox_min(),
             cell_size, indices));
     MatrixIr tiled_edges = tile_edges(num_repetitions);
 

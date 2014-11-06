@@ -49,6 +49,19 @@ void WireNetwork::scale(const VectorF& factors) {
     }
 }
 
+void WireNetwork::scale_fit(const VectorF& bbox_min, const VectorF& bbox_max) {
+    center_at_origin();
+
+    VectorF bbox_size = bbox_max - bbox_min;
+    VectorF bbox_center = 0.5 * (bbox_min + bbox_max);
+    VectorF cur_bbox_size = get_bbox_max() - get_bbox_min();
+
+    VectorF scale_factor = bbox_size.cwiseQuotient(cur_bbox_size);
+    scale(scale_factor);
+
+    translate(bbox_center);
+}
+
 void WireNetwork::translate(const VectorF& offset) {
     if (offset.size() != m_dim) {
         std::stringstream err_msg;
@@ -68,7 +81,7 @@ void WireNetwork::center_at_origin() {
 }
 
 VectorF WireNetwork::center() const {
-    return 0.5 * (bbox_min() + bbox_max());
+    return 0.5 * (get_bbox_min() + get_bbox_max());
 }
 
 void WireNetwork::initialize() {

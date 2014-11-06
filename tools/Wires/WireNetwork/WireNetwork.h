@@ -31,11 +31,12 @@ class WireNetwork {
         }
 
         void scale(const VectorF& factors);
+        void scale_fit(const VectorF& bbox_min, const VectorF& bbox_max);
         void translate(const VectorF& offset);
         void center_at_origin();
         VectorF center() const;
-        VectorF bbox_min() const { return m_vertices.colwise().minCoeff(); }
-        VectorF bbox_max() const { return m_vertices.colwise().maxCoeff(); }
+        VectorF get_bbox_min() const { return m_vertices.colwise().minCoeff(); }
+        VectorF get_bbox_max() const { return m_vertices.colwise().maxCoeff(); }
 
 
     public:
