@@ -19,15 +19,18 @@ PyMesh depends on the following tools/libraries:
 * [NumPy](http://www.numpy.org/) v1.8 or higher
 * [SciPy](http://www.scipy.org/) v0.13 or higher
 * [SWIG](http://www.swig.org/)
-* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page)
+* [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) v3.2 or higher
 
 Optional library:
 
 * [SparseHash](https://code.google.com/p/sparsehash/)
 * [CGAL](https://www.cgal.org/)
-* [TetGen](http://wias-berlin.de/software/tetgen/)
+* [tetgen](http://wias-berlin.de/software/tetgen/)
 * [libigl](http://igl.ethz.ch/projects/libigl/)
 * [cork](https://github.com/gilbo/cork)
+* [triangle](http://www.cs.cmu.edu/~quake/triangle.html)
+* [qhull](http://www.qhull.org/)
+* [Clipper](http://www.angusj.com/delphi/clipper.php)
 
 Most optinal libraries are detected automatically.  To disable the usage of SparseHash, use the flag "-DUSE_SPARSE_HASH=OFF" with cmake.  I.e.
 
@@ -47,6 +50,10 @@ If any of the dependent library is not installed in standard locations (/usr/loc
 * BOOST_INC: directory containing boost.
 * LIBIGL_PATH: path to libigl.
 * CORK_PATH: path to cork.
+* TETGEN_PATH: path to tetgen
+* TRIANGLE_PATH: path to triangle
+* QHULL_PATH: path to qhull
+* CLIPPER_PATH: path to clipper
 
 ### Build ###
 
