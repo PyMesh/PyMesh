@@ -1,90 +1,47 @@
-<h3>Download Source</h3>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>README</title>
 
-<p>To retrieve the code:</p>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700' rel='stylesheet' type='text/css'>
+        <style>
+            .contents {
+                margin-left: auto;
+                margin-right: auto;
+                border: 1px solid black;
+                border-radius: 25px;
+                padding: 5px 25px;
+                width: 1024px;
+                font-family: 'Open Sans', sans-serif;
+            }
 
-<pre><code>hg clone https://subversive.cims.nyu.edu/geonum/zhou/PyMesh/
-</code></pre>
+            .contents h1,h2,h3 {
+                text-decoration: underline;
+                font-weight: bold;
+            }
+            .contents code {
+                font-family: 'Inconsolata', ;
+                font-size: 1.1em;
+                color: #3E3E3E;
+            }
+        </style>
 
-<p>Be sure to save the root directory of PyMesh in the environment variable
-PYMESH_PATH:</p>
-
-<pre><code>export PYMESH_PATH=/path/to/PyMesh/
-</code></pre>
-
-<p>Unit tests relies on this environment variable to load relevant libraries.</p>
-
-<h3>Dependencies</h3>
-
-<p>PyMesh depends on the following tools/libraries:</p>
-
-<ul>
-<li><a href="https://www.python.org/">Python</a> v2.7 or higher, note that Python 3.x is not tested.</li>
-<li><a href="http://www.numpy.org/">NumPy</a> v1.8 or higher</li>
-<li><a href="http://www.scipy.org/">SciPy</a> v0.13 or higher</li>
-<li><a href="http://www.swig.org/">SWIG</a></li>
-<li><a href="http://eigen.tuxfamily.org/index.php?title=Main_Page">Eigen</a></li>
-</ul>
-
-<p>Optional library:</p>
-
-<ul>
-<li><a href="https://code.google.com/p/sparsehash/">SparseHash</a></li>
-<li><a href="https://www.cgal.org/">CGAL</a></li>
-<li><a href="http://wias-berlin.de/software/tetgen/">tetgen</a></li>
-<li><a href="http://igl.ethz.ch/projects/libigl/">libigl</a></li>
-<li><a href="https://github.com/gilbo/cork">cork</a></li>
-<li><a href="http://www.cs.cmu.edu/~quake/triangle.html">triangle</a></li>
-<li><a href="http://www.qhull.org/">qhull</a></li>
-<li><a href="http://www.angusj.com/delphi/clipper.php">Clipper</a></li>
-</ul>
-
-<p>Most optinal libraries are detected automatically.  To disable the usage of SparseHash, use the flag "-DUSE<em>SPARSE</em>HASH=OFF" with cmake.  I.e.</p>
-
-<pre><code>cmake -DUSE_SPARSE_HASH=OFF ..
-</code></pre>
-
-<p>instead of</p>
-
-<pre><code>cmake ..
-</code></pre>
-
-<h3>Environment Variables</h3>
-
-<p>If any of the dependent library is not installed in standard locations (/usr/local/, /opt/local), one needs to sent environment variables that points to the correct directories.  PyMesh check the following environment varaibles:</p>
-
-<ul>
-<li>EIGEN_INC: directory containing the Eigen library.</li>
-<li>GOOGLEHASH_INCLUDES: directory containing sparse hash.</li>
-<li>CGAL_PATH: path to CGAL library</li>
-<li>BOOST_INC: directory containing boost.</li>
-<li>LIBIGL_PATH: path to libigl.</li>
-<li>CORK_PATH: path to cork.</li>
-<li>TETGEN_PATH: path to tetgen</li>
-<li>TRIANGLE_PATH: path to triangle</li>
-<li>QHULL_PATH: path to qhull</li>
-<li>CLIPPER_PATH: path to clipper</li>
-</ul>
-
-<h3>Build</h3>
-
-<p>It is recommended to build out of source:</p>
-
-<pre><code>cd $PYMESH_PATH
-mkdir build
-cd build
-cmake ..
-</code></pre>
-
-<p>To build the main PyMesh library:</p>
-
-<pre><code>make
-make src_tests
-</code></pre>
-
-<p>To build all available tools:</p>
-
-<pre><code>make tools
-make tools_tests
-</code></pre>
-
-<p>Make sure all unit tests are passed before using the library.</p>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script type="text/javascript" src="http://www.cs.nyu.edu/~qnzhou/pagedown/Markdown.Converter.js"></script>
+    </head>
+    <body>
+        <div class="contents">
+        </div>
+        <script>
+            $(document).ready(function() {
+                var converter = new Markdown.Converter();
+                var markdownToHtml = converter.makeHtml;
+                $.get("README").success(function(data) {
+                    $(".contents").html(markdownToHtml(data));
+                });
+            });
+        </script>
+    </body>
+</html>
