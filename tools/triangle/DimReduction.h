@@ -11,14 +11,14 @@ class DimReduction {
         typedef Eigen::Matrix<Float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixIn;
         typedef Eigen::Matrix<Float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixOut;
         DimReduction(const MatrixIn& pts) {
-            const Float EPS = 1e-12;
+            const Float rel_eps = 1e-3;
             m_mean = pts.colwise().sum().array() / pts.rows();
             Eigen::JacobiSVD<MatrixIn> svd(
                     pts.rowwise() - m_mean.transpose(), Eigen::ComputeThinV);
             auto singular_vals = svd.singularValues();
             size_t rank = 0;
             for (size_t i=0; i<FROM_DIM; i++) {
-                if (singular_vals[i] > EPS) {
+                if (singular_vals[i] > singular_vals[0] * rel_eps) {
                     rank++;
                 }
             }
