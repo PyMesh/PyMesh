@@ -3,7 +3,7 @@
 
 class IsolatedVertexRemoval {
     public:
-        IsolatedVertexRemoval(MatrixFr& vertices, MatrixIr& faces);
+        IsolatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces);
     public:
         size_t run();
         MatrixFr get_vertices() const { return m_vertices; }

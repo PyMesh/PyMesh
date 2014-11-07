@@ -15,9 +15,8 @@ void PeriodicInflator::inflate() {
 void PeriodicInflator::initialize_phantom_wires() {
     m_wire_network.center_at_origin();
     const size_t dim = m_wire_network.get_dim();
-    const MatrixFr& vertices = m_wire_network.get_vertices();
-    VectorF bbox_min = vertices.colwise().minCoeff();
-    VectorF bbox_max = vertices.colwise().maxCoeff();
+    VectorF bbox_min, bbox_max;
+    get_center_cell_bbox(bbox_min, bbox_max);
 
     bbox_min.array() *= 3;
     bbox_max.array() *= 3;
@@ -76,7 +75,6 @@ void PeriodicInflator::update_phantom_periodic_face_sources(
 
 void PeriodicInflator::get_center_cell_bbox(
         VectorF& bbox_min, VectorF& bbox_max) {
-    const MatrixFr vertices = m_wire_network.get_vertices();
-    bbox_min = vertices.colwise().minCoeff();
-    bbox_max = vertices.colwise().maxCoeff();
+    bbox_min = m_wire_network.get_bbox_min();
+    bbox_max = m_wire_network.get_bbox_max();
 }

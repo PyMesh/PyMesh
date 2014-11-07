@@ -4,6 +4,7 @@
 #include "Attributes/WireEdgePeriodicIndexAttributeTest.h"
 #include "Attributes/WireVertexMinAngleAttributeTest.h"
 #include "Attributes/WireVertexPeriodicIndexAttributeTest.h"
+#include "Inflator/BoxCheckerTest.h"
 #include "Inflator/PeriodicInflator2DTest.h"
 #include "Inflator/PeriodicInflator3DTest.h"
 #include "Inflator/SimpleInflatorTest.h"

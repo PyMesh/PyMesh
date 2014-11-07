@@ -3,7 +3,7 @@
 #include <vector>
 
 IsolatedVertexRemoval::IsolatedVertexRemoval(
-        MatrixFr& vertices, MatrixIr& faces) :
+        const MatrixFr& vertices, const MatrixIr& faces) :
     m_vertices(vertices), m_faces(faces) { }
 
 size_t IsolatedVertexRemoval::run() {
