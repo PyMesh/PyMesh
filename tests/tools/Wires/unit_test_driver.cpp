@@ -10,6 +10,7 @@
 #include "Inflator/SimpleInflatorTest.h"
 #include "Inflator/WireProfileTest.h"
 #include "Misc/BilinearInterpolationTest.h"
+#include "Misc/DistanceComputationTest.h"
 #include "Misc/TrilinearInterpolationTest.h"
 #include "Tiler/AABBTilerTest.h"
 #include "Tiler/MeshTilerTest.h"

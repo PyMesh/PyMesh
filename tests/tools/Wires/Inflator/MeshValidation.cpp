@@ -112,3 +112,75 @@ bool MeshValidation::is_periodic(
     return result;
 }
 
+bool MeshValidation::face_source_is_valid(
+        const MatrixFr& vertices,
+        const MatrixIr& faces,
+        const VectorI& face_sources) {
+    const Float EPS = 1e-6;
+    const size_t num_vertices = vertices.rows();
+    const size_t num_faces = faces.rows();
+
+    Vector3F bbox_min = vertices.colwise().minCoeff();
+    Vector3F bbox_max = vertices.colwise().maxCoeff();
+
+    bool result = true;
+    for (size_t i=0; i<num_faces; i++) {
+        const Vector3I& f = faces.row(i);
+        const Vector3F& v0 = vertices.row(f[0]);
+        const Vector3F& v1 = vertices.row(f[1]);
+        const Vector3F& v2 = vertices.row(f[2]);
+
+        if (fabs(v0[0] - bbox_min[0]) < EPS &&
+            fabs(v1[0] - bbox_min[0]) < EPS &&
+            fabs(v2[0] - bbox_min[0]) < EPS) {
+            result = result && (face_sources[i] == 0);
+            continue;
+        }
+
+        if (fabs(v0[1] - bbox_min[1]) < EPS &&
+            fabs(v1[1] - bbox_min[1]) < EPS &&
+            fabs(v2[1] - bbox_min[1]) < EPS) {
+            result = result && (face_sources[i] == 0);
+            continue;
+        }
+
+        if (fabs(v0[2] - bbox_min[2]) < EPS &&
+            fabs(v1[2] - bbox_min[2]) < EPS &&
+            fabs(v2[2] - bbox_min[2]) < EPS) {
+            result = result && (face_sources[i] == 0);
+            continue;
+        }
+
+        if (fabs(v0[0] - bbox_max[0]) < EPS &&
+            fabs(v1[0] - bbox_max[0]) < EPS &&
+            fabs(v2[0] - bbox_max[0]) < EPS) {
+            result = result && (face_sources[i] == 0);
+            continue;
+        }
+
+        if (fabs(v0[1] - bbox_max[1]) < EPS &&
+            fabs(v1[1] - bbox_max[1]) < EPS &&
+            fabs(v2[1] - bbox_max[1]) < EPS) {
+            result = result && (face_sources[i] == 0);
+            continue;
+        }
+
+        if (fabs(v0[2] - bbox_max[2]) < EPS &&
+            fabs(v1[2] - bbox_max[2]) < EPS &&
+            fabs(v2[2] - bbox_max[2]) < EPS) {
+            result = result && (face_sources[i] == 0);
+            continue;
+        }
+        result = result && (face_sources[i] != 0);
+        if (!result) {
+            std::cout << i << ":  ";
+            std::cout << face_sources[i] << std::endl;
+            std::cout << v0.transpose() << std::endl;
+            std::cout << v1.transpose() << std::endl;
+            std::cout << v2.transpose() << std::endl;
+            return result;
+        }
+    }
+    return result;
+}
+

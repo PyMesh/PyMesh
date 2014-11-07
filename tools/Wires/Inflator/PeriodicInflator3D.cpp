@@ -15,6 +15,7 @@ extern "C" {
 
 #include <MeshFactory.h>
 #include "PeriodicBoundaryRemesher.h"
+#include <Wires/Misc/DistanceComputation.h>
 
 namespace PeriodicInflator3DHelper {
     enum Location { INSIDE, ON_BORDER, OUTSIDE };
@@ -157,10 +158,10 @@ namespace PeriodicInflator3DHelper {
     bool point_is_in_triangle(const Vector3F& p,
             const Vector3F& c0, const Vector3F& c1, const Vector3F& c2) {
         // Note tolerance are in unit mm.
-        const Float EPS = 1e-3;
+        const Float EPS = 1e-6;
         const Vector3F n = (c1 - c0).cross(c2 - c0).normalized();
         Float dist_to_plane = (p - c0).dot(n);
-        if (dist_to_plane > EPS) return false;
+        if (fabs(dist_to_plane) > EPS) return false;
 
         const Vector3F v0 = c0 - p;
         const Vector3F v1 = c1 - p;
@@ -250,16 +251,21 @@ void PeriodicInflator3D::update_face_sources() {
             Vector3F centroid = (v0+v1+v2) / 3.0;
             VectorI adj_faces = phantom_mesh->get_vertex_adjacent_faces(v_index);
             const size_t num_adj_faces = adj_faces.size();
+            VectorF distances(num_adj_faces);
             assert(num_adj_faces > 0);
             for (size_t j=0; j<num_adj_faces; j++) {
                 const VectorI& tri = m_phantom_faces.row(adj_faces[j]);
                 const Vector3F& corner_0 = m_phantom_vertices.row(tri[0]);
                 const Vector3F& corner_1 = m_phantom_vertices.row(tri[1]);
                 const Vector3F& corner_2 = m_phantom_vertices.row(tri[2]);
-                if (point_is_in_triangle(centroid, corner_0, corner_1, corner_2)) {
-                    m_face_sources[i] = m_phantom_face_sources[adj_faces[j]];
-                    break;
-                }
+                distances[j] = DistanceComputation::point_to_triangle(
+                        centroid, corner_0, corner_1, corner_2);
+            }
+            auto min_itr = std::min_element(
+                    distances.data(), distances.data() + num_adj_faces);
+            if (*min_itr < 1e-1) {
+                m_face_sources[i] = m_phantom_face_sources[
+                    adj_faces[min_itr - distances.data()]];
             }
         }
     }

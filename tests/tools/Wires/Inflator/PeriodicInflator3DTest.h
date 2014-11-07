@@ -55,6 +55,7 @@ class PeriodicInflator3DTest : public WireTest {
             ASSERT_TRUE(is_water_tight(m_vertices, m_faces));
             ASSERT_TRUE(is_manifold(m_vertices, m_faces));
             ASSERT_TRUE(is_periodic(m_vertices, m_faces));
+            ASSERT_TRUE(face_source_is_valid(m_vertices, m_faces, m_face_sources));
         }
 
     protected:
