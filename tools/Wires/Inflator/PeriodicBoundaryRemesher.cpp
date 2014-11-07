@@ -22,12 +22,13 @@ namespace PeriodicBoundaryRemesherHelper {
     const short min_axis_marker[3] = {-1, -2, -3};
     const short max_axis_marker[3] = { 1,  2,  3};
 
-    void triangulate(const MatrixFr& vertices, const MatrixIr& edges,
+    void triangulate(MatrixFr vertices, MatrixIr edges,
             MatrixFr& output_vertices, MatrixIr& output_faces, Float max_area) {
-        IsolatedVertexRemoval remover(vertices, edges);
-        remover.run();
+        MeshCleaner cleaner;
+        cleaner.remove_isolated_vertices(vertices, edges);
+        cleaner.remove_duplicated_vertices(vertices, edges, 1e-12);
 
-        TriangleWrapper triangle(remover.get_vertices(), remover.get_faces());
+        TriangleWrapper triangle(vertices, edges);
         triangle.run(max_area, false, true, true);
 
         output_vertices = triangle.get_vertices();

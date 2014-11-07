@@ -11,9 +11,14 @@ namespace WireProfileHelper {
     }
 
     MatrixFr rotate_loop_3D(const MatrixFr& loop, const VectorF& dir) {
+        const Vector3F X(1, 0, 0);
         const Vector3F Z(0, 0, 1);
         Eigen::Quaternion<Float> Q;
         Q.setFromTwoVectors(Z, dir);
+        if (fabs(dir[0]) > 1e-6 || fabs(dir[1]) > 1e-6) {
+            Q = Q * Eigen::Quaternion<Float>::FromTwoVectors(
+                    X, Vector3F(dir[0], dir[1], 0.0));
+        }
         return (Q.toRotationMatrix() * loop.transpose()).transpose();
     }
 }
