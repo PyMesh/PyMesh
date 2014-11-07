@@ -45,7 +45,7 @@ MeshFactory& MeshFactory::load_data(VectorF& vertices, VectorI& faces, VectorI& 
     geometry->set_vertex_per_face(num_vertex_per_face);
     geometry->set_vertex_per_voxel(num_vertex_per_voxel);
 
-    if (faces.size() == 0) {
+    if (faces.size() == 0 && voxels.size() > 0) {
         geometry->extract_faces_from_voxels();
     }
 
