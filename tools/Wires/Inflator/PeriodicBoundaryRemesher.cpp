@@ -10,12 +10,11 @@
 #include <Mesh.h>
 #include <MeshFactory.h>
 #include <MeshUtils/Boundary.h>
-#include <MeshUtils/IsolatedVertexRemoval.h>
 #include <Misc/HashGrid.h>
 #include <triangle/TriangleWrapper.h>
 
-#include "BoxChecker.h"
-#include "MeshCleaner.h"
+#include <Wires/Misc/BoxChecker.h>
+#include <Wires/Misc/MeshCleaner.h>
 
 namespace PeriodicBoundaryRemesherHelper {
     enum Axis { X=0, Y=1, Z=2 };

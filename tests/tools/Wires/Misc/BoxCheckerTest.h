@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Wires/Inflator/BoxChecker.h>
+#include <Wires/Misc/BoxChecker.h>
 
 class BoxCheckerTest : public ::testing::Test {
     protected:
