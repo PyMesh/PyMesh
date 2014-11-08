@@ -45,8 +45,8 @@ void PeriodicInflator::inflate_phantom_wires() {
     m_phantom_vertices = inflator.get_vertices();
     m_phantom_faces = inflator.get_faces();
     update_phantom_periodic_face_sources(inflator.get_face_sources());
-    save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
-            m_phantom_face_sources.cast<Float>());
+    //save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
+    //        m_phantom_face_sources.cast<Float>());
 }
 
 void PeriodicInflator::update_phantom_periodic_face_sources(

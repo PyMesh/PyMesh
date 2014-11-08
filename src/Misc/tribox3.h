@@ -190,3 +190,16 @@ int triBoxOverlap(const Float boxcenter[3],const Float boxhalfsize[3],const Floa
    return 1;   /* box and triangle overlaps */
 }
 
+#undef X
+#undef Y
+#undef Z
+#undef CROSS
+#undef DOT
+#undef SUB
+#undef FINDMINMAX
+#undef AXISTEST_X01
+#undef AXISTEST_X2
+#undef AXISTEST_Y02
+#undef AXISTEST_Y1
+#undef AXISTEST_Z12
+#undef AXISTEST_Z0

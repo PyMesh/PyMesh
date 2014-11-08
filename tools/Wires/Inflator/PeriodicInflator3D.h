@@ -12,6 +12,7 @@ class PeriodicInflator3D : public PeriodicInflator {
         virtual void clip_to_center_cell();
         void clip_phantom_mesh();
         void update_face_sources();
+        void update_face_sources_old();
         void periodic_remesh();
 
     private:

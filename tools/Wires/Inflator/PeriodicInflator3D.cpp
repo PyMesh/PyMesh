@@ -9,13 +9,17 @@
 #include <MeshUtils/TripletMap.h>
 #include <Misc/HashGrid.h>
 #include <Misc/Triplet.h>
+namespace TriBox3 {
 extern "C" {
 #include <Misc/tribox3.h>
+}
 }
 
 #include <MeshFactory.h>
 #include "PeriodicBoundaryRemesher.h"
 #include <Wires/Misc/DistanceComputation.h>
+
+#include <igl/cgal/signed_distance.h>
 
 namespace PeriodicInflator3DHelper {
     enum Location { INSIDE, ON_BORDER, OUTSIDE };
@@ -40,7 +44,7 @@ namespace PeriodicInflator3DHelper {
         const Float tri[3][3] = {
             {p0[0], p0[1], p0[2]},  {p1[0], p1[1], p1[2]},  {p2[0], p2[1], p2[2]}
         };
-        bool overlap = triBoxOverlap(
+        bool overlap = TriBox3::triBoxOverlap(
                 bbox_center.data(),
                 bbox_size.data(),
                 tri);
@@ -155,6 +159,7 @@ namespace PeriodicInflator3DHelper {
         return true;
     }
 
+    /*
     bool point_is_in_triangle(const Vector3F& p,
             const Vector3F& c0, const Vector3F& c1, const Vector3F& c2) {
         // Note tolerance are in unit mm.
@@ -173,6 +178,7 @@ namespace PeriodicInflator3DHelper {
 
         return ((area_0 > -EPS) && (area_1 > -EPS) && (area_2 > -EPS));
     }
+    */
 
     std::vector<Location> compute_face_locations(
             const MatrixFr& vertices, const MatrixIr& faces,
@@ -217,10 +223,39 @@ void PeriodicInflator3D::clip_phantom_mesh() {
 
     m_vertices = csg_engine->get_vertices();
     m_faces = csg_engine->get_faces();
-    m_face_sources = VectorI(m_faces.rows());
 }
 
 void PeriodicInflator3D::update_face_sources() {
+    const size_t num_faces = m_faces.rows();
+    MatrixFr face_centroids(num_faces, 3);
+    for (size_t i=0; i<num_faces; i++) {
+        const VectorI& f = m_faces.row(i);
+        face_centroids.row(i) = (
+                m_vertices.row(f[0]) +
+                m_vertices.row(f[1]) +
+                m_vertices.row(f[2])) / 3.0;
+    }
+
+    VectorF dists;
+    VectorI closest_face_indices;
+    MatrixF closest_pts;
+    MatrixF closest_normal;
+
+    typedef CGAL::Simple_cartesian<double> Kernel;
+    igl::signed_distance<Kernel>(face_centroids, m_phantom_vertices, m_phantom_faces,
+            igl::SIGNED_DISTANCE_TYPE_PSEUDONORMAL,
+            dists, closest_face_indices, closest_pts, closest_normal);
+
+    assert(dists.size() == num_faces);
+    m_face_sources = VectorI::Zero(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        if (fabs(dists[i]) < 1e-3) {
+            m_face_sources[i] = m_phantom_face_sources[closest_face_indices[i]];
+        }
+    }
+}
+
+void PeriodicInflator3D::update_face_sources_old() {
     const size_t num_phantom_vertices = m_phantom_vertices.rows();
     const size_t num_phantom_faces = m_phantom_faces.rows();
 
