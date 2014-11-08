@@ -7,6 +7,7 @@ SET(CMAKE_BUILD_TYPE Release)
 
 # Create 64 bits binary.  32 bits support is dropped.
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Os -std=c++11")
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O0 -std=c++11")
 SET(CMAKE_LIBRARY_PATH /opt/local/lib ${CMAKE_LIBRARY_PATH})
 
 # Set output directories
@@ -28,3 +29,5 @@ SET(EIGEN_WRAPPER_PATH ${PROJECT_SOURCE_DIR}/eigen_wrapper)
 
 # Disallow depreciated numpy calls
 #ADD_DEFINITIONS(-DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION)
+
+SET(CMAKE_MACOSX_RPATH ON)
