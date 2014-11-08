@@ -31,7 +31,7 @@ namespace TriangleWrapperHelper {
         std::stringstream flags;
         flags << "zQpa" << max_area;
         if (!split_boundary) {
-            flags << "Y";
+            flags << "YY";
         }
         if (refine) {
             flags << "r";
