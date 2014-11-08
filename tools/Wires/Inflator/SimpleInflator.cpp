@@ -59,6 +59,7 @@ void SimpleInflator::inflate() {
 }
 
 void SimpleInflator::initialize() {
+    check_thickness();
     m_end_loops.clear();
     m_vertex_list.clear();
     m_face_list.clear();

@@ -16,6 +16,9 @@ class InflatorEngine {
         };
 
     public:
+        static Ptr create(const std::string& type, WireNetwork::Ptr network);
+
+    public:
         InflatorEngine(WireNetwork& wire_network);
         virtual ~InflatorEngine() {}
 
@@ -41,6 +44,7 @@ class InflatorEngine {
         void remove_short_edges();
         void save_mesh(const std::string& filename, const MatrixFr& vertices,
                 const MatrixIr& faces, VectorF debug);
+        void check_thickness() const;
 
     protected:
         WireNetwork& m_wire_network;

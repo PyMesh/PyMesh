@@ -1,12 +1,18 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 #include <Wires/Attributes/WireAttributes.h>
 #include "WireConnectivity.h"
 
 class WireNetwork {
+    public:
+        typedef std::shared_ptr<WireNetwork> Ptr;
+        static Ptr create(const std::string& wire_file);
+        static Ptr create_raw(const MatrixFr& vertices, const MatrixIr& edges);
+
     public:
         WireNetwork();
         WireNetwork(const std::string& wire_file);

@@ -6,6 +6,15 @@
 
 #include <Core/Exception.h>
 
+WireNetwork::Ptr WireNetwork::create(const std::string& wire_file) {
+    return Ptr(new WireNetwork(wire_file));
+}
+
+WireNetwork::Ptr WireNetwork::create_raw(
+        const MatrixFr& vertices, const MatrixIr& edges) {
+    return Ptr(new WireNetwork(vertices, edges));
+}
+
 WireNetwork::WireNetwork() : m_dim(0) {
     initialize();
 }

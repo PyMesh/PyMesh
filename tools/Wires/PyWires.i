@@ -1,0 +1,9 @@
+%module PyWires
+%include numpy_setup.i
+%include Core/EigenTypedef.i
+%include eigen.i
+%include Core/ExceptionConverter.i
+%include WireNetwork/WireNetwork.i
+%include Tiler/WireTiler.i
+%include Inflator/InflatorEngine.i
+%include Inflator/WireProfile.i

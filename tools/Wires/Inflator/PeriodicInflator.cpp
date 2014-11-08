@@ -6,6 +6,7 @@
 #include "SimpleInflator.h"
 
 void PeriodicInflator::inflate() {
+    check_thickness();
     initialize_phantom_wires();
     inflate_phantom_wires();
     clip_to_center_cell();
