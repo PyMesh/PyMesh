@@ -91,7 +91,7 @@ void PeriodicBoundaryRemesher::label_bd_faces() {
 
     VectorF labels(m_faces.rows());
     std::copy(m_bd_face_markers.begin(), m_bd_face_markers.end(), labels.data());
-    save_mesh("face_labels.msh", m_vertices, m_faces, labels);
+    //save_mesh("face_labels.msh", m_vertices, m_faces, labels);
 }
 
 void PeriodicBoundaryRemesher::label_bd_faces(int axis) {
@@ -252,10 +252,10 @@ void PeriodicBoundaryRemesher::match_bd_loops(short axis) {
         throw RuntimeError("Unable to match max boundary loops");
     }
 
-    // DEBUG CODE
-    VectorF matched_vertices(num_vertices);
-    std::copy(vertex_map.begin(), vertex_map.end(), matched_vertices.data());
-    save_mesh("matched_vertices.msh", m_vertices, m_faces, matched_vertices);
+    //// DEBUG CODE
+    //VectorF matched_vertices(num_vertices);
+    //std::copy(vertex_map.begin(), vertex_map.end(), matched_vertices.data());
+    //save_mesh("matched_vertices.msh", m_vertices, m_faces, matched_vertices);
 }
 
 void PeriodicBoundaryRemesher::refine_bd_loops(Float ave_edge_len) {
