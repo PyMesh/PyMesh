@@ -1,8 +1,4 @@
-# General lib locations
-LINK_DIRECTORIES(/opt/local/lib)
-
 # Find triangle
-FIND_PACKAGE(Triangle REQUIRED)
 INCLUDE_DIRECTORIES(${Triangle_INCLUDE_DIR})
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})

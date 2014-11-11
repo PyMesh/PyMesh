@@ -12,12 +12,28 @@ if(BLAS_FOUND)
     umfpack.h
     PATHS
     $ENV{UMFPACKDIR}
+    $ENV{SUITESPARSE_INC}
+    $ENV{SUITESPARSE_ROOT}
+    $ENV{SUITESPARSE_ROOT}/include
     ${INCLUDE_INSTALL_DIR}
+    /opt/local/include
+    /usr/local/include
+    /usr/include
     PATH_SUFFIXES
     suitesparse
   )
 
-  find_library(UMFPACK_LIBRARIES umfpack PATHS $ENV{UMFPACKDIR} ${LIB_INSTALL_DIR})
+  find_library(UMFPACK_LIBRARIES umfpack
+      PATHS
+      $ENV{UMFPACKDIR}
+      $ENV{SUITESPARSE_LIB}
+      $ENV{SUITESPARSE_ROOT}
+      $ENV{SUITESPARSE_ROOT}/lib
+      ${LIB_INSTALL_DIR}
+      /opt/local/lib
+      /usr/local/lib
+      /usr/lib
+      )
 
   if(UMFPACK_LIBRARIES)
 

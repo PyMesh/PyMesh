@@ -1,12 +1,6 @@
 # Include Eigen
-IF (DEFINED ENV{EIGEN_INC})
-    SET(EIGEN_BASE $ENV{EIGEN_INC}/eigen3)
-ELSE (DEFINED ENV{EIGEN_INC})
-    SET(EIGEN_BASE "/opt/local/include/eigen3")
-ENDIF (DEFINED ENV{EIGEN_INC})
-INCLUDE_DIRECTORIES("/opt/local/include")
-INCLUDE_DIRECTORIES(${EIGEN_BASE})
-INCLUDE_DIRECTORIES(${EIGEN_BASE}/unsupported)
+INCLUDE_DIRECTORIES(${Eigen_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${Eigen_INCLUDE_DIR}/unsupported)
 ADD_DEFINITIONS(-DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET)
 
 # Add googletest googlemock support
@@ -22,9 +16,11 @@ INCLUDE_DIRECTORIES(${EIGEN_WRAPPER_PATH})
 
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(tools)
-ADD_SUBDIRECTORY(learning_tests)
+#ADD_SUBDIRECTORY(learning_tests)
 
 # Bundle all tests into a single target
 # make all_tests
-ADD_CUSTOM_TARGET(all_tests DEPENDS tests tools_tests learning_tests)
+ADD_CUSTOM_TARGET(all_tests DEPENDS tests tools_tests
+    #learning_tests
+    )
 

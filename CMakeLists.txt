@@ -7,7 +7,6 @@ SET(CMAKE_CXX_COMPILER "clang++")
 PROJECT(Mesh)
 
 INCLUDE(Settings.cmake)
-INCLUDE(Options.cmake)
 
 # Process code in each subdirectories
 ADD_SUBDIRECTORY(src)

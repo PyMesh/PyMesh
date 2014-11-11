@@ -2,31 +2,61 @@
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
 
-#ADD_SUBDIRECTORY(selfintersect)
-#ADD_SUBDIRECTORY(windingnumber)
-ADD_SUBDIRECTORY(MeshUtils)
-ADD_SUBDIRECTORY(tetgen)
-ADD_SUBDIRECTORY(triangle)
-#ADD_SUBDIRECTORY(CGAL)
-ADD_SUBDIRECTORY(ConvexHull)
-ADD_SUBDIRECTORY(Assembler)
-ADD_SUBDIRECTORY(EigenUtils)
-ADD_SUBDIRECTORY(Envelope)
-ADD_SUBDIRECTORY(SparseSolver)
-ADD_SUBDIRECTORY(CSG)
-ADD_SUBDIRECTORY(Wires)
+SET(TARGET_MODULE_TESTS "")
 
-ADD_CUSTOM_TARGET(tools_tests DEPENDS
-    #selfintersect_tests
-    #windingnumber_tests
-    MeshUtils_tests
-    tetgen_tests
-    triangle_tests
-    #cgal_tests
-    convex_hull_tests
-    assembler_tests
-    EigenUtils_tests
-    envelope_tests
-    SparseSolver_tests
-    csg_tests
-    wires_tests)
+IF (TARGET MeshUtils)
+    ADD_SUBDIRECTORY(MeshUtils)
+    LIST(APPEND TARGET_MODULE_TESTS MeshUtils_tests)
+ENDIF (TARGET MeshUtils)
+
+IF (TARGET assembler)
+    ADD_SUBDIRECTORY(Assembler)
+    LIST(APPEND TARGET_MODULE_TESTS assembler_tests)
+ENDIF (TARGET assembler)
+
+IF (TARGET tetgen)
+    ADD_SUBDIRECTORY(tetgen)
+    LIST(APPEND TARGET_MODULE_TESTS tetgen_tests)
+ENDIF (TARGET tetgen)
+
+IF (TARGET cgal)
+    ADD_SUBDIRECTORY(CGAL)
+    LIST(APPEND TARGET_MODULE_TESTS cgal_tests)
+ENDIF (TARGET cgal)
+
+IF (TARGET triangle)
+    ADD_SUBDIRECTORY(triangle)
+    LIST(APPEND TARGET_MODULE_TESTS triangle_tests)
+ENDIF (TARGET triangle)
+
+IF (TARGET convex_hull)
+    ADD_SUBDIRECTORY(ConvexHull)
+    LIST(APPEND TARGET_MODULE_TESTS convex_hull_tests)
+ENDIF (TARGET convex_hull)
+
+IF (TARGET csg)
+    ADD_SUBDIRECTORY(CSG)
+    LIST(APPEND TARGET_MODULE_TESTS csg_tests)
+ENDIF (TARGET csg)
+
+#IF (TARGET EigenUtils)
+#    ADD_SUBDIRECTORY(EigenUtils)
+#    LIST(APPEND TARGET_MODULE_TESTS EigenUtils_tests)
+#ENDIF (TARGET EigenUtils)
+
+IF (TARGET SparseSolver)
+    ADD_SUBDIRECTORY(SparseSolver)
+    LIST(APPEND TARGET_MODULE_TESTS SparseSolver_tests)
+ENDIF (TARGET SparseSolver)
+
+IF (TARGET Envelope)
+    ADD_SUBDIRECTORY(Envelope)
+    LIST(APPEND TARGET_MODULE_TESTS envelope_tests)
+ENDIF (TARGET Envelope)
+
+IF (TARGET wires)
+    ADD_SUBDIRECTORY(Wires)
+    LIST(APPEND TARGET_MODULE_TESTS wires_tests)
+ENDIF (TARGET wires)
+
+ADD_CUSTOM_TARGET(tools_tests DEPENDS ${TARGET_MODULE_TESTS})

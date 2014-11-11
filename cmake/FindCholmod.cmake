@@ -8,12 +8,28 @@ find_path(CHOLMOD_INCLUDES
   cholmod.h
   PATHS
   $ENV{CHOLMODDIR}
+  $ENV{SUITESPARSE_INC}
+  $ENV{SUITESPARSE_ROOT}
+  $ENV{SUITESPARSE_ROOT}/include
   ${INCLUDE_INSTALL_DIR}
+  /opt/local/include
+  /usr/local/include
+  /usr/include
   PATH_SUFFIXES
   suitesparse
 )
 
-find_library(CHOLMOD_LIBRARIES cholmod PATHS $ENV{CHOLMODDIR} ${LIB_INSTALL_DIR})
+find_library(CHOLMOD_LIBRARIES cholmod
+    PATHS
+    $ENV{CHOLMODDIR}
+    $ENV{SUITESPARSE_LIB}
+    $ENV{SUITESPARSE_ROOT}
+    $ENV{SUITESPARSE_ROOT}/lib
+    ${LIB_INSTALL_DIR}
+    /opt/local/lib
+    /usr/local/lib
+    /usr/lib
+    )
 
 if(CHOLMOD_LIBRARIES)
 
