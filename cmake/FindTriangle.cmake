@@ -3,11 +3,11 @@
 # The following variables are set.
 #
 # TRIANGLE_FOUND
-# Triangle_INCLUDE_DIR
+# Triangle_INCLUDE_DIRS
 # Triangle_LIBRARIES
 
 # Find include directory.
-find_path (Triangle_INCLUDE_DIR triangle.h 
+find_path (Triangle_INCLUDE_DIRS triangle.h 
     $ENV{TRIANGLE_PATH}
     $ENV{TRIANGLE_PATH}/include
     /opt/local/include
@@ -26,9 +26,9 @@ FIND_LIBRARY(Triangle_LIBRARIES triangle
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Triangle
   "Triangle could not be found."
-  Triangle_LIBRARIES Triangle_INCLUDE_DIR)
+  Triangle_LIBRARIES Triangle_INCLUDE_DIRS)
 
 mark_as_advanced(
-  Triangle_INCLUDE_DIR
+  Triangle_INCLUDE_DIRS
   Triangle_LIBRARIES
   )

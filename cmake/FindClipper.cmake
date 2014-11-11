@@ -2,12 +2,12 @@
 # The following variables are set
 #
 # CLIPPER_FOUND
-# CLIPPER_INCLUDE_DIR
+# CLIPPER_INCLUDE_DIRS
 # CLIPPER_LIBRARIES
 #
 # It searches the environment variable $CLIPPER_PATH automatically.
 
-FIND_PATH(CLIPPER_INCLUDE_DIR clipper.hpp
+FIND_PATH(CLIPPER_INCLUDE_DIRS clipper.hpp
     $ENV{CLIPPER_PATH}
     $ENV{CLIPPER_PATH}/cpp/
     $ENV{CLIPPER_PATH}/include/
@@ -34,9 +34,9 @@ FIND_LIBRARY(CLIPPER_LIBRARIES polyclipping
 include(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Clipper
     "Clipper library cannot be found.  Consider set CLIPPER_PATH environment variable"
-    CLIPPER_INCLUDE_DIR
+    CLIPPER_INCLUDE_DIRS
     CLIPPER_LIBRARIES)
 
 MARK_AS_ADVANCED(
-    CLIPPER_INCLUDE_DIR
+    CLIPPER_INCLUDE_DIRS
     CLIPPER_LIBRARIES)

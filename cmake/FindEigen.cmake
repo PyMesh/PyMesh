@@ -2,8 +2,8 @@
 # This module searches for the Eigen C++ library.
 # 
 # The module defines the following variables:
-#  Eigen_INCLUDE_DIR, where to find Eigen/Core, etc.
-#  Eigen_FOUND, if false, do not try to use EIGEN.
+#  EIGEN_INCLUDE_DIRS, where to find Eigen/Core, etc.
+#  EIGEN_FOUND, if false, do not try to use EIGEN.
 #
 # Variables used by this module, they can change the default behavior and need
 # to be set before calling find_package:
@@ -14,7 +14,7 @@
 include(FindPackageHandleStandardArgs)
 
 # Finds the include files directory
-find_path(Eigen_INCLUDE_DIR 
+find_path(EIGEN_INCLUDE_DIRS
     NAMES Eigen/Core
     HINTS "${EIGEN_ROOT_DIR}"
     PATHS
@@ -28,8 +28,8 @@ find_path(Eigen_INCLUDE_DIR
     NO_DEFAULT_PATH
     )
 
-if(Eigen_INCLUDE_DIR)
-    mark_as_advanced(Eigen_INCLUDE_DIR)
+if(EIGEN_INCLUDE_DIRS)
+    mark_as_advanced(EIGEN_INCLUDE_DIRS)
 endif()
 
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(Eigen DEFAULT_MSG Eigen_INCLUDE_DIR)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Eigen DEFAULT_MSG EIGEN_INCLUDE_DIRS)

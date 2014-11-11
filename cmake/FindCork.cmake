@@ -2,12 +2,12 @@
 # The following variables are set
 #
 # CORK_FOUND
-# CORK_INCLUDE_DIR
+# CORK_INCLUDE_DIRS
 # CORK_LIBRARIES
 #
 # It searches the environment variable $CORK_PATH automatically.
 
-FIND_PATH(CORK_INCLUDE_DIR cork.h
+FIND_PATH(CORK_INCLUDE_DIRS cork.h
     $ENV{CORK_PATH}
     $ENV{CORK_PATH}/include/
     /opt/local/include/
@@ -24,9 +24,9 @@ FIND_LIBRARY(CORK_LIBRARIES cork
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Cork
     "Cork library cannot be found.  Consider set CORK_PATH environment variable"
-    CORK_INCLUDE_DIR
+    CORK_INCLUDE_DIRS
     CORK_LIBRARIES)
 
 MARK_AS_ADVANCED(
-    CORK_INCLUDE_DIR
+    CORK_INCLUDE_DIRS
     CORK_LIBRARIES)

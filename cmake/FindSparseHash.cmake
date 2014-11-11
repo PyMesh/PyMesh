@@ -2,10 +2,10 @@
 # The following variables are set.
 #
 # SPARSEHASH_FOUND
-# SPARSEHASH_INCLUDE_DIR
+# SPARSEHASH_INCLUDE_DIRS
 
 # Find include directory
-FIND_PATH(SPARSEHASH_INCLUDE_DIR sparsehash/sparse_hash_map
+FIND_PATH(SPARSEHASH_INCLUDE_DIRS sparsehash/sparse_hash_map
     $ENV{SPARSEHASH_PATH}
     /opt/local/include
     /usr/local/include
@@ -14,6 +14,6 @@ FIND_PATH(SPARSEHASH_INCLUDE_DIR sparsehash/sparse_hash_map
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(SparseHash
     "SparseHash not found, consider set $SPARSEHASH_PATH environment variable"
-    SPARSEHASH_INCLUDE_DIR)
+    SPARSEHASH_INCLUDE_DIRS)
 
-MARK_AS_ADVANCED(SPARSEHASH_INCLUDE_DIR)
+MARK_AS_ADVANCED(SPARSEHASH_INCLUDE_DIRS)
