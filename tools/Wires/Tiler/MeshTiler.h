@@ -7,15 +7,15 @@ class MeshTiler : public TilerEngine {
     public:
         typedef Mesh::Ptr MeshPtr;
 
-        MeshTiler(const WireNetwork& unit_wire_network, MeshPtr mesh);
+        MeshTiler(WireNetwork::Ptr unit_wire_network, MeshPtr mesh);
         virtual ~MeshTiler() {}
 
     public:
-        virtual WireNetwork tile();
+        virtual WireNetwork::Ptr tile();
 
     private:
-        WireNetwork tile_2D();
-        WireNetwork tile_3D();
+        WireNetwork::Ptr tile_2D();
+        WireNetwork::Ptr tile_3D();
 
         void scale_to_unit_box();
 

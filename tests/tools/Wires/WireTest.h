@@ -19,6 +19,10 @@ class WireTest : public ::testing::Test {
             return WireNetwork(m_data_dir + filename);
         }
 
+        WireNetwork::Ptr load_wire_shared(const std::string& filename) {
+            return WireNetwork::create(m_data_dir + filename);
+        }
+
         void ASSERT_VECTOR_EQ(const VectorF& v1, const VectorF& v2) {
             ASSERT_EQ(v1.size(), v2.size());
             const size_t num_entries = v1.size();

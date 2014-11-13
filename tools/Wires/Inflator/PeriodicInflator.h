@@ -4,7 +4,7 @@
 
 class PeriodicInflator : public InflatorEngine {
     public:
-        PeriodicInflator(WireNetwork& wire_network) :
+        PeriodicInflator(WireNetwork::Ptr wire_network) :
             InflatorEngine(wire_network) {}
         virtual ~PeriodicInflator() {}
 
@@ -19,7 +19,7 @@ class PeriodicInflator : public InflatorEngine {
         void get_center_cell_bbox(VectorF& bbox_min, VectorF& bbox_max);
 
     protected:
-        WireNetwork m_phantom_wires;
+        WireNetwork::Ptr m_phantom_wires;
         MatrixFr m_phantom_vertices;
         MatrixIr m_phantom_faces;
         VectorI  m_phantom_face_sources;

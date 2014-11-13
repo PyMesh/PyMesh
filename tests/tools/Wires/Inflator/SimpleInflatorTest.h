@@ -21,9 +21,9 @@ class SimpleInflatorTest : public WireTest {
 };
 
 TEST_F(SimpleInflatorTest, 2D) {
-    WireNetwork network = load_wire("square.wire");
-    network.compute_connectivity();
-    const size_t num_edges = network.get_num_edges();
+    WireNetwork::Ptr network = load_wire_shared("square.wire");
+    network->compute_connectivity();
+    const size_t num_edges = network->get_num_edges();
 
     SimpleInflator inflator(network);
     inflator.set_thickness_type(SimpleInflator::PER_EDGE);
@@ -45,9 +45,9 @@ TEST_F(SimpleInflatorTest, 2D) {
 }
 
 TEST_F(SimpleInflatorTest, 3D) {
-    WireNetwork network = load_wire("cube.wire");
-    network.compute_connectivity();
-    const size_t num_edges = network.get_num_edges();
+    WireNetwork::Ptr network = load_wire_shared("cube.wire");
+    network->compute_connectivity();
+    const size_t num_edges = network->get_num_edges();
 
     WireProfile::Ptr profile = WireProfile::create("hexagon");
 

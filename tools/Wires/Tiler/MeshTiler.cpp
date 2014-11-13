@@ -56,17 +56,17 @@ namespace MeshTilerHelper {
 
 using namespace MeshTilerHelper;
 
-MeshTiler::MeshTiler(const WireNetwork& unit_wire_network, MeshTiler::MeshPtr mesh) :
+MeshTiler::MeshTiler(WireNetwork::Ptr unit_wire_network, MeshTiler::MeshPtr mesh) :
     TilerEngine(unit_wire_network), m_mesh(mesh) {
-    if (m_mesh->get_dim() != m_unit_wire_network.get_dim()) {
+    if (m_mesh->get_dim() != m_unit_wire_network->get_dim()) {
         std::stringstream err_msg;
         err_msg << "Unsupported dim: " << m_mesh->get_dim()
-            << ", expect " << m_unit_wire_network.get_dim();
+            << ", expect " << m_unit_wire_network->get_dim();
         throw RuntimeError(err_msg.str());
     }
 }
 
-WireNetwork MeshTiler::tile() {
+WireNetwork::Ptr MeshTiler::tile() {
     const size_t dim = m_mesh->get_dim();
     switch (dim) {
         case 2:
@@ -80,29 +80,29 @@ WireNetwork MeshTiler::tile() {
     }
 }
 
-WireNetwork MeshTiler::tile_2D() {
+WireNetwork::Ptr MeshTiler::tile_2D() {
     const size_t num_cells = m_mesh->get_num_faces();
     scale_to_unit_box();
     MatrixFr tiled_vertices = tile_vertices(
             get_2D_tiling_operators(m_mesh));
     MatrixIr tiled_edges = tile_edges(num_cells);
 
-    WireNetwork tiled_network(tiled_vertices, tiled_edges);
-    update_attributes(tiled_network, num_cells);
-    clean_up(tiled_network);
+    WireNetwork::Ptr tiled_network = WireNetwork::create_raw(tiled_vertices, tiled_edges);
+    update_attributes(*tiled_network, num_cells);
+    clean_up(*tiled_network);
     return tiled_network;
 }
 
-WireNetwork MeshTiler::tile_3D() {
+WireNetwork::Ptr MeshTiler::tile_3D() {
     const size_t num_cells = m_mesh->get_num_voxels();
     scale_to_unit_box();
     MatrixFr tiled_vertices = tile_vertices(
             get_3D_tiling_operators(m_mesh));
     MatrixIr tiled_edges = tile_edges(num_cells);
 
-    WireNetwork tiled_network(tiled_vertices, tiled_edges);
-    update_attributes(tiled_network, num_cells);
-    clean_up(tiled_network);
+    WireNetwork::Ptr tiled_network = WireNetwork::create_raw(tiled_vertices, tiled_edges);
+    update_attributes(*tiled_network, num_cells);
+    clean_up(*tiled_network);
     return tiled_network;
 }
 
@@ -111,5 +111,5 @@ void MeshTiler::scale_to_unit_box() {
     VectorF cell_size = VectorF::Ones(dim);
     VectorF center = cell_size * 0.5;
     normalize_unit_wire(cell_size);
-    m_unit_wire_network.translate(center);
+    m_unit_wire_network->translate(center);
 }

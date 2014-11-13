@@ -40,30 +40,30 @@ class MeshTilerTest : public WireTest {
 };
 
 TEST_F(MeshTilerTest, cube) {
-    WireNetwork wire_network = load_wire("cube.wire");
+    WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
     MeshPtr mesh = load_mesh("hex.msh");
     MeshTiler tiler(wire_network, mesh);
-    WireNetwork tiled_network = tiler.tile();
+    WireNetwork::Ptr tiled_network = tiler.tile();
 
-    ASSERT_EQ(wire_network.get_num_vertices(), tiled_network.get_num_vertices());
-    ASSERT_EQ(wire_network.get_num_edges(), tiled_network.get_num_edges());
-    ASSERT_BBOX_MATCHES(tiled_network.get_vertices(), mesh->get_vertices());
+    ASSERT_EQ(wire_network->get_num_vertices(), tiled_network->get_num_vertices());
+    ASSERT_EQ(wire_network->get_num_edges(), tiled_network->get_num_edges());
+    ASSERT_BBOX_MATCHES(tiled_network->get_vertices(), mesh->get_vertices());
     ASSERT_FLOAT_EQ(0.0,
-            (wire_network.get_edges() -
-             tiled_network.get_edges()).norm());
+            (wire_network->get_edges() -
+             tiled_network->get_edges()).norm());
 }
 
 TEST_F(MeshTilerTest, square) {
-    WireNetwork wire_network = load_wire("square.wire");
+    WireNetwork::Ptr wire_network = load_wire_shared("square.wire");
     MeshPtr mesh = load_mesh("quad.obj");
     MeshTiler tiler(wire_network, mesh);
-    WireNetwork tiled_network = tiler.tile();
+    WireNetwork::Ptr tiled_network = tiler.tile();
 
-    ASSERT_EQ(wire_network.get_num_vertices(), tiled_network.get_num_vertices());
-    ASSERT_EQ(wire_network.get_num_edges(), tiled_network.get_num_edges());
-    ASSERT_BBOX_MATCHES(tiled_network.get_vertices(), mesh->get_vertices());
+    ASSERT_EQ(wire_network->get_num_vertices(), tiled_network->get_num_vertices());
+    ASSERT_EQ(wire_network->get_num_edges(), tiled_network->get_num_edges());
+    ASSERT_BBOX_MATCHES(tiled_network->get_vertices(), mesh->get_vertices());
     ASSERT_FLOAT_EQ(0.0,
-            (wire_network.get_edges() -
-             tiled_network.get_edges()).norm());
+            (wire_network->get_edges() -
+             tiled_network->get_edges()).norm());
 }
 

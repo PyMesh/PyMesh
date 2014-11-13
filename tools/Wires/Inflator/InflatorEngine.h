@@ -19,7 +19,7 @@ class InflatorEngine {
         static Ptr create(const std::string& type, WireNetwork::Ptr network);
 
     public:
-        InflatorEngine(WireNetwork& wire_network);
+        InflatorEngine(WireNetwork::Ptr wire_network);
         virtual ~InflatorEngine() {}
 
     public:
@@ -47,7 +47,7 @@ class InflatorEngine {
         void check_thickness() const;
 
     protected:
-        WireNetwork& m_wire_network;
+        WireNetwork::Ptr m_wire_network;
 
         MatrixFr m_vertices;
         MatrixIr m_faces;

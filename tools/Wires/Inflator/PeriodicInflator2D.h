@@ -5,7 +5,7 @@
 
 class PeriodicInflator2D : public PeriodicInflator {
     public:
-        PeriodicInflator2D(WireNetwork& wire_network) :
+        PeriodicInflator2D(WireNetwork::Ptr wire_network) :
             PeriodicInflator(wire_network) {}
         virtual ~PeriodicInflator2D() {}
 

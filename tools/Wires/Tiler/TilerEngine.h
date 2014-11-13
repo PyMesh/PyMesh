@@ -5,12 +5,12 @@
 
 class TilerEngine {
     public:
-        TilerEngine(const WireNetwork& unit_wire_network)
+        TilerEngine(WireNetwork::Ptr unit_wire_network)
             : m_unit_wire_network(unit_wire_network) {}
         virtual ~TilerEngine() {}
 
     public:
-        virtual WireNetwork tile()=0;
+        virtual WireNetwork::Ptr tile()=0;
 
 
     public:
@@ -28,5 +28,5 @@ class TilerEngine {
         void remove_duplicated_edges(WireNetwork& wire_network);
 
     protected:
-        WireNetwork m_unit_wire_network;
+        WireNetwork::Ptr m_unit_wire_network;
 };

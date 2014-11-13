@@ -7,17 +7,17 @@ class WireTiler {
     public:
         typedef Mesh::Ptr MeshPtr;
 
-        WireTiler(const WireNetwork& unit_wire_network)
+        WireTiler(WireNetwork::Ptr unit_wire_network)
             : m_unit_wire_network(unit_wire_network) {}
 
     public:
-        WireNetwork tile_with_guide_bbox(
+        WireNetwork::Ptr tile_with_guide_bbox(
                 const VectorF& bbox_min,
                 const VectorF& bbox_max,
                 const VectorI& repetitions);
 
-        WireNetwork tile_with_guide_mesh(const MeshPtr mesh);
+        WireNetwork::Ptr tile_with_guide_mesh(const MeshPtr mesh);
 
     private:
-        const WireNetwork& m_unit_wire_network;
+        WireNetwork::Ptr m_unit_wire_network;
 };

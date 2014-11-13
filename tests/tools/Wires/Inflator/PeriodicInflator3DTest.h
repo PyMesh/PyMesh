@@ -32,10 +32,10 @@ class PeriodicInflator3DTest : public WireTest {
 
         void inflate(const std::string& wire_file, Float thickness=0.5) {
             const Vector3F half_size(2.5, 2.5, 2.5);
-            WireNetwork network = load_wire(wire_file);
-            network.compute_connectivity();
-            network.scale_fit(-half_size, half_size); // 5mm cell
-            const size_t num_edges = network.get_num_edges();
+            WireNetwork::Ptr network = load_wire_shared(wire_file);
+            network->compute_connectivity();
+            network->scale_fit(-half_size, half_size); // 5mm cell
+            const size_t num_edges = network->get_num_edges();
 
             PeriodicInflator3D inflator(network);
             inflator.set_thickness_type(InflatorEngine::PER_EDGE);
@@ -55,10 +55,10 @@ class PeriodicInflator3DTest : public WireTest {
                 const std::string& wire_file, Float base_thickness=0.5,
                 size_t num_profile_samples=8) {
             const Vector3F half_size(2.5, 2.5, 2.5);
-            WireNetwork network = load_wire(wire_file);
-            network.compute_connectivity();
-            network.scale_fit(-half_size, half_size); // 5mm cell
-            const size_t num_edges = network.get_num_edges();
+            WireNetwork::Ptr network = load_wire_shared(wire_file);
+            network->compute_connectivity();
+            network->scale_fit(-half_size, half_size); // 5mm cell
+            const size_t num_edges = network->get_num_edges();
 
             VectorF thickness = VectorF::Ones(num_edges) * base_thickness;
             for (size_t i=0; i<num_edges; i++) {

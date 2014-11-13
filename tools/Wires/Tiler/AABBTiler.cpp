@@ -63,7 +63,7 @@ namespace AABBTilerHelper {
 using namespace AABBTilerHelper;
 
 AABBTiler::AABBTiler(
-        const WireNetwork& unit_wire_network,
+        WireNetwork::Ptr unit_wire_network,
         const VectorF& bbox_min,
         const VectorF& bbox_max,
         const VectorI& repetitions)
@@ -71,14 +71,14 @@ AABBTiler::AABBTiler(
     m_bbox_min(bbox_min),
     m_bbox_max(bbox_max),
     m_repetitions(repetitions) {
-        const size_t dim = m_unit_wire_network.get_dim();
+        const size_t dim = m_unit_wire_network->get_dim();
         run_compatibility_check(dim, m_bbox_min);
         run_compatibility_check(dim, m_bbox_max);
         run_compatibility_check(dim, m_repetitions);
 }
 
-WireNetwork AABBTiler::tile() {
-    const size_t dim = m_unit_wire_network.get_dim();
+WireNetwork::Ptr AABBTiler::tile() {
+    const size_t dim = m_unit_wire_network->get_dim();
 
     VectorF cell_size = (m_bbox_max - m_bbox_min).cwiseQuotient(
             m_repetitions.cast<Float>());
@@ -88,12 +88,13 @@ WireNetwork AABBTiler::tile() {
     const size_t num_repetitions = indices.size();
     MatrixFr tiled_vertices = tile_vertices(
             get_tiling_operators(
-            m_unit_wire_network.get_bbox_min(),
+            m_unit_wire_network->get_bbox_min(),
             cell_size, indices));
     MatrixIr tiled_edges = tile_edges(num_repetitions);
 
-    WireNetwork tiled_network(tiled_vertices, tiled_edges);
-    update_attributes(tiled_network, num_repetitions);
-    clean_up(tiled_network);
+    WireNetwork::Ptr tiled_network =
+        WireNetwork::create_raw(tiled_vertices, tiled_edges);
+    update_attributes(*tiled_network, num_repetitions);
+    clean_up(*tiled_network);
     return tiled_network;
 }

@@ -182,8 +182,8 @@ namespace PeriodicInflator3DHelper {
 
     std::vector<Location> compute_face_locations(
             const MatrixFr& vertices, const MatrixIr& faces,
-            const WireNetwork& network) {
-        const MatrixFr& wire_vertices = network.get_vertices();
+            WireNetwork::Ptr network) {
+        const MatrixFr& wire_vertices = network->get_vertices();
         const VectorF bbox_min = wire_vertices.colwise().minCoeff();
         const VectorF bbox_max = wire_vertices.colwise().maxCoeff();
         const size_t num_faces = faces.rows();

@@ -60,9 +60,9 @@ using namespace TilerEngineHelper;
 
 MatrixFr TilerEngine::tile_vertices(const TilerEngine::FuncList& funcs) {
     const size_t num_copies = funcs.size();
-    const size_t dim = m_unit_wire_network.get_dim();
-    const size_t num_vertices = m_unit_wire_network.get_num_vertices();
-    const MatrixFr& vertices = m_unit_wire_network.get_vertices();
+    const size_t dim = m_unit_wire_network->get_dim();
+    const size_t num_vertices = m_unit_wire_network->get_num_vertices();
+    const MatrixFr& vertices = m_unit_wire_network->get_vertices();
 
     MatrixFr tiled_vertices(num_copies * num_vertices, dim);
 
@@ -76,15 +76,15 @@ MatrixFr TilerEngine::tile_vertices(const TilerEngine::FuncList& funcs) {
 }
 
 MatrixIr TilerEngine::tile_edges(size_t num_repetitions) {
-    const size_t num_vertices = m_unit_wire_network.get_num_vertices();
-    const size_t num_edges    = m_unit_wire_network.get_num_edges();
+    const size_t num_vertices = m_unit_wire_network->get_num_vertices();
+    const size_t num_edges    = m_unit_wire_network->get_num_edges();
 
     MatrixIr tiled_edges(num_edges * num_repetitions, 2);
 
     size_t vertex_count = 0;
     for (size_t i=0; i<num_repetitions; i++) {
         tiled_edges.block(num_edges * i, 0, num_edges, 2) =
-            m_unit_wire_network.get_edges().array() + vertex_count;
+            m_unit_wire_network->get_edges().array() + vertex_count;
         vertex_count += num_vertices;
     }
     return tiled_edges;
@@ -92,19 +92,19 @@ MatrixIr TilerEngine::tile_edges(size_t num_repetitions) {
 
 void TilerEngine::normalize_unit_wire(const VectorF& cell_size) {
     VectorF factors = cell_size.cwiseQuotient(
-            m_unit_wire_network.get_bbox_max() - m_unit_wire_network.get_bbox_min());
-    m_unit_wire_network.center_at_origin();
-    m_unit_wire_network.scale(factors);
+            m_unit_wire_network->get_bbox_max() - m_unit_wire_network->get_bbox_min());
+    m_unit_wire_network->center_at_origin();
+    m_unit_wire_network->scale(factors);
 }
 
 void TilerEngine::update_attributes(WireNetwork& wire_network, size_t num_repetitions) {
-    std::vector<std::string> attr_names = m_unit_wire_network.get_attribute_names();
+    std::vector<std::string> attr_names = m_unit_wire_network->get_attribute_names();
     for (auto itr : attr_names) {
         const std::string& name = itr;
         wire_network.add_attribute(name,
-                m_unit_wire_network.is_vertex_attribute(name));
+                m_unit_wire_network->is_vertex_attribute(name));
 
-        const MatrixFr& values = m_unit_wire_network.get_attribute(name);
+        const MatrixFr& values = m_unit_wire_network->get_attribute(name);
         const size_t rows = values.rows();
         const size_t cols = values.cols();
         MatrixFr tiled_values(rows * num_repetitions, cols);

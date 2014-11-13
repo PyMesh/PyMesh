@@ -66,21 +66,21 @@ void SimpleInflator::initialize() {
     m_face_source_list.clear();
     m_num_vertex_accumulated = 0;
 
-    if (!m_wire_network.with_connectivity()) {
-        m_wire_network.compute_connectivity();
+    if (!m_wire_network->with_connectivity()) {
+        m_wire_network->compute_connectivity();
     }
-    if (!m_wire_network.has_attribute("vertex_min_angle")) {
-        m_wire_network.add_attribute("vertex_min_angle");
+    if (!m_wire_network->has_attribute("vertex_min_angle")) {
+        m_wire_network->add_attribute("vertex_min_angle");
     }
-    if (!m_wire_network.has_attribute("edge_length")) {
-        m_wire_network.add_attribute("edge_length");
+    if (!m_wire_network->has_attribute("edge_length")) {
+        m_wire_network->add_attribute("edge_length");
     }
 }
 
 void SimpleInflator::compute_end_loop_offsets() {
-    const size_t num_vertices = m_wire_network.get_num_vertices();
+    const size_t num_vertices = m_wire_network->get_num_vertices();
     const VectorF& min_angles =
-        m_wire_network.get_attribute("vertex_min_angle");
+        m_wire_network->get_attribute("vertex_min_angle");
     assert(min_angles.size() == num_vertices);
     VectorF vertex_thickness = compute_vertex_thickness();
 
@@ -92,10 +92,10 @@ void SimpleInflator::compute_end_loop_offsets() {
 }
 
 void SimpleInflator::generate_end_loops() {
-    const size_t num_edges = m_wire_network.get_num_edges();
+    const size_t num_edges = m_wire_network->get_num_edges();
 
-    const MatrixFr vertices = m_wire_network.get_vertices();
-    const MatrixIr edges = m_wire_network.get_edges();
+    const MatrixFr vertices = m_wire_network->get_vertices();
+    const MatrixIr edges = m_wire_network->get_edges();
     const MatrixFr edge_thickness = get_edge_thickness();
     for (size_t i=0; i<num_edges; i++) {
         const VectorI& edge = edges.row(i);
@@ -112,11 +112,11 @@ void SimpleInflator::generate_end_loops() {
 }
 
 void SimpleInflator::generate_joints() {
-    const size_t dim = m_wire_network.get_dim();
-    const size_t num_vertices = m_wire_network.get_num_vertices();
-    const size_t num_edges = m_wire_network.get_num_edges();
-    const MatrixFr& vertices = m_wire_network.get_vertices();
-    const MatrixIr& edges = m_wire_network.get_edges();
+    const size_t dim = m_wire_network->get_dim();
+    const size_t num_vertices = m_wire_network->get_num_vertices();
+    const size_t num_edges = m_wire_network->get_num_edges();
+    const MatrixFr& vertices = m_wire_network->get_vertices();
+    const MatrixIr& edges = m_wire_network->get_edges();
     const size_t loop_size = m_profile->size();
 
     std::vector<std::vector<const MatrixFr*> > loops(num_vertices);
@@ -151,10 +151,10 @@ void SimpleInflator::generate_joints() {
 }
 
 void SimpleInflator::connect_end_loops() {
-    const size_t dim = m_wire_network.get_dim();
+    const size_t dim = m_wire_network->get_dim();
     const Float ave_thickness = m_thickness.sum() / m_thickness.size();
-    const auto& edge_lengths = m_wire_network.get_attribute("edge_length");
-    const size_t num_edges = m_wire_network.get_num_edges();
+    const auto& edge_lengths = m_wire_network->get_attribute("edge_length");
+    const size_t num_edges = m_wire_network->get_num_edges();
     const size_t loop_size = m_profile->size();
 
     const MatrixIr connecting_faces = generate_faces_connecting_loops(
@@ -188,7 +188,7 @@ void SimpleInflator::connect_end_loops() {
 }
 
 void SimpleInflator::finalize() {
-    const size_t dim = m_wire_network.get_dim();
+    const size_t dim = m_wire_network->get_dim();
     size_t num_vertices = 0;
     size_t num_faces = 0;
     for (auto itr : m_vertex_list) num_vertices += itr.rows();
@@ -222,9 +222,9 @@ void SimpleInflator::finalize() {
 VectorF SimpleInflator::compute_vertex_thickness() const {
     if (m_thickness_type == PER_VERTEX) return m_thickness;
 
-    const size_t num_vertices = m_wire_network.get_num_vertices();
-    const size_t num_edges = m_wire_network.get_num_edges();
-    const MatrixIr& edges = m_wire_network.get_edges();
+    const size_t num_vertices = m_wire_network->get_num_vertices();
+    const size_t num_edges = m_wire_network->get_num_edges();
+    const MatrixIr& edges = m_wire_network->get_edges();
     VectorF vertex_thickness = VectorF::Zero(num_vertices);
 
     for (size_t i=0; i<num_edges; i++) {
@@ -241,10 +241,10 @@ VectorF SimpleInflator::compute_vertex_thickness() const {
 }
 
 MatrixFr SimpleInflator::get_edge_thickness() const {
-    const size_t num_edges = m_wire_network.get_num_edges();
+    const size_t num_edges = m_wire_network->get_num_edges();
     MatrixFr thickness(num_edges, 2);
     if (m_thickness_type == PER_VERTEX) {
-        const MatrixIr& edges = m_wire_network.get_edges();
+        const MatrixIr& edges = m_wire_network->get_edges();
         for (size_t i=0; i<num_edges; i++) {
             const VectorI& edge = edges.row(i);
             thickness(i,0) = m_thickness[edge[0]];
@@ -259,7 +259,7 @@ MatrixFr SimpleInflator::get_edge_thickness() const {
 
 void SimpleInflator::generate_joint(
         const MatrixFr& pts, const VectorI& source_ids, size_t vertex_index) {
-    const size_t dim = m_wire_network.get_dim();
+    const size_t dim = m_wire_network->get_dim();
     ConvexHullEngine::Ptr convex_hull = ConvexHullEngine::create(dim, "qhull");
     convex_hull->run(pts);
 

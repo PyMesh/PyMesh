@@ -132,66 +132,66 @@ class AABBTilerTest : public WireTest {
         }
 
         void run_periodic_vertex_index_check(const std::string& wire_file) {
-            WireNetwork wire_network = load_wire(wire_file);
-            wire_network.center_at_origin();
-            wire_network.add_attribute("vertex_periodic_index");
+            WireNetwork::Ptr wire_network = load_wire_shared(wire_file);
+            wire_network->center_at_origin();
+            wire_network->add_attribute("vertex_periodic_index");
 
-            const MatrixFr& vertices = wire_network.get_vertices();
+            const MatrixFr& vertices = wire_network->get_vertices();
             VectorF bbox_min = vertices.colwise().minCoeff() * 3;
             VectorF bbox_max = vertices.colwise().maxCoeff() * 3;
-            VectorI repetitions = VectorI::Ones(wire_network.get_dim())*3;
+            VectorI repetitions = VectorI::Ones(wire_network->get_dim())*3;
 
             AABBTiler tiler(wire_network, bbox_min, bbox_max, repetitions);
-            WireNetwork tiled_network = tiler.tile();
+            WireNetwork::Ptr tiled_network = tiler.tile();
 
-            check_vertex_attribute_propagation("vertex_periodic_index", wire_network, tiled_network);
+            check_vertex_attribute_propagation("vertex_periodic_index", *wire_network, *tiled_network);
         }
 
         void run_periodic_edge_index_check(const std::string& wire_file) {
-            WireNetwork wire_network = load_wire(wire_file);
-            wire_network.center_at_origin();
-            wire_network.add_attribute("edge_periodic_index");
+            WireNetwork::Ptr wire_network = load_wire_shared(wire_file);
+            wire_network->center_at_origin();
+            wire_network->add_attribute("edge_periodic_index");
 
-            const MatrixFr& vertices = wire_network.get_vertices();
+            const MatrixFr& vertices = wire_network->get_vertices();
             VectorF bbox_min = vertices.colwise().minCoeff() * 3;
             VectorF bbox_max = vertices.colwise().maxCoeff() * 3;
-            VectorI repetitions = VectorI::Ones(wire_network.get_dim())*3;
+            VectorI repetitions = VectorI::Ones(wire_network->get_dim())*3;
 
             AABBTiler tiler(wire_network, bbox_min, bbox_max, repetitions);
-            WireNetwork tiled_network = tiler.tile();
+            WireNetwork::Ptr tiled_network = tiler.tile();
 
-            check_edge_attribute_propagation("edge_periodic_index", wire_network, tiled_network);
+            check_edge_attribute_propagation("edge_periodic_index", *wire_network, *tiled_network);
         }
 };
 
 TEST_F(AABBTilerTest, cube) {
-    WireNetwork wire_network = load_wire("cube.wire");
+    WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
     VectorF bbox_min = VectorF::Zero(3);
     VectorF bbox_max = VectorF::Ones(3)*2;
     VectorI repetitions = VectorI::Ones(3)*2;
 
     AABBTiler tiler(wire_network, bbox_min, bbox_max, repetitions);
-    WireNetwork tiled_network = tiler.tile();
+    WireNetwork::Ptr tiled_network = tiler.tile();
 
-    ASSERT_EQ(27, tiled_network.get_num_vertices());
-    ASSERT_EQ(54, tiled_network.get_num_edges());
-    ASSERT_VALID_EDGES(tiled_network);
-    ASSERT_BBOX_SIZE(tiled_network, bbox_max - bbox_min);
+    ASSERT_EQ(27, tiled_network->get_num_vertices());
+    ASSERT_EQ(54, tiled_network->get_num_edges());
+    ASSERT_VALID_EDGES(*tiled_network);
+    ASSERT_BBOX_SIZE(*tiled_network, bbox_max - bbox_min);
 }
 
 TEST_F(AABBTilerTest, square) {
-    WireNetwork wire_network = load_wire("square.wire");
+    WireNetwork::Ptr wire_network = load_wire_shared("square.wire");
     VectorF bbox_min = VectorF::Zero(2);
     VectorF bbox_max = VectorF::Ones(2)*2;
     VectorI repetitions = VectorI::Ones(2)*2;
 
     AABBTiler tiler(wire_network, bbox_min, bbox_max, repetitions);
-    WireNetwork tiled_network = tiler.tile();
+    WireNetwork::Ptr tiled_network = tiler.tile();
 
-    ASSERT_EQ(9, tiled_network.get_num_vertices());
-    ASSERT_EQ(12, tiled_network.get_num_edges());
-    ASSERT_VALID_EDGES(tiled_network);
-    ASSERT_BBOX_SIZE(tiled_network, bbox_max - bbox_min);
+    ASSERT_EQ(9, tiled_network->get_num_vertices());
+    ASSERT_EQ(12, tiled_network->get_num_edges());
+    ASSERT_VALID_EDGES(*tiled_network);
+    ASSERT_BBOX_SIZE(*tiled_network, bbox_max - bbox_min);
 }
 
 TEST_F(AABBTilerTest, VertexAttributes) {

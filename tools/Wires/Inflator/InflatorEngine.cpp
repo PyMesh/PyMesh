@@ -19,12 +19,12 @@ InflatorEngine::Ptr InflatorEngine::create(const std::string& type,
         WireNetwork::Ptr network) {
     const size_t dim = network->get_dim();
     if (type == "simple") {
-        return std::make_shared<SimpleInflator>(*network);
+        return std::make_shared<SimpleInflator>(network);
     } else if (type == "periodic") {
         if (dim == 2) {
-            return std::make_shared<PeriodicInflator2D>(*network);
+            return std::make_shared<PeriodicInflator2D>(network);
         } else if (dim == 3) {
-            return std::make_shared<PeriodicInflator3D>(*network);
+            return std::make_shared<PeriodicInflator3D>(network);
         } else {
             std::stringstream err_msg;
             err_msg << "Unsupported dim: " << dim;
@@ -37,9 +37,9 @@ InflatorEngine::Ptr InflatorEngine::create(const std::string& type,
     }
 }
 
-InflatorEngine::InflatorEngine(WireNetwork& wire_network) :
+InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
     m_wire_network(wire_network), m_thickness_type(PER_VERTEX) {
-        const size_t dim = m_wire_network.get_dim();
+        const size_t dim = m_wire_network->get_dim();
         if (dim == 3) {
             m_profile = WireProfile::create("square");
         } else if (dim == 2) {
@@ -132,9 +132,9 @@ void InflatorEngine::save_mesh(const std::string& filename,
 void InflatorEngine::check_thickness() const {
     size_t size;
     if (m_thickness_type == PER_VERTEX) {
-        size = m_wire_network.get_num_vertices();
+        size = m_wire_network->get_num_vertices();
     } else if (m_thickness_type == PER_EDGE) {
-        size = m_wire_network.get_num_edges();
+        size = m_wire_network->get_num_edges();
     } else {
         throw RuntimeError("Invalid thickness type!");
     }

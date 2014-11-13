@@ -7,7 +7,7 @@
 
 class SimpleInflator : public InflatorEngine {
     public:
-        SimpleInflator(WireNetwork& wire_network)
+        SimpleInflator(WireNetwork::Ptr wire_network)
             : InflatorEngine(wire_network) {}
         virtual ~SimpleInflator() {}
 

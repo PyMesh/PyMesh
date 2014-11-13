@@ -59,11 +59,11 @@ class PeriodicInflator2DTest : public WireTest {
 };
 
 TEST_F(PeriodicInflator2DTest, square) {
-    WireNetwork network = load_wire("square.wire");
-    network.compute_connectivity();
-    network.scale(Vector2F::Ones() * 5); // 5mm cell
-    const size_t num_vertices = network.get_num_vertices();
-    const size_t num_edges = network.get_num_edges();
+    WireNetwork::Ptr network = load_wire_shared("square.wire");
+    network->compute_connectivity();
+    network->scale(Vector2F::Ones() * 5); // 5mm cell
+    const size_t num_vertices = network->get_num_vertices();
+    const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
     inflator.set_thickness_type(InflatorEngine::PER_EDGE);
@@ -109,11 +109,11 @@ TEST_F(PeriodicInflator2DTest, square) {
 }
 
 TEST_F(PeriodicInflator2DTest, box) {
-    WireNetwork network = load_wire("box.wire");
-    network.compute_connectivity();
-    network.scale(Vector2F::Ones() * 5); // 5mm cell
-    const size_t num_vertices = network.get_num_vertices();
-    const size_t num_edges = network.get_num_edges();
+    WireNetwork::Ptr network = load_wire_shared("box.wire");
+    network->compute_connectivity();
+    network->scale(Vector2F::Ones() * 5); // 5mm cell
+    const size_t num_vertices = network->get_num_vertices();
+    const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
     inflator.set_thickness_type(InflatorEngine::PER_EDGE);
@@ -173,11 +173,11 @@ TEST_F(PeriodicInflator2DTest, box) {
 }
 
 TEST_F(PeriodicInflator2DTest, star) {
-    WireNetwork network = load_wire("star_2D.wire");
-    network.compute_connectivity();
-    network.scale(Vector2F::Ones() * 5); // 5mm cell
-    const size_t num_vertices = network.get_num_vertices();
-    const size_t num_edges = network.get_num_edges();
+    WireNetwork::Ptr network = load_wire_shared("star_2D.wire");
+    network->compute_connectivity();
+    network->scale(Vector2F::Ones() * 5); // 5mm cell
+    const size_t num_vertices = network->get_num_vertices();
+    const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
     inflator.set_thickness_type(InflatorEngine::PER_EDGE);
