@@ -3,6 +3,7 @@
 #include <Core/Exception.h>
 #include <Wires/Misc/BilinearInterpolation.h>
 #include <Wires/Misc/TrilinearInterpolation.h>
+#include <Wires/Parameters/ParameterCommon.h>
 
 namespace MeshTilerHelper {
     TilerEngine::FuncList get_2D_tiling_operators(MeshTiler::MeshPtr mesh) {
@@ -52,6 +53,59 @@ namespace MeshTilerHelper {
         }
         return operators;
     }
+
+    std::list<ParameterCommon::Variables> extract_face_attributes(
+            MeshTiler::MeshPtr mesh) {
+        const size_t num_faces = mesh->get_num_faces();
+        std::list<ParameterCommon::Variables> vars_list;
+        const auto& attr_names = mesh->get_attribute_names();
+
+        for (size_t i=0; i<num_faces; i++) {
+            ParameterCommon::Variables vars;
+            for (const auto& name : attr_names) {
+                const MatrixFr& attr = mesh->get_attribute(name);
+                if (attr.rows() != num_faces) continue;
+                if (attr.cols() != 1) continue;
+                vars[name] = attr(i, 0);
+            }
+            vars_list.push_back(vars);
+        }
+        return vars_list;
+    }
+
+    std::list<ParameterCommon::Variables> extract_voxel_attributes(
+            MeshTiler::MeshPtr mesh) {
+        const size_t num_voxels = mesh->get_num_voxels();
+        std::list<ParameterCommon::Variables> vars_list;
+        const auto& attr_names = mesh->get_attribute_names();
+
+        for (size_t i=0; i<num_voxels; i++) {
+            ParameterCommon::Variables vars;
+            for (const auto& name : attr_names) {
+                const MatrixFr& attr = mesh->get_attribute(name);
+                if (attr.rows() != num_voxels) continue;
+                if (attr.cols() != 1) continue;
+                vars[name] = attr(i, 0);
+            }
+            vars_list.push_back(vars);
+        }
+        return vars_list;
+    }
+
+    std::list<ParameterCommon::Variables> extract_attributes(
+            MeshTiler::MeshPtr mesh) {
+        const size_t dim = mesh->get_dim();
+
+        if (dim == 2) {
+            return extract_face_attributes(mesh);
+        } else if (dim == 3) {
+            return extract_voxel_attributes(mesh);
+        } else {
+            std::stringstream err_msg;
+            err_msg << "Unsupport dim: " << dim;
+            throw RuntimeError(err_msg.str());
+        }
+    }
 }
 
 using namespace MeshTilerHelper;
@@ -83,12 +137,13 @@ WireNetwork::Ptr MeshTiler::tile() {
 WireNetwork::Ptr MeshTiler::tile_2D() {
     const size_t num_cells = m_mesh->get_num_faces();
     scale_to_unit_box();
-    MatrixFr tiled_vertices = tile_vertices(
-            get_2D_tiling_operators(m_mesh));
+    auto transforms = get_2D_tiling_operators(m_mesh);
+    MatrixFr tiled_vertices = tile_vertices(transforms);
     MatrixIr tiled_edges = tile_edges(num_cells);
 
     WireNetwork::Ptr tiled_network = WireNetwork::create_raw(tiled_vertices, tiled_edges);
     update_attributes(*tiled_network, num_cells);
+    evaluate_parameters(*tiled_network, transforms);
     clean_up(*tiled_network);
     return tiled_network;
 }
@@ -96,12 +151,13 @@ WireNetwork::Ptr MeshTiler::tile_2D() {
 WireNetwork::Ptr MeshTiler::tile_3D() {
     const size_t num_cells = m_mesh->get_num_voxels();
     scale_to_unit_box();
-    MatrixFr tiled_vertices = tile_vertices(
-            get_3D_tiling_operators(m_mesh));
+    auto transforms = get_3D_tiling_operators(m_mesh);
+    MatrixFr tiled_vertices = tile_vertices(transforms);
     MatrixIr tiled_edges = tile_edges(num_cells);
 
     WireNetwork::Ptr tiled_network = WireNetwork::create_raw(tiled_vertices, tiled_edges);
     update_attributes(*tiled_network, num_cells);
+    evaluate_parameters(*tiled_network, transforms);
     clean_up(*tiled_network);
     return tiled_network;
 }
@@ -113,3 +169,72 @@ void MeshTiler::scale_to_unit_box() {
     normalize_unit_wire(cell_size);
     m_unit_wire_network->translate(center);
 }
+
+void MeshTiler::evaluate_parameters(WireNetwork& wire_network,
+        const MeshTiler::FuncList& funcs) {
+    evaluate_thickness_parameters(wire_network, funcs);
+    evaluate_offset_parameters(wire_network, funcs);
+}
+
+void MeshTiler::evaluate_thickness_parameters(WireNetwork& wire_network,
+        const MeshTiler::FuncList& funcs) {
+    const size_t dim = wire_network.get_dim();
+    const size_t num_vertices = wire_network.get_num_vertices();
+    const size_t num_edges = wire_network.get_num_edges();
+    const size_t num_unit_vertices = m_unit_wire_network->get_num_vertices();
+    const size_t num_unit_edges = m_unit_wire_network->get_num_edges();
+
+    size_t num_thickness_entries, thickness_index_stride;
+    if (m_params->get_thickness_type() == ParameterCommon::VERTEX) {
+        thickness_index_stride = num_unit_vertices;
+        num_thickness_entries = num_vertices;
+        wire_network.add_attribute("thickness", true);
+    } else {
+        thickness_index_stride = num_unit_edges;
+        num_thickness_entries = num_edges;
+        wire_network.add_attribute("thickness", false);
+    }
+    MatrixFr thickness(num_thickness_entries, 1);
+
+    auto vars_list = extract_attributes(m_mesh);
+    assert(vars_list.size() == funcs.size());
+    size_t count=0;
+    auto vars_itr = vars_list.begin();
+    for (auto f : funcs) {
+        assert(vars_itr != vars_list.end());
+        VectorF local_thickness = m_params->evaluate_thickness(*vars_itr);
+        thickness.block(count * thickness_index_stride, 0,
+                thickness_index_stride, 1) = local_thickness;
+        count++;
+        vars_itr++;
+    }
+    wire_network.set_attribute("thickness", thickness);
+}
+
+void MeshTiler::evaluate_offset_parameters(WireNetwork& wire_network,
+        const MeshTiler::FuncList& funcs) {
+    const size_t dim = wire_network.get_dim();
+    const size_t num_vertices = wire_network.get_num_vertices();
+    const size_t num_unit_vertices = m_unit_wire_network->get_num_vertices();
+
+    wire_network.add_attribute("vertex_offset", true);
+    MatrixFr attr_value(num_vertices, dim);
+
+    auto vars_list = extract_attributes(m_mesh);
+    const MatrixFr& ori_vertices = m_unit_wire_network->get_vertices();
+    size_t count=0;
+    auto vars_itr = vars_list.begin();
+    for (auto f : funcs) {
+        assert(vars_itr != vars_list.end());
+        MatrixFr local_offseted_vertices = ori_vertices +
+            m_params->evaluate_offset(*vars_itr);
+        attr_value.block(count * num_unit_vertices, 0,
+                num_unit_vertices, dim) = f(local_offseted_vertices);
+        count++;
+        vars_itr++;
+    }
+
+    attr_value = wire_network.get_vertices() - attr_value;
+    wire_network.set_attribute("vertex_offset", attr_value);
+}
+

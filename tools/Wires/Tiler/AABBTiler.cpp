@@ -3,6 +3,8 @@
 #include <iostream>
 #include <list>
 
+#include <Wires/Parameters/ParameterCommon.h>
+
 namespace AABBTilerHelper {
     std::vector<VectorI> enumerate(const VectorI& repetitions) {
         std::vector<VectorI> result;
@@ -86,15 +88,76 @@ WireNetwork::Ptr AABBTiler::tile() {
 
     std::vector<VectorI> indices = enumerate(m_repetitions);
     const size_t num_repetitions = indices.size();
-    MatrixFr tiled_vertices = tile_vertices(
-            get_tiling_operators(
-            m_unit_wire_network->get_bbox_min(),
-            cell_size, indices));
+    auto transforms = get_tiling_operators(m_unit_wire_network->get_bbox_min(),
+            cell_size, indices);
+    MatrixFr tiled_vertices = tile_vertices(transforms);
     MatrixIr tiled_edges = tile_edges(num_repetitions);
 
     WireNetwork::Ptr tiled_network =
         WireNetwork::create_raw(tiled_vertices, tiled_edges);
     update_attributes(*tiled_network, num_repetitions);
+    evaluate_parameters(*tiled_network, transforms);
     clean_up(*tiled_network);
     return tiled_network;
 }
+
+void AABBTiler::evaluate_parameters(WireNetwork& wire_network,
+        const AABBTiler::FuncList& funcs) {
+    evaluate_thickness_parameters(wire_network, funcs);
+    evaluate_offset_parameters(wire_network, funcs);
+}
+
+void AABBTiler::evaluate_thickness_parameters(WireNetwork& wire_network,
+        const AABBTiler::FuncList& funcs) {
+    const size_t dim = wire_network.get_dim();
+    const size_t num_vertices = wire_network.get_num_vertices();
+    const size_t num_edges = wire_network.get_num_edges();
+    const size_t num_unit_vertices = m_unit_wire_network->get_num_vertices();
+    const size_t num_unit_edges = m_unit_wire_network->get_num_edges();
+
+    size_t num_thickness_entries, thickness_index_stride;
+    if (m_params->get_thickness_type() == ParameterCommon::VERTEX) {
+        thickness_index_stride = num_unit_vertices;
+        num_thickness_entries = num_vertices;
+        wire_network.add_attribute("thickness", true);
+    } else {
+        thickness_index_stride = num_unit_edges;
+        num_thickness_entries = num_edges;
+        wire_network.add_attribute("thickness", false);
+    }
+    MatrixFr thickness(num_thickness_entries, 1);
+
+    ParameterCommon::Variables vars;
+    size_t count=0;
+    for (auto f : funcs) {
+        VectorF local_thickness = m_params->evaluate_thickness(vars);
+        thickness.block(count * thickness_index_stride, 0,
+                thickness_index_stride, 1) = local_thickness;
+        count++;
+    }
+    wire_network.set_attribute("thickness", thickness);
+}
+
+void AABBTiler::evaluate_offset_parameters(WireNetwork& wire_network,
+        const AABBTiler::FuncList& funcs) {
+    const size_t dim = wire_network.get_dim();
+    const size_t num_vertices = wire_network.get_num_vertices();
+    const size_t num_unit_vertices = m_unit_wire_network->get_num_vertices();
+
+    wire_network.add_attribute("vertex_offset", true);
+    MatrixFr attr_value(num_vertices, dim);
+
+    ParameterCommon::Variables vars;
+    const MatrixFr& ori_vertices = m_unit_wire_network->get_vertices();
+    size_t count=0;
+    for (auto f : funcs) {
+        MatrixFr local_offseted_vertices = ori_vertices + m_params->evaluate_offset(vars);
+        attr_value.block(count * num_unit_vertices, 0,
+                num_unit_vertices, dim) = f(local_offseted_vertices);
+        count++;
+    }
+
+    attr_value = wire_network.get_vertices() - attr_value;
+    wire_network.set_attribute("vertex_offset", attr_value);
+}
+

@@ -1,9 +1,16 @@
 #include "PeriodicInflator.h"
 
 #include <iostream>
+#include <sstream>
 
 #include <Wires/Tiler/WireTiler.h>
 #include "SimpleInflator.h"
+
+namespace PeriodicInflatorHelper {
+    const std::string thickness_attr_name("internal_thickness");
+}
+
+using namespace PeriodicInflatorHelper;
 
 void PeriodicInflator::inflate() {
     check_thickness();
@@ -24,19 +31,20 @@ void PeriodicInflator::initialize_phantom_wires() {
 
     m_wire_network->add_attribute("vertex_periodic_index", true);
     m_wire_network->add_attribute("edge_periodic_index", false);
-    m_wire_network->add_attribute("thickness", m_thickness_type == PER_VERTEX);
-    m_wire_network->set_attribute("thickness", m_thickness);
+    m_wire_network->add_attribute(thickness_attr_name, m_thickness_type == PER_VERTEX);
+    m_wire_network->set_attribute(thickness_attr_name, m_thickness);
 
     WireTiler tiler(m_wire_network);
     m_phantom_wires = tiler.tile_with_guide_bbox(
             bbox_min, bbox_max, VectorI::Ones(dim) * 3);
     m_phantom_wires->center_at_origin();
-    assert(m_phantom_wires->has_attribute("thickness"));
+    assert(m_phantom_wires->has_attribute(thickness_attr_name));
 }
 
 void PeriodicInflator::inflate_phantom_wires() {
     SimpleInflator inflator(m_phantom_wires);
-    const VectorF& thickness = m_phantom_wires->get_attribute("thickness");
+    const VectorF& thickness =
+        m_phantom_wires->get_attribute(thickness_attr_name);
 
     inflator.set_thickness_type(m_thickness_type);
     inflator.set_thickness(thickness);

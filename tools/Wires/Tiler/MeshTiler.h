@@ -19,6 +19,13 @@ class MeshTiler : public TilerEngine {
 
         void scale_to_unit_box();
 
+        void evaluate_parameters(
+                WireNetwork& wire_network, const FuncList& funcs);
+        void evaluate_thickness_parameters(
+                WireNetwork& wire_network, const FuncList& funcs);
+        void evaluate_offset_parameters(
+                WireNetwork& wire_network, const FuncList& funcs);
+
     private:
         MeshPtr m_mesh;
 };

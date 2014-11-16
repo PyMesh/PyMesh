@@ -5,6 +5,8 @@
 #include <Wires/Inflator/PeriodicInflator2D.h>
 #include <Wires/Inflator/WireProfile.h>
 #include <Wires/Inflator/InflatorEngine.h>
+#include <Wires/Parameters/ParameterCommon.h>
+#include <Wires/Parameters/ParameterManager.h>
 #include <WireTest.h>
 #include <IO/MeshWriter.h>
 #include <Misc/HashGrid.h>
@@ -204,5 +206,43 @@ TEST_F(PeriodicInflator2DTest, star) {
 
     ASSERT_EQ(2, base_vertex_indices.size());
     ASSERT_EQ(4, base_edge_indices.size());
+}
+
+TEST_F(PeriodicInflator2DTest, box_with_parameter) {
+    WireNetwork::Ptr network = load_wire_shared("box.wire");
+    network->center_at_origin();
+    network->compute_connectivity();
+    network->scale(Vector2F::Ones() * 5); // 5mm cell
+
+    ParameterManager::Ptr manager = ParameterManager::create_from_setting_file(
+            network, 0.5,
+            m_data_dir + "box.orbit",
+            m_data_dir + "box.modifier");
+    ParameterCommon::Variables vars;
+    VectorF thickness = manager->evaluate_thickness(vars);
+    MatrixFr offset = manager->evaluate_offset(vars);
+    network->set_vertices(network->get_vertices() + offset);
+
+    PeriodicInflator2D inflator(network);
+    if (manager->get_thickness_type() == ParameterCommon::VERTEX) {
+        inflator.set_thickness_type(InflatorEngine::PER_VERTEX);
+    } else {
+        inflator.set_thickness_type(InflatorEngine::PER_EDGE);
+    }
+    inflator.set_thickness(thickness);
+    inflator.inflate();
+    inflator.refine("simple", 2);
+
+    MatrixFr vertices = inflator.get_vertices();
+    MatrixIr faces = inflator.get_faces();
+    VectorI face_sources = inflator.get_face_sources();
+
+    ASSERT_GT(vertices.rows(), 0);
+    ASSERT_EQ(2, vertices.cols());
+    ASSERT_GT(faces.rows(), 0);
+    ASSERT_EQ(3, faces.cols());
+    ASSERT_EQ(faces.rows(), face_sources.size());
+    save_mesh("inflated_box_params.msh", vertices, faces,
+            face_sources.cast<Float>());
 }
 

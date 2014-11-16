@@ -1,0 +1,43 @@
+{
+    "paramter": [
+        0.5, 
+        0.5, 
+        0.75
+    ], 
+    "vertex_offset": {
+        "type": "vertex_orbit", 
+        "effective_orbits": [
+            0, 
+            1, 
+            4
+        ], 
+        "offset_percentages": [
+            [
+                0.0, 
+                0.0
+            ], 
+            [
+                -0.1, 
+                0.0
+            ], 
+            [
+                0.0, 
+                0.0
+            ]
+        ]
+    }, 
+    "thickness": {
+        "default": 0.5, 
+        "type": "vertex_orbit", 
+        "effective_orbits": [
+            0, 
+            1, 
+            4
+        ], 
+        "thickness": [
+            0.5, 
+            0.5, 
+            0.75
+        ]
+    }
+}

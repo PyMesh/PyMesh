@@ -2,11 +2,16 @@
 
 #include <list>
 #include <Wires/WireNetwork/WireNetwork.h>
+#include <Wires/Parameters/ParameterManager.h>
 
 class TilerEngine {
     public:
         TilerEngine(WireNetwork::Ptr unit_wire_network)
-            : m_unit_wire_network(unit_wire_network) {}
+            : m_unit_wire_network(unit_wire_network) {
+                m_params = ParameterManager::create_empty_manager(
+                        m_unit_wire_network);
+            }
+
         virtual ~TilerEngine() {}
 
     public:
@@ -15,6 +20,8 @@ class TilerEngine {
 
     public:
         typedef std::list<std::function<MatrixFr(const MatrixFr&)> > FuncList;
+
+        void with_parameters(ParameterManager::Ptr params) { m_params = params; }
 
     protected:
         MatrixFr tile_vertices(const FuncList& funcs);
@@ -29,4 +36,5 @@ class TilerEngine {
 
     protected:
         WireNetwork::Ptr m_unit_wire_network;
+        ParameterManager::Ptr m_params;
 };
