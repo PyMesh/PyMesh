@@ -89,6 +89,7 @@ void SimpleInflator::compute_end_loop_offsets() {
         m_end_loop_offsets[i] = 0.5 * vertex_thickness[i] /
             tan(min_angles[i] * 0.5) + EPSILON;
     }
+    validate_end_loop_offset();
 }
 
 void SimpleInflator::generate_end_loops() {
@@ -238,6 +239,28 @@ VectorF SimpleInflator::compute_vertex_thickness() const {
 
     assert(vertex_thickness.minCoeff() > 0.0);
     return vertex_thickness;
+}
+
+void SimpleInflator::validate_end_loop_offset() const {
+    const size_t num_edges = m_wire_network->get_num_edges();
+    const MatrixIr& edges = m_wire_network->get_edges();
+    const auto& edge_lengths = m_wire_network->get_attribute("edge_length");
+
+    for (size_t i=0; i<num_edges; i++) {
+        const Vector2I edge = edges.row(i);
+        Float edge_len = edge_lengths(i, 0);
+        Float v0_offset = m_end_loop_offsets[edge[0]];
+        Float v1_offset = m_end_loop_offsets[edge[1]];
+        if (edge_len < v0_offset + v1_offset + EPSILON) {
+            std::stringstream err_msg;
+            err_msg << "Edge " << i << " is too short: len=" << edge_len <<
+                std::endl;
+            err_msg << "Its length needs to be  at least "
+                << v0_offset + v1_offset + EPSILON
+                << " to ensure inflation is self-intersection free";
+            throw RuntimeError(err_msg.str());
+        }
+    }
 }
 
 MatrixFr SimpleInflator::get_edge_thickness() const {

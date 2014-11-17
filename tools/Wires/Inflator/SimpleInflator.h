@@ -23,6 +23,7 @@ class SimpleInflator : public InflatorEngine {
         void finalize();
 
         VectorF compute_vertex_thickness() const;
+        void validate_end_loop_offset() const;
         MatrixFr get_edge_thickness() const;
         void generate_joint(const MatrixFr& pts, const VectorI& source_ids, size_t vertex_index);
         bool belong_to_the_same_loop(

@@ -180,3 +180,7 @@ TEST_F(PeriodicInflator3DTest, brick5_with_params) {
     ASSERT_MESH_IS_VALID();
 }
 
+TEST_F(PeriodicInflator3DTest, invalid) {
+    ASSERT_THROW(inflate("invalid.wire"), RuntimeError);
+}
+
