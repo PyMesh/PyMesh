@@ -9,6 +9,9 @@
 #include <Core/Exception.h>
 
 #include "SymmetryOrbits.h"
+#include "EdgeThicknessParameterDerivative.h"
+#include "VertexThicknessParameterDerivative.h"
+#include "VertexOffsetParameterDerivative.h"
 
 using namespace ParameterCommon;
 
@@ -153,6 +156,14 @@ size_t ParameterManager::get_num_dofs() const {
     return m_thickness_params.get_num_dofs() + m_offset_params.get_num_dofs();
 }
 
+size_t ParameterManager::get_num_thickness_dofs() const {
+    return m_thickness_params.get_num_dofs();
+}
+
+size_t ParameterManager::get_num_offset_dofs() const {
+    return m_offset_params.get_num_dofs();
+}
+
 VectorF ParameterManager::get_dofs() const {
     const size_t num_thickness_dofs = m_thickness_params.get_num_dofs();
     const size_t num_offset_dofs = m_offset_params.get_num_dofs();
@@ -177,6 +188,34 @@ void ParameterManager::set_dofs(const VectorF& values) {
     m_thickness_params.set_dofs(values.segment(0, num_thickness_dofs));
     m_offset_params.set_dofs(
             values.segment(num_thickness_dofs, num_offset_dofs));
+}
+
+std::vector<MatrixFr> ParameterManager::compute_shape_velocity(Mesh::Ptr mesh) {
+    std::vector<MatrixFr> velocity;
+    for (auto param : m_thickness_params) {
+        ParameterDerivative::Ptr param_derivative;
+        if (param->get_type() == PatternParameter::VERTEX_THICKNESS) {
+            param_derivative = std::make_shared<
+                VertexThicknessParameterDerivative>(mesh, param);
+        } else if (param->get_type() == PatternParameter::EDGE_THICKNESS) {
+            param_derivative = std::make_shared<
+                EdgeThicknessParameterDerivative>(mesh, param);
+        } else {
+            assert(false);
+        }
+        velocity.push_back(param_derivative->compute());
+    }
+
+    for (auto param : m_offset_params) {
+        ParameterDerivative::Ptr param_derivative;
+        assert(param->get_type() == PatternParameter::VERTEX_OFFSET);
+        param_derivative =
+            std::make_shared<VertexOffsetParameterDerivative>(mesh, param);
+        velocity.push_back(param_derivative->compute());
+    }
+    assert(velocity.size() == get_num_dofs());
+
+    return velocity;
 }
 
 VectorF ParameterManager::evaluate_thickness(

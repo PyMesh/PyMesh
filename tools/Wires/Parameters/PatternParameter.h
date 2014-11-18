@@ -12,6 +12,11 @@ class PatternParameter {
     public:
         typedef std::shared_ptr<PatternParameter> Ptr;
         typedef ParameterCommon::Variables Variables;
+        enum ParameterType {
+            VERTEX_THICKNESS,
+            EDGE_THICKNESS,
+            VERTEX_OFFSET
+        };
 
     public:
         PatternParameter(WireNetwork::Ptr wire_network)
@@ -28,8 +33,19 @@ class PatternParameter {
             m_formula = formula;
         }
 
+        WireNetwork::Ptr get_wire_network() { return m_wire_network; }
+
     public:
         virtual void apply(VectorF& results, const Variables& vars)=0;
+
+        /**
+         * Compute dv/dp, i.e. gradient of wire vertex location with respect to
+         * change in parameter.
+         * Returned matrix is of size (num_vertex, dim).
+         */
+        virtual MatrixFr compute_derivative() const = 0;
+
+        virtual ParameterType get_type() const =0;
 
     protected:
         void evaluate_formula(const Variables& vars);

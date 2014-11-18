@@ -14,23 +14,6 @@
 
 class PeriodicInflator3DTest : public WireTest {
     protected:
-        void save_mesh(const std::string& file_name,
-                MatrixFr& vertices, MatrixIr& faces, VectorF debug) {
-            VectorF flat_vertices(vertices.rows() * vertices.cols());
-            std::copy(vertices.data(), vertices.data() + flat_vertices.size(), flat_vertices.data());
-            VectorI flat_faces(faces.rows() * faces.cols());
-            std::copy(faces.data(), faces.data() + flat_faces.size(), flat_faces.data());
-            VectorI flat_voxels = VectorI::Zero(0);
-
-            MeshFactory factory;
-            Mesh::Ptr mesh = factory.load_data(flat_vertices, flat_faces, flat_voxels,
-                    vertices.cols(), faces.cols(), 4).create_shared();
-            mesh->add_attribute("debug");
-            mesh->set_attribute("debug", debug);
-
-            MeshWriter::create_writer(file_name)->with_attribute("debug").write_mesh(*mesh);
-        }
-
         void inflate(const std::string& wire_file, Float thickness=0.5) {
             const Vector3F half_size(2.5, 2.5, 2.5);
             WireNetwork::Ptr network = load_wire_shared(wire_file);

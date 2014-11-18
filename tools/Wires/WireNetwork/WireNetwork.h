@@ -70,6 +70,10 @@ class WireNetwork {
             return m_attributes.get_attribute_names();
         }
 
+        void clear_attributes() {
+            m_attributes.clear();
+        }
+
     public:
         bool with_connectivity() const {
             return m_connectivity.is_available();

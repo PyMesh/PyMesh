@@ -29,9 +29,11 @@ void PeriodicInflator::initialize_phantom_wires() {
     bbox_min.array() *= 3;
     bbox_max.array() *= 3;
 
+    m_wire_network->clear_attributes();
     m_wire_network->add_attribute("vertex_periodic_index", true);
     m_wire_network->add_attribute("edge_periodic_index", false);
-    m_wire_network->add_attribute(thickness_attr_name, m_thickness_type == PER_VERTEX);
+    m_wire_network->add_attribute(thickness_attr_name,
+            m_thickness_type == PER_VERTEX);
     m_wire_network->set_attribute(thickness_attr_name, m_thickness);
 
     WireTiler tiler(m_wire_network);
@@ -54,8 +56,8 @@ void PeriodicInflator::inflate_phantom_wires() {
     m_phantom_vertices = inflator.get_vertices();
     m_phantom_faces = inflator.get_faces();
     update_phantom_periodic_face_sources(inflator.get_face_sources());
-    save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
-            m_phantom_face_sources.cast<Float>());
+    //save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
+    //        m_phantom_face_sources.cast<Float>());
 }
 
 void PeriodicInflator::update_phantom_periodic_face_sources(

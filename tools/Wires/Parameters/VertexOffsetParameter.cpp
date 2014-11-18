@@ -30,3 +30,21 @@ void VertexOffsetParameter::apply(VectorF& results,
             (v[m_axis] - m_center[m_axis]) * m_value;
     }
 }
+
+MatrixFr VertexOffsetParameter::compute_derivative() const {
+    const size_t dim = m_wire_network->get_dim();
+    const size_t num_vertices = m_wire_network->get_num_vertices();
+    const size_t roi_size = m_roi.size();
+    const MatrixFr& vertices = m_wire_network->get_vertices();
+    assert(m_axis < dim);
+
+    MatrixFr derivative = MatrixFr::Zero(num_vertices, dim);
+
+    for (size_t i=0; i<roi_size; i++) {
+        size_t v_idx = m_roi[i];
+        assert(v_idx < num_vertices);
+        derivative(m_roi[i], m_axis) = vertices(v_idx, m_axis) - m_center[m_axis];
+    }
+
+    return derivative;
+}

@@ -38,6 +38,15 @@ class ParameterList {
             }
         }
 
+    public:
+        typedef std::list<PatternParameter::Ptr>::iterator iterator;
+        typedef std::list<PatternParameter::Ptr>::const_iterator const_iterator;
+
+        iterator begin() { return m_params.begin(); }
+        const_iterator begin() const { return m_params.begin(); }
+        iterator end() { return m_params.end(); }
+        const_iterator end() const { return m_params.end(); }
+
     protected:
         std::list<PatternParameter::Ptr> m_params;
 };

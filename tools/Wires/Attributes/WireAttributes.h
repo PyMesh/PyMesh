@@ -18,6 +18,8 @@ class WireAttributes {
 
         std::vector<std::string> get_attribute_names() const;
 
+        void clear() { m_attr_map.clear(); }
+
     private:
         typedef std::map<std::string, WireAttribute::Ptr> AttrMap;
         AttrMap m_attr_map;

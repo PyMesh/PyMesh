@@ -14,3 +14,11 @@ void VertexThicknessParameter::apply(VectorF& results,
         results[m_roi[i]] = m_value;
     }
 }
+
+MatrixFr VertexThicknessParameter::compute_derivative() const {
+    const size_t dim = m_wire_network->get_dim();
+    const size_t num_vertices = m_wire_network->get_num_vertices();
+    // Changing thickness does not modify the wire vertex locations.
+    // So its derivative is 0.
+    return MatrixFr::Zero(num_vertices, dim);
+}

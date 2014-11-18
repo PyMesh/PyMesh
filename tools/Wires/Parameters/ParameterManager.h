@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 
+#include <Mesh.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
 #include "ParameterCommon.h"
@@ -47,8 +48,11 @@ class ParameterManager {
     public:
         // The following methods are mostly used for parameter sweep
         size_t get_num_dofs() const;
+        size_t get_num_thickness_dofs() const;
+        size_t get_num_offset_dofs() const;
         VectorF get_dofs() const;
         void set_dofs(const VectorF& values);
+        std::vector<MatrixFr> compute_shape_velocity(Mesh::Ptr mesh);
 
         // The following methods are used for converting parameter into
         // thickness and offset values per vertex/edge.

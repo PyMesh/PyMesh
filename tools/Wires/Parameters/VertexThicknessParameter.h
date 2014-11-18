@@ -9,5 +9,7 @@ class VertexThicknessParameter : public PatternParameter {
         virtual ~VertexThicknessParameter() {}
 
     public:
-        void apply(VectorF& results, const Variables& vars);
+        virtual void apply(VectorF& results, const Variables& vars);
+        virtual MatrixFr compute_derivative() const;
+        virtual ParameterType get_type() const { return VERTEX_THICKNESS; }
 };
