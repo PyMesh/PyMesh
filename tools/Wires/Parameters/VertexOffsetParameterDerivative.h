@@ -22,7 +22,7 @@ class VertexOffsetParameterDerivative : public ParameterDerivative {
                 const BoolVector& in_roi,
                 const MatrixFr& wire_derivative,
                 MatrixFr& derivative_v,
-                VectorI& num_adj_faces_in_roi);
+                VectorF& weights);
 
         void compute_derivative_on_vertex(
                 size_t wire_vertex_index,
@@ -30,5 +30,5 @@ class VertexOffsetParameterDerivative : public ParameterDerivative {
                 const BoolVector& in_roi,
                 const MatrixFr& wire_derivative,
                 MatrixFr& derivative_v,
-                VectorI& num_adj_faces_in_roi);
+                VectorF& weights);
 };

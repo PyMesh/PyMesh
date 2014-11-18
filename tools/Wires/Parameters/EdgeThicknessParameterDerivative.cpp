@@ -23,7 +23,7 @@ MatrixFr EdgeThicknessParameterDerivative::compute() {
     }
 
     MatrixFr derivative_v = MatrixFr::Zero(num_mesh_vertices, dim);
-    VectorI num_adj_faces_in_roi = VectorI::Zero(num_mesh_vertices);
+    VectorF weights = VectorF::Zero(num_mesh_vertices);
 
     for (size_t i=0; i<num_mesh_faces; i++) {
         const VectorI  face = m_mesh->get_face(i);
@@ -34,19 +34,24 @@ MatrixFr EdgeThicknessParameterDerivative::compute() {
             size_t edge_idx = -source - 1;
             assert(edge_idx >= 0 && edge_idx < num_wire_edges);
             if (in_roi[edge_idx]) {
-                derivative_v.row(face[0]) += normal.transpose();
-                derivative_v.row(face[1]) += normal.transpose();
-                derivative_v.row(face[2]) += normal.transpose();
-                num_adj_faces_in_roi[face[0]] ++;
-                num_adj_faces_in_roi[face[1]] ++;
-                num_adj_faces_in_roi[face[2]] ++;
+                Float w0 = m_face_voronoi_areas(i, 0);
+                Float w1 = m_face_voronoi_areas(i, 1);
+                Float w2 = m_face_voronoi_areas(i, 2);
+
+                derivative_v.row(face[0]) += w0 * normal.transpose();
+                derivative_v.row(face[1]) += w1 * normal.transpose();
+                derivative_v.row(face[2]) += w2 * normal.transpose();
+
+                weights[face[0]] += w0;
+                weights[face[1]] += w1;
+                weights[face[2]] += w2;
             }
         }
     }
 
     for (size_t i=0; i<num_mesh_vertices; i++) {
-        if (num_adj_faces_in_roi[i] > 0)
-            derivative_v.row(i) /= num_adj_faces_in_roi[i];
+        if (weights[i] > 0)
+            derivative_v.row(i) /= weights[i];
     }
     return derivative_v;
 }

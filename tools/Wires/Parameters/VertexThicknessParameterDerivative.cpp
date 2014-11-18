@@ -38,7 +38,7 @@ MatrixFr VertexThicknessParameterDerivative::compute() {
     }
 
     MatrixFr derivative_v = MatrixFr::Zero(num_mesh_vertices, dim);
-    VectorI num_adj_faces_in_roi = VectorI::Zero(num_mesh_vertices);
+    VectorF weights = VectorF::Zero(num_mesh_vertices);
 
     for (size_t i=0; i< num_mesh_faces; i++) {
         int source = m_face_source[i];
@@ -46,18 +46,18 @@ MatrixFr VertexThicknessParameterDerivative::compute() {
             // Source is edge
             size_t edge_idx = -source - 1;
             compute_derivative_on_edge(
-                    edge_idx, i, in_roi, derivative_v, num_adj_faces_in_roi);
+                    edge_idx, i, in_roi, derivative_v, weights);
         } else if (source > 0) {
             // Source is vertex
             size_t vertex_idx = source - 1;
             compute_derivative_on_vertex(
-                    vertex_idx, i, in_roi, derivative_v, num_adj_faces_in_roi);
+                    vertex_idx, i, in_roi, derivative_v, weights);
         }
     }
 
     for (size_t i=0; i<num_mesh_vertices; i++) {
-        if (num_adj_faces_in_roi[i] > 0)
-            derivative_v.row(i) /= num_adj_faces_in_roi[i];
+        if (weights[i] > 0)
+            derivative_v.row(i) /= weights[i];
     }
     return derivative_v;
 }
@@ -65,7 +65,7 @@ MatrixFr VertexThicknessParameterDerivative::compute() {
 void VertexThicknessParameterDerivative::compute_derivative_on_edge(
         size_t wire_edge_index, size_t face_index,
         const BoolVector& in_roi, MatrixFr& derivative_v,
-        VectorI& num_adj_faces_in_roi) {
+        VectorF& weights) {
     WireNetwork::Ptr wire_network = m_parameter->get_wire_network();
 
     const MatrixFr& wire_vertices = wire_network->get_vertices();
@@ -89,40 +89,48 @@ void VertexThicknessParameterDerivative::compute_derivative_on_edge(
     assert(loc_1 >= 0.0 && loc_1 <= 1.0);
     assert(loc_2 >= 0.0 && loc_2 <= 1.0);
 
+    Float w0 = m_face_voronoi_areas(face_index, 0);
+    Float w1 = m_face_voronoi_areas(face_index, 1);
+    Float w2 = m_face_voronoi_areas(face_index, 2);
+
     if (in_roi[edge[0]]) {
-        derivative_v.row(face[0]) += (1.0 - loc_0) * face_normal.transpose();
-        derivative_v.row(face[1]) += (1.0 - loc_1) * face_normal.transpose();
-        derivative_v.row(face[2]) += (1.0 - loc_2) * face_normal.transpose();
+        derivative_v.row(face[0]) += w0 * (1.0 - loc_0) * face_normal.transpose();
+        derivative_v.row(face[1]) += w1 * (1.0 - loc_1) * face_normal.transpose();
+        derivative_v.row(face[2]) += w2 * (1.0 - loc_2) * face_normal.transpose();
     }
 
     if (in_roi[edge[1]]) {
-        derivative_v.row(face[0]) += loc_0 * face_normal.transpose();
-        derivative_v.row(face[1]) += loc_1 * face_normal.transpose();
-        derivative_v.row(face[2]) += loc_2 * face_normal.transpose();
+        derivative_v.row(face[0]) += w0 * loc_0 * face_normal.transpose();
+        derivative_v.row(face[1]) += w1 * loc_1 * face_normal.transpose();
+        derivative_v.row(face[2]) += w2 * loc_2 * face_normal.transpose();
     }
 
     if (in_roi[edge[0]] || in_roi[edge[1]]) {
-        num_adj_faces_in_roi[face[0]] ++;
-        num_adj_faces_in_roi[face[1]] ++;
-        num_adj_faces_in_roi[face[2]] ++;
+        weights[face[0]] += w0;
+        weights[face[1]] += w1;
+        weights[face[2]] += w2;
     }
 }
 
 void VertexThicknessParameterDerivative::compute_derivative_on_vertex(
         size_t wire_vertex_index, size_t face_index,
         const BoolVector& in_roi, MatrixFr& derivative_v,
-        VectorI& num_adj_faces_in_roi) {
+        VectorF& weights) {
     if (!in_roi[wire_vertex_index]) return;
 
     const VectorI  face = m_mesh->get_face(face_index);
     const VectorF& face_normal = m_face_normals.row(face_index);
 
-    derivative_v.row(face[0]) += face_normal.transpose();
-    derivative_v.row(face[1]) += face_normal.transpose();
-    derivative_v.row(face[2]) += face_normal.transpose();
+    Float w0 = m_face_voronoi_areas(face_index, 0);
+    Float w1 = m_face_voronoi_areas(face_index, 1);
+    Float w2 = m_face_voronoi_areas(face_index, 2);
 
-    num_adj_faces_in_roi[face[0]] ++;
-    num_adj_faces_in_roi[face[1]] ++;
-    num_adj_faces_in_roi[face[2]] ++;
+    derivative_v.row(face[0]) += face_normal.transpose() * w0;
+    derivative_v.row(face[1]) += face_normal.transpose() * w1;
+    derivative_v.row(face[2]) += face_normal.transpose() * w2;
+
+    weights[face[0]] += w0;
+    weights[face[1]] += w1;
+    weights[face[2]] += w2;
 }
 

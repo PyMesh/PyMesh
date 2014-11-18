@@ -7,7 +7,7 @@ class VertexThicknessParameterDerivative : public ParameterDerivative {
     public:
         VertexThicknessParameterDerivative(
                 Mesh::Ptr mesh, PatternParameter::Ptr param)
-            : ParameterDerivative(mesh, param) {}
+            : ParameterDerivative(mesh, param) { }
         virtual ~VertexThicknessParameterDerivative() {}
 
     public:
@@ -21,12 +21,13 @@ class VertexThicknessParameterDerivative : public ParameterDerivative {
                 size_t face_index,
                 const BoolVector& in_roi,
                 MatrixFr& derivative_v,
-                VectorI& num_adj_faces_in_roi);
+                VectorF& weights);
 
         void compute_derivative_on_vertex(
                 size_t wire_edge_index,
                 size_t face_index,
                 const BoolVector& in_roi,
                 MatrixFr& derivative_v,
-                VectorI& num_adj_faces_in_roi);
+                VectorF& weights);
+
 };

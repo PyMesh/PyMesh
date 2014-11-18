@@ -27,10 +27,12 @@ class ParameterDerivative {
         void initialize_wires();
         void initialize_mesh();
         void initialize_normals();
+        void initialize_face_voronoi_areas();
 
     protected:
         Mesh::Ptr m_mesh;
         PatternParameter::Ptr m_parameter;
         VectorI m_face_source;
         MatrixFr m_face_normals;
+        MatrixFr m_face_voronoi_areas;
 };
