@@ -48,10 +48,10 @@ void PeriodicExploration::periodic_inflate() {
     m_faces = inflator->get_faces();
     m_face_sources = inflator->get_face_sources();
 
-    m_wire_network->set_vertices(ori_vertices);
-
     update_mesh();
     compute_shape_velocity();
+
+    m_wire_network->set_vertices(ori_vertices);
 }
 
 void PeriodicExploration::compute_shape_velocity() {

@@ -13,7 +13,7 @@ class PeriodicExplorationTest : public WireTest {
 
 TEST_F(PeriodicExplorationTest, creation) {
     PeriodicExploration explorer(
-            m_data_dir + "brick5.wire", 5, 0.5);
+            m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
             m_data_dir + "brick5.orbit",
             m_data_dir + "brick5.modifier");
@@ -22,7 +22,19 @@ TEST_F(PeriodicExplorationTest, creation) {
     const size_t num_dofs = explorer.get_num_dofs();
     for (size_t i=0; i<5; i++) {
         Float factor = 1.0 - i * 0.1;
-        explorer.set_dofs(dofs * factor);
+        VectorF modified_dofs(dofs);
+        for (size_t j=0; j<num_dofs; j++) {
+            if (explorer.is_thickness_dof(j)) {
+                modified_dofs[j] *= factor;
+            } else {
+                if (dofs[j] < 0) {
+                    modified_dofs[j] += i * 0.05;
+                } else {
+                    modified_dofs[j] -= i * 0.05;
+                }
+            }
+        }
+        explorer.set_dofs(modified_dofs);
         explorer.periodic_inflate();
 
         Mesh::Ptr mesh = explorer.get_mesh();
