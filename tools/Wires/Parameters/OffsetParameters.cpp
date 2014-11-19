@@ -45,7 +45,8 @@ void OffsetParameters::add(const VectorI& roi,
         // No dof in this axis without destroy symmetry.
         return;
     }
-    if (roi_min[axis] > bbox_min[axis] && roi_max[axis] < bbox_max[axis]) {
+    if (roi_min[axis] > bbox_min[axis] + tol &&
+            roi_max[axis] < bbox_max[axis] - tol) {
         m_params.emplace_back(PatternParameter::Ptr(
                     new VertexOffsetParameter(m_wire_network, axis)));
         PatternParameter::Ptr param = m_params.back();

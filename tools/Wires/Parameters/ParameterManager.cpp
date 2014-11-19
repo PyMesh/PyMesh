@@ -4,8 +4,11 @@
 #include <boost/property_tree/json_parser.hpp>
 
 #include <cassert>
+#include <map>
 #include <sstream>
 #include <string>
+#include <vector>
+
 #include <Core/Exception.h>
 
 #include "SymmetryOrbits.h"
@@ -117,9 +120,72 @@ namespace ParameterManagerHelper {
             thickness_itr++;
         }
     }
+
+    std::list<VectorI> group_by_label(const MatrixFr& labels) {
+        std::map<int, std::vector<size_t> > groups;
+        const size_t num_entries = labels.rows();
+        for (size_t i=0; i<num_entries; i++) {
+            int label = int(std::round(labels(i, 0)));
+            auto itr = groups.find(label);
+            if (itr == groups.end()) {
+                std::vector<size_t> group;
+                group.push_back(i);
+                groups.emplace(label, group);
+            } else {
+                itr->second.push_back(i);
+            }
+        }
+
+        std::list<VectorI> result;
+        for (const auto& group : groups) {
+            const size_t group_size = group.second.size();
+            result.emplace_back(group_size);
+            std::copy(group.second.begin(), group.second.end(),
+                    result.back().data());
+        }
+        return result;
+    }
 }
 
 using namespace ParameterManagerHelper;
+
+ParameterManager::Ptr ParameterManager::create(
+        WireNetwork::Ptr wire_network,
+        Float default_thickness,
+        ParameterManager::TargetType thickness_type) {
+    const size_t dim = wire_network->get_dim();
+    Ptr manager = create_empty_manager(wire_network, default_thickness);
+    if (!wire_network->has_attribute("vertex_symmetry_orbit")) {
+        wire_network->add_attribute("vertex_symmetry_orbit");
+    }
+    if (!wire_network->has_attribute("edge_symmetry_orbit")) {
+        wire_network->add_attribute("edge_symmetry_orbit");
+    }
+
+    std::list<VectorI> vertex_orbits = group_by_label(
+            wire_network->get_attribute("vertex_symmetry_orbit"));
+    std::list<VectorI> edge_orbits = group_by_label(
+            wire_network->get_attribute("edge_symmetry_orbit"));
+
+    manager->set_thickness_type(thickness_type);
+    if (thickness_type == ParameterCommon::VERTEX) {
+        for (const auto& roi : vertex_orbits) {
+            manager->add_thickness_parameter(roi, "", default_thickness);
+        }
+    } else {
+        for (const auto& roi : edge_orbits) {
+            manager->add_thickness_parameter(roi, "", default_thickness);
+        }
+    }
+
+    manager->set_offset_type(ParameterCommon::VERTEX);
+    for (const auto& roi : vertex_orbits) {
+        for (size_t i=0; i<dim; i++) {
+            manager->add_offset_parameter(roi, "", 0.0, i);
+        }
+    }
+    return manager;
+}
 
 ParameterManager::Ptr ParameterManager::create_empty_manager(
         WireNetwork::Ptr wire_network, Float default_thickness) {

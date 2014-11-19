@@ -7,7 +7,53 @@
 class ParameterManagerTest : public WireTest {
 };
 
-TEST_F(ParameterManagerTest, creation) {
+TEST_F(ParameterManagerTest, creation_default_cube) {
+    WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(1, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(3, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_default_brick5) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(7, manager->get_num_thickness_dofs());
+    ASSERT_EQ(6, manager->get_num_offset_dofs());
+    ASSERT_EQ(13, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(12, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_default_square) {
+    WireNetwork::Ptr wire_network = load_wire_shared("square.wire");
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(1, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(2, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_default_box) {
+    WireNetwork::Ptr wire_network = load_wire_shared("box.wire");
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(9, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(8, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_empty) {
     WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
     ParameterManager::Ptr manager = ParameterManager::create_empty_manager(
             wire_network, 0.5);

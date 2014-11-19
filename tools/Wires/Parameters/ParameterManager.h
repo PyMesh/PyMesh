@@ -18,8 +18,25 @@ class ParameterManager {
         typedef std::shared_ptr<ParameterManager> Ptr;
 
     public:
+        /**
+         * Create default parameter manager with all parameters initialized with
+         * default values.
+         */
+        static Ptr create(
+                WireNetwork::Ptr wire_network,
+                Float default_thickness = 0.5,
+                TargetType thickness_type = ParameterCommon::VERTEX);
+
+        /**
+         * Create parameter manager that contains 0 parameters.
+         */
         static Ptr create_empty_manager(WireNetwork::Ptr wire_network,
                 Float default_thickness = 0.5);
+
+        /**
+         * Create parameter manager with parameter specified by orbit files and
+         * modifier files.
+         */
         static Ptr create_from_setting_file(WireNetwork::Ptr wire_network,
                 Float default_thickness,
                 const std::string& orbit_file,
