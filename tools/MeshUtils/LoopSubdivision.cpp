@@ -1,5 +1,5 @@
 #include <cmath>
-#include <iostream>
+#include <Core/Exception.h>
 #include "LoopSubdivision.h"
 
 void LoopSubdivision::subdivide(

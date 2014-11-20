@@ -9,21 +9,24 @@
 class SimpleSubdivision : public Subdivision {
     public:
         virtual ~SimpleSubdivision() {}
+
         virtual void subdivide(MatrixFr vertices, MatrixIr faces,
                 size_t num_iterations);
+
+        virtual const std::vector<ZSparseMatrix>& get_subdivision_matrices() const {
+            return m_subdivision_matrices;
+        }
 
     protected:
         void initialize_face_indices();
         void subdivide_once();
-        void subdivide_face(size_t fi);
-        VectorI compute_mid_edge_points(const VectorI& face);
-        void update_vertices();
-        void update_faces();
-        void update_face_indices();
+        void compute_subdivided_vertices();
+        void extract_sub_faces();
+        void extract_edges();
+        void register_edges(const VectorI& face, size_t base_index);
+        Vector3I get_edge_indices(const VectorI& face);
 
     protected:
-        std::map<Triplet, size_t> m_mid_edge_points_map;
-        std::vector<VectorF> m_mid_edge_points;
-        std::vector<VectorI> m_subdivided_faces;
-        std::vector<size_t>  m_subdivided_face_indices;
+        std::map<Triplet, size_t> m_edge_index_map;
+        std::vector<ZSparseMatrix> m_subdivision_matrices;
 };

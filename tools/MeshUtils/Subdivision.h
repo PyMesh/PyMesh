@@ -1,8 +1,9 @@
 #pragma once
 #include <string>
 #include <memory>
+#include <vector>
 #include <Core/EigenTypedef.h>
-#include <Core/Exception.h>
+#include <Math/ZSparseMatrix.h>
 
 class Subdivision {
     public:
@@ -14,9 +15,14 @@ class Subdivision {
         virtual ~Subdivision() {}
 
         virtual void subdivide(MatrixFr vertices, MatrixIr faces,
-                size_t num_iterations) {
-            throw NotImplementedError("subdivide method should be implemented by subclasses");
-        };
+                size_t num_iterations)=0;
+
+        /**
+         * Each iteration of subdivision can be thought of as applying a linear
+         * transfermation on the vertex coordinates.  This method compute and
+         * returns such transformation matrices for each iteration.
+         */
+        virtual const std::vector<ZSparseMatrix>& get_subdivision_matrices() const=0;
 
     public:
         MatrixFr get_vertices() const { return m_vertices; }

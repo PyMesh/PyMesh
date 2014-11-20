@@ -10,8 +10,13 @@
 class LoopSubdivision : public Subdivision {
     public:
         virtual ~LoopSubdivision() {}
+
         virtual void subdivide(MatrixFr vertices, MatrixIr faces,
                 size_t num_iterations);
+
+        virtual const std::vector<ZSparseMatrix>& get_subdivision_matrices() const {
+            return m_subdivision_matrices;
+        }
 
     protected:
         void subdivide_once();
