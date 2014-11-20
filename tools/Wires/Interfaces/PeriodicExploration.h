@@ -45,6 +45,7 @@ class PeriodicExploration {
 
     private:
         void compute_shape_velocity();
+        void run_tetgen();
         void update_mesh();
 
     private:

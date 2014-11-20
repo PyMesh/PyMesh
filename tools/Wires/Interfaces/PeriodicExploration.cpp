@@ -3,6 +3,7 @@
 #include <iostream>
 #include <Core/Exception.h>
 #include <MeshFactory.h>
+#include <tetgen/TetgenWrapper.h>
 #include <Wires/Inflator/InflatorEngine.h>
 #include <Wires/Parameters/ParameterCommon.h>
 
@@ -58,9 +59,31 @@ void PeriodicExploration::compute_shape_velocity() {
     m_shape_velocity = m_parameters->compute_shape_velocity(m_mesh);
 }
 
-void PeriodicExploration::update_mesh() {
-    const size_t num_vertices = m_vertices.rows();
+void PeriodicExploration::run_tetgen() {
     const size_t dim = m_vertices.cols();
+    const size_t num_vertices = m_vertices.rows();
+    TetgenWrapper tetgen(m_vertices, m_faces);
+    std::stringstream flags;
+    Float max_tet_vol = 0.01 * m_default_thickness * m_default_thickness;
+    flags << "pqYQa" << max_tet_vol;
+    tetgen.run(flags.str());
+
+    // Important note:
+    //
+    // The following code is based on rather shaky the observation that tetgen
+    // will only append to the existing list of vertices.  Therefore, the face
+    // arrays are still valid given the "Y" flag is used.
+    MatrixFr vertices = tetgen.get_vertices();
+    assert((vertices.block(0, 0, num_vertices, dim).array()==m_vertices.array()).all());
+    m_vertices = vertices;
+    m_voxels = tetgen.get_voxels();
+}
+
+void PeriodicExploration::update_mesh() {
+    const size_t dim = m_vertices.cols();
+    if (dim == 3) run_tetgen();
+
+    const size_t num_vertices = m_vertices.rows();
     const size_t num_faces = m_faces.rows();
     const size_t vertex_per_face = m_faces.cols();
     const size_t num_voxels = m_voxels.rows();

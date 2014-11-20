@@ -15,6 +15,12 @@ IF (LIBIGL_FOUND)
     INCLUDE_DIRECTORIES(${LIBIGL_INCLUDE_DIRS})
 ENDIF (LIBIGL_FOUND)
 
+# tetgen
+IF (TETGEN_FOUND)
+    INCLUDE_DIRECTORIES(${TETGEN_INCLUDE_DIRS})
+    ADD_DEFINITIONS(-DTETLIBRARY)
+ENDIF (TETGEN_FOUND)
+
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
 
 FILE(GLOB SRC_FILES *.cpp)
@@ -31,7 +37,7 @@ ADD_SUBDIRECTORY(Parameters)
 
 ADD_LIBRARY(lib_wires SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(lib_wires Mesh lib_MeshUtils lib_convex_hull
-    lib_triangle_wrapper lib_csg)
+    lib_triangle_wrapper lib_csg lib_tetgen_wrapper)
 SET_TARGET_PROPERTIES(lib_wires PROPERTIES OUTPUT_NAME "wires")
 
 SET(SWG_FILES PyWires.i)
