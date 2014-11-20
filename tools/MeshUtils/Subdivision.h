@@ -29,6 +29,9 @@ class Subdivision {
         MatrixIr get_faces() const { return m_faces; }
         VectorI  get_face_indices() const { return m_face_indices; }
 
+        size_t get_num_vertices() const { return m_vertices.rows(); }
+        size_t get_num_faces() const { return m_faces.rows(); }
+
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
