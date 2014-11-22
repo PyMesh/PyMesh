@@ -6,6 +6,9 @@
 #ifdef WITH_CLIPPER
 #include "Clipper/ClipperEngine.h"
 #endif
+#ifdef WITH_IGL
+#include "IGL/IGLEngine.h"
+#endif 
 
 #include <sstream>
 #include <iostream>
@@ -31,6 +34,9 @@ CSGEngine::Ptr CSGEngine::create(const std::string& engine_name) {
 #endif
 #ifdef WITH_CLIPPER
     if (engine_name == "clipper") { return Ptr(new ClipperEngine()); }
+#endif
+#ifdef WITH_IGL
+    if (engine_name == "igl") { return Ptr(new IGLEngine()); }
 #endif
     engine_not_found(engine_name);
     return Ptr(NULL);
