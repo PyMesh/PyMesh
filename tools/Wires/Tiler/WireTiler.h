@@ -2,6 +2,7 @@
 
 #include <Mesh.h>
 #include <Wires/WireNetwork/WireNetwork.h>
+#include <Wires/Parameters/ParameterManager.h>
 
 class WireTiler {
     public:
@@ -9,6 +10,8 @@ class WireTiler {
 
         WireTiler(WireNetwork::Ptr unit_wire_network)
             : m_unit_wire_network(unit_wire_network) {}
+
+        void with_parameters(ParameterManager::Ptr params) { m_params = params; }
 
     public:
         WireNetwork::Ptr tile_with_guide_bbox(
@@ -20,4 +23,5 @@ class WireTiler {
 
     private:
         WireNetwork::Ptr m_unit_wire_network;
+        ParameterManager::Ptr m_params;
 };

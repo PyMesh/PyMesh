@@ -5,6 +5,7 @@
 
 #include <Wires/WireNetwork/WireNetwork.h>
 #include "WireProfile.h"
+#include <Wires/Parameters/ParameterManager.h>
 
 class InflatorEngine {
     public:
@@ -17,6 +18,8 @@ class InflatorEngine {
 
     public:
         static Ptr create(const std::string& type, WireNetwork::Ptr network);
+        static Ptr create_parametric(WireNetwork::Ptr network,
+                ParameterManager::Ptr manager);
 
     public:
         InflatorEngine(WireNetwork::Ptr wire_network);

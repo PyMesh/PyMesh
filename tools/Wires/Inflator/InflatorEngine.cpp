@@ -37,6 +37,26 @@ InflatorEngine::Ptr InflatorEngine::create(const std::string& type,
     }
 }
 
+InflatorEngine::Ptr InflatorEngine::create_parametric(WireNetwork::Ptr network,
+        ParameterManager::Ptr manager) {
+    const size_t dim = network->get_dim();
+    if (dim == 2) {
+        std::shared_ptr<PeriodicInflator2D> ptr =
+            std::make_shared<PeriodicInflator2D>(network);
+        ptr->set_parameter(manager);
+        return ptr;
+    } else if (dim == 3) {
+        std::shared_ptr<PeriodicInflator3D> ptr =
+            std::make_shared<PeriodicInflator3D>(network);
+        ptr->set_parameter(manager);
+        return ptr;
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Unsupported dim: " << dim;
+        throw NotImplementedError(err_msg.str());
+    }
+}
+
 InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
     m_wire_network(wire_network), m_thickness_type(PER_VERTEX) {
         const size_t dim = m_wire_network->get_dim();

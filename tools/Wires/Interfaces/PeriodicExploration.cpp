@@ -4,7 +4,9 @@
 #include <Core/Exception.h>
 #include <MeshFactory.h>
 #include <tetgen/TetgenWrapper.h>
+#include <tetgen/TetgenException.h>
 #include <Wires/Inflator/InflatorEngine.h>
+#include <Wires/Inflator/MeshRefiner.h>
 #include <Wires/Parameters/ParameterCommon.h>
 
 PeriodicExploration::PeriodicExploration(const std::string& wire_file,
@@ -27,7 +29,7 @@ void PeriodicExploration::with_parameters(
             m_wire_network, m_default_thickness, orbit_file, modifier_file);
 }
 
-void PeriodicExploration::periodic_inflate() {
+void PeriodicExploration::periodic_inflate(size_t subdiv_order) {
     ParameterCommon::Variables vars;
     VectorF thickness = m_parameters->evaluate_thickness(vars);
     MatrixFr offset = m_parameters->evaluate_offset(vars);
@@ -51,22 +53,25 @@ void PeriodicExploration::periodic_inflate() {
 
     update_mesh();
     compute_shape_velocity();
+    //refine(subdiv_order);
+    update_mesh();
 
     m_wire_network->set_vertices(ori_vertices);
 }
 
-void PeriodicExploration::compute_shape_velocity() {
-    m_shape_velocity = m_parameters->compute_shape_velocity(m_mesh);
-}
-
-void PeriodicExploration::run_tetgen() {
+bool PeriodicExploration::run_tetgen() {
     const size_t dim = m_vertices.cols();
     const size_t num_vertices = m_vertices.rows();
     TetgenWrapper tetgen(m_vertices, m_faces);
     std::stringstream flags;
     Float max_tet_vol = 0.01 * m_default_thickness * m_default_thickness;
     flags << "pqYQa" << max_tet_vol;
-    tetgen.run(flags.str());
+    try {
+        tetgen.run(flags.str());
+    } catch (TetgenException& e) {
+        std::cerr << e.what() << std::endl;
+        return false;
+    }
 
     // Important note:
     //
@@ -77,11 +82,29 @@ void PeriodicExploration::run_tetgen() {
     assert((vertices.block(0, 0, num_vertices, dim).array()==m_vertices.array()).all());
     m_vertices = vertices;
     m_voxels = tetgen.get_voxels();
+
+    return true;
+}
+
+void PeriodicExploration::refine(size_t order) {
+    MeshRefiner refiner("loop");
+    refiner.refine(m_vertices, m_faces, order);
+
+    m_vertices = refiner.get_vertices();
+    m_faces = refiner.get_faces();
+    m_face_sources = refiner.update_face_sources(m_face_sources);
+
+    for (auto& velocity : m_shape_velocity) {
+        velocity = refiner.update_vertex_field(velocity);
+    }
+}
+
+void PeriodicExploration::compute_shape_velocity() {
+    m_shape_velocity = m_parameters->compute_shape_velocity(m_mesh);
 }
 
 void PeriodicExploration::update_mesh() {
     const size_t dim = m_vertices.cols();
-    if (dim == 3) run_tetgen();
 
     const size_t num_vertices = m_vertices.rows();
     const size_t num_faces = m_faces.rows();

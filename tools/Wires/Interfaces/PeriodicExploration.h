@@ -35,7 +35,12 @@ class PeriodicExploration {
             return i < m_parameters->get_num_thickness_dofs();
         }
 
-        void  periodic_inflate();
+        void periodic_inflate(size_t subdiv_order=0);
+
+        /**
+         * Return true only if tetgen succeeded.
+         */
+        bool run_tetgen();
 
         Mesh::Ptr get_mesh() { return m_mesh; }
         MatrixFr get_vertices() const { return m_vertices; }
@@ -45,8 +50,8 @@ class PeriodicExploration {
 
     private:
         void compute_shape_velocity();
-        void run_tetgen();
         void update_mesh();
+        void refine(size_t order);
 
     private:
         Float m_default_thickness;

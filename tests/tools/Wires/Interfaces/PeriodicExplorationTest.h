@@ -35,7 +35,7 @@ TEST_F(PeriodicExplorationTest, creation) {
             }
         }
         explorer.set_dofs(modified_dofs);
-        explorer.periodic_inflate();
+        explorer.periodic_inflate(1);
 
         Mesh::Ptr mesh = explorer.get_mesh();
         std::vector<MatrixFr> velocity = explorer.get_shape_velocity();

@@ -3,14 +3,11 @@
 #include <iostream>
 #include <sstream>
 
+#include <MeshFactory.h>
 #include <Wires/Tiler/WireTiler.h>
+#include <Wires/Parameters/ParameterCommon.h>
+
 #include "SimpleInflator.h"
-
-namespace PeriodicInflatorHelper {
-    const std::string thickness_attr_name("internal_thickness");
-}
-
-using namespace PeriodicInflatorHelper;
 
 void PeriodicInflator::inflate() {
     check_thickness();
@@ -18,6 +15,19 @@ void PeriodicInflator::inflate() {
     inflate_phantom_wires();
     clip_to_center_cell();
     clean_up();
+}
+
+void PeriodicInflator::set_parameter(ParameterManager::Ptr manager) {
+    m_parameter_manager = manager;
+    if (m_parameter_manager->get_thickness_type() ==
+            ParameterCommon::VERTEX) {
+        set_thickness_type(PER_VERTEX);
+    } else if (m_parameter_manager->get_thickness_type() ==
+            ParameterCommon::EDGE) {
+        set_thickness_type(PER_EDGE);
+    } else {
+        throw NotImplementedError("Unknow thickness type!");
+    }
 }
 
 void PeriodicInflator::initialize_phantom_wires() {
@@ -32,21 +42,24 @@ void PeriodicInflator::initialize_phantom_wires() {
     m_wire_network->clear_attributes();
     m_wire_network->add_attribute("vertex_periodic_index", true);
     m_wire_network->add_attribute("edge_periodic_index", false);
-    m_wire_network->add_attribute(thickness_attr_name,
-            m_thickness_type == PER_VERTEX);
-    m_wire_network->set_attribute(thickness_attr_name, m_thickness);
+
+    ParameterCommon::Variables vars;
+    MatrixFr offset = m_parameter_manager->evaluate_offset(vars);
+    m_wire_network->set_vertices(m_wire_network->get_vertices() + offset);
 
     WireTiler tiler(m_wire_network);
+    tiler.with_parameters(m_parameter_manager);
     m_phantom_wires = tiler.tile_with_guide_bbox(
             bbox_min, bbox_max, VectorI::Ones(dim) * 3);
     m_phantom_wires->center_at_origin();
-    assert(m_phantom_wires->has_attribute(thickness_attr_name));
+
+    assert(m_phantom_wires->has_attribute("thickness"));
+    assert(m_phantom_wires->has_attribute("vertex_offset"));
 }
 
 void PeriodicInflator::inflate_phantom_wires() {
     SimpleInflator inflator(m_phantom_wires);
-    const VectorF& thickness =
-        m_phantom_wires->get_attribute(thickness_attr_name);
+    const VectorF& thickness = m_phantom_wires->get_attribute("thickness");
 
     inflator.set_thickness_type(m_thickness_type);
     inflator.set_thickness(thickness);
@@ -56,8 +69,9 @@ void PeriodicInflator::inflate_phantom_wires() {
     m_phantom_vertices = inflator.get_vertices();
     m_phantom_faces = inflator.get_faces();
     update_phantom_periodic_face_sources(inflator.get_face_sources());
-    //save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
-    //        m_phantom_face_sources.cast<Float>());
+    compute_phantom_shape_velocity();
+    save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
+            m_phantom_face_sources.cast<Float>());
 }
 
 void PeriodicInflator::update_phantom_periodic_face_sources(
@@ -82,6 +96,26 @@ void PeriodicInflator::update_phantom_periodic_face_sources(
             m_phantom_face_sources[i] = vertex_periodic_index(source, 0) + 1;
         }
     }
+}
+
+void PeriodicInflator::compute_phantom_shape_velocity() {
+    const size_t dim = m_phantom_vertices.cols();
+    const size_t vertex_per_face = m_phantom_faces.cols();
+    const size_t vertex_per_voxel = 0;
+
+    MeshFactory factory;
+    VectorF flattened_vertices = Eigen::Map<VectorF>(
+            m_phantom_vertices.data(),
+            m_phantom_vertices.rows() * m_phantom_vertices.cols());
+    VectorI flattened_faces = Eigen::Map<VectorI>(
+            m_phantom_faces.data(),
+            m_phantom_faces.rows() * m_phantom_faces.cols());
+    VectorI voxels = VectorI::Zero(0);
+    factory.load_data(flattened_vertices, flattened_faces, voxels,
+            dim, vertex_per_face, vertex_per_voxel);
+    Mesh::Ptr mesh = factory.create_shared();
+
+    m_shape_velocities = m_parameter_manager->compute_shape_velocity(mesh);
 }
 
 void PeriodicInflator::get_center_cell_bbox(
