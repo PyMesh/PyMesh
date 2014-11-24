@@ -58,7 +58,9 @@ InflatorEngine::Ptr InflatorEngine::create_parametric(WireNetwork::Ptr network,
 }
 
 InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
-    m_wire_network(wire_network), m_thickness_type(PER_VERTEX) {
+    m_wire_network(wire_network),
+    m_thickness_type(PER_VERTEX),
+    m_subdiv_order(0) {
         const size_t dim = m_wire_network->get_dim();
         if (dim == 3) {
             m_profile = WireProfile::create("square");
@@ -76,19 +78,10 @@ void InflatorEngine::set_thickness(const VectorF& thickness) {
     check_thickness();
 }
 
-void InflatorEngine::refine(const std::string& algorithm, size_t order) {
-    Subdivision::Ptr subdiv = Subdivision::create(algorithm);
-    subdiv->subdivide(m_vertices, m_faces, order);
-    m_vertices = subdiv->get_vertices();
-    m_faces = subdiv->get_faces();
-
-    VectorI face_indices = subdiv->get_face_indices();
-    const size_t num_faces = m_faces.rows();
-    VectorI face_sources(num_faces);
-    for (size_t i=0; i<num_faces; i++) {
-        face_sources[i] = m_face_sources[face_indices[i]];
-    }
-    m_face_sources = face_sources;
+void InflatorEngine::with_refinement(
+        const std::string& algorithm, size_t order) {
+    m_refiner = Subdivision::create(algorithm);
+    m_subdiv_order = order;
 }
 
 void InflatorEngine::clean_up() {

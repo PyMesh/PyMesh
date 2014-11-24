@@ -62,6 +62,12 @@ class ParameterManager {
             m_thickness_params.set_default(thickness);
         }
 
+        const ThicknessParameters& get_thickness_params() const { return m_thickness_params; }
+        ThicknessParameters& get_thickness_params() { return m_thickness_params; }
+
+        const OffsetParameters& get_offset_params() const { return m_offset_params; }
+        OffsetParameters& get_offset_params() { return m_offset_params; }
+
     public:
         // The following methods are mostly used for parameter sweep
         size_t get_num_dofs() const;
@@ -90,6 +96,9 @@ class ParameterManager {
         void set_offset_type(TargetType type);
         void add_offset_parameter(const VectorI& roi,
                 const std::string& formula, Float value, size_t axis);
+        void add_offset_parameter(const VectorI& roi,
+                const std::string& formula, Float value,
+                const MatrixFr& custom_offset);
 
     private:
         WireNetwork::Ptr m_wire_network;

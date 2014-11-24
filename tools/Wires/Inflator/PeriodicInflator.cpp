@@ -2,19 +2,58 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
+#include <vector>
 
 #include <MeshFactory.h>
-#include <Wires/Tiler/WireTiler.h>
+#include <Math/ZSparseMatrix.h>
 #include <Wires/Parameters/ParameterCommon.h>
 
+#include "AABBTree.h"
 #include "SimpleInflator.h"
+#include "PhantomMeshGenerator.h"
+
+namespace PeriodicInflatorHelper {
+    Vector3F compute_barycentric_coord(
+            const VectorF& p,
+            const VectorF& a,
+            const VectorF& b,
+            const VectorF& c) {
+        VectorF v0 = b-a;
+        VectorF v1 = c-a;
+        VectorF v2 = p-a;
+        Float d00 = v0.dot(v0);
+        Float d01 = v0.dot(v1);
+        Float d11 = v1.dot(v1);
+        Float d20 = v2.dot(v0);
+        Float d21 = v2.dot(v1);
+        Float denom = d00 * d11 - d01 * d01;
+        Float v = (d11 * d20 - d01 * d21) / denom;
+        Float w = (d00 * d21 - d01 * d20) / denom;
+        Float u = 1.0 - v - w;
+        return Vector3F(u, v, w);
+    }
+}
+using namespace PeriodicInflatorHelper;
 
 void PeriodicInflator::inflate() {
-    check_thickness();
-    initialize_phantom_wires();
-    inflate_phantom_wires();
+    generate_phantom_mesh();
+    refine_phantom_mesh();
     clip_to_center_cell();
     clean_up();
+    update_shape_velocities();
+}
+
+void PeriodicInflator::generate_phantom_mesh() {
+    PhantomMeshGenerator generator(
+            m_wire_network, m_parameter_manager, m_profile);
+    generator.generate();
+    m_phantom_vertices = generator.get_vertices();
+    m_phantom_faces = generator.get_faces();
+    m_phantom_face_sources = generator.get_face_sources();
+    m_shape_velocities = generator.get_shape_velocities();
+
+    m_tree = std::make_shared<AABBTree>(m_phantom_vertices, m_phantom_faces);
 }
 
 void PeriodicInflator::set_parameter(ParameterManager::Ptr manager) {
@@ -30,92 +69,29 @@ void PeriodicInflator::set_parameter(ParameterManager::Ptr manager) {
     }
 }
 
-void PeriodicInflator::initialize_phantom_wires() {
-    m_wire_network->center_at_origin();
-    const size_t dim = m_wire_network->get_dim();
-    VectorF bbox_min, bbox_max;
-    get_center_cell_bbox(bbox_min, bbox_max);
+void PeriodicInflator::refine_phantom_mesh() {
+    if (!m_refiner) return;
+    m_refiner->subdivide(m_phantom_vertices, m_phantom_faces, m_subdiv_order);
+    m_phantom_vertices = m_refiner->get_vertices();
+    m_phantom_faces = m_refiner->get_faces();
 
-    bbox_min.array() *= 3;
-    bbox_max.array() *= 3;
-
-    m_wire_network->clear_attributes();
-    m_wire_network->add_attribute("vertex_periodic_index", true);
-    m_wire_network->add_attribute("edge_periodic_index", false);
-
-    ParameterCommon::Variables vars;
-    MatrixFr offset = m_parameter_manager->evaluate_offset(vars);
-    m_wire_network->set_vertices(m_wire_network->get_vertices() + offset);
-
-    WireTiler tiler(m_wire_network);
-    tiler.with_parameters(m_parameter_manager);
-    m_phantom_wires = tiler.tile_with_guide_bbox(
-            bbox_min, bbox_max, VectorI::Ones(dim) * 3);
-    m_phantom_wires->center_at_origin();
-
-    assert(m_phantom_wires->has_attribute("thickness"));
-    assert(m_phantom_wires->has_attribute("vertex_offset"));
-}
-
-void PeriodicInflator::inflate_phantom_wires() {
-    SimpleInflator inflator(m_phantom_wires);
-    const VectorF& thickness = m_phantom_wires->get_attribute("thickness");
-
-    inflator.set_thickness_type(m_thickness_type);
-    inflator.set_thickness(thickness);
-    inflator.set_profile(m_profile);
-    inflator.inflate();
-
-    m_phantom_vertices = inflator.get_vertices();
-    m_phantom_faces = inflator.get_faces();
-    update_phantom_periodic_face_sources(inflator.get_face_sources());
-    compute_phantom_shape_velocity();
-    save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
-            m_phantom_face_sources.cast<Float>());
-}
-
-void PeriodicInflator::update_phantom_periodic_face_sources(
-        const VectorI& face_sources) {
-    const size_t num_faces = face_sources.size();
-    m_phantom_face_sources.resize(num_faces);
-
-    const MatrixFr& vertex_periodic_index =
-        m_phantom_wires->get_attribute("vertex_periodic_index");
-    const MatrixFr& edge_periodic_index =
-        m_phantom_wires->get_attribute("edge_periodic_index");
-
+    VectorI face_indices = m_refiner->get_face_indices();
+    const size_t num_faces = m_phantom_faces.rows();
+    VectorI face_sources(num_faces);
     for (size_t i=0; i<num_faces; i++) {
-        int source = face_sources[i];
-        if (source < 0) {
-            // Edge index
-            source = -source - 1;
-            m_phantom_face_sources[i] = -edge_periodic_index(source, 0) - 1;
-        } else if (source > 0) {
-            // Vertex index
-            source  = source - 1;
-            m_phantom_face_sources[i] = vertex_periodic_index(source, 0) + 1;
+        face_sources[i] = m_phantom_face_sources[face_indices[i]];
+    }
+    m_phantom_face_sources = face_sources;
+
+    const std::vector<ZSparseMatrix>& subdiv_matrices =
+        m_refiner->get_subdivision_matrices();
+    for (auto& shape_velocity : m_shape_velocities) {
+        for (const auto& mat : subdiv_matrices) {
+            shape_velocity = mat * shape_velocity;
         }
     }
-}
 
-void PeriodicInflator::compute_phantom_shape_velocity() {
-    const size_t dim = m_phantom_vertices.cols();
-    const size_t vertex_per_face = m_phantom_faces.cols();
-    const size_t vertex_per_voxel = 0;
-
-    MeshFactory factory;
-    VectorF flattened_vertices = Eigen::Map<VectorF>(
-            m_phantom_vertices.data(),
-            m_phantom_vertices.rows() * m_phantom_vertices.cols());
-    VectorI flattened_faces = Eigen::Map<VectorI>(
-            m_phantom_faces.data(),
-            m_phantom_faces.rows() * m_phantom_faces.cols());
-    VectorI voxels = VectorI::Zero(0);
-    factory.load_data(flattened_vertices, flattened_faces, voxels,
-            dim, vertex_per_face, vertex_per_voxel);
-    Mesh::Ptr mesh = factory.create_shared();
-
-    m_shape_velocities = m_parameter_manager->compute_shape_velocity(mesh);
+    assert(m_phantom_faces.rows() == m_phantom_face_sources.size());
 }
 
 void PeriodicInflator::get_center_cell_bbox(
@@ -123,3 +99,40 @@ void PeriodicInflator::get_center_cell_bbox(
     bbox_min = m_wire_network->get_bbox_min();
     bbox_max = m_wire_network->get_bbox_max();
 }
+
+void PeriodicInflator::update_shape_velocities() {
+    const size_t num_vertices = m_vertices.rows();
+    const size_t num_phantom_vertices = m_phantom_vertices.rows();
+    VectorF squared_dists;
+    VectorI closest_face_indices;
+    MatrixFr closest_pts;
+    m_tree->look_up_with_closest_points(
+            m_vertices, squared_dists, closest_face_indices, closest_pts);
+
+    typedef Eigen::Triplet<Float> T;
+    std::vector<T> entries;
+    assert(squared_dists.size() == num_vertices);
+    for (size_t i=0; i<num_vertices; i++) {
+        Float dist = squared_dists[i];
+        if (dist > 1e-3) continue;
+        size_t face_idx = closest_face_indices[i];
+        const VectorI& f = m_phantom_faces.row(i);
+        Vector3F weight = compute_barycentric_coord(
+                closest_pts.row(i),
+                m_phantom_vertices.row(f[0]),
+                m_phantom_vertices.row(f[1]),
+                m_phantom_vertices.row(f[2]));
+
+        entries.push_back(T(i, f[0], weight[0]));
+        entries.push_back(T(i, f[1], weight[1]));
+        entries.push_back(T(i, f[2], weight[2]));
+    }
+
+    ZSparseMatrix transform(num_vertices, num_phantom_vertices);
+    transform.setFromTriplets(entries.begin(), entries.end());
+
+    for (auto& shape_velocity :m_shape_velocities) {
+        shape_velocity = transform * shape_velocity;
+    }
+}
+

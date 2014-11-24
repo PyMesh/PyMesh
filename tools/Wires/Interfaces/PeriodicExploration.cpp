@@ -21,6 +21,9 @@ PeriodicExploration::PeriodicExploration(const std::string& wire_file,
             -half_bbox_size, half_bbox_size);
     m_parameters = ParameterManager::create_empty_manager(
             m_wire_network, m_default_thickness);
+
+    m_refine_algorithm = "simple";
+    m_refine_order = 0;
 }
 
 void PeriodicExploration::with_parameters(
@@ -29,7 +32,13 @@ void PeriodicExploration::with_parameters(
             m_wire_network, m_default_thickness, orbit_file, modifier_file);
 }
 
-void PeriodicExploration::periodic_inflate(size_t subdiv_order) {
+void PeriodicExploration::with_refinement(
+        const std::string& algorithm, size_t order) {
+    m_refine_algorithm = algorithm;
+    m_refine_order = order;
+}
+
+void PeriodicExploration::periodic_inflate() {
     ParameterCommon::Variables vars;
     VectorF thickness = m_parameters->evaluate_thickness(vars);
     MatrixFr offset = m_parameters->evaluate_offset(vars);
@@ -45,6 +54,8 @@ void PeriodicExploration::periodic_inflate(size_t subdiv_order) {
         inflator->set_thickness_type(InflatorEngine::PER_EDGE);
     }
     inflator->set_thickness(thickness);
+    if (m_refine_order > 0)
+        inflator->with_refinement(m_refine_algorithm, m_refine_order);
     inflator->inflate();
 
     m_vertices = inflator->get_vertices();
@@ -53,7 +64,6 @@ void PeriodicExploration::periodic_inflate(size_t subdiv_order) {
 
     update_mesh();
     compute_shape_velocity();
-    //refine(subdiv_order);
     update_mesh();
 
     m_wire_network->set_vertices(ori_vertices);
@@ -84,19 +94,6 @@ bool PeriodicExploration::run_tetgen() {
     m_voxels = tetgen.get_voxels();
 
     return true;
-}
-
-void PeriodicExploration::refine(size_t order) {
-    MeshRefiner refiner("loop");
-    refiner.refine(m_vertices, m_faces, order);
-
-    m_vertices = refiner.get_vertices();
-    m_faces = refiner.get_faces();
-    m_face_sources = refiner.update_face_sources(m_face_sources);
-
-    for (auto& velocity : m_shape_velocity) {
-        velocity = refiner.update_vertex_field(velocity);
-    }
 }
 
 void PeriodicExploration::compute_shape_velocity() {

@@ -6,21 +6,19 @@
 #include <vector>
 
 #include <CSG/CSGEngine.h>
-#include <MeshUtils/TripletMap.h>
-#include <Misc/HashGrid.h>
-#include <Misc/Triplet.h>
+#include <Math/ZSparseMatrix.h>
+#include <MeshFactory.h>
+
 namespace TriBox3 {
 extern "C" {
 #include <Misc/tribox3.h>
 }
 }
 
-#include <MeshFactory.h>
+#include "AABBTree.h"
 #include "PeriodicBoundaryRemesher.h"
 #include <Wires/Misc/DistanceComputation.h>
 #include <Wires/Misc/BoxChecker.h>
-
-#include <igl/cgal/signed_distance.h>
 
 namespace PeriodicInflator3DHelper {
     void create_box(const VectorF& bbox_min, const VectorF& bbox_max,
@@ -88,19 +86,13 @@ void PeriodicInflator3D::update_face_sources() {
                 m_vertices.row(f[2])) / 3.0;
     }
 
-    VectorF dists;
+    VectorF squared_dists;
     VectorI closest_face_indices;
-    MatrixF closest_pts;
-    MatrixF closest_normal;
+    m_tree->look_up(face_centroids, squared_dists, closest_face_indices);
 
-    typedef CGAL::Simple_cartesian<double> Kernel;
-    igl::signed_distance<Kernel>(face_centroids, m_phantom_vertices, m_phantom_faces,
-            igl::SIGNED_DISTANCE_TYPE_PSEUDONORMAL,
-            dists, closest_face_indices, closest_pts, closest_normal);
-
-    assert(dists.size() == num_faces);
     m_face_sources = VectorI::Zero(num_faces);
     for (size_t i=0; i<num_faces; i++) {
+        const VectorI& f = m_faces.row(i);
         const VectorF& centroid = face_centroids.row(i);
         if (box_checker.is_on_boundary(centroid)) {
             continue;

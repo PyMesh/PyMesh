@@ -56,6 +56,7 @@ void SimpleInflator::inflate() {
     generate_joints();
     connect_end_loops();
     finalize();
+    refine();
 }
 
 void SimpleInflator::initialize() {
@@ -218,6 +219,22 @@ void SimpleInflator::finalize() {
     }
 
     clean_up();
+}
+
+void SimpleInflator::refine() {
+    if (!m_refiner) return;
+    Subdivision::Ptr subdiv = m_refiner;
+    subdiv->subdivide(m_vertices, m_faces, m_subdiv_order);
+    m_vertices = subdiv->get_vertices();
+    m_faces = subdiv->get_faces();
+
+    VectorI face_indices = subdiv->get_face_indices();
+    const size_t num_faces = m_faces.rows();
+    VectorI face_sources(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        face_sources[i] = m_face_sources[face_indices[i]];
+    }
+    m_face_sources = face_sources;
 }
 
 VectorF SimpleInflator::compute_vertex_thickness() const {

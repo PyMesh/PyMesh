@@ -1,5 +1,6 @@
 #include "TilerEngine.h"
 
+#include <cassert>
 #include <iostream>
 #include <sstream>
 #include <unordered_set>
@@ -57,6 +58,11 @@ namespace TilerEngineHelper {
 }
 
 using namespace TilerEngineHelper;
+
+void TilerEngine::with_parameters(ParameterManager::Ptr params) {
+    assert(params);
+    m_params = params;
+}
 
 MatrixFr TilerEngine::tile_vertices(const TilerEngine::FuncList& funcs) {
     const size_t num_copies = funcs.size();

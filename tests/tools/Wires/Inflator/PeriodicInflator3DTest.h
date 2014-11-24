@@ -92,6 +92,7 @@ class PeriodicInflator3DTest : public WireTest {
                 inflator.set_thickness_type(InflatorEngine::PER_EDGE);
             }
             inflator.set_thickness(thickness);
+            inflator.with_refinement("loop", 1);
             inflator.inflate();
 
             m_vertices = inflator.get_vertices();

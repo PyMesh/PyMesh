@@ -103,8 +103,8 @@ TEST_F(PeriodicInflator2DTest, box) {
     PeriodicInflator2D inflator(network);
     inflator.set_thickness_type(InflatorEngine::PER_EDGE);
     inflator.set_thickness(VectorF::Ones(num_edges) * 0.5);
+    inflator.with_refinement("simple", 1);
     inflator.inflate();
-    inflator.refine("simple", 1);
 
     MatrixFr vertices = inflator.get_vertices();
     MatrixIr faces = inflator.get_faces();
@@ -213,8 +213,8 @@ TEST_F(PeriodicInflator2DTest, box_with_parameter) {
         inflator.set_thickness_type(InflatorEngine::PER_EDGE);
     }
     inflator.set_thickness(thickness);
+    inflator.with_refinement("simple", 2);
     inflator.inflate();
-    inflator.refine("simple", 2);
 
     MatrixFr vertices = inflator.get_vertices();
     MatrixIr faces = inflator.get_faces();

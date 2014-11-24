@@ -19,8 +19,8 @@ TEST_F(SimpleInflatorTest, 2D) {
     SimpleInflator inflator(network);
     inflator.set_thickness_type(SimpleInflator::PER_EDGE);
     inflator.set_thickness(VectorF::Ones(num_edges) * 0.2);
+    inflator.with_refinement("loop", 2);
     inflator.inflate();
-    //inflator.refine("loop", 2);
 
     MatrixFr vertices = inflator.get_vertices();
     MatrixIr faces = inflator.get_faces();
@@ -86,8 +86,8 @@ TEST_F(SimpleInflatorTest, 3D) {
     inflator.set_profile(profile);
     inflator.set_thickness_type(SimpleInflator::PER_EDGE);
     inflator.set_thickness(VectorF::Ones(num_edges) * 0.25);
+    inflator.with_refinement("loop", 2);
     inflator.inflate();
-    //inflator.refine("loop", 2);
 
     MatrixFr vertices = inflator.get_vertices();
     MatrixIr faces = inflator.get_faces();

@@ -6,10 +6,15 @@
 
 #include "InflatorEngine.h"
 
+class AABBTree;
+
 class PeriodicInflator : public InflatorEngine {
     public:
         PeriodicInflator(WireNetwork::Ptr wire_network) :
-            InflatorEngine(wire_network) {}
+            InflatorEngine(wire_network) {
+                m_parameter_manager =
+                    ParameterManager::create_empty_manager(wire_network, 0.5);
+            }
         virtual ~PeriodicInflator() {}
 
     public:
@@ -17,12 +22,11 @@ class PeriodicInflator : public InflatorEngine {
         void set_parameter(ParameterManager::Ptr manager);
 
     protected:
-        void initialize_phantom_wires();
-        void inflate_phantom_wires();
-        void update_phantom_periodic_face_sources(const VectorI& face_sources);
-        void compute_phantom_shape_velocity();
+        void generate_phantom_mesh();
         virtual void clip_to_center_cell()=0;
+        void refine_phantom_mesh();
         void get_center_cell_bbox(VectorF& bbox_min, VectorF& bbox_max);
+        void update_shape_velocities();
 
     protected:
         WireNetwork::Ptr m_phantom_wires;
@@ -31,4 +35,5 @@ class PeriodicInflator : public InflatorEngine {
         VectorI  m_phantom_face_sources;
         ParameterManager::Ptr m_parameter_manager;
         std::vector<MatrixFr> m_shape_velocities;
+        std::shared_ptr<AABBTree> m_tree;
 };

@@ -5,6 +5,7 @@
 #include <Core/Exception.h>
 
 #include "VertexOffsetParameter.h"
+#include "VertexCustomOffsetParameter.h"
 
 OffsetParameters::OffsetParameters(WireNetwork::Ptr wire_network,
         OffsetParameters::TargetType type,
@@ -54,6 +55,18 @@ void OffsetParameters::add(const VectorI& roi,
         param->set_value(value);
         param->set_formula(formula);
     }
+}
+
+void OffsetParameters::add(const VectorI& roi,
+        const std::string& formula, Float value,
+        const MatrixFr& custom_offset) {
+    m_params.emplace_back(PatternParameter::Ptr(
+                new VertexCustomOffsetParameter(
+                    m_wire_network, custom_offset)));
+    PatternParameter::Ptr param = m_params.back();
+    param->set_roi(roi);
+    param->set_value(value);
+    param->set_formula(formula);
 }
 
 MatrixFr OffsetParameters::evaluate(const OffsetParameters::Variables& vars) {

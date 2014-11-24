@@ -21,7 +21,7 @@ class TilerEngine {
     public:
         typedef std::list<std::function<MatrixFr(const MatrixFr&)> > FuncList;
 
-        void with_parameters(ParameterManager::Ptr params) { m_params = params; }
+        void with_parameters(ParameterManager::Ptr params);
 
     protected:
         MatrixFr tile_vertices(const FuncList& funcs);

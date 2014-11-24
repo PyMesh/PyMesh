@@ -18,6 +18,9 @@ class OffsetParameters : public ParameterList {
     public:
         void add(const VectorI& roi,
                 const std::string& formula, Float value, size_t axis);
+        void add(const VectorI& roi,
+                const std::string& formula, Float value,
+                const MatrixFr& custom_offset);
 
         MatrixFr evaluate(const Variables& vars);
 

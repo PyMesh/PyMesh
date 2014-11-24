@@ -17,10 +17,11 @@ TEST_F(PeriodicExplorationTest, creation) {
     explorer.with_parameters(
             m_data_dir + "brick5.orbit",
             m_data_dir + "brick5.modifier");
+    explorer.with_refinement("loop", 2);
 
     VectorF dofs = explorer.get_dofs();
     const size_t num_dofs = explorer.get_num_dofs();
-    for (size_t i=0; i<5; i++) {
+    for (size_t i=0; i<1; i++) {
         Float factor = 1.0 - i * 0.1;
         VectorF modified_dofs(dofs);
         for (size_t j=0; j<num_dofs; j++) {
@@ -35,7 +36,7 @@ TEST_F(PeriodicExplorationTest, creation) {
             }
         }
         explorer.set_dofs(modified_dofs);
-        explorer.periodic_inflate(1);
+        explorer.periodic_inflate();
 
         Mesh::Ptr mesh = explorer.get_mesh();
         std::vector<MatrixFr> velocity = explorer.get_shape_velocity();

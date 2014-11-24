@@ -1,5 +1,6 @@
 #include "AABBTiler.h"
 
+#include <cassert>
 #include <iostream>
 #include <list>
 
@@ -109,6 +110,7 @@ void AABBTiler::evaluate_parameters(WireNetwork& wire_network,
 
 void AABBTiler::evaluate_thickness_parameters(WireNetwork& wire_network,
         const AABBTiler::FuncList& funcs) {
+    assert(m_params);
     const size_t dim = wire_network.get_dim();
     const size_t num_vertices = wire_network.get_num_vertices();
     const size_t num_edges = wire_network.get_num_edges();

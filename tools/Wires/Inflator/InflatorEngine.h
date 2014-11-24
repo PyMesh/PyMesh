@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 
+#include <MeshUtils/Subdivision.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 #include "WireProfile.h"
 #include <Wires/Parameters/ParameterManager.h>
@@ -29,7 +30,7 @@ class InflatorEngine {
         virtual void inflate()=0;
 
     public:
-        void refine(const std::string& algorithm, size_t order);
+        void with_refinement(const std::string& algorithm, size_t order);
         VectorF  get_thickness() const { return m_thickness; }
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
@@ -57,6 +58,8 @@ class InflatorEngine {
         VectorF m_thickness;
         ThicknessType m_thickness_type;
         WireProfilePtr m_profile;
+        Subdivision::Ptr m_refiner;
+        size_t m_subdiv_order;
 
         /**
          * m_face_sources tracks the source element of each inflated face.

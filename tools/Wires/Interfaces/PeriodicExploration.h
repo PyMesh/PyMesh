@@ -18,6 +18,10 @@ class PeriodicExploration {
                 const std::string& orbit_file,
                 const std::string& modifier_file);
 
+        void with_refinement(
+                const std::string& algorithm,
+                size_t order);
+
     public:
         size_t get_num_dofs() const {
             return m_parameters->get_num_dofs();
@@ -35,7 +39,7 @@ class PeriodicExploration {
             return i < m_parameters->get_num_thickness_dofs();
         }
 
-        void periodic_inflate(size_t subdiv_order=0);
+        void periodic_inflate();
 
         /**
          * Return true only if tetgen succeeded.
@@ -51,7 +55,6 @@ class PeriodicExploration {
     private:
         void compute_shape_velocity();
         void update_mesh();
-        void refine(size_t order);
 
     private:
         Float m_default_thickness;
@@ -64,4 +67,7 @@ class PeriodicExploration {
         VectorI  m_face_sources;
         Mesh::Ptr m_mesh;
         std::vector<MatrixFr> m_shape_velocity;
+
+        std::string m_refine_algorithm;
+        size_t m_refine_order;
 };

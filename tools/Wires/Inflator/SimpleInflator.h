@@ -21,6 +21,7 @@ class SimpleInflator : public InflatorEngine {
         void generate_joints();
         void connect_end_loops();
         void finalize();
+        void refine();
 
         VectorF compute_vertex_thickness() const;
         void validate_end_loop_offset() const;
