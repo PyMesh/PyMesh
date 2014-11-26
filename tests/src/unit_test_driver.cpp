@@ -15,6 +15,7 @@
 #include "Misc/MultipletTest.h"
 #include "Misc/HashGridTest.h"
 #include "Misc/HashKeyTest.h"
+#include "Misc/MatrixIOTest.h"
 #include "Attributes/FaceAreaAttributeTest.h"
 #include "Attributes/FaceCentroidAttributeTest.h"
 #include "Attributes/FaceCircumCenterAttributeTest.h"
