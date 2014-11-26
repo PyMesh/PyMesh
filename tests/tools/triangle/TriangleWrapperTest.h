@@ -2,10 +2,16 @@
 
 #include <triangle/TriangleWrapper.h>
 #include <IO/MeshWriter.h>
+#include <Misc/Environment.h>
+#include <Misc/MatrixIO.h>
 
 class TriangleWrapperTest : public ::testing::Test {
     protected:
         virtual void SetUp() {
+            std::string proj_root =
+                Environment::get_required("PYMESH_PATH");
+            m_data_dir = proj_root + "/tests/tools/triangle/data/";
+
             m_vertices.resize(8, 2);
             m_vertices << 0.0, 0.0,
                           1.0, 0.0,
@@ -83,6 +89,7 @@ class TriangleWrapperTest : public ::testing::Test {
         MatrixFr m_vertices;
         MatrixIr m_segments;
         MatrixFr m_holes;
+        std::string m_data_dir;
 };
 
 TEST_F(TriangleWrapperTest, Creation) {
@@ -217,4 +224,44 @@ TEST_F(TriangleWrapperTest, 3DWithHoles) {
     ASSERT_GT(faces.rows(), 0);
 
     ASSERT_OUTSIDE(holes.row(0), vertices, faces);
+}
+
+TEST_F(TriangleWrapperTest, debug) {
+    MatrixFr input_vertices = MatrixIO::load_matrix<MatrixFr>(
+            m_data_dir + "v1.npy");
+    MatrixIr input_loops = MatrixIO::load_matrix<MatrixIr>(
+            m_data_dir + "e1.npy");
+    //std::cout << input_vertices.rows() << std::endl;
+    //std::cout << input_loops.rows() << std::endl;
+
+    TriangleWrapper tri(input_vertices, input_loops);
+    tri.run(0.25, false, true, true);
+
+    MatrixFr vertices = tri.get_vertices();
+    MatrixIr faces = tri.get_faces();
+
+    //std::cout << vertices.rows() << std::endl;
+    //std::cout << faces.rows() << std::endl;
+
+    //save_mesh("triangle_debug_1.obj", vertices, faces);
+}
+
+TEST_F(TriangleWrapperTest, debug2) {
+    MatrixFr input_vertices = MatrixIO::load_matrix<MatrixFr>(
+            m_data_dir + "v2.npy");
+    MatrixIr input_loops = MatrixIO::load_matrix<MatrixIr>(
+            m_data_dir + "e2.npy");
+    //std::cout << input_vertices.rows() << std::endl;
+    //std::cout << input_loops.rows() << std::endl;
+
+    TriangleWrapper tri(input_vertices, input_loops);
+    tri.run(0.25, false, true, true);
+
+    MatrixFr vertices = tri.get_vertices();
+    MatrixIr faces = tri.get_faces();
+
+    //std::cout << vertices.rows() << std::endl;
+    //std::cout << faces.rows() << std::endl;
+
+    //save_mesh("triangle_debug_2.obj", vertices, faces);
 }
