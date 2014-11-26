@@ -135,8 +135,8 @@ void TriangleWrapper::run(Float max_area, bool split_boundary,
             assert(m_holes.cols() == 3);
             m_holes = reductor.project(m_holes);
         }
-
         process_2D_input(flags, auto_hole_detection);
+
         m_vertices = reductor.unproject(m_vertices);
     } else {
         std::stringstream err_msg;
@@ -194,6 +194,14 @@ void TriangleWrapper::run_triangle(
     std::copy(points.data(), points.data() + num_points * dim,
             in.pointlist);
 
+    in.trianglelist = NULL;
+    in.triangleattributelist = NULL;
+    in.trianglearealist = NULL;
+    in.neighborlist = NULL;
+    in.numberoftriangles = 0;
+    in.numberofcorners = 0;
+    in.numberoftriangleattributes = 0;
+
     in.numberofsegments = num_segments;
     in.segmentlist      = new int[num_segments * pt_per_segment];
     std::copy(segments.data(),
@@ -207,9 +215,17 @@ void TriangleWrapper::run_triangle(
         in.holelist = new REAL[num_holes * dim];
         std::copy(holes.data(), holes.data() + num_holes * dim,
                 in.holelist);
+    } else {
+        in.holelist = NULL;
     }
 
     in.numberofregions = 0;
+    in.regionlist = NULL;
+
+    in.edgelist = NULL;
+    in.edgemarkerlist = NULL;
+    in.normlist = NULL;
+    in.numberofedges = 0;
 
     out.pointlist = NULL;
     out.pointattributelist = NULL;
@@ -339,11 +355,33 @@ void TriangleWrapper::poke_holes() {
 
     std::list<size_t> interior_faces;
     for (auto& region : regions) {
-        VectorI seed_face = m_faces.row(region.front());
-        VectorF seed_p = (
-                m_vertices.row(seed_face[0]) +
-                m_vertices.row(seed_face[1]) +
-                m_vertices.row(seed_face[2])) / 3.0;
+        bool seed_found;
+        VectorF seed_p;
+        for (auto face_idx : region) {
+            const VectorI& f = m_faces.row(face_idx);
+            const VectorF& v0 = m_vertices.row(f[0]);
+            const VectorF& v1 = m_vertices.row(f[1]);
+            const VectorF& v2 = m_vertices.row(f[2]);
+            VectorF u = v1 - v0;
+            VectorF v = v2 - v0;
+            Float area = u[0]*v[1] - u[1]*v[0];
+            if (area > 1e-6) {
+                seed_found = true;
+                seed_p = (v0+v1+v2)/3.0;
+                break;
+            }
+        }
+
+        if (!seed_found) {
+            std::cerr << "Warning: All generated triangles are degenerated!" << std::endl;
+            std::cerr << "Using the first triangle as seed!" << std::endl;
+            const VectorI& f = m_faces.row(region.front());
+            const VectorF& v0 = m_vertices.row(f[0]);
+            const VectorF& v1 = m_vertices.row(f[1]);
+            const VectorF& v2 = m_vertices.row(f[2]);
+            seed_p = (v0+v1+v2)/3.0;
+        }
+
         Float wind_num = compute_winding_number(seed_p, m_points, m_segments);
         if (fabs(wind_num) > 0.5) {
             interior_faces.splice(interior_faces.end(), region);
