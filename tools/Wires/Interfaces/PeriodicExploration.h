@@ -53,7 +53,6 @@ class PeriodicExploration {
         std::vector<MatrixFr> get_shape_velocities() const { return m_shape_velocities; }
 
     private:
-        void compute_shape_velocity();
         void update_mesh();
 
     private:

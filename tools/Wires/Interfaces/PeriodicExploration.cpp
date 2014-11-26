@@ -79,11 +79,6 @@ bool PeriodicExploration::run_tetgen() {
     return true;
 }
 
-void PeriodicExploration::compute_shape_velocity() {
-    // TODO: to remove.
-    m_shape_velocities = m_parameters->compute_shape_velocity(m_mesh);
-}
-
 void PeriodicExploration::update_mesh() {
     const size_t dim = m_vertices.cols();
 
