@@ -59,6 +59,11 @@ void SimpleInflator::inflate() {
     refine();
 }
 
+const std::vector<MatrixFr>& SimpleInflator::get_shape_velocities() const {
+    throw NotImplementedError(
+            "Shape velocity computation is not supported for non-periodic inflations");
+}
+
 void SimpleInflator::initialize() {
     check_thickness();
     m_end_loops.clear();

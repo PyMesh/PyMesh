@@ -39,6 +39,7 @@ using namespace PeriodicInflatorHelper;
 void PeriodicInflator::inflate() {
     generate_phantom_mesh();
     refine_phantom_mesh();
+    initialize_AABB_tree();
     clip_to_center_cell();
     clean_up();
     update_shape_velocities();
@@ -52,7 +53,9 @@ void PeriodicInflator::generate_phantom_mesh() {
     m_phantom_faces = generator.get_faces();
     m_phantom_face_sources = generator.get_face_sources();
     m_shape_velocities = generator.get_shape_velocities();
+}
 
+void PeriodicInflator::initialize_AABB_tree() {
     m_tree = std::make_shared<AABBTree>(m_phantom_vertices, m_phantom_faces);
 }
 
@@ -92,6 +95,8 @@ void PeriodicInflator::refine_phantom_mesh() {
     }
 
     assert(m_phantom_faces.rows() == m_phantom_face_sources.size());
+    //save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces,
+    //        m_phantom_face_sources.cast<Float>());
 }
 
 void PeriodicInflator::get_center_cell_bbox(
@@ -116,7 +121,7 @@ void PeriodicInflator::update_shape_velocities() {
         Float dist = squared_dists[i];
         if (dist > 1e-3) continue;
         size_t face_idx = closest_face_indices[i];
-        const VectorI& f = m_phantom_faces.row(i);
+        const VectorI& f = m_phantom_faces.row(face_idx);
         Vector3F weight = compute_barycentric_coord(
                 closest_pts.row(i),
                 m_phantom_vertices.row(f[0]),

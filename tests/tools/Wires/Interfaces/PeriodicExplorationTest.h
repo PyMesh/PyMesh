@@ -39,8 +39,8 @@ TEST_F(PeriodicExplorationTest, creation) {
         explorer.periodic_inflate();
 
         Mesh::Ptr mesh = explorer.get_mesh();
-        std::vector<MatrixFr> velocity = explorer.get_shape_velocity();
-        ASSERT_EQ(explorer.get_num_dofs(), velocity.size());
+        std::vector<MatrixFr> velocities = explorer.get_shape_velocities();
+        ASSERT_EQ(explorer.get_num_dofs(), velocities.size());
 
         std::vector<std::string> attr_names;
         for (size_t j=0; j<num_dofs; j++) {
@@ -48,7 +48,7 @@ TEST_F(PeriodicExplorationTest, creation) {
             attr_name_stream << "velocity_" << j;
             std::string attr_name = attr_name_stream.str();
 
-            VectorF flattened_attr = flatten(velocity[j]);
+            VectorF flattened_attr = flatten(velocities[j]);
 
             mesh->add_attribute(attr_name);
             mesh->set_attribute(attr_name, flattened_attr);

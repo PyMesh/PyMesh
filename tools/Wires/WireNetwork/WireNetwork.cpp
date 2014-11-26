@@ -1,10 +1,37 @@
 #include "WireNetwork.h"
 #include "WireParser.h"
 
+#include <cassert>
 #include <iostream>
 #include <sstream>
 
 #include <Core/Exception.h>
+
+namespace WireNetworkHelper {
+    template<typename Derived>
+    void filter(const Eigen::MatrixBase<Derived>& data,
+            const std::vector<bool>& to_keep,
+            Derived& out) {
+        const size_t num_data = data.rows();
+        const size_t dim = data.cols();
+        assert(num_data == to_keep.size());
+
+        size_t num_kept= 0;
+        for (size_t i=0; i<num_data; i++) {
+            if (to_keep[i]) num_kept++;
+        }
+
+        out.resize(num_kept, dim);
+        size_t count=0;
+        for (size_t i=0; i<num_data; i++) {
+            if (to_keep[i]) {
+                out.row(count) = data.row(i);
+                count++;
+            }
+        }
+    }
+}
+using namespace WireNetworkHelper;
 
 WireNetwork::Ptr WireNetwork::create(const std::string& wire_file) {
     return Ptr(new WireNetwork(wire_file));
@@ -91,6 +118,61 @@ void WireNetwork::center_at_origin() {
 
 VectorF WireNetwork::center() const {
     return 0.5 * (get_bbox_min() + get_bbox_max());
+}
+
+void WireNetwork::filter_vertices(const std::vector<bool>& to_keep) {
+    const size_t num_vertices = m_vertices.rows();
+    MatrixFr vertices;
+    filter(m_vertices, to_keep, vertices);
+    m_vertices = vertices;
+    const auto& attr_names = m_attributes.get_attribute_names();
+    for (const auto& name : attr_names) {
+        if (is_vertex_attribute(name)) {
+            const MatrixFr& val = m_attributes.get_attribute(name);
+            MatrixFr filtered_val;
+            filter(val, to_keep, filtered_val);
+            m_attributes.set_attribute(*this, name, filtered_val);
+        }
+    }
+
+    size_t count = 0;
+    VectorI index_map = VectorI::Ones(num_vertices) * -1;
+    for (size_t i=0; i<num_vertices; i++) {
+        if (to_keep[i]) {
+            index_map[i] = count;
+            count++;
+        }
+    }
+
+    const size_t num_edges = m_edges.rows();
+    std::vector<bool> edge_to_keep(num_edges, false);
+    for (size_t i=0; i<num_edges; i++) {
+        m_edges(i, 0) = index_map[m_edges(i, 0)];
+        m_edges(i, 1) = index_map[m_edges(i, 1)];
+        if ((m_edges.row(i).array() >= 0).all()) {
+            edge_to_keep[i] = true;
+        }
+    }
+    filter_edges(edge_to_keep);
+    assert((m_edges.array() >= 0).all());
+
+    m_connectivity.reset();
+}
+
+void WireNetwork::filter_edges(const std::vector<bool>& to_keep) {
+    MatrixIr edges;
+    filter(m_edges, to_keep, edges);
+    m_edges = edges;
+    const auto& attr_names = m_attributes.get_attribute_names();
+    for (const auto& name : attr_names) {
+        if (!is_vertex_attribute(name)) {
+            const MatrixFr& val = m_attributes.get_attribute(name);
+            MatrixFr filtered_val;
+            filter(val, to_keep, filtered_val);
+            m_attributes.set_attribute(*this, name, filtered_val);
+        }
+    }
+    m_connectivity.reset();
 }
 
 void WireNetwork::initialize() {

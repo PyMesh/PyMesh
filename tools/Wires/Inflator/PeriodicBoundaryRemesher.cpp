@@ -23,9 +23,11 @@ namespace PeriodicBoundaryRemesherHelper {
 
     void triangulate(MatrixFr vertices, MatrixIr edges,
             MatrixFr& output_vertices, MatrixIr& output_faces, Float max_area) {
+        assert(edges.rows() >= 3);
         MeshCleaner cleaner;
         cleaner.remove_isolated_vertices(vertices, edges);
         cleaner.remove_duplicated_vertices(vertices, edges, 1e-12);
+        assert(vertices.rows() >= 3);
 
         TriangleWrapper triangle(vertices, edges);
         triangle.run(max_area, false, true, true);

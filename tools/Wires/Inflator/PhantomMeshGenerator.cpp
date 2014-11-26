@@ -2,8 +2,10 @@
 
 #include <cassert>
 #include <list>
+#include <iostream>
 
 #include <MeshFactory.h>
+#include <IO/MeshWriter.h>
 
 #include <Wires/Parameters/ParameterCommon.h>
 #include <Wires/Parameters/ThicknessParameters.h>
@@ -44,6 +46,18 @@ namespace PhantomMeshGeneratorHelper {
         std::copy(indices.begin(), indices.end(), result.data());
         return result;
     }
+
+    void dilate(const MatrixIr& edges, std::vector<bool>& indicator) {
+        const size_t num_edges = edges.rows();
+        std::vector<bool> ref = indicator;
+        for (size_t i=0; i<num_edges; i++) {
+            const VectorI& e = edges.row(i);
+            if (ref[e[0]] || ref[e[1]]) {
+                indicator[e[0]] = true;
+                indicator[e[1]] = true;
+            }
+        }
+    }
 }
 using namespace PhantomMeshGeneratorHelper;
 
@@ -52,6 +66,7 @@ void PhantomMeshGenerator::generate() {
     initialize_wire_network();
     convert_parameters_to_attributes();
     tile();
+    trim_irrelavent_edges();
     convert_attributes_to_parameters();
     inflate();
 }
@@ -127,7 +142,7 @@ void PhantomMeshGenerator::tile() {
     ParameterCommon::Variables vars;
     MatrixFr offset = m_parameter_manager->evaluate_offset(vars);
     MatrixFr ori_vertices = m_wire_network->get_vertices();
-    m_wire_network->set_vertices(ori_vertices + offset);
+    m_wire_network->set_vertices(ori_vertices+ offset);
 
     WireTiler tiler(m_wire_network);
     tiler.with_parameters(m_parameter_manager);
@@ -139,6 +154,33 @@ void PhantomMeshGenerator::tile() {
     assert(m_phantom_wires->has_attribute("vertex_offset"));
 
     m_wire_network->set_vertices(ori_vertices);
+}
+
+void PhantomMeshGenerator::trim_irrelavent_edges() {
+    // Relavent edge is edge that have at least 1 end point from the original
+    // wire network.
+    const Float eps = 1e-3;
+    const size_t dim = m_wire_network->get_dim();
+    const VectorF bbox_min = m_wire_network->get_bbox_min() - VectorF::Ones(dim)*eps;
+    const VectorF bbox_max = m_wire_network->get_bbox_max() + VectorF::Ones(dim)*eps;
+
+    const size_t num_phantom_vertices = m_phantom_wires->get_num_vertices();
+    const size_t num_phantom_edges = m_phantom_wires->get_num_edges();
+    const MatrixFr& phantom_vertices = m_phantom_wires->get_vertices();
+    const MatrixIr& phantom_edges = m_phantom_wires->get_edges();
+
+    std::vector<bool> vertex_relavent_indicator(num_phantom_vertices, false);
+    for (size_t i=0; i<num_phantom_vertices; i++) {
+        const VectorF& v = phantom_vertices.row(i);
+        if ((v.array() > bbox_min.array()).all() &&
+                (v.array() < bbox_max.array()).all()) {
+            vertex_relavent_indicator[i] = true;
+        }
+    }
+
+    dilate(phantom_edges, vertex_relavent_indicator);
+    dilate(phantom_edges, vertex_relavent_indicator);
+    m_phantom_wires->filter_vertices(vertex_relavent_indicator);
 }
 
 void PhantomMeshGenerator::convert_attributes_to_parameters() {
@@ -203,7 +245,8 @@ void PhantomMeshGenerator::inflate() {
 void PhantomMeshGenerator::update_face_sources(
         const VectorI& face_sources) {
     const size_t num_faces = face_sources.size();
-    m_face_sources.resize(num_faces);
+    m_face_sources_from_ori_wires.resize(num_faces);
+    m_face_sources_from_phantom_wires = face_sources;
 
     const MatrixFr& vertex_periodic_index =
         m_phantom_wires->get_attribute("vertex_periodic_index");
@@ -215,11 +258,11 @@ void PhantomMeshGenerator::update_face_sources(
         if (source < 0) {
             // Edge index
             source = -source - 1;
-            m_face_sources[i] = -edge_periodic_index(source, 0) - 1;
+            m_face_sources_from_ori_wires[i] = -edge_periodic_index(source, 0) - 1;
         } else if (source > 0) {
             // Vertex index
             source  = source - 1;
-            m_face_sources[i] = vertex_periodic_index(source, 0) + 1;
+            m_face_sources_from_ori_wires[i] = vertex_periodic_index(source, 0) + 1;
         }
     }
 }
@@ -241,6 +284,35 @@ void PhantomMeshGenerator::compute_phantom_shape_velocity() {
             dim, vertex_per_face, vertex_per_voxel);
     Mesh::Ptr mesh = factory.create_shared();
 
+    VectorF face_sources = m_face_sources_from_phantom_wires.cast<Float>();
+    mesh->add_attribute("face_source");
+    mesh->set_attribute("face_source", face_sources);
+
+    VectorF debug_face_sources = m_face_sources_from_ori_wires.cast<Float>();
+    //save_mesh("phantom_debug.msh", m_vertices, m_faces, debug_face_sources);
+
     m_shape_velocities = m_phantom_param_manager->compute_shape_velocity(mesh);
+    assert(m_shape_velocities.size() == m_phantom_param_manager->get_num_dofs());
+}
+
+void PhantomMeshGenerator::save_mesh(const std::string& filename,
+        const MatrixFr& vertices, const MatrixIr& faces, VectorF debug) {
+    VectorF flattened_vertices(vertices.rows() * vertices.cols());
+    std::copy(vertices.data(), vertices.data() + vertices.rows() *
+            vertices.cols(), flattened_vertices.data());
+    VectorI flattened_faces(faces.rows() * faces.cols());
+    std::copy(faces.data(), faces.data() + faces.rows() * faces.cols(),
+            flattened_faces.data());
+    VectorI voxels = VectorI::Zero(0);
+
+    Mesh::Ptr mesh = MeshFactory().load_data(
+            flattened_vertices, flattened_faces, voxels,
+            vertices.cols(), faces.cols(), 0).create_shared();
+    mesh->add_attribute("debug");
+    mesh->set_attribute("debug", debug);
+
+    MeshWriter* writer = MeshWriter::create_writer(filename);
+    writer->with_attribute("debug").write_mesh(*mesh);
+    delete writer;
 }
 

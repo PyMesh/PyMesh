@@ -19,10 +19,14 @@ class PeriodicInflator : public InflatorEngine {
 
     public:
         virtual void inflate();
+        virtual const std::vector<MatrixFr>& get_shape_velocities() const {
+            return m_shape_velocities;
+        }
         void set_parameter(ParameterManager::Ptr manager);
 
     protected:
         void generate_phantom_mesh();
+        void initialize_AABB_tree();
         virtual void clip_to_center_cell()=0;
         void refine_phantom_mesh();
         void get_center_cell_bbox(VectorF& bbox_min, VectorF& bbox_max);

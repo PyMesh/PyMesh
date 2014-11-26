@@ -66,6 +66,7 @@ void VertexThicknessParameterDerivative::compute_derivative_on_edge(
         size_t wire_edge_index, size_t face_index,
         const BoolVector& in_roi, MatrixFr& derivative_v,
         VectorF& weights) {
+    const Float eps = 1e-3;
     WireNetwork::Ptr wire_network = m_parameter->get_wire_network();
 
     const MatrixFr& wire_vertices = wire_network->get_vertices();
@@ -85,9 +86,9 @@ void VertexThicknessParameterDerivative::compute_derivative_on_edge(
     Float loc_1 = compute_projection_ratio(c1, v0, v1);
     Float loc_2 = compute_projection_ratio(c2, v0, v1);
 
-    assert(loc_0 >= 0.0 && loc_0 <= 1.0);
-    assert(loc_1 >= 0.0 && loc_1 <= 1.0);
-    assert(loc_2 >= 0.0 && loc_2 <= 1.0);
+    assert(loc_0 >= -eps && loc_0 <= 1.0 + eps);
+    assert(loc_1 >= -eps && loc_1 <= 1.0 + eps);
+    assert(loc_2 >= -eps && loc_2 <= 1.0 + eps);
 
     Float w0 = m_face_voronoi_areas(face_index, 0);
     Float w1 = m_face_voronoi_areas(face_index, 1);

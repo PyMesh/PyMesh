@@ -39,21 +39,8 @@ void PeriodicExploration::with_refinement(
 }
 
 void PeriodicExploration::periodic_inflate() {
-    ParameterCommon::Variables vars;
-    VectorF thickness = m_parameters->evaluate_thickness(vars);
-    MatrixFr offset = m_parameters->evaluate_offset(vars);
-
-    MatrixFr ori_vertices = m_wire_network->get_vertices();
-    m_wire_network->set_vertices(ori_vertices + offset);
-
-    InflatorEngine::Ptr inflator = InflatorEngine::create("periodic", m_wire_network);
-
-    if (m_parameters->get_thickness_type() == ParameterCommon::VERTEX) {
-        inflator->set_thickness_type(InflatorEngine::PER_VERTEX);
-    } else {
-        inflator->set_thickness_type(InflatorEngine::PER_EDGE);
-    }
-    inflator->set_thickness(thickness);
+    InflatorEngine::Ptr inflator =
+        InflatorEngine::create_parametric(m_wire_network, m_parameters);
     if (m_refine_order > 0)
         inflator->with_refinement(m_refine_algorithm, m_refine_order);
     inflator->inflate();
@@ -61,12 +48,8 @@ void PeriodicExploration::periodic_inflate() {
     m_vertices = inflator->get_vertices();
     m_faces = inflator->get_faces();
     m_face_sources = inflator->get_face_sources();
-
+    m_shape_velocities = inflator->get_shape_velocities();
     update_mesh();
-    compute_shape_velocity();
-    update_mesh();
-
-    m_wire_network->set_vertices(ori_vertices);
 }
 
 bool PeriodicExploration::run_tetgen() {
@@ -97,7 +80,8 @@ bool PeriodicExploration::run_tetgen() {
 }
 
 void PeriodicExploration::compute_shape_velocity() {
-    m_shape_velocity = m_parameters->compute_shape_velocity(m_mesh);
+    // TODO: to remove.
+    m_shape_velocities = m_parameters->compute_shape_velocity(m_mesh);
 }
 
 void PeriodicExploration::update_mesh() {

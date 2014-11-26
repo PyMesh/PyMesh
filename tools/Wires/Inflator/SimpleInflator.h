@@ -13,6 +13,7 @@ class SimpleInflator : public InflatorEngine {
 
     public:
         virtual void inflate();
+        virtual const std::vector<MatrixFr>& get_shape_velocities() const;
 
     protected:
         void initialize();

@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <MeshUtils/Subdivision.h>
 #include <Wires/WireNetwork/WireNetwork.h>
@@ -28,6 +29,7 @@ class InflatorEngine {
 
     public:
         virtual void inflate()=0;
+        virtual const std::vector<MatrixFr>& get_shape_velocities() const=0;
 
     public:
         void with_refinement(const std::string& algorithm, size_t order);

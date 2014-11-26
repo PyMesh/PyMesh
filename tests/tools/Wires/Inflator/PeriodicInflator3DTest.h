@@ -79,25 +79,15 @@ class PeriodicInflator3DTest : public WireTest {
             ParameterManager::Ptr manager =
                 ParameterManager::create_from_setting_file(
                         network, base_thickness, orbit_file, modifier_file);
+            ASSERT_LT(0, manager->get_num_dofs());
 
-            ParameterCommon::Variables vars;
-            VectorF thickness = manager->evaluate_thickness(vars);
-            MatrixFr offset = manager->evaluate_offset(vars);
-            network->set_vertices(network->get_vertices() + offset);
-
-            PeriodicInflator3D inflator(network);
-            if (manager->get_thickness_type() == ParameterCommon::VERTEX) {
-                inflator.set_thickness_type(InflatorEngine::PER_VERTEX);
-            } else {
-                inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-            }
-            inflator.set_thickness(thickness);
-            inflator.with_refinement("loop", 1);
-            inflator.inflate();
-
-            m_vertices = inflator.get_vertices();
-            m_faces = inflator.get_faces();
-            m_face_sources = inflator.get_face_sources();
+            InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(
+                    network, manager);
+            inflator->with_refinement("loop", 1);
+            inflator->inflate();
+            m_vertices = inflator->get_vertices();
+            m_faces = inflator->get_faces();
+            m_face_sources = inflator->get_face_sources();
 
             ASSERT_LT(0, m_vertices.rows());
             ASSERT_LT(0, m_faces.rows());

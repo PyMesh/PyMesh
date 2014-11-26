@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include <memory>
 
 #include <Core/EigenTypedef.h>
@@ -43,6 +44,9 @@ class WireNetwork {
         VectorF center() const;
         VectorF get_bbox_min() const { return m_vertices.colwise().minCoeff(); }
         VectorF get_bbox_max() const { return m_vertices.colwise().maxCoeff(); }
+
+        void filter_vertices(const std::vector<bool>& to_keep);
+        void filter_edges(const std::vector<bool>& to_keep);
 
 
     public:

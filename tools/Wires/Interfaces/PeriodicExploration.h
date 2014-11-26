@@ -50,7 +50,7 @@ class PeriodicExploration {
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
         MatrixIr get_voxels() const { return m_voxels; }
-        std::vector<MatrixFr> get_shape_velocity() const { return m_shape_velocity; }
+        std::vector<MatrixFr> get_shape_velocities() const { return m_shape_velocities; }
 
     private:
         void compute_shape_velocity();
@@ -66,7 +66,7 @@ class PeriodicExploration {
         MatrixIr m_voxels;
         VectorI  m_face_sources;
         Mesh::Ptr m_mesh;
-        std::vector<MatrixFr> m_shape_velocity;
+        std::vector<MatrixFr> m_shape_velocities;
 
         std::string m_refine_algorithm;
         size_t m_refine_order;
