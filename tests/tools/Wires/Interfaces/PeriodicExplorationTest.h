@@ -20,7 +20,7 @@ TEST_F(PeriodicExplorationTest, brick5) {
             m_data_dir + "brick5.modifier");
     explorer.with_refinement("loop", 2);
 
-    std::cout << "This might take a fiew minutes ";
+    std::cout << "This might take a few minutes ";
     std::cout.flush();
     VectorF dofs = explorer.get_dofs();
     const size_t num_dofs = explorer.get_num_dofs();
@@ -73,7 +73,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
     explorer.with_all_parameters();
     explorer.with_refinement("loop", 2);
 
-    std::cout << "This might take a fiew minutes ";
+    std::cout << "This might take a few minutes ";
     std::cout.flush();
     VectorF dofs = explorer.get_dofs();
     const size_t num_dofs = explorer.get_num_dofs();
