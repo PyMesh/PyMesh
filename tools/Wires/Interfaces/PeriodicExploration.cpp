@@ -41,6 +41,7 @@ void PeriodicExploration::with_refinement(
 void PeriodicExploration::periodic_inflate() {
     InflatorEngine::Ptr inflator =
         InflatorEngine::create_parametric(m_wire_network, m_parameters);
+    inflator->with_shape_velocities();
     if (m_refine_order > 0)
         inflator->with_refinement(m_refine_algorithm, m_refine_order);
     inflator->inflate();

@@ -71,6 +71,17 @@ void PhantomMeshGenerator::generate() {
     inflate();
 }
 
+std::vector<MatrixFr> PhantomMeshGenerator::get_shape_velocities() const {
+    if (m_with_shape_velocities) {
+        return m_shape_velocities;
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Shape velocity support is turned off.  "
+            << "Please call with_shape_velocity() method to turn it on.";
+        throw RuntimeError(err_msg.str());
+    }
+}
+
 void PhantomMeshGenerator::initialize_wire_network() {
     m_wire_network->center_at_origin();
 }
@@ -241,7 +252,7 @@ void PhantomMeshGenerator::inflate() {
     m_vertices = inflator.get_vertices();
     m_faces = inflator.get_faces();
     update_face_sources(inflator.get_face_sources());
-    compute_phantom_shape_velocity();
+    compute_phantom_shape_velocities();
 }
 
 void PhantomMeshGenerator::update_face_sources(
@@ -269,7 +280,8 @@ void PhantomMeshGenerator::update_face_sources(
     }
 }
 
-void PhantomMeshGenerator::compute_phantom_shape_velocity() {
+void PhantomMeshGenerator::compute_phantom_shape_velocities() {
+    if (!m_with_shape_velocities) return;
     const size_t dim = m_vertices.cols();
     const size_t vertex_per_face = m_faces.cols();
     const size_t vertex_per_voxel = 0;

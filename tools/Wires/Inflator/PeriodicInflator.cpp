@@ -57,11 +57,14 @@ void PeriodicInflator::set_thickness(const VectorF& thickness) {
 void PeriodicInflator::generate_phantom_mesh() {
     PhantomMeshGenerator generator(
             m_wire_network, m_parameter_manager, m_profile);
+    if (m_with_shape_velocities)
+        generator.with_shape_velocities();
     generator.generate();
     m_phantom_vertices = generator.get_vertices();
     m_phantom_faces = generator.get_faces();
     m_phantom_face_sources = generator.get_face_sources();
-    m_shape_velocities = generator.get_shape_velocities();
+    if (m_with_shape_velocities)
+        m_shape_velocities = generator.get_shape_velocities();
 }
 
 void PeriodicInflator::initialize_AABB_tree() {
@@ -95,11 +98,13 @@ void PeriodicInflator::refine_phantom_mesh() {
     }
     m_phantom_face_sources = face_sources;
 
-    const std::vector<ZSparseMatrix>& subdiv_matrices =
-        m_refiner->get_subdivision_matrices();
-    for (auto& shape_velocity : m_shape_velocities) {
-        for (const auto& mat : subdiv_matrices) {
-            shape_velocity = mat * shape_velocity;
+    if (m_with_shape_velocities) {
+        const std::vector<ZSparseMatrix>& subdiv_matrices =
+            m_refiner->get_subdivision_matrices();
+        for (auto& shape_velocity : m_shape_velocities) {
+            for (const auto& mat : subdiv_matrices) {
+                shape_velocity = mat * shape_velocity;
+            }
         }
     }
 
@@ -115,6 +120,8 @@ void PeriodicInflator::get_center_cell_bbox(
 }
 
 void PeriodicInflator::update_shape_velocities() {
+    if (!m_with_shape_velocities) return;
+
     const size_t num_vertices = m_vertices.rows();
     const size_t num_phantom_vertices = m_phantom_vertices.rows();
     VectorF squared_dists;

@@ -28,6 +28,7 @@ class InflatorEngine {
         virtual ~InflatorEngine() {}
 
     public:
+        virtual void with_shape_velocities();
         virtual void inflate()=0;
         virtual const std::vector<MatrixFr>& get_shape_velocities() const=0;
         virtual void set_uniform_thickness(Float thickness);

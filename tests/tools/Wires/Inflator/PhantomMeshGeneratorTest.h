@@ -20,6 +20,7 @@ TEST_F(PhantomMeshGeneratorTest, creation) {
     ParameterManager::Ptr manager = ParameterManager::create(network);
 
     PhantomMeshGenerator generator(network, manager, profile);
+    generator.with_shape_velocities();
     generator.generate();
 
     Mesh::Ptr mesh = form_mesh(

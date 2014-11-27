@@ -14,6 +14,7 @@ class EdgeThicknessParameterDerivativeTest : public WireTest {
     protected:
         void inflate(WireNetwork::Ptr wire_network, ParameterManager::Ptr manager) {
             InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(wire_network, manager);
+            inflator->with_shape_velocities();
             inflator->inflate();
 
             MatrixFr vertices = inflator->get_vertices();

@@ -14,18 +14,18 @@ class PhantomMeshGenerator {
                 WireProfile::Ptr profile) :
             m_wire_network(wire_network),
             m_parameter_manager(manager),
-            m_profile(profile) {}
+            m_profile(profile),
+            m_with_shape_velocities(false) {}
 
     public:
+        void with_shape_velocities() { m_with_shape_velocities = true; }
         void generate();
 
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
         VectorI get_face_sources() const { return m_face_sources_from_ori_wires; }
 
-        std::vector<MatrixFr> get_shape_velocities() const {
-            return m_shape_velocities;
-        }
+        std::vector<MatrixFr> get_shape_velocities() const;
 
     private:
         void initialize_wire_network();
@@ -35,7 +35,7 @@ class PhantomMeshGenerator {
         void convert_attributes_to_parameters();
         void inflate();
         void update_face_sources(const VectorI& face_sources);
-        void compute_phantom_shape_velocity();
+        void compute_phantom_shape_velocities();
 
         void save_mesh(
                 const std::string& filename,
@@ -56,6 +56,8 @@ class PhantomMeshGenerator {
         MatrixIr m_faces;
         VectorI  m_face_sources_from_ori_wires;
         VectorI  m_face_sources_from_phantom_wires;
+
+        bool m_with_shape_velocities;
         std::vector<MatrixFr> m_shape_velocities;
 
         std::vector<std::string> m_thickness_roi_attr_names;

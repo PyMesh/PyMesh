@@ -73,6 +73,11 @@ InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
         }
     }
 
+void InflatorEngine::with_shape_velocities() {
+    throw NotImplementedError(
+            "Shape velocity computation is not supported for this type of inflator");
+}
+
 void InflatorEngine::set_uniform_thickness(Float thickness) {
     if (m_thickness_type == PER_VERTEX) {
         set_thickness(VectorF::Ones(m_wire_network->get_num_vertices()));
