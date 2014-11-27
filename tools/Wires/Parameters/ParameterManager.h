@@ -96,7 +96,7 @@ class ParameterManager {
         void set_offset_type(TargetType type);
         void add_offset_parameter(const VectorI& roi,
                 const std::string& formula, Float value, size_t axis);
-        void add_offset_parameter(const VectorI& roi,
+        void add_custom_offset_parameter(const VectorI& roi,
                 const std::string& formula, Float value,
                 const MatrixFr& custom_offset);
 

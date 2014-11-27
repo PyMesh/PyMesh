@@ -320,7 +320,7 @@ void ParameterManager::add_offset_parameter(
     m_offset_params.add(roi, formula, value, axis);
 }
 
-void ParameterManager::add_offset_parameter(const VectorI& roi,
+void ParameterManager::add_custom_offset_parameter(const VectorI& roi,
         const std::string& formula, Float value,
         const MatrixFr& custom_offset) {
     m_offset_params.add(roi, formula, value, custom_offset);

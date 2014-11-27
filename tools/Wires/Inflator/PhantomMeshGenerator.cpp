@@ -217,7 +217,7 @@ void PhantomMeshGenerator::convert_attributes_to_parameters() {
             m_offset_derivative_attr_names[count];
         const MatrixFr& derivative =
             m_phantom_wires->get_attribute(derivative_name);
-        m_phantom_param_manager->add_offset_parameter(
+        m_phantom_param_manager->add_custom_offset_parameter(
                 roi, "", 0.0, derivative);
         count++;
     }
