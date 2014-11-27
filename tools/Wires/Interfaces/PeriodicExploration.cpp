@@ -32,6 +32,11 @@ void PeriodicExploration::with_parameters(
             m_wire_network, m_default_thickness, orbit_file, modifier_file);
 }
 
+void PeriodicExploration::with_all_parameters() {
+    m_parameters = ParameterManager::create(
+            m_wire_network, m_default_thickness);
+}
+
 void PeriodicExploration::with_refinement(
         const std::string& algorithm, size_t order) {
     m_refine_algorithm = algorithm;

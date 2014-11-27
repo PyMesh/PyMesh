@@ -167,6 +167,7 @@ void PeriodicBoundaryRemesher::match_bd_loops() {
 }
 
 void PeriodicBoundaryRemesher::match_bd_loops(short axis) {
+    const Float tol = 1e-12;
     const size_t dim = m_vertices.cols();
     const size_t coord_1 = (axis+1) % dim;
     const size_t coord_2 = (axis+2) % dim;
@@ -176,7 +177,7 @@ void PeriodicBoundaryRemesher::match_bd_loops(short axis) {
     MatrixIr& min_bd_loops = m_bd_loops[min_axis_marker[axis]];
     MatrixIr& max_bd_loops = m_bd_loops[max_axis_marker[axis]];
 
-    HashGrid::Ptr grid = HashGrid::create(1e-3, dim);
+    HashGrid::Ptr grid = HashGrid::create(5e-3, dim);
 
     const size_t num_min_edges = min_bd_loops.rows();
     for (size_t i=0; i<num_min_edges; i++) {
@@ -193,15 +194,43 @@ void PeriodicBoundaryRemesher::match_bd_loops(short axis) {
     for (size_t i=0; i<num_max_edges; i++) {
         for (size_t j=0; j<2; j++) {
             size_t max_v_idx = max_bd_loops(i,j);
+            if (vertex_map[max_v_idx] >= 0) continue;
+
             const VectorF& max_v = m_vertices.row(max_v_idx);
             VectorF min_v = max_v + offset;
             VectorI candidates = grid->get_items_near_point(min_v);
             if (candidates.size() > 0) {
-                const size_t matched_idx = candidates[0];
-                vertex_map[max_v_idx] = matched_idx;
-                vertex_map[matched_idx] = max_v_idx;
-                m_vertices(max_v_idx, coord_1) = m_vertices(matched_idx, coord_1);
-                m_vertices(max_v_idx, coord_2) = m_vertices(matched_idx, coord_2);
+                const size_t num_candidates = candidates.size();
+                size_t best_match = candidates[0];
+                Float best_match_err = (min_v.transpose() -
+                        m_vertices.row(best_match)).squaredNorm();
+                for (size_t k=1; k<num_candidates; k++) {
+                    size_t idx = candidates[k];
+                    Float match_err = (min_v.transpose() -
+                            m_vertices.row(idx)).squaredNorm();
+                    if (match_err < best_match_err) {
+                        best_match = idx;
+                        best_match_err = match_err;
+                    }
+                }
+
+                vertex_map[max_v_idx] = best_match;
+                vertex_map[best_match] = max_v_idx;
+
+                const VectorF& matched_v = m_vertices.row(best_match);
+                if (fabs(max_v[coord_1] - m_bbox_min[coord_1]) < tol ||
+                    fabs(max_v[coord_1] - m_bbox_max[coord_1]) < tol) {
+                    m_vertices(best_match, coord_1) = max_v[coord_1];
+                } else {
+                    m_vertices(max_v_idx, coord_1) = matched_v[coord_1];
+                }
+
+                if (fabs(max_v[coord_2] - m_bbox_min[coord_2]) < tol ||
+                    fabs(max_v[coord_2] - m_bbox_max[coord_2]) < tol) {
+                    m_vertices(best_match, coord_2) = max_v[coord_2];
+                } else {
+                    m_vertices(max_v_idx, coord_2) = matched_v[coord_2];
+                }
             }
         }
     }
