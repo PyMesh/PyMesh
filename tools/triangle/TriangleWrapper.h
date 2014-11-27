@@ -5,7 +5,7 @@
 class TriangleWrapper {
     public:
         TriangleWrapper(const MatrixFr& points, const MatrixIr& segments) : 
-            m_points(points), m_segments(segments) {}
+            m_points(points), m_segments(segments), m_max_area(0.0) {}
 
     public:
         /**
@@ -48,6 +48,7 @@ class TriangleWrapper {
         MatrixFr m_points;
         MatrixFr m_holes;
         MatrixIr m_segments;
+        Float    m_max_area;
 
         // Output data
         MatrixFr m_vertices;

@@ -119,6 +119,7 @@ using namespace TriangleWrapperHelper;
 
 void TriangleWrapper::run(Float max_area, bool split_boundary,
         bool auto_hole_detection, bool use_steiner_points) {
+    m_max_area = max_area;
     const size_t dim = m_points.cols();
     const size_t vertex_per_segment = m_segments.cols();
     bool do_refine = (vertex_per_segment == 3);
@@ -339,6 +340,7 @@ void TriangleWrapper::refine(
 }
 
 void TriangleWrapper::poke_holes() {
+    const Float degeneracy_tol = std::min(m_max_area * 0.01, 1e-6);
     const size_t num_faces = m_faces.rows();
     const size_t num_edges = m_edge_marks.size();
     assert(m_edges.size() == num_edges * 2);
@@ -355,7 +357,7 @@ void TriangleWrapper::poke_holes() {
 
     std::list<size_t> interior_faces;
     for (auto& region : regions) {
-        bool seed_found;
+        bool seed_found = false;
         VectorF seed_p;
         for (auto face_idx : region) {
             const VectorI& f = m_faces.row(face_idx);
@@ -365,7 +367,7 @@ void TriangleWrapper::poke_holes() {
             VectorF u = v1 - v0;
             VectorF v = v2 - v0;
             Float area = u[0]*v[1] - u[1]*v[0];
-            if (area > 1e-6) {
+            if (area > degeneracy_tol) {
                 seed_found = true;
                 seed_p = (v0+v1+v2)/3.0;
                 break;
@@ -373,13 +375,8 @@ void TriangleWrapper::poke_holes() {
         }
 
         if (!seed_found) {
-            std::cerr << "Warning: All generated triangles are degenerated!" << std::endl;
-            std::cerr << "Using the first triangle as seed!" << std::endl;
-            const VectorI& f = m_faces.row(region.front());
-            const VectorF& v0 = m_vertices.row(f[0]);
-            const VectorF& v1 = m_vertices.row(f[1]);
-            const VectorF& v2 = m_vertices.row(f[2]);
-            seed_p = (v0+v1+v2)/3.0;
+            // All faces are degenerated in this region.
+            continue;
         }
 
         Float wind_num = compute_winding_number(seed_p, m_points, m_segments);
