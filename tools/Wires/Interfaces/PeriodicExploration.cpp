@@ -1,5 +1,6 @@
 #include "PeriodicExploration.h"
 
+#include <cmath>
 #include <iostream>
 #include <Core/Exception.h>
 #include <MeshFactory.h>
@@ -53,6 +54,7 @@ void PeriodicExploration::periodic_inflate() {
 
     m_vertices = inflator->get_vertices();
     m_faces = inflator->get_faces();
+    m_voxels = MatrixIr::Zero(0, 4);
     m_face_sources = inflator->get_face_sources();
     m_shape_velocities = inflator->get_shape_velocities();
     update_mesh();
@@ -63,7 +65,8 @@ bool PeriodicExploration::run_tetgen() {
     const size_t num_vertices = m_vertices.rows();
     TetgenWrapper tetgen(m_vertices, m_faces);
     std::stringstream flags;
-    Float max_tet_vol = 0.01 * m_default_thickness * m_default_thickness;
+    Float max_tet_vol =
+        pow(m_default_thickness * pow(0.5, m_refine_order), dim);
     flags << "pqYQa" << max_tet_vol;
     try {
         tetgen.run(flags.str());
@@ -81,6 +84,14 @@ bool PeriodicExploration::run_tetgen() {
     assert((vertices.block(0, 0, num_vertices, dim).array()==m_vertices.array()).all());
     m_vertices = vertices;
     m_voxels = tetgen.get_voxels();
+
+    const size_t num_vol_vertices = m_vertices.rows();
+    for (auto& velocity : m_shape_velocities) {
+        velocity.conservativeResize(num_vol_vertices, dim);
+        velocity.block(num_vertices, 0,
+                num_vol_vertices-num_vertices, dim).setZero();
+    }
+    update_mesh();
 
     return true;
 }

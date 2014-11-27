@@ -12,7 +12,7 @@
 class PeriodicExplorationTest : public WireTest {
 };
 
-TEST_F(PeriodicExplorationTest, brick5) {
+TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -42,6 +42,8 @@ TEST_F(PeriodicExplorationTest, brick5) {
         }
         explorer.set_dofs(modified_dofs);
         explorer.periodic_inflate();
+        bool tetgen_success = explorer.run_tetgen();
+        ASSERT_TRUE(tetgen_success);
 
         Mesh::Ptr mesh = explorer.get_mesh();
         std::vector<MatrixFr> velocities = explorer.get_shape_velocities();
@@ -71,7 +73,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
     PeriodicExploration explorer(
             m_data_dir + "diamond.wire", 5, 0.5);
     explorer.with_all_parameters();
-    explorer.with_refinement("loop", 2);
+    explorer.with_refinement("simple", 2);
 
     std::cout << "This might take a few minutes ";
     std::cout.flush();
@@ -91,6 +93,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
         }
         explorer.set_dofs(modified_dofs);
         explorer.periodic_inflate();
+        bool tetgen_success = explorer.run_tetgen();
 
         Mesh::Ptr mesh = explorer.get_mesh();
         std::vector<MatrixFr> velocities = explorer.get_shape_velocities();
