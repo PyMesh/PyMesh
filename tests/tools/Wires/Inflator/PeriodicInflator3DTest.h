@@ -22,8 +22,7 @@ class PeriodicInflator3DTest : public WireTest {
             const size_t num_edges = network->get_num_edges();
 
             PeriodicInflator3D inflator(network);
-            inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-            inflator.set_thickness(VectorF::Ones(num_edges) * thickness);
+            inflator.set_uniform_thickness(thickness);
             inflator.inflate();
 
             m_vertices = inflator.get_vertices();
@@ -35,7 +34,7 @@ class PeriodicInflator3DTest : public WireTest {
             ASSERT_EQ(m_faces.rows(), m_face_sources.size());
         }
 
-        void inflate_with_changing_thickness(
+        void inflate_with_circle_profile(
                 const std::string& wire_file, Float base_thickness=0.5,
                 size_t num_profile_samples=8) {
             const Vector3F half_size(2.5, 2.5, 2.5);
@@ -44,22 +43,16 @@ class PeriodicInflator3DTest : public WireTest {
             network->scale_fit(-half_size, half_size); // 5mm cell
             const size_t num_edges = network->get_num_edges();
 
-            VectorF thickness = VectorF::Ones(num_edges) * base_thickness;
-            for (size_t i=0; i<num_edges; i++) {
-                thickness[i] += 0.1 * i;
-            }
-
             WireProfile::Ptr profile = WireProfile::create_isotropic(num_profile_samples);
 
-            PeriodicInflator3D inflator(network);
-            inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-            inflator.set_thickness(thickness);
-            inflator.set_profile(profile);
-            inflator.inflate();
+            InflatorEngine::Ptr inflator = InflatorEngine::create("periodic", network);
+            inflator->set_uniform_thickness(base_thickness);
+            inflator->set_profile(profile);
+            inflator->inflate();
 
-            m_vertices = inflator.get_vertices();
-            m_faces = inflator.get_faces();
-            m_face_sources = inflator.get_face_sources();
+            m_vertices = inflator->get_vertices();
+            m_faces = inflator->get_faces();
+            m_face_sources = inflator->get_face_sources();
 
             ASSERT_LT(0, m_vertices.rows());
             ASSERT_LT(0, m_faces.rows());
@@ -133,13 +126,13 @@ TEST_F(PeriodicInflator3DTest, diamond) {
 }
 
 TEST_F(PeriodicInflator3DTest, cube_dense) {
-    inflate_with_changing_thickness("cube.wire", 0.5, 20);
+    inflate_with_circle_profile("cube.wire", 0.5, 20);
     save_mesh("inflated_dense_cube.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
     ASSERT_MESH_IS_VALID();
 }
 
 TEST_F(PeriodicInflator3DTest, diamond_dense) {
-    inflate_with_changing_thickness("diamond.wire", 0.5, 20);
+    inflate_with_circle_profile("diamond.wire", 0.5, 20);
     save_mesh("inflated_dense_diamond.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
     ASSERT_MESH_IS_VALID();
 }

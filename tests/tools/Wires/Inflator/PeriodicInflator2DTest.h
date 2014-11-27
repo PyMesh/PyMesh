@@ -5,7 +5,6 @@
 #include <Wires/Inflator/PeriodicInflator2D.h>
 #include <Wires/Inflator/WireProfile.h>
 #include <Wires/Inflator/InflatorEngine.h>
-#include <Wires/Parameters/ParameterCommon.h>
 #include <Wires/Parameters/ParameterManager.h>
 #include <WireTest.h>
 #include <IO/MeshWriter.h>
@@ -51,8 +50,7 @@ TEST_F(PeriodicInflator2DTest, square) {
     const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
-    inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-    inflator.set_thickness(VectorF::Ones(num_edges) * 0.2);
+    inflator.set_uniform_thickness(0.2);
     inflator.inflate();
 
     MatrixFr vertices = inflator.get_vertices();
@@ -101,8 +99,7 @@ TEST_F(PeriodicInflator2DTest, box) {
     const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
-    inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-    inflator.set_thickness(VectorF::Ones(num_edges) * 0.5);
+    inflator.set_uniform_thickness(0.5);
     inflator.with_refinement("simple", 1);
     inflator.inflate();
 
@@ -165,8 +162,7 @@ TEST_F(PeriodicInflator2DTest, star) {
     const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
-    inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-    inflator.set_thickness(VectorF::Ones(num_edges) * 0.5);
+    inflator.set_uniform_thickness(0.5);
     inflator.inflate();
 
     MatrixFr vertices = inflator.get_vertices();
@@ -189,6 +185,9 @@ TEST_F(PeriodicInflator2DTest, star) {
 
     ASSERT_EQ(2, base_vertex_indices.size());
     ASSERT_EQ(4, base_edge_indices.size());
+
+    save_mesh("inflated_star_2D.msh", vertices, faces,
+            face_sources.cast<Float>());
 }
 
 TEST_F(PeriodicInflator2DTest, box_with_parameter) {
@@ -201,24 +200,15 @@ TEST_F(PeriodicInflator2DTest, box_with_parameter) {
             network, 0.5,
             m_data_dir + "box.orbit",
             m_data_dir + "box.modifier");
-    ParameterCommon::Variables vars;
-    VectorF thickness = manager->evaluate_thickness(vars);
-    MatrixFr offset = manager->evaluate_offset(vars);
-    network->set_vertices(network->get_vertices() + offset);
 
-    PeriodicInflator2D inflator(network);
-    if (manager->get_thickness_type() == ParameterCommon::VERTEX) {
-        inflator.set_thickness_type(InflatorEngine::PER_VERTEX);
-    } else {
-        inflator.set_thickness_type(InflatorEngine::PER_EDGE);
-    }
-    inflator.set_thickness(thickness);
-    inflator.with_refinement("simple", 2);
-    inflator.inflate();
+    InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(
+            network, manager);
+    inflator->with_refinement("simple", 2);
+    inflator->inflate();
 
-    MatrixFr vertices = inflator.get_vertices();
-    MatrixIr faces = inflator.get_faces();
-    VectorI face_sources = inflator.get_face_sources();
+    MatrixFr vertices = inflator->get_vertices();
+    MatrixIr faces = inflator->get_faces();
+    VectorI face_sources = inflator->get_face_sources();
 
     ASSERT_GT(vertices.rows(), 0);
     ASSERT_EQ(2, vertices.cols());
