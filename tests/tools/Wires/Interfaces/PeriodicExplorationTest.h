@@ -12,7 +12,7 @@
 class PeriodicExplorationTest : public WireTest {
 };
 
-TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
+TEST_F(PeriodicExplorationTest, brick5) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
