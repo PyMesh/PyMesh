@@ -4,16 +4,16 @@
 
 #include <WireTest.h>
 #include <Wires/Parameters/PatternParameter.h>
+#include <Wires/Parameters/ParameterCommon.h>
+#include <Wires/Parameters/ParameterManager.h>
 #include <Wires/Parameters/EdgeThicknessParameter.h>
 #include <Wires/Parameters/EdgeThicknessParameterDerivative.h>
 #include <Wires/Inflator/InflatorEngine.h>
 
 class EdgeThicknessParameterDerivativeTest : public WireTest {
     protected:
-        void inflate(WireNetwork::Ptr wire_network, const VectorF& thickness) {
-            InflatorEngine::Ptr inflator = InflatorEngine::create("periodic", wire_network);
-            inflator->set_thickness_type(InflatorEngine::PER_EDGE);
-            inflator->set_thickness(thickness);
+        void inflate(WireNetwork::Ptr wire_network, ParameterManager::Ptr manager) {
+            InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(wire_network, manager);
             inflator->inflate();
 
             MatrixFr vertices = inflator->get_vertices();
@@ -34,19 +34,15 @@ TEST_F(EdgeThicknessParameterDerivativeTest, cube) {
     VectorI roi(4);
     roi << 0, 7, 8, 11;
 
-    PatternParameter::Ptr param =
-        std::make_shared<EdgeThicknessParameter>(wire_network);
-    param->set_roi(roi);
-    param->set_value(1.5);
+    ParameterManager::Ptr manager = ParameterManager::create_empty_manager(wire_network);
+    manager->set_thickness_type(ParameterCommon::EDGE);
+    manager->add_thickness_parameter(roi, "", 1.5);
 
-    VectorF thickness = VectorF::Ones(wire_network->get_num_edges()) * 0.5;
-    PatternParameter::Variables vars;
-    param->apply(thickness, vars);
-    inflate(wire_network, thickness);
+    inflate(wire_network, manager);
     ASSERT_EQ(3, m_mesh->get_dim());
 
-    EdgeThicknessParameterDerivative derivative(m_mesh, param);
-    VectorF flattened_derivative = flatten(derivative.compute());
+    VectorF flattened_derivative = flatten(
+            manager->compute_shape_velocity(m_mesh).front());
     m_mesh->add_attribute("derivative");
     m_mesh->set_attribute("derivative", flattened_derivative);
 

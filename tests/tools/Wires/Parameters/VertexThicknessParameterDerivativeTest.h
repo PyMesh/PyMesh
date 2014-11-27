@@ -12,10 +12,8 @@
 
 class VertexThicknessParameterDerivativeTest : public WireTest {
     protected:
-        void inflate(WireNetwork::Ptr wire_network, const VectorF& thickness) {
-            InflatorEngine::Ptr inflator = InflatorEngine::create("periodic", wire_network);
-            inflator->set_thickness_type(InflatorEngine::PER_VERTEX);
-            inflator->set_thickness(thickness);
+        void inflate(WireNetwork::Ptr wire_network, ParameterManager::Ptr manager) {
+            InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(wire_network, manager);
             inflator->inflate();
 
             MatrixFr vertices = inflator->get_vertices();
@@ -36,19 +34,15 @@ TEST_F(VertexThicknessParameterDerivativeTest, cube) {
     VectorI roi(8);
     roi << 0, 1, 2, 3, 4, 5, 6, 7;
 
-    PatternParameter::Ptr param =
-        std::make_shared<VertexThicknessParameter>(wire_network);
-    param->set_roi(roi);
-    param->set_value(1.5);
+    ParameterManager::Ptr manager = ParameterManager::create_empty_manager(wire_network);
+    manager->set_thickness_type(ParameterCommon::VERTEX);
+    manager->add_thickness_parameter(roi, "", 1.5);
 
-    VectorF thickness = VectorF::Ones(wire_network->get_num_vertices()) * 0.5;
-    PatternParameter::Variables vars;
-    param->apply(thickness, vars);
-    inflate(wire_network, thickness);
+    inflate(wire_network, manager);
     ASSERT_EQ(3, m_mesh->get_dim());
 
-    VertexThicknessParameterDerivative derivative(m_mesh, param);
-    VectorF flattened_derivative = flatten(derivative.compute());
+    VectorF flattened_derivative = flatten(
+            manager->compute_shape_velocity(m_mesh).front());
     m_mesh->add_attribute("derivative");
     m_mesh->set_attribute("derivative", flattened_derivative);
 
@@ -63,50 +57,19 @@ TEST_F(VertexThicknessParameterDerivativeTest, brick5) {
     VectorI roi(8);
     roi << 0, 1, 2, 3, 4, 5, 6, 7;
 
-    PatternParameter::Ptr param =
-        std::make_shared<VertexThicknessParameter>(wire_network);
-    param->set_roi(roi);
-    param->set_value(1.5);
+    ParameterManager::Ptr manager = ParameterManager::create_empty_manager(wire_network);
+    manager->set_thickness_type(ParameterCommon::VERTEX);
+    manager->add_thickness_parameter(roi, "", 1.5);
 
-    VectorF thickness = VectorF::Ones(wire_network->get_num_vertices()) * 0.5;
-    PatternParameter::Variables vars;
-    param->apply(thickness, vars);
-    inflate(wire_network, thickness);
+    inflate(wire_network, manager);
     ASSERT_EQ(3, m_mesh->get_dim());
 
-    VertexThicknessParameterDerivative derivative(m_mesh, param);
-    VectorF flattened_derivative = flatten(derivative.compute());
+    VectorF flattened_derivative = flatten(
+            manager->compute_shape_velocity(m_mesh).front());
     m_mesh->add_attribute("derivative");
     m_mesh->set_attribute("derivative", flattened_derivative);
 
     save_mesh("vertex_thickness_derivative_brick5.msh", m_mesh, "derivative");
-
-    ASSERT_NE(0.0, flattened_derivative.norm());
-}
-
-TEST_F(VertexThicknessParameterDerivativeTest, DISABLED_2D) {
-    WireNetwork::Ptr wire_network = load_wire_shared("box.wire");
-    wire_network->scale(Vector2F::Ones() * 5);
-    VectorI roi(4);
-    roi << 0, 1, 2, 3;
-
-    PatternParameter::Ptr param =
-        std::make_shared<VertexThicknessParameter>(wire_network);
-    param->set_roi(roi);
-    param->set_value(1.5);
-
-    VectorF thickness = VectorF::Ones(wire_network->get_num_vertices()) * 0.5;
-    PatternParameter::Variables vars;
-    param->apply(thickness, vars);
-    inflate(wire_network, thickness);
-    ASSERT_EQ(2, m_mesh->get_dim());
-
-    VertexThicknessParameterDerivative derivative(m_mesh, param);
-    VectorF flattened_derivative = flatten(derivative.compute());
-    m_mesh->add_attribute("derivative");
-    m_mesh->set_attribute("derivative", flattened_derivative);
-
-    save_mesh("thickness_derivative_2D.msh", m_mesh, "derivative");
 
     ASSERT_NE(0.0, flattened_derivative.norm());
 }

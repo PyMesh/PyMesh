@@ -92,7 +92,9 @@ void PhantomMeshGenerator::convert_parameters_to_attributes() {
     VectorF empty_vertex_roi_indicator = VectorF::Zero(num_wire_vertices);
     VectorF empty_edge_roi_indicator = VectorF::Zero(num_wire_edges);
     VectorF empty_roi_indicator;
-    if (thickness_params.get_type() == ParameterCommon::VERTEX) {
+    bool per_vertex_thickness =
+        (thickness_params.get_type() == ParameterCommon::VERTEX);
+    if (per_vertex_thickness) {
         empty_roi_indicator = empty_vertex_roi_indicator;
     } else {
         empty_roi_indicator = empty_edge_roi_indicator;
@@ -104,7 +106,7 @@ void PhantomMeshGenerator::convert_parameters_to_attributes() {
         VectorF roi_indicator = empty_roi_indicator;
         batch_assign(roi_indicator, roi, 1.0);
         std::string attr_name = get_indexed_name("thickness_roi", count);
-        m_wire_network->add_attribute(attr_name);
+        m_wire_network->add_attribute(attr_name, per_vertex_thickness);
         m_wire_network->set_attribute(attr_name, roi_indicator);
         m_thickness_roi_attr_names.push_back(attr_name);
         count++;

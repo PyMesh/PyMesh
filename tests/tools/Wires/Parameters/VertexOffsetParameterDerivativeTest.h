@@ -10,10 +10,8 @@
 
 class VertexOffsetParameterDerivativeTest : public WireTest {
     protected:
-        void inflate(WireNetwork::Ptr wire_network, const VectorF& thickness) {
-            InflatorEngine::Ptr inflator = InflatorEngine::create("periodic", wire_network);
-            inflator->set_thickness_type(InflatorEngine::PER_VERTEX);
-            inflator->set_thickness(thickness);
+        void inflate(WireNetwork::Ptr wire_network, ParameterManager::Ptr manager) {
+            InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(wire_network, manager);
             inflator->inflate();
 
             MatrixFr vertices = inflator->get_vertices();
@@ -36,30 +34,20 @@ TEST_F(VertexOffsetParameterDerivativeTest, brick5) {
     VectorI roi(8);
     roi << 0, 1, 2, 3, 4, 5, 6, 7;
 
-    PatternParameter::Ptr param =
-        std::make_shared<VertexOffsetParameter>(wire_network, 0);
-    param->set_roi(roi);
-    param->set_value(0.1);
+    ParameterManager::Ptr manager = ParameterManager::create_empty_manager(wire_network);
+    manager->set_offset_type(ParameterCommon::VERTEX);
+    manager->add_offset_parameter(roi, "", 0.1, 0);
 
-    VectorF thickness = VectorF::Ones(num_wire_vertices) * 0.5;
-    VectorF flattened_offset = VectorF::Zero(num_wire_vertices * dim);
-    PatternParameter::Variables vars;
-    param->apply(flattened_offset, vars);
-    MatrixFr offset = Eigen::Map<MatrixFr>(
-            flattened_offset.data(), num_wire_vertices, dim);
+    inflate(wire_network, manager);
+    ASSERT_EQ(3, m_mesh->get_dim());
 
-    wire_network->set_vertices(wire_network->get_vertices() + offset);
-    inflate(wire_network, thickness);
-    wire_network->set_vertices(wire_network->get_vertices() - offset);
-    ASSERT_EQ(dim, m_mesh->get_dim());
-
-    VertexOffsetParameterDerivative derivative(m_mesh, param);
-    VectorF flattened_derivative = flatten(derivative.compute());
+    VectorF flattened_derivative = flatten(
+            manager->compute_shape_velocity(m_mesh).front());
     m_mesh->add_attribute("derivative");
     m_mesh->set_attribute("derivative", flattened_derivative);
 
     save_mesh("vertex_offset_derivative_brick5.msh", m_mesh, "derivative");
-
     ASSERT_NE(0.0, flattened_derivative.norm());
+
 }
 

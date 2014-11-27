@@ -190,7 +190,7 @@ TEST_F(PeriodicInflator2DTest, star) {
             face_sources.cast<Float>());
 }
 
-TEST_F(PeriodicInflator2DTest, box_with_parameter) {
+TEST_F(PeriodicInflator2DTest, DISABLED_box_with_parameter) {
     WireNetwork::Ptr network = load_wire_shared("box.wire");
     network->center_at_origin();
     network->compute_connectivity();
