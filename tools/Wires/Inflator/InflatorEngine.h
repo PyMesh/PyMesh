@@ -30,6 +30,9 @@ class InflatorEngine {
     public:
         virtual void inflate()=0;
         virtual const std::vector<MatrixFr>& get_shape_velocities() const=0;
+        virtual void set_uniform_thickness(Float thickness);
+        virtual void set_thickness(const VectorF& thickness);
+        virtual void set_thickness_type(ThicknessType type) { m_thickness_type = type; }
 
     public:
         void with_refinement(const std::string& algorithm, size_t order);
@@ -39,8 +42,6 @@ class InflatorEngine {
         VectorI  get_face_sources() const { return m_face_sources; }
         ThicknessType get_thickness_type() const { return m_thickness_type; }
 
-        void set_thickness(const VectorF& thickness);
-        void set_thickness_type(ThicknessType type) { m_thickness_type = type; }
         void set_profile(WireProfilePtr profile) { m_profile = profile; }
 
     protected:

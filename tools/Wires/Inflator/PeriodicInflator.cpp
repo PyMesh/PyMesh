@@ -45,6 +45,15 @@ void PeriodicInflator::inflate() {
     update_shape_velocities();
 }
 
+void PeriodicInflator::set_uniform_thickness(Float thickness) {
+    m_parameter_manager->set_default_thickness(thickness);
+}
+
+void PeriodicInflator::set_thickness(const VectorF& thickness) {
+    throw NotImplementedError(
+            "Setting thickness directorily is not allowed for periodic inflator");
+}
+
 void PeriodicInflator::generate_phantom_mesh() {
     PhantomMeshGenerator generator(
             m_wire_network, m_parameter_manager, m_profile);

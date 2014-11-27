@@ -22,6 +22,9 @@ class PeriodicInflator : public InflatorEngine {
         virtual const std::vector<MatrixFr>& get_shape_velocities() const {
             return m_shape_velocities;
         }
+        virtual void set_uniform_thickness(Float thickness);
+        virtual void set_thickness(const VectorF& thickness);
+
         void set_parameter(ParameterManager::Ptr manager);
 
     protected:

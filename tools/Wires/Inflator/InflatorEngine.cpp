@@ -73,6 +73,14 @@ InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
         }
     }
 
+void InflatorEngine::set_uniform_thickness(Float thickness) {
+    if (m_thickness_type == PER_VERTEX) {
+        set_thickness(VectorF::Ones(m_wire_network->get_num_vertices()));
+    } else {
+        set_thickness(VectorF::Ones(m_wire_network->get_num_edges()));
+    }
+}
+
 void InflatorEngine::set_thickness(const VectorF& thickness) {
     m_thickness = thickness;
     check_thickness();

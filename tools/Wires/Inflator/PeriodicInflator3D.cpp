@@ -103,11 +103,11 @@ void PeriodicInflator3D::update_face_sources() {
 }
 
 void PeriodicInflator3D::periodic_remesh() {
-    Float ave_thickness = m_thickness.sum() / m_thickness.size();
+    Float default_thickness = m_parameter_manager->get_default_thickness();
     PeriodicBoundaryRemesher remesher(m_vertices, m_faces,
             m_center_cell_bbox_min,
             m_center_cell_bbox_max);
-    remesher.remesh(ave_thickness);
+    remesher.remesh(default_thickness);
     m_vertices = remesher.get_vertices();
     m_faces = remesher.get_faces();
 }
