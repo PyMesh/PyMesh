@@ -50,8 +50,23 @@ void PeriodicInflator::set_uniform_thickness(Float thickness) {
 }
 
 void PeriodicInflator::set_thickness(const VectorF& thickness) {
-    throw NotImplementedError(
-            "Setting thickness directorily is not allowed for periodic inflator");
+    const size_t thickness_size = thickness.size();
+    auto& thickness_params = m_parameter_manager->get_thickness_params();
+    for (auto& param : thickness_params) {
+        VectorI roi = param->get_roi();
+        assert(roi.size() > 0);
+        assert(roi.maxCoeff() < thickness_size);
+        assert(roi.minCoeff() >= 0);
+        Float val = thickness[roi[0]];
+
+        const size_t roi_size = roi.size();
+        for (size_t i=1; i<roi_size; i++) {
+            if (thickness[roi[i]] != val) {
+                throw RuntimeError("Non-uniform thickness for a single orbit");
+            }
+        }
+        param->set_value(val);
+    }
 }
 
 void PeriodicInflator::generate_phantom_mesh() {
