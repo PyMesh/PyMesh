@@ -36,6 +36,22 @@ namespace PeriodicBoundaryRemesherHelper {
         output_faces = triangle.get_faces();
     }
 
+    void reorientate_triangles(const MatrixFr& vertices, MatrixIr& faces,
+            const VectorF& n) {
+        assert(vertices.cols() == 3);
+        assert(faces.cols() == 3);
+
+        const VectorI& f = faces.row(0);
+        const Vector3F& v0 = vertices.row(f[0]);
+        const Vector3F& v1 = vertices.row(f[1]);
+        const Vector3F& v2 = vertices.row(f[2]);
+
+        Float projected_area = (v1-v0).cross(v2-v0).dot(n);
+        if (projected_area < 0) {
+            faces.col(2).swap(faces.col(1));
+        }
+    }
+
     void save_mesh(const std::string& filename,
             const MatrixFr& vertices, const MatrixIr& faces, VectorF debug) {
         VectorF flattened_vertices(vertices.rows() * vertices.cols());
@@ -428,11 +444,14 @@ void PeriodicBoundaryRemesher::triangulate_bd_loops(Float max_area, short axis,
         size_t& vertex_count, size_t& face_count) {
     Vector3F offset(0.0, 0.0, 0.0);
     offset[axis] = m_bbox_max[axis] - m_bbox_min[axis];
+    Vector3F normal(0.0, 0.0, 0.0);
+    normal[axis] = -1.0;
     const MatrixIr& min_loops = m_bd_loops[min_axis_marker[axis]];
 
     MatrixFr output_vertices;
     MatrixIr output_faces;
     triangulate(m_vertices, min_loops, output_vertices, output_faces, max_area);
+    reorientate_triangles(output_vertices, output_faces, normal);
 
     // Add triangulated min boundary
     remeshed_vertices.emplace_back(output_vertices);
