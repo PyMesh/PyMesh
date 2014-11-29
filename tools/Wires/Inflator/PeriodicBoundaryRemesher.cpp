@@ -15,6 +15,7 @@
 
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>
+#include <Wires/Misc/VertexSnapper.h>
 
 namespace PeriodicBoundaryRemesherHelper {
     enum Axis { X=0, Y=1, Z=2 };
@@ -193,7 +194,7 @@ void PeriodicBoundaryRemesher::match_bd_loops(short axis) {
     MatrixIr& min_bd_loops = m_bd_loops[min_axis_marker[axis]];
     MatrixIr& max_bd_loops = m_bd_loops[max_axis_marker[axis]];
 
-    HashGrid::Ptr grid = HashGrid::create(5e-3, dim);
+    HashGrid::Ptr grid = HashGrid::create(1e-2, dim);
 
     const size_t num_min_edges = min_bd_loops.rows();
     for (size_t i=0; i<num_min_edges; i++) {
