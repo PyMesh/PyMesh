@@ -91,7 +91,7 @@ void PeriodicBoundaryRemesher::remesh(Float ave_edge_length) {
     extract_bd_loops();
     match_bd_loops();
     refine_bd_loops(ave_edge_length);
-    remesh_boundary(ave_edge_length * ave_edge_length);
+    remesh_boundary(0.5 * ave_edge_length * ave_edge_length);
     clean_up();
 }
 

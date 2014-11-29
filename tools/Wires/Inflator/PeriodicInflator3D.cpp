@@ -1,5 +1,6 @@
 #include "PeriodicInflator3D.h"
 
+#include <cmath>
 #include <limits>
 #include <list>
 #include <iostream>
@@ -104,6 +105,7 @@ void PeriodicInflator3D::update_face_sources() {
 
 void PeriodicInflator3D::periodic_remesh() {
     Float default_thickness = m_parameter_manager->get_default_thickness();
+    default_thickness *= pow(0.5, m_subdiv_order);
     PeriodicBoundaryRemesher remesher(m_vertices, m_faces,
             m_center_cell_bbox_min,
             m_center_cell_bbox_max);
