@@ -11,7 +11,7 @@
 
 const size_t ShortEdgeRemoval::UNMAPPED = std::numeric_limits<size_t>::max();
 
-ShortEdgeRemoval::ShortEdgeRemoval(MatrixFr& vertices, MatrixIr& faces) :
+ShortEdgeRemoval::ShortEdgeRemoval(const MatrixFr& vertices, const MatrixIr& faces) :
     m_vertices(vertices),
     m_faces(faces),
     m_num_collapsed(0),

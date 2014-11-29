@@ -8,7 +8,7 @@
 
 class ShortEdgeRemoval {
     public:
-        ShortEdgeRemoval(MatrixFr& vertices, MatrixIr& faces);
+        ShortEdgeRemoval(const MatrixFr& vertices, const MatrixIr& faces);
 
     public:
         /**

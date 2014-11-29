@@ -7,12 +7,13 @@
 
 class ObtuseTriangleRemoval {
     public:
-        ObtuseTriangleRemoval(MatrixF& vertices, MatrixI& faces);
+        ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces);
 
     public:
+        // Angle in radian
         size_t run(Float max_angle_allowed);
-        MatrixF get_vertices();
-        MatrixI get_faces();
+        MatrixFr get_vertices();
+        MatrixIr get_faces();
 
     private:
         void set_all_faces_as_valid();
@@ -38,6 +39,6 @@ class ObtuseTriangleRemoval {
         std::vector<Vector3F> m_new_vertices;
         std::vector<Vector3I> m_new_faces;
 
-        MatrixF m_vertices;
-        MatrixI m_faces;
+        MatrixFr m_vertices;
+        MatrixIr m_faces;
 };

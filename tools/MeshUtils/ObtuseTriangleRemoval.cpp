@@ -10,13 +10,13 @@ namespace ObtuseTriangleRemovalHelper {
         Float sin_val = v1.cross(v2).norm();
         Float cos_val = v1.dot(v2);
         Float result = atan2(sin_val, cos_val);
-        return result;
+        return fabs(result);
     }
 }
 
 using namespace ObtuseTriangleRemovalHelper;
 
-ObtuseTriangleRemoval::ObtuseTriangleRemoval(MatrixF& vertices, MatrixI& faces)
+ObtuseTriangleRemoval::ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces)
     : m_vertices(vertices), m_faces(faces) { }
 
 size_t ObtuseTriangleRemoval::run(Float max_angle_allowed) {
@@ -28,11 +28,11 @@ size_t ObtuseTriangleRemoval::run(Float max_angle_allowed) {
     return split_obtuse_triangles(max_angle_allowed);
 }
 
-MatrixF ObtuseTriangleRemoval::get_vertices() {
+MatrixFr ObtuseTriangleRemoval::get_vertices() {
     const size_t num_old_v = m_vertices.rows();
     const size_t num_new_v = m_new_vertices.size();
     const size_t num_vertices = num_old_v + num_new_v;
-    MatrixF vertices(num_vertices, 3);
+    MatrixFr vertices(num_vertices, 3);
     vertices.topRows(num_old_v) = m_vertices;
     size_t count = num_old_v;
     for (std::vector<Vector3F>::const_iterator itr = m_new_vertices.begin();
@@ -43,7 +43,7 @@ MatrixF ObtuseTriangleRemoval::get_vertices() {
     return vertices;
 }
 
-MatrixI ObtuseTriangleRemoval::get_faces() {
+MatrixIr ObtuseTriangleRemoval::get_faces() {
     assert(m_valid.size() == m_faces.rows());
     typedef std::vector<Vector3I> FaceArray;
     const size_t num_ori_f = m_faces.rows();
@@ -58,7 +58,7 @@ MatrixI ObtuseTriangleRemoval::get_faces() {
     const size_t num_old_f = valid_faces.size();
     const size_t num_new_f = m_new_faces.size();
     const size_t num_faces = num_old_f + num_new_f;
-    MatrixI faces(num_faces, 3);
+    MatrixIr faces(num_faces, 3);
 
     size_t count = 0;
     for (FaceArray::const_iterator itr = valid_faces.begin();
