@@ -7,4 +7,5 @@
 %include Tiler/WireTiler.i
 %include Inflator/InflatorEngine.i
 %include Inflator/WireProfile.i
+%include Parameters/ParameterCommon.i
 %include Parameters/ParameterManager.i
