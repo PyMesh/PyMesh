@@ -97,6 +97,16 @@ MatrixIr TilerEngine::tile_edges(size_t num_repetitions) {
 }
 
 void TilerEngine::normalize_unit_wire(const VectorF& cell_size) {
+    if (cell_size.minCoeff() <= 1e-30) {
+        const size_t dim = cell_size.size();
+        if (dim == 3)
+            throw RuntimeError("It seems the 3D wires are flat.");
+        else if (dim == 2)
+            throw RuntimeError("It seems the 2D wires are degenerated/linear.");
+        else
+            throw NotImplementedError("Unsupported dimension!");
+    }
+
     VectorF factors = cell_size.cwiseQuotient(
             m_unit_wire_network->get_bbox_max() - m_unit_wire_network->get_bbox_min());
     m_unit_wire_network->center_at_origin();
