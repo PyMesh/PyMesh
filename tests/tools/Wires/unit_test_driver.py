@@ -12,7 +12,7 @@ sys.path.append(os.path.join(PYMESH_PATH, "lib"));
 sys.path.append(os.path.join(PYMESH_PATH, "swig"));
 
 from WireNetwork.WireNetworkTest import WireNetworkTest
-#from Inflator.InflatorEngineTest import InflatorEngineTest
+from Inflator.InflatorEngineTest import InflatorEngineTest
 from Tiler.WireTilerTest import WireTilerTest
 
 if __name__ == "__main__":

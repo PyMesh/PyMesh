@@ -22,8 +22,11 @@ class PeriodicBoundaryRemesher {
         void label_bd_faces(int axis);
         void extract_bd_loops();
         void extract_bd_loops(short label);
+        void collapse_short_bd_edges(Float tol);
+        void collapse_short_bd_edges(short label, Float tol);
         void match_bd_loops();
         void match_bd_loops(short axis);
+        void collapse_unmatched_vertices(short label, std::vector<int>& vertex_map);
         void refine_bd_loops(Float ave_edge_len);
         void refine_bd_loops(short label, Float ave_edge_len,
                 std::vector<Float>& refined_vertices);
@@ -38,6 +41,8 @@ class PeriodicBoundaryRemesher {
                 std::vector<MatrixFr>& remeshed_vertices,
                 std::vector<MatrixIr>& remeshed_faces,
                 size_t& vertex_count, size_t& face_count);
+
+        void update_all_indices(const VectorI& vertex_map);
 
     protected:
         MatrixFr m_vertices;

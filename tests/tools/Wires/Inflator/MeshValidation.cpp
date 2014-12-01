@@ -93,19 +93,19 @@ bool MeshValidation::is_periodic(
         if (fabs(v[0] - bbox_min[0]) < EPS) {
             result = result && match(grid, v + offsets[0]);
         }
-        if (fabs(v[0] - bbox_max[0]) < EPS) {;
+        if (fabs(v[0] - bbox_max[0]) < EPS) {
             result = result && match(grid, v + offsets[1]);
         }
-        if (fabs(v[1] - bbox_min[1]) < EPS) {;
+        if (fabs(v[1] - bbox_min[1]) < EPS) {
             result = result && match(grid, v + offsets[2]);
         }
-        if (fabs(v[1] - bbox_max[1]) < EPS) {;
+        if (fabs(v[1] - bbox_max[1]) < EPS) {
             result = result && match(grid, v + offsets[3]);
         }
-        if (fabs(v[2] - bbox_min[2]) < EPS) {;
+        if (fabs(v[2] - bbox_min[2]) < EPS) {
             result = result && match(grid, v + offsets[4]);
         }
-        if (fabs(v[2] - bbox_max[2]) < EPS) {;
+        if (fabs(v[2] - bbox_max[2]) < EPS) {
             result = result && match(grid, v + offsets[5]);
         }
     }

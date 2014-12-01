@@ -10,6 +10,7 @@
 #include <Mesh.h>
 #include <MeshFactory.h>
 #include <MeshUtils/Boundary.h>
+#include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <Misc/HashGrid.h>
 #include <triangle/TriangleWrapper.h>
 
@@ -73,6 +74,16 @@ namespace PeriodicBoundaryRemesherHelper {
         writer->with_attribute("debug").write_mesh(*mesh);
         delete writer;
     }
+
+    void update_indices(MatrixIr& indices, const VectorI& vertex_map) {
+        const size_t num_rows = indices.rows();
+        const size_t cols_per_row = indices.cols();
+        for (size_t i=0; i<num_rows; i++) {
+            for (size_t j=0; j<cols_per_row; j++) {
+                indices(i,j) = vertex_map[indices(i,j)];
+            }
+        }
+    }
 }
 
 using namespace PeriodicBoundaryRemesherHelper;
@@ -89,6 +100,7 @@ void PeriodicBoundaryRemesher::remesh(Float ave_edge_length) {
     clean_up();
     label_bd_faces();
     extract_bd_loops();
+    collapse_short_bd_edges(1e-4);
     match_bd_loops();
     refine_bd_loops(ave_edge_length);
     remesh_boundary(0.5 * ave_edge_length * ave_edge_length);
@@ -177,6 +189,57 @@ void PeriodicBoundaryRemesher::extract_bd_loops(short label) {
     m_bd_loops.emplace(label, bd_extractor->get_boundaries());
 }
 
+void PeriodicBoundaryRemesher::collapse_short_bd_edges(Float tol) {
+    collapse_short_bd_edges(min_axis_marker[X], tol);
+    collapse_short_bd_edges(max_axis_marker[X], tol);
+    collapse_short_bd_edges(min_axis_marker[Y], tol);
+    collapse_short_bd_edges(max_axis_marker[Y], tol);
+    collapse_short_bd_edges(min_axis_marker[Z], tol);
+    collapse_short_bd_edges(max_axis_marker[Z], tol);
+}
+
+void PeriodicBoundaryRemesher::collapse_short_bd_edges(short label, Float tol) {
+    BoxChecker checker(m_bbox_min, m_bbox_max);
+    const size_t num_vertices = m_vertices.rows();
+    VectorI vertex_map(num_vertices);
+    for (size_t i=0; i<num_vertices; i++) {
+        vertex_map[i] = i;
+    }
+
+    const MatrixIr& bd_loops = m_bd_loops[label];
+    const size_t num_loop_edges = bd_loops.rows();
+    for (size_t i=0; i<num_loop_edges; i++) {
+        const VectorI& e = bd_loops.row(i);
+        if (vertex_map[e[0]] != e[0] || vertex_map[e[1]] != e[1]) continue;
+        const VectorF& v0 = m_vertices.row(e[0]);
+        const VectorF& v1 = m_vertices.row(e[1]);
+        Float edge_len = (v1 - v0).squaredNorm();
+        if (edge_len < tol) {
+            bool v0_on_bd = checker.is_on_boundary_edges(v0);
+            bool v1_on_bd = checker.is_on_boundary_edges(v1);
+            if (!v0_on_bd && !v1_on_bd) {
+                vertex_map[e[1]] = e[0];
+            } else if (!v0_on_bd) {
+                vertex_map[e[0]] = e[1];
+            } else if (!v1_on_bd) {
+                vertex_map[e[1]] = e[0];
+            } else {
+                bool v0_is_corner = checker.is_on_boundary_corners(v0);
+                bool v1_is_corner = checker.is_on_boundary_corners(v1);
+                if (!v0_is_corner && !v1_is_corner) {
+                    vertex_map[e[1]] = e[0];
+                } else if (!v0_is_corner) {
+                    vertex_map[e[0]] = e[1];
+                } else if (!v1_is_corner) {
+                    vertex_map[e[1]] = e[0];
+                }
+            }
+        }
+    }
+
+    update_all_indices(vertex_map);
+}
+
 void PeriodicBoundaryRemesher::match_bd_loops() {
     match_bd_loops(X);
     match_bd_loops(Y);
@@ -252,58 +315,52 @@ void PeriodicBoundaryRemesher::match_bd_loops(short axis) {
         }
     }
 
-    bool min_matched = true;
-    size_t count = 0;
-    do {
-        min_matched = true;
-        for (size_t i=0; i<num_min_edges; i++) {
-            const VectorI& e = min_bd_loops.row(i);
-            if (vertex_map[e[0]] >= 0 && vertex_map[e[1]] >= 0) {
-                continue;
-            } else if (vertex_map[e[0]] < 0 && vertex_map[e[1]] >= 0) {
-                m_vertices.row(e[0]) = m_vertices.row(e[1]);
-                vertex_map[e[0]] = vertex_map[e[1]];
-            } else if (vertex_map[e[0]] >= 0 && vertex_map[e[1]] < 0) {
-                m_vertices.row(e[1]) = m_vertices.row(e[0]);
-                vertex_map[e[1]] = vertex_map[e[0]];
-            } else {
-                min_matched = false;
-            }
-        }
-        count++;
-    } while (!min_matched && count < num_min_edges);
-    if (!min_matched) {
-        throw RuntimeError("Unable to match min boundary loops");
-    }
-
-    bool max_matched = true;
-    count = 0;
-    do {
-        max_matched = true;
-        for (size_t i=0; i<num_max_edges; i++) {
-            const VectorI& e = max_bd_loops.row(i);
-            if (vertex_map[e[0]] >= 0 && vertex_map[e[1]] >= 0) {
-                continue;
-            } else if (vertex_map[e[0]] < 0 && vertex_map[e[1]] >= 0) {
-                m_vertices.row(e[0]) = m_vertices.row(e[1]);
-                vertex_map[e[0]] = vertex_map[e[1]];
-            } else if (vertex_map[e[0]] >= 0 && vertex_map[e[1]] < 0) {
-                m_vertices.row(e[1]) = m_vertices.row(e[0]);
-                vertex_map[e[1]] = vertex_map[e[0]];
-            } else {
-                max_matched = false;
-            }
-        }
-        count++;
-    } while (!max_matched && count < num_max_edges);
-    if (!max_matched) {
-        throw RuntimeError("Unable to match max boundary loops");
-    }
+    collapse_unmatched_vertices(min_axis_marker[axis], vertex_map);
+    collapse_unmatched_vertices(max_axis_marker[axis], vertex_map);
 
     //// DEBUG CODE
     //VectorF matched_vertices(num_vertices);
     //std::copy(vertex_map.begin(), vertex_map.end(), matched_vertices.data());
     //save_mesh("matched_vertices.msh", m_vertices, m_faces, matched_vertices);
+}
+
+void PeriodicBoundaryRemesher::collapse_unmatched_vertices(
+        short label, std::vector<int>& vertex_map) {
+    const MatrixIr& loops = m_bd_loops[label];
+    const size_t loop_size = loops.rows();
+    const size_t num_vertices = m_vertices.rows();
+    bool all_matched = true;
+    size_t count = 0;
+    do {
+        VectorI bd_vertex_map(num_vertices);
+        for (size_t i=0; i<num_vertices; i++) {
+            bd_vertex_map[i] = i;
+        }
+
+        all_matched = true;
+        for (size_t i=0; i<loop_size; i++) {
+            const VectorI& e = loops.row(i);
+
+            if (vertex_map[e[0]] >= 0 && vertex_map[e[1]] >= 0) {
+                continue;
+            } else if (vertex_map[e[0]] < 0 && vertex_map[e[1]] >= 0) {
+                m_vertices.row(e[0]) = m_vertices.row(e[1]);
+                vertex_map[e[0]] = vertex_map[e[1]];
+            } else if (vertex_map[e[0]] >= 0 && vertex_map[e[1]] < 0) {
+                m_vertices.row(e[1]) = m_vertices.row(e[0]);
+                vertex_map[e[1]] = vertex_map[e[0]];
+            } else {
+                all_matched = false;
+            }
+        }
+        count++;
+    } while (!all_matched && count < loop_size);
+
+    if (!all_matched) {
+        throw RuntimeError("Unable to match min boundary loops");
+    }
+
+    collapse_short_bd_edges(label, 1e-6);
 }
 
 void PeriodicBoundaryRemesher::refine_bd_loops(Float ave_edge_len) {
@@ -466,5 +523,12 @@ void PeriodicBoundaryRemesher::triangulate_bd_loops(Float max_area, short axis,
     remeshed_faces.emplace_back(output_faces.array() + vertex_count);
     vertex_count += output_vertices.rows();
     face_count += output_faces.rows();
+}
+
+void PeriodicBoundaryRemesher::update_all_indices(const VectorI& vertex_map) {
+    update_indices(m_faces, vertex_map);
+    for (auto& itr: m_bd_loops) {
+        update_indices(itr.second, vertex_map);
+    }
 }
 
