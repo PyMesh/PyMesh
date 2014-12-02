@@ -1,5 +1,6 @@
 #include "WireNetwork.h"
 #include "WireParser.h"
+#include "WireWriter.h"
 
 #include <cassert>
 #include <iostream>
@@ -173,6 +174,11 @@ void WireNetwork::filter_edges(const std::vector<bool>& to_keep) {
         }
     }
     m_connectivity.reset();
+}
+
+void WireNetwork::write_to_file(const std::string& filename) const {
+    WireWriter writer;
+    writer.write(filename, *this);
 }
 
 void WireNetwork::initialize() {

@@ -162,6 +162,28 @@ class AABBTilerTest : public WireTest {
 
             check_edge_attribute_propagation("edge_periodic_index", *wire_network, *tiled_network);
         }
+
+        void run_min_angle_check(const std::string& wire_file) {
+            WireNetwork::Ptr wire_network = load_wire_shared(wire_file);
+            wire_network->compute_connectivity();
+            wire_network->center_at_origin();
+
+            VectorF bbox_min = wire_network->get_bbox_min() * 3;
+            VectorF bbox_max = wire_network->get_bbox_max() * 3;
+            VectorI repetitions = VectorI::Ones(wire_network->get_dim())*3;
+
+            AABBTiler tiler(wire_network, bbox_min, bbox_max, repetitions);
+            WireNetwork::Ptr tiled_network = tiler.tile();
+
+            wire_network->add_attribute("vertex_min_angle");
+            const MatrixFr& min_angles = wire_network->get_attribute("vertex_min_angle");
+            ASSERT_LT(1e-6, min_angles.minCoeff());
+
+            tiled_network->compute_connectivity();
+            tiled_network->add_attribute("vertex_min_angle");
+            const MatrixFr& tiled_min_angles = tiled_network->get_attribute("vertex_min_angle");
+            ASSERT_LT(1e-6, tiled_min_angles.minCoeff());
+        }
 };
 
 TEST_F(AABBTilerTest, cube) {
@@ -199,6 +221,7 @@ TEST_F(AABBTilerTest, VertexAttributes) {
     run_periodic_vertex_index_check("cube.wire");
     run_periodic_vertex_index_check("box.wire");
     run_periodic_vertex_index_check("brick5.wire");
+    run_periodic_vertex_index_check("truncated_octahedron_s1.wire");
 }
 
 TEST_F(AABBTilerTest, EdgeAttributes) {
@@ -206,4 +229,9 @@ TEST_F(AABBTilerTest, EdgeAttributes) {
     run_periodic_edge_index_check("cube.wire");
     run_periodic_edge_index_check("brick5.wire");
     run_periodic_edge_index_check("box.wire");
+    run_periodic_edge_index_check("truncated_octahedron_s1.wire");
+}
+
+TEST_F(AABBTilerTest, postive_min_angles) {
+    run_min_angle_check("truncated_octahedron_s1.wire");
 }

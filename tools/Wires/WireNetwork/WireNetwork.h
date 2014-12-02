@@ -48,6 +48,7 @@ class WireNetwork {
         void filter_vertices(const std::vector<bool>& to_keep);
         void filter_edges(const std::vector<bool>& to_keep);
 
+        void write_to_file(const std::string& filename) const;
 
     public:
         bool has_attribute(const std::string& name) const {

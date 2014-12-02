@@ -1,7 +1,6 @@
 #include "TilerEngine.h"
 
 #include <cassert>
-#include <iostream>
 #include <sstream>
 #include <unordered_set>
 #include <vector>

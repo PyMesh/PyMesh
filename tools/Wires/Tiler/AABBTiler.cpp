@@ -98,7 +98,7 @@ WireNetwork::Ptr AABBTiler::tile() {
         WireNetwork::create_raw(tiled_vertices, tiled_edges);
     update_attributes(*tiled_network, num_repetitions);
     evaluate_parameters(*tiled_network, transforms);
-    clean_up(*tiled_network);
+    clean_up(*tiled_network, 1e-3);
     return tiled_network;
 }
 

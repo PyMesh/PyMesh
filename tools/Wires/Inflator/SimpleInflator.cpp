@@ -88,6 +88,7 @@ void SimpleInflator::compute_end_loop_offsets() {
     const VectorF& min_angles =
         m_wire_network->get_attribute("vertex_min_angle");
     assert(min_angles.size() == num_vertices);
+    assert(min_angles.minCoeff() > 0.0);
     VectorF vertex_thickness = compute_vertex_thickness();
 
     m_end_loop_offsets.resize(num_vertices);
