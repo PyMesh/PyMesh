@@ -133,7 +133,6 @@ TEST_F(WireNetworkTest, IO) {
     std::string tmp_wire_file = "tmp.wire";
     network.write_to_file(tmp_wire_file);
     WireNetwork tmp_network(tmp_wire_file);
-    std::cout << tmp_network.get_edges() << std::endl;
 
     ASSERT_FLOAT_EQ(0.0, (network.get_vertices() - tmp_network.get_vertices()).norm());
     ASSERT_FLOAT_EQ(0.0, (network.get_edges() - tmp_network.get_edges()).norm());
