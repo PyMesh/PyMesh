@@ -190,3 +190,55 @@ TEST_F(DuplicatedVertexRemovalTest, not_close_enough_points) {
 
     ASSERT_EQ(1, result_vertices.rows());
 }
+
+TEST_F(DuplicatedVertexRemovalTest, importance_level) {
+    const Float tol = 1e-3;
+    MatrixF vertices(3, 2);
+    vertices << 0.0, 0.0,
+                1.0, 0.0,
+                1.0, 1e-4;
+    MatrixI faces(1, 3);
+    faces << 0, 1, 2;
+
+    Vector3I importance_level(0, 0, 1);
+    DuplicatedVertexRemoval remover(vertices, faces);
+    remover.set_importance_level(importance_level);
+    remover.run(tol);
+
+    MatrixFr result_vertices = remover.get_vertices();
+    MatrixIr result_faces = remover.get_faces();
+    VectorI  index_map = remover.get_index_map();
+
+    ASSERT_EQ(2, result_vertices.rows());
+    ASSERT_FLOAT_EQ(0.0, (result_vertices.row(0) - vertices.row(0)).norm());
+    ASSERT_FLOAT_EQ(0.0, (result_vertices.row(1) - vertices.row(2)).norm());
+    ASSERT_EQ(0, index_map[0]);
+    ASSERT_EQ(1, index_map[1]);
+    ASSERT_EQ(1, index_map[1]);
+}
+
+TEST_F(DuplicatedVertexRemovalTest, importance_level_2) {
+    const Float tol = 1e-3;
+    MatrixF vertices(3, 2);
+    vertices << 0.0, 0.0,
+                1.0, 0.0,
+                1.0, 1e-4;
+    MatrixI faces(1, 3);
+    faces << 0, 1, 2;
+
+    Vector3I importance_level(0, 1, 0);
+    DuplicatedVertexRemoval remover(vertices, faces);
+    remover.set_importance_level(importance_level);
+    remover.run(tol);
+
+    MatrixFr result_vertices = remover.get_vertices();
+    MatrixIr result_faces = remover.get_faces();
+    VectorI  index_map = remover.get_index_map();
+
+    ASSERT_EQ(2, result_vertices.rows());
+    ASSERT_FLOAT_EQ(0.0, (result_vertices.row(0) - vertices.row(0)).norm());
+    ASSERT_FLOAT_EQ(0.0, (result_vertices.row(1) - vertices.row(1)).norm());
+    ASSERT_EQ(0, index_map[0]);
+    ASSERT_EQ(1, index_map[1]);
+    ASSERT_EQ(1, index_map[1]);
+}

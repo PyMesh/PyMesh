@@ -15,6 +15,12 @@ class DuplicatedVertexRemoval {
         MatrixIr get_faces() const { return m_faces; }
 
         /**
+         * Assign an integer importance per vertex.  Vertex with high importance
+         * level would keep their coordinate during vertex merging.
+         */
+        void set_importance_level(const VectorI& level) { m_importance_level = level; }
+
+        /**
          * index map maps the input vertex index to an output vertex index.
          * i.e. it specifies where each input vertex ends up in the output.
          */
@@ -24,4 +30,5 @@ class DuplicatedVertexRemoval {
         MatrixFr m_vertices;
         MatrixIr m_faces;
         VectorI  m_index_map;
+        VectorI  m_importance_level;
 };

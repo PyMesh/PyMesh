@@ -1,12 +1,15 @@
 #include "DuplicatedVertexRemoval.h"
 #include <cassert>
 #include <sstream>
+#include <vector>
 
 #include <Core/Exception.h>
 #include <Misc/HashGrid.h>
 
 DuplicatedVertexRemoval::DuplicatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces):
-    m_vertices(vertices), m_faces(faces) {}
+    m_vertices(vertices), m_faces(faces) {
+        m_importance_level = VectorI::Zero(m_vertices.rows());
+    }
 
 size_t DuplicatedVertexRemoval::run(Float tol) {
     const size_t dim = m_vertices.cols();
@@ -15,6 +18,7 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
     const size_t num_faces = m_faces.rows();
     const size_t vertex_per_face = m_faces.cols();
     m_index_map.resize(num_vertices);
+    std::vector<size_t> source_index;
 
     size_t count = 0;
     size_t num_duplications = 0;
@@ -30,7 +34,17 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
             size_t min_idx;
             Float min_dist = dists.minCoeff(&min_idx);
             if (min_dist < tol) {
-                m_index_map[i] = m_index_map[candidates[min_idx]];
+                size_t best_match_idx = candidates[min_idx];
+                size_t output_idx = m_index_map[best_match_idx];
+                m_index_map[i] = output_idx;
+
+                int curr_importance_level = m_importance_level[i];
+                int matched_importance_level =
+                    m_importance_level[source_index[output_idx]];
+                if (curr_importance_level > matched_importance_level) {
+                    source_index[output_idx] = i;
+                }
+
                 num_duplications++;
                 continue;
             }
@@ -39,13 +53,15 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
         // No match, add this vertex in the book.
         grid->insert(i, v);
         m_index_map[i] = count;
+        source_index.push_back(i);
         count++;
     }
 
+    assert(source_index.size() == count);
     MatrixFr vertices(count, dim);
-    for (size_t i=0; i<num_vertices; i++) {
-        assert(m_index_map[i] < num_vertices && m_index_map[i] >= 0);
-        vertices.row(m_index_map[i]) = m_vertices.row(i);
+    for (size_t i=0; i<count; i++) {
+        assert(m_index_map[source_index[i]] == i);
+        vertices.row(i) = m_vertices.row(source_index[i]);
     }
     m_vertices = vertices;
 
