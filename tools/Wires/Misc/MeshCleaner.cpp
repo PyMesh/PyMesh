@@ -4,16 +4,42 @@
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 
+#include "BoxChecker.h"
+
 VectorI MeshCleaner::clean(MatrixFr& vertices, MatrixIr& faces, Float tol) {
+    remove_isolated_vertices(vertices, faces);
     remove_duplicated_vertices(vertices, faces, tol);
     VectorI face_sources = remove_short_edges(vertices, faces, tol);
     remove_isolated_vertices(vertices, faces);
     return face_sources;
 }
 
+VectorI MeshCleaner::compute_importance_level(const MatrixFr& vertices) {
+    VectorF bbox_min = vertices.colwise().minCoeff();
+    VectorF bbox_max = vertices.colwise().maxCoeff();
+    BoxChecker checker(bbox_min, bbox_max);
+
+    const size_t num_vertices = vertices.rows();
+    VectorI level = VectorI::Zero(num_vertices);
+    for (size_t i=0; i<num_vertices; i++) {
+        const VectorF& v = vertices.row(i);
+        if (checker.is_on_boundary_corners(v)) {
+            level[i] = 3;
+        } else if (checker.is_on_boundary_edges(v)) {
+            level[i] = 2;
+        } else if (checker.is_on_boundary(v)) {
+            level[i] = 1;
+        }
+    }
+
+    return level;
+}
+
 void MeshCleaner::remove_duplicated_vertices(
         MatrixFr& vertices, MatrixIr& faces, Float tol) {
+    VectorI importance_level = compute_importance_level(vertices);
     DuplicatedVertexRemoval remover(vertices, faces);
+    remover.set_importance_level(importance_level);
     remover.run(tol);
     vertices = remover.get_vertices();
     faces = remover.get_faces();

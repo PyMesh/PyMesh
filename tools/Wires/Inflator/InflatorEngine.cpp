@@ -11,6 +11,8 @@
 #include <MeshUtils/Subdivision.h>
 #include <MeshFactory.h>
 
+#include <Wires/Misc/MeshCleaner.h>
+
 #include "SimpleInflator.h"
 #include "PeriodicInflator2D.h"
 #include "PeriodicInflator3D.h"
@@ -98,7 +100,9 @@ void InflatorEngine::with_refinement(
 }
 
 void InflatorEngine::clean_up() {
-    remove_duplicated_vertices();
+    remove_isolated_vertices();
+    MeshCleaner cleaner;
+    cleaner.remove_duplicated_vertices(m_vertices, m_faces, 1e-3);
     remove_short_edges();
     remove_isolated_vertices();
 }

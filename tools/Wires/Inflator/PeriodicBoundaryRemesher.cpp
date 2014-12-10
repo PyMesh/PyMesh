@@ -94,6 +94,9 @@ PeriodicBoundaryRemesher::PeriodicBoundaryRemesher(
     m_vertices(vertices), m_faces(faces),
     m_bbox_min(bbox_min), m_bbox_max(bbox_max) {
         assert(m_faces.cols() == 3);
+
+    //VectorF labels = VectorF::Ones(m_vertices.rows());
+    //save_mesh("init.msh", m_vertices, m_faces, labels);
     }
 
 void PeriodicBoundaryRemesher::remesh(Float ave_edge_length) {
@@ -120,8 +123,8 @@ void PeriodicBoundaryRemesher::label_bd_faces() {
     label_bd_faces(Y);
     label_bd_faces(Z);
 
-    VectorF labels(m_faces.rows());
-    std::copy(m_bd_face_markers.begin(), m_bd_face_markers.end(), labels.data());
+    //VectorF labels(m_faces.rows());
+    //std::copy(m_bd_face_markers.begin(), m_bd_face_markers.end(), labels.data());
     //save_mesh("face_labels.msh", m_vertices, m_faces, labels);
 }
 

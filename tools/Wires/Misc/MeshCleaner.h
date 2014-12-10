@@ -5,6 +5,8 @@
 class MeshCleaner {
     public:
         VectorI clean(MatrixFr& vertices, MatrixIr& faces, Float tol);
+
+        VectorI compute_importance_level(const MatrixFr& vertices);
         void remove_duplicated_vertices(MatrixFr& vertices, MatrixIr& faces, Float tol);
         VectorI remove_short_edges(MatrixFr& vertices, MatrixIr& faces, Float tol);
         void remove_isolated_vertices(MatrixFr& vertices, MatrixIr& faces);
