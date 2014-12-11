@@ -60,13 +60,15 @@ void PeriodicExploration::periodic_inflate() {
     update_mesh();
 }
 
-bool PeriodicExploration::run_tetgen() {
+bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
     const size_t dim = m_vertices.cols();
     const size_t num_vertices = m_vertices.rows();
     TetgenWrapper tetgen(m_vertices, m_faces);
     std::stringstream flags;
-    Float max_tet_vol =
-        pow(m_default_thickness * pow(0.5, m_refine_order), dim);
+    if (max_tet_vol == 0.0) {
+        max_tet_vol =
+            pow(m_default_thickness * pow(0.5, m_refine_order), dim);
+    }
     flags << "pqYQa" << max_tet_vol;
     try {
         tetgen.run(flags.str());

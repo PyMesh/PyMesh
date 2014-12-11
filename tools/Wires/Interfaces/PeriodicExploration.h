@@ -46,7 +46,7 @@ class PeriodicExploration {
         /**
          * Return true only if tetgen succeeded.
          */
-        bool run_tetgen();
+        bool run_tetgen(Float max_tet_vol=0.0);
 
         Mesh::Ptr get_mesh() { return m_mesh; }
         MatrixFr get_vertices() const { return m_vertices; }
