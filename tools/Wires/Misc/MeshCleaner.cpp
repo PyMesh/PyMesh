@@ -1,17 +1,21 @@
 #include "MeshCleaner.h"
 
+#include <cmath>
+
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
+#include <MeshUtils/ObtuseTriangleRemoval.h>
 
 #include "BoxChecker.h"
 
-VectorI MeshCleaner::clean(MatrixFr& vertices, MatrixIr& faces, Float tol) {
+void MeshCleaner::clean(MatrixFr& vertices, MatrixIr& faces, Float tol) {
     remove_isolated_vertices(vertices, faces);
     remove_duplicated_vertices(vertices, faces, tol);
     VectorI face_sources = remove_short_edges(vertices, faces, tol);
+    remove_obtuse_triangle(vertices, faces);
     remove_isolated_vertices(vertices, faces);
-    return face_sources;
+    //return face_sources;
 }
 
 VectorI MeshCleaner::compute_importance_level(const MatrixFr& vertices) {
@@ -63,3 +67,11 @@ void MeshCleaner::remove_isolated_vertices(
     vertices = remover.get_vertices();
     faces = remover.get_faces();
 }
+
+void MeshCleaner::remove_obtuse_triangle(MatrixFr& vertices, MatrixIr& faces) {
+    ObtuseTriangleRemoval remover(vertices, faces);
+    remover.run(M_PI - 1e-3);
+    vertices = remover.get_vertices();
+    faces = remover.get_faces();
+}
+
