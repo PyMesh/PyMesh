@@ -73,7 +73,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
     PeriodicExploration explorer(
             m_data_dir + "diamond.wire", 5, 0.5);
     explorer.with_all_parameters();
-    explorer.with_refinement("simple", 2);
+    explorer.with_refinement("loop", 2);
 
     std::cout << "This might take a few minutes ";
     std::cout.flush();
