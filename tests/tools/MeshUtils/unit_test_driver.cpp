@@ -10,6 +10,7 @@
 #include "SimpleSubdivisionTest.h"
 #include "LoopSubdivisionTest.h"
 #include "DuplicatedVertexRemovalTest.h"
+#include "FinFaceRemovalTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

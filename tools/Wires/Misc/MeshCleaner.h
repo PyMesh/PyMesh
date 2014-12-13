@@ -11,4 +11,5 @@ class MeshCleaner {
         VectorI remove_short_edges(MatrixFr& vertices, MatrixIr& faces, Float tol);
         void remove_isolated_vertices(MatrixFr& vertices, MatrixIr& faces);
         void remove_obtuse_triangle(MatrixFr& vertices, MatrixIr& faces);
+        void remove_fin_faces(MatrixFr& vertices, MatrixIr& faces);
 };

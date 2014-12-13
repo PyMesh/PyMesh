@@ -2,8 +2,9 @@
 
 #include <cmath>
 
-#include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
+#include <MeshUtils/IsolatedVertexRemoval.h>
+#include <MeshUtils/FinFaceRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/ObtuseTriangleRemoval.h>
 
@@ -12,6 +13,7 @@
 void MeshCleaner::clean(MatrixFr& vertices, MatrixIr& faces, Float tol) {
     remove_isolated_vertices(vertices, faces);
     remove_duplicated_vertices(vertices, faces, tol);
+    remove_fin_faces(vertices, faces);
     VectorI face_sources = remove_short_edges(vertices, faces, tol);
     remove_obtuse_triangle(vertices, faces);
     remove_isolated_vertices(vertices, faces);
@@ -73,5 +75,13 @@ void MeshCleaner::remove_obtuse_triangle(MatrixFr& vertices, MatrixIr& faces) {
     remover.run(M_PI - 1e-3);
     vertices = remover.get_vertices();
     faces = remover.get_faces();
+}
+
+void MeshCleaner::remove_fin_faces(MatrixFr& vertices, MatrixIr& faces) {
+    FinFaceRemoval remover(vertices, faces);
+    size_t num_face_removed = remover.run();
+    if (num_face_removed > 0) {
+        faces = remover.get_faces();
+    }
 }
 
