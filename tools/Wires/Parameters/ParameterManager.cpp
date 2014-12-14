@@ -14,6 +14,7 @@
 #include "SymmetryOrbits.h"
 #include "EdgeThicknessParameterDerivative.h"
 #include "VertexThicknessParameterDerivative.h"
+#include "VertexOffsetParameter.h"
 #include "VertexOffsetParameterDerivative.h"
 
 using namespace ParameterCommon;
@@ -282,6 +283,53 @@ std::vector<MatrixFr> ParameterManager::compute_shape_velocity(Mesh::Ptr mesh) {
     assert(velocity.size() == get_num_dofs());
 
     return velocity;
+}
+
+VectorI ParameterManager::get_thickness_dof_map() const {
+    size_t domain_size = 0;
+    if (get_thickness_type() == ParameterCommon::VERTEX) {
+        domain_size = m_wire_network->get_num_vertices();
+    } else {
+        domain_size = m_wire_network->get_num_edges();
+    }
+    VectorI dof_map = VectorI::Ones(domain_size) * -1;
+
+    size_t dof_counter = 0;
+    for (const auto& param : m_thickness_params) {
+        VectorI roi = param->get_roi();
+        const size_t roi_size = roi.size();
+        for (size_t i=0; i<roi_size; i++) {
+            if (dof_map[roi[i]] != -1) {
+                throw RuntimeError("Thickness parameters have overlapping ROI");
+            }
+            dof_map[roi[i]] = dof_counter;
+        }
+        dof_counter++;
+    }
+    return dof_map;
+}
+
+MatrixIr ParameterManager::get_offset_dof_map() const {
+    const size_t num_thickness_dofs = get_num_thickness_dofs();
+    const size_t domain_size = m_wire_network->get_num_vertices();
+    const size_t dim = m_wire_network->get_dim();
+    MatrixIr dof_map = MatrixIr::Ones(domain_size, dim) * -1;
+
+    size_t dof_counter = num_thickness_dofs;
+    for (const auto& param : m_offset_params) {
+        VectorI roi = param->get_roi();
+        const size_t roi_size = roi.size();
+
+        const VertexOffsetParameter* param_ptr =
+            dynamic_cast<const VertexOffsetParameter*>(param.get());
+        size_t axis = param_ptr->get_axis();
+
+        for (size_t i=0; i<roi_size; i++) {
+            dof_map(roi[i], axis) = dof_counter;
+        }
+        dof_counter++;
+    }
+    return dof_map;
 }
 
 VectorF ParameterManager::evaluate_thickness(

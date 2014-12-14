@@ -11,6 +11,7 @@ class VertexOffsetParameter : public PatternParameter {
         virtual void apply(VectorF& results, const Variables& vars);
         virtual MatrixFr compute_derivative() const;
         virtual ParameterType get_type() const { return VERTEX_OFFSET; }
+        size_t get_axis() const { return m_axis; }
 
     private:
         size_t m_axis;

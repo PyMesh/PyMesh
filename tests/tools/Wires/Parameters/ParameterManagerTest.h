@@ -201,3 +201,104 @@ TEST_F(ParameterManagerTest, add_vertex_offset) {
     ASSERT_FLOAT_EQ(0.5, thickness.minCoeff());
     ASSERT_FLOAT_EQ(0.5, thickness.maxCoeff());
 }
+
+TEST_F(ParameterManagerTest, vertex_thickness_dof_map) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    const size_t num_vertices = wire_network->get_num_vertices();
+
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    VectorI thickness_dof_map = manager->get_thickness_dof_map();
+
+    ASSERT_EQ(num_vertices, thickness_dof_map.size());
+
+    ParameterCommon::Variables vars;
+    const size_t num_thickness_dof = manager->get_num_thickness_dofs();
+    for (size_t i=0; i<num_thickness_dof; i++) {
+        VectorF cur_dofs = manager->get_dofs();
+        VectorF cur_thickness = manager->evaluate_thickness(vars);
+
+        VectorF new_dofs = cur_dofs;
+        new_dofs[i] += 0.1;
+        manager->set_dofs(new_dofs);
+        VectorF new_thickness = manager->evaluate_thickness(vars);
+
+        VectorF diff_thickness = new_thickness - cur_thickness;
+        for (size_t j=0; j<num_vertices; j++) {
+            if (thickness_dof_map[j] != i) {
+                ASSERT_FLOAT_EQ(0.0, diff_thickness[j]);
+            } else {
+                ASSERT_LT(0.0, diff_thickness[j]);
+            }
+        }
+    }
+}
+
+TEST_F(ParameterManagerTest, edge_thickness_dof_map) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    const size_t num_edges = wire_network->get_num_edges();
+
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    VectorI thickness_dof_map = manager->get_thickness_dof_map();
+
+    ASSERT_EQ(num_edges, thickness_dof_map.size());
+
+    ParameterCommon::Variables vars;
+    const size_t num_thickness_dof = manager->get_num_thickness_dofs();
+    for (size_t i=0; i<num_thickness_dof; i++) {
+        VectorF cur_dofs = manager->get_dofs();
+        VectorF cur_thickness = manager->evaluate_thickness(vars);
+
+        VectorF new_dofs = cur_dofs;
+        new_dofs[i] += 0.1;
+        manager->set_dofs(new_dofs);
+        VectorF new_thickness = manager->evaluate_thickness(vars);
+
+        VectorF diff_thickness = new_thickness - cur_thickness;
+        for (size_t j=0; j<num_edges; j++) {
+            if (thickness_dof_map[j] != i) {
+                ASSERT_FLOAT_EQ(0.0, diff_thickness[j]);
+            } else {
+                ASSERT_LT(0.0, diff_thickness[j]);
+            }
+        }
+    }
+}
+
+TEST_F(ParameterManagerTest, vertex_offset_dof_map) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+
+    MatrixIr offset_dof_map = manager->get_offset_dof_map();
+
+    const size_t dim = wire_network->get_dim();
+    const size_t num_vertices = wire_network->get_num_vertices();
+    ASSERT_EQ(num_vertices, offset_dof_map.rows());
+    ASSERT_EQ(dim, offset_dof_map.cols());
+
+    ParameterCommon::Variables vars;
+    const size_t num_thickness_dof = manager->get_num_thickness_dofs();
+    const size_t num_dofs = manager->get_num_dofs();
+    for (size_t i=num_thickness_dof; i<num_dofs; i++) {
+        VectorF cur_dofs = manager->get_dofs();
+        MatrixFr cur_offset = manager->evaluate_offset(vars);
+
+        VectorF new_dofs = cur_dofs;
+        new_dofs[i] += 0.1;
+        manager->set_dofs(new_dofs);
+        MatrixFr new_offset = manager->evaluate_offset(vars);
+
+        MatrixFr diff_offset = new_offset - cur_offset;
+        for (size_t j=0; j<num_vertices; j++) {
+            for (size_t k=0; k<dim; k++) {
+                if (offset_dof_map(j,k) != i) {
+                    ASSERT_FLOAT_EQ(0.0, diff_offset(j,k));
+                } else {
+                    ASSERT_LT(0.0, fabs(diff_offset(j,k)));
+                }
+            }
+        }
+    }
+}
