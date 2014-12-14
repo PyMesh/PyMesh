@@ -52,6 +52,10 @@ class ParameterManager {
 
         void set_wire_network(WireNetwork::Ptr wire_network) {
             m_wire_network = wire_network;
+            for (auto& param : m_thickness_params)
+                param->set_wire_network(m_wire_network);
+            for (auto& param : m_offset_params)
+                param->set_wire_network(m_wire_network);
         }
 
         Float get_default_thickness() const {

@@ -34,6 +34,7 @@ class PatternParameter {
         }
 
         WireNetwork::Ptr get_wire_network() { return m_wire_network; }
+        void set_wire_network(WireNetwork::Ptr network) { m_wire_network = network; }
 
     public:
         virtual void apply(VectorF& results, const Variables& vars)=0;

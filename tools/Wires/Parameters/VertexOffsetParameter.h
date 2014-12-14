@@ -14,5 +14,4 @@ class VertexOffsetParameter : public PatternParameter {
 
     private:
         size_t m_axis;
-        VectorF m_center;
 };
