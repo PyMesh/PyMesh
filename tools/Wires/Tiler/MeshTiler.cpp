@@ -234,7 +234,7 @@ void MeshTiler::evaluate_offset_parameters(WireNetwork& wire_network,
         vars_itr++;
     }
 
-    attr_value = wire_network.get_vertices() - attr_value;
+    attr_value = attr_value - wire_network.get_vertices();
     wire_network.set_attribute("vertex_offset", attr_value);
 }
 

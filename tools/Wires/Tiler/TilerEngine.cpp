@@ -61,6 +61,7 @@ using namespace TilerEngineHelper;
 void TilerEngine::with_parameters(ParameterManager::Ptr params) {
     assert(params);
     m_params = params;
+    m_params->set_wire_network(m_unit_wire_network);
 }
 
 MatrixFr TilerEngine::tile_vertices(const TilerEngine::FuncList& funcs) {
