@@ -8,8 +8,27 @@
 #include <Mesh.h>
 #include <WireTest.h>
 #include <Wires/Interfaces/PeriodicExploration.h>
+#include <Wires/Inflator/AABBTree.h>
 
 class PeriodicExplorationTest : public WireTest {
+    protected:
+        void ASSERT_ASSENDING_DIRECTION(const MatrixFr& delta_y, const MatrixFr& grad) {
+            Float proj_len = delta_y.cwiseProduct(grad).sum();
+            ASSERT_LT(0.0, proj_len);
+        }
+
+        Float compute_hausdorff_distance(
+                const MatrixFr& vertices_1,
+                const MatrixIr& faces_1,
+                const MatrixFr& vertices_2) {
+            AABBTree tree_1(vertices_1, faces_1);
+
+            VectorF squared_dist;
+            VectorI closest_face_indices;
+
+            tree_1.look_up(vertices_2, squared_dist, closest_face_indices);
+            return squared_dist.maxCoeff();
+        }
 };
 
 TEST_F(PeriodicExplorationTest, brick5) {
@@ -25,8 +44,6 @@ TEST_F(PeriodicExplorationTest, brick5) {
     VectorF dofs = explorer.get_dofs();
     const size_t num_dofs = explorer.get_num_dofs();
     for (size_t i=0; i<5; i++) {
-        std::cout << ".";
-        std::cout.flush();
         Float factor = 1.0 - i * 0.1;
         VectorF modified_dofs(dofs);
         for (size_t j=0; j<num_dofs; j++) {
@@ -65,6 +82,9 @@ TEST_F(PeriodicExplorationTest, brick5) {
         std::stringstream sin;
         sin << "exploration_brick5_itr_" << i << ".msh";
         save_mesh(sin.str(), mesh, attr_names);
+
+        std::cout << ".";
+        std::cout.flush();
     }
     std::cout << " done!" << std::endl;;
 }
@@ -80,8 +100,6 @@ TEST_F(PeriodicExplorationTest, diamond) {
     VectorF dofs = explorer.get_dofs();
     const size_t num_dofs = explorer.get_num_dofs();
     for (size_t i=0; i<5; i++) {
-        std::cout << ".";
-        std::cout.flush();
         Float factor = 1.0 + i * 0.1;
         VectorF modified_dofs(dofs);
         for (size_t j=0; j<num_dofs; j++) {
@@ -115,6 +133,61 @@ TEST_F(PeriodicExplorationTest, diamond) {
         std::stringstream sin;
         sin << "exploration_diamond_itr_" << i << ".msh";
         save_mesh(sin.str(), mesh, attr_names);
+
+        std::cout << ".";
+        std::cout.flush();
+    }
+    std::cout << " done!" << std::endl;
+}
+
+TEST_F(PeriodicExplorationTest, finite_difference) {
+    std::cout << "This might take a few minutes ";
+    std::cout.flush();
+
+    Float eps = 0.1;
+    PeriodicExploration explorer(
+            m_data_dir + "diamond.wire", 5, 0.5);
+    explorer.with_all_parameters();
+    explorer.with_refinement("loop", 0);
+
+    size_t num_dofs = explorer.get_num_dofs();
+    VectorF dofs = explorer.get_dofs();
+    explorer.periodic_inflate();
+
+    MatrixFr init_vertices = explorer.get_vertices();
+    MatrixIr init_faces = explorer.get_faces();
+    auto shape_velocities = explorer.get_shape_velocities();
+
+    for (size_t i=0; i<num_dofs; i++) {
+        VectorF modified_dofs = dofs;
+        if (explorer.is_thickness_dof(i)) {
+            eps = 1.0;
+        } else {
+            eps = 0.1;
+        }
+        modified_dofs[i] += eps;
+
+        explorer.set_dofs(modified_dofs);
+        explorer.periodic_inflate();
+
+        MatrixFr vertices = explorer.get_vertices();
+        MatrixIr faces = explorer.get_faces();
+        MatrixFr perturbed_vertices = init_vertices + shape_velocities[i] * eps;
+
+        std::stringstream sin_1;
+        sin_1 << "diamond_perturbation_" << i << ".msh";
+        save_mesh(sin_1.str(), perturbed_vertices, init_faces);
+
+        std::stringstream sin_2;
+        sin_2 << "diamond_actual_" << i << ".msh";
+        save_mesh(sin_2.str(), vertices, faces);
+
+        Float dist = compute_hausdorff_distance(
+                perturbed_vertices, init_faces, vertices);
+        ASSERT_LT(dist, eps);
+
+        std::cout << ".";
+        std::cout.flush();
     }
     std::cout << " done!" << std::endl;
 }
