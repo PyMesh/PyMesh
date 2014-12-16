@@ -5,6 +5,7 @@
 #include "Attributes/WireEdgeSymmetryAttributeTest.h"
 #include "Attributes/WireVertexMinAngleAttributeTest.h"
 #include "Attributes/WireVertexPeriodicIndexAttributeTest.h"
+#include "Attributes/WireVertexSupportAttributeTest.h"
 #include "Attributes/WireVertexSymmetryAttributeTest.h"
 #include "Inflator/AABBTreeTest.h"
 #include "Inflator/PeriodicInflator2DTest.h"
