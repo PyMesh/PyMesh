@@ -7,6 +7,8 @@
 #include <MeshFactory.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 
+#include "Eroder.h"
+
 namespace VoxelGridHelper {
     bool nonzero(short i) { return i!=0; }
 
@@ -126,6 +128,46 @@ void VoxelGrid<DIM>::create_grid() {
 }
 
 template<int DIM>
+void VoxelGrid<DIM>::dilate(size_t iterations) {
+    // Dilate the solid regions is equivalent to erode the void reigions.
+    // mask(idx) == true iff idx is void.
+    Mask mask = create_mask();
+    std::transform(mask.begin(), mask.end(), mask.begin(),
+            std::logical_not<bool>());
+
+    Eroder<DIM> eroder(mask);
+    eroder.erode(iterations);
+
+    mask = eroder.get_mask();
+
+    auto mask_itr = mask.begin();
+    auto data_itr = this->begin();
+    for (; mask_itr != mask.end(); mask_itr++, data_itr++) {
+        if (!*mask_itr) { *data_itr = 1; }
+        else { *data_itr = 0; }
+    }
+    assert(data_itr == this->end());
+}
+
+template<int DIM>
+void VoxelGrid<DIM>::erode(size_t iterations) {
+    Mask solid = create_mask();
+
+    Eroder<DIM> eroder(solid);
+    eroder.erode(iterations);
+
+    solid = eroder.get_mask();
+
+    auto solid_itr = solid.begin();
+    auto data_itr = this->begin();
+    for (; solid_itr != solid.end(); solid_itr++, data_itr++) {
+        if (*solid_itr) { *data_itr = 1; }
+        else { *data_itr = 0; }
+    }
+    assert(data_itr == this->end());
+}
+
+template<int DIM>
 Mesh::Ptr VoxelGrid<DIM>::get_voxel_mesh() {
     size_t index = 0;
     const Vector_f half_cell_size = this->m_cell_size * 0.5;
@@ -219,14 +261,14 @@ typename VoxelGrid<DIM>::Mask VoxelGrid<DIM>::create_mask() const {
     Mask mask(this->m_cell_size[0]);
     assert((mask.cell_size().array() == this->m_cell_size.array()).all());
     mask.initialize(this->size(), this->base_coordinates());
+    std::transform(this->begin(), this->end(), mask.begin(),
+            std::ptr_fun<short, bool>(nonzero));
     return mask;
 }
 
 template<int DIM>
 void VoxelGrid<DIM>::flood_exterior_cells() {
     Mask mask = create_mask();
-    std::transform(this->begin(), this->end(), mask.begin(),
-            std::ptr_fun<short, bool>(nonzero));
 
     flood_from_base_cell(mask);
     auto mask_itr = mask.begin();

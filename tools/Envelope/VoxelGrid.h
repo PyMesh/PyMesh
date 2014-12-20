@@ -23,6 +23,8 @@ class VoxelGrid : public Grid<DIM, short>{
     public:
         void insert_mesh(Mesh::Ptr mesh);
         void create_grid();
+        void erode(size_t iterations);
+        void dilate(size_t iterations);
         Mesh::Ptr get_voxel_mesh();
 
     protected:

@@ -176,3 +176,33 @@ TEST_F(VoxelGridTest, Rectangle) {
     save_mesh("tmp_rec.msh", rec_mesh);
 }
 
+TEST_F(VoxelGridTest, dilation) {
+    MeshPtr mesh = load_mesh("cube.obj");
+    const Float cell_size = 1.0;
+    VoxelGrid<3> grid(cell_size);
+    grid.insert_mesh(mesh);
+    grid.create_grid();
+    grid.dilate(1);
+    MeshPtr hex_mesh = grid.get_voxel_mesh();
+    save_mesh("dilated.msh", hex_mesh);
+
+    ASSERT_EQ(3, hex_mesh->get_dim());
+    ASSERT_EQ(8, hex_mesh->get_vertex_per_voxel());
+    ASSERT_EQ(125, hex_mesh->get_num_voxels());
+}
+
+TEST_F(VoxelGridTest, erosion) {
+    MeshPtr mesh = load_mesh("cube.obj");
+    const Float cell_size = 1.0;
+    VoxelGrid<3> grid(cell_size);
+    grid.insert_mesh(mesh);
+    grid.create_grid();
+    grid.erode(1);
+    MeshPtr hex_mesh = grid.get_voxel_mesh();
+    save_mesh("eroded.msh", hex_mesh);
+
+    ASSERT_EQ(3, hex_mesh->get_dim());
+    ASSERT_EQ(8, hex_mesh->get_vertex_per_voxel());
+    ASSERT_EQ(1, hex_mesh->get_num_voxels());
+}
+
