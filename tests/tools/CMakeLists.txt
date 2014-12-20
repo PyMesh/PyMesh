@@ -49,10 +49,10 @@ IF (TARGET SparseSolver)
     LIST(APPEND TARGET_MODULE_TESTS SparseSolver_tests)
 ENDIF (TARGET SparseSolver)
 
-IF (TARGET Envelope)
+IF (TARGET envelope)
     ADD_SUBDIRECTORY(Envelope)
     LIST(APPEND TARGET_MODULE_TESTS envelope_tests)
-ENDIF (TARGET Envelope)
+ENDIF (TARGET envelope)
 
 IF (TARGET wires)
     ADD_SUBDIRECTORY(Wires)
