@@ -9,12 +9,14 @@
 
 FIND_PATH(TETGEN_INCLUDE_DIRS tetgen.h
     $ENV{TETGEN_PATH}
+    $ENV{TETGEN_PATH}/include/
     /opt/local/include/
     /usr/local/include/
     /usr/include/)
 
 FIND_LIBRARY(TETGEN_LIBRARIES tet
     $ENV{TETGEN_PATH}
+    $ENV{TETGEN_PATH}/lib/
     /opt/local/lib/
     /usr/local/lib/
     /usr/lib/)

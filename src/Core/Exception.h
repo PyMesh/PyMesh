@@ -5,7 +5,7 @@
 class PyMeshException : public std::exception {
     public:
         PyMeshException(const std::string& description) :
-            m_description(description), exception() {}
+            exception(), m_description(description) {}
         virtual ~PyMeshException() throw() {}
 
     public:

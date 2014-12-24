@@ -7,6 +7,7 @@
 # Find include directory
 FIND_PATH(SPARSEHASH_INCLUDE_DIRS sparsehash/sparse_hash_map
     $ENV{SPARSEHASH_PATH}
+    $ENV{SPARSEHASH_PATH}/include
     /opt/local/include
     /usr/local/include
     /usr/include)
