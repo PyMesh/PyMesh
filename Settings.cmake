@@ -30,6 +30,11 @@ SET(EIGEN_WRAPPER_PATH ${PROJECT_SOURCE_DIR}/eigen_wrapper)
 # Disallow depreciated numpy calls
 #ADD_DEFINITIONS(-DNPY_NO_DEPRECATED_API=NPY_1_7_API_VERSION)
 
+OPTION(WITHOUT_SWIG "Compile with building swig modules" OFF)
+IF(WITHOUT_SWIG)
+    MESSAGE("Python modules won't be built!!!")
+ENDIF(WITHOUT_SWIG)
+
 SET(CMAKE_MACOSX_RPATH ON)
 
 # Include all libraries

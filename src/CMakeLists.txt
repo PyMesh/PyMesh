@@ -18,6 +18,10 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 # Add executable and library
 ADD_LIBRARY(Mesh SHARED ${SRC_FILES} ${INC_FILES})
 
+IF(WITHOUT_SWIG)
+    RETURN()
+ENDIF(WITHOUT_SWIG)
+
 # Add swig interface files
 SET(SWG_FILES PyMesh.i)
 

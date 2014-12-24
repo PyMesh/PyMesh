@@ -15,14 +15,18 @@ SET_TARGET_PROPERTIES(lib_SparseSolver PROPERTIES OUTPUT_NAME "SparseSolver")
 TARGET_LINK_LIBRARIES(lib_SparseSolver Mesh
     ${UMFPACK_LIBRARIES} ${CHOLMOD_LIBRARIES} ${METIS_LIBRARIES})
 
-set(SWG_FILES PySparseSolver.i)
+IF(NOT WITHOUT_SWIG)
+    set(SWG_FILES PySparseSolver.i)
 
-# Generate wrapper for python
-SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-SWIG_ADD_MODULE(PySparseSolver python ${SWG_FILES} ${INC_FILES})
-SWIG_LINK_LIBRARIES(PySparseSolver ${PYTHON_LIBRARIES} lib_SparseSolver Mesh)
+    # Generate wrapper for python
+    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
+    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
+    SWIG_ADD_MODULE(PySparseSolver python ${SWG_FILES} ${INC_FILES})
+    SWIG_LINK_LIBRARIES(PySparseSolver ${PYTHON_LIBRARIES} lib_SparseSolver Mesh)
 
-# Boudle lib, swig wrapper into a single target.
-# Usage: make SparseSolver
-ADD_CUSTOM_TARGET(SparseSolver DEPENDS lib_SparseSolver _PySparseSolver)
+    # Boudle lib, swig wrapper into a single target.
+    # Usage: make SparseSolver
+    ADD_CUSTOM_TARGET(SparseSolver DEPENDS lib_SparseSolver _PySparseSolver)
+ELSE(NOT WITHOUT_SWIG)
+    ADD_CUSTOM_TARGET(SparseSolver DEPENDS lib_SparseSolver)
+ENDIF(NOT WITHOUT_SWIG)

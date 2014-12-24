@@ -50,15 +50,19 @@ ADD_LIBRARY(lib_csg SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_csg PROPERTIES OUTPUT_NAME "csg")
 TARGET_LINK_LIBRARIES(lib_csg Mesh lib_MeshUtils lib_triangle_wrapper ${DEPENDENT_LIBS})
 
-set(SWG_FILES PyCSG.i)
+IF(NOT WITHOUT_SWIG)
+    set(SWG_FILES PyCSG.i)
 
-# Generate wrapper for python
-SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-SWIG_ADD_MODULE(PyCSG python ${SWG_FILES} ${INC_FILES})
-SWIG_LINK_LIBRARIES(PyCSG ${PYTHON_LIBRARIES} Mesh lib_MeshUtils lib_csg
-    ${DEPENDENT_LIBS})
+    # Generate wrapper for python
+    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
+    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
+    SWIG_ADD_MODULE(PyCSG python ${SWG_FILES} ${INC_FILES})
+    SWIG_LINK_LIBRARIES(PyCSG ${PYTHON_LIBRARIES} Mesh lib_MeshUtils lib_csg
+        ${DEPENDENT_LIBS})
 
-# Boudle lib, swig wrapper into a single target.
-# Usage: make csg
-ADD_CUSTOM_TARGET(csg DEPENDS lib_csg _PyCSG)
+    # Boudle lib, swig wrapper into a single target.
+    # Usage: make csg
+    ADD_CUSTOM_TARGET(csg DEPENDS lib_csg _PyCSG)
+ELSE(NOT WITHOUT_SWIG)
+    ADD_CUSTOM_TARGET(csg DEPENDS lib_csg)
+ENDIF(NOT WITHOUT_SWIG)

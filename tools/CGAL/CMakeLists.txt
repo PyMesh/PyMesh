@@ -21,14 +21,18 @@ INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/MeshUtils)
 ADD_LIBRARY(cgal_wrapper SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(cgal_wrapper Mesh lib_MeshUtils ${CGAL_LIBRARIES})
 
-SET(SWG_FILES PyCGAL.i)
+IF(NOT WITHOUT_SWIG)
+    SET(SWG_FILES PyCGAL.i)
 
-# Generate wrapper for python
-SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-SWIG_ADD_MODULE(PyCGAL python ${SWG_FILES} ${INC_FILES})
-SWIG_LINK_LIBRARIES(PyCGAL ${PYTHON_LIBRARIES} cgal_wrapper)
+    # Generate wrapper for python
+    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
+    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
+    SWIG_ADD_MODULE(PyCGAL python ${SWG_FILES} ${INC_FILES})
+    SWIG_LINK_LIBRARIES(PyCGAL ${PYTHON_LIBRARIES} cgal_wrapper)
 
-# Boudle exe, lib, swig wrapper into a single target.
-# To build all: "make cgal"
-ADD_CUSTOM_TARGET(cgal DEPENDS cgal_wrapper _PyCGAL)
+    # Boudle exe, lib, swig wrapper into a single target.
+    # To build all: "make cgal"
+    ADD_CUSTOM_TARGET(cgal DEPENDS cgal_wrapper _PyCGAL)
+ELSE(NOT WITHOUT_SWIG)
+    ADD_CUSTOM_TARGET(cgal DEPENDS cgal_wrapper)
+ENDIF(NOT WITHOUT_SWIG)
