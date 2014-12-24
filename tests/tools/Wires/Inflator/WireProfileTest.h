@@ -45,7 +45,8 @@ TEST_F(WireProfileTest, 3D) {
     Vector3F p1(1,0,0);
     Float offset = 0.0;
     Float thickness = 1.0;
-    MatrixFr loop = profile->place(p0, p1, offset, thickness);
+    Vector3F correction(0, 0, 0);
+    MatrixFr loop = profile->place(p0, p1, offset, thickness, correction);
     ASSERT_FLOAT_EQ(offset, compute_offset(loop, p0));
     ASSERT_FLOAT_EQ(thickness * 0.5, compute_radius(loop));
     ASSERT_COLINEAR(loop, p0, p1);
@@ -57,7 +58,8 @@ TEST_F(WireProfileTest, 3D_diag) {
     Vector3F p1(1,1,1);
     Float offset = 0.5;
     Float thickness = 2.0;
-    MatrixFr loop = profile->place(p0, p1, offset, thickness);
+    Vector3F correction(0, 0, 0);
+    MatrixFr loop = profile->place(p0, p1, offset, thickness, correction);
     ASSERT_FLOAT_EQ(offset, compute_offset(loop, p0));
     ASSERT_FLOAT_EQ(thickness * 0.5, compute_radius(loop));
     ASSERT_COLINEAR(loop, p0, p1);
@@ -69,7 +71,8 @@ TEST_F(WireProfileTest, 2D) {
     Vector2F p1(1,0);
     Float offset = 0.3;
     Float thickness = 1.1;
-    MatrixFr loop = profile->place(p0, p1, offset, thickness);
+    Vector2F correction(0, 0);
+    MatrixFr loop = profile->place(p0, p1, offset, thickness, correction);
     ASSERT_FLOAT_EQ(offset, compute_offset(loop, p0));
     ASSERT_FLOAT_EQ(thickness * 0.5, compute_radius(loop));
     ASSERT_COLINEAR(loop, p0, p1);
@@ -81,7 +84,8 @@ TEST_F(WireProfileTest, 2D_diag) {
     Vector2F p1(1,1);
     Float offset = 0.1;
     Float thickness = 1.0;
-    MatrixFr loop = profile->place(p0, p1, offset, thickness);
+    Vector2F correction(0, 0);
+    MatrixFr loop = profile->place(p0, p1, offset, thickness, correction);
     ASSERT_FLOAT_EQ(offset, compute_offset(loop, p0));
     ASSERT_FLOAT_EQ(thickness * 0.5, compute_radius(loop));
     ASSERT_COLINEAR(loop, p0, p1);

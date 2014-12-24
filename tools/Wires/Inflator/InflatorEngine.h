@@ -37,6 +37,7 @@ class InflatorEngine {
 
     public:
         void with_refinement(const std::string& algorithm, size_t order);
+        void with_geometry_correction(const VectorF& correction);
         VectorF  get_thickness() const { return m_thickness; }
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
@@ -64,6 +65,7 @@ class InflatorEngine {
         WireProfilePtr m_profile;
         Subdivision::Ptr m_refiner;
         size_t m_subdiv_order;
+        VectorF m_correction;
 
         /**
          * m_face_sources tracks the source element of each inflated face.

@@ -21,6 +21,18 @@ namespace WireProfileHelper {
         }
         return (Q.toRotationMatrix() * loop.transpose()).transpose();
     }
+
+    void apply_correction(MatrixFr& loop, const VectorF& correction) {
+        assert(loop.cols() == correction.size());
+        VectorF centroid = 0.5 *
+            (loop.colwise().minCoeff() + loop.colwise().maxCoeff());
+        const size_t loop_size = loop.rows();
+        for (size_t i=0; i<loop_size; i++) {
+            VectorF v = loop.row(i) - centroid.transpose();
+            Float l = v.norm();
+            loop.row(i) += (v.cwiseProduct(correction) / l).transpose();
+        }
+    }
 }
 
 using namespace WireProfileHelper;
@@ -84,7 +96,7 @@ void WireProfile::initialize(const MatrixFr& loop) {
 }
 
 MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
-        Float offset, Float thickness) {
+        Float offset, Float thickness, const VectorF& correction) {
     VectorF dir = end_2 - end_1;
     MatrixFr loop = m_loop;
 
@@ -101,6 +113,7 @@ MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
         err_msg << "Unsupported dimention: " << m_dim;
         throw NotImplementedError(err_msg.str());
     }
+    apply_correction(loop, correction);
     return loop.rowwise() + end_1.transpose();
 }
 

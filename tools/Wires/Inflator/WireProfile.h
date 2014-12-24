@@ -26,7 +26,7 @@ class WireProfile {
          * bounding sphere of the loop.
          */
         MatrixFr place(const VectorF& end_1, const VectorF& end_2,
-                Float offset, Float thickness);
+                Float offset, Float thickness, const VectorF& correction);
 
         size_t size() const { return m_loop.rows(); }
 
