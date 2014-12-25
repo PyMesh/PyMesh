@@ -32,9 +32,9 @@ Optional library:
 * [qhull](http://www.qhull.org/)
 * [Clipper](http://www.angusj.com/delphi/clipper.php)
 
-Most optinal libraries are detected automatically.  To disable the usage of SparseHash, use the flag "-DUSE_SPARSE_HASH=OFF" with cmake.  I.e.
+To only build the C++ libraries without the swig python modules, run
 
-    cmake -DUSE_SPARSE_HASH=OFF ..
+    cmake -DWITHOUT_SWIG=ON ..
 
 instead of
 
