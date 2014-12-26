@@ -17,6 +17,7 @@
 #include "Misc/BilinearInterpolationTest.h"
 #include "Misc/BoxCheckerTest.h"
 #include "Misc/DistanceComputationTest.h"
+#include "Misc/SymmetryOperatorsTest.h"
 #include "Misc/TrilinearInterpolationTest.h"
 #include "Parameters/ThicknessParametersTest.h"
 #include "Parameters/OffsetParameterTest.h"

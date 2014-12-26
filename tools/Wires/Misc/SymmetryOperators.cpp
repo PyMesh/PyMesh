@@ -1,7 +1,7 @@
 #include "SymmetryOperators.h"
 
 template<>
-SymmetryOperators::Operators SymmetryOperators::generate_symmetry_operators<2>(const VectorF& c) {
+SymmetryOperators::Operators SymmetryOperators::generate_reflective_symmetry_operators<2>(const VectorF& c) {
     assert(c.size() == 2);
     Operators ops;
 
@@ -16,7 +16,7 @@ SymmetryOperators::Operators SymmetryOperators::generate_symmetry_operators<2>(c
 }
 
 template<>
-SymmetryOperators::Operators SymmetryOperators::generate_symmetry_operators<3>(const VectorF& c) {
+SymmetryOperators::Operators SymmetryOperators::generate_reflective_symmetry_operators<3>(const VectorF& c) {
     assert(c.size() == 3);
     Operators ops;
 
@@ -32,6 +32,50 @@ SymmetryOperators::Operators SymmetryOperators::generate_symmetry_operators<3>(c
 
     // Reflective symmetry with respect to center.
     ops.push_back([=](const VectorF& p) { return Vector3F(2*c[0]-p[0], 2*c[1]-p[1], 2*c[2]-p[2]); });
+
+    return ops;
+}
+
+template<>
+SymmetryOperators::Operators SymmetryOperators::generate_rotational_symmetry_operators<2>(const VectorF& c) {
+    assert(c.size() == 2);
+    Operators ops;
+
+    ops.push_back([=](const VectorF& p) {
+            return Vector2F(c[0]+p[1]-c[1], c[1]-p[0]+c[0]); });
+    ops.push_back([=](const VectorF& p) {
+            return Vector2F(c[0]-p[1]+c[1], c[1]+p[0]-c[0]); });
+    ops.push_back([=](const VectorF& p) {
+            return Vector2F(c[0]-p[0]+c[0], c[1]-p[1]+c[1]); });
+
+    return ops;
+}
+
+template<>
+SymmetryOperators::Operators SymmetryOperators::generate_rotational_symmetry_operators<3>(const VectorF& c) {
+    assert(c.size() == 3);
+    Operators ops;
+
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(p[0], c[1]+p[2]-c[2], c[2]-p[1]+c[1]); });
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(p[0], c[1]-p[1]+c[1], c[2]-p[2]+c[2]); });
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(p[0], c[1]-p[2]+c[2], c[2]+p[1]-c[1]); });
+
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(c[2]+p[0]-c[0], p[1], c[0]-p[2]+c[2]); });
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(c[0]-p[0]+c[0], p[1], c[2]-p[2]+c[2]); });
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(c[2]-p[0]+c[0], p[1], c[0]+p[2]-c[2]); });
+
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(c[0]+p[1]-c[1], c[1]-p[0]+c[0], p[2]); });
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(c[0]-p[0]+c[0], c[1]-p[1]+c[1], p[2]); });
+    ops.push_back([=](const VectorF& p)
+            { return Vector3F(c[0]-p[1]+c[1], c[1]+p[0]-c[0], p[2]); });
 
     return ops;
 }

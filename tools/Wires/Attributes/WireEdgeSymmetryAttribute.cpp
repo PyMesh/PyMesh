@@ -11,9 +11,9 @@ namespace WireEdgeSymmetryAttributeHelper {
 
     Operators get_symmetry_operators(size_t dim, const VectorF& center) {
         if (dim == 2) {
-            return generate_symmetry_operators<2>(center);
+            return generate_reflective_symmetry_operators<2>(center);
         } else if (dim == 3) {
-            return generate_symmetry_operators<3>(center);
+            return generate_reflective_symmetry_operators<3>(center);
         } else {
             throw NotImplementedError(
                     "Symmetry operations only supports 2D and 3D");
