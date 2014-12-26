@@ -14,9 +14,11 @@ typedef Eigen::Vector2d Vector2F;
 typedef Eigen::Vector2i Vector2I;
 
 typedef Eigen::MatrixXd MatrixF;
+typedef Eigen::Matrix2d Matrix2F;
 typedef Eigen::Matrix3d Matrix3F;
 typedef Eigen::Matrix4d Matrix4F;
 typedef Eigen::MatrixXi MatrixI;
+typedef Eigen::Matrix2i Matrix2I;
 typedef Eigen::Matrix3i Matrix3I;
 typedef Eigen::Matrix4i Matrix4I;
 

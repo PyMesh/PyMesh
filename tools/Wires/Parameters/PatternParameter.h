@@ -24,7 +24,10 @@ class PatternParameter {
         virtual ~PatternParameter() {}
 
         VectorI get_roi() const { return m_roi; }
-        void set_roi(const VectorI& roi) { m_roi = roi; }
+        void set_roi(const VectorI& roi) {
+            m_roi = roi;
+            process_roi();
+        }
 
         Float get_value() const { return m_value; }
         void set_value(Float val) { m_value = val; }
@@ -49,6 +52,8 @@ class PatternParameter {
         virtual ParameterType get_type() const =0;
 
     protected:
+        virtual void process_roi() {};
+
         void evaluate_formula(const Variables& vars);
 
     protected:

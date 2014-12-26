@@ -21,6 +21,7 @@
 #include "Misc/DistanceComputationTest.h"
 #include "Misc/SymmetryOperatorsTest.h"
 #include "Misc/TrilinearInterpolationTest.h"
+#include "Parameters/IsotropicTransformsTest.h"
 #include "Parameters/ThicknessParametersTest.h"
 #include "Parameters/OffsetParameterTest.h"
 #include "Parameters/ParameterManagerTest.h"
