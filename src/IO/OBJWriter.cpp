@@ -23,8 +23,8 @@ void OBJWriter::write_mesh(Mesh& mesh) {
 
 void OBJWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
-    if (vertex_per_face != 3) {
-        std::cerr << "Error: non-triangle face with "
+    if (vertex_per_face != 3 && vertex_per_face != 4) {
+        std::cerr << "Error: non-triangle non-quad face with "
             << vertex_per_face << " vertices." << std::endl;
         throw RuntimeError("Unsupported face type.");
     }
