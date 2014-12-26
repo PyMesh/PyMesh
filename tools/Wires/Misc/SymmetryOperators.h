@@ -11,6 +11,7 @@
 
 namespace SymmetryOperators {
     typedef std::vector<std::function<VectorF(const VectorF&)> > Operators;
+    typedef std::vector<std::list<size_t> > SymmetryConnectivity;
 
     template<int DIM>
     Operators generate_reflective_symmetry_operators(const VectorF& center) {
@@ -38,6 +39,12 @@ namespace SymmetryOperators {
     template<>
     Operators generate_rotational_symmetry_operators<3>(const VectorF& c);
 
+    SymmetryConnectivity compute_vertex_connectivity(
+            const MatrixFr& vertices, Operators& ops);
+
+    SymmetryConnectivity compute_edge_connectivity(
+            const MatrixFr& vertices, const MatrixIr& edges, Operators& ops);
+
     VectorI label_connected_components(size_t num_entries,
-            const std::vector<std::list<size_t> >& connectivity);
+            const SymmetryConnectivity& connectivity);
 }

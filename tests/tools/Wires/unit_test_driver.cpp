@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include "Attributes/WireAttributeTest.h"
+#include "Attributes/WireEdgeCubicSymmetryAttributeTest.h"
 #include "Attributes/WireEdgePeriodicIndexAttributeTest.h"
 #include "Attributes/WireEdgeSymmetryAttributeTest.h"
+#include "Attributes/WireVertexCubicSymmetryAttributeTest.h"
 #include "Attributes/WireVertexMinAngleAttributeTest.h"
 #include "Attributes/WireVertexPeriodicIndexAttributeTest.h"
 #include "Attributes/WireVertexSupportAttributeTest.h"

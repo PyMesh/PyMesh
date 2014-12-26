@@ -80,6 +80,76 @@ SymmetryOperators::Operators SymmetryOperators::generate_rotational_symmetry_ope
     return ops;
 }
 
+SymmetryOperators::SymmetryConnectivity SymmetryOperators::compute_vertex_connectivity(
+        const MatrixFr& vertices, SymmetryOperators::Operators& ops) {
+    const Float tol = 1e-12;
+    const size_t num_vertices = vertices.rows();
+
+    SymmetryConnectivity connectivity(num_vertices);
+    for (auto& op : ops) {
+        std::vector<bool> visited(num_vertices, false);
+        for (size_t i=0; i<num_vertices; i++) {
+            if (visited[i]) continue;
+
+            const VectorF& curr_p = vertices.row(i);
+            VectorF mapped_p = op(curr_p);
+            for (size_t j=i+1; j<num_vertices; j++) {
+                const VectorF& other_p = vertices.row(j);
+                Float squared_dist = (mapped_p - other_p).squaredNorm();
+                if (squared_dist < tol) {
+                    visited[i] = true;
+                    visited[j] = true;
+                    connectivity[i].push_back(j);
+                    connectivity[j].push_back(i);
+                }
+            }
+        }
+    }
+
+    return connectivity;
+}
+
+SymmetryOperators::SymmetryConnectivity SymmetryOperators::compute_edge_connectivity(
+        const MatrixFr& vertices,
+        const MatrixIr& edges,
+        SymmetryOperators::Operators& ops) {
+    const Float tol = 1e-12;
+    const size_t num_edges = edges.rows();
+
+    SymmetryConnectivity connectivity(num_edges);
+    for (auto& op : ops) {
+        std::vector<bool> visited(num_edges, false);
+        for (size_t i=0; i<num_edges; i++) {
+            if (visited[i]) continue;
+
+            const VectorI& curr_e = edges.row(i);
+            const VectorF& e0 = vertices.row(curr_e[0]);
+            const VectorF& e1 = vertices.row(curr_e[1]);
+            VectorF mapped_e0 = op(e0);
+            VectorF mapped_e1 = op(e1);
+
+            for (size_t j=i+1; j<num_edges; j++) {
+                const VectorI& other_e = edges.row(j);
+                const VectorF& other_e0 = vertices.row(other_e[0]);
+                const VectorF& other_e1 = vertices.row(other_e[1]);
+
+                Float dist_1 = (mapped_e0 - other_e0).squaredNorm() +
+                    (mapped_e1 - other_e1).squaredNorm();
+                Float dist_2 = (mapped_e0 - other_e1).squaredNorm() +
+                    (mapped_e1 - other_e0).squaredNorm();
+                if (dist_1 < tol || dist_2 < tol) {
+                    visited[i] = true;
+                    visited[j] = true;
+                    connectivity[i].push_back(j);
+                    connectivity[j].push_back(i);
+                }
+            }
+        }
+    }
+
+    return connectivity;
+}
+
 VectorI SymmetryOperators::label_connected_components(size_t num_entries,
         const std::vector<std::list<size_t> >& connectivity) {
     size_t count = 0;
@@ -105,3 +175,4 @@ VectorI SymmetryOperators::label_connected_components(size_t num_entries,
     }
     return components;
 }
+

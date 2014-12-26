@@ -1,7 +1,9 @@
 #include "WireAttribute.h"
+#include "WireEdgeCubicSymmetryAttribute.h"
 #include "WireEdgeLengthAttribute.h"
 #include "WireEdgePeriodicIndexAttribute.h"
 #include "WireEdgeSymmetryAttribute.h"
+#include "WireVertexCubicSymmetryAttribute.h"
 #include "WireVertexMinAngleAttribute.h"
 #include "WireVertexPeriodicIndexAttribute.h"
 #include "WireVertexSupportAttribute.h"
@@ -17,6 +19,8 @@ WireAttribute::Ptr WireAttribute::create(const std::string& name,
         return Ptr(new WireVertexPeriodicIndexAttribute);
     } else if (name == "vertex_symmetry_orbit") {
         return Ptr(new WireVertexSymmetryAttribute);
+    } else if (name == "vertex_cubic_symmetry_orbit") {
+        return Ptr(new WireVertexCubicSymmetryAttribute);
     } else if (name == "vertex_support_X") {
         Vector3F print_dir = Vector3F::UnitX();
         return Ptr(new WireVertexSupportAttribute(print_dir));
@@ -32,6 +36,8 @@ WireAttribute::Ptr WireAttribute::create(const std::string& name,
         return Ptr(new WireEdgePeriodicIndexAttribute);
     } else if (name == "edge_symmetry_orbit") {
         return Ptr(new WireEdgeSymmetryAttribute);
+    } else if (name == "edge_cubic_symmetry_orbit") {
+        return Ptr(new WireEdgeCubicSymmetryAttribute);
     } else {
         Ptr attr = Ptr(new WireAttribute);
         attr->set_attribute_type(type);
