@@ -53,6 +53,54 @@ TEST_F(ParameterManagerTest, creation_default_box) {
     ASSERT_EQ(8, manager2->get_num_dofs());
 }
 
+TEST_F(ParameterManagerTest, create_isotropic_cube) {
+    WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
+    ParameterManager::Ptr manager = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(1, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(1, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_isotropic_brick5) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    ParameterManager::Ptr manager = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(3, manager->get_num_thickness_dofs());
+    ASSERT_EQ(2, manager->get_num_offset_dofs());
+    ASSERT_EQ(5, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(4, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_isotropic_square) {
+    WireNetwork::Ptr wire_network = load_wire_shared("square.wire");
+    ParameterManager::Ptr manager = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(1, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(1, manager2->get_num_dofs());
+}
+
+TEST_F(ParameterManagerTest, creation_isotropic_box) {
+    WireNetwork::Ptr wire_network = load_wire_shared("box.wire");
+    ParameterManager::Ptr manager = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    ASSERT_EQ(3, manager->get_num_thickness_dofs());
+    ASSERT_EQ(2, manager->get_num_offset_dofs());
+    ASSERT_EQ(5, manager->get_num_dofs());
+
+    ParameterManager::Ptr manager2 = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::EDGE);
+    ASSERT_EQ(4, manager2->get_num_dofs());
+}
+
 TEST_F(ParameterManagerTest, creation_empty) {
     WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
     ParameterManager::Ptr manager = ParameterManager::create_empty_manager(

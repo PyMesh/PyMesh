@@ -21,6 +21,9 @@ class OffsetParameters : public ParameterList {
         void add(const VectorI& roi,
                 const std::string& formula, Float value,
                 const MatrixFr& custom_offset);
+        void add_isotropic(const VectorI& roi,
+                const std::string& formula, Float value,
+                const VectorF& dof_dir);
 
         MatrixFr evaluate(const Variables& vars);
 

@@ -11,8 +11,9 @@
 
 #include <Core/Exception.h>
 
-#include "SymmetryOrbits.h"
 #include "EdgeThicknessParameterDerivative.h"
+#include "IsotropicDofExtractor.h"
+#include "SymmetryOrbits.h"
 #include "VertexThicknessParameterDerivative.h"
 #include "VertexOffsetParameter.h"
 #include "VertexOffsetParameterDerivative.h"
@@ -183,6 +184,51 @@ ParameterManager::Ptr ParameterManager::create(
     for (const auto& roi : vertex_orbits) {
         for (size_t i=0; i<dim; i++) {
             manager->add_offset_parameter(roi, "", 0.0, i);
+        }
+    }
+    return manager;
+}
+
+ParameterManager::Ptr ParameterManager::create_isotropic(
+        WireNetwork::Ptr wire_network,
+        Float default_thickness,
+        ParameterManager::TargetType thickness_type) {
+    const size_t dim = wire_network->get_dim();
+    Ptr manager = create_empty_manager(wire_network, default_thickness);
+    if (!wire_network->has_attribute("vertex_cubic_symmetry_orbit")) {
+        wire_network->add_attribute("vertex_cubic_symmetry_orbit");
+    }
+    if (!wire_network->has_attribute("edge_cubic_symmetry_orbit")) {
+        wire_network->add_attribute("edge_cubic_symmetry_orbit");
+    }
+
+    std::list<VectorI> vertex_orbits = group_by_label(
+            wire_network->get_attribute("vertex_cubic_symmetry_orbit"));
+    std::list<VectorI> edge_orbits = group_by_label(
+            wire_network->get_attribute("edge_cubic_symmetry_orbit"));
+
+    manager->set_thickness_type(thickness_type);
+    if (thickness_type == ParameterCommon::VERTEX) {
+        for (const auto& roi : vertex_orbits) {
+            manager->add_thickness_parameter(roi, "", default_thickness);
+        }
+    } else {
+        for (const auto& roi : edge_orbits) {
+            manager->add_thickness_parameter(roi, "", default_thickness);
+        }
+    }
+
+    IsotropicDofExtractor extractor(wire_network);
+    const MatrixFr& vertices = wire_network->get_vertices();
+    manager->set_offset_type(ParameterCommon::VERTEX);
+    for (const auto& roi : vertex_orbits) {
+        const size_t seed_idx = roi.minCoeff();
+        VectorF seed = vertices.row(seed_idx);
+
+        const auto dofs = extractor.extract_dofs(seed);
+        for (const auto& dof_dir : dofs) {
+            manager->add_isotropic_offset_parameter(
+                    roi, "", 0.0, dof_dir);
         }
     }
     return manager;
@@ -372,5 +418,10 @@ void ParameterManager::add_custom_offset_parameter(const VectorI& roi,
         const std::string& formula, Float value,
         const MatrixFr& custom_offset) {
     m_offset_params.add(roi, formula, value, custom_offset);
+}
+
+void ParameterManager::add_isotropic_offset_parameter(const VectorI& roi,
+        const std::string& formula, Float value, const VectorF& dof_dir) {
+    m_offset_params.add_isotropic(roi, formula, value, dof_dir);
 }
 

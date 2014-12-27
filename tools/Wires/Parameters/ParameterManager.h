@@ -27,6 +27,11 @@ class ParameterManager {
                 Float default_thickness = 0.5,
                 TargetType thickness_type = ParameterCommon::VERTEX);
 
+        static Ptr create_isotropic(
+                WireNetwork::Ptr wire_network,
+                Float default_thickness = 0.5,
+                TargetType thickness_type = ParameterCommon::VERTEX);
+
         /**
          * Create parameter manager that contains 0 parameters.
          */
@@ -105,6 +110,9 @@ class ParameterManager {
         void add_custom_offset_parameter(const VectorI& roi,
                 const std::string& formula, Float value,
                 const MatrixFr& custom_offset);
+        void add_isotropic_offset_parameter(const VectorI& roi,
+                const std::string& formula, Float value,
+                const VectorF& dof_dir);
 
     private:
         WireNetwork::Ptr m_wire_network;

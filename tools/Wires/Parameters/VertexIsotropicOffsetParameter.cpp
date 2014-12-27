@@ -2,9 +2,9 @@
 #include "IsotropicTransforms.h"
 
 VertexIsotropicOffsetParameter::VertexIsotropicOffsetParameter(
-        WireNetwork::Ptr wire_network, size_t axis)
-: PatternParameter(wire_network), m_axis(axis) {
-    assert(m_axis < m_wire_network->get_dim());
+        WireNetwork::Ptr wire_network, const VectorF& dof_dir)
+: PatternParameter(wire_network), m_dof_dir(dof_dir) {
+    assert(m_dof_dir.size() == m_wire_network->get_dim());
 }
 
 void VertexIsotropicOffsetParameter::apply(VectorF& results,
@@ -13,7 +13,7 @@ void VertexIsotropicOffsetParameter::apply(VectorF& results,
     const size_t num_vertices = m_wire_network->get_num_vertices();
     const size_t roi_size = m_roi.size();
     const VectorF center = m_wire_network->center();
-    assert(m_axis < dim);
+    const VectorF bbox_max = m_wire_network->get_bbox_max();
     assert(results.size() == dim * num_vertices);
     assert(roi_size == m_transforms.size());
 
@@ -23,7 +23,7 @@ void VertexIsotropicOffsetParameter::apply(VectorF& results,
     size_t seed_vertex_index = m_roi.minCoeff();
     VectorF seed_vertex = vertices.row(seed_vertex_index);
     VectorF seed_offset = VectorF::Zero(dim);
-    seed_offset[m_axis] = (seed_vertex[m_axis] - center[m_axis]) * m_value;
+    seed_offset = (bbox_max - center).cwiseProduct(m_dof_dir) * m_value;
 
     for (size_t i=0; i<roi_size; i++) {
         size_t v_idx = m_roi[i];
@@ -35,17 +35,17 @@ void VertexIsotropicOffsetParameter::apply(VectorF& results,
 
 MatrixFr VertexIsotropicOffsetParameter::compute_derivative() const {
     const VectorF center = m_wire_network->center();
+    const VectorF bbox_max = m_wire_network->get_bbox_max();
     const size_t dim = m_wire_network->get_dim();
     const size_t num_vertices = m_wire_network->get_num_vertices();
     const size_t roi_size = m_roi.size();
     const MatrixFr& vertices = m_wire_network->get_vertices();
-    assert(m_axis < dim);
     assert(roi_size == m_transforms.size());
 
     size_t seed_vertex_index = m_roi.minCoeff();
     VectorF seed_vertex = vertices.row(seed_vertex_index);
     VectorF seed_offset = VectorF::Zero(dim);
-    seed_offset[m_axis] = seed_vertex[m_axis] - center[m_axis];
+    seed_offset = (bbox_max - center).cwiseProduct(m_dof_dir);
 
     MatrixFr derivative = MatrixFr::Zero(num_vertices, dim);
     for (size_t i=0; i<roi_size; i++) {

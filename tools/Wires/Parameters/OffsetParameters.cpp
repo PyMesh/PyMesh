@@ -6,6 +6,7 @@
 
 #include "VertexOffsetParameter.h"
 #include "VertexCustomOffsetParameter.h"
+#include "VertexIsotropicOffsetParameter.h"
 
 OffsetParameters::OffsetParameters(WireNetwork::Ptr wire_network,
         OffsetParameters::TargetType type,
@@ -63,6 +64,16 @@ void OffsetParameters::add(const VectorI& roi,
     m_params.emplace_back(PatternParameter::Ptr(
                 new VertexCustomOffsetParameter(
                     m_wire_network, custom_offset)));
+    PatternParameter::Ptr param = m_params.back();
+    param->set_roi(roi);
+    param->set_value(value);
+    param->set_formula(formula);
+}
+
+void OffsetParameters::add_isotropic(const VectorI& roi,
+        const std::string& formula, Float value, const VectorF& dof_dir) {
+    m_params.emplace_back(PatternParameter::Ptr(
+                new VertexIsotropicOffsetParameter(m_wire_network, dof_dir)));
     PatternParameter::Ptr param = m_params.back();
     param->set_roi(roi);
     param->set_value(value);
