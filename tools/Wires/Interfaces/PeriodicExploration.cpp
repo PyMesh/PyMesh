@@ -38,6 +38,11 @@ void PeriodicExploration::with_all_parameters() {
             m_wire_network, m_default_thickness);
 }
 
+void PeriodicExploration::with_all_isotropic_parameters() {
+    m_parameters = ParameterManager::create_isotropic(
+            m_wire_network, m_default_thickness);
+}
+
 void PeriodicExploration::with_refinement(
         const std::string& algorithm, size_t order) {
     m_refine_algorithm = algorithm;

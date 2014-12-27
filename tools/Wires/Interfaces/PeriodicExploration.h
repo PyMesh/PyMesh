@@ -19,6 +19,7 @@ class PeriodicExploration {
                 const std::string& modifier_file);
 
         void with_all_parameters();
+        void with_all_isotropic_parameters();
 
         void with_refinement(
                 const std::string& algorithm,
