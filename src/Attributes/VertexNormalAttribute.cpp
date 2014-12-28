@@ -43,7 +43,8 @@ void VertexNormalAttribute::compute_vertex_normals_from_face(Mesh& mesh) {
 
     for (size_t i=0; i<num_vertices; i++) {
         VectorF n = v_normals.segment(dim*i, dim);
-        n.normalize();
+        Float n_len = n.norm();
+        if (n_len > 0.0) n /= n_len;
         v_normals.segment(dim*i, dim) = n;
     }
 }
