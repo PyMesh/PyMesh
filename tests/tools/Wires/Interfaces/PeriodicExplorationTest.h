@@ -191,3 +191,72 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
     }
     std::cout << " done!" << std::endl;
 }
+
+TEST_F(PeriodicExplorationTest, gradient_descent) {
+    std::cout << "This might take a few minutes ";
+    std::cout.flush();
+
+    PeriodicExploration explorer(
+            m_data_dir + "brick5.wire", 5, 0.25);
+    explorer.with_all_isotropic_parameters();
+    explorer.with_refinement("loop", 2);
+
+    const size_t num_dofs = explorer.get_num_dofs();
+    const size_t num_steps = 5;
+    const Float step_size = 0.01;
+    for (size_t i=0; i<num_steps; i++) {
+
+        explorer.periodic_inflate();
+        bool tetgen_success = explorer.run_tetgen();
+        ASSERT_TRUE(tetgen_success);
+
+        Mesh::Ptr mesh = explorer.get_mesh();
+
+        mesh->add_attribute("vertex_normal");
+        VectorF vertex_normals = mesh->get_attribute("vertex_normal");
+        ASSERT_EQ(mesh->get_num_vertices() * mesh->get_dim(), vertex_normals.size());
+
+        mesh->add_attribute("vertex_area");
+        VectorF vertex_areas = mesh->get_attribute("vertex_area");
+        ASSERT_EQ(mesh->get_num_vertices(), vertex_areas.size());
+
+        std::vector<MatrixFr> velocities = explorer.get_shape_velocities();
+        ASSERT_EQ(explorer.get_num_dofs(), velocities.size());
+
+        VectorF grad = VectorF::Zero(num_dofs);
+        std::vector<std::string> attr_names;
+        for (size_t j=0; j<num_dofs; j++) {
+            std::stringstream attr_name_stream;
+            attr_name_stream << "velocity_" << j;
+            std::string attr_name = attr_name_stream.str();
+
+            VectorF flattened_attr = flatten(velocities[j]);
+
+            mesh->add_attribute(attr_name);
+            mesh->set_attribute(attr_name, flattened_attr);
+            attr_names.push_back(attr_name);
+
+            const size_t num_vertices = mesh->get_num_vertices();
+            for (size_t k=0; k<num_vertices; k++) {
+                grad[j] += vertex_normals.segment(k*3,3).dot(
+                            flattened_attr.segment(k*3,3)) * vertex_areas[k];
+            }
+        }
+
+        std::stringstream sin;
+        sin << "exploration_isotropic_brick5_itr_" << i << ".msh";
+        save_mesh(sin.str(), mesh, attr_names);
+
+        std::stringstream dof_stream;
+        dof_stream << "exploration_isotropic_brick5_itr_" << i << ".dof";
+        explorer.save_dofs(dof_stream.str());
+
+        VectorF dofs = explorer.get_dofs();
+        dofs += grad * step_size;
+        explorer.set_dofs(dofs);
+
+        std::cout << ".";
+        std::cout.flush();
+    }
+    std::cout << " done!" << std::endl;
+}
