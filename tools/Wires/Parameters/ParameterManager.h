@@ -16,6 +16,11 @@ class ParameterManager {
         typedef ParameterCommon::TargetType TargetType;
         typedef ParameterCommon::Variables Variables;
         typedef std::shared_ptr<ParameterManager> Ptr;
+        enum DofType {
+            ISOTROPIC,
+            ORTHOTROPIC,
+            UNKNOWN
+        };
 
     public:
         /**
@@ -101,6 +106,7 @@ class ParameterManager {
         std::vector<MatrixFr> compute_shape_velocity(Mesh::Ptr mesh);
         VectorI get_thickness_dof_map() const;
         MatrixIr get_offset_dof_map() const;
+        void save_dofs(const std::string& dof_file) const;
 
         // The following methods are used for converting parameter into
         // thickness and offset values per vertex/edge.
@@ -132,5 +138,5 @@ class ParameterManager {
         WireNetwork::Ptr m_wire_network;
         ThicknessParameters m_thickness_params;
         OffsetParameters m_offset_params;
-
+        DofType m_dof_type;
 };

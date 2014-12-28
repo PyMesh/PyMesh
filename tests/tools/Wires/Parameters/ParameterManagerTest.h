@@ -374,3 +374,22 @@ TEST_F(ParameterManagerTest, vertex_offset_dof_map) {
         }
     }
 }
+
+TEST_F(ParameterManagerTest, save_dofs) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    ParameterManager::Ptr manager = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    VectorF dofs = manager->get_dofs();
+    for (size_t i=0; i<dofs.size(); i++) {
+        dofs[i] = 0.1 + 0.02 * i;
+    }
+    manager->set_dofs(dofs);
+    manager->save_dofs("tmp.dof");
+
+    ParameterManager::Ptr manager2 =
+        ParameterManager::create_from_dof_file(wire_network, 0.5, "tmp.dof");
+    VectorF dofs2 = manager2->get_dofs();
+
+    ASSERT_EQ(dofs.size(), dofs2.size());
+    ASSERT_NEAR(0.0, (dofs-dofs2).norm(), 1e-12);
+}

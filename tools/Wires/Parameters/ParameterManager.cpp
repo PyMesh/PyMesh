@@ -186,6 +186,7 @@ ParameterManager::Ptr ParameterManager::create(
             manager->add_offset_parameter(roi, "", 0.0, i);
         }
     }
+    manager->m_dof_type = ORTHOTROPIC;
     return manager;
 }
 
@@ -231,6 +232,7 @@ ParameterManager::Ptr ParameterManager::create_isotropic(
                     roi, "", 0.0, dof_dir);
         }
     }
+    manager->m_dof_type = ISOTROPIC;
     return manager;
 }
 
@@ -312,7 +314,8 @@ ParameterManager::ParameterManager(
         WireNetwork::Ptr wire_network, Float default_thickness) :
     m_wire_network(wire_network),
     m_thickness_params(wire_network, ParameterCommon::VERTEX, default_thickness),
-    m_offset_params(wire_network, ParameterCommon::VERTEX, 0.0) { }
+    m_offset_params(wire_network, ParameterCommon::VERTEX, 0.0),
+    m_dof_type(UNKNOWN) { }
 
 size_t ParameterManager::get_num_dofs() const {
     return m_thickness_params.get_num_dofs() + m_offset_params.get_num_dofs();
@@ -425,6 +428,41 @@ MatrixIr ParameterManager::get_offset_dof_map() const {
         dof_counter++;
     }
     return dof_map;
+}
+
+void ParameterManager::save_dofs(const std::string& dof_file) const {
+    PTree dof_config;
+    switch (m_dof_type) {
+        case ISOTROPIC:
+            dof_config.put("dof_type", "isotropic");
+            break;
+        case ORTHOTROPIC:
+            dof_config.put("dof_type", "orthotropic");
+            break;
+        default:
+            throw RuntimeError("Cannot save dof with unknown dof type");
+    }
+    switch (get_thickness_type()) {
+        case ParameterCommon::VERTEX:
+            dof_config.put("thickness_type", "vertex");
+            break;
+        case ParameterCommon::EDGE:
+            dof_config.put("thickness_type", "edge");
+            break;
+        default:
+            throw RuntimeError("Unknown thickness type.");
+    }
+
+    PTree dof_array;
+    const size_t num_dofs = get_num_dofs();
+    VectorF dofs = get_dofs();
+    for (size_t i=0; i<num_dofs; i++) {
+        PTree value;
+        value.put("", dofs[i]);
+        dof_array.push_back(std::make_pair("", value));
+    }
+    dof_config.add_child("dof", dof_array);
+    write_json(dof_file, dof_config);
 }
 
 VectorF ParameterManager::evaluate_thickness(
