@@ -1,0 +1,5 @@
+{
+    "dof_type": "isotropic",
+    "thickness_type": "vertex",
+    "dof": [0.75]
+}

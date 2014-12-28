@@ -47,6 +47,20 @@ class ParameterManager {
                 const std::string& orbit_file,
                 const std::string& modifier_file);
 
+        /**
+         * Create parameter manager with parameters specified in the dof file.
+         *
+         * Syntax:
+         * {
+         *   "dof_type": "isotropic" | "orthotropic",
+         *   "thickness_type": "vertex" | "edge",
+         *   "dof": [#, #, ...]
+         * }
+         */
+        static Ptr create_from_dof_file(WireNetwork::Ptr wire_network,
+                Float default_thickness,
+                const std::string& dof_file);
+
     public:
         ParameterManager(WireNetwork::Ptr wire_network, Float default_thickness);
 

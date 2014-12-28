@@ -1,0 +1,7 @@
+{
+    "#": "This is a comment",
+    "dof_type": "isotropic",
+    "thickness_type": "edge",
+    "#": "the zero values below should be discarded since brick5 only have 4 dofs",
+    "dof": [0.1, 0.1, 0.2, 0.2, 0.0, 0.0, 0.0, 0.0]
+}

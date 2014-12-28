@@ -259,6 +259,55 @@ ParameterManager::Ptr ParameterManager::create_from_setting_file(
     return manager;
 }
 
+ParameterManager::Ptr ParameterManager::create_from_dof_file(
+        WireNetwork::Ptr wire_network, Float default_thickness,
+        const std::string& dof_file) {
+    PTree dof_config;
+    read_json(dof_file, dof_config);
+    std::string dof_type = dof_config.get<std::string>("dof_type");
+    std::string thickness_type_str =
+        dof_config.get<std::string>("thickness_type");
+
+    PTree& dof_values = dof_config.get_child("dof");
+    VectorF dof = VectorF::Zero(dof_values.size());
+    size_t count = 0;
+    for (const auto& value : dof_values) {
+        dof[count] = value.second.get_value<Float>();
+        count++;
+    }
+    assert(count == dof.size());
+
+    TargetType thickness_type = ParameterCommon::VERTEX;
+    if (thickness_type_str == "vertex") {
+        thickness_type = ParameterCommon::VERTEX;
+    } else if (thickness_type_str == "edge") {
+        thickness_type = ParameterCommon::EDGE;
+    }
+
+    Ptr manager;
+    if (dof_type == "isotropic") {
+        manager = ParameterManager::create_isotropic(wire_network,
+                default_thickness, thickness_type);
+    } else if (dof_type == "orthotropic") {
+        manager = ParameterManager::create(wire_network,
+                default_thickness, thickness_type);
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Unknown dof type: " << dof_type;
+        throw NotImplementedError(err_msg.str());
+    }
+
+    size_t num_dofs = manager->get_num_dofs();
+    if (num_dofs > dof.size()) {
+        std::stringstream err_msg;
+        err_msg << "Dof mismatch: expect " << num_dofs
+            << " dofs, but only received " << dof.size() << " values";
+        throw RuntimeError(err_msg.str());
+    }
+    manager->set_dofs(dof.segment(0, num_dofs));
+    return manager;
+}
+
 ParameterManager::ParameterManager(
         WireNetwork::Ptr wire_network, Float default_thickness) :
     m_wire_network(wire_network),

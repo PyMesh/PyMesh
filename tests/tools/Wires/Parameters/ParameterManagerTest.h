@@ -131,6 +131,30 @@ TEST_F(ParameterManagerTest, creation_from_setting) {
     ASSERT_LT(0.0, dofs.norm());
 }
 
+TEST_F(ParameterManagerTest, create_from_dof_file_cube) {
+    WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
+    std::string dof_file = m_data_dir + "cube.dof";
+    ParameterManager::Ptr manager = ParameterManager::create_from_dof_file(
+            wire_network, 0.5, dof_file);
+
+    ASSERT_EQ(1, manager->get_num_dofs());
+    VectorF dofs = manager->get_dofs();
+    ASSERT_FLOAT_EQ(0.75, dofs[0]);
+}
+
+TEST_F(ParameterManagerTest, create_from_dof_file_brick5) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    std::string dof_file = m_data_dir + "brick5.dof";
+    ParameterManager::Ptr manager = ParameterManager::create_from_dof_file(
+            wire_network, 0.5, dof_file);
+
+    ASSERT_EQ(4, manager->get_num_dofs());
+    VectorF dofs = manager->get_dofs();
+    VectorF expected_dofs(4);
+    expected_dofs << 0.1, 0.1, 0.2, 0.2;
+    ASSERT_FLOAT_EQ(0.0, (dofs - expected_dofs).norm());
+}
+
 TEST_F(ParameterManagerTest, add_edge_thickness) {
     WireNetwork::Ptr wire_network = load_wire_shared("cube.wire");
     const size_t dim = wire_network->get_dim();
