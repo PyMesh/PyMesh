@@ -465,6 +465,42 @@ void ParameterManager::save_dofs(const std::string& dof_file) const {
     write_json(dof_file, dof_config);
 }
 
+void ParameterManager::load_dofs(const std::string& dof_file) {
+    PTree dof_config;
+    read_json(dof_file, dof_config);
+
+    std::string dof_type = dof_config.get<std::string>("dof_type");
+    if (m_dof_type == UNKNOWN ||
+            (m_dof_type == ISOTROPIC && dof_type != "isotropic") ||
+            (m_dof_type == ORTHOTROPIC && dof_type != "orthotropic")) {
+        std::stringstream err_msg;
+        err_msg << "Dof type mismatch: " << dof_type;
+        throw RuntimeError(err_msg.str());
+    }
+
+    TargetType thickness_type = get_thickness_type();
+    std::string thickness_type_str =
+        dof_config.get<std::string>("thickness_type");
+    if ((thickness_type == ParameterCommon::VERTEX &&
+         thickness_type_str != "vertex") ||
+        (thickness_type == ParameterCommon::EDGE &&
+         thickness_type_str != "edge")) {
+        std::stringstream err_msg;
+        err_msg << "thickness type mismatch: " << thickness_type_str;
+        throw RuntimeError(err_msg.str());
+    }
+
+    PTree& dof_values = dof_config.get_child("dof");
+    VectorF dof = VectorF::Zero(dof_values.size());
+    size_t count = 0;
+    for (const auto& value : dof_values) {
+        dof[count] = value.second.get_value<Float>();
+        count++;
+    }
+    assert(count == dof.size());
+    set_dofs(dof);
+}
+
 VectorF ParameterManager::evaluate_thickness(
         const ParameterManager::Variables& vars) {
     return m_thickness_params.evaluate(vars);

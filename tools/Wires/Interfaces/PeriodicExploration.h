@@ -42,6 +42,14 @@ class PeriodicExploration {
             return i < m_parameters->get_num_thickness_dofs();
         }
 
+        void save_dofs(const std::string& filename) const {
+            m_parameters->save_dofs(filename);
+        }
+
+        void load_dofs(const std::string& filename) {
+            m_parameters->load_dofs(filename);
+        }
+
         void periodic_inflate();
 
         /**
