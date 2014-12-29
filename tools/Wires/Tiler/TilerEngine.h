@@ -19,7 +19,8 @@ class TilerEngine {
 
 
     public:
-        typedef std::list<std::function<MatrixFr(const MatrixFr&)> > FuncList;
+        typedef std::function<MatrixFr(const MatrixFr&)> Func;
+        typedef std::list<Func> FuncList;
 
         void with_parameters(ParameterManager::Ptr params);
 

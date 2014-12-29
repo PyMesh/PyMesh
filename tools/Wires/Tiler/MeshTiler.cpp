@@ -94,12 +94,12 @@ void MeshTiler::evaluate_thickness_parameters(WireNetwork& wire_network,
     }
     MatrixFr thickness(num_thickness_entries, 1);
 
-    auto vars_list = extract_attributes(m_mesh);
-    assert(vars_list.size() == funcs.size());
+    auto vars_array = extract_attributes(m_mesh);
+    assert(vars_array.size() == funcs.size());
     size_t count=0;
-    auto vars_itr = vars_list.begin();
+    auto vars_itr = vars_array.begin();
     for (auto f : funcs) {
-        assert(vars_itr != vars_list.end());
+        assert(vars_itr != vars_array.end());
         VectorF local_thickness = m_params->evaluate_thickness(*vars_itr);
         thickness.block(count * thickness_index_stride, 0,
                 thickness_index_stride, 1) = local_thickness;
@@ -118,12 +118,12 @@ void MeshTiler::evaluate_offset_parameters(WireNetwork& wire_network,
     wire_network.add_attribute("vertex_offset", true);
     MatrixFr attr_value(num_vertices, dim);
 
-    auto vars_list = extract_attributes(m_mesh);
+    auto vars_array = extract_attributes(m_mesh);
     const MatrixFr& ori_vertices = m_unit_wire_network->get_vertices();
     size_t count=0;
-    auto vars_itr = vars_list.begin();
+    auto vars_itr = vars_array.begin();
     for (auto f : funcs) {
-        assert(vars_itr != vars_list.end());
+        assert(vars_itr != vars_array.end());
         MatrixFr local_offseted_vertices = ori_vertices +
             m_params->evaluate_offset(*vars_itr);
         attr_value.block(count * num_unit_vertices, 0,

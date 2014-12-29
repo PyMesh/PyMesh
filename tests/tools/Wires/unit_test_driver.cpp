@@ -32,6 +32,7 @@
 #include "Parameters/VertexThicknessParameterDerivativeTest.h"
 #include "Tiler/AABBTilerTest.h"
 #include "Tiler/MeshTilerTest.h"
+#include "Tiler/MixedMeshTilerTest.h"
 #include "WireNetwork/WireConnectivityTest.h"
 #include "WireNetwork/WireNetworkTest.h"
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <Mesh.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 #include <Wires/Parameters/ParameterManager.h>
@@ -20,6 +22,12 @@ class WireTiler {
                 const VectorI& repetitions);
 
         WireNetwork::Ptr tile_with_guide_mesh(const MeshPtr mesh);
+
+        WireNetwork::Ptr tile_with_mixed_patterns(
+                const std::vector<WireNetwork::Ptr>& patterns,
+                const MeshPtr mesh,
+                bool per_vertex_thickness,
+                bool isotropic);
 
     private:
         WireNetwork::Ptr m_unit_wire_network;

@@ -54,10 +54,10 @@ TilerEngine::FuncList MeshTilerHelper::get_3D_tiling_operators(Mesh::Ptr mesh) {
     return operators;
 }
 
-std::list<ParameterCommon::Variables> MeshTilerHelper::extract_face_attributes(
+std::vector<ParameterCommon::Variables> MeshTilerHelper::extract_face_attributes(
         Mesh::Ptr mesh) {
     const size_t num_faces = mesh->get_num_faces();
-    std::list<ParameterCommon::Variables> vars_list;
+    std::vector<ParameterCommon::Variables> vars_array;
     const auto& attr_names = mesh->get_attribute_names();
 
     for (size_t i=0; i<num_faces; i++) {
@@ -68,15 +68,15 @@ std::list<ParameterCommon::Variables> MeshTilerHelper::extract_face_attributes(
             if (attr.cols() != 1) continue;
             vars[name] = attr(i, 0);
         }
-        vars_list.push_back(vars);
+        vars_array.push_back(vars);
     }
-    return vars_list;
+    return vars_array;
 }
 
-std::list<ParameterCommon::Variables> MeshTilerHelper::extract_voxel_attributes(
+std::vector<ParameterCommon::Variables> MeshTilerHelper::extract_voxel_attributes(
         Mesh::Ptr mesh) {
     const size_t num_voxels = mesh->get_num_voxels();
-    std::list<ParameterCommon::Variables> vars_list;
+    std::vector<ParameterCommon::Variables> vars_array;
     const auto& attr_names = mesh->get_attribute_names();
 
     for (size_t i=0; i<num_voxels; i++) {
@@ -87,12 +87,12 @@ std::list<ParameterCommon::Variables> MeshTilerHelper::extract_voxel_attributes(
             if (attr.cols() != 1) continue;
             vars[name] = attr(i, 0);
         }
-        vars_list.push_back(vars);
+        vars_array.push_back(vars);
     }
-    return vars_list;
+    return vars_array;
 }
 
-std::list<ParameterCommon::Variables> MeshTilerHelper::extract_attributes(
+std::vector<ParameterCommon::Variables> MeshTilerHelper::extract_attributes(
         Mesh::Ptr mesh) {
     const size_t dim = mesh->get_dim();
 
