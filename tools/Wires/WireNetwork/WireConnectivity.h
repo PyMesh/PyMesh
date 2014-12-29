@@ -31,6 +31,7 @@ class WireConnectivity {
         void set_wire_network(const WireNetwork* wire_network) {
             m_wire_network = wire_network;
         }
+        const WireNetwork* get_wire_network() const { return m_wire_network; }
 
         void compute();
         void reset();

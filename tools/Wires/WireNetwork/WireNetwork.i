@@ -1,6 +1,10 @@
 %include <std_string.i>
 %include <std_shared_ptr.i>
 %shared_ptr(WireNetwork)
+%include <std_vector.i>
+namespace std {
+%template(vectorb) vector<bool>;
+};
 %{
 #include <Wires/WireNetwork/WireNetwork.h>
 %}

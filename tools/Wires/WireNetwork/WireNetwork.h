@@ -85,6 +85,7 @@ class WireNetwork {
         }
 
         void compute_connectivity() {
+            assert(m_connectivity.get_wire_network() == this);
             m_connectivity.compute();
         }
 
