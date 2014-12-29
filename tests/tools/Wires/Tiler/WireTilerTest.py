@@ -63,3 +63,55 @@ class WireTilerTest(WireTest):
         self.assertEqual(wires.get_num_edges(),
                 tiled_wires.get_num_edges());
 
+    def test_mixed_mesh_tiling_2D(self):
+        mesh = self.load_mesh("quad_s1.obj");
+        wires = [self.load_wire_file("box.wire"),
+                self.load_wire_file("cross.wire")];
+        mesh.add_attribute("pattern_id");
+        mesh.set_attribute("pattern_id", np.array([0, 1, 1, 0]));
+        for i in range(5):
+            attr_name = "dof_{}".format(i);
+            attr_value = np.array([0.1, 0.1, 0.1, 0.1]);
+            mesh.add_attribute(attr_name);
+            mesh.set_attribute(attr_name, attr_value);
+
+        tiler = PyWires.WireTiler(None);
+        tiled_wires = tiler.tile_with_mixed_patterns(wires, mesh, True, True);
+        self.assertTrue(tiled_wires.has_attribute("thickness"));
+        self.assertTrue(tiled_wires.has_attribute("vertex_offset"));
+
+        self.assertEqual(np.sum(wire.get_num_vertices()*2 for wire in wires) - 4,
+                tiled_wires.get_num_vertices());
+        self.assertEqual(np.sum(wire.get_num_edges()*2 for wire in wires),
+                tiled_wires.get_num_edges());
+
+        thickness = tiled_wires.get_attribute("thickness");
+        self.assertAlmostEqual(0.1, np.amin(thickness));
+        self.assertAlmostEqual(0.1, np.amax(thickness));
+
+    def test_mixed_mesh_tiling_3D(self):
+        mesh = self.load_mesh("hex_s1.msh");
+        wires = [self.load_wire_file("brick5.wire"),
+                self.load_wire_file("cross_3D.wire")];
+        mesh.add_attribute("pattern_id");
+        mesh.set_attribute("pattern_id", np.array([0, 1, 1, 0, 1, 0, 0, 1]));
+        for i in range(5):
+            attr_name = "dof_{}".format(i);
+            attr_value = np.ones(8) * 0.1;
+            mesh.add_attribute(attr_name);
+            mesh.set_attribute(attr_name, attr_value);
+
+        tiler = PyWires.WireTiler(None);
+        tiled_wires = tiler.tile_with_mixed_patterns(wires, mesh, True, True);
+        self.assertTrue(tiled_wires.has_attribute("thickness"));
+        self.assertTrue(tiled_wires.has_attribute("vertex_offset"));
+
+        self.assertEqual(np.sum(wire.get_num_vertices()*4 for wire in wires) - 12,
+                tiled_wires.get_num_vertices());
+        self.assertEqual(np.sum(wire.get_num_edges()*4 for wire in wires),
+                tiled_wires.get_num_edges());
+
+        thickness = tiled_wires.get_attribute("thickness");
+        self.assertAlmostEqual(0.1, np.amin(thickness));
+        self.assertAlmostEqual(0.1, np.amax(thickness));
+
