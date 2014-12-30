@@ -60,6 +60,21 @@ TEST_F(WireEdgeCubicSymmetryAttributeTest, brick5) {
             network->get_vertices(), network->get_edges(), values);
 }
 
+TEST_F(WireEdgeCubicSymmetryAttributeTest, pattern0050) {
+    WireNetwork::Ptr network = load_wire_shared("pattern0050.wire");
+    network->add_attribute("edge_cubic_symmetry_orbit");
+    const MatrixFr& values = network->get_attribute(
+            "edge_cubic_symmetry_orbit");
+
+    ASSERT_EQ(network->get_num_edges(), values.rows());
+    ASSERT_EQ(1, values.cols());
+    ASSERT_FLOAT_EQ(0.0, values.minCoeff());
+    ASSERT_FLOAT_EQ(1.0, values.maxCoeff());
+
+    ASSERT_ORBIT_IS_VALID(
+            network->get_vertices(), network->get_edges(), values);
+}
+
 TEST_F(WireEdgeCubicSymmetryAttributeTest, square) {
     WireNetwork::Ptr network = load_wire_shared("square.wire");
     network->add_attribute("edge_cubic_symmetry_orbit");

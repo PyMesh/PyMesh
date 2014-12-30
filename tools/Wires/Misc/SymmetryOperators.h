@@ -3,6 +3,7 @@
 #include <functional>
 #include <list>
 #include <sstream>
+#include <set>
 #include <queue>
 #include <vector>
 
@@ -11,7 +12,7 @@
 
 namespace SymmetryOperators {
     typedef std::vector<std::function<VectorF(const VectorF&)> > Operators;
-    typedef std::vector<std::list<size_t> > SymmetryConnectivity;
+    typedef std::vector<std::set<size_t> > SymmetryConnectivity;
 
     template<int DIM>
     Operators generate_reflective_symmetry_operators(const VectorF& center) {
