@@ -35,7 +35,7 @@ const MatrixFr& WireAttributes::get_attribute(const std::string& name) const {
 }
 
 void WireAttributes::add_attribute(const WireNetwork& wire_network,
-        const std::string& name, bool vertex_wise) {
+        const std::string& name, bool vertex_wise, bool auto_compute) {
     AttrMap::const_iterator itr = m_attr_map.find(name);
     if (itr != m_attr_map.end()) {
         throw_attribute_exists_error(name);
@@ -43,7 +43,7 @@ void WireAttributes::add_attribute(const WireNetwork& wire_network,
 
     WireAttribute::Ptr attribute = WireAttribute::create(name,
             vertex_wise ? WireAttribute::VERTEX : WireAttribute::EDGE);
-    attribute->compute(wire_network);
+    if (auto_compute) attribute->compute(wire_network);
 
     m_attr_map[name] = attribute;
 }

@@ -1,6 +1,7 @@
 #include "TilerEngine.h"
 
 #include <cassert>
+#include <iostream>
 #include <sstream>
 #include <unordered_set>
 #include <vector>
@@ -118,7 +119,7 @@ void TilerEngine::update_attributes(WireNetwork& wire_network, size_t num_repeti
     for (auto itr : attr_names) {
         const std::string& name = itr;
         wire_network.add_attribute(name,
-                m_unit_wire_network->is_vertex_attribute(name));
+                m_unit_wire_network->is_vertex_attribute(name), false);
 
         const MatrixFr& values = m_unit_wire_network->get_attribute(name);
         const size_t rows = values.rows();

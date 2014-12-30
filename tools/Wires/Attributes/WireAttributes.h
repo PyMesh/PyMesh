@@ -12,7 +12,8 @@ class WireAttributes {
     public:
         bool has_attribute(const std::string& name) const;
         const MatrixFr& get_attribute(const std::string& name) const;
-        void add_attribute(const WireNetwork& wire_network, const std::string& name, bool vertex_wise=true);
+        void add_attribute(const WireNetwork& wire_network, const std::string& name,
+                bool vertex_wise=true, bool auto_compute=true);
         void set_attribute(const WireNetwork& wire_network, const std::string& name, const MatrixFr& values);
         bool is_vertex_attribute(const std::string& name) const;
 

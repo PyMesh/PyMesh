@@ -36,6 +36,10 @@ class PatternParameter {
             m_formula = formula;
         }
 
+        const std::string& get_formula() const {
+            return m_formula;
+        }
+
         WireNetwork::Ptr get_wire_network() { return m_wire_network; }
         void set_wire_network(WireNetwork::Ptr network) { m_wire_network = network; }
 

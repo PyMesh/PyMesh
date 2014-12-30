@@ -63,8 +63,9 @@ class WireNetwork {
             return m_attributes.get_attribute(name);
         }
 
-        void add_attribute(const std::string& name, bool vertex_wise=true) const {
-            m_attributes.add_attribute(*this, name, vertex_wise);
+        void add_attribute(const std::string& name,
+                bool vertex_wise=true, bool auto_compute=true) const {
+            m_attributes.add_attribute(*this, name, vertex_wise, auto_compute);
         }
 
         void set_attribute(const std::string& name, const MatrixFr& values) const {

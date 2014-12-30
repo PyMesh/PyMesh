@@ -505,6 +505,19 @@ void ParameterManager::load_dofs(const std::string& dof_file) {
     set_dofs(dof);
 }
 
+std::vector<std::string> ParameterManager::get_formulas() const {
+    const size_t num_thickness_dofs = get_num_thickness_dofs();
+    const size_t num_offset_dofs = get_num_offset_dofs();
+    std::vector<std::string> formulas;
+    for (const auto& param : m_thickness_params) {
+        formulas.emplace_back(param->get_formula());
+    }
+    for (const auto& param : m_offset_params) {
+        formulas.emplace_back(param->get_formula());
+    }
+    return formulas;
+}
+
 VectorF ParameterManager::evaluate_thickness(
         const ParameterManager::Variables& vars) {
     return m_thickness_params.evaluate(vars);

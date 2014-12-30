@@ -108,6 +108,7 @@ class ParameterManager {
         MatrixIr get_offset_dof_map() const;
         void save_dofs(const std::string& dof_file) const;
         void load_dofs(const std::string& dof_file);
+        std::vector<std::string> get_formulas() const;
 
         // The following methods are used for converting parameter into
         // thickness and offset values per vertex/edge.
