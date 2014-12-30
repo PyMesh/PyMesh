@@ -22,8 +22,8 @@ class IsotropicTransforms {
     private:
         size_t m_dim;
 
-        // Any isotropic transformation can be decomposed into a reflection
-        // followed by a rotation.
+        // Any isotropic transformation can be decomposed into a rotation
+        // followed by a reflection then followed by a rotation.
         std::vector<MatrixF> m_reflections;
         std::vector<MatrixF> m_rotations;
 };

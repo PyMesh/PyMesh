@@ -9,12 +9,14 @@ MatrixF IsotropicTransforms::fit(
         const VectorF& from_dir, const VectorF& to_dir) const {
     const Float tol = 1e-12;
 
-    for (const auto& ref : m_reflections) {
-        for (const auto& rot : m_rotations) {
-            VectorF dir = rot * ref * from_dir;
-            Float dist = (dir - to_dir).squaredNorm();
-            if (dist < tol) {
-                return rot * ref;
+    for (const auto& rot1 : m_rotations) {
+        for (const auto& ref : m_reflections) {
+            for (const auto& rot2 : m_rotations) {
+                VectorF dir = rot1 * ref * rot2 * from_dir;
+                Float dist = (dir - to_dir).squaredNorm();
+                if (dist < tol) {
+                    return rot1 * ref * rot2;
+                }
             }
         }
     }
