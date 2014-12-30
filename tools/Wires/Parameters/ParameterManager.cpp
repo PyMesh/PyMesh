@@ -408,6 +408,10 @@ VectorI ParameterManager::get_thickness_dof_map() const {
 }
 
 MatrixIr ParameterManager::get_offset_dof_map() const {
+    if (m_dof_type == ISOTROPIC) {
+        throw RuntimeError("Offset DOF map does not support isotropic dofs!");
+    }
+
     const size_t num_thickness_dofs = get_num_thickness_dofs();
     const size_t domain_size = m_wire_network->get_num_vertices();
     const size_t dim = m_wire_network->get_dim();
