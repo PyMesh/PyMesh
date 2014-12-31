@@ -9,26 +9,50 @@ extern "C" {
 #include "TriBox2D.h"
 
 namespace HashGridImplementationHelper {
-    std::vector<VectorI> get_surrounding_cells(const Vector2I& p) {
-        std::vector<VectorI> cells;
-        for (int i=-1; i<2; i++) {
-            for (int j=-1; j<2; j++) {
-                cells.push_back(Vector2I( p[0] + i, p[1] + j));
-            }
-        }
-        return cells;
+    std::vector<Vector2I> get_surrounding_cells(const Vector2I& p) {
+        return {
+            Vector2I(p[0]-1, p[1]-1),
+            Vector2I(p[0]-1, p[1]  ),
+            Vector2I(p[0]-1, p[1]+1),
+            Vector2I(p[0]  , p[1]-1),
+            Vector2I(p[0]  , p[1]  ),
+            Vector2I(p[0]  , p[1]+1),
+            Vector2I(p[0]+1, p[1]-1),
+            Vector2I(p[0]+1, p[1]  ),
+            Vector2I(p[0]+1, p[1]+1)
+        };
     }
 
-    std::vector<VectorI> get_surrounding_cells(const Vector3I& p) {
-        std::vector<VectorI> cells;
-        for (int i=-1; i<2; i++) {
-            for (int j=-1; j<2; j++) {
-                for (int k=-1; k<2; k++) {
-                    cells.push_back(Vector3I( p[0] + i, p[1] + j, p[2] + k));
-                }
-            }
-        }
-        return cells;
+    std::vector<Vector3I> get_surrounding_cells(const Vector3I& p) {
+        return {
+            Vector3I(p[0]-1, p[1]-1, p[2]-1),
+            Vector3I(p[0]-1, p[1]  , p[2]-1),
+            Vector3I(p[0]-1, p[1]+1, p[2]-1),
+            Vector3I(p[0]  , p[1]-1, p[2]-1),
+            Vector3I(p[0]  , p[1]  , p[2]-1),
+            Vector3I(p[0]  , p[1]+1, p[2]-1),
+            Vector3I(p[0]+1, p[1]-1, p[2]-1),
+            Vector3I(p[0]+1, p[1]  , p[2]-1),
+            Vector3I(p[0]+1, p[1]+1, p[2]-1),
+            Vector3I(p[0]-1, p[1]-1, p[2]  ),
+            Vector3I(p[0]-1, p[1]  , p[2]  ),
+            Vector3I(p[0]-1, p[1]+1, p[2]  ),
+            Vector3I(p[0]  , p[1]-1, p[2]  ),
+            Vector3I(p[0]  , p[1]  , p[2]  ),
+            Vector3I(p[0]  , p[1]+1, p[2]  ),
+            Vector3I(p[0]+1, p[1]-1, p[2]  ),
+            Vector3I(p[0]+1, p[1]  , p[2]  ),
+            Vector3I(p[0]+1, p[1]+1, p[2]  ),
+            Vector3I(p[0]-1, p[1]-1, p[2]+1),
+            Vector3I(p[0]-1, p[1]  , p[2]+1),
+            Vector3I(p[0]-1, p[1]+1, p[2]+1),
+            Vector3I(p[0]  , p[1]-1, p[2]+1),
+            Vector3I(p[0]  , p[1]  , p[2]+1),
+            Vector3I(p[0]  , p[1]+1, p[2]+1),
+            Vector3I(p[0]+1, p[1]-1, p[2]+1),
+            Vector3I(p[0]+1, p[1]  , p[2]+1),
+            Vector3I(p[0]+1, p[1]+1, p[2]+1)
+        };
     }
 }
 using namespace HashGridImplementationHelper;
@@ -227,8 +251,8 @@ VectorI HashGridImplementation<Trait>::get_items_near_point(const VectorF& coord
     HashItem nearby_set = Trait::get_default_item();
     HashKey center_key = convert_to_key(coordinates);
 
-    std::vector<VectorI> surrounding_cells = get_surrounding_cells(center_key.get_raw_data());
-    for (auto cell_idx : surrounding_cells) {
+    const auto surrounding_cells = get_surrounding_cells(center_key.get_raw_data());
+    for (const auto& cell_idx : surrounding_cells) {
         HashKey key(cell_idx);
         typename HashMap::const_iterator itr = m_hash_map->find(key);
         if (itr != m_hash_map->end()) {
