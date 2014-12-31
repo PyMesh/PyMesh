@@ -114,7 +114,9 @@ class ParameterManager {
 
         // The following methods are used for converting parameter into
         // thickness and offset values per vertex/edge.
+        VectorF evaluate_thickness_no_formula();
         VectorF evaluate_thickness(const Variables& vars);
+        MatrixFr evaluate_offset_no_formula();
         MatrixFr evaluate_offset(const Variables& vars);
 
         // The following methods are used for adding parameters in code.

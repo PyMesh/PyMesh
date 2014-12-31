@@ -542,9 +542,19 @@ std::vector<std::string> ParameterManager::get_formulas() const {
     return formulas;
 }
 
+VectorF ParameterManager::evaluate_thickness_no_formula() {
+    ParameterManager::Variables vars;
+    return evaluate_thickness(vars);
+}
+
 VectorF ParameterManager::evaluate_thickness(
         const ParameterManager::Variables& vars) {
     return m_thickness_params.evaluate(vars);
+}
+
+MatrixFr ParameterManager::evaluate_offset_no_formula() {
+    ParameterManager::Variables vars;
+    return evaluate_offset(vars);
 }
 
 MatrixFr ParameterManager::evaluate_offset(
