@@ -30,6 +30,7 @@ class WireNetwork {
         void set_vertices(const MatrixFr& vertices) {
             m_vertices = vertices;
             m_dim = m_vertices.cols();
+            update_bbox();
         }
 
         void set_edges(const MatrixIr& edges) {
@@ -42,8 +43,8 @@ class WireNetwork {
         void translate(const VectorF& offset);
         void center_at_origin();
         VectorF center() const;
-        VectorF get_bbox_min() const { return m_vertices.colwise().minCoeff(); }
-        VectorF get_bbox_max() const { return m_vertices.colwise().maxCoeff(); }
+        VectorF get_bbox_min() const { return m_bbox_min; }
+        VectorF get_bbox_max() const { return m_bbox_max; }
 
         void filter_vertices(const std::vector<bool>& to_keep);
         void filter_edges(const std::vector<bool>& to_keep);
@@ -97,6 +98,7 @@ class WireNetwork {
     private:
         void initialize();
         void initialize_connectivity();
+        void update_bbox();
 
     private:
         size_t m_dim;
@@ -104,4 +106,7 @@ class WireNetwork {
         MatrixIr m_edges;
         mutable WireAttributes m_attributes;
         WireConnectivity m_connectivity;
+
+        VectorF m_bbox_min;
+        VectorF m_bbox_max;
 };

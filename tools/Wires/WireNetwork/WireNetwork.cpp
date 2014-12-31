@@ -84,6 +84,8 @@ void WireNetwork::scale(const VectorF& factors) {
         const VectorF& v = m_vertices.row(i);
         m_vertices.row(i) = v.cwiseProduct(factors);
     }
+
+    update_bbox();
 }
 
 void WireNetwork::scale_fit(const VectorF& bbox_min, const VectorF& bbox_max) {
@@ -111,6 +113,7 @@ void WireNetwork::translate(const VectorF& offset) {
     for (size_t i=0; i<num_vertices; i++) {
         m_vertices.row(i) += offset;
     }
+    update_bbox();
 }
 
 void WireNetwork::center_at_origin() {
@@ -158,6 +161,7 @@ void WireNetwork::filter_vertices(const std::vector<bool>& to_keep) {
     assert((m_edges.array() >= 0).all());
 
     m_connectivity.reset();
+    update_bbox();
 }
 
 void WireNetwork::filter_edges(const std::vector<bool>& to_keep) {
@@ -183,8 +187,14 @@ void WireNetwork::write_to_file(const std::string& filename) const {
 
 void WireNetwork::initialize() {
     initialize_connectivity();
+    update_bbox();
 }
 
 void WireNetwork::initialize_connectivity() {
     m_connectivity.set_wire_network(this);
+}
+
+void WireNetwork::update_bbox() {
+    m_bbox_min = m_vertices.colwise().minCoeff();
+    m_bbox_max = m_vertices.colwise().maxCoeff();
 }
