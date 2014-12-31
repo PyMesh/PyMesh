@@ -41,11 +41,15 @@ TEST_F(OffsetParameterTest, AddValue) {
     params.add(roi, "", 0.1, 1);
     params.add(roi, "", 0.1, 2);
 
+    const VectorF bbox_half_size =
+        wire_network->get_bbox_max() - wire_network->center();
+    const Float half_size = bbox_half_size[0];
+
     ParameterCommon::Variables vars;
     MatrixFr offset = params.evaluate(vars);
     ASSERT_EQ(num_vertices, offset.rows());
     ASSERT_EQ(dim, offset.cols());
-    ASSERT_TRUE((offset.block(0, 0, 4, dim).cwiseAbs().array() == 0.1).all());
+    ASSERT_TRUE((offset.block(0, 0, 4, dim).cwiseAbs().array() == 0.1 * half_size).all());
     ASSERT_TRUE((offset.block(4, 0, offset.rows() - 4, dim).array() == 0.0)
             .all());
 }
@@ -54,6 +58,8 @@ TEST_F(OffsetParameterTest, AddFormula) {
     WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
     const size_t dim = wire_network->get_dim();
     const size_t num_vertices = wire_network->get_num_vertices();
+    const VectorF bbox_half_size =
+        wire_network->get_bbox_max() - wire_network->center();
 
     OffsetParameters params(wire_network, ParameterCommon::VERTEX, 0.0);
 
@@ -74,9 +80,9 @@ TEST_F(OffsetParameterTest, AddFormula) {
     ASSERT_EQ(dim, offset.cols());
     for (size_t i=0; i<4; i++) {
         const VectorF& u = offset.row(i);
-        ASSERT_FLOAT_EQ(0.1, fabs(u[0]));
-        ASSERT_FLOAT_EQ(0.2, fabs(u[1]));
-        ASSERT_FLOAT_EQ(0.3, fabs(u[2]));
+        ASSERT_FLOAT_EQ(0.1 * bbox_half_size[0], fabs(u[0]));
+        ASSERT_FLOAT_EQ(0.2 * bbox_half_size[1], fabs(u[1]));
+        ASSERT_FLOAT_EQ(0.3 * bbox_half_size[2], fabs(u[2]));
     }
     ASSERT_TRUE((offset.block(4, 0, offset.rows() - 4, dim).array() == 0.0)
             .all());
