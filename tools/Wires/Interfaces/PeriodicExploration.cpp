@@ -50,12 +50,19 @@ void PeriodicExploration::with_refinement(
 }
 
 void PeriodicExploration::periodic_inflate() {
+    ParameterCommon::Variables vars;
+    MatrixFr offset = m_parameters->evaluate_offset(vars);
+    MatrixFr ori_vertices = m_wire_network->get_vertices();
+    m_wire_network->set_vertices(ori_vertices+ offset);
+
     InflatorEngine::Ptr inflator =
         InflatorEngine::create_parametric(m_wire_network, m_parameters);
     inflator->with_shape_velocities();
     if (m_refine_order > 0)
         inflator->with_refinement(m_refine_algorithm, m_refine_order);
     inflator->inflate();
+
+    m_wire_network->set_vertices(ori_vertices);
 
     m_vertices = inflator->get_vertices();
     m_faces = inflator->get_faces();

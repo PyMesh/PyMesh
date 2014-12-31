@@ -257,12 +257,7 @@ TEST_F(ParameterManagerTest, add_vertex_offset) {
     MatrixFr offset = manager->evaluate_offset(vars);
     ASSERT_EQ(num_vertices, offset.rows());
     ASSERT_EQ(dim, offset.cols());
-    for (size_t i=0; i<4; i++) {
-        ASSERT_FLOAT_EQ(0.1, fabs(offset(i, 0)));
-        ASSERT_FLOAT_EQ(0.2, fabs(offset(i, 1)));
-        ASSERT_FLOAT_EQ(0.3, fabs(offset(i, 2)));
-    }
-    for (size_t i=4; i<8; i++) {
+    for (size_t i=0; i<8; i++) {
         ASSERT_LT(0.0, fabs(offset(i, 0)));
         ASSERT_LT(0.0, fabs(offset(i, 1)));
         ASSERT_LT(0.0, fabs(offset(i, 2)));
@@ -392,4 +387,68 @@ TEST_F(ParameterManagerTest, save_dofs) {
 
     ASSERT_EQ(dofs.size(), dofs2.size());
     ASSERT_NEAR(0.0, (dofs-dofs2).norm(), 1e-12);
+}
+
+TEST_F(ParameterManagerTest, constant_isotropic_offset_wire_grad) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    ParameterManager::Ptr manager = ParameterManager::create_isotropic(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    const size_t num_dofs = manager->get_num_dofs();
+    const size_t num_offset_dofs = manager->get_num_offset_dofs();
+    VectorF dofs = manager->get_dofs();
+
+    std::vector<MatrixFr> offset_wire_grads;
+    for (const auto& param : manager->get_offset_params()) {
+        offset_wire_grads.emplace_back(param->compute_derivative());
+    }
+
+    dofs += VectorF::Ones(num_dofs) * 0.1;
+    manager->set_dofs(dofs);
+    MatrixFr offset = manager->evaluate_offset_no_formula();
+    wire_network->set_vertices(wire_network->get_vertices() + offset);
+
+    std::vector<MatrixFr> updated_offset_wire_grads;
+    for (const auto& param : manager->get_offset_params()) {
+        updated_offset_wire_grads.emplace_back(param->compute_derivative());
+    }
+
+    ASSERT_EQ(num_offset_dofs, offset_wire_grads.size());
+    ASSERT_EQ(num_offset_dofs, updated_offset_wire_grads.size());
+    for (size_t i=0; i<num_offset_dofs; i++) {
+        Float diff = (offset_wire_grads[i] - updated_offset_wire_grads[i])
+            .squaredNorm();
+        ASSERT_FLOAT_EQ(0.0, diff);
+    }
+}
+
+TEST_F(ParameterManagerTest, constant_anisotropic_offset_wire_grad) {
+    WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
+    ParameterManager::Ptr manager = ParameterManager::create(
+            wire_network, 0.5, ParameterCommon::VERTEX);
+    const size_t num_dofs = manager->get_num_dofs();
+    const size_t num_offset_dofs = manager->get_num_offset_dofs();
+    VectorF dofs = manager->get_dofs();
+
+    std::vector<MatrixFr> offset_wire_grads;
+    for (const auto& param : manager->get_offset_params()) {
+        offset_wire_grads.emplace_back(param->compute_derivative());
+    }
+
+    dofs += VectorF::Ones(num_dofs) * 0.1;
+    manager->set_dofs(dofs);
+    MatrixFr offset = manager->evaluate_offset_no_formula();
+    wire_network->set_vertices(wire_network->get_vertices() + offset);
+
+    std::vector<MatrixFr> updated_offset_wire_grads;
+    for (const auto& param : manager->get_offset_params()) {
+        updated_offset_wire_grads.emplace_back(param->compute_derivative());
+    }
+
+    ASSERT_EQ(num_offset_dofs, offset_wire_grads.size());
+    ASSERT_EQ(num_offset_dofs, updated_offset_wire_grads.size());
+    for (size_t i=0; i<num_offset_dofs; i++) {
+        Float diff = (offset_wire_grads[i] - updated_offset_wire_grads[i])
+            .squaredNorm();
+        ASSERT_FLOAT_EQ(0.0, diff);
+    }
 }

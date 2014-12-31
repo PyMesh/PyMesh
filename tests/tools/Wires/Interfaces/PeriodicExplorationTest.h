@@ -106,7 +106,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
             if (explorer.is_thickness_dof(j)) {
                 modified_dofs[j] *= factor;
             } else {
-                modified_dofs[j] -= i * 0.1;
+                modified_dofs[j] -= i * 0.05;
             }
         }
         explorer.set_dofs(modified_dofs);
@@ -152,6 +152,12 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
 
     size_t num_dofs = explorer.get_num_dofs();
     VectorF dofs = explorer.get_dofs();
+    for (size_t i=0; i<num_dofs; i++) {
+        if (!explorer.is_thickness_dof(i)) {
+            dofs[i] = 0.1;
+        }
+    }
+    explorer.set_dofs(dofs);
     explorer.periodic_inflate();
 
     MatrixFr init_vertices = explorer.get_vertices();

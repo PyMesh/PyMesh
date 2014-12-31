@@ -152,11 +152,6 @@ void PhantomMeshGenerator::tile() {
     bbox_min.array() *= 3;
     bbox_max.array() *= 3;
 
-    ParameterCommon::Variables vars;
-    MatrixFr offset = m_parameter_manager->evaluate_offset(vars);
-    MatrixFr ori_vertices = m_wire_network->get_vertices();
-    m_wire_network->set_vertices(ori_vertices+ offset);
-
     WireTiler tiler(m_wire_network);
     tiler.with_parameters(m_parameter_manager);
     m_phantom_wires = tiler.tile_with_guide_bbox(
@@ -165,8 +160,6 @@ void PhantomMeshGenerator::tile() {
 
     assert(m_phantom_wires->has_attribute("thickness"));
     assert(m_phantom_wires->has_attribute("vertex_offset"));
-
-    m_wire_network->set_vertices(ori_vertices);
 }
 
 void PhantomMeshGenerator::trim_irrelavent_edges() {
