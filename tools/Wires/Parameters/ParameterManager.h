@@ -104,11 +104,13 @@ class ParameterManager {
         VectorF get_dofs() const;
         void set_dofs(const VectorF& values);
         std::vector<MatrixFr> compute_shape_velocity(Mesh::Ptr mesh);
+        MatrixFr compute_wire_gradient(size_t i) const;
         VectorI get_thickness_dof_map() const;
         MatrixIr get_offset_dof_map() const;
         void save_dofs(const std::string& dof_file) const;
         void load_dofs(const std::string& dof_file);
         std::vector<std::string> get_formulas() const;
+        DofType get_dof_type() const { return m_dof_type; }
 
         // The following methods are used for converting parameter into
         // thickness and offset values per vertex/edge.

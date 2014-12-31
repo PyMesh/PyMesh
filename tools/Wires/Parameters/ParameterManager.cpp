@@ -383,6 +383,30 @@ std::vector<MatrixFr> ParameterManager::compute_shape_velocity(Mesh::Ptr mesh) {
     return velocity;
 }
 
+MatrixFr ParameterManager::compute_wire_gradient(size_t i) const {
+    // This is probably not fast, but the number of parameters are typically
+    // low.
+    const size_t num_thickness_dofs = get_num_thickness_dofs();
+    if (i < num_thickness_dofs) {
+        size_t count = 0;
+        for (const auto& param : m_thickness_params) {
+            if (count == i)
+                return param->compute_derivative();
+            count++;
+        }
+    } else {
+        size_t count = num_thickness_dofs;
+        for (const auto& param : m_offset_params) {
+            if (count == i)
+                return param->compute_derivative();
+            count++;
+        }
+
+    }
+
+    throw RuntimeError("Parameter index out of bound!");
+}
+
 VectorI ParameterManager::get_thickness_dof_map() const {
     size_t domain_size = 0;
     if (get_thickness_type() == ParameterCommon::VERTEX) {
