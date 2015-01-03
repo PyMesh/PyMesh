@@ -128,3 +128,28 @@ TEST_F(MixedMeshTilerTest, 3D) {
     ASSERT_EQ(expected_num_vertices, tiled_network->get_num_vertices());
 }
 
+TEST_F(MixedMeshTilerTest, 3D_single_pattern) {
+    std::vector<WireNetwork::Ptr> patterns;
+    patterns.push_back(load_wire_shared("cube.wire"));
+
+    MeshPtr mesh = load_mesh("hex_s1.msh");
+    const size_t num_cells = mesh->get_num_voxels();
+    VectorF pattern_id = generate_pattern_id(num_cells, 1);
+    mesh->add_attribute("pattern_id");
+    mesh->set_attribute("pattern_id", pattern_id);
+
+    size_t max_num_dofs = 2;
+    MatrixF dofs = MatrixFr::Ones(num_cells, max_num_dofs) * 0.2;
+    for (size_t i=0; i<num_cells; i++) {
+        dofs(i, 0) += i * 0.02;
+    }
+    add_dofs_as_attributes(mesh, dofs);
+
+    MixedMeshTiler tiler(patterns, mesh);
+    WireNetwork::Ptr tiled_network = tiler.tile();
+
+    ASSERT_TRUE(tiled_network->has_attribute("thickness"));
+    MatrixFr thickness = tiled_network->get_attribute("thickness");
+    ASSERT_FALSE((thickness.array() == thickness(0, 0)).all());
+}
+
