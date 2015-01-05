@@ -30,7 +30,7 @@ class ParameterList {
         }
 
         void set_dofs(const VectorF& dofs) {
-            assert(dofs.size() == m_params.size());
+            assert(size_t(dofs.size()) == m_params.size());
             size_t count = 0;
             for (auto param : m_params) {
                 param->set_value(dofs[count]);

@@ -33,12 +33,14 @@ void PeriodicExploration::with_parameters(
             m_wire_network, m_default_thickness, orbit_file, modifier_file);
 }
 
-void PeriodicExploration::with_all_parameters() {
+void PeriodicExploration::with_all_parameters(
+        TargetType thickness_type) {
     m_parameters = ParameterManager::create(
             m_wire_network, m_default_thickness);
 }
 
-void PeriodicExploration::with_all_isotropic_parameters() {
+void PeriodicExploration::with_all_isotropic_parameters(
+        TargetType thickness_type) {
     m_parameters = ParameterManager::create_isotropic(
             m_wire_network, m_default_thickness);
 }

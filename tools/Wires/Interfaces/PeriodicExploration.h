@@ -18,8 +18,11 @@ class PeriodicExploration {
                 const std::string& orbit_file,
                 const std::string& modifier_file);
 
-        void with_all_parameters();
-        void with_all_isotropic_parameters();
+        typedef ParameterCommon::TargetType TargetType;
+        void with_all_parameters(
+                TargetType thickness_type = ParameterCommon::VERTEX);
+        void with_all_isotropic_parameters(
+                TargetType thickness_type = ParameterCommon::VERTEX);
 
         void with_refinement(
                 const std::string& algorithm,
