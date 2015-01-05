@@ -53,6 +53,13 @@ ELSE (TETGEN_FOUND)
     MESSAGE(WARNING "Tetgen wrapper module is not built because tetgen lib is missing")
 ENDIF (TETGEN_FOUND)
 
+IF (CGAL_FOUND)
+    ADD_SUBDIRECTORY(tetrahedronization)
+    LIST(APPEND TARGET_MODULES tetrahedronization)
+ELSE (CGAL_FOUND)
+    MESSAGE(WARNING "Tetrahedronization module is not built because CGAL is missing")
+ENDIF (CGAL_FOUND)
+
 IF (TRIANGLE_FOUND)
     ADD_SUBDIRECTORY(triangle)
     LIST(APPEND TARGET_MODULES triangle)
