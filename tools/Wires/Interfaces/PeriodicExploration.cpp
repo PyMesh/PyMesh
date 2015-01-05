@@ -63,9 +63,9 @@ void PeriodicExploration::periodic_inflate() {
 
     try {
         inflator->inflate();
-    } catch (const std::exception& e) {
+    } catch (...) {
         m_wire_network->set_vertices(ori_vertices);
-        throw e;
+        throw;
     }
 
     m_wire_network->set_vertices(ori_vertices);
