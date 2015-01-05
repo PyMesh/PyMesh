@@ -54,7 +54,7 @@ ELSE (TETGEN_FOUND)
 ENDIF (TETGEN_FOUND)
 
 IF (CGAL_FOUND)
-    ADD_SUBDIRECTORY(tetrahedronization)
+    ADD_SUBDIRECTORY(Tetrahedronization)
     LIST(APPEND TARGET_MODULES tetrahedronization)
 ELSE (CGAL_FOUND)
     MESSAGE(WARNING "Tetrahedronization module is not built because CGAL is missing")
