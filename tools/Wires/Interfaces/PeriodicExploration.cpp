@@ -60,7 +60,13 @@ void PeriodicExploration::periodic_inflate() {
     inflator->with_shape_velocities();
     if (m_refine_order > 0)
         inflator->with_refinement(m_refine_algorithm, m_refine_order);
-    inflator->inflate();
+
+    try {
+        inflator->inflate();
+    } catch (const std::exception& e) {
+        m_wire_network->set_vertices(ori_vertices);
+        throw e;
+    }
 
     m_wire_network->set_vertices(ori_vertices);
 

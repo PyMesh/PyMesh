@@ -63,6 +63,9 @@ class PeriodicExploration {
         MatrixIr get_voxels() const { return m_voxels; }
         std::vector<MatrixFr> get_shape_velocities() const { return m_shape_velocities; }
 
+        // Debug functions
+        WireNetwork::Ptr get_wire_network() { return m_wire_network; }
+
     private:
         void update_mesh();
 

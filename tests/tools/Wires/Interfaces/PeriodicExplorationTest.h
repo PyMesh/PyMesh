@@ -266,3 +266,43 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
     }
     std::cout << " done!" << std::endl;
 }
+
+TEST_F(PeriodicExplorationTest, debug) {
+    PeriodicExploration explorer(
+            m_data_dir + "brick5.wire", 5, 0.5);
+    explorer.with_all_parameters();
+    explorer.with_refinement("simple", 2);
+
+    WireNetwork::Ptr wire_network = explorer.get_wire_network();
+    MatrixFr vertices = wire_network->get_vertices();
+
+    VectorF dofs(13);
+    dofs << 1, 0.872991, 0.784742, 0.424264,
+        0.424264, 0.424264, 0.424264,
+        0.15, -0.0557327, 0.15,
+        0.15, 0.0201534, -0.12166;
+
+    for (size_t i=0; i<3; i++) {
+        explorer.set_dofs(dofs);
+        try {
+            explorer.periodic_inflate();
+        } catch (...) {
+            MatrixFr itr_vertices = wire_network->get_vertices();
+            ASSERT_FLOAT_EQ(0.0, (vertices-itr_vertices).norm());
+        }
+    }
+}
+
+TEST_F(PeriodicExplorationTest, debug2) {
+    PeriodicExploration explorer(
+            m_data_dir + "brick5.wire", 5, 0.5);
+    explorer.with_all_parameters();
+    explorer.with_refinement("simple", 2);
+    std::string dof_file = m_data_dir + "lengthError.dof";
+    explorer.load_dofs(dof_file);
+    try {
+        explorer.periodic_inflate();
+    } catch (const std::exception& e) {
+        // TODO: min boundary not match.
+    }
+}
