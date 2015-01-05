@@ -73,7 +73,9 @@ InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
             err_msg << "Unsupported dim: " << dim;
             throw NotImplementedError(err_msg.str());
         }
-        m_correction = VectorF::Zero(dim);
+        m_rel_correction = VectorF::Zero(dim);
+        m_abs_correction = VectorF::Zero(dim);
+        m_correction_cap = 0.3;
     }
 
 void InflatorEngine::with_shape_velocities() {
@@ -100,15 +102,26 @@ void InflatorEngine::with_refinement(
     m_subdiv_order = order;
 }
 
-void InflatorEngine::with_geometry_correction(const VectorF& correction) {
+void InflatorEngine::with_rel_geometry_correction(const VectorF& correction) {
     if (correction.size() != m_wire_network->get_dim()) {
         std::stringstream err_msg;
-        err_msg << "Geometry offset dimension mismatch.  Expect "
+        err_msg << "Relative geometry offset dimension mismatch.  Expect "
             << m_wire_network->get_dim() << " but get "
             << correction.size() << " instead.";
         throw RuntimeError(err_msg.str());
     }
-    m_correction = correction;
+    m_rel_correction = correction;
+}
+
+void InflatorEngine::with_abs_geometry_correction(const VectorF& correction) {
+    if (correction.size() != m_wire_network->get_dim()) {
+        std::stringstream err_msg;
+        err_msg << "Absolute geometry offset dimension mismatch.  Expect "
+            << m_wire_network->get_dim() << " but get "
+            << correction.size() << " instead.";
+        throw RuntimeError(err_msg.str());
+    }
+    m_abs_correction = correction;
 }
 
 void InflatorEngine::clean_up() {

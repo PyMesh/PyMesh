@@ -22,15 +22,59 @@ namespace WireProfileHelper {
         return (Q.toRotationMatrix() * loop.transpose()).transpose();
     }
 
-    void apply_correction(MatrixFr& loop, const VectorF& correction) {
-        assert(loop.cols() == correction.size());
+    void apply_correction(const Vector3F& dir, MatrixFr& loop,
+            const Vector3F& rel_correction, const Vector3F& abs_correction, 
+            const Float correction_cap) {
+        static const Float tol = 1e-3;
+        assert(loop.cols() == abs_correction.size());
+        assert(loop.cols() == rel_correction.size());
+        assert(correction_cap >= 0.0);
         VectorF centroid = 0.5 *
             (loop.colwise().minCoeff() + loop.colwise().maxCoeff());
+        Float dir_sq_len = dir.squaredNorm();
+
         const size_t loop_size = loop.rows();
-        for (size_t i=0; i<loop_size; i++) {
-            VectorF v = loop.row(i) - centroid.transpose();
-            Float l = v.norm();
-            loop.row(i) += (v.cwiseProduct(correction) / l).transpose();
+        if (fabs(dir[2]) > tol) {
+            for (size_t i=0; i<loop_size; i++) {
+                Vector3F v = loop.row(i) - centroid.transpose();
+                Float factor = -v[2] / dir[2];
+                Vector3F p = v + dir * factor;
+                Vector3F offset(0, 0, 0);
+                assert(fabs(p[2]) < 1e-12);
+                offset[0] = p[0] * rel_correction[0] + abs_correction[0];
+                offset[1] = p[1] * rel_correction[1] + abs_correction[1];
+                offset[2] = p[2] * rel_correction[2] + abs_correction[2];
+
+                if (offset[0] > 0.0) offset[0] = std::min(offset[0], correction_cap);
+                if (offset[1] > 0.0) offset[1] = std::min(offset[1], correction_cap);
+                if (offset[2] > 0.0) offset[2] = std::min(offset[2], correction_cap);
+                if (offset[0] < 0.0) offset[0] = std::max(offset[0],-correction_cap);
+                if (offset[1] < 0.0) offset[1] = std::max(offset[1],-correction_cap);
+                if (offset[2] < 0.0) offset[2] = std::max(offset[2],-correction_cap);
+
+                p += offset;
+                p = p - dir * (dir.dot(p) / dir_sq_len);
+                loop.row(i) = (p+centroid).transpose();
+            }
+        } else {
+            for (size_t i=0; i<loop_size; i++) {
+                Vector3F v = loop.row(i) - centroid.transpose();
+                Vector3F offset(0, 0, 0);
+                offset[0] = v[0] * rel_correction[0] + abs_correction[0];
+                offset[1] = v[1] * rel_correction[1] + abs_correction[1];
+                offset[2] = v[2] * rel_correction[2] + abs_correction[2];
+
+                if (offset[0] > 0.0) offset[0] = std::min(offset[0], correction_cap);
+                if (offset[1] > 0.0) offset[1] = std::min(offset[1], correction_cap);
+                if (offset[2] > 0.0) offset[2] = std::min(offset[2], correction_cap);
+                if (offset[0] < 0.0) offset[0] = std::max(offset[0],-correction_cap);
+                if (offset[1] < 0.0) offset[1] = std::max(offset[1],-correction_cap);
+                if (offset[2] < 0.0) offset[2] = std::max(offset[2],-correction_cap);
+
+                v += offset;
+                v = v - dir * (dir.dot(v) / dir_sq_len);
+                loop.row(i) = (v+centroid).transpose();
+            }
         }
     }
 }
@@ -96,7 +140,10 @@ void WireProfile::initialize(const MatrixFr& loop) {
 }
 
 MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
-        Float offset, Float thickness, const VectorF& correction) {
+        Float offset, Float thickness,
+        const VectorF& rel_correction,
+        const VectorF& abs_correction,
+        Float correction_cap) {
     VectorF dir = end_2 - end_1;
     MatrixFr loop = m_loop;
 
@@ -107,13 +154,13 @@ MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
         loop = rotate_loop_2D(loop, dir);
     } else if (m_dim == 3) {
         loop = rotate_loop_3D(loop, dir);
+        apply_correction(dir, loop, rel_correction, abs_correction, correction_cap);
     } else {
         assert(false);
         std::stringstream err_msg;
         err_msg << "Unsupported dimention: " << m_dim;
         throw NotImplementedError(err_msg.str());
     }
-    apply_correction(loop, correction);
     return loop.rowwise() + end_1.transpose();
 }
 

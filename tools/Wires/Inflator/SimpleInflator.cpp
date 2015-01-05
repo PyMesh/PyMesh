@@ -90,10 +90,13 @@ void SimpleInflator::compute_end_loop_offsets() {
     assert(min_angles.size() == num_vertices);
     assert(min_angles.minCoeff() > 0.0);
     VectorF vertex_thickness = compute_vertex_thickness();
-    const Float max_correction = m_correction.maxCoeff();
+    const Float max_rel_correction = m_rel_correction.maxCoeff();
+    const Float max_abs_correction = m_abs_correction.maxCoeff();
 
     m_end_loop_offsets.resize(num_vertices);
     for (size_t i=0; i<num_vertices; i++) {
+        const Float max_correction = vertex_thickness[i] * max_rel_correction
+            + max_abs_correction;
         m_end_loop_offsets[i] = 0.5 * (vertex_thickness[i] + max_correction) /
             tan(min_angles[i] * 0.5) + EPSILON;
     }
@@ -113,10 +116,12 @@ void SimpleInflator::generate_end_loops() {
         Float edge_len = (v2 - v1).norm();
         MatrixFr loop_1 = m_profile->place(v1, v2,
                 m_end_loop_offsets[edge[0]],
-                edge_thickness(i, 0), m_correction);
+                edge_thickness(i, 0),
+                m_rel_correction, m_abs_correction, m_correction_cap);
         MatrixFr loop_2 = m_profile->place(v1, v2,
                 edge_len - m_end_loop_offsets[edge[1]],
-                edge_thickness(i, 1), m_correction);
+                edge_thickness(i, 1),
+                m_rel_correction, m_abs_correction, m_correction_cap);
         m_end_loops.push_back(std::make_pair(loop_1, loop_2));
     }
 }
