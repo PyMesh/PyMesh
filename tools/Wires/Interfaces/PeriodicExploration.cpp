@@ -36,13 +36,13 @@ void PeriodicExploration::with_parameters(
 void PeriodicExploration::with_all_parameters(
         TargetType thickness_type) {
     m_parameters = ParameterManager::create(
-            m_wire_network, m_default_thickness);
+            m_wire_network, m_default_thickness, thickness_type);
 }
 
 void PeriodicExploration::with_all_isotropic_parameters(
         TargetType thickness_type) {
     m_parameters = ParameterManager::create_isotropic(
-            m_wire_network, m_default_thickness);
+            m_wire_network, m_default_thickness, thickness_type);
 }
 
 void PeriodicExploration::with_refinement(
