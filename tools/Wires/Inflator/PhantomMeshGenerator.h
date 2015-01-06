@@ -15,10 +15,24 @@ class PhantomMeshGenerator {
             m_wire_network(wire_network),
             m_parameter_manager(manager),
             m_profile(profile),
-            m_with_shape_velocities(false) {}
+            m_with_shape_velocities(false) {
+                const size_t dim = m_wire_network->get_dim();
+                m_rel_geometry_correction = VectorF::Zero(dim);
+                m_abs_geometry_correction = VectorF::Zero(dim);
+                m_geometry_correction_cap = 0.3;
+            }
 
     public:
         void with_shape_velocities() { m_with_shape_velocities = true; }
+        void with_rel_geometry_correction(const VectorF& correction) {
+            m_rel_geometry_correction = correction;
+        }
+        void with_abs_geometry_correction(const VectorF& correction) {
+            m_abs_geometry_correction = correction;
+        }
+        void set_geometry_correction_cap(Float cap) {
+            m_geometry_correction_cap = cap;
+        }
         void generate();
 
         MatrixFr get_vertices() const { return m_vertices; }
@@ -63,4 +77,8 @@ class PhantomMeshGenerator {
         std::vector<std::string> m_thickness_roi_attr_names;
         std::vector<std::string> m_offset_roi_attr_names;
         std::vector<std::string> m_offset_derivative_attr_names;
+
+        VectorF m_rel_geometry_correction;
+        VectorF m_abs_geometry_correction;
+        Float m_geometry_correction_cap;
 };

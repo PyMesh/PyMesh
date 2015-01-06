@@ -74,6 +74,9 @@ void PeriodicInflator::generate_phantom_mesh() {
             m_wire_network, m_parameter_manager, m_profile);
     if (m_with_shape_velocities)
         generator.with_shape_velocities();
+    generator.with_rel_geometry_correction(m_rel_correction);
+    generator.with_abs_geometry_correction(m_abs_correction);
+    generator.set_geometry_correction_cap(m_correction_cap);
     generator.generate();
     m_phantom_vertices = generator.get_vertices();
     m_phantom_faces = generator.get_faces();

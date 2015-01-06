@@ -39,11 +39,16 @@ namespace WireProfileHelper {
                 Vector3F v = loop.row(i) - centroid.transpose();
                 Float factor = -v[2] / dir[2];
                 Vector3F p = v + dir * factor;
-                Vector3F offset(0, 0, 0);
                 assert(fabs(p[2]) < 1e-12);
-                offset[0] = p[0] * rel_correction[0] + abs_correction[0];
-                offset[1] = p[1] * rel_correction[1] + abs_correction[1];
-                offset[2] = p[2] * rel_correction[2] + abs_correction[2];
+
+                Vector3F sign(1, 1, 1);
+                if (v[0] < 0.0) sign[0] = -1;
+                if (v[1] < 0.0) sign[1] = -1;
+                if (v[2] < 0.0) sign[2] = -1;
+
+                Vector3F offset(0, 0, 0);
+                offset = v.cwiseProduct(rel_correction) +
+                    sign.cwiseProduct(abs_correction);
 
                 if (offset[0] > 0.0) offset[0] = std::min(offset[0], correction_cap);
                 if (offset[1] > 0.0) offset[1] = std::min(offset[1], correction_cap);
@@ -59,10 +64,14 @@ namespace WireProfileHelper {
         } else {
             for (size_t i=0; i<loop_size; i++) {
                 Vector3F v = loop.row(i) - centroid.transpose();
+                Vector3F sign(1, 1, 1);
+                if (v[0] < 0.0) sign[0] = -1;
+                if (v[1] < 0.0) sign[1] = -1;
+                if (v[2] < 0.0) sign[2] = -1;
+
                 Vector3F offset(0, 0, 0);
-                offset[0] = v[0] * rel_correction[0] + abs_correction[0];
-                offset[1] = v[1] * rel_correction[1] + abs_correction[1];
-                offset[2] = v[2] * rel_correction[2] + abs_correction[2];
+                offset = v.cwiseProduct(rel_correction) +
+                    sign.cwiseProduct(abs_correction);
 
                 if (offset[0] > 0.0) offset[0] = std::min(offset[0], correction_cap);
                 if (offset[1] > 0.0) offset[1] = std::min(offset[1], correction_cap);

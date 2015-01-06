@@ -240,12 +240,18 @@ void PhantomMeshGenerator::inflate() {
     inflator.set_thickness_type(thickness_type);
     inflator.set_thickness(thickness);
     inflator.set_profile(m_profile);
+    inflator.with_rel_geometry_correction(m_rel_geometry_correction);
+    inflator.with_abs_geometry_correction(m_abs_geometry_correction);
+    inflator.set_geometry_correction_cap(m_geometry_correction_cap);
     inflator.inflate();
 
     m_vertices = inflator.get_vertices();
     m_faces = inflator.get_faces();
     update_face_sources(inflator.get_face_sources());
     compute_phantom_shape_velocities();
+
+    //VectorF debug_face_sources = m_face_sources_from_ori_wires.cast<Float>();
+    //save_mesh("phantom_debug.msh", m_vertices, m_faces, debug_face_sources);
 }
 
 void PhantomMeshGenerator::update_face_sources(
@@ -295,7 +301,7 @@ void PhantomMeshGenerator::compute_phantom_shape_velocities() {
     mesh->add_attribute("face_source");
     mesh->set_attribute("face_source", face_sources);
 
-    VectorF debug_face_sources = m_face_sources_from_ori_wires.cast<Float>();
+    //VectorF debug_face_sources = m_face_sources_from_ori_wires.cast<Float>();
     //save_mesh("phantom_debug.msh", m_vertices, m_faces, debug_face_sources);
 
     m_shape_velocities = m_phantom_param_manager->compute_shape_velocity(mesh);
