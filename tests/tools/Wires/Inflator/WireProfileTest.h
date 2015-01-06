@@ -10,7 +10,7 @@ class WireProfileTest : public WireTest {
         virtual void SetUp() {
             m_rel_correction = Vector3F::Zero();
             m_abs_correction = Vector3F::Zero();
-            m_correction_cap = 0.0;
+            m_correction_cap = 0.3;
         }
 
         VectorF compute_center(const MatrixFr& loop) {
@@ -74,6 +74,108 @@ TEST_F(WireProfileTest, 3D_diag) {
     ASSERT_FLOAT_EQ(offset, compute_offset(loop, p0));
     ASSERT_FLOAT_EQ(thickness * 0.5, compute_radius(loop));
     ASSERT_COLINEAR(loop, p0, p1);
+}
+
+TEST_F(WireProfileTest, rel_geometry_correction) {
+    WireProfile::Ptr profile = WireProfile::create("square");
+    Vector3F p0(0,0,0);
+    Vector3F p1(1,0,0);
+    Float offset = 0.0;
+    Float thickness = sqrt(2.0);
+    Vector3F rel_correction(0.1, 0.2, 0.3);
+    MatrixFr loop = profile->place(p0, p1, offset, thickness,
+            rel_correction, m_abs_correction, m_correction_cap);
+    Vector3F bbox_min = loop.colwise().minCoeff();
+    Vector3F bbox_max = loop.colwise().maxCoeff();
+    Vector3F bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.0, bbox_size[0]);
+    ASSERT_FLOAT_EQ(0.2, bbox_size[1] - 1.0);
+    ASSERT_FLOAT_EQ(0.3, bbox_size[2] - 1.0);
+
+    p1 = Vector3F(0,1,0);
+    loop = profile->place(p0, p1, offset, thickness,
+            rel_correction, m_abs_correction, m_correction_cap);
+    bbox_min = loop.colwise().minCoeff();
+    bbox_max = loop.colwise().maxCoeff();
+    bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.1, bbox_size[0] - 1.0);
+    ASSERT_FLOAT_EQ(0.0, bbox_size[1]);
+    ASSERT_FLOAT_EQ(0.3, bbox_size[2] - 1.0);
+
+    p1 = Vector3F(0,0,1);
+    loop = profile->place(p0, p1, offset, thickness,
+            rel_correction, m_abs_correction, m_correction_cap);
+    bbox_min = loop.colwise().minCoeff();
+    bbox_max = loop.colwise().maxCoeff();
+    bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.1, bbox_size[0] - 1.0);
+    ASSERT_FLOAT_EQ(0.2, bbox_size[1] - 1.0);
+    ASSERT_FLOAT_EQ(0.0, bbox_size[2]);
+}
+
+TEST_F(WireProfileTest, abs_geometry_correction) {
+    WireProfile::Ptr profile = WireProfile::create("square");
+    Vector3F p0(0,0,0);
+    Vector3F p1(1,0,0);
+    Float offset = 0.0;
+    Float thickness = sqrt(2.0);
+    Vector3F abs_correction(0.1, 0.2, 0.3);
+    MatrixFr loop = profile->place(p0, p1, offset, thickness,
+            m_rel_correction, abs_correction, m_correction_cap);
+    Vector3F bbox_min = loop.colwise().minCoeff();
+    Vector3F bbox_max = loop.colwise().maxCoeff();
+    Vector3F bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.0, bbox_size[0]);
+    ASSERT_FLOAT_EQ(0.2, bbox_size[1] - 1.0);
+    ASSERT_FLOAT_EQ(0.3, bbox_size[2] - 1.0);
+
+    p1 = Vector3F(0, 1, 0);
+    loop = profile->place(p0, p1, offset, thickness,
+            m_rel_correction, abs_correction, m_correction_cap);
+    bbox_min = loop.colwise().minCoeff();
+    bbox_max = loop.colwise().maxCoeff();
+    bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.1, bbox_size[0] - 1.0);
+    ASSERT_FLOAT_EQ(0.0, bbox_size[1]);
+    ASSERT_FLOAT_EQ(0.3, bbox_size[2] - 1.0);
+
+    p1 = Vector3F(0, 0, 1);
+    loop = profile->place(p0, p1, offset, thickness,
+            m_rel_correction, abs_correction, m_correction_cap);
+    bbox_min = loop.colwise().minCoeff();
+    bbox_max = loop.colwise().maxCoeff();
+    bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.1, bbox_size[0] - 1.0);
+    ASSERT_FLOAT_EQ(0.2, bbox_size[1] - 1.0);
+    ASSERT_FLOAT_EQ(0.0, bbox_size[2]);
+}
+
+TEST_F(WireProfileTest, geometry_correction_cap) {
+    WireProfile::Ptr profile = WireProfile::create("square");
+    Vector3F p0(0,0,0);
+    Vector3F p1(1,0,0);
+    Float offset = 0.0;
+    Float thickness = sqrt(2.0);
+    Vector3F abs_correction(0.1, 0.2, 0.3);
+    Float correction_cap = 0.1;
+    MatrixFr loop = profile->place(p0, p1, offset, thickness,
+            m_rel_correction, abs_correction, correction_cap);
+    Vector3F bbox_min = loop.colwise().minCoeff();
+    Vector3F bbox_max = loop.colwise().maxCoeff();
+    Vector3F bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.0, bbox_size[0]);
+    ASSERT_FLOAT_EQ(0.1, bbox_size[1] - 1.0);
+    ASSERT_FLOAT_EQ(0.1, bbox_size[2] - 1.0);
+
+    p1 = Vector3F(0, 0, 1);
+    loop = profile->place(p0, p1, offset, thickness,
+            m_rel_correction, abs_correction, correction_cap);
+    bbox_min = loop.colwise().minCoeff();
+    bbox_max = loop.colwise().maxCoeff();
+    bbox_size = bbox_max - bbox_min;
+    ASSERT_FLOAT_EQ(0.1, bbox_size[0] - 1.0);
+    ASSERT_FLOAT_EQ(0.1, bbox_size[1] - 1.0);
+    ASSERT_FLOAT_EQ(0.0, bbox_size[2]);
 }
 
 TEST_F(WireProfileTest, 2D) {

@@ -29,8 +29,11 @@ namespace WireProfileHelper {
         assert(loop.cols() == abs_correction.size());
         assert(loop.cols() == rel_correction.size());
         assert(correction_cap >= 0.0);
+
         VectorF centroid = 0.5 *
             (loop.colwise().minCoeff() + loop.colwise().maxCoeff());
+        const Vector3F upper_cap = Vector3F::Ones() * correction_cap * 0.5;
+        const Vector3F lower_cap =-Vector3F::Ones() * correction_cap * 0.5;
         Float dir_sq_len = dir.squaredNorm();
 
         const size_t loop_size = loop.rows();
@@ -48,14 +51,9 @@ namespace WireProfileHelper {
 
                 Vector3F offset(0, 0, 0);
                 offset = v.cwiseProduct(rel_correction) +
-                    sign.cwiseProduct(abs_correction);
-
-                if (offset[0] > 0.0) offset[0] = std::min(offset[0], correction_cap);
-                if (offset[1] > 0.0) offset[1] = std::min(offset[1], correction_cap);
-                if (offset[2] > 0.0) offset[2] = std::min(offset[2], correction_cap);
-                if (offset[0] < 0.0) offset[0] = std::max(offset[0],-correction_cap);
-                if (offset[1] < 0.0) offset[1] = std::max(offset[1],-correction_cap);
-                if (offset[2] < 0.0) offset[2] = std::max(offset[2],-correction_cap);
+                    sign.cwiseProduct(abs_correction * 0.5);
+                offset = offset.cwiseMin(upper_cap);
+                offset = offset.cwiseMax(lower_cap);
 
                 p += offset;
                 p = p - dir * (dir.dot(p) / dir_sq_len);
@@ -71,14 +69,10 @@ namespace WireProfileHelper {
 
                 Vector3F offset(0, 0, 0);
                 offset = v.cwiseProduct(rel_correction) +
-                    sign.cwiseProduct(abs_correction);
+                    sign.cwiseProduct(abs_correction * 0.5);
 
-                if (offset[0] > 0.0) offset[0] = std::min(offset[0], correction_cap);
-                if (offset[1] > 0.0) offset[1] = std::min(offset[1], correction_cap);
-                if (offset[2] > 0.0) offset[2] = std::min(offset[2], correction_cap);
-                if (offset[0] < 0.0) offset[0] = std::max(offset[0],-correction_cap);
-                if (offset[1] < 0.0) offset[1] = std::max(offset[1],-correction_cap);
-                if (offset[2] < 0.0) offset[2] = std::max(offset[2],-correction_cap);
+                offset = offset.cwiseMin(upper_cap);
+                offset = offset.cwiseMax(lower_cap);
 
                 v += offset;
                 v = v - dir * (dir.dot(v) / dir_sq_len);
