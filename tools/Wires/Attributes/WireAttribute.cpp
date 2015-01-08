@@ -30,6 +30,18 @@ WireAttribute::Ptr WireAttribute::create(const std::string& name,
     } else if (name == "vertex_support_Z") {
         Vector3F print_dir = Vector3F::UnitZ();
         return Ptr(new WireVertexSupportAttribute(print_dir));
+    } else if (name == "vertex_support_XY") {
+        Vector3F print_dir = Vector3F(1.0, 1.0, 0.0).normalized();
+        return Ptr(new WireVertexSupportAttribute(print_dir));
+    } else if (name == "vertex_support_YZ") {
+        Vector3F print_dir = Vector3F(0.0, 1.0, 1.0).normalized();
+        return Ptr(new WireVertexSupportAttribute(print_dir));
+    } else if (name == "vertex_support_ZX") {
+        Vector3F print_dir = Vector3F(1.0, 0.0, 1.0).normalized();
+        return Ptr(new WireVertexSupportAttribute(print_dir));
+    } else if (name == "vertex_support_XYZ") {
+        Vector3F print_dir = Vector3F(1.0, 1.0, 1.0).normalized();
+        return Ptr(new WireVertexSupportAttribute(print_dir));
     } else if (name == "edge_length") {
         return Ptr(new WireEdgeLengthAttribute);
     } else if (name == "edge_periodic_index") {

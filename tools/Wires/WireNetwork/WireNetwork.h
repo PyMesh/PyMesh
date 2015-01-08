@@ -95,6 +95,12 @@ class WireNetwork {
             return m_connectivity.get_vertex_neighbors(i);
         }
 
+    public:
+        /**
+         * Valid print dir: X, Y, Z, YZ, ZX, XY, XYZ.
+         */
+        bool is_printable(const std::string& print_dir = "Z") const;
+
     private:
         void initialize();
         void initialize_connectivity();

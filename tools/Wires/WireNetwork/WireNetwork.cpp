@@ -198,3 +198,11 @@ void WireNetwork::update_bbox() {
     m_bbox_min = m_vertices.colwise().minCoeff();
     m_bbox_max = m_vertices.colwise().maxCoeff();
 }
+
+bool WireNetwork::is_printable(const std::string& print_dir) const {
+    std::string attr_name = std::string("vertex_support_") + print_dir;
+    add_attribute(attr_name);
+    const MatrixFr& vertex_supported = get_attribute(attr_name);
+    return (vertex_supported.array() > 0.5).all();
+}
+
