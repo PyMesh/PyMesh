@@ -40,6 +40,7 @@ class InflatorEngine {
         void with_rel_geometry_correction(const VectorF& correction);
         void with_abs_geometry_correction(const VectorF& correction);
         void set_geometry_correction_cap(Float cap) { m_correction_cap = cap; }
+        void set_geometry_spread_constant(Float val) { m_spread_const = val; }
         VectorF  get_thickness() const { return m_thickness; }
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
@@ -70,6 +71,7 @@ class InflatorEngine {
         VectorF m_rel_correction;
         VectorF m_abs_correction;
         Float m_correction_cap;
+        Float m_spread_const;
 
         /**
          * m_face_sources tracks the source element of each inflated face.

@@ -24,7 +24,7 @@ namespace WireProfileHelper {
 
     void apply_correction(const Vector3F& dir, MatrixFr& loop,
             const Vector3F& rel_correction, const Vector3F& abs_correction, 
-            const Float correction_cap) {
+            const Float correction_cap, const Float spread_const) {
         static const Float tol = 1e-3;
         assert(loop.cols() == abs_correction.size());
         assert(loop.cols() == rel_correction.size());
@@ -52,6 +52,11 @@ namespace WireProfileHelper {
                 Vector3F offset(0, 0, 0);
                 offset = v.cwiseProduct(rel_correction) +
                     sign.cwiseProduct(abs_correction * 0.5);
+
+                Float spread = 0.5 * spread_const *
+                    (1.0 - fabs(dir[2]) / sqrt(dir_sq_len));
+                offset[0] += sign[0] * spread;
+                offset[1] += sign[1] * spread;
                 offset = offset.cwiseMin(upper_cap);
                 offset = offset.cwiseMax(lower_cap);
 
@@ -70,6 +75,9 @@ namespace WireProfileHelper {
                 Vector3F offset(0, 0, 0);
                 offset = v.cwiseProduct(rel_correction) +
                     sign.cwiseProduct(abs_correction * 0.5);
+                Float spread = 0.5 * spread_const;
+                offset[0] += sign[0] * spread;
+                offset[1] += sign[1] * spread;
 
                 offset = offset.cwiseMin(upper_cap);
                 offset = offset.cwiseMax(lower_cap);
@@ -146,7 +154,8 @@ MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
         Float offset, Float thickness,
         const VectorF& rel_correction,
         const VectorF& abs_correction,
-        Float correction_cap) {
+        Float correction_cap,
+        Float spread_const) {
     VectorF dir = end_2 - end_1;
     MatrixFr loop = m_loop;
 
@@ -157,7 +166,8 @@ MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
         loop = rotate_loop_2D(loop, dir);
     } else if (m_dim == 3) {
         loop = rotate_loop_3D(loop, dir);
-        apply_correction(dir, loop, rel_correction, abs_correction, correction_cap);
+        apply_correction(dir, loop, rel_correction, abs_correction,
+                correction_cap, spread_const);
     } else {
         assert(false);
         std::stringstream err_msg;

@@ -117,11 +117,13 @@ void SimpleInflator::generate_end_loops() {
         MatrixFr loop_1 = m_profile->place(v1, v2,
                 m_end_loop_offsets[edge[0]],
                 edge_thickness(i, 0),
-                m_rel_correction, m_abs_correction, m_correction_cap);
+                m_rel_correction, m_abs_correction, m_correction_cap,
+                m_spread_const);
         MatrixFr loop_2 = m_profile->place(v1, v2,
                 edge_len - m_end_loop_offsets[edge[1]],
                 edge_thickness(i, 1),
-                m_rel_correction, m_abs_correction, m_correction_cap);
+                m_rel_correction, m_abs_correction, m_correction_cap,
+                m_spread_const);
         m_end_loops.push_back(std::make_pair(loop_1, loop_2));
     }
 }

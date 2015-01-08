@@ -29,7 +29,8 @@ class WireProfile {
                 Float offset, Float thickness,
                 const VectorF& rel_correction,
                 const VectorF& abs_correction,
-                Float correction_cap);
+                Float correction_cap,
+                Float spread_const);
 
         size_t size() const { return m_loop.rows(); }
 

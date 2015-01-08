@@ -76,6 +76,7 @@ InflatorEngine::InflatorEngine(WireNetwork::Ptr wire_network) :
         m_rel_correction = VectorF::Zero(dim);
         m_abs_correction = VectorF::Zero(dim);
         m_correction_cap = 0.3;
+        m_spread_const = 0.0;
     }
 
 void InflatorEngine::with_shape_velocities() {
