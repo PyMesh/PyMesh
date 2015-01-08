@@ -96,7 +96,7 @@ void SimpleInflator::compute_end_loop_offsets() {
     m_end_loop_offsets.resize(num_vertices);
     for (size_t i=0; i<num_vertices; i++) {
         const Float max_correction = vertex_thickness[i] * max_rel_correction
-            + max_abs_correction;
+            + max_abs_correction + std::max(0.0, m_spread_const);
         m_end_loop_offsets[i] = 0.5 * (vertex_thickness[i] + sqrt(2) * max_correction) /
             tan(min_angles[i] * 0.5) + EPSILON;
     }
