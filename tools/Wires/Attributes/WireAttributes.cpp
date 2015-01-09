@@ -82,6 +82,11 @@ bool WireAttributes::is_vertex_attribute(const std::string& name) const {
     return itr->second->get_attribute_type() == WireAttribute::VERTEX;
 }
 
+void WireAttributes::remove_attribute(const std::string& name) {
+    AttrMap::iterator itr = m_attr_map.find(name);
+    m_attr_map.erase(itr);
+}
+
 std::vector<std::string> WireAttributes::get_attribute_names() const {
     std::vector<std::string> names;
     for (auto itr : m_attr_map) {

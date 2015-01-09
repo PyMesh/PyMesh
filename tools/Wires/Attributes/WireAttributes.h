@@ -16,6 +16,7 @@ class WireAttributes {
                 bool vertex_wise=true, bool auto_compute=true);
         void set_attribute(const WireNetwork& wire_network, const std::string& name, const MatrixFr& values);
         bool is_vertex_attribute(const std::string& name) const;
+        void remove_attribute(const std::string& name);
 
         std::vector<std::string> get_attribute_names() const;
 

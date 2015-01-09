@@ -31,7 +31,7 @@ class PeriodicExplorationTest : public WireTest {
         }
 };
 
-TEST_F(PeriodicExplorationTest, brick5) {
+TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -89,7 +89,7 @@ TEST_F(PeriodicExplorationTest, brick5) {
     std::cout << " done!" << std::endl;;
 }
 
-TEST_F(PeriodicExplorationTest, diamond) {
+TEST_F(PeriodicExplorationTest, DISABLED_diamond) {
     PeriodicExploration explorer(
             m_data_dir + "diamond.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -140,7 +140,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, finite_difference) {
+TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -198,7 +198,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, gradient_descent) {
+TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -267,7 +267,7 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, debug) {
+TEST_F(PeriodicExplorationTest, DISABLED_debug) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -293,7 +293,7 @@ TEST_F(PeriodicExplorationTest, debug) {
     }
 }
 
-TEST_F(PeriodicExplorationTest, debug2) {
+TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -306,3 +306,52 @@ TEST_F(PeriodicExplorationTest, debug2) {
         // TODO: min boundary not match.
     }
 }
+
+TEST_F(PeriodicExplorationTest, printability) {
+    PeriodicExploration explorer(
+            m_data_dir + "brick5.wire", 5, 0.5);
+    explorer.with_all_isotropic_parameters();
+
+    VectorF dofs = explorer.get_dofs();
+    ASSERT_EQ(5, dofs.size());
+
+    dofs[4] = -0.1;
+    explorer.set_dofs(dofs);
+    ASSERT_FALSE(explorer.is_printable());
+
+    dofs[4] = 0.0;
+    explorer.set_dofs(dofs);
+    ASSERT_TRUE(explorer.is_printable());
+
+    dofs[4] = 0.1;
+    explorer.set_dofs(dofs);
+    ASSERT_TRUE(explorer.is_printable());
+}
+
+TEST_F(PeriodicExplorationTest, hex_profile) {
+    PeriodicExploration explorer(
+            m_data_dir + "pattern1065.wire", 5, 0.5);
+    explorer.with_all_isotropic_parameters(ParameterCommon::EDGE);
+    VectorF dofs(6);
+    dofs << 0.5, 0.5, 0.5, 0.125, -0.125, 0.125;
+    explorer.set_dofs(dofs);
+    explorer.with_profile("hexagon");
+    explorer.periodic_inflate();
+    Mesh::Ptr mesh = explorer.get_mesh();
+    std::vector<MatrixFr> velocities = explorer.get_shape_velocities();
+
+    std::vector<std::string> attr_names;
+    for (size_t j=0; j<6; j++) {
+        std::stringstream attr_name_stream;
+        attr_name_stream << "velocity_" << j;
+        std::string attr_name = attr_name_stream.str();
+
+        VectorF flattened_attr = flatten(velocities[j]);
+
+        mesh->add_attribute(attr_name);
+        mesh->set_attribute(attr_name, flattened_attr);
+        attr_names.push_back(attr_name);
+    }
+    save_mesh("hex_1065.msh", mesh, attr_names);
+}
+

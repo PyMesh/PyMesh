@@ -7,6 +7,7 @@
 #include <Mesh.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 #include <Wires/Parameters/ParameterManager.h>
+#include <Wires/Inflator/WireProfile.h>
 
 class PeriodicExploration {
     public:
@@ -27,6 +28,9 @@ class PeriodicExploration {
         void with_refinement(
                 const std::string& algorithm,
                 size_t order);
+
+        void with_profile(const std::string& profile_name);
+        void with_profile(size_t num_samples);
 
     public:
         size_t get_num_dofs() const {
@@ -65,6 +69,8 @@ class PeriodicExploration {
         MatrixIr get_faces() const { return m_faces; }
         MatrixIr get_voxels() const { return m_voxels; }
         std::vector<MatrixFr> get_shape_velocities() const { return m_shape_velocities; }
+        bool is_printable();
+
 
         // Debug functions
         WireNetwork::Ptr get_wire_network() { return m_wire_network; }
@@ -76,6 +82,7 @@ class PeriodicExploration {
         Float m_default_thickness;
         WireNetwork::Ptr m_wire_network;
         ParameterManager::Ptr m_parameters;
+        WireProfile::Ptr m_profile;
 
         MatrixFr m_vertices;
         MatrixIr m_faces;

@@ -199,8 +199,13 @@ void WireNetwork::update_bbox() {
     m_bbox_max = m_vertices.colwise().maxCoeff();
 }
 
-bool WireNetwork::is_printable(const std::string& print_dir) const {
+bool WireNetwork::is_printable(const std::string& print_dir) {
+    if (!with_connectivity()) { compute_connectivity(); }
+
     std::string attr_name = std::string("vertex_support_") + print_dir;
+    if (has_attribute(attr_name)) {
+        m_attributes.remove_attribute(attr_name);
+    }
     add_attribute(attr_name);
     const MatrixFr& vertex_supported = get_attribute(attr_name);
     return (vertex_supported.array() > 0.5).all();

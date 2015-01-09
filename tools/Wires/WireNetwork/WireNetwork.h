@@ -99,7 +99,7 @@ class WireNetwork {
         /**
          * Valid print dir: X, Y, Z, YZ, ZX, XY, XYZ.
          */
-        bool is_printable(const std::string& print_dir = "Z") const;
+        bool is_printable(const std::string& print_dir = "Z");
 
     private:
         void initialize();

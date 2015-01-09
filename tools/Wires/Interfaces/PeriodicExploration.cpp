@@ -15,8 +15,10 @@ PeriodicExploration::PeriodicExploration(const std::string& wire_file,
         Float default_thickness) {
     m_default_thickness = default_thickness;
     m_wire_network = WireNetwork::create(wire_file);
+    size_t dim = m_wire_network->get_dim();
+    assert(dim == 3);
 
-    VectorF half_bbox_size = VectorF::Ones(m_wire_network->get_dim())
+    VectorF half_bbox_size = VectorF::Ones(dim)
         * 0.5 * cell_size;
     m_wire_network->scale_fit(
             -half_bbox_size, half_bbox_size);
@@ -25,6 +27,7 @@ PeriodicExploration::PeriodicExploration(const std::string& wire_file,
 
     m_refine_algorithm = "simple";
     m_refine_order = 0;
+    m_profile = WireProfile::create("square");
 }
 
 void PeriodicExploration::with_parameters(
@@ -51,6 +54,14 @@ void PeriodicExploration::with_refinement(
     m_refine_order = order;
 }
 
+void PeriodicExploration::with_profile(const std::string& name) {
+    m_profile = WireProfile::create(name);
+}
+
+void PeriodicExploration::with_profile(size_t num_samples) {
+    m_profile = WireProfile::create_isotropic(num_samples);
+}
+
 void PeriodicExploration::periodic_inflate() {
     ParameterCommon::Variables vars;
     MatrixFr offset = m_parameters->evaluate_offset(vars);
@@ -59,6 +70,7 @@ void PeriodicExploration::periodic_inflate() {
 
     InflatorEngine::Ptr inflator =
         InflatorEngine::create_parametric(m_wire_network, m_parameters);
+    inflator->set_profile(m_profile);
     inflator->with_shape_velocities();
     if (m_refine_order > 0)
         inflator->with_refinement(m_refine_algorithm, m_refine_order);
@@ -116,6 +128,16 @@ bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
     update_mesh();
 
     return true;
+}
+
+bool PeriodicExploration::is_printable() {
+    ParameterCommon::Variables vars;
+    MatrixFr offset = m_parameters->evaluate_offset(vars);
+    MatrixFr ori_vertices = m_wire_network->get_vertices();
+    m_wire_network->set_vertices(ori_vertices+ offset);
+    bool result = m_wire_network->is_printable();
+    m_wire_network->set_vertices(ori_vertices);
+    return result;
 }
 
 void PeriodicExploration::update_mesh() {
