@@ -31,7 +31,7 @@ class PeriodicExplorationTest : public WireTest {
         }
 };
 
-TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
+TEST_F(PeriodicExplorationTest, brick5) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -89,7 +89,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
     std::cout << " done!" << std::endl;;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_diamond) {
+TEST_F(PeriodicExplorationTest, diamond) {
     PeriodicExploration explorer(
             m_data_dir + "diamond.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -140,7 +140,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_diamond) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
+TEST_F(PeriodicExplorationTest, finite_difference) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -198,7 +198,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
+TEST_F(PeriodicExplorationTest, gradient_descent) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -267,7 +267,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_debug) {
+TEST_F(PeriodicExplorationTest, debug) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -293,7 +293,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug) {
     }
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
+TEST_F(PeriodicExplorationTest, debug2) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
