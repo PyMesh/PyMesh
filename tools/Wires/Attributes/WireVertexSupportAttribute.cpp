@@ -4,7 +4,7 @@
 #include <Wires/WireNetwork/WireNetwork.h>
 
 namespace WireVertexSupportAttributeHelper {
-    const Float EPS = 1e-12;
+    const Float EPS = 1e-6;
     const Float SUPPORTED = 1.0;
     const Float NOT_SUPPORTED = 0.0;
 }
