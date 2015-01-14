@@ -291,8 +291,8 @@ void SimpleInflator::validate_end_loop_offset() const {
             err_msg << "Its length needs to be  at least "
                 << v0_offset + v1_offset + EPSILON
                 << " to ensure inflation is self-intersection free";
-            std::cerr << err_msg.str() << std::endl;
-            //throw RuntimeError(err_msg.str());
+            //std::cerr << err_msg.str() << std::endl;
+            throw RuntimeError(err_msg.str());
         }
     }
 }
