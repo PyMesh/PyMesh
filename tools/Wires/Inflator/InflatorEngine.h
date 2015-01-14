@@ -36,6 +36,7 @@ class InflatorEngine {
         virtual void set_thickness_type(ThicknessType type) { m_thickness_type = type; }
 
     public:
+        void self_intersection_is_fatal() { m_self_intersection_is_fatal = true; }
         void with_refinement(const std::string& algorithm, size_t order);
         void with_geometry_correction_lookup(const std::string& csv_file);
         void with_rel_geometry_correction(const VectorF& correction);
@@ -73,6 +74,7 @@ class InflatorEngine {
         VectorF m_abs_correction;
         Float m_correction_cap;
         Float m_spread_const;
+        bool m_self_intersection_is_fatal;
 
         /**
          * m_face_sources tracks the source element of each inflated face.
