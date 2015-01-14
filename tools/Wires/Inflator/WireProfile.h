@@ -4,6 +4,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+#include "GeometryCorrectionTable.h"
+
 class WireProfile {
     public:
         typedef std::shared_ptr<WireProfile> Ptr;
@@ -19,6 +21,13 @@ class WireProfile {
          * in 2D.
          */
         void initialize(const MatrixFr& loop);
+
+        /**
+         * apply geometric correction based on lookup table
+         */
+        void with_geometry_correction_lookup(const std::string& csv_file) {
+            m_correction_table = std::make_shared<GeometryCorrectionTable>(csv_file);
+        }
 
         /**
          * Place the edge loop along the edge (end_1, end_2) that is offseted
@@ -39,4 +48,5 @@ class WireProfile {
         MatrixFr m_loop;
         Float m_radius;
         VectorF m_offset_dir;
+        GeometryCorrectionTable::Ptr m_correction_table;
 };

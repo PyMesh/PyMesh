@@ -37,6 +37,7 @@ class InflatorEngine {
 
     public:
         void with_refinement(const std::string& algorithm, size_t order);
+        void with_geometry_correction_lookup(const std::string& csv_file);
         void with_rel_geometry_correction(const VectorF& correction);
         void with_abs_geometry_correction(const VectorF& correction);
         void set_geometry_correction_cap(Float cap) { m_correction_cap = cap; }

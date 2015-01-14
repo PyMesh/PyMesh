@@ -49,12 +49,21 @@ namespace WireProfileHelper {
                 if (v[1] < 0.0) sign[1] = -1;
                 if (v[2] < 0.0) sign[2] = -1;
 
+                Float ave_XY_abs_offset = 0.5 * (abs_correction[0] +
+                        abs_correction[1]);
                 Vector3F offset(0, 0, 0);
-                offset = v.cwiseProduct(rel_correction) +
-                    sign.cwiseProduct(abs_correction * 0.5);
+                offset = p.cwiseProduct(rel_correction) +
+                    Vector3F::UnitZ() * v[2] * rel_correction[2] +
+                    0.5 * Vector3F::UnitZ() * sign[2] * abs_correction[2] +
+                    0.5 * p / p.norm() * ave_XY_abs_offset;
+                    //sign.cwiseProduct(abs_correction * 0.5);
 
-                Float spread = 0.5 * spread_const *
-                    (1.0 - fabs(dir[2]) / sqrt(dir_sq_len));
+                Float dist_to_center = p.norm();
+                Float spread = 0.5 * spread_const;
+                if (dist_to_center < 2.0 && 2.0 > ave_XY_abs_offset) {
+                    spread = 0.5 * spread_const *
+                        dist_to_center / (2.0 - ave_XY_abs_offset);
+                }
                 offset[0] += sign[0] * spread;
                 offset[1] += sign[1] * spread;
                 offset = offset.cwiseMin(upper_cap);
@@ -67,14 +76,19 @@ namespace WireProfileHelper {
         } else {
             for (size_t i=0; i<loop_size; i++) {
                 Vector3F v = loop.row(i) - centroid.transpose();
+                Vector3F p(v[0], v[1], 0.0);
                 Vector3F sign(1, 1, 1);
                 if (v[0] < 0.0) sign[0] = -1;
                 if (v[1] < 0.0) sign[1] = -1;
                 if (v[2] < 0.0) sign[2] = -1;
 
+                Float ave_XY_abs_offset = 0.5 * (abs_correction[0] +
+                        abs_correction[1]);
                 Vector3F offset(0, 0, 0);
                 offset = v.cwiseProduct(rel_correction) +
-                    sign.cwiseProduct(abs_correction * 0.5);
+                    0.5 * Vector3F::UnitZ() * sign[2] * abs_correction[2] +
+                    0.5 * p / p.norm() * ave_XY_abs_offset;
+                    //sign.cwiseProduct(abs_correction * 0.5);
                 Float spread = 0.5 * spread_const;
                 offset[0] += sign[0] * spread;
                 offset[1] += sign[1] * spread;
@@ -166,8 +180,11 @@ MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
         loop = rotate_loop_2D(loop, dir);
     } else if (m_dim == 3) {
         loop = rotate_loop_3D(loop, dir);
-        apply_correction(dir, loop, rel_correction, abs_correction,
-                correction_cap, spread_const);
+        if (m_correction_table) {
+            m_correction_table->apply_correction(dir, loop);
+        }
+        //apply_correction(dir, loop, rel_correction, abs_correction,
+        //        correction_cap, spread_const);
     } else {
         assert(false);
         std::stringstream err_msg;

@@ -10,6 +10,7 @@
 #include "Attributes/WireVertexSupportAttributeTest.h"
 #include "Attributes/WireVertexSymmetryAttributeTest.h"
 #include "Inflator/AABBTreeTest.h"
+#include "Inflator/GeometryCorrectionTableTest.h"
 #include "Inflator/PeriodicInflator2DTest.h"
 #include "Inflator/PeriodicInflator3DTest.h"
 #include "Inflator/PhantomMeshGeneratorTest.h"

@@ -103,6 +103,11 @@ void InflatorEngine::with_refinement(
     m_subdiv_order = order;
 }
 
+void InflatorEngine::with_geometry_correction_lookup(
+        const std::string& csv_file) {
+    m_profile->with_geometry_correction_lookup(csv_file);
+}
+
 void InflatorEngine::with_rel_geometry_correction(const VectorF& correction) {
     if (correction.size() != m_wire_network->get_dim()) {
         std::stringstream err_msg;
