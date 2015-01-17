@@ -6,8 +6,11 @@
 #include <iostream>
 
 #include <fstream>
+#include <Core/Exception.h>
 
 namespace GeometryCorrectionTableHelper {
+    const size_t num_offset_pixel = 0;
+    const Float min_thickness = 0.1;
     Float signed_area(
             const Vector2F& v1,
             const Vector2F& v2,
@@ -46,6 +49,8 @@ GeometryCorrectionTable::GeometryCorrectionTable(const std::string& table_file) 
 }
 
 void GeometryCorrectionTable::apply_correction(const Vector3F& dir, MatrixFr& loop) {
+    Float edge_len = dir.norm();
+    assert(edge_len > 1e-12);
     Vector3F edge_dir = dir.normalized();
     if (fabs(edge_dir[2]) < 1e-3) {
         apply_correction_to_in_plane_edge(edge_dir, loop);
@@ -73,8 +78,11 @@ void GeometryCorrectionTable::apply_correction_to_in_plane_edge(
     Float target_half_height = 1e3; // Something huge to represent inf
     Float target_half_width = proj_loop.row(0).norm();
 
-    VectorF correction = lookup(target_half_width, target_half_height);
-    Float half_width  = correction[0];
+    Vector2F correction_1 = lookup(target_half_width, target_half_height);
+    Vector2F correction_2 = lookup(target_half_height, target_half_width);
+    Float half_width  = 0.5 * (correction_1[0] + correction_2[1])
+        + 0.05 * num_offset_pixel;
+    half_width = std::max(half_width, min_thickness);
 
     for (size_t i=0; i<num_vts; i++) {
         loop.row(i) += proj_loop.row(i) *
@@ -84,7 +92,7 @@ void GeometryCorrectionTable::apply_correction_to_in_plane_edge(
 
 void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
         const Vector3F& edge_dir, MatrixFr& loop) {
-    const Float EPS = 1e-6;
+    const Float EPS = 1e-3;
     assert(fabs(edge_dir[2]) > 0.0);
     VectorF bbox_min = loop.colwise().minCoeff();
     VectorF bbox_max = loop.colwise().maxCoeff();
@@ -95,11 +103,17 @@ void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
     assert(dim == 3);
     MatrixFr proj_loop(num_vts, 3);
     Vector3F proj_edge_dir(edge_dir[0], edge_dir[1], 0.0);
-    Float proj_edge_dir_len = proj_edge_dir.norm();
-    if (proj_edge_dir_len > EPS) {
-        proj_edge_dir.normalize();
+
+    if (loop.rows() != 4) {
+        throw NotImplementedError(
+                "Geometry correction supports only square wires");
+    }
+    Float dist_01 = (loop.row(0) - loop.row(1)).norm();
+    Float dist_12 = (loop.row(1) - loop.row(2)).norm();
+    if (dist_01 > dist_12) {
+        proj_edge_dir = (loop.row(0) - loop.row(1)) / dist_01;
     } else {
-        proj_edge_dir = Vector3F::UnitX();
+        proj_edge_dir = (loop.row(1) - loop.row(2)) / dist_12;
     }
 
     for (size_t i=0; i<num_vts; i++) {
@@ -116,14 +130,22 @@ void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
         (corner - proj_edge_dir * target_half_height).norm();
     target_half_height = fabs(target_half_height);
 
-    VectorF correction = lookup(target_half_width, target_half_height);
-    Float half_width  = correction[0];
-    Float half_height = correction[1];
+    Vector2F correction_1 = lookup(target_half_width, target_half_height);
+    Vector2F correction_2 = lookup(target_half_height, target_half_width);
+    Float half_width  = 0.5 * (correction_1[0] + correction_2[1])
+        + 0.05 * num_offset_pixel;
+    Float half_height = 0.5 * (correction_1[1] + correction_2[0])
+        + 0.05 * num_offset_pixel;
+    half_width = std::max(half_width, min_thickness);
+    half_height = std::max(half_height, min_thickness);
 
     for (size_t i=0; i<num_vts; i++) {
         const VectorF& proj_v = proj_loop.row(i);
         Float height = proj_edge_dir.dot(proj_v);
         VectorF width_dir = (proj_v - proj_edge_dir * height).normalized();
+        assert(!isnan(width_dir[0]));
+        assert(!isnan(width_dir[1]));
+        assert(!isnan(width_dir[2]));
 
         Float height_sign = (height < 0.0)? -1: 1;
         proj_loop.row(i) = proj_edge_dir * height_sign * half_height
@@ -138,7 +160,9 @@ void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
 
 void GeometryCorrectionTable::apply_z_correction(
         const Vector3F& edge_dir, MatrixFr& loop) {
-    const Float max_z_error = 0.125;
+    //const Float max_z_error = 0.125;
+    //const Float max_z_error = 0.09;
+    const Float max_z_error = 0.00;
     VectorF bbox_min = loop.colwise().minCoeff();
     VectorF bbox_max = loop.colwise().maxCoeff();
     VectorF bbox_center = 0.5 * (bbox_min + bbox_max);
