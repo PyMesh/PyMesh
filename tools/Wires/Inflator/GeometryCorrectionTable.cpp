@@ -108,13 +108,6 @@ void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
         throw NotImplementedError(
                 "Geometry correction supports only square wires");
     }
-    Float dist_01 = (loop.row(0) - loop.row(1)).norm();
-    Float dist_12 = (loop.row(1) - loop.row(2)).norm();
-    if (dist_01 > dist_12) {
-        proj_edge_dir = (loop.row(0) - loop.row(1)) / dist_01;
-    } else {
-        proj_edge_dir = (loop.row(1) - loop.row(2)) / dist_12;
-    }
 
     for (size_t i=0; i<num_vts; i++) {
         VectorF v = loop.row(i) - bbox_center.transpose();
@@ -122,6 +115,14 @@ void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
         VectorF proj_v = v - edge_dir * edge_dir_offset;
         proj_loop.row(i) = proj_v;
         assert(fabs(proj_v[2]) < EPS);
+    }
+
+    Float dist_01 = (proj_loop.row(0) - proj_loop.row(1)).norm();
+    Float dist_12 = (proj_loop.row(1) - proj_loop.row(2)).norm();
+    if (dist_01 > dist_12) {
+        proj_edge_dir = (proj_loop.row(0) - proj_loop.row(1)) / dist_01;
+    } else {
+        proj_edge_dir = (proj_loop.row(1) - proj_loop.row(2)) / dist_12;
     }
 
     const VectorF& corner = proj_loop.row(0);
@@ -154,7 +155,8 @@ void GeometryCorrectionTable::apply_correction_to_out_plane_edge(
 
     for (size_t i=0; i<num_vts; i++) {
         const VectorF& proj_v = proj_loop.row(i);
-        loop.row(i) = bbox_center + proj_v - edge_dir * edge_dir.dot(proj_v);
+        loop.row(i) = (bbox_center + proj_v - edge_dir *
+                edge_dir.dot(proj_v)).transpose();
     }
 }
 
@@ -177,7 +179,9 @@ void GeometryCorrectionTable::apply_z_correction(
         Float side_component = side_dir.dot(v) / sin_val;
         Vector3F proj_v = v - side_component * side_dir / sin_val;
         Float proj_component = proj_v.norm();
-        proj_v -= proj_v / proj_component * (sin_val * max_z_error);
+        if (proj_component > 1e-3) {
+            proj_v -= proj_v / proj_component * (sin_val * max_z_error);
+        }
         loop.row(i) = bbox_center + proj_v + side_component * side_dir / sin_val;
     }
 }
