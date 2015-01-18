@@ -49,19 +49,21 @@ TEST_F(GeometryCorrectionTableTest, loop_order) {
            -0.20711,-0.20711, 0.70711,
            -0.20711,-1.20711,-0.70711,
             1.20711, 0.20711,-0.70711;
-    Vector3F edge_dir(0, -1, 1);
+    Vector3F e0 = loop.row(1) - loop.row(0);
+    Vector3F e1 = loop.row(2) - loop.row(0);
+    Vector3F edge_dir = e0.cross(e1);
 
     table.apply_correction(edge_dir, loop);
-    std::cout << loop << std::endl;
 
     MatrixFr loop2(4, 3);
     loop2 << 0.20711, 1.20711, 0.70711,
            -0.20711,-0.20711, 0.70711,
            -0.20711,-1.20711,-0.70711,
             1.20711, 0.20711,-0.70711;
-    Vector3F edge_dir2(0, -1, 1);
+    e0 = loop2.row(1) - loop2.row(0);
+    e1 = loop2.row(2) - loop2.row(0);
+    Vector3F edge_dir2 = e0.cross(e1);
     table.apply_correction(edge_dir2, loop2);
-    std::cout << loop2 << std::endl;
 
     ASSERT_FLOAT_EQ(0.0, (loop-loop2).norm());
 }
