@@ -192,7 +192,7 @@ void MixedMeshTiler::append_thicknesses(const MixedMeshTiler::Variables& vars) {
 void MixedMeshTiler::append_offsets(const MixedMeshTiler::Variables& vars,
         const TilerEngine::Func& f) {
     MatrixFr offset = m_params->evaluate_offset(vars);
-    const auto& vertices = m_tiled_vertices.back();
+    const auto& vertices = m_unit_wire_network->get_vertices();
     m_tiled_offsets.emplace_back(f(vertices + offset) - f(vertices));
 }
 
