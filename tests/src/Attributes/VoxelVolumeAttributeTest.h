@@ -52,3 +52,11 @@ TEST_F(VoxelVolumeAttributeTest, ZeroVoxel) {
     ASSERT_TRUE(square->has_attribute("voxel_volume"));
     ASSERT_EQ(0, square->get_attribute("voxel_volume").size());
 }
+
+TEST_F(VoxelVolumeAttributeTest, hex) {
+    MeshPtr hex = load_mesh("hex.msh");
+    ASSERT_TRUE(hex->has_attribute("voxel_volume"));
+    VectorF volumes = hex->get_attribute("voxel_volume");
+    ASSERT_EQ(1, volumes.size());
+    ASSERT_FLOAT_EQ(8.0, volumes[0]);
+}

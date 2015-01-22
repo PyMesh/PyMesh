@@ -5,9 +5,11 @@
 #include <Mesh.h>
 
 void VertexVolumeAttribute::compute_from_mesh(Mesh& mesh) {
-    size_t num_vertices = mesh.get_num_vertices();
-    size_t num_voxels = mesh.get_num_voxels();
-    size_t num_vertex_per_voxel = mesh.get_vertex_per_voxel();
+    const size_t dim = mesh.get_dim();
+    const size_t num_vertices = mesh.get_num_vertices();
+    const size_t num_voxels = mesh.get_num_voxels();
+    const size_t num_vertex_per_voxel = mesh.get_vertex_per_voxel();
+    if (dim != 3 || num_voxels == 0) return;
 
     VectorI& voxels = mesh.get_voxels();
     VectorF& volumes = get_voxel_volumes(mesh);
@@ -21,6 +23,8 @@ void VertexVolumeAttribute::compute_from_mesh(Mesh& mesh) {
             vertex_volumes[voxels[index]] += volumes[i];
         }
     }
+
+    vertex_volumes /= num_vertex_per_voxel;
 }
 
 VectorF& VertexVolumeAttribute::get_voxel_volumes(Mesh& mesh) {

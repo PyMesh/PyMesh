@@ -86,10 +86,10 @@ Float VoxelVolumeAttribute::compute_hex_volume(Mesh& mesh, size_t voxel_idx) {
     Vector3F face_centers[6] = {
         0.25 * (v[0] + v[1] + v[2] + v[3]),
         0.25 * (v[4] + v[5] + v[6] + v[7]),
-        0.25 * (v[0] + v[1] + v[4] + v[5]),
-        0.25 * (v[2] + v[3] + v[6] + v[7]),
-        0.25 * (v[0] + v[4] + v[3] + v[7]),
-        0.25 * (v[1] + v[2] + v[5] + v[6]),
+        0.25 * (v[0] + v[1] + v[5] + v[4]),
+        0.25 * (v[2] + v[3] + v[7] + v[6]),
+        0.25 * (v[0] + v[4] + v[7] + v[3]),
+        0.25 * (v[1] + v[2] + v[6] + v[5]),
     };
 
     Vector3F centroid = 0.125 * (
@@ -108,22 +108,22 @@ Float VoxelVolumeAttribute::compute_hex_volume(Mesh& mesh, size_t voxel_idx) {
         ::compute_tet_volume(centroid, face_centers[1], v[7], v[4]) +
 
         ::compute_tet_volume(centroid, face_centers[2], v[0], v[1]) +
-        ::compute_tet_volume(centroid, face_centers[2], v[1], v[4]) +
-        ::compute_tet_volume(centroid, face_centers[2], v[4], v[5]) +
-        ::compute_tet_volume(centroid, face_centers[2], v[5], v[0]) +
+        ::compute_tet_volume(centroid, face_centers[2], v[1], v[5]) +
+        ::compute_tet_volume(centroid, face_centers[2], v[5], v[4]) +
+        ::compute_tet_volume(centroid, face_centers[2], v[4], v[0]) +
 
         ::compute_tet_volume(centroid, face_centers[3], v[2], v[3]) +
-        ::compute_tet_volume(centroid, face_centers[3], v[3], v[6]) +
-        ::compute_tet_volume(centroid, face_centers[3], v[6], v[7]) +
-        ::compute_tet_volume(centroid, face_centers[3], v[7], v[2]) +
+        ::compute_tet_volume(centroid, face_centers[3], v[3], v[7]) +
+        ::compute_tet_volume(centroid, face_centers[3], v[7], v[6]) +
+        ::compute_tet_volume(centroid, face_centers[3], v[6], v[2]) +
 
         ::compute_tet_volume(centroid, face_centers[4], v[0], v[4]) +
-        ::compute_tet_volume(centroid, face_centers[4], v[4], v[3]) +
-        ::compute_tet_volume(centroid, face_centers[4], v[3], v[7]) +
-        ::compute_tet_volume(centroid, face_centers[4], v[7], v[0]) +
+        ::compute_tet_volume(centroid, face_centers[4], v[4], v[7]) +
+        ::compute_tet_volume(centroid, face_centers[4], v[7], v[3]) +
+        ::compute_tet_volume(centroid, face_centers[4], v[3], v[0]) +
 
         ::compute_tet_volume(centroid, face_centers[5], v[1], v[2]) +
-        ::compute_tet_volume(centroid, face_centers[5], v[2], v[5]) +
-        ::compute_tet_volume(centroid, face_centers[5], v[5], v[6]) +
-        ::compute_tet_volume(centroid, face_centers[5], v[6], v[1]) ;
+        ::compute_tet_volume(centroid, face_centers[5], v[2], v[6]) +
+        ::compute_tet_volume(centroid, face_centers[5], v[6], v[5]) +
+        ::compute_tet_volume(centroid, face_centers[5], v[5], v[1]) ;
 }

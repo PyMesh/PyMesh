@@ -31,6 +31,7 @@
 #include "Attributes/VertexMeanCurvatureAttributeTest.h"
 #include "Attributes/VertexLaplacianAttributeTest.h"
 #include "Attributes/VertexValanceAttributeTest.h"
+#include "Attributes/VertexVolumeAttributeTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
