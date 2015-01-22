@@ -12,4 +12,5 @@ class VoxelVolumeAttribute : public MeshAttribute {
 
     private:
         Float compute_tet_volume(Mesh& mesh, size_t voxel_idx);
+        Float compute_hex_volume(Mesh& mesh, size_t voxel_idx);
 };
