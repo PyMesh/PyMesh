@@ -92,7 +92,7 @@ template <class HDS>
 
     void extract_mesh(const C3t3& c3t3,
             MatrixFr& vertices, MatrixIr& faces, MatrixIr& voxels) {
-        Tr tr = c3t3.triangulation();
+        const Tr& tr = c3t3.triangulation();
         size_t num_vertices = tr.number_of_vertices();
         size_t num_faces = c3t3.number_of_facets_in_complex();
         size_t num_voxels = c3t3.number_of_cells_in_complex();
