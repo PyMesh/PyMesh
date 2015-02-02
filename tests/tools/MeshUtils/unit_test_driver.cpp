@@ -11,6 +11,7 @@
 #include "LoopSubdivisionTest.h"
 #include "DuplicatedVertexRemovalTest.h"
 #include "FinFaceRemovalTest.h"
+#include "SubMeshTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

@@ -32,3 +32,73 @@ T MatrixUtils::vstack(const std::vector<T>& matrices) {
     return result;
 }
 
+template<typename T>
+Eigen::Matrix<typename T::Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>
+MatrixUtils::rowstack(const std::vector<T>& rows) {
+    typedef Eigen::Matrix<typename T::Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> OutType;
+    if (rows.empty()) {
+        throw RuntimeError("Zero rows to stack");
+    }
+
+    const size_t num_rows = rows.size();
+    const size_t num_cols = rows.front().size();
+
+    OutType result(num_rows, num_cols);
+
+    size_t row_count = 0;
+    for (const auto& row : rows) {
+        if (row.size() != num_cols) {
+            std::stringstream err_msg;
+            err_msg << "Expect vectors are of size "
+                << num_cols << " but get " << row.size()
+                << " at row " << row_count;
+            throw RuntimeError(err_msg.str());
+        }
+
+        std::copy(row.data(), row.data() + num_cols,
+                result.data() + row_count * num_cols);
+        row_count++;
+    }
+
+    return result;
+}
+
+template<typename T>
+Eigen::Matrix<typename T::Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor>
+MatrixUtils::colstack(const std::vector<T>& cols) {
+    typedef Eigen::Matrix<typename T::Scalar, Eigen::Dynamic, Eigen::Dynamic, Eigen::ColMajor> OutType;
+    if (cols.empty()) {
+        throw RuntimeError("Zero cols to stack");
+    }
+
+    const size_t num_rows = cols.front().size();
+    const size_t num_cols = cols.size();
+
+    OutType result(num_rows, num_cols);
+
+    size_t col_count = 0;
+    for (const auto& col : cols) {
+        if (col.size() != num_rows) {
+            std::stringstream err_msg;
+            err_msg << "Expect vectors are of size "
+                << num_rows << " but get " << col.size()
+                << " at row " << col_count;
+            throw RuntimeError(err_msg.str());
+        }
+
+        std::copy(col.data(), col.data() + num_rows,
+                result.data() + col_count * num_rows);
+        col_count++;
+    }
+
+    return result;
+}
+
+template<typename T>
+Eigen::Matrix<T, Eigen::Dynamic, 1> MatrixUtils::std2eigen(
+        const std::vector<T>& data) {
+    const size_t num_data = data.size();
+    Eigen::Matrix<T, Eigen::Dynamic, 1> result(num_data);
+    std::copy(data.begin(), data.end(), result.data());
+    return result;
+}
