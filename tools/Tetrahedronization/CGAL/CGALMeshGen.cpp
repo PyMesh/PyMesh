@@ -47,10 +47,11 @@ template <class HDS>
         public:
             PolyhedronBuilder(const MatrixFr& vertices, const MatrixIr& faces) :
                 m_vertices(vertices), m_faces(faces) {}
+            virtual ~PolyhedronBuilder() {}
 
         public:
             void operator()( HDS& hds) {
-                CGAL::Polyhedron_incremental_builder_3<HDS> builder(hds, false);
+                CGAL::Polyhedron_incremental_builder_3<HDS> builder(hds, true);
                 const size_t num_vertices = m_vertices.rows();
                 const size_t num_faces = m_faces.rows();
                 assert(3 == m_vertices.cols());
