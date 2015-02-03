@@ -125,3 +125,8 @@ Eigen::Map<T> MatrixUtils::flatten(Eigen::MatrixBase<Derived>& matrix) {
     return Eigen::Map<T>(static_cast<Derived&>(matrix).data(), matrix.rows() * matrix.cols());
 }
 
+template<typename T, typename Derived>
+Eigen::Map<const T> MatrixUtils::flatten(const Eigen::MatrixBase<Derived>& matrix) {
+    return Eigen::Map<const T>(static_cast<const Derived&>(matrix).data(), matrix.rows() * matrix.cols());
+}
+

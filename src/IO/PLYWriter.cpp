@@ -21,9 +21,8 @@ namespace PLYWriterHelper {
 
 using namespace PLYWriterHelper;
 
-MeshWriter& PLYWriter::with_attribute(const std::string& attr_name) {
+void PLYWriter::with_attribute(const std::string& attr_name) {
     m_attr_names.push_back(attr_name);
-    return *this;
 }
 
 void PLYWriter::write_mesh(Mesh& mesh) {
@@ -49,7 +48,10 @@ void PLYWriter::write_mesh(Mesh& mesh) {
     ply_close(ply);
 }
 
-void PLYWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
+void PLYWriter::write(
+        const VectorF& vertices,
+        const VectorI& faces,
+        const VectorI& voxels,
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
     if (m_attr_names.size() != 0) {
         std::cerr << "Warning: all attributes are ignored" << std::endl;

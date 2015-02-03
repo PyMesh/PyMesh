@@ -34,7 +34,8 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
     return *this;
 }
 
-MeshFactory& MeshFactory::load_data(VectorF& vertices, VectorI& faces, VectorI& voxels,
+MeshFactory& MeshFactory::load_data(
+        const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
         size_t dim, size_t num_vertex_per_face, size_t num_vertex_per_voxel) {
     m_mesh->set_geometry(Mesh::GeometryPtr(new MeshGeometry()));
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();

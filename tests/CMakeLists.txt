@@ -19,7 +19,7 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
 
 ADD_SUBDIRECTORY(src)
 ADD_SUBDIRECTORY(tools)
-#ADD_SUBDIRECTORY(learning_tests)
+ADD_SUBDIRECTORY(learning_tests)
 
 # Bundle all tests into a single target
 # make all_tests

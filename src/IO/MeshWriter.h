@@ -8,13 +8,14 @@ class Mesh;
 
 /**
  * Usage:
- *      MeshWriter::create_writer("test.obj")
- *              .with_attribute("vertex_normal")
- *              .in_ascii()
- *              .write(mesh);
+ *      MeshWriter::Ptr writer = MeshWriter::create("test.obj");
+ *      writer->with_attribute("vertex_normal");
+ *      writer->in_ascii();
+ *      writer->write_mesh(mesh);
  * or
- *      MeshWriter::create_writer("test.obj")
- *              .write(vertices, faces, voxels);
+ *      MeshWriter::Ptr writer = MeshWriter::create("test.obj");
+ *      writer->write(vertices, faces, voxels,
+ *          dim, vertex_per_face, vertex_per_voxel);
  */
 class MeshWriter {
     public:
@@ -27,11 +28,11 @@ class MeshWriter {
         virtual ~MeshWriter() {}
 
     public:
-        virtual MeshWriter& with_attribute(const std::string& attr_name)=0;
-        virtual MeshWriter& in_ascii() { return *this; }
+        virtual void with_attribute(const std::string& attr_name)=0;
+        virtual void in_ascii() {}
 
         virtual void write_mesh(Mesh& mesh)=0;
-        virtual void write(VectorF& vertices, VectorI& faces, VectorI& voxels,
+        virtual void write(const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel)=0;
 
     public:

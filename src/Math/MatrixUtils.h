@@ -57,6 +57,9 @@ namespace MatrixUtils {
      */
     template<typename T, typename Derived>
     Eigen::Map<T> flatten(Eigen::MatrixBase<Derived>& matrix);
+
+    template<typename T, typename Derived>
+    Eigen::Map<const T> flatten(const Eigen::MatrixBase<Derived>& matrix);
 }
 
 #include "MatrixUtils.inl"

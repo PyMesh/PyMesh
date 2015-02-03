@@ -34,9 +34,8 @@ namespace MSHWriterHelper {
 
 using namespace MSHWriterHelper;
 
-MeshWriter& MSHWriter::with_attribute(const std::string& attr_name) {
+void MSHWriter::with_attribute(const std::string& attr_name) {
     m_attr_names.push_back(attr_name);
-    return *this;
 }
 
 void MSHWriter::write_mesh(Mesh& mesh) {
@@ -47,7 +46,7 @@ void MSHWriter::write_mesh(Mesh& mesh) {
     }
 }
 
-void MSHWriter::write(VectorF& vertices, VectorI& faces, VectorI& voxels,
+void MSHWriter::write(const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
     MshSaver saver(m_filename, !m_in_ascii);
     if (voxels.size() == 0) {
@@ -115,11 +114,11 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
     }
 }
 
-void MSHWriter::write_geometry(MshSaver& saver, VectorF& vertices,
-        VectorI& elements, size_t dim, size_t vertex_per_element) {
-    if (dim == 3 && vertex_per_element == 4) {
-        correct_tet_orientation(vertices, elements);
-    }
+void MSHWriter::write_geometry(MshSaver& saver, const VectorF& vertices,
+        const VectorI& elements, size_t dim, size_t vertex_per_element) {
+    //if (dim == 3 && vertex_per_element == 4) {
+    //    correct_tet_orientation(vertices, elements);
+    //}
     saver.save_mesh(vertices, elements, dim, vertex_per_element);
 }
 

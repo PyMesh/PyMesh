@@ -8,6 +8,7 @@
 #include <Core/Exception.h>
 #include <IO/MeshWriter.h>
 #include <Misc/Environment.h>
+#include <Math/MatrixUtils.h>
 
 /**
  * Base test class.  This class provides some common method often needed during
@@ -40,11 +41,36 @@ class TestBase : public ::testing::Test {
         }
 
         virtual void write_mesh_raw(const std::string& mesh_file,
-                VectorF& vertices, VectorI& faces, VectorI& voxels,
+                const Eigen::Ref<const VectorF>& vertices,
+                const Eigen::Ref<const VectorI>& faces,
+                const Eigen::Ref<const VectorI>& voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
             MeshWriter::Ptr writer = MeshWriter::create(mesh_file);
             writer->write(vertices, faces, voxels,
                     dim, vertex_per_face, vertex_per_voxel);
+        }
+
+        virtual void write_mesh_raw(const std::string& mesh_file,
+                const Eigen::Ref<const MatrixFr>& vertices,
+                const Eigen::Ref<const MatrixIr>& faces,
+                const Eigen::Ref<const MatrixIr>& voxels) {
+            auto flattened_vertices = MatrixUtils::flatten<VectorF>(vertices);
+            auto flattened_faces = MatrixUtils::flatten<VectorI>(faces);
+            auto flattened_voxels = MatrixUtils::flatten<VectorI>(voxels);
+            write_mesh_raw(mesh_file,
+                    flattened_vertices, flattened_faces, flattened_voxels,
+                    vertices.cols(), faces.cols(), voxels.cols());
+        }
+
+        virtual void write_mesh_raw(const std::string& mesh_file,
+                const Eigen::Ref<const MatrixFr>& vertices,
+                const Eigen::Ref<const MatrixIr>& faces) {
+            auto flattened_vertices = MatrixUtils::flatten<VectorF>(vertices);
+            auto flattened_faces = MatrixUtils::flatten<VectorI>(faces);
+            VectorI flattened_voxels = VectorI::Zero(0);
+            write_mesh_raw(mesh_file,
+                    flattened_vertices, flattened_faces, flattened_voxels,
+                    vertices.cols(), faces.cols(), 0);
         }
 
     protected:

@@ -5,48 +5,17 @@
 
 #include <Core/EigenTypedef.h>
 #include <CSG/CSGEngine.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
 #include <IO/MeshWriter.h>
-#include <Misc/Environment.h>
 
-class CSGEngineTest : public ::testing::Test {
+#include <TestBase.h>
+
+class CSGEngineTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
         typedef CSGEngine::Ptr CSGPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
 
         void save_mesh(const std::string& filename,
                 const MatrixFr& vertices, const MatrixIr& faces) {
-            MeshWriter* writer = MeshWriter::create_writer(filename);
-
-            const size_t num_v_entries = vertices.rows() * vertices.cols();
-            VectorF linearized_vertices(num_v_entries);
-            std::copy(vertices.data(), vertices.data() + num_v_entries,
-                    linearized_vertices.data());
-
-            const size_t num_f_entries = faces.rows() * faces.cols();
-            VectorI linearized_faces(num_f_entries);
-            std::copy(faces.data(), faces.data() + num_f_entries,
-                    linearized_faces.data());
-
-            VectorI voxels = VectorI::Zero(0);
-            writer->write(linearized_vertices, linearized_faces, voxels,
-                    vertices.cols(), faces.cols(), 0);
-            delete writer;
+            write_mesh_raw(filename, vertices, faces);
         }
 
         MatrixFr extract_vertices(MeshPtr mesh) {
@@ -71,7 +40,4 @@ class CSGEngineTest : public ::testing::Test {
                 pts.row(i) += offset;
             }
         }
-
-    protected:
-        std::string m_data_dir;
 };

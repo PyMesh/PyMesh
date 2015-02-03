@@ -70,9 +70,9 @@ namespace PeriodicBoundaryRemesherHelper {
         mesh->add_attribute("debug");
         mesh->set_attribute("debug", debug);
 
-        MeshWriter* writer = MeshWriter::create_writer(filename);
-        writer->with_attribute("debug").write_mesh(*mesh);
-        delete writer;
+        MeshWriter::Ptr writer = MeshWriter::create(filename);
+        writer->with_attribute("debug");
+        writer->write_mesh(*mesh);
     }
 
     void update_indices(MatrixIr& indices, const VectorI& vertex_map) {
