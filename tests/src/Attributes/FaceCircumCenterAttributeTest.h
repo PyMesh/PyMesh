@@ -3,25 +3,14 @@
 #include <string>
 #include <cmath>
 
-#include <Misc/Environment.h>
+#include <TestBase.h>
 
-class FaceCircumCenterAttributeTest : public ::testing::Test {
+class FaceCircumCenterAttributeTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("face_circumcenter")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("face_circumcenter");
+            return r;
         }
 
         void assert_equal_dist_to_vertices(
@@ -40,9 +29,6 @@ class FaceCircumCenterAttributeTest : public ::testing::Test {
             ASSERT_FLOAT_EQ(d1, d2);
             ASSERT_FLOAT_EQ(d1, d3);
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(FaceCircumCenterAttributeTest, 2D) {

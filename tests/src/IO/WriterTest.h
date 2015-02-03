@@ -1,26 +1,14 @@
 #pragma once
 #include <string>
 #include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
 
-class WriterTest : public ::testing::Test {
+#include <TestBase.h>
+
+class WriterTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
         virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
+            TestBase::SetUp();
             m_tmp_dir = "/tmp/";
-        }
-
-        MeshPtr load_mesh(const std::string& mesh_file) {
-            MeshPtr mesh = MeshFactory()
-                .load_file(m_data_dir + mesh_file)
-                .drop_zero_dim()
-                .create_shared();
-            return mesh;
         }
 
         MeshPtr load_tmp_mesh(const std::string& mesh_file) {
@@ -29,6 +17,22 @@ class WriterTest : public ::testing::Test {
                 .drop_zero_dim()
                 .create_shared();
             return mesh;
+        }
+
+        void write_tmp_mesh(const std::string& mesh_file, MeshPtr mesh) {
+            write_mesh(m_tmp_dir + mesh_file, mesh);
+        }
+
+        void write_tmp_mesh_raw(const std::string& mesh_file,
+                VectorF& vertices,
+                VectorI& faces,
+                VectorI& voxels,
+                size_t dim,
+                size_t vertex_per_face,
+                size_t vertex_per_voxel) {
+            write_mesh_raw(m_tmp_dir + mesh_file,
+                    vertices, faces, voxels,
+                    dim, vertex_per_face, vertex_per_voxel);
         }
 
         void remove(const std::string& filename) {
@@ -124,6 +128,5 @@ class WriterTest : public ::testing::Test {
         }
 
     protected:
-        std::string m_data_dir;
         std::string m_tmp_dir;
 };

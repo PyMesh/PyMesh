@@ -2,29 +2,15 @@
 
 #include <string>
 
-#include <Misc/Environment.h>
+#include <TestBase.h>
 
-class VertexMeanCurvatureAttributeTest : public ::testing::Test {
+class VertexMeanCurvatureAttributeTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("vertex_mean_curvature")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("vertex_mean_curvature");
+            return r;
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(VertexMeanCurvatureAttributeTest, ConvexShape) {

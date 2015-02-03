@@ -3,45 +3,34 @@
 #include <memory>
 
 #include <IO/MeshWriter.h>
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
+#include "WriterTest.h"
 
-class OBJWriterTest : public ::testing::Test {
+class OBJWriterTest : public WriterTest {
     protected:
-        typedef std::shared_ptr<Mesh> MeshPtr;
-        typedef std::shared_ptr<MeshWriter> WriterPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-            m_tmp_dir = "/tmp/";
+        MeshPtr write_and_load(const std::string& filename, MeshPtr mesh) {
+            write_tmp_mesh(filename, mesh);
+            MeshPtr r = load_tmp_mesh(filename);
+            remove(filename);
+            return r;
         }
 
-        MeshPtr load_mesh(const std::string& mesh_file) {
-            MeshFactory factory;
-            return MeshPtr(
-                    factory.load_file(mesh_file).create());
+        MeshPtr write_and_load_raw(const std::string& filename, MeshPtr mesh) {
+            write_tmp_mesh_raw(
+                    filename,
+                    mesh->get_vertices(),
+                    mesh->get_faces(),
+                    mesh->get_voxels(),
+                    mesh->get_dim(),
+                    mesh->get_vertex_per_face(),
+                    mesh->get_vertex_per_voxel());
+            return load_tmp_mesh(filename);
         }
-
-        void write_mesh(const std::string& mesh_file) {
-            m_writer = WriterPtr(MeshWriter::create_writer(mesh_file));
-        }
-
-    protected:
-        std::string m_data_dir;
-        std::string m_tmp_dir;
-        WriterPtr m_writer;
 };
 
 TEST_F(OBJWriterTest, WriteCube) {
-    std::string mesh_file = m_data_dir + "cube.obj";
-    std::string temp_file = m_tmp_dir + "cube.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write_mesh(*m1);
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("cube.obj");
+    MeshPtr m2 = write_and_load("cube.obj", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_vertex_per_voxel(), m2->get_vertex_per_voxel());
@@ -53,12 +42,9 @@ TEST_F(OBJWriterTest, WriteCube) {
 }
 
 TEST_F(OBJWriterTest, WriteTet) {
-    std::string mesh_file = m_data_dir + "tet.obj";
-    std::string temp_file = m_tmp_dir + "tet.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write_mesh(*m1);
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("tet.msh");
+    MeshPtr m2 = write_and_load("tet.msh", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_vertex_per_voxel(), m2->get_vertex_per_voxel());
@@ -70,12 +56,9 @@ TEST_F(OBJWriterTest, WriteTet) {
 }
 
 TEST_F(OBJWriterTest, Write2DSquare) {
-    std::string mesh_file = m_data_dir + "square_2D.obj";
-    std::string temp_file = m_tmp_dir + "square_2D.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write_mesh(*m1);
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("square_2D.obj");
+    MeshPtr m2 = write_and_load("square_2D.obj", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_vertex_per_voxel(), m2->get_vertex_per_voxel());
@@ -87,18 +70,9 @@ TEST_F(OBJWriterTest, Write2DSquare) {
 }
 
 TEST_F(OBJWriterTest, WriteCubeRaw) {
-    std::string mesh_file = m_data_dir + "cube.obj";
-    std::string temp_file = m_tmp_dir + "cube_raw.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write(
-            m1->get_vertices(),
-            m1->get_faces(),
-            m1->get_voxels(),
-            m1->get_dim(),
-            m1->get_vertex_per_face(),
-            m1->get_vertex_per_voxel());
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("square_2D.obj");
+    MeshPtr m2 = write_and_load_raw("square_2D_raw.obj", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_vertex_per_voxel(), m2->get_vertex_per_voxel());
@@ -110,18 +84,9 @@ TEST_F(OBJWriterTest, WriteCubeRaw) {
 }
 
 TEST_F(OBJWriterTest, WriteTetRaw) {
-    std::string mesh_file = m_data_dir + "tet.obj";
-    std::string temp_file = m_tmp_dir + "tet_raw.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write(
-            m1->get_vertices(),
-            m1->get_faces(),
-            m1->get_voxels(),
-            m1->get_dim(),
-            m1->get_vertex_per_face(),
-            m1->get_vertex_per_voxel());
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("tet.obj");
+    MeshPtr m2 = write_and_load_raw("tet_raw.obj", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_vertex_per_voxel(), m2->get_vertex_per_voxel());
@@ -133,18 +98,9 @@ TEST_F(OBJWriterTest, WriteTetRaw) {
 }
 
 TEST_F(OBJWriterTest, Write2DSquareRaw) {
-    std::string mesh_file = m_data_dir + "square_2D.obj";
-    std::string temp_file = m_tmp_dir + "square_2D_raw.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write(
-            m1->get_vertices(),
-            m1->get_faces(),
-            m1->get_voxels(),
-            m1->get_dim(),
-            m1->get_vertex_per_face(),
-            m1->get_vertex_per_voxel());
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("square_2D.obj");
+    MeshPtr m2 = write_and_load_raw("square_2D_raw.obj", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_vertex_per_voxel(), m2->get_vertex_per_voxel());
@@ -156,12 +112,8 @@ TEST_F(OBJWriterTest, Write2DSquareRaw) {
 }
 
 TEST_F(OBJWriterTest, ConvertMshToObj) {
-    std::string mesh_file = m_data_dir + "cube.msh";
-    std::string temp_file = m_tmp_dir + "cube1.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write_mesh(*m1);
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("cube.msh");
+    MeshPtr m2 = write_and_load("cube1.obj", m1);
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_num_vertices(), m2->get_num_vertices());
@@ -171,12 +123,9 @@ TEST_F(OBJWriterTest, ConvertMshToObj) {
 }
 
 TEST_F(OBJWriterTest, WriteHexToObj) {
-    std::string mesh_file = m_data_dir + "hex.msh";
-    std::string temp_file = m_tmp_dir + "hex1.obj";
-    MeshPtr m1 = load_mesh(mesh_file);
-    write_mesh(temp_file);
-    m_writer->write_mesh(*m1);
-    MeshPtr m2 = load_mesh(temp_file);
+    MeshPtr m1 = load_mesh("hex.msh");
+    MeshPtr m2 = write_and_load("hex1.obj", m1);
+
     ASSERT_EQ(m1->get_dim(), m2->get_dim());
     ASSERT_EQ(m1->get_vertex_per_face(), m2->get_vertex_per_face());
     ASSERT_EQ(m1->get_num_vertices(), m2->get_num_vertices());

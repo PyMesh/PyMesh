@@ -2,25 +2,14 @@
 
 #include <string>
 
-#include <Misc/Environment.h>
+#include <TestBase.h>
 
-class VoxelCentroidAttributeTest : public ::testing::Test {
+class VoxelCentroidAttributeTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("voxel_centroid")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("voxel_centroid");
+            return r;
         }
 
         void validate_centroid(MeshPtr mesh, const VectorF& centroids) {
@@ -38,9 +27,6 @@ class VoxelCentroidAttributeTest : public ::testing::Test {
                 ASSERT_FLOAT_EQ(0.0, diff);
             }
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(VoxelCentroidAttributeTest, Cube) {

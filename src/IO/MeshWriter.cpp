@@ -29,3 +29,7 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
     writer->set_output_filename(filename);
     return writer;
 }
+
+MeshWriter::Ptr MeshWriter::create(const std::string& filename) {
+    return Ptr(create_writer(filename));
+}

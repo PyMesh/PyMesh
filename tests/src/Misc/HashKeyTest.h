@@ -5,10 +5,6 @@ class HashKeyTest : public ::testing::Test {
     protected:
         typedef VectorHashKey<int, 2> HashKey2D;
         typedef VectorHashKey<int, 3> HashKey3D;
-
-        virtual void SetUp() {
-            // Seems nothing to do here.
-        }
 };
 
 TEST_F(HashKeyTest, Creation2D) {

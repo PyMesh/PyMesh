@@ -2,30 +2,17 @@
 
 #include <string>
 #include <cmath>
-#include <Misc/Environment.h>
 
-class FaceVoronoiAreaAttributeTest : public ::testing::Test {
+#include <TestBase.h>
+
+class FaceVoronoiAreaAttributeTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("face_area")
-                    .with_attribute("face_voronoi_area")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("face_area");
+            r->add_attribute("face_voronoi_area");
+            return r;
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(FaceVoronoiAreaAttributeTest, 2D) {

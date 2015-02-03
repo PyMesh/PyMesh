@@ -6,62 +6,44 @@
 #include "WriterTest.h"
 
 class PLYWriterTest : public WriterTest {
+    protected:
+        MeshPtr write_and_load(const std::string& filename, MeshPtr mesh) {
+            write_tmp_mesh(filename, mesh);
+            MeshPtr r = load_tmp_mesh(filename);
+            remove(filename);
+            return r;
+        }
 };
 
 TEST_F(PLYWriterTest, SurfaceMesh) {
-    std::string filename = "cube.ply";
-    MeshPtr mesh = load_mesh(filename);
+    MeshPtr mesh = load_mesh("cube.ply");
+    MeshPtr mesh2 = write_and_load("tmp_cube.ply", mesh);
 
-    std::string tmp_name = "tmp_cube_surface.ply";
-    PLYWriter writer;
-    writer.set_output_filename(m_tmp_dir + tmp_name);
-    writer.write_mesh(*mesh);
-
-    MeshPtr mesh2 = load_tmp_mesh(tmp_name);
     assert_eq_vertices(mesh, mesh2);
     assert_eq_faces(mesh, mesh2);
     assert_eq_voxels(mesh, mesh2);
-
-    remove(tmp_name);
 }
 
 TEST_F(PLYWriterTest, VolumeMesh) {
-    std::string filename = "cube.msh";
-    MeshPtr mesh = load_mesh(filename);
+    MeshPtr mesh = load_mesh("cube.msh");
+    MeshPtr mesh2 = write_and_load("tmp_cube_volume.ply", mesh);
 
-    std::string tmp_name = "tmp_cube_volume.ply";
-    PLYWriter writer;
-    writer.set_output_filename(m_tmp_dir + tmp_name);
-    writer.write_mesh(*mesh);
-
-    MeshPtr mesh2 = load_tmp_mesh(tmp_name);
     assert_eq_vertices(mesh, mesh2);
     assert_eq_faces(mesh, mesh2);
     assert_eq_voxels(mesh, mesh2);
-
-    remove(tmp_name);
 }
 
 TEST_F(PLYWriterTest, 2DMesh) {
-    std::string filename = "square_2D.obj";
-    MeshPtr mesh = load_mesh(filename);
+    MeshPtr mesh = load_mesh("square_2D.obj");
+    MeshPtr mesh2 = write_and_load("tmp_square_2D.ply", mesh);
 
-    std::string tmp_name = "tmp_square_2D.ply";
-    PLYWriter writer;
-    writer.set_output_filename(m_tmp_dir + tmp_name);
-    writer.write_mesh(*mesh);
-
-    MeshPtr mesh2 = load_tmp_mesh(tmp_name);
     assert_eq_vertices(mesh, mesh2);
     assert_eq_faces(mesh, mesh2);
     assert_eq_voxels(mesh, mesh2);
-
-    remove(tmp_name);
 }
 
 TEST_F(PLYWriterTest, VertexAttributes) {
-    std::string filename = "tet.msh";
-    MeshPtr mesh = load_mesh(filename);
+    MeshPtr mesh = load_mesh("tet.msh");
 
     mesh->add_attribute("vertex_index");
     mesh->add_attribute("vertex_normal");
@@ -76,13 +58,10 @@ TEST_F(PLYWriterTest, VertexAttributes) {
     MeshPtr mesh2 = load_tmp_mesh(tmp_name);
     assert_eq_attribute(mesh, mesh2, "vertex_index");
     assert_eq_attribute(mesh, mesh2, "vertex_normal");
-
-    remove(tmp_name);
 }
 
 TEST_F(PLYWriterTest, FaceAttributes) {
-    std::string filename = "cube.obj";
-    MeshPtr mesh = load_mesh(filename);
+    MeshPtr mesh = load_mesh("cube.obj");
 
     mesh->add_attribute("face_index");
     mesh->add_attribute("face_normal");
@@ -97,13 +76,10 @@ TEST_F(PLYWriterTest, FaceAttributes) {
     MeshPtr mesh2 = load_tmp_mesh(tmp_name);
     assert_eq_attribute(mesh, mesh2, "face_index");
     assert_eq_attribute(mesh, mesh2, "face_normal");
-
-    remove(tmp_name);
 }
 
 TEST_F(PLYWriterTest, VoxelAttributes) {
-    std::string filename = "cube.msh";
-    MeshPtr mesh = load_mesh(filename);
+    MeshPtr mesh = load_mesh("cube.msh");
     const size_t dim = mesh->get_dim();
     const size_t num_voxels = mesh->get_num_voxels();
 
@@ -129,7 +105,5 @@ TEST_F(PLYWriterTest, VoxelAttributes) {
     assert_eq_attribute(mesh, mesh2, "voxel_index");
     assert_eq_attribute(mesh, mesh2, "voxel_vector");
     assert_eq_voxel_tensor_attribute(mesh, mesh2, "voxel_tensor");
-
-    remove(tmp_name);
 }
 

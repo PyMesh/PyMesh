@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 
 #include <Core/EigenTypedef.h>
 
@@ -17,7 +18,10 @@ class Mesh;
  */
 class MeshWriter {
     public:
+        typedef std::shared_ptr<MeshWriter> Ptr;
+
         static MeshWriter* create_writer(const std::string& filename);
+        static Ptr create(const std::string& filename);
 
     public:
         virtual ~MeshWriter() {}

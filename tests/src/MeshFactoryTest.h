@@ -3,31 +3,13 @@
 
 #include <Mesh.h>
 #include <MeshFactory.h>
-#include <Misc/Environment.h>
+
+#include <TestBase.h>
 
 using ::testing::Contains;
 
-class MeshFactoryTest : public ::testing::Test {
+class MeshFactoryTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root = Environment::get("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string full_path = m_data_dir + filename;
-            return MeshPtr(MeshFactory().load_file(full_path).create());
-        }
-
-        MeshPtr load_data(VectorF& vertices, VectorI& faces, VectorI& voxels,
-                size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
-            return MeshPtr(MeshFactory().load_data(
-                        vertices, faces, voxels,
-                        dim, vertex_per_face, vertex_per_voxel).create());
-        }
-
         MeshPtr copy_mesh_data(const MeshPtr mesh) {
             return load_data(mesh->get_vertices(), mesh->get_faces(), mesh->get_voxels(),
                     mesh->get_dim(),
@@ -41,9 +23,6 @@ class MeshFactoryTest : public ::testing::Test {
             ASSERT_EQ(mesh1->get_faces(), mesh2->get_faces());
             ASSERT_EQ(mesh1->get_voxels(), mesh2->get_voxels());
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(MeshFactoryTest, NonExistFile) {

@@ -1,16 +1,10 @@
 #pragma once
 #include <string>
 #include <IO/MeshParser.h>
-#include <Misc/Environment.h>
+#include <TestBase.h>
 
-class PLYParserTest : public ::testing::Test {
+class PLYParserTest : public TestBase {
     protected:
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         void parse(const std::string& mesh_file) {
             m_parser = std::shared_ptr<MeshParser>(MeshParser::create_parser(mesh_file));
             bool result = m_parser->parse(mesh_file);
@@ -18,7 +12,6 @@ class PLYParserTest : public ::testing::Test {
         }
 
     protected:
-        std::string m_data_dir;
         std::shared_ptr<MeshParser> m_parser;
 };
 

@@ -1,25 +1,19 @@
 #pragma once
 #include <string>
-
 #include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
+#include <TestBase.h>
 
 using ::testing::Contains;
 
-class MeshTest : public ::testing::Test {
+class MeshTest : public TestBase {
     protected:
         typedef Mesh::Ptr MeshPtr;
         virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            std::string cube_tri_file   = project_dir + "/tests/data/cube.obj";
-            std::string cube_tet_file   = project_dir + "/tests/data/cube.msh";
-            std::string square_tri_file = project_dir + "/tests/data/square_2D.obj";
-            std::string cube_hex_file = project_dir + "/tests/data/hex.msh";
-            m_cube_tri = MeshPtr(MeshFactory().load_file(cube_tri_file).create());
-            m_cube_tet = MeshPtr(MeshFactory().load_file(cube_tet_file).create());
-            m_square_tri = MeshPtr(MeshFactory().load_file(square_tri_file).create());
-            m_cube_hex = MeshPtr(MeshFactory().load_file(cube_hex_file).create());
+            TestBase::SetUp();
+            m_cube_tri = load_mesh("cube.obj");
+            m_cube_tet = load_mesh("cube.msh");
+            m_square_tri = load_mesh("square_2D.obj");
+            m_cube_hex = load_mesh("hex.msh");
         }
 
     protected:

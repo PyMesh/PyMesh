@@ -1,30 +1,14 @@
 #pragma once
 
-#include <string>
+#include <TestBase.h>
 
-#include <Misc/Environment.h>
-
-class VoxelIndexAttributeTest : public ::testing::Test {
+class VoxelIndexAttributeTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("voxel_index")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("voxel_index");
+            return r;
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(VoxelIndexAttributeTest, cube) {

@@ -2,29 +2,15 @@
 
 #include <string>
 
-#include <Misc/Environment.h>
+#include <TestBase.h>
 
-class VertexVolumeAttributeTest : public ::testing::Test {
+class VertexVolumeAttributeTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("vertex_volume")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("vertex_volume");
+            return r;
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(VertexVolumeAttributeTest, tet) {
@@ -32,6 +18,10 @@ TEST_F(VertexVolumeAttributeTest, tet) {
     ASSERT_TRUE(tet->has_attribute("vertex_volume"));
     VectorF volumes = tet->get_attribute("vertex_volume");
     ASSERT_TRUE((volumes.array() == volumes[0]).all());
+
+    tet->add_attribute("voxel_volume");
+    Float total_volume = tet->get_attribute("voxel_volume").sum();
+    ASSERT_FLOAT_EQ(total_volume, volumes.sum());
 }
 
 TEST_F(VertexVolumeAttributeTest, hex) {
@@ -40,6 +30,10 @@ TEST_F(VertexVolumeAttributeTest, hex) {
     VectorF volumes = hex->get_attribute("vertex_volume");
     ASSERT_FLOAT_EQ(1.0, volumes[0]);
     ASSERT_TRUE((volumes.array() == volumes[0]).all());
+
+    hex->add_attribute("voxel_volume");
+    Float total_volume = hex->get_attribute("voxel_volume").sum();
+    ASSERT_FLOAT_EQ(total_volume, volumes.sum());
 }
 
 TEST_F(VertexVolumeAttributeTest, surface_mesh) {
