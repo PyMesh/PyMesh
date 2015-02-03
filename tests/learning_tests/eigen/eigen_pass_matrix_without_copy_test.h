@@ -94,3 +94,20 @@ TEST_F(EigenPassMatrixWithoutCopyTest, PassVector) {
     //pass3(v);
     //ASSERT_FLOAT_EQ(3.0, v(0, 0));
 }
+
+TEST_F(EigenPassMatrixWithoutCopyTest, PassMap) {
+    auto m = Eigen::Map<MatrixFr>(m_matrix.data(),
+            m_matrix.rows(), m_matrix.cols());
+
+    ASSERT_FLOAT_EQ(0.0, m(0, 0));
+
+    pass1(m);
+    ASSERT_FLOAT_EQ(1.0, m(0, 0));
+
+    pass2(m);
+    ASSERT_FLOAT_EQ(2.0, m(0, 0));
+
+    // The following expression does not compile
+    //pass3(m);
+    //ASSERT_FLOAT_EQ(3.0, m(0, 0));
+}
