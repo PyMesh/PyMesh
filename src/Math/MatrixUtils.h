@@ -28,6 +28,35 @@ namespace MatrixUtils {
      */
     template<typename T>
     Eigen::Matrix<T, Eigen::Dynamic, 1> std2eigen(const std::vector<T>& data);
+
+    /**
+     * Reinterpret data as matrix of a different shape.
+     *
+     * This method does no copy on its own, however, copying might be
+     * performed during casting such as the following:
+     *
+     *      VectorF data = VectorF::Ones(4);
+     *      MatrixFr m = reshape<MatrixFr>(data, 2, 2);
+     * 
+     * The copying operation occurs at the assignment because a type cast is
+     * needed.  To avoid copying, do the following:
+     *
+     *      auto m = reshape<MatrixFr>(data, 2, 2);
+     *
+     * Of course, it is the user's responsibility to ensure the memory shared
+     * by data and m is valid throughout the life time of m.  In particular,
+     * deleting data will likely to invalidate m.
+     */
+    template<typename T, typename Derived>
+    Eigen::Map<T> reshape(Eigen::MatrixBase<Derived>& M, size_t rows, size_t cols);
+
+    /**
+     * Flatten a matrix into vector according to its storage order.
+     *
+     * See the documentation of flatten above on issues about copying.
+     */
+    template<typename T, typename Derived>
+    Eigen::Map<T> flatten(Eigen::MatrixBase<Derived>& matrix);
 }
 
 #include "MatrixUtils.inl"

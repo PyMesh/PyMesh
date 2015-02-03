@@ -10,6 +10,7 @@
 #include "IO/PLYParserTest.h"
 #include "IO/PLYWriterTest.h"
 #include "Math/ZSparseMatrixTest.h"
+#include "Math/MatrixUtilsTest.h"
 #include "Misc/TripletTest.h"
 #include "Misc/TriBox2DTest.h"
 #include "Misc/MultipletTest.h"

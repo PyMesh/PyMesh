@@ -1,30 +1,11 @@
 #pragma once
 
-#include <string>
 #include <iostream>
-
-#include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
-
 #include <MeshUtils/IsolatedVertexRemoval.h>
+#include <TestBase.h>
 
-class IsolatedVertexRemovalTest : public ::testing::Test {
+class IsolatedVertexRemovalTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
-
         void assert_matrix_eq(const MatrixFr& m1, const MatrixFr& m2) {
             MatrixFr diff = m1 - m2;
             ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
@@ -62,9 +43,6 @@ class IsolatedVertexRemovalTest : public ::testing::Test {
             assert_matrix_eq(vertices, result_vertices);
             assert_matrix_eq(faces, result_faces);
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(IsolatedVertexRemovalTest, 2D) {

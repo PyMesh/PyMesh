@@ -2,24 +2,11 @@
 
 #include <vector>
 
+#include <TestBase.h>
 #include <MeshUtils/SubMesh.h>
 
-class SubMeshTest : public ::testing::Test {
+class SubMeshTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
-
         VectorF compute_face_center(MeshPtr mesh, size_t i) {
             VectorI face = mesh->get_face(i);
             VectorF center = VectorF::Zero(mesh->get_dim());
@@ -56,9 +43,6 @@ class SubMeshTest : public ::testing::Test {
             ASSERT_FLOAT_EQ(0.0,
                     (result_face_center - target_face_center).squaredNorm());
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(SubMeshTest, 2D) {

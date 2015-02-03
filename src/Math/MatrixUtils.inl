@@ -102,3 +102,26 @@ Eigen::Matrix<T, Eigen::Dynamic, 1> MatrixUtils::std2eigen(
     std::copy(data.begin(), data.end(), result.data());
     return result;
 }
+
+template<typename T, typename Derived>
+Eigen::Map<T> MatrixUtils::reshape(Eigen::MatrixBase<Derived>& M, size_t rows, size_t cols) {
+    const size_t ori_num_rows = M.rows();
+    const size_t ori_num_cols = M.cols();
+    const size_t num_entries = ori_num_rows * ori_num_cols;
+    if (num_entries != rows * cols) {
+        std::stringstream err_msg;
+        err_msg << "Cannot reshape matrix of size ("
+            << ori_num_rows << ", " << ori_num_cols
+            << ") into matrix of size ("
+            << rows << ", " << cols << ")" << std::endl;
+        throw RuntimeError(err_msg.str());
+    }
+
+    return Eigen::Map<T>(static_cast<Derived&>(M).data(), rows, cols);
+}
+
+template<typename T, typename Derived>
+Eigen::Map<T> MatrixUtils::flatten(Eigen::MatrixBase<Derived>& matrix) {
+    return Eigen::Map<T>(static_cast<Derived&>(matrix).data(), matrix.rows() * matrix.cols());
+}
+
