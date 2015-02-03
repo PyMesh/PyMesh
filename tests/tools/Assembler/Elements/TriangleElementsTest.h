@@ -4,39 +4,21 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
 
 #include <Assembler/Elements/Elements.h>
 #include <Assembler/Elements/TriangleElements.h>
 
+#include <TestBase.h>
+
 #include "GeometryChecker.h"
 
-class TriangleElementsTest : public ::testing::Test {
+class TriangleElementsTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
         typedef Elements::Ptr ElementsPtr;
-
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
 
         ElementsPtr adapt(MeshPtr mesh) {
             return ElementsPtr(new TriangleElements(mesh));
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(TriangleElementsTest, 2DMesh) {

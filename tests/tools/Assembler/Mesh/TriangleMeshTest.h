@@ -3,32 +3,28 @@
 #include <string>
 #include <vector>
 
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
-
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/Mesh/TriangleMesh.h>
+
+#include <TestBase.h>
 
 #include "BoundaryChecker.h"
 #include "ConnectivityChecker.h"
 #include "GeometryChecker.h"
 #include "MiscChecker.h"
 
-class TriangleMeshTest : public ::testing::Test {
+class TriangleMeshTest : public TestBase {
     protected:
-        typedef std::shared_ptr<Mesh> MeshPtr;
         typedef std::shared_ptr<FEMeshAdaptor> FEMeshPtr;
         virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
+            TestBase::SetUp();
 
             m_cube_tri = load_mesh("cube.obj");
             m_cube_tet = load_mesh("cube.msh");
             m_square = load_mesh("square_2D.obj");
         }
 
-        MeshPtr load_mesh(const std::string& filename) {
+        virtual MeshPtr load_mesh(const std::string& filename) {
             std::string mesh_file = m_data_dir + filename;
             return MeshPtr(
                     MeshFactory()
@@ -45,7 +41,6 @@ class TriangleMeshTest : public ::testing::Test {
         }
 
     protected:
-        std::string m_data_dir;
         MeshPtr m_cube_tri;
         MeshPtr m_cube_tet;
         MeshPtr m_square;

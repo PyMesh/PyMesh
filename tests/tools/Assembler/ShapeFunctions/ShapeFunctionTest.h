@@ -2,34 +2,18 @@
 
 #include <string>
 
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
-
 #include <Assembler/Elements/Elements.h>
 #include <Assembler/ShapeFunctions/ShapeFunction.h>
 
-class ShapeFunctionTest : public ::testing::Test {
+#include <TestBase.h>
+
+class ShapeFunctionTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
         typedef Elements::Ptr FEMeshPtr;
         typedef ShapeFunction::Ptr ShapeFuncPtr;
-        void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
 
-        FEMeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return Elements::adapt(
-                    MeshPtr(
-                        MeshFactory()
-                        .load_file(mesh_file)
-                        .with_connectivity("all")
-                        .with_attribute("vertex_normal")
-                        .with_attribute("face_area")
-                        .with_attribute("voxel_volume")
-                        .create()));
+        FEMeshPtr load_fem_mesh(const std::string& filename) {
+            return Elements::adapt(load_mesh(filename));
         }
 
         Float get_edge_length(const VectorF& v1, const VectorF& v2) {
@@ -66,13 +50,10 @@ class ShapeFunctionTest : public ::testing::Test {
             Float base_area = get_triangle_area(opp_v1, opp_v2, opp_v3);
             return volume * 3.0 / base_area;
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(ShapeFunctionTest, EvalAtNodeSquare) {
-    FEMeshPtr mesh = load_mesh("square_2D.obj");
+    FEMeshPtr mesh = load_fem_mesh("square_2D.obj");
     ShapeFuncPtr shape_func =
         ShapeFunction::create(mesh, "linear");
     ASSERT_EQ(1.0, shape_func->evaluate_func(0, 0, Vector3F(1, 0, 0)));
@@ -89,7 +70,7 @@ TEST_F(ShapeFunctionTest, EvalAtNodeSquare) {
 }
 
 TEST_F(ShapeFunctionTest, EvalAtNodeCube) {
-    FEMeshPtr mesh = load_mesh("cube.msh");
+    FEMeshPtr mesh = load_fem_mesh("cube.msh");
     ShapeFuncPtr shape_func =
         ShapeFunction::create(mesh, "linear");
     ASSERT_EQ(1.0, shape_func->evaluate_func(0, 0, Vector4F(1, 0, 0, 0)));
@@ -119,7 +100,7 @@ TEST_F(ShapeFunctionTest, EvalAtNodeCube) {
  * This is what we are checking here.
  */
 TEST_F(ShapeFunctionTest, TriangleGradient) {
-    FEMeshPtr mesh = load_mesh("square_2D.obj");
+    FEMeshPtr mesh = load_fem_mesh("square_2D.obj");
     ShapeFuncPtr shape_func =
         ShapeFunction::create(mesh, "linear");
     Vector3F coord(1.0 / 3.0, 1.0 / 3.0, 1.0 / 3.0);
@@ -145,7 +126,7 @@ TEST_F(ShapeFunctionTest, TriangleGradient) {
  * This is what we are checking here.
  */
 TEST_F(ShapeFunctionTest, TetrahedronGradient) {
-    FEMeshPtr mesh = load_mesh("cube.msh");
+    FEMeshPtr mesh = load_fem_mesh("cube.msh");
     ShapeFuncPtr shape_func =
         ShapeFunction::create(mesh, "linear");
     Vector4F coord(1.0 / 4.0, 1.0 / 4.0, 1.0 / 4.0, 1.0 / 4.0);

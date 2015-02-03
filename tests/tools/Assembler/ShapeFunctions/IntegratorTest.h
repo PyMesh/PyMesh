@@ -2,36 +2,20 @@
 
 #include <string>
 
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
-
 #include <Assembler/Elements/Elements.h>
 #include <Assembler/ShapeFunctions/Integrator.h>
 #include <Assembler/ShapeFunctions/ShapeFunction.h>
 
-class IntegratorTest : public ::testing::Test {
+#include <TestBase.h>
+
+class IntegratorTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
         typedef Elements::Ptr FEMeshPtr;
         typedef Integrator::Ptr IntegratorPtr;
         typedef ShapeFunction::Ptr ShapeFuncPtr;
-        void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
 
-        FEMeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return Elements::adapt(
-                    MeshPtr(
-                        MeshFactory()
-                        .load_file(mesh_file)
-                        .with_connectivity("all")
-                        .with_attribute("vertex_normal")
-                        .with_attribute("face_area")
-                        .with_attribute("voxel_volume")
-                        .create()));
+        FEMeshPtr load_fem_mesh(const std::string& filename) {
+            return Elements::adapt(load_mesh(filename));
         }
 
         IntegratorPtr create_integrator(FEMeshPtr mesh) {
@@ -53,13 +37,10 @@ class IntegratorTest : public ::testing::Test {
             Vector3F b = v3 - v1;
             return 0.5 * a.dot(b) / a.cross(b).norm();
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(IntegratorTest, FuncOverTriangle) {
-    FEMeshPtr mesh = load_mesh("square_2D.obj");
+    FEMeshPtr mesh = load_fem_mesh("square_2D.obj");
     IntegratorPtr integrator = create_integrator(mesh);
     const size_t num_element = mesh->getNbrElements();
     for (size_t i=0; i<num_element; i++) {
@@ -80,7 +61,7 @@ TEST_F(IntegratorTest, FuncOverTriangle) {
 }
 
 TEST_F(IntegratorTest, FuncOverTetrahedron) {
-    FEMeshPtr mesh = load_mesh("cube.msh");
+    FEMeshPtr mesh = load_fem_mesh("cube.msh");
     IntegratorPtr integrator = create_integrator(mesh);
     const size_t num_element = mesh->getNbrElements();
     for (size_t i=0; i<num_element; i++) {
@@ -109,7 +90,7 @@ TEST_F(IntegratorTest, FuncOverTetrahedron) {
 }
 
 TEST_F(IntegratorTest, GradOverTriangle) {
-    FEMeshPtr mesh = load_mesh("square_2D.obj");
+    FEMeshPtr mesh = load_fem_mesh("square_2D.obj");
     IntegratorPtr integrator = create_integrator(mesh);
     const size_t num_element = mesh->getNbrElements();
     for (size_t i=0; i<num_element; i++) {
@@ -131,7 +112,7 @@ TEST_F(IntegratorTest, GradOverTriangle) {
 }
 
 TEST_F(IntegratorTest, GradOverTetrahedronSymmetry) {
-    FEMeshPtr mesh = load_mesh("tet.msh");
+    FEMeshPtr mesh = load_fem_mesh("tet.msh");
     IntegratorPtr integrator = create_integrator(mesh);
 
     // Check phi_i * phi_j == phi_j * phi_i.
@@ -147,7 +128,7 @@ TEST_F(IntegratorTest, GradOverTetrahedronSymmetry) {
 }
 
 TEST_F(IntegratorTest, MaterialContractionTriangle) {
-    FEMeshPtr mesh = load_mesh("square_2D.obj");
+    FEMeshPtr mesh = load_fem_mesh("square_2D.obj");
     IntegratorPtr integrator = create_integrator(mesh);
     Material::Ptr material = Material::create_isotropic(2, 1.0, 1.0, 0.0);
 
@@ -175,7 +156,7 @@ TEST_F(IntegratorTest, MaterialContractionTriangle) {
 }
 
 TEST_F(IntegratorTest, MaterialContractionTetrahedron) {
-    FEMeshPtr mesh = load_mesh("tet.msh");
+    FEMeshPtr mesh = load_fem_mesh("tet.msh");
     IntegratorPtr integrator = create_integrator(mesh);
     Material::Ptr material = Material::create_isotropic(3, 1.0, 1.0, 0.0);
 

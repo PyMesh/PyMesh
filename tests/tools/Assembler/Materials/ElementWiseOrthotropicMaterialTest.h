@@ -4,7 +4,6 @@
 #include <vector>
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Mesh.h>
 
 #include <Assembler/Materials/ElementWiseOrthotropicMaterial.h>
 #include <Assembler/Materials/Material.h>

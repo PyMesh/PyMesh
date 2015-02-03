@@ -5,9 +5,6 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
 
 #include <Assembler/Materials/ElementWiseIsotropicMaterial.h>
 #include <Assembler/Materials/IsotropicMaterial.h>
