@@ -33,11 +33,13 @@ class SubMesh {
          */
         void finalize();
 
-        const MatrixFr& get_vertices() const { return m_vertices; }
-        const MatrixIr& get_faces() const { return m_faces; }
+        const MatrixFr& get_vertices() const { check_validity(); return m_vertices; }
+        const MatrixIr& get_faces() const { check_validity(); return m_faces; }
 
-        const VectorI& get_ori_vertex_indices() const { return m_ori_vertex_indices; }
-        const VectorI& get_ori_face_indices() const { return m_ori_face_indices; }
+        const VectorI& get_ori_vertex_indices() const { check_validity(); return m_ori_vertex_indices; }
+        const VectorI& get_ori_face_indices() const { check_validity(); return m_ori_face_indices; }
+
+        void check_validity() const;
 
     protected:
         void collect_selected_vertices();

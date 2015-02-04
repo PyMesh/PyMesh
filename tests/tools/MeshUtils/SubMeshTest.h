@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <functional>
 
 #include <TestBase.h>
+#include <Math/MatrixUtils.h>
 #include <MeshUtils/SubMesh.h>
 
 class SubMeshTest : public TestBase {
@@ -84,3 +86,41 @@ TEST_F(SubMeshTest, 3D) {
     ASSERT_FACE_EQ(mesh, 0, vertices, faces, 0);
     ASSERT_FACE_EQ(mesh, 1, vertices, faces, 1);
 }
+
+TEST_F(SubMeshTest, BoundaryFaces) {
+    MeshPtr mesh = load_mesh("cube.msh");
+    const size_t dim = mesh->get_dim();
+    const size_t num_vertices = mesh->get_num_vertices();
+
+    SubMesh::Ptr submesh = SubMesh::create(mesh);
+
+    auto ori_vertices = MatrixUtils::reshape<MatrixFr>(
+            mesh->get_vertices(), num_vertices, dim);
+    VectorF bbox_min = ori_vertices.colwise().minCoeff();
+
+    std::function<bool(VectorF)> filter([&](const VectorF& v) {
+            return v[0] == bbox_min[0]; });
+    submesh->filter_vertex_with_custom_function(filter);
+    submesh->finalize();
+
+    const MatrixFr& vertices = submesh->get_vertices();
+    const MatrixIr& faces = submesh->get_faces();
+
+    const size_t num_filted_vertices = vertices.rows();
+    for (size_t i=0; i<num_filted_vertices; i++) {
+        ASSERT_TRUE(filter(vertices.row(i)));
+    }
+
+    ASSERT_EQ(4, vertices.rows());
+    ASSERT_EQ(2, faces.rows());
+}
+
+TEST_F(SubMeshTest, NotFinalized) {
+    MeshPtr mesh = load_mesh("cube.msh");
+    SubMesh::Ptr submesh = SubMesh::create(mesh);
+    ASSERT_THROW(submesh->get_vertices(), RuntimeError);
+    ASSERT_THROW(submesh->get_faces(), RuntimeError);
+    ASSERT_THROW(submesh->get_ori_vertex_indices(), RuntimeError);
+    ASSERT_THROW(submesh->get_ori_face_indices(), RuntimeError);
+}
+

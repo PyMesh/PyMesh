@@ -30,18 +30,6 @@ SubMesh::SubMesh(
         const MatrixIr& faces)
 : m_vertices(vertices), m_faces(faces) {
     const size_t num_vertices = vertices.rows();
-    const size_t num_faces = faces.rows();
-
-    m_ori_vertex_indices.resize(num_vertices);
-    m_ori_face_indices.resize(num_faces);
-
-    for (size_t i=0; i<num_vertices; i++) {
-        m_ori_vertex_indices[i] = i;
-    }
-    for (size_t i=0; i<num_faces; i++) {
-        m_ori_face_indices[i] = i;
-    }
-
     m_vertex_selection = std::vector<bool>(num_vertices, false);
 }
 
@@ -76,6 +64,14 @@ void SubMesh::finalize() {
     collect_selected_vertices();
     collect_selected_faces();
     remove_isolated_vertices();
+}
+
+void SubMesh::check_validity() const {
+    if (m_ori_vertex_indices.size() != m_vertices.rows() ||
+            m_ori_face_indices.size() != m_faces.rows()) {
+        throw RuntimeError(
+                "Invalid submesh detected, did you forget to call finalize()");
+    }
 }
 
 void SubMesh::collect_selected_vertices() {
