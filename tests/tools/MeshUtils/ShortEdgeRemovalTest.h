@@ -4,7 +4,9 @@
 
 #include <MeshUtils/ShortEdgeRemoval.h>
 
-class ShortEdgeRemovalTest : public ::testing::Test {
+#include <TestBase.h>
+
+class ShortEdgeRemovalTest : public TestBase {
     protected:
         void check_num_faces_left(const ShortEdgeRemoval& remover, size_t n) {
             MatrixIr faces_left = remover.get_faces();

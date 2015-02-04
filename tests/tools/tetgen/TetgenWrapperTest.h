@@ -4,49 +4,25 @@
 #include <string>
 
 #include <Core/EigenTypedef.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
+#include <Math/MatrixUtils.h>
 
-class TetgenWrapperTest : public ::testing::Test {
+#include <TestBase.h>
+
+class TetgenWrapperTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
-
         MatrixFr extract_vertices(MeshPtr mesh) {
             const size_t num_vertices = mesh->get_num_vertices();
             const size_t dim = mesh->get_dim();
-            VectorF vertices = mesh->get_vertices();
-            MatrixFr result(num_vertices, dim);
-            std::copy(vertices.data(), vertices.data() + num_vertices * dim,
-                    result.data());
-            return result;
+            return MatrixUtils::reshape<MatrixFr>(
+                    mesh->get_vertices(), num_vertices, dim);
         }
 
         MatrixIr extract_faces(MeshPtr mesh) {
             const size_t num_faces = mesh->get_num_faces();
             const size_t vertex_per_face = mesh->get_vertex_per_face();
-            VectorI faces = mesh->get_faces();
-            MatrixIr result(num_faces, vertex_per_face);
-            std::copy(faces.data(), faces.data() + num_faces * vertex_per_face,
-                    result.data());
-            return result;
+            return MatrixUtils::reshape<MatrixIr>(
+                    mesh->get_faces(), num_faces, vertex_per_face);
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(TetgenWrapperTest, Cube) {

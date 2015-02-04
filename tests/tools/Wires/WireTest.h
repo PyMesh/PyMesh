@@ -3,16 +3,16 @@
 #include <string>
 #include <vector>
 
-#include <Mesh.h>
-#include <MeshFactory.h>
 #include <IO/MeshWriter.h>
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Misc/Environment.h>
+#include <Math/MatrixUtils.h>
 
 #include <Wires/WireNetwork/WireNetwork.h>
 
-class WireTest : public ::testing::Test {
+#include <TestBase.h>
+
+class WireTest : public TestBase {
     protected:
         virtual void SetUp() {
             std::string project_dir = Environment::get("PYMESH_PATH");
@@ -28,20 +28,13 @@ class WireTest : public ::testing::Test {
         }
 
         void ASSERT_VECTOR_EQ(const VectorF& v1, const VectorF& v2) {
-            ASSERT_EQ(v1.size(), v2.size());
-            const size_t num_entries = v1.size();
-            for (size_t i=0; i<num_entries; i++) {
-                ASSERT_FLOAT_EQ(v1[i], v2[i]);
-            }
+            ASSERT_MATRIX_EQ(v1, v2);
         }
 
         template<typename T>
         Eigen::Matrix<T, Eigen::Dynamic, 1> flatten(
                 const Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor>& mat) {
-            size_t num_entries = mat.rows() * mat.cols();
-            Eigen::Matrix<T, Eigen::Dynamic, 1> vec(num_entries);
-            std::copy(mat.data(), mat.data() + num_entries, vec.data());
-            return vec;
+            return MatrixUtils::flatten<Eigen::Matrix<T, Eigen::Dynamic, 1> >(mat);
         }
 
         Mesh::Ptr form_mesh(const MatrixFr& vertices, const MatrixIr& faces) {
@@ -105,7 +98,4 @@ class WireTest : public ::testing::Test {
             writer->write_mesh(*mesh);
             delete writer;
         }
-
-    protected:
-        std::string m_data_dir;
 };

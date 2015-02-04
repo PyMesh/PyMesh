@@ -2,7 +2,9 @@
 
 #include <MeshUtils/FinFaceRemoval.h>
 
-class FinFaceRemovalTest : public ::testing::Test {
+#include <TestBase.h>
+
+class FinFaceRemovalTest : public TestBase {
     protected:
         void check_face_index(const MatrixIr& in_faces, 
                 const MatrixIr& out_faces, 

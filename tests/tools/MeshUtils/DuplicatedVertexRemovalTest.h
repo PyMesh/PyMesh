@@ -4,44 +4,16 @@
 #include <string>
 #include <iostream>
 
-#include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
-
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 
-class DuplicatedVertexRemovalTest : public ::testing::Test {
+#include <TestBase.h>
+
+class DuplicatedVertexRemovalTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
-
         void assert_vector_eq(const VectorF& v1, const VectorF& v2) {
             VectorF diff = v1 - v2;
             ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
             ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
-        }
-
-        void assert_matrix_eq(const MatrixFr& m1, const MatrixFr& m2) {
-            MatrixFr diff = m1 - m2;
-            ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
-            ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
-        }
-
-        void assert_matrix_eq(const MatrixIr& m1, const MatrixIr& m2) {
-            MatrixIr diff = m1 - m2;
-            ASSERT_EQ(0, diff.minCoeff());
-            ASSERT_EQ(0, diff.maxCoeff());
         }
 
         void assert_valid_index_map(
@@ -57,9 +29,6 @@ class DuplicatedVertexRemovalTest : public ::testing::Test {
                 ASSERT_NEAR(0.0, (new_v-old_v).norm(), tol);
             }
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(DuplicatedVertexRemovalTest, 2D) {
@@ -98,8 +67,8 @@ TEST_F(DuplicatedVertexRemovalTest, 2D) {
     MatrixIr result_faces = remover.get_faces();
     VectorI  index_map = remover.get_index_map();
 
-    assert_matrix_eq(expected_vertices, result_vertices);
-    assert_matrix_eq(expected_faces, result_faces);
+    ASSERT_MATRIX_EQ(expected_vertices, result_vertices);
+    ASSERT_MATRIX_EQ(expected_faces, result_faces);
     assert_valid_index_map(vertices, result_vertices, index_map, tol);
 
     ASSERT_EQ(vertices.rows() - 1, result_vertices.rows());
@@ -144,8 +113,8 @@ TEST_F(DuplicatedVertexRemovalTest, 3D) {
     MatrixIr result_faces = remover.get_faces();
     VectorI  index_map = remover.get_index_map();
 
-    assert_matrix_eq(expected_vertices, result_vertices);
-    assert_matrix_eq(expected_faces, result_faces);
+    ASSERT_MATRIX_EQ(expected_vertices, result_vertices);
+    ASSERT_MATRIX_EQ(expected_faces, result_faces);
     assert_valid_index_map(vertices, result_vertices, index_map, tol);
 
     ASSERT_EQ(vertices.rows() - 1, result_vertices.rows());

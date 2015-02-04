@@ -4,28 +4,19 @@
 #include <set>
 
 #include <Core/Exception.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
 
 #include <MeshUtils/Subdivision.h>
 
-class SubdivisionTest : public ::testing::Test {
+#include <TestBase.h>
+
+class SubdivisionTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
         typedef Subdivision::Ptr SubDivPtr;
 
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
         MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("face_area")
-                    .create());
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("face_area");
+            return r;
         }
 
         virtual SubDivPtr create_subdivision() {
@@ -70,8 +61,5 @@ class SubdivisionTest : public ::testing::Test {
             Float dist = (centroid1 - centroid2).norm();
             ASSERT_NEAR(0.0, dist, 1e-6);
         }
-
-    protected:
-        std::string m_data_dir;
 };
 

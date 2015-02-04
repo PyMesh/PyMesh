@@ -4,26 +4,17 @@
 #include <set>
 
 #include <Core/Exception.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
-#include <Misc/Environment.h>
 
 #include <MeshUtils/AttributeUtils.h>
 
-class AttributeUtilsTest : public ::testing::Test {
-    protected:
-        typedef Mesh::Ptr MeshPtr;
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
+#include <TestBase.h>
 
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(MeshFactory()
-                    .load_file(mesh_file)
-                    .with_attribute("face_area")
-                    .create());
+class AttributeUtilsTest : public TestBase {
+    protected:
+        virtual MeshPtr load_mesh(const std::string& filename) {
+            MeshPtr r = TestBase::load_mesh(filename);
+            r->add_attribute("face_area");
+            return r;
         }
 
         void check_vertex_field(MeshPtr mesh) {
@@ -71,9 +62,6 @@ class AttributeUtilsTest : public ::testing::Test {
             result = convert_to_face_attribute(*mesh.get(), voxel_field);
             ASSERT_FLOAT_EQ(num_faces, result.sum());
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(AttributeUtilsTest, VertexField) {
