@@ -21,6 +21,46 @@ class EigenPassMatrixWithoutCopyTest : public ::testing::Test {
             M(0, 0) += 1;
         }
 
+        template<typename Derived>
+        void chain_11(Eigen::MatrixBase<Derived>& M) {
+            pass1(M);
+        }
+
+        template<typename Derived>
+        void chain_12(Eigen::MatrixBase<Derived>& M) {
+            pass2(M);
+        }
+
+        template<typename Derived>
+        void chain_13(Eigen::MatrixBase<Derived>& M) {
+            pass3(M);
+        }
+
+        void chain_21(Eigen::Ref<MatrixFr> M) {
+            pass1(M);
+        }
+
+        void chain_22(Eigen::Ref<MatrixFr> M) {
+            pass2(M);
+        }
+
+        void chain_23(Eigen::Ref<MatrixFr> M) {
+            // The following does not compile
+            //pass3(M);
+        }
+
+        void chain_31(MatrixFr& M) {
+            pass1(M);
+        }
+
+        void chain_32(MatrixFr& M) {
+            pass2(M);
+        }
+
+        void chain_33(MatrixFr& M) {
+            pass3(M);
+        }
+
     protected:
         MatrixFr m_matrix;
 };
@@ -110,4 +150,46 @@ TEST_F(EigenPassMatrixWithoutCopyTest, PassMap) {
     // The following expression does not compile
     //pass3(m);
     //ASSERT_FLOAT_EQ(3.0, m(0, 0));
+}
+
+TEST_F(EigenPassMatrixWithoutCopyTest, Chain1) {
+    ASSERT_FLOAT_EQ(0.0, m_matrix(0, 0));
+
+    chain_11(m_matrix);
+    ASSERT_FLOAT_EQ(1.0, m_matrix(0, 0));
+
+    // The following expression does not compile
+    //chain_12(m_matrix);
+    //ASSERT_FLOAT_EQ(2.0, m_matrix(0, 0));
+
+    // The following expression does not compile
+    //chain_13(m_matrix);
+    //ASSERT_FLOAT_EQ(2.0, m_matrix(0, 0));
+}
+
+TEST_F(EigenPassMatrixWithoutCopyTest, Chain2) {
+    ASSERT_FLOAT_EQ(0.0, m_matrix(0, 0));
+
+    chain_21(m_matrix);
+    ASSERT_FLOAT_EQ(1.0, m_matrix(0, 0));
+
+    chain_22(m_matrix);
+    ASSERT_FLOAT_EQ(2.0, m_matrix(0, 0));
+
+    // The following expression does not compile
+    //chain_23(m_matrix);
+    //ASSERT_FLOAT_EQ(3.0, m_matrix(0, 0));
+}
+
+TEST_F(EigenPassMatrixWithoutCopyTest, Chain3) {
+    ASSERT_FLOAT_EQ(0.0, m_matrix(0, 0));
+
+    chain_31(m_matrix);
+    ASSERT_FLOAT_EQ(1.0, m_matrix(0, 0));
+
+    chain_32(m_matrix);
+    ASSERT_FLOAT_EQ(2.0, m_matrix(0, 0));
+
+    chain_33(m_matrix);
+    ASSERT_FLOAT_EQ(3.0, m_matrix(0, 0));
 }

@@ -1,51 +1,22 @@
 #pragma once
 
 #include <Core/Exception.h>
-#include <Misc/Environment.h>
-#include <Mesh.h>
-#include <MeshFactory.h>
 #include <IO/MeshWriter.h>
 
 #include <Envelope/VoxelGrid.h>
 
-class VoxelGridTest : public ::testing::Test {
+#include <TestBase.h>
+
+class VoxelGridTest : public TestBase {
     protected:
-        typedef Mesh::Ptr MeshPtr;
-
-        virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/data/";
-        }
-
-        MeshPtr load_mesh(const std::string& filename) {
-            std::string mesh_file = m_data_dir + filename;
-            return MeshPtr(
-                    MeshFactory()
-                    .load_file(mesh_file)
-                    .create());
-        }
-
         MeshPtr form_mesh(MatrixFr& vertices, MatrixIr& faces) {
-            const size_t dim = vertices.cols();
-            const size_t vertex_per_face = faces.cols();
-            VectorI voxels = VectorI::Zero(0);
-
-            VectorF flat_vertices = Eigen::Map<VectorF>(vertices.data(), vertices.rows()*vertices.cols());
-            VectorI flat_faces = Eigen::Map<VectorI>(faces.data(), faces.rows() * faces.cols());
-
-            return MeshFactory().load_data(
-                    flat_vertices, flat_faces,
-                    voxels, dim, vertex_per_face, 0).create_shared();
+            MatrixIr voxels(0, 0);
+            return load_data(vertices, faces, voxels);
         }
 
         void save_mesh(const std::string& filename, MeshPtr mesh) {
-            MeshWriter* writer = MeshWriter::create_writer(filename);
-            writer->write_mesh(*mesh);
-            delete writer;
+            write_mesh(filename, mesh);
         }
-
-    protected:
-        std::string m_data_dir;
 };
 
 TEST_F(VoxelGridTest, creation_2D) {

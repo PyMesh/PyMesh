@@ -29,10 +29,23 @@ class TestBase : public ::testing::Test {
         }
 
         virtual MeshPtr load_data(
-                VectorF& vertices, VectorI& faces, VectorI& voxels,
+                Eigen::Ref<VectorF> vertices,
+                Eigen::Ref<VectorI> faces,
+                Eigen::Ref<VectorI> voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
             return MeshFactory().load_data(vertices, faces, voxels,
                         dim, vertex_per_face, vertex_per_voxel).create_shared();
+        }
+
+        virtual MeshPtr load_data(
+                Eigen::Ref<MatrixFr> vertices,
+                Eigen::Ref<MatrixIr> faces,
+                Eigen::Ref<MatrixIr> voxels) {
+            return load_data(
+                    MatrixUtils::flatten<VectorF>(vertices),
+                    MatrixUtils::flatten<VectorI>(faces),
+                    MatrixUtils::flatten<VectorI>(voxels),
+                    vertices.cols(), faces.cols(), voxels.cols());
         }
 
         virtual void write_mesh(const std::string& mesh_file, MeshPtr mesh) {
