@@ -1,18 +1,11 @@
 #pragma once
 
-#include <algorithm>
-#include <string>
-
-#include <Core/EigenTypedef.h>
-#include <CSG/CSGEngine.h>
-#include <CSG/Cork/CorkEngine.h>
-
 #include "../CSGEngineTest.h"
 
-class CorkEngineTest : public CSGEngineTest {
+class IGLEngineTest : public CSGEngineTest {
     protected:
         CSGPtr get_disjoint_setting(MeshPtr mesh) {
-            CSGPtr cork_engine = CSGEngine::create("cork");
+            CSGPtr igl_engine = CSGEngine::create("igl");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -25,13 +18,13 @@ class CorkEngineTest : public CSGEngineTest {
             MatrixFr vertices_2 = vertices_1;
             translate(vertices_2, bbox_size * 2);
 
-            cork_engine->set_mesh_1(vertices_1, faces_1);
-            cork_engine->set_mesh_2(vertices_2, faces_1);
-            return cork_engine;
+            igl_engine->set_mesh_1(vertices_1, faces_1);
+            igl_engine->set_mesh_2(vertices_2, faces_1);
+            return igl_engine;
         }
 
         CSGPtr get_overlap_setting(MeshPtr mesh) {
-            CSGPtr cork_engine = CSGEngine::create("cork");
+            CSGPtr igl_engine = CSGEngine::create("igl");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -44,9 +37,9 @@ class CorkEngineTest : public CSGEngineTest {
             MatrixFr vertices_2 = vertices_1;
             translate(vertices_2, bbox_size * 0.5);
 
-            cork_engine->set_mesh_1(vertices_1, faces_1);
-            cork_engine->set_mesh_2(vertices_2, faces_1);
-            return cork_engine;
+            igl_engine->set_mesh_1(vertices_1, faces_1);
+            igl_engine->set_mesh_2(vertices_2, faces_1);
+            return igl_engine;
         }
 
         CSGPtr get_epsilon_box_setting(
@@ -56,19 +49,19 @@ class CorkEngineTest : public CSGEngineTest {
             MatrixIr box_faces;
             generate_epsilon_box(p, box_vertices, box_faces, EPS);
 
-            CSGPtr cork_engine = CSGEngine::create("cork");
-            cork_engine->set_mesh_1(vertices, faces);
-            cork_engine->set_mesh_2(box_vertices, box_faces);
-            cork_engine->compute_intersection();
-            return cork_engine;
+            CSGPtr igl_engine = CSGEngine::create("igl");
+            igl_engine->set_mesh_1(vertices, faces);
+            igl_engine->set_mesh_2(box_vertices, box_faces);
+            igl_engine->compute_intersection();
+            return igl_engine;
         }
 
         void assert_interior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            CSGPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
-            const MatrixFr& vts = cork_engine->get_vertices();
+            const MatrixFr& vts = igl_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
             VectorF bbox_min = vts.colwise().minCoeff();
             VectorF bbox_size = bbox_max - bbox_min;
@@ -80,9 +73,9 @@ class CorkEngineTest : public CSGEngineTest {
         void assert_on_boundary(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            CSGPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
-            const MatrixFr& vts = cork_engine->get_vertices();
+            const MatrixFr& vts = igl_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
             VectorF bbox_min = vts.colwise().minCoeff();
             VectorF bbox_size = bbox_max - bbox_min;
@@ -98,8 +91,8 @@ class CorkEngineTest : public CSGEngineTest {
         void assert_exterior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
-            ASSERT_EQ(0, cork_engine->get_vertices().rows());
+            CSGPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            ASSERT_EQ(0, igl_engine->get_vertices().rows());
         }
 
         void generate_epsilon_box(const VectorF& p,
@@ -134,14 +127,14 @@ class CorkEngineTest : public CSGEngineTest {
         }
 };
 
-TEST_F(CorkEngineTest, disjoint_union) {
+TEST_F(IGLEngineTest, disjoint_union) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
-    cork_engine->compute_union();
+    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    igl_engine->compute_union();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
@@ -149,27 +142,27 @@ TEST_F(CorkEngineTest, disjoint_union) {
     ASSERT_EQ(num_faces * 2, faces.rows());
 }
 
-TEST_F(CorkEngineTest, disjoint_intersection) {
+TEST_F(IGLEngineTest, disjoint_intersection) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
-    cork_engine->compute_intersection();
+    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    igl_engine->compute_intersection();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     ASSERT_EQ(0, vertices.rows());
     ASSERT_EQ(0, faces.rows());
 }
 
-TEST_F(CorkEngineTest, disjoint_difference) {
+TEST_F(IGLEngineTest, disjoint_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
-    cork_engine->compute_difference();
+    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    igl_engine->compute_difference();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
@@ -177,14 +170,14 @@ TEST_F(CorkEngineTest, disjoint_difference) {
     ASSERT_EQ(num_faces, faces.rows());
 }
 
-TEST_F(CorkEngineTest, disjoint_symmetric_difference) {
+TEST_F(IGLEngineTest, disjoint_symmetric_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
-    cork_engine->compute_symmetric_difference();
+    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    igl_engine->compute_symmetric_difference();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
@@ -192,14 +185,14 @@ TEST_F(CorkEngineTest, disjoint_symmetric_difference) {
     ASSERT_EQ(num_faces * 2, faces.rows());
 }
 
-TEST_F(CorkEngineTest, overlap_union) {
+TEST_F(IGLEngineTest, overlap_union) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
-    cork_engine->compute_union();
+    CSGPtr igl_engine = get_overlap_setting(mesh);
+    igl_engine->compute_union();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
@@ -211,14 +204,14 @@ TEST_F(CorkEngineTest, overlap_union) {
     assert_on_boundary(vertices, faces, -corner);
 }
 
-TEST_F(CorkEngineTest, overlap_intersection) {
+TEST_F(IGLEngineTest, overlap_intersection) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
-    cork_engine->compute_intersection();
+    CSGPtr igl_engine = get_overlap_setting(mesh);
+    igl_engine->compute_intersection();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
@@ -230,14 +223,14 @@ TEST_F(CorkEngineTest, overlap_intersection) {
     assert_exterior(vertices, faces, -corner);
 }
 
-TEST_F(CorkEngineTest, overlap_difference) {
+TEST_F(IGLEngineTest, overlap_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
-    cork_engine->compute_difference();
+    CSGPtr igl_engine = get_overlap_setting(mesh);
+    igl_engine->compute_difference();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     VectorF origin = VectorF::Zero(3);
     VectorF corner = VectorF::Ones(3);
@@ -246,14 +239,14 @@ TEST_F(CorkEngineTest, overlap_difference) {
     assert_on_boundary(vertices, faces, -corner);
 }
 
-TEST_F(CorkEngineTest, overlap_symmetric_difference) {
+TEST_F(IGLEngineTest, overlap_symmetric_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
-    cork_engine->compute_symmetric_difference();
+    CSGPtr igl_engine = get_overlap_setting(mesh);
+    igl_engine->compute_symmetric_difference();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
+    const MatrixFr& vertices = igl_engine->get_vertices();
+    const MatrixIr& faces = igl_engine->get_faces();
 
     VectorF origin = VectorF::Zero(3);
     VectorF corner = VectorF::Ones(3);
@@ -262,7 +255,7 @@ TEST_F(CorkEngineTest, overlap_symmetric_difference) {
     assert_on_boundary(vertices, faces, -corner);
 }
 
-TEST_F(CorkEngineTest, open_surface) {
+TEST_F(IGLEngineTest, open_surface) {
     MeshPtr mesh = load_mesh("cube.obj");
     MatrixFr box_vertices = extract_vertices(mesh);
     MatrixIr box_faces = extract_faces(mesh);
@@ -274,15 +267,10 @@ TEST_F(CorkEngineTest, open_surface) {
                     0.0, 9.0, 0.0;
     tri_faces << 0, 1, 2;
 
-    CSGPtr cork_engine = CSGEngine::create("cork");
-    cork_engine->set_mesh_1(box_vertices, box_faces);
-    cork_engine->set_mesh_2(tri_vertices, tri_faces);
-    cork_engine->compute_intersection();
+    CSGPtr igl_engine = CSGEngine::create("igl");
+    igl_engine->set_mesh_1(box_vertices, box_faces);
+    igl_engine->set_mesh_2(tri_vertices, tri_faces);
+    //igl_engine->compute_intersection();
 
-    const MatrixFr& vertices = cork_engine->get_vertices();
-    const MatrixIr& faces = cork_engine->get_faces();
-    save_mesh("open.obj", vertices, faces);
-
-    // Cork does not handle intersecting closed surface with open surface.
-    //EXPECT_EQ(2, faces.rows());
+    // LIBIGL does not handle open surface.
 }

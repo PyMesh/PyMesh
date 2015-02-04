@@ -6,6 +6,9 @@
 #ifdef WITH_CLIPPER
 #include "Clipper/ClipperEngineTest.h"
 #endif
+#ifdef WITH_IGL
+#include "IGL/IGLEngineTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
