@@ -4,13 +4,13 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
-class CSGEngine {
+class BooleanEngine {
     public:
-        typedef std::shared_ptr<CSGEngine> Ptr;
+        typedef std::shared_ptr<BooleanEngine> Ptr;
         static Ptr create(const std::string& engine_name);
 
     public:
-        virtual ~CSGEngine() {}
+        virtual ~BooleanEngine() {}
 
     public:
         void set_mesh_1(const MatrixFr& vertices, const MatrixIr& faces) {

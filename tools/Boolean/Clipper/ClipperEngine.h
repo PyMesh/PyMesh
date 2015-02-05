@@ -1,9 +1,9 @@
 #pragma once
 
-#include <CSG/CSGEngine.h>
+#include <Boolean/BooleanEngine.h>
 #include <clipper.hpp>
 
-class ClipperEngine : public CSGEngine {
+class ClipperEngine : public BooleanEngine {
     public:
         virtual ~ClipperEngine() {}
 

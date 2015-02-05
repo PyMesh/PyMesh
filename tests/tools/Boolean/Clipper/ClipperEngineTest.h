@@ -1,12 +1,12 @@
 #pragma once
 
-#include <CSG/Clipper/ClipperEngine.h>
-#include "../CSGEngineTest.h"
+#include <Boolean/Clipper/ClipperEngine.h>
+#include "../BooleanEngineTest.h"
 
-class ClipperEngineTest : public CSGEngineTest {
+class ClipperEngineTest : public BooleanEngineTest {
     protected:
-        CSGPtr get_disjoint_setting(MeshPtr mesh) {
-            CSGPtr clipper_engine = CSGEngine::create("clipper");
+        BooleanPtr get_disjoint_setting(MeshPtr mesh) {
+            BooleanPtr clipper_engine = BooleanEngine::create("clipper");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -24,8 +24,8 @@ class ClipperEngineTest : public CSGEngineTest {
             return clipper_engine;
         }
 
-        CSGPtr get_overlap_setting(MeshPtr mesh) {
-            CSGPtr clipper_engine = CSGEngine::create("clipper");
+        BooleanPtr get_overlap_setting(MeshPtr mesh) {
+            BooleanPtr clipper_engine = BooleanEngine::create("clipper");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -43,14 +43,14 @@ class ClipperEngineTest : public CSGEngineTest {
             return clipper_engine;
         }
 
-        CSGPtr get_epsilon_box_setting(
+        BooleanPtr get_epsilon_box_setting(
                 const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p, const Float EPS=0.1) {
             MatrixFr box_vertices;
             MatrixIr box_faces;
             generate_epsilon_box(p, box_vertices, box_faces, EPS);
 
-            CSGPtr clipper_engine = CSGEngine::create("clipper");
+            BooleanPtr clipper_engine = BooleanEngine::create("clipper");
             clipper_engine->set_mesh_1(vertices, faces);
             clipper_engine->set_mesh_2(box_vertices, box_faces);
             clipper_engine->compute_intersection();
@@ -60,7 +60,7 @@ class ClipperEngineTest : public CSGEngineTest {
         void assert_interior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr clipper_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr clipper_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
             const MatrixFr& vts = clipper_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
@@ -74,7 +74,7 @@ class ClipperEngineTest : public CSGEngineTest {
         void assert_on_boundary(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr clipper_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr clipper_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
             const MatrixFr& vts = clipper_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
@@ -92,7 +92,7 @@ class ClipperEngineTest : public CSGEngineTest {
         void assert_exterior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr clipper_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr clipper_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
             ASSERT_EQ(0, clipper_engine->get_vertices().rows());
         }
 
@@ -118,7 +118,7 @@ class ClipperEngineTest : public CSGEngineTest {
 TEST_F(ClipperEngineTest, disjoint_union) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_disjoint_setting(mesh);
+    BooleanPtr clipper_engine = get_disjoint_setting(mesh);
     clipper_engine->compute_union();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -133,7 +133,7 @@ TEST_F(ClipperEngineTest, disjoint_union) {
 TEST_F(ClipperEngineTest, disjoint_intersection) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_disjoint_setting(mesh);
+    BooleanPtr clipper_engine = get_disjoint_setting(mesh);
     clipper_engine->compute_intersection();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -146,7 +146,7 @@ TEST_F(ClipperEngineTest, disjoint_intersection) {
 TEST_F(ClipperEngineTest, disjoint_difference) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_disjoint_setting(mesh);
+    BooleanPtr clipper_engine = get_disjoint_setting(mesh);
     clipper_engine->compute_difference();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -161,7 +161,7 @@ TEST_F(ClipperEngineTest, disjoint_difference) {
 TEST_F(ClipperEngineTest, disjoint_symmetric_difference) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_disjoint_setting(mesh);
+    BooleanPtr clipper_engine = get_disjoint_setting(mesh);
     clipper_engine->compute_symmetric_difference();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -176,7 +176,7 @@ TEST_F(ClipperEngineTest, disjoint_symmetric_difference) {
 TEST_F(ClipperEngineTest, overlap_union) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_overlap_setting(mesh);
+    BooleanPtr clipper_engine = get_overlap_setting(mesh);
     clipper_engine->compute_union();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -195,7 +195,7 @@ TEST_F(ClipperEngineTest, overlap_union) {
 TEST_F(ClipperEngineTest, overlap_intersection) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_overlap_setting(mesh);
+    BooleanPtr clipper_engine = get_overlap_setting(mesh);
     clipper_engine->compute_intersection();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -214,7 +214,7 @@ TEST_F(ClipperEngineTest, overlap_intersection) {
 TEST_F(ClipperEngineTest, overlap_difference) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_overlap_setting(mesh);
+    BooleanPtr clipper_engine = get_overlap_setting(mesh);
     clipper_engine->compute_difference();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
@@ -230,7 +230,7 @@ TEST_F(ClipperEngineTest, overlap_difference) {
 TEST_F(ClipperEngineTest, overlap_symmetric_difference) {
     MeshPtr mesh = load_mesh("square_2D.obj");
 
-    CSGPtr clipper_engine = get_overlap_setting(mesh);
+    BooleanPtr clipper_engine = get_overlap_setting(mesh);
     clipper_engine->compute_symmetric_difference();
 
     const MatrixFr& vertices = clipper_engine->get_vertices();

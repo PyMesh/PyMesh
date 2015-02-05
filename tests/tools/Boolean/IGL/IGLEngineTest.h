@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../CSGEngineTest.h"
+#include "../BooleanEngineTest.h"
 
-class IGLEngineTest : public CSGEngineTest {
+class IGLEngineTest : public BooleanEngineTest {
     protected:
-        CSGPtr get_disjoint_setting(MeshPtr mesh) {
-            CSGPtr igl_engine = CSGEngine::create("igl");
+        BooleanPtr get_disjoint_setting(MeshPtr mesh) {
+            BooleanPtr igl_engine = BooleanEngine::create("igl");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -23,8 +23,8 @@ class IGLEngineTest : public CSGEngineTest {
             return igl_engine;
         }
 
-        CSGPtr get_overlap_setting(MeshPtr mesh) {
-            CSGPtr igl_engine = CSGEngine::create("igl");
+        BooleanPtr get_overlap_setting(MeshPtr mesh) {
+            BooleanPtr igl_engine = BooleanEngine::create("igl");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -42,14 +42,14 @@ class IGLEngineTest : public CSGEngineTest {
             return igl_engine;
         }
 
-        CSGPtr get_epsilon_box_setting(
+        BooleanPtr get_epsilon_box_setting(
                 const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p, const Float EPS=0.1) {
             MatrixFr box_vertices;
             MatrixIr box_faces;
             generate_epsilon_box(p, box_vertices, box_faces, EPS);
 
-            CSGPtr igl_engine = CSGEngine::create("igl");
+            BooleanPtr igl_engine = BooleanEngine::create("igl");
             igl_engine->set_mesh_1(vertices, faces);
             igl_engine->set_mesh_2(box_vertices, box_faces);
             igl_engine->compute_intersection();
@@ -59,7 +59,7 @@ class IGLEngineTest : public CSGEngineTest {
         void assert_interior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
             const MatrixFr& vts = igl_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
@@ -73,7 +73,7 @@ class IGLEngineTest : public CSGEngineTest {
         void assert_on_boundary(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
             const MatrixFr& vts = igl_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
@@ -91,7 +91,7 @@ class IGLEngineTest : public CSGEngineTest {
         void assert_exterior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr igl_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
             ASSERT_EQ(0, igl_engine->get_vertices().rows());
         }
 
@@ -130,7 +130,7 @@ class IGLEngineTest : public CSGEngineTest {
 TEST_F(IGLEngineTest, disjoint_union) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    BooleanPtr igl_engine = get_disjoint_setting(mesh);
     igl_engine->compute_union();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -145,7 +145,7 @@ TEST_F(IGLEngineTest, disjoint_union) {
 TEST_F(IGLEngineTest, disjoint_intersection) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    BooleanPtr igl_engine = get_disjoint_setting(mesh);
     igl_engine->compute_intersection();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -158,7 +158,7 @@ TEST_F(IGLEngineTest, disjoint_intersection) {
 TEST_F(IGLEngineTest, disjoint_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    BooleanPtr igl_engine = get_disjoint_setting(mesh);
     igl_engine->compute_difference();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -173,7 +173,7 @@ TEST_F(IGLEngineTest, disjoint_difference) {
 TEST_F(IGLEngineTest, disjoint_symmetric_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_disjoint_setting(mesh);
+    BooleanPtr igl_engine = get_disjoint_setting(mesh);
     igl_engine->compute_symmetric_difference();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -188,7 +188,7 @@ TEST_F(IGLEngineTest, disjoint_symmetric_difference) {
 TEST_F(IGLEngineTest, overlap_union) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_overlap_setting(mesh);
+    BooleanPtr igl_engine = get_overlap_setting(mesh);
     igl_engine->compute_union();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -207,7 +207,7 @@ TEST_F(IGLEngineTest, overlap_union) {
 TEST_F(IGLEngineTest, overlap_intersection) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_overlap_setting(mesh);
+    BooleanPtr igl_engine = get_overlap_setting(mesh);
     igl_engine->compute_intersection();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -226,7 +226,7 @@ TEST_F(IGLEngineTest, overlap_intersection) {
 TEST_F(IGLEngineTest, overlap_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_overlap_setting(mesh);
+    BooleanPtr igl_engine = get_overlap_setting(mesh);
     igl_engine->compute_difference();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -242,7 +242,7 @@ TEST_F(IGLEngineTest, overlap_difference) {
 TEST_F(IGLEngineTest, overlap_symmetric_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr igl_engine = get_overlap_setting(mesh);
+    BooleanPtr igl_engine = get_overlap_setting(mesh);
     igl_engine->compute_symmetric_difference();
 
     const MatrixFr& vertices = igl_engine->get_vertices();
@@ -267,7 +267,7 @@ TEST_F(IGLEngineTest, open_surface) {
                     0.0, 9.0, 0.0;
     tri_faces << 0, 1, 2;
 
-    CSGPtr igl_engine = CSGEngine::create("igl");
+    BooleanPtr igl_engine = BooleanEngine::create("igl");
     igl_engine->set_mesh_1(box_vertices, box_faces);
     igl_engine->set_mesh_2(tri_vertices, tri_faces);
     //igl_engine->compute_intersection();

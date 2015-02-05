@@ -1,10 +1,10 @@
 #pragma once
 
-#include <CSG/CSGEngine.h>
+#include <Boolean/BooleanEngine.h>
 
-class IGLEngine : public CSGEngine {
+class CorkEngine : public BooleanEngine {
     public:
-        virtual ~IGLEngine() {}
+        virtual ~CorkEngine();
 
     public:
         virtual void compute_union();

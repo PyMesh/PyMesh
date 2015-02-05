@@ -32,7 +32,7 @@ ADD_SUBDIRECTORY(Parameters)
 
 ADD_LIBRARY(lib_wires SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(lib_wires Mesh lib_MeshUtils lib_convex_hull
-    lib_triangle_wrapper lib_csg lib_tetgen_wrapper)
+    lib_triangle_wrapper lib_boolean lib_tetgen_wrapper)
 SET_TARGET_PROPERTIES(lib_wires PROPERTIES OUTPUT_NAME "wires")
 
 IF(NOT WITHOUT_SWIG)

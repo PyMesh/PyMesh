@@ -4,15 +4,15 @@
 #include <string>
 
 #include <Core/EigenTypedef.h>
-#include <CSG/CSGEngine.h>
-#include <CSG/Cork/CorkEngine.h>
+#include <Boolean/BooleanEngine.h>
+#include <Boolean/Cork/CorkEngine.h>
 
-#include "../CSGEngineTest.h"
+#include "../BooleanEngineTest.h"
 
-class CorkEngineTest : public CSGEngineTest {
+class CorkEngineTest : public BooleanEngineTest {
     protected:
-        CSGPtr get_disjoint_setting(MeshPtr mesh) {
-            CSGPtr cork_engine = CSGEngine::create("cork");
+        BooleanPtr get_disjoint_setting(MeshPtr mesh) {
+            BooleanPtr cork_engine = BooleanEngine::create("cork");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -30,8 +30,8 @@ class CorkEngineTest : public CSGEngineTest {
             return cork_engine;
         }
 
-        CSGPtr get_overlap_setting(MeshPtr mesh) {
-            CSGPtr cork_engine = CSGEngine::create("cork");
+        BooleanPtr get_overlap_setting(MeshPtr mesh) {
+            BooleanPtr cork_engine = BooleanEngine::create("cork");
             const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
@@ -49,14 +49,14 @@ class CorkEngineTest : public CSGEngineTest {
             return cork_engine;
         }
 
-        CSGPtr get_epsilon_box_setting(
+        BooleanPtr get_epsilon_box_setting(
                 const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p, const Float EPS=0.1) {
             MatrixFr box_vertices;
             MatrixIr box_faces;
             generate_epsilon_box(p, box_vertices, box_faces, EPS);
 
-            CSGPtr cork_engine = CSGEngine::create("cork");
+            BooleanPtr cork_engine = BooleanEngine::create("cork");
             cork_engine->set_mesh_1(vertices, faces);
             cork_engine->set_mesh_2(box_vertices, box_faces);
             cork_engine->compute_intersection();
@@ -66,7 +66,7 @@ class CorkEngineTest : public CSGEngineTest {
         void assert_interior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
             const MatrixFr& vts = cork_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
@@ -80,7 +80,7 @@ class CorkEngineTest : public CSGEngineTest {
         void assert_on_boundary(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
 
             const MatrixFr& vts = cork_engine->get_vertices();
             VectorF bbox_max = vts.colwise().maxCoeff();
@@ -98,7 +98,7 @@ class CorkEngineTest : public CSGEngineTest {
         void assert_exterior(const MatrixFr& vertices, const MatrixIr& faces,
                 const VectorF& p) {
             const Float EPS = 0.1;
-            CSGPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
+            BooleanPtr cork_engine = get_epsilon_box_setting(vertices, faces, p, EPS);
             ASSERT_EQ(0, cork_engine->get_vertices().rows());
         }
 
@@ -137,7 +137,7 @@ class CorkEngineTest : public CSGEngineTest {
 TEST_F(CorkEngineTest, disjoint_union) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
+    BooleanPtr cork_engine = get_disjoint_setting(mesh);
     cork_engine->compute_union();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -152,7 +152,7 @@ TEST_F(CorkEngineTest, disjoint_union) {
 TEST_F(CorkEngineTest, disjoint_intersection) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
+    BooleanPtr cork_engine = get_disjoint_setting(mesh);
     cork_engine->compute_intersection();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -165,7 +165,7 @@ TEST_F(CorkEngineTest, disjoint_intersection) {
 TEST_F(CorkEngineTest, disjoint_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
+    BooleanPtr cork_engine = get_disjoint_setting(mesh);
     cork_engine->compute_difference();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -180,7 +180,7 @@ TEST_F(CorkEngineTest, disjoint_difference) {
 TEST_F(CorkEngineTest, disjoint_symmetric_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_disjoint_setting(mesh);
+    BooleanPtr cork_engine = get_disjoint_setting(mesh);
     cork_engine->compute_symmetric_difference();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -195,7 +195,7 @@ TEST_F(CorkEngineTest, disjoint_symmetric_difference) {
 TEST_F(CorkEngineTest, overlap_union) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
+    BooleanPtr cork_engine = get_overlap_setting(mesh);
     cork_engine->compute_union();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -214,7 +214,7 @@ TEST_F(CorkEngineTest, overlap_union) {
 TEST_F(CorkEngineTest, overlap_intersection) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
+    BooleanPtr cork_engine = get_overlap_setting(mesh);
     cork_engine->compute_intersection();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -233,7 +233,7 @@ TEST_F(CorkEngineTest, overlap_intersection) {
 TEST_F(CorkEngineTest, overlap_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
+    BooleanPtr cork_engine = get_overlap_setting(mesh);
     cork_engine->compute_difference();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -249,7 +249,7 @@ TEST_F(CorkEngineTest, overlap_difference) {
 TEST_F(CorkEngineTest, overlap_symmetric_difference) {
     MeshPtr mesh = load_mesh("cube.obj");
 
-    CSGPtr cork_engine = get_overlap_setting(mesh);
+    BooleanPtr cork_engine = get_overlap_setting(mesh);
     cork_engine->compute_symmetric_difference();
 
     const MatrixFr& vertices = cork_engine->get_vertices();
@@ -274,7 +274,7 @@ TEST_F(CorkEngineTest, open_surface) {
                     0.0, 9.0, 0.0;
     tri_faces << 0, 1, 2;
 
-    CSGPtr cork_engine = CSGEngine::create("cork");
+    BooleanPtr cork_engine = BooleanEngine::create("cork");
     cork_engine->set_mesh_1(box_vertices, box_faces);
     cork_engine->set_mesh_2(tri_vertices, tri_faces);
     cork_engine->compute_intersection();

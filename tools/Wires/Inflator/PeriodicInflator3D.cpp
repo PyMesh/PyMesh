@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-#include <CSG/CSGEngine.h>
+#include <Boolean/BooleanEngine.h>
 #include <Math/ZSparseMatrix.h>
 #include <MeshFactory.h>
 
@@ -66,13 +66,13 @@ void PeriodicInflator3D::clip_phantom_mesh() {
     MatrixIr box_faces;
     create_box(bbox_min, bbox_max, box_vertices, box_faces);
 
-    CSGEngine::Ptr csg_engine = CSGEngine::create("cork");
-    csg_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
-    csg_engine->set_mesh_2(box_vertices, box_faces);
-    csg_engine->compute_intersection();
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cork");
+    boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
+    boolean_engine->set_mesh_2(box_vertices, box_faces);
+    boolean_engine->compute_intersection();
 
-    m_vertices = csg_engine->get_vertices();
-    m_faces = csg_engine->get_faces();
+    m_vertices = boolean_engine->get_vertices();
+    m_faces = boolean_engine->get_faces();
 }
 
 void PeriodicInflator3D::update_face_sources() {

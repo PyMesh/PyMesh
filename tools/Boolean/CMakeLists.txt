@@ -16,9 +16,9 @@ IF (CORK_FOUND AND GMP_FOUND)
     ADD_DEFINITIONS(-DWITH_CORK)
     ADD_SUBDIRECTORY(Cork)
 ELSEIF (NOT CORK_FOUND)
-    MESSAGE(WARNING "Cork is missing.  Cork CSG support is skipped")
+    MESSAGE(WARNING "Cork is missing.  Cork boolean support is skipped")
 ELSEIF (NOT GMP_FOUND)
-    MESSAGE(WARNING "GMP is missing.  Cork CSG support is skipped")
+    MESSAGE(WARNING "GMP is missing.  Cork boolean support is skipped")
 ENDIF (CORK_FOUND AND GMP_FOUND)
 
 # Clipper
@@ -28,7 +28,7 @@ IF (CLIPPER_FOUND)
     ADD_DEFINITIONS(-DWITH_CLIPPER)
     ADD_SUBDIRECTORY(Clipper)
 ELSE(CLIPPER_FOUND)
-    MESSAGE(WARNING "Clipper is missing. Clipper CSG support is skipped")
+    MESSAGE(WARNING "Clipper is missing. Clipper boolean support is skipped")
 ENDIF(CLIPPER_FOUND)
 
 # IGL and CGAL
@@ -42,28 +42,28 @@ IF (LIBIGL_FOUND AND CGAL_FOUND)
     LIST(APPEND DEPENDENT_LIBS ${CGAL_LIBRARIES})
     ADD_SUBDIRECTORY(IGL)
 ELSEIF(NOT LIBIGL_FOUND)
-    MESSAGE(WARNING "libigl is missing, libigl CSG support is skipped")
+    MESSAGE(WARNING "libigl is missing, libigl boolean support is skipped")
 ELSEIF(NOT CGAL_FOUND)
-    MESSAGE(WARNING "CGAL is missing, libigl CSG support is skipped")
+    MESSAGE(WARNING "CGAL is missing, libigl boolean support is skipped")
 ENDIF (LIBIGL_FOUND AND CGAL_FOUND)
 
-ADD_LIBRARY(lib_csg SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_csg PROPERTIES OUTPUT_NAME "csg")
-TARGET_LINK_LIBRARIES(lib_csg Mesh lib_MeshUtils lib_triangle_wrapper ${DEPENDENT_LIBS})
+ADD_LIBRARY(lib_boolean SHARED ${SRC_FILES} ${INC_FILES})
+SET_TARGET_PROPERTIES(lib_boolean PROPERTIES OUTPUT_NAME "boolean")
+TARGET_LINK_LIBRARIES(lib_boolean Mesh lib_MeshUtils lib_triangle_wrapper ${DEPENDENT_LIBS})
 
 IF(NOT WITHOUT_SWIG)
-    set(SWG_FILES PyCSG.i)
+    set(SWG_FILES PyBoolean.i)
 
     # Generate wrapper for python
     SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
     SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-    SWIG_ADD_MODULE(PyCSG python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyCSG ${PYTHON_LIBRARIES} Mesh lib_MeshUtils lib_csg
-        ${DEPENDENT_LIBS})
+    SWIG_ADD_MODULE(PyBoolean python ${SWG_FILES} ${INC_FILES})
+    SWIG_LINK_LIBRARIES(PyBoolean ${PYTHON_LIBRARIES} Mesh lib_MeshUtils
+        lib_boolean ${DEPENDENT_LIBS})
 
     # Boudle lib, swig wrapper into a single target.
-    # Usage: make csg
-    ADD_CUSTOM_TARGET(csg DEPENDS lib_csg _PyCSG)
+    # Usage: make boolean
+    ADD_CUSTOM_TARGET(boolean DEPENDS lib_boolean _PyBoolean)
 ELSE(NOT WITHOUT_SWIG)
-    ADD_CUSTOM_TARGET(csg DEPENDS lib_csg)
+    ADD_CUSTOM_TARGET(boolean DEPENDS lib_boolean)
 ENDIF(NOT WITHOUT_SWIG)

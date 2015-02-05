@@ -1,6 +1,6 @@
 #include "PeriodicInflator2D.h"
 #include <Misc/TriBox2D.h>
-#include <CSG/CSGEngine.h>
+#include <Boolean/BooleanEngine.h>
 
 #include <iostream>
 #include <list>
@@ -59,12 +59,12 @@ namespace PeriodicInflator2DHelper {
         MatrixIr tri_faces(1, 3);
         tri_faces << 0, 1, 2;
 
-        CSGEngine::Ptr csg_engine = CSGEngine::create("clipper");
-        csg_engine->set_mesh_1(tri_vertices, tri_faces);
-        csg_engine->set_mesh_2(box_vertices, box_faces);
-        csg_engine->compute_intersection();
-        vertices = csg_engine->get_vertices();
-        faces = csg_engine->get_faces();
+        BooleanEngine::Ptr boolean_engine = BooleanEngine::create("clipper");
+        boolean_engine->set_mesh_1(tri_vertices, tri_faces);
+        boolean_engine->set_mesh_2(box_vertices, box_faces);
+        boolean_engine->compute_intersection();
+        vertices = boolean_engine->get_vertices();
+        faces = boolean_engine->get_faces();
     }
 
     template<typename M, typename T>
