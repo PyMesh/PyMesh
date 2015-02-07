@@ -130,3 +130,10 @@ Eigen::Map<const T> MatrixUtils::flatten(const Eigen::MatrixBase<Derived>& matri
     return Eigen::Map<const T>(static_cast<const Derived&>(matrix).data(), matrix.rows() * matrix.cols());
 }
 
+template<typename T>
+T MatrixUtils::range(const size_t n) {
+    T result(n);
+    for (size_t i=0; i<n; i++) { result[i] = i; }
+    return result;
+}
+

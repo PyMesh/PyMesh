@@ -60,6 +60,13 @@ namespace MatrixUtils {
 
     template<typename T, typename Derived>
     Eigen::Map<const T> flatten(const Eigen::MatrixBase<Derived>& matrix);
+
+    /**
+     * Return [0, ..., n-1] in type T.  Expect T(n) and T[i] to work exactly as
+     * std::vector.
+     */
+    template<typename T>
+    T range(const size_t n);
 }
 
 #include "MatrixUtils.inl"
