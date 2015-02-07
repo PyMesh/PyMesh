@@ -6,18 +6,6 @@
 
 class IsolatedVertexRemovalTest : public TestBase {
     protected:
-        void assert_matrix_eq(const MatrixFr& m1, const MatrixFr& m2) {
-            MatrixFr diff = m1 - m2;
-            ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
-            ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
-        }
-
-        void assert_matrix_eq(const MatrixIr& m1, const MatrixIr& m2) {
-            MatrixIr diff = m1 - m2;
-            ASSERT_EQ(0, diff.minCoeff());
-            ASSERT_EQ(0, diff.maxCoeff());
-        }
-
         void add_extra_vertex_and_check(MeshPtr mesh) {
             const size_t dim = mesh->get_dim();
             const size_t num_vertices = mesh->get_num_vertices();
@@ -39,9 +27,13 @@ class IsolatedVertexRemovalTest : public TestBase {
 
             MatrixFr result_vertices = remover.get_vertices();
             MatrixIr result_faces = remover.get_faces();
+            VectorI  ori_vertex_indices = remover.get_ori_vertex_indices();
+            VectorI  tar_vertex_indices =
+                MatrixUtils::range<VectorI>(num_vertices).array() + 1;
 
-            assert_matrix_eq(vertices, result_vertices);
-            assert_matrix_eq(faces, result_faces);
+            ASSERT_MATRIX_EQ(vertices, result_vertices);
+            ASSERT_MATRIX_EQ(faces, result_faces);
+            ASSERT_MATRIX_EQ(tar_vertex_indices, ori_vertex_indices);
         }
 };
 

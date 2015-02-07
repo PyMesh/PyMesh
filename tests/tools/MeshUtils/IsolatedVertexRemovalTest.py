@@ -25,7 +25,7 @@ class IsolatedVertexRemovalTest(unittest.TestCase):
         self.assertAlmostEqual(0.0, np.amax(diff));
         self.assertAlmostEqual(0.0, np.amin(diff));
 
-    def add_extra_vertex_and_check(self, mesh):
+    def get_raw_data(self, mesh):
         dim = mesh.get_dim();
         num_vertices = mesh.get_num_vertices();
         num_faces = mesh.get_num_faces();
@@ -33,16 +33,33 @@ class IsolatedVertexRemovalTest(unittest.TestCase):
         vertices = mesh.get_vertices().reshape((num_vertices, dim), order="C");
         faces = mesh.get_faces().reshape((num_faces, vertex_per_face), order="C");
 
+        return vertices, faces;
+
+    def add_extra_vertex(self, vertices, faces):
+        dim = vertices.shape[1];
         modified_vertices = np.vstack((np.ones(dim), vertices));
         modified_faces = faces + 1;
 
-        remover = PyMeshUtils.IsolatedVertexRemoval(modified_vertices, modified_faces);
+        return modified_vertices, modified_faces;
+
+    def run_remover(self, vertices, faces):
+        remover = PyMeshUtils.IsolatedVertexRemoval(vertices, faces);
         remover.run();
         result_vertices = remover.get_vertices();
         result_faces = remover.get_faces();
 
-        self.assert_matrix_eq(vertices, result_vertices);
-        self.assert_matrix_eq(faces, result_faces);
+        # Results should be vaid after remover object is deleted.
+        return result_vertices, result_faces;
+
+    def add_extra_vertex_and_check(self, mesh):
+        ori_vertices, ori_faces = self.get_raw_data(mesh);
+        modified_vertices, modified_faces = self.add_extra_vertex(
+                ori_vertices, ori_faces);
+        result_vertices, result_faces = self.run_remover(
+                modified_vertices, modified_faces);
+
+        self.assert_matrix_eq(ori_vertices, result_vertices);
+        self.assert_matrix_eq(ori_faces, result_faces);
 
     def test_2D(self):
         mesh = self.load_mesh("square_2D.obj");
@@ -51,3 +68,4 @@ class IsolatedVertexRemovalTest(unittest.TestCase):
     def test_3D(self):
         mesh = self.load_mesh("cube.msh");
         self.add_extra_vertex_and_check(mesh);
+
