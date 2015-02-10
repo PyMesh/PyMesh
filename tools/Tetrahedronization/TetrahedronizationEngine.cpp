@@ -73,6 +73,12 @@ void TetrahedronizationEngine::compute_ave_edge_length() {
 }
 
 void TetrahedronizationEngine::auto_compute_meshing_params() {
+    if (m_edge_size < 0.0) {
+       m_edge_size = m_ave_edge_length * 2;
+#ifndef NDEBUG
+       std::cout << "using default edge size: " << m_edge_size << std::endl;
+#endif
+    }
     if (m_face_size < 0.0) {
         m_face_size = m_ave_edge_length;
 #ifndef NDEBUG

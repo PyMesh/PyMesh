@@ -11,7 +11,7 @@ class TetrahedronizationEngine {
 
     public:
         TetrahedronizationEngine() :
-            m_edge_size(1e6), // edge_size needs to be positive to preserve 1D feature.
+            m_edge_size(-1.0),
             m_face_size(-1.0),
             m_cell_radius_edge_ratio(2),
             m_cell_size(-1.0),
