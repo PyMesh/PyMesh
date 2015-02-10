@@ -150,13 +150,14 @@ template <class HDS>
 using namespace CGALMeshGenHelper;
 
 void CGALMeshGen::run() {
+    preprocess();
     Polyhedron P = generate_polyhedron(m_vertices, m_faces);
     Mesh_domain domain(P);
     domain.detect_features();
+    auto_compute_meshing_params();
     Mesh_criteria criteria(
             edge_size             =m_edge_size,
             facet_size            =m_face_size,
-            facet_angle           =m_face_angle, 
             cell_radius_edge_ratio=m_cell_radius_edge_ratio,
             cell_size             =m_cell_size);
 
@@ -166,3 +167,4 @@ void CGALMeshGen::run() {
     std::ofstream medit_file("debug.yams2");
     c3t3.output_to_medit(medit_file);
 }
+

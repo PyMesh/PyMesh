@@ -4,6 +4,7 @@
 #include <tetgen/TetgenWrapper.h>
 
 void TetGenEngine::run() {
+    preprocess();
     TetgenWrapper tetgen(m_vertices, m_faces);
     std::stringstream opt;
     opt << "pqQ";

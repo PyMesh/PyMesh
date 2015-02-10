@@ -11,12 +11,11 @@ class TetrahedronizationEngine {
 
     public:
         TetrahedronizationEngine() :
-            m_edge_size(1.0),
-            m_face_angle(25),
-            m_face_size(1),
-            m_face_distance(0.1),
+            m_edge_size(1e6), // edge_size needs to be positive to preserve 1D feature.
+            m_face_size(-1.0),
             m_cell_radius_edge_ratio(2),
-            m_cell_size(1.5) {}
+            m_cell_size(-1.0),
+            m_ave_edge_length(1.0) { }
 
         virtual ~TetrahedronizationEngine() {}
 
@@ -27,9 +26,7 @@ class TetrahedronizationEngine {
         void set_faces(const MatrixIr& faces) { m_faces = faces; }
 
         void set_edge_size(Float val) { m_edge_size = val; }
-        void set_face_angle(Float val) { m_face_angle = val; }
         void set_face_size(Float val) { m_face_size = val; }
-        void set_face_distance(Float val) { m_face_distance = val; }
         void set_cell_radius_edge_ratio(Float val) { m_cell_radius_edge_ratio = val; }
         void set_cell_size(Float val) { m_cell_size = val; }
 
@@ -38,14 +35,19 @@ class TetrahedronizationEngine {
         MatrixIr get_voxels() const { return m_voxels; }
 
     protected:
+        void preprocess();
+        void assert_mesh_is_valid() const;
+        void compute_ave_edge_length();
+        void auto_compute_meshing_params();
+
+    protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
         MatrixIr m_voxels;
 
+        Float m_ave_edge_length;
         Float m_edge_size;
-        Float m_face_angle;
         Float m_face_size;
-        Float m_face_distance;
         Float m_cell_radius_edge_ratio;
         Float m_cell_size;
 };
