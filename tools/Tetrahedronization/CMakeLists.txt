@@ -20,6 +20,16 @@ ELSE(CGAL_FOUND)
     MESSAGE(WARNING "CGAL missing.  Skipping CGAL tetrahedronization support")
 ENDIF(CGAL_FOUND)
 
+# Include TetGen
+IF(TETGEN_FOUND)
+    INCLUDE_DIRECTORIES(${TETGEN_INCLUDE_DIRS})
+    LIST(APPEND DEPENDENT_LIBS ${TETGEN_LIBRARIES} lib_tetgen_wrapper)
+    ADD_DEFINITIONS(-DWITH_TETGEN)
+    ADD_SUBDIRECTORY(TetGen)
+ELSE(TETGEN_FOUND)
+    MESSAGE(WARNING "Tetgen missing.  Skipping TetGen tetrahedronization support")
+ENDIF(TETGEN_FOUND)
+
 ADD_LIBRARY(lib_tetrahedronization SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(lib_tetrahedronization
     ${DEPENDENT_LIBS} Mesh lib_MeshUtils)
