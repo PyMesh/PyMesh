@@ -1,6 +1,5 @@
 #include "SubMesh.h"
 
-#include <iostream>
 #include <algorithm>
 #include <memory>
 #include <Math/MatrixUtils.h>
@@ -61,56 +60,58 @@ void SubMesh::filter_vertex_with_custom_function(
 }
 
 void SubMesh::finalize() {
-    collect_selected_vertices();
     collect_selected_faces();
-    remove_isolated_vertices();
-}
-
-void SubMesh::check_validity() const {
-    if (m_ori_vertex_indices.size() != m_vertices.rows() ||
-            m_ori_face_indices.size() != m_faces.rows()) {
-        throw RuntimeError(
-                "Invalid submesh detected, did you forget to call finalize()");
-    }
-}
-
-void SubMesh::collect_selected_vertices() {
-    std::vector<int> selection;
-    const size_t num_vertices = m_vertices.rows();
-    for (size_t i=0; i<num_vertices; i++) {
-        if (m_vertex_selection[i]) {
-            selection.push_back(i);
-        }
-    }
-
-    m_ori_vertex_indices = MatrixUtils::std2eigen(selection);
+    clean_up_selected();
+    clean_up_unselected();
 }
 
 void SubMesh::collect_selected_faces() {
-    std::vector<int> selection;
-    std::vector<VectorI> selected_faces;
+    std::vector<int> selected, unselected;
+    std::vector<VectorI> selected_faces, unselected_faces;
     const size_t num_faces = m_faces.rows();
     const size_t num_vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {
         const auto& face = m_faces.row(i);
-        bool selected = true;
-        for (size_t j=0; selected && j<num_vertex_per_face; j++) {
-            selected = selected && m_vertex_selection[face[j]];
+        bool is_selected = true;
+        for (size_t j=0; is_selected && j<num_vertex_per_face; j++) {
+            is_selected = is_selected && m_vertex_selection[face[j]];
         }
-        if (selected) {
-            selection.push_back(i);
+        if (is_selected) {
+            selected.push_back(i);
             selected_faces.push_back(face);
+        } else {
+            unselected.push_back(i);
+            unselected_faces.push_back(face);
         }
     }
 
-    m_ori_face_indices = MatrixUtils::std2eigen(selection);
-    m_faces = MatrixUtils::rowstack(selected_faces);
+    m_selected_face_indices = MatrixUtils::std2eigen(selected);
+    m_selected_faces = MatrixUtils::rowstack(selected_faces);
+
+    m_unselected_face_indices = MatrixUtils::std2eigen(unselected);
+    m_unselected_faces = MatrixUtils::rowstack(unselected_faces);
 }
 
-void SubMesh::remove_isolated_vertices() {
-    IsolatedVertexRemoval remover(m_vertices, m_faces);
+void SubMesh::clean_up_selected() {
+    IsolatedVertexRemoval remover(m_vertices, m_selected_faces);
     remover.run();
-    m_vertices = remover.get_vertices();
-    m_faces = remover.get_faces();
+    m_selected_vertices = remover.get_vertices();
+    m_selected_faces = remover.get_faces();
+    m_selected_vertex_indices = remover.get_ori_vertex_indices();
+}
+
+void SubMesh::clean_up_unselected() {
+    IsolatedVertexRemoval remover(m_vertices, m_unselected_faces);
+    remover.run();
+    m_unselected_vertices = remover.get_vertices();
+    m_unselected_faces = remover.get_faces();
+    m_unselected_vertex_indices = remover.get_ori_vertex_indices();
+}
+
+void SubMesh::check_validity() const {
+    if (m_selected_faces.rows() + m_unselected_faces.rows() != m_faces.rows()) {
+        throw RuntimeError(
+                "Invalid submesh detected, did you forget to call finalize()");
+    }
 }
 

@@ -57,8 +57,8 @@ TEST_F(SubMeshTest, 2D) {
     submesh->filter_with_face_index(selected_faces);
     submesh->finalize();
 
-    const MatrixFr& vertices = submesh->get_vertices();
-    const MatrixIr& faces = submesh->get_faces();
+    const MatrixFr& vertices = submesh->get_selected_vertices();
+    const MatrixIr& faces = submesh->get_selected_faces();
 
     ASSERT_EQ(3, vertices.rows());
     ASSERT_EQ(1, faces.rows());
@@ -77,8 +77,8 @@ TEST_F(SubMeshTest, 3D) {
     submesh->filter_with_face_index(selected_faces);
     submesh->finalize();
 
-    const MatrixFr& vertices = submesh->get_vertices();
-    const MatrixIr& faces = submesh->get_faces();
+    const MatrixFr& vertices = submesh->get_selected_vertices();
+    const MatrixIr& faces = submesh->get_selected_faces();
 
     ASSERT_EQ(4, vertices.rows());
     ASSERT_EQ(2, faces.rows());
@@ -103,8 +103,8 @@ TEST_F(SubMeshTest, BoundaryFaces) {
     submesh->filter_vertex_with_custom_function(filter);
     submesh->finalize();
 
-    const MatrixFr& vertices = submesh->get_vertices();
-    const MatrixIr& faces = submesh->get_faces();
+    const MatrixFr& vertices = submesh->get_selected_vertices();
+    const MatrixIr& faces = submesh->get_selected_faces();
 
     const size_t num_filted_vertices = vertices.rows();
     for (size_t i=0; i<num_filted_vertices; i++) {
@@ -118,9 +118,9 @@ TEST_F(SubMeshTest, BoundaryFaces) {
 TEST_F(SubMeshTest, NotFinalized) {
     MeshPtr mesh = load_mesh("cube.msh");
     SubMesh::Ptr submesh = SubMesh::create(mesh);
-    ASSERT_THROW(submesh->get_vertices(), RuntimeError);
-    ASSERT_THROW(submesh->get_faces(), RuntimeError);
-    ASSERT_THROW(submesh->get_ori_vertex_indices(), RuntimeError);
-    ASSERT_THROW(submesh->get_ori_face_indices(), RuntimeError);
+    ASSERT_THROW(submesh->get_selected_vertices(), RuntimeError);
+    ASSERT_THROW(submesh->get_selected_faces(), RuntimeError);
+    ASSERT_THROW(submesh->get_selected_vertex_indices(), RuntimeError);
+    ASSERT_THROW(submesh->get_selected_face_indices(), RuntimeError);
 }
 

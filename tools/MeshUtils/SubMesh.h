@@ -29,29 +29,60 @@ class SubMesh {
                 const std::function<bool(const VectorF&)>& func);
 
         /**
-         * Union all selected vertices, faces and voxels.
+         * Union all selected vertices and faces.
+         * A face is selected iff all of its vertices are selected.
          */
         void finalize();
 
-        const MatrixFr& get_vertices() const { check_validity(); return m_vertices; }
-        const MatrixIr& get_faces() const { check_validity(); return m_faces; }
+        // Selected geometry
+        const MatrixFr& get_selected_vertices() const {
+            check_validity(); return m_selected_vertices;
+        }
+        const MatrixIr& get_selected_faces() const {
+            check_validity(); return m_selected_faces;
+        }
 
-        const VectorI& get_ori_vertex_indices() const { check_validity(); return m_ori_vertex_indices; }
-        const VectorI& get_ori_face_indices() const { check_validity(); return m_ori_face_indices; }
+        const VectorI& get_selected_vertex_indices() const {
+            check_validity(); return m_selected_vertex_indices;
+        }
+        const VectorI& get_selected_face_indices() const {
+            check_validity(); return m_selected_face_indices;
+        }
 
-        void check_validity() const;
+        // Unselected geometry
+        const MatrixFr& get_unselected_vertices() const {
+            check_validity(); return m_unselected_vertices;
+        }
+        const MatrixIr& get_unselected_faces() const {
+            check_validity(); return m_unselected_faces;
+        }
+
+        const VectorI& get_unselected_vertex_indices() const {
+            check_validity(); return m_unselected_vertex_indices;
+        }
+        const VectorI& get_unselected_face_indices() const {
+            check_validity(); return m_unselected_face_indices;
+        }
 
     protected:
-        void collect_selected_vertices();
         void collect_selected_faces();
-        void remove_isolated_vertices();
+        void clean_up_selected();
+        void clean_up_unselected();
+        void check_validity() const;
 
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
 
-        VectorI m_ori_vertex_indices;
-        VectorI m_ori_face_indices;
+        MatrixFr m_selected_vertices;
+        MatrixIr m_selected_faces;
+        VectorI m_selected_vertex_indices;
+        VectorI m_selected_face_indices;
+
+        MatrixFr m_unselected_vertices;
+        MatrixIr m_unselected_faces;
+        VectorI m_unselected_vertex_indices;
+        VectorI m_unselected_face_indices;
 
         std::vector<bool> m_vertex_selection;
 };

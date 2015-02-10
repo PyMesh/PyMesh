@@ -58,6 +58,8 @@ class InflatorEngine {
         void remove_short_edges();
         void save_mesh(const std::string& filename, const MatrixFr& vertices,
                 const MatrixIr& faces, VectorF debug);
+        void save_mesh(const std::string& filename, const MatrixFr& vertices,
+                const MatrixIr& faces);
         void check_thickness() const;
 
     protected:

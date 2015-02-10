@@ -5,6 +5,7 @@
 
 #include <Core/Exception.h>
 #include <IO/MeshWriter.h>
+#include <Math/MatrixUtils.h>
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
@@ -189,6 +190,17 @@ void InflatorEngine::save_mesh(const std::string& filename,
     MeshWriter::Ptr writer = MeshWriter::create(filename);
     writer->with_attribute("debug");
     writer->write_mesh(*mesh);
+}
+
+void InflatorEngine::save_mesh(const std::string& filename,
+        const MatrixFr& vertices, const MatrixIr& faces) {
+    auto flattened_vertices = MatrixUtils::flatten<VectorF>(vertices);
+    auto flattened_faces = MatrixUtils::flatten<VectorI>(faces);
+    VectorI voxels = VectorI::Zero(0);
+
+    MeshWriter::Ptr writer = MeshWriter::create(filename);
+    writer->write(flattened_vertices, flattened_faces, voxels,
+            vertices.cols(), faces.cols(), 0);
 }
 
 void InflatorEngine::check_thickness() const {
