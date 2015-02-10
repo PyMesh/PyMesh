@@ -9,6 +9,9 @@
 #ifdef WITH_IGL
 #include "IGL/IGLEngineTest.h"
 #endif
+#ifdef WITH_CGAL
+#include "CGAL/CGALBooleanEngineTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
