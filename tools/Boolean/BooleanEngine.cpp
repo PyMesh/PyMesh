@@ -9,6 +9,9 @@
 #ifdef WITH_IGL
 #include "IGL/IGLEngine.h"
 #endif 
+#ifdef WITH_CGAL
+#include "CGAL/CGALBooleanEngine.h"
+#endif 
 
 #include <sstream>
 #include <iostream>
@@ -37,6 +40,9 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #endif
 #ifdef WITH_IGL
     if (engine_name == "igl") { return Ptr(new IGLEngine()); }
+#endif
+#ifdef WITH_CGAL
+    if (engine_name == "cgal") { return Ptr(new CGALBooleanEngine()); }
 #endif
     engine_not_found(engine_name);
     return Ptr(NULL);
