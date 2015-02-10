@@ -1,6 +1,8 @@
 #include "TetrahedronizationEngine.h"
 
+#include <cmath>
 #include <sstream>
+#include <iostream>
 
 #include <Core/Exception.h>
 
@@ -72,10 +74,15 @@ void TetrahedronizationEngine::compute_ave_edge_length() {
 
 void TetrahedronizationEngine::auto_compute_meshing_params() {
     if (m_face_size < 0.0) {
-        m_face_size = 0.5 * m_ave_edge_length * m_ave_edge_length;
+        m_face_size = m_ave_edge_length;
+#ifndef NDEBUG
+        std::cout << "using default face size: " << m_face_size << std::endl;
+#endif
     }
     if (m_cell_size < 0.0) {
-        m_cell_size = m_ave_edge_length * m_ave_edge_length * m_ave_edge_length /
-            6.0;
+        m_cell_size = m_ave_edge_length;
+#ifndef NDEBUG
+        std::cout << "using default cell size: " << m_cell_size << std::endl;
+#endif
     }
 }

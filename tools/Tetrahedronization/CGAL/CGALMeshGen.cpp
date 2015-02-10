@@ -97,9 +97,6 @@ template <class HDS>
         size_t num_vertices = tr.number_of_vertices();
         size_t num_faces = c3t3.number_of_facets_in_complex();
         size_t num_voxels = c3t3.number_of_cells_in_complex();
-        std::cout << "#v: " << num_vertices << std::endl;
-        std::cout << "#f: " << num_faces << std::endl;
-        std::cout << "#V: " << num_voxels << std::endl;
 
         vertices.resize(num_vertices, 3);
         faces.resize(num_faces, 3);
@@ -151,6 +148,7 @@ using namespace CGALMeshGenHelper;
 
 void CGALMeshGen::run() {
     preprocess();
+
     Polyhedron P = generate_polyhedron(m_vertices, m_faces);
     Mesh_domain domain(P);
     domain.detect_features();

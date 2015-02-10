@@ -1,14 +1,20 @@
 #include "TetGenEngine.h"
 
+#include <cmath>
 #include <sstream>
 #include <tetgen/TetgenWrapper.h>
 
 void TetGenEngine::run() {
     preprocess();
+
+    // Use the volume of regular tetrahedron of radius m_cell_size as max
+    // volume.
+    Float max_tet_volume = 8 * pow(m_cell_size, 3) / (9 * sqrt(3));
+
     TetgenWrapper tetgen(m_vertices, m_faces);
     std::stringstream opt;
     opt << "pqQ";
-    opt << "a" << m_cell_size;
+    opt << "a" << max_tet_volume;
     tetgen.run(opt.str());
 
     m_vertices = tetgen.get_vertices();

@@ -25,9 +25,24 @@ class TetrahedronizationEngine {
         void set_vertices(const MatrixFr& vertices) { m_vertices = vertices; }
         void set_faces(const MatrixIr& faces) { m_faces = faces; }
 
+        /**
+         * edge size determines the sample density of the feature curves if any.
+         */
         void set_edge_size(Float val) { m_edge_size = val; }
+
+        /**
+         * face size is the max radii of the circumcircle of surface triangles.
+         */
         void set_face_size(Float val) { m_face_size = val; }
+
+        /**
+         * max bound on ratio of the circumradius of a tet to its shortest edge.
+         */
         void set_cell_radius_edge_ratio(Float val) { m_cell_radius_edge_ratio = val; }
+
+        /**
+         * cell size is the max radii of the circumsphere of tets.
+         */
         void set_cell_size(Float val) { m_cell_size = val; }
 
         MatrixFr get_vertices() const { return m_vertices; }
