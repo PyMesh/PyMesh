@@ -1,0 +1,34 @@
+# Find Carve library
+# (https://code.google.com/p/carve/)
+# The following variables are set
+#
+# CARVE_FOUND
+# CARVE_INCLUDE_DIRS
+# CARVE_LIBRARIES
+#
+# It searches the environment variable $CARVE_PATH automatically.
+
+FIND_PATH(CARVE_INCLUDE_DIRS carve.hpp
+    $ENV{CARVE_PATH}
+    $ENV{CARVE_PATH}/include/
+    /opt/local/include/
+    /usr/local/include/
+    /usr/include/
+    PATH_SUFFIXES carve)
+
+FIND_LIBRARY(CARVE_LIBRARIES carve
+    $ENV{CARVE_PATH}
+    $ENV{CARVE_PATH}/lib/
+    /opt/local/lib/
+    /usr/local/lib/
+    /usr/lib/)
+
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(CARVE
+    "Carve library cannot be found.  Consider set CARVE_PATH environment variable"
+    CARVE_INCLUDE_DIRS
+    CARVE_LIBRARIES)
+
+MARK_AS_ADVANCED(
+    CARVE_INCLUDE_DIRS
+    CARVE_LIBRARIES)
