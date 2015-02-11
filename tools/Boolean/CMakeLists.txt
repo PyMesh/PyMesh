@@ -59,6 +59,16 @@ ELSE (CGAL_FOUND)
     MESSAGE(WARNING "CGAL is missing, CGAL boolean support is skipped")
 ENDIF (CGAL_FOUND)
 
+## Carve
+#IF (CARVE_FOUND)
+#    INCLUDE_DIRECTORIES(${CARVE_INCLUDE_DIRS})
+#    LIST(APPEND DEPENDENT_LIBS ${CARVE_LIBRARIES})
+#    ADD_DEFINITIONS(-DWITH_CARVE)
+#    ADD_SUBDIRECTORY(Carve)
+#ELSEIF (CARVE_FOUND)
+#    MESSAGE(WARNING "Carve is missing, Carve boolean support is skipped")
+#ENDIF (CARVE_FOUND)
+
 ADD_LIBRARY(lib_boolean SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_boolean PROPERTIES OUTPUT_NAME "boolean")
 TARGET_LINK_LIBRARIES(lib_boolean Mesh lib_MeshUtils lib_triangle_wrapper ${DEPENDENT_LIBS})
