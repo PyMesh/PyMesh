@@ -35,32 +35,32 @@ class SubMesh {
         void finalize();
 
         // Selected geometry
-        const MatrixFr& get_selected_vertices() const {
+        MatrixFr get_selected_vertices() const {
             check_validity(); return m_selected_vertices;
         }
-        const MatrixIr& get_selected_faces() const {
+        MatrixIr get_selected_faces() const {
             check_validity(); return m_selected_faces;
         }
 
-        const VectorI& get_selected_vertex_indices() const {
+        VectorI get_selected_vertex_indices() const {
             check_validity(); return m_selected_vertex_indices;
         }
-        const VectorI& get_selected_face_indices() const {
+        VectorI get_selected_face_indices() const {
             check_validity(); return m_selected_face_indices;
         }
 
         // Unselected geometry
-        const MatrixFr& get_unselected_vertices() const {
+        MatrixFr get_unselected_vertices() const {
             check_validity(); return m_unselected_vertices;
         }
-        const MatrixIr& get_unselected_faces() const {
+        MatrixIr get_unselected_faces() const {
             check_validity(); return m_unselected_faces;
         }
 
-        const VectorI& get_unselected_vertex_indices() const {
+        VectorI get_unselected_vertex_indices() const {
             check_validity(); return m_unselected_vertex_indices;
         }
-        const VectorI& get_unselected_face_indices() const {
+        VectorI get_unselected_face_indices() const {
             check_validity(); return m_unselected_face_indices;
         }
 
