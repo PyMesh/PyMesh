@@ -1,7 +1,8 @@
 #include "ObtuseTriangleRemoval.h"
 
 #include <cmath>
-#include <iostream>
+
+#include <Math/MatrixUtils.h>
 
 #include "IndexHeap.h"
 
@@ -20,59 +21,26 @@ ObtuseTriangleRemoval::ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces
     : m_vertices(vertices), m_faces(faces) { }
 
 size_t ObtuseTriangleRemoval::run(Float max_angle_allowed) {
+    clear_intermediate_data();
     set_all_faces_as_valid();
     compute_face_angles();
     compute_opposite_vertices();
     compute_edge_face_adjacency();
 
-    return split_obtuse_triangles(max_angle_allowed);
+    size_t num_split = split_obtuse_triangles(max_angle_allowed);
+
+    finalize_geometry();
+    return num_split;
 }
 
-MatrixFr ObtuseTriangleRemoval::get_vertices() {
-    const size_t num_old_v = m_vertices.rows();
-    const size_t num_new_v = m_new_vertices.size();
-    const size_t num_vertices = num_old_v + num_new_v;
-    MatrixFr vertices(num_vertices, 3);
-    vertices.topRows(num_old_v) = m_vertices;
-    size_t count = num_old_v;
-    for (std::vector<Vector3F>::const_iterator itr = m_new_vertices.begin();
-            itr != m_new_vertices.end(); itr++) {
-        vertices.row(count) = *itr;
-        count ++;
-    }
-    return vertices;
-}
-
-MatrixIr ObtuseTriangleRemoval::get_faces() {
-    assert(m_valid.size() == m_faces.rows());
-    typedef std::vector<Vector3I> FaceArray;
-    const size_t num_ori_f = m_faces.rows();
-    FaceArray valid_faces;
-    valid_faces.reserve(num_ori_f);
-    for (size_t i=0; i<num_ori_f; i++) {
-        if (m_valid[i]) {
-            valid_faces.push_back(m_faces.row(i));
-        }
-    }
-
-    const size_t num_old_f = valid_faces.size();
-    const size_t num_new_f = m_new_faces.size();
-    const size_t num_faces = num_old_f + num_new_f;
-    MatrixIr faces(num_faces, 3);
-
-    size_t count = 0;
-    for (FaceArray::const_iterator itr = valid_faces.begin();
-            itr != valid_faces.end(); itr++) {
-        faces.row(count) = *itr;
-        count ++;
-    }
-
-    for (FaceArray::const_iterator itr = m_new_faces.begin();
-            itr != m_new_faces.end(); itr++) {
-        faces.row(count) = *itr;
-        count ++;
-    }
-    return faces;
+void ObtuseTriangleRemoval::clear_intermediate_data() {
+    m_face_angles.clear();
+    m_opp_vertices.clear();
+    m_edges.clear();
+    m_valid.clear();
+    m_edge_faces.clear();
+    m_new_vertices.clear();
+    m_new_faces.clear();
 }
 
 void ObtuseTriangleRemoval::set_all_faces_as_valid() {
@@ -81,7 +49,6 @@ void ObtuseTriangleRemoval::set_all_faces_as_valid() {
 
 void ObtuseTriangleRemoval::compute_face_angles() {
     const size_t num_faces = m_faces.rows();
-    m_face_angles.clear();
     m_face_angles.reserve(num_faces * 3);
     for (size_t i=0; i<num_faces; i++) {
         Vector3F v1 = m_vertices.row(m_faces(i, 0));
@@ -96,7 +63,6 @@ void ObtuseTriangleRemoval::compute_face_angles() {
 
 void ObtuseTriangleRemoval::compute_opposite_vertices() {
     const size_t num_faces = m_faces.rows();
-    m_opp_vertices.clear();
     m_opp_vertices.reserve(num_faces * 3);
     for (size_t i=0; i<num_faces; i++) {
         m_opp_vertices.push_back(0);
@@ -107,7 +73,6 @@ void ObtuseTriangleRemoval::compute_opposite_vertices() {
 
 void ObtuseTriangleRemoval::compute_edge_face_adjacency() {
     const size_t num_faces = m_faces.rows();
-    m_edges.clear();
     m_edges.reserve(num_faces * 3);
     for (size_t i=0; i<num_faces; i++) {
         Edge e1(m_faces(i, 1), m_faces(i, 2));
@@ -196,3 +161,30 @@ Vector3F ObtuseTriangleRemoval::project(size_t ext_idx) {
     return proj;
 }
 
+void ObtuseTriangleRemoval::finalize_geometry() {
+    finalize_vertices();
+    finalize_faces();
+}
+
+void ObtuseTriangleRemoval::finalize_vertices() {
+    auto new_vertices = MatrixUtils::rowstack(m_new_vertices);
+    const size_t num_old_v = m_vertices.rows();
+    const size_t num_new_v = new_vertices.rows();
+    m_vertices = MatrixUtils::vstack<MatrixFr>({m_vertices, new_vertices});
+}
+
+void ObtuseTriangleRemoval::finalize_faces() {
+    assert(m_valid.size() == m_faces.rows());
+    typedef std::vector<Vector3I> FaceArray;
+    const size_t num_ori_f = m_faces.rows();
+    FaceArray valid_faces;
+    valid_faces.reserve(num_ori_f);
+    for (size_t i=0; i<num_ori_f; i++) {
+        if (m_valid[i]) {
+            valid_faces.push_back(m_faces.row(i));
+        }
+    }
+    valid_faces.insert(valid_faces.end(),
+            m_new_faces.begin(), m_new_faces.end());
+    m_faces = MatrixUtils::rowstack(valid_faces);
+}

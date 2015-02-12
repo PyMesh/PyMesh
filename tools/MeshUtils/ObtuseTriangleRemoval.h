@@ -12,10 +12,11 @@ class ObtuseTriangleRemoval {
     public:
         // Angle in radian
         size_t run(Float max_angle_allowed);
-        MatrixFr get_vertices();
-        MatrixIr get_faces();
+        MatrixFr get_vertices() const { return m_vertices; }
+        MatrixIr get_faces() const { return m_faces; }
 
     private:
+        void clear_intermediate_data();
         void set_all_faces_as_valid();
         void compute_face_angles();
         void compute_opposite_vertices();
@@ -25,6 +26,10 @@ class ObtuseTriangleRemoval {
         size_t split_obtuse_triangles(Float max_angle);
         void split_triangle(size_t ext_idx);
         Vector3F project(size_t ext_idx);
+
+        void finalize_geometry();
+        void finalize_vertices();
+        void finalize_faces();
 
     private:
         typedef Triplet Edge;
