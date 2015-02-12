@@ -12,6 +12,7 @@
 #include "DuplicatedVertexRemovalTest.h"
 #include "FinFaceRemovalTest.h"
 #include "SubMeshTest.h"
+#include "ObtuseTriangleRemovalTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
