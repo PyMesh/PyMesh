@@ -14,6 +14,8 @@ class IsotropicPeriodicInflator : public PeriodicInflator {
     private:
         void initialize_center_cell_and_octa_cell();
         void clip_phantom_mesh_with_octa_cell();
+        void clean_up_clipped_mesh();
+        void refine_long_clip_box_edges();
         void remesh_boundary();
         void reflect();
         void update_face_sources();

@@ -7,13 +7,12 @@
 #include <Boolean/BooleanEngine.h>
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
-#include <MeshUtils/SubMesh.h>
-#include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
-#include <MeshUtils/ObtuseTriangleRemoval.h>
 #include <tetgen/TetgenWrapper.h>
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
+#include <Wires/Misc/EdgeSplitter.h>
+#include <Wires/Misc/MeshCleaner.h>
 
 #include "AABBTree.h"
 
@@ -58,9 +57,32 @@ IsotropicPeriodicInflator::IsotropicPeriodicInflator(
 void IsotropicPeriodicInflator::clip_to_center_cell() {
     initialize_center_cell_and_octa_cell();
     clip_phantom_mesh_with_octa_cell();
+    clean_up_clipped_mesh();
+    refine_long_clip_box_edges();
     remesh_boundary();
     reflect();
     update_face_sources();
+}
+
+void IsotropicPeriodicInflator::refine_long_clip_box_edges() {
+    const Float max_edge_len = 0.5;
+    BoxChecker box(m_octa_cell_bbox_min, m_octa_cell_bbox_max);
+    box.set_tolerance(1e-12);
+
+    EdgeSplitter splitter(m_vertices, m_faces);
+    EdgeSplitter::IndicatorFunc bd_edge_indicator =
+        [=](const VectorF& v0, const VectorF& v1) {
+            VectorF mid_pt = 0.5 * (v0 + v1);
+            return box.is_on_boundary_edges(mid_pt);
+        };
+    splitter.run(bd_edge_indicator, max_edge_len);
+
+    m_vertices = splitter.get_vertices();
+    m_faces = splitter.get_faces();
+
+#ifndef NDEBUG
+    save_mesh("splitted.msh", m_vertices, m_faces);
+#endif
 }
 
 void IsotropicPeriodicInflator::initialize_center_cell_and_octa_cell() {
@@ -102,7 +124,7 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
     create_box(m_octa_cell_bbox_min, m_octa_cell_bbox_max,
             box_vertices, box_faces);
 
-    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cork");
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cgal");
     boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
     boolean_engine->set_mesh_2(box_vertices, box_faces);
     boolean_engine->compute_intersection();
@@ -117,10 +139,23 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
 #endif
 }
 
+void IsotropicPeriodicInflator::clean_up_clipped_mesh() {
+    MeshCleaner cleaner;
+    cleaner.remove_isolated_vertices(m_vertices, m_faces);
+    cleaner.remove_duplicated_vertices(m_vertices, m_faces, 1e-12);
+    cleaner.remove_short_edges(m_vertices, m_faces, 1e-12);
+}
+
 void IsotropicPeriodicInflator::remesh_boundary() {
     typedef std::function<bool(const VectorF&)> IndicatorFunc;
     const Float tol = 1e-6;
     std::vector<IndicatorFunc> bd_indicators;
+    bd_indicators.push_back([=](const VectorF& v)
+            { return fabs(v[0] - m_octa_cell_bbox_min[0]) < tol; });
+    bd_indicators.push_back([=](const VectorF& v)
+            { return fabs(v[1] - m_octa_cell_bbox_min[1]) < tol; });
+    bd_indicators.push_back([=](const VectorF& v)
+            { return fabs(v[2] - m_octa_cell_bbox_min[2]) < tol; });
     bd_indicators.push_back([=](const VectorF& v)
             { return fabs(v[0] - m_octa_cell_bbox_max[0]) < tol; });
     bd_indicators.push_back([=](const VectorF& v)
@@ -131,7 +166,7 @@ void IsotropicPeriodicInflator::remesh_boundary() {
     size_t count = 0;
     for (auto f : bd_indicators) {
         BoundaryRemesher remesher(m_vertices, m_faces);
-        remesher.remesh(f, 0.1);
+        remesher.remesh(f, 0.05);
         m_vertices = remesher.get_vertices();
         m_faces = remesher.get_faces();
         assert(m_vertices.rows() > 0);

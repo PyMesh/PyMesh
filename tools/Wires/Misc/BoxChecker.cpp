@@ -18,7 +18,7 @@ BoxChecker::BoxChecker(const VectorF& bbox_min, const VectorF& bbox_max) :
         m_tol = 1e-12;
     }
 
-bool BoxChecker::is_inside(const VectorF& p) {
+bool BoxChecker::is_inside(const VectorF& p) const {
     bool r = true;
     for (size_t i=0; i<m_dim; i++) {
         r = r && (p[i] >= m_bbox_min[i] + m_tol);
@@ -27,7 +27,7 @@ bool BoxChecker::is_inside(const VectorF& p) {
     return r;
 }
 
-bool BoxChecker::is_outside(const VectorF& p) {
+bool BoxChecker::is_outside(const VectorF& p) const {
     bool r = false;
     for (size_t i=0; i<m_dim; i++) {
         r = r || (p[i] <= m_bbox_min[0] - m_tol);
@@ -36,21 +36,21 @@ bool BoxChecker::is_outside(const VectorF& p) {
     return r;
 }
 
-bool BoxChecker::is_on_boundary(const VectorF& p) {
+bool BoxChecker::is_on_boundary(const VectorF& p) const {
     return (!is_inside(p)) && (!is_outside(p));
 }
 
-bool BoxChecker::is_on_boundary_edges(const VectorF& p) {
+bool BoxChecker::is_on_boundary_edges(const VectorF& p) const {
     if (!is_on_boundary(p)) return false;
     return get_dim_on_border(p) > 1;
 }
 
-bool BoxChecker::is_on_boundary_corners(const VectorF& p) {
+bool BoxChecker::is_on_boundary_corners(const VectorF& p) const {
     if (!is_on_boundary(p)) return false;
     return get_dim_on_border(p) == m_dim;
 }
 
-size_t BoxChecker::get_dim_on_border(const VectorF& p) {
+size_t BoxChecker::get_dim_on_border(const VectorF& p) const {
     VectorF dist_to_min = p - m_bbox_min;
     size_t num_dim_on_border = 0;
     for (size_t i=0; i<m_dim; i++) {

@@ -9,14 +9,14 @@ class BoxChecker {
     public:
         void set_tolerance(Float tol) { m_tol = tol; }
 
-        bool is_inside(const VectorF& p);
-        bool is_outside(const VectorF& p);
-        bool is_on_boundary(const VectorF& p);
-        bool is_on_boundary_edges(const VectorF& p);
-        bool is_on_boundary_corners(const VectorF& p);
+        bool is_inside(const VectorF& p) const;
+        bool is_outside(const VectorF& p) const;
+        bool is_on_boundary(const VectorF& p) const;
+        bool is_on_boundary_edges(const VectorF& p) const;
+        bool is_on_boundary_corners(const VectorF& p) const;
 
     private:
-        size_t get_dim_on_border(const VectorF& p);
+        size_t get_dim_on_border(const VectorF& p) const;
 
     private:
         size_t  m_dim;

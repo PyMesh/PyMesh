@@ -41,19 +41,19 @@ class IsotropicPeriodicInflatorTest : public WireTest {
         VectorI  m_face_sources;
 };
 
-TEST_F(IsotropicPeriodicInflatorTest, DISABLED_cube) {
+TEST_F(IsotropicPeriodicInflatorTest, cube) {
     inflate("cube.wire");
     save_mesh("inflated_cube.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
     ASSERT_MESH_IS_VALID();
 }
 
-TEST_F(IsotropicPeriodicInflatorTest, DISABLED_brick5) {
+TEST_F(IsotropicPeriodicInflatorTest, brick5) {
     inflate("brick5.wire");
     save_mesh("inflated_brick5.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
     ASSERT_MESH_IS_VALID();
 }
 
-TEST_F(IsotropicPeriodicInflatorTest, DISABLED_star) {
+TEST_F(IsotropicPeriodicInflatorTest, star) {
     inflate("star_3D.wire");
     save_mesh("inflated_star.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
     ASSERT_MESH_IS_VALID();
@@ -65,7 +65,7 @@ TEST_F(IsotropicPeriodicInflatorTest, diamond) {
     ASSERT_MESH_IS_VALID();
 }
 
-TEST_F(IsotropicPeriodicInflatorTest, DISABLED_pattern1065) {
+TEST_F(IsotropicPeriodicInflatorTest, pattern1065) {
     inflate("pattern1065.wire");
     save_mesh("inflated_pattern1065.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
     ASSERT_MESH_IS_VALID();
