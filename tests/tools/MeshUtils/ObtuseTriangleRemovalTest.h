@@ -8,6 +8,26 @@ class ObtuseTriangleRemovalTest : public TestBase {
     protected:
 };
 
+TEST_F(ObtuseTriangleRemovalTest, good_triangles) {
+    MatrixFr vertices(4, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.5, 1.0, 0.0,
+                0.5,-1.0, 0.0;
+    MatrixIr faces(2, 3);
+    faces << 0, 1, 2,
+             0, 3, 1;
+
+    ObtuseTriangleRemoval remover(vertices, faces);
+    remover.run(M_PI * 0.75);
+
+    auto result_vertices = remover.get_vertices();
+    auto result_faces = remover.get_faces();
+
+    ASSERT_MATRIX_EQ(vertices, result_vertices);
+    ASSERT_MATRIX_EQ(faces, result_faces);
+}
+
 TEST_F(ObtuseTriangleRemovalTest, single_obtuse) {
     MatrixFr vertices(4, 3);
     vertices << 0.0, 0.0, 0.0,

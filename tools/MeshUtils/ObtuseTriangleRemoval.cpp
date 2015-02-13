@@ -167,6 +167,8 @@ void ObtuseTriangleRemoval::finalize_geometry() {
 }
 
 void ObtuseTriangleRemoval::finalize_vertices() {
+    if (m_new_vertices.empty()) return;
+
     auto new_vertices = MatrixUtils::rowstack(m_new_vertices);
     const size_t num_old_v = m_vertices.rows();
     const size_t num_new_v = new_vertices.rows();
@@ -174,6 +176,8 @@ void ObtuseTriangleRemoval::finalize_vertices() {
 }
 
 void ObtuseTriangleRemoval::finalize_faces() {
+    if (m_new_faces.empty()) return;
+
     assert(m_valid.size() == m_faces.rows());
     typedef std::vector<Vector3I> FaceArray;
     const size_t num_ori_f = m_faces.rows();
@@ -186,5 +190,6 @@ void ObtuseTriangleRemoval::finalize_faces() {
     }
     valid_faces.insert(valid_faces.end(),
             m_new_faces.begin(), m_new_faces.end());
+    assert(valid_faces.size() > 0);
     m_faces = MatrixUtils::rowstack(valid_faces);
 }
