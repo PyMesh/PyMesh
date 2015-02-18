@@ -294,7 +294,7 @@ TEST_F(PeriodicExplorationTest, debug) {
     }
 }
 
-TEST_F(PeriodicExplorationTest, debug2) {
+TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
