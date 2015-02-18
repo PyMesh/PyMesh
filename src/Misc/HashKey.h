@@ -35,11 +35,11 @@ class VectorHashKey {
             return hash(m_data);
         }
 
-        size_t hash(const Vector2I&) const {
+        size_t hash(const Eigen::Matrix<ValueType, 2, 1>&) const {
             return m_data[0]*p1 ^ m_data[1]*p2;
         }
 
-        size_t hash(const Vector3I&) const {
+        size_t hash(const Eigen::Matrix<ValueType, 3, 1>&) const {
             return m_data[0]*p1 ^ m_data[1]*p2 ^ m_data[2]*p3;
         }
 
@@ -53,8 +53,11 @@ class VectorHashKey {
         // Magic primes (p1, p2, p3) from the following paper.
         // "Optimized Spacial Hashing for Collision Detection of
         // Deformable Objects" by Teschner et al. (VMV 2003)
-        static const int p1 = 73856093;
-        static const int p2 = 19349663;
-        static const int p3 = 83492791;
+        //
+        // Not that p2 is actaully not a prime!  p2 = 41 * 471943
+        // Sigh, graphics paper cannot be trusted!
+        static const long p1 = 73856093;
+        static const long p2 = 19349663;
+        static const long p3 = 83492791;
 };
 

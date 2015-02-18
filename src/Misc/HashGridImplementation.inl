@@ -9,49 +9,55 @@ extern "C" {
 #include "TriBox2D.h"
 
 namespace HashGridImplementationHelper {
-    std::vector<Vector2I> get_surrounding_cells(const Vector2I& p) {
+    template<typename T>
+    std::vector<Eigen::Matrix<T, 2, 1> >
+    get_surrounding_cells(const Eigen::Matrix<T, 2, 1>& p) {
+        typedef Eigen::Matrix<T, 2, 1> Key;
         return {
-            Vector2I(p[0]-1, p[1]-1),
-            Vector2I(p[0]-1, p[1]  ),
-            Vector2I(p[0]-1, p[1]+1),
-            Vector2I(p[0]  , p[1]-1),
-            Vector2I(p[0]  , p[1]  ),
-            Vector2I(p[0]  , p[1]+1),
-            Vector2I(p[0]+1, p[1]-1),
-            Vector2I(p[0]+1, p[1]  ),
-            Vector2I(p[0]+1, p[1]+1)
+            Key(p[0]-1, p[1]-1),
+            Key(p[0]-1, p[1]  ),
+            Key(p[0]-1, p[1]+1),
+            Key(p[0]  , p[1]-1),
+            Key(p[0]  , p[1]  ),
+            Key(p[0]  , p[1]+1),
+            Key(p[0]+1, p[1]-1),
+            Key(p[0]+1, p[1]  ),
+            Key(p[0]+1, p[1]+1)
         };
     }
 
-    std::vector<Vector3I> get_surrounding_cells(const Vector3I& p) {
+    template<typename T>
+    std::vector<Eigen::Matrix<T, 3, 1> >
+    get_surrounding_cells(const Eigen::Matrix<T, 3, 1>& p) {
+        typedef Eigen::Matrix<T, 3, 1> Key;
         return {
-            Vector3I(p[0]-1, p[1]-1, p[2]-1),
-            Vector3I(p[0]-1, p[1]  , p[2]-1),
-            Vector3I(p[0]-1, p[1]+1, p[2]-1),
-            Vector3I(p[0]  , p[1]-1, p[2]-1),
-            Vector3I(p[0]  , p[1]  , p[2]-1),
-            Vector3I(p[0]  , p[1]+1, p[2]-1),
-            Vector3I(p[0]+1, p[1]-1, p[2]-1),
-            Vector3I(p[0]+1, p[1]  , p[2]-1),
-            Vector3I(p[0]+1, p[1]+1, p[2]-1),
-            Vector3I(p[0]-1, p[1]-1, p[2]  ),
-            Vector3I(p[0]-1, p[1]  , p[2]  ),
-            Vector3I(p[0]-1, p[1]+1, p[2]  ),
-            Vector3I(p[0]  , p[1]-1, p[2]  ),
-            Vector3I(p[0]  , p[1]  , p[2]  ),
-            Vector3I(p[0]  , p[1]+1, p[2]  ),
-            Vector3I(p[0]+1, p[1]-1, p[2]  ),
-            Vector3I(p[0]+1, p[1]  , p[2]  ),
-            Vector3I(p[0]+1, p[1]+1, p[2]  ),
-            Vector3I(p[0]-1, p[1]-1, p[2]+1),
-            Vector3I(p[0]-1, p[1]  , p[2]+1),
-            Vector3I(p[0]-1, p[1]+1, p[2]+1),
-            Vector3I(p[0]  , p[1]-1, p[2]+1),
-            Vector3I(p[0]  , p[1]  , p[2]+1),
-            Vector3I(p[0]  , p[1]+1, p[2]+1),
-            Vector3I(p[0]+1, p[1]-1, p[2]+1),
-            Vector3I(p[0]+1, p[1]  , p[2]+1),
-            Vector3I(p[0]+1, p[1]+1, p[2]+1)
+            Key(p[0]-1, p[1]-1, p[2]-1),
+            Key(p[0]-1, p[1]  , p[2]-1),
+            Key(p[0]-1, p[1]+1, p[2]-1),
+            Key(p[0]  , p[1]-1, p[2]-1),
+            Key(p[0]  , p[1]  , p[2]-1),
+            Key(p[0]  , p[1]+1, p[2]-1),
+            Key(p[0]+1, p[1]-1, p[2]-1),
+            Key(p[0]+1, p[1]  , p[2]-1),
+            Key(p[0]+1, p[1]+1, p[2]-1),
+            Key(p[0]-1, p[1]-1, p[2]  ),
+            Key(p[0]-1, p[1]  , p[2]  ),
+            Key(p[0]-1, p[1]+1, p[2]  ),
+            Key(p[0]  , p[1]-1, p[2]  ),
+            Key(p[0]  , p[1]  , p[2]  ),
+            Key(p[0]  , p[1]+1, p[2]  ),
+            Key(p[0]+1, p[1]-1, p[2]  ),
+            Key(p[0]+1, p[1]  , p[2]  ),
+            Key(p[0]+1, p[1]+1, p[2]  ),
+            Key(p[0]-1, p[1]-1, p[2]+1),
+            Key(p[0]-1, p[1]  , p[2]+1),
+            Key(p[0]-1, p[1]+1, p[2]+1),
+            Key(p[0]  , p[1]-1, p[2]+1),
+            Key(p[0]  , p[1]  , p[2]+1),
+            Key(p[0]  , p[1]+1, p[2]+1),
+            Key(p[0]+1, p[1]-1, p[2]+1),
+            Key(p[0]+1, p[1]  , p[2]+1),
+            Key(p[0]+1, p[1]+1, p[2]+1)
         };
     }
 }
@@ -282,7 +288,7 @@ typename HashGridImplementation<Trait>::HashKey HashGridImplementation<Trait>::c
     return typename HashKey::VectorType(
             (value / m_cell_size).unaryExpr(
                 std::ptr_fun<Float,Float>(std::round)
-                ).template cast<int>());
+                ).template cast<long>());
 }
 
 template <typename Trait>
