@@ -268,7 +268,7 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_debug) {
+TEST_F(PeriodicExplorationTest, debug) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -294,7 +294,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug) {
     }
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
+TEST_F(PeriodicExplorationTest, debug2) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();

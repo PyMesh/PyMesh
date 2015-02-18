@@ -243,6 +243,7 @@ void PhantomMeshGenerator::inflate() {
     inflator.with_rel_geometry_correction(m_rel_geometry_correction);
     inflator.with_abs_geometry_correction(m_abs_geometry_correction);
     inflator.set_geometry_correction_cap(m_geometry_correction_cap);
+    inflator.self_intersection_is_fatal();
     inflator.inflate();
 
     m_vertices = inflator.get_vertices();
