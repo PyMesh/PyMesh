@@ -10,6 +10,7 @@
 #include "IndexHeap.h"
 
 const size_t ShortEdgeRemoval::UNMAPPED = std::numeric_limits<size_t>::max();
+const Float  ShortEdgeRemoval::INFINITE = std::numeric_limits<Float>::max();
 
 ShortEdgeRemoval::ShortEdgeRemoval(const MatrixFr& vertices, const MatrixIr& faces) :
     m_vertices(vertices),
@@ -20,6 +21,7 @@ ShortEdgeRemoval::ShortEdgeRemoval(const MatrixFr& vertices, const MatrixIr& fac
         if (vertex_per_face != 3) {
             throw NotImplementedError("Only triangle faces are supported!");
         }
+        m_importance = VectorI::Zero(m_vertices.rows());
 }
 
 size_t ShortEdgeRemoval::run(Float threshold) {
@@ -54,6 +56,7 @@ void ShortEdgeRemoval::init() {
 
 void ShortEdgeRemoval::update() {
     update_faces();
+    update_importance();
     init_vertex_map();
     init_edges();
     init_edge_length_heap();
@@ -95,7 +98,11 @@ void ShortEdgeRemoval::init_edge_length_heap() {
     const size_t num_edges = m_edges.size();
     std::vector<Float> edge_lengths(num_edges);
     for (size_t i=0; i<num_edges; i++) {
-        edge_lengths[i] = compute_edge_length(m_edges[i]);
+        if (edge_can_be_collapsed(i)) {
+            edge_lengths[i] = compute_edge_length(m_edges[i]);
+        } else {
+            edge_lengths[i] = INFINITE;
+        }
     }
     m_heap.init(edge_lengths);
 }
@@ -112,7 +119,7 @@ void ShortEdgeRemoval::update_faces() {
         for (size_t j=0; j<vertex_per_face; j++) {
             size_t mapped_idx = m_vertex_map[face[j]];
             if (mapped_idx != UNMAPPED)
-                face[j] = m_vertex_map[face[j]];
+                face[j] = mapped_idx;
         }
         if (face[0] == face[1] ||
             face[1] == face[2] ||
@@ -129,6 +136,28 @@ void ShortEdgeRemoval::update_faces() {
     std::copy(face_indices.begin(), face_indices.end(), m_face_indices.data());
 }
 
+void ShortEdgeRemoval::update_importance() {
+    const size_t num_ori_vertices = m_vertex_map.size();
+    const size_t num_vertices = get_num_vertices();
+    m_importance.conservativeResize(num_vertices);
+    m_importance.segment(num_ori_vertices,
+            num_vertices-num_ori_vertices).setZero();
+    for (size_t i=0; i<num_ori_vertices; i++) {
+        size_t mapped_idx = m_vertex_map[i];
+        if (mapped_idx != UNMAPPED) {
+            int cur_val = m_importance[mapped_idx];
+            int old_val = m_importance[i];
+            assert(cur_val >= -1);
+            assert(old_val >= -1);
+            if (cur_val < 0 || old_val < 0) {
+                m_importance[mapped_idx] = -1;
+            } else {
+                m_importance[mapped_idx] = std::max(cur_val, old_val);
+            }
+        }
+    }
+}
+
 void ShortEdgeRemoval::collapse(Float threshold) {
     while (!m_heap.empty()) {
         size_t edge_idx = m_heap.top();
@@ -137,6 +166,7 @@ void ShortEdgeRemoval::collapse(Float threshold) {
 
         if (edge_len > threshold) break;
         if (!edge_is_valid(edge_idx)) continue;
+        if (!edge_can_be_collapsed(edge_idx)) continue;
 
         collapse_edge(edge_idx);
     }
@@ -150,6 +180,13 @@ bool ShortEdgeRemoval::edge_is_valid(size_t edge_idx) const {
            m_vertex_map[v2_idx] == UNMAPPED;
 }
 
+bool ShortEdgeRemoval::edge_can_be_collapsed(size_t edge_idx) const {
+    const Edge& edge = m_edges[edge_idx];
+    size_t v1_idx = edge.get_ori_data()[0];
+    size_t v2_idx = edge.get_ori_data()[1];
+    return (m_importance[v1_idx] >= 0) || (m_importance[v2_idx] >= 0);
+}
+
 void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
     const Edge& e = m_edges[edge_idx];
     const size_t dim = m_vertices.cols();
@@ -159,9 +196,24 @@ void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
     const size_t i2 = e.get_ori_data()[1];
     const VectorF v1 = get_vertex(i1);
     const VectorF v2 = get_vertex(i2);
+    const int v1_importance = m_importance[i1];
+    const int v2_importance = m_importance[i2];
 
-    VectorF v_mid = 0.5 * (v1 + v2);
-    m_new_vertices.push_back(v_mid);
+    if (v1_importance < 0) {
+        assert(v2_importance >= 0);
+        m_new_vertices.push_back(v1);
+    } else if (v2_importance < 0) {
+        assert(v1_importance >= 0);
+        m_new_vertices.push_back(v2);
+    } else {
+        if (v1_importance == v2_importance) {
+            m_new_vertices.push_back(0.5 * (v1 + v2));
+        } else if (v1_importance > v2_importance) {
+            m_new_vertices.push_back(v1);
+        } else {
+            m_new_vertices.push_back(v2);
+        }
+    }
 
     size_t idx_mid = num_ori_vertices + num_new_vertices;
     m_vertex_map[i1] = idx_mid;

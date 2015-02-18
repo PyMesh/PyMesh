@@ -1,7 +1,9 @@
 #include "SubMesh.h"
 
+#include <iostream>
 #include <algorithm>
 #include <memory>
+#include <sstream>
 #include <Math/MatrixUtils.h>
 #include "IsolatedVertexRemoval.h"
 
@@ -85,11 +87,23 @@ void SubMesh::collect_selected_faces() {
         }
     }
 
-    m_selected_face_indices = MatrixUtils::std2eigen(selected);
-    m_selected_faces = MatrixUtils::rowstack(selected_faces);
+    assert(selected.size() + unselected.size() == num_faces);
+    assert(selected_faces.size() + unselected_faces.size() == num_faces);
+    if (selected.size() > 0) {
+        m_selected_face_indices = MatrixUtils::std2eigen(selected);
+        m_selected_faces = MatrixUtils::rowstack(selected_faces);
+    } else {
+        m_selected_face_indices.resize(0);
+        m_selected_faces.resize(0, num_vertex_per_face);
+    }
 
-    m_unselected_face_indices = MatrixUtils::std2eigen(unselected);
-    m_unselected_faces = MatrixUtils::rowstack(unselected_faces);
+    if (unselected.size() > 0) {
+        m_unselected_face_indices = MatrixUtils::std2eigen(unselected);
+        m_unselected_faces = MatrixUtils::rowstack(unselected_faces);
+    } else {
+        m_unselected_face_indices.resize(0);
+        m_unselected_faces.resize(0, num_vertex_per_face);
+    }
 }
 
 void SubMesh::clean_up_selected() {
@@ -110,8 +124,14 @@ void SubMesh::clean_up_unselected() {
 
 void SubMesh::check_validity() const {
     if (m_selected_faces.rows() + m_unselected_faces.rows() != m_faces.rows()) {
-        throw RuntimeError(
-                "Invalid submesh detected, did you forget to call finalize()");
+        std::stringstream err_msg;
+        err_msg << "Out of " << m_faces.rows() << " faces, "
+            << m_selected_faces.rows() << " faces are selected, "
+            << m_unselected_faces.rows() << " face are unselected, "
+            << m_faces.rows() - m_selected_faces.rows() -
+            m_unselected_faces.rows() << " are missing." << std::endl;
+        err_msg << "Did you forget to call finalize()?";
+        throw RuntimeError(err_msg.str());
     }
 }
 

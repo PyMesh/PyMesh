@@ -17,6 +17,7 @@ class DuplicatedVertexRemoval {
         /**
          * Assign an integer importance per vertex.  Vertex with high importance
          * level would keep their coordinate during vertex merging.
+         * Vertices with negative importance is excluded from consideration.
          */
         void set_importance_level(const VectorI& level) { m_importance_level = level; }
 

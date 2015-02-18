@@ -12,6 +12,17 @@ class ShortEdgeRemoval {
 
     public:
         /**
+         * Importance is an integer value per vertex.  The vertex with higher
+         * importance would keep its position during edge collapsing.  Mid-point
+         * is used when collapsing edge with same importance at each end.
+         *
+         * Vertex with negative importance is not considered during collapsing.
+         * i.e. they will keep their original location.
+         */
+        void set_importance(const VectorI& importance) {
+            m_importance = importance;
+        }
+        /**
          * Remove all edges that <= thresold
          * If thresold=0, remove all degenerated edges.
          */
@@ -30,8 +41,10 @@ class ShortEdgeRemoval {
         void init_edges();
         void init_edge_length_heap();
         void update_faces();
+        void update_importance();
         void collapse(Float threshold);
         bool edge_is_valid(size_t edge_idx) const;
+        bool edge_can_be_collapsed(size_t edge_idx) const;
         void collapse_edge(size_t edge_idx);
         VectorF get_vertex(size_t i) const;
         Float min_edge_length() const;
@@ -48,6 +61,7 @@ class ShortEdgeRemoval {
         MatrixFr m_vertices;
         MatrixIr m_faces;
         VectorI  m_face_indices;
+        VectorI  m_importance;
 
         std::vector<VectorF> m_new_vertices;
 
@@ -55,4 +69,5 @@ class ShortEdgeRemoval {
 
     private:
         static const size_t UNMAPPED;
+        static const Float INFINITE;
 };

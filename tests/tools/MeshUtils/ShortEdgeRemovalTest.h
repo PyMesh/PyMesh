@@ -248,3 +248,82 @@ TEST_F(ShortEdgeRemovalTest, FaceIndices) {
     check_face_indices(remover, vertices, faces, 0.2);
 }
 
+TEST_F(ShortEdgeRemovalTest, importance) {
+    MatrixFr vertices(4,3);
+    vertices <<
+        0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.1;
+    MatrixIr faces(2,3);
+    faces << 0,1,2,
+             0,2,3;
+    VectorI importance(4);
+    importance << 0, 0, 0, 1;
+
+    ShortEdgeRemoval remover(vertices, faces);
+    remover.set_importance(importance);
+    remover.run(0.2);
+
+    check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
+    check_preserved_vertex(remover, vertices.row(3), 1e-12);
+}
+
+TEST_F(ShortEdgeRemovalTest, importance2) {
+    MatrixFr vertices(4,3);
+    vertices <<
+        0.0, 0.0, 0.0,
+        1.0, 0.0, 0.0,
+        0.0, 1.0, 0.0,
+        0.0, 1.0, 0.1;
+    MatrixIr faces(2,3);
+    faces << 0,1,2,
+             0,2,3;
+    VectorI importance(4);
+    importance << 0, 0, 1, 0;
+
+    ShortEdgeRemoval remover(vertices, faces);
+    remover.set_importance(importance);
+    remover.run(0.2);
+
+    check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.2);
+    check_preserved_vertex(remover, vertices.row(2), 1e-12);
+}
+
+TEST_F(ShortEdgeRemovalTest, ChainOfImportance) {
+    // Divid the edge (0,0,0), (1,0,0) into N segments.
+    // Form a triangle fan with vertex (0,1,0).
+    const size_t N = 100;
+    const Float threshold = 0.2;
+    Vector3F v0(0.0, 0.0, 0.0);
+    Vector3F v1(1.0, 0.0, 0.0);
+    Vector3F v2(0.0, 1.0, 0.0);
+    MatrixFr vertices(N+2, 3);
+    vertices.row(0) = v2;
+    for (size_t i=0; i<=N; i++) {
+        Float ratio = Float(i) / Float(N);
+        vertices.row(i+1) = (1.0 - ratio) * v0 + ratio * v1;
+    }
+
+    MatrixIr faces(N, 3);
+    for (size_t i=0; i<N; i++) {
+        faces.row(i) = Vector3I(0, i+1, i+2);
+    }
+    VectorI importance = VectorI::Zero(N+2);
+    importance[0] = -1;
+    importance[1] = -1;
+    importance[N+1] = -1;
+
+    ShortEdgeRemoval remover(vertices, faces);
+    remover.set_importance(importance);
+    remover.run(threshold);
+
+    check_face_validity(remover);
+    check_preserved_vertex(remover, v0, 1e-12);
+    check_preserved_vertex(remover, v1, 1e-12);
+    check_preserved_vertex(remover, v2, 1e-12);
+    check_face_indices(remover, vertices, faces, threshold);
+}
+

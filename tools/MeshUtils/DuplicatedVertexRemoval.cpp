@@ -23,6 +23,13 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
     size_t count = 0;
     size_t num_duplications = 0;
     for (size_t i=0; i<num_vertices; i++) {
+        int curr_importance_level = m_importance_level[i];
+        if (curr_importance_level < 0) {
+            m_index_map[i] = count;
+            source_index.push_back(i);
+            count++;
+            continue;
+        }
         const VectorF& v = m_vertices.row(i);
         VectorI candidates = grid->get_items_near_point(v);
         const size_t num_candidates = candidates.size();
@@ -38,7 +45,6 @@ size_t DuplicatedVertexRemoval::run(Float tol) {
                 size_t output_idx = m_index_map[best_match_idx];
                 m_index_map[i] = output_idx;
 
-                int curr_importance_level = m_importance_level[i];
                 int matched_importance_level =
                     m_importance_level[source_index[output_idx]];
                 if (curr_importance_level > matched_importance_level) {
