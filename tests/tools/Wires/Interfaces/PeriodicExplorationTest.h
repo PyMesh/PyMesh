@@ -58,7 +58,8 @@ TEST_F(PeriodicExplorationTest, brick5) {
             }
         }
         explorer.set_dofs(modified_dofs);
-        explorer.periodic_inflate();
+        explorer.periodic_inflate(true);
+        write_mesh("test.msh", explorer.get_mesh());
         bool tetgen_success = explorer.run_tetgen();
         ASSERT_TRUE(tetgen_success);
 
@@ -110,7 +111,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
             }
         }
         explorer.set_dofs(modified_dofs);
-        explorer.periodic_inflate();
+        explorer.periodic_inflate(true);
         bool tetgen_success = explorer.run_tetgen();
 
         Mesh::Ptr mesh = explorer.get_mesh();
@@ -158,7 +159,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
         }
     }
     explorer.set_dofs(dofs);
-    explorer.periodic_inflate();
+    explorer.periodic_inflate(true);
 
     MatrixFr init_vertices = explorer.get_vertices();
     MatrixIr init_faces = explorer.get_faces();
@@ -174,7 +175,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
         modified_dofs[i] += eps;
 
         explorer.set_dofs(modified_dofs);
-        explorer.periodic_inflate();
+        explorer.periodic_inflate(true);
 
         MatrixFr vertices = explorer.get_vertices();
         MatrixIr faces = explorer.get_faces();
@@ -212,7 +213,7 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
     const Float step_size = 0.01;
     for (size_t i=0; i<num_steps; i++) {
 
-        explorer.periodic_inflate();
+        explorer.periodic_inflate(true);
         bool tetgen_success = explorer.run_tetgen();
         ASSERT_TRUE(tetgen_success);
 
@@ -285,7 +286,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug) {
     for (size_t i=0; i<3; i++) {
         explorer.set_dofs(dofs);
         try {
-            explorer.periodic_inflate();
+            explorer.periodic_inflate(true);
         } catch (...) {
             MatrixFr itr_vertices = wire_network->get_vertices();
             ASSERT_FLOAT_EQ(0.0, (vertices-itr_vertices).norm());
@@ -293,7 +294,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug) {
     }
 }
 
-TEST_F(PeriodicExplorationTest, debug2) {
+TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -301,7 +302,7 @@ TEST_F(PeriodicExplorationTest, debug2) {
     std::string dof_file = m_data_dir + "lengthError.dof";
     explorer.load_dofs(dof_file);
     try {
-        explorer.periodic_inflate();
+        explorer.periodic_inflate(true);
     } catch (const std::exception& e) {
         // TODO: min boundary not match.
     }
@@ -336,7 +337,7 @@ TEST_F(PeriodicExplorationTest, hex_profile) {
     dofs << 0.5, 0.5, 0.5, 0.125, -0.125, 0.125;
     explorer.set_dofs(dofs);
     explorer.with_profile("hexagon");
-    explorer.periodic_inflate();
+    explorer.periodic_inflate(true);
     Mesh::Ptr mesh = explorer.get_mesh();
     std::vector<MatrixFr> velocities = explorer.get_shape_velocities();
 

@@ -22,6 +22,8 @@ class InflatorEngine {
         static Ptr create(const std::string& type, WireNetwork::Ptr network);
         static Ptr create_parametric(WireNetwork::Ptr network,
                 ParameterManager::Ptr manager);
+        static Ptr create_isotropic_parametric(WireNetwork::Ptr network,
+                ParameterManager::Ptr manager);
 
     public:
         InflatorEngine(WireNetwork::Ptr wire_network);

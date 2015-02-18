@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cassert>
 
+#include <IO/MeshWriter.h>
 #include <Core/Exception.h>
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
@@ -47,6 +48,17 @@ namespace BoundaryRemsherHelper {
         assert((faces.col(0).array() != faces.col(1).array()).all());
         assert((faces.col(1).array() != faces.col(2).array()).all());
         assert((faces.col(2).array() != faces.col(1).array()).all());
+    }
+
+    void save_mesh(const std::string& filename,
+            const MatrixFr& vertices, const MatrixIr& faces) {
+        auto flattened_vertices = MatrixUtils::flatten<VectorF>(vertices);
+        auto flattened_faces = MatrixUtils::flatten<VectorI>(faces);
+        VectorI voxels = VectorI::Zero(0);
+
+        MeshWriter::Ptr writer = MeshWriter::create(filename);
+        writer->write(flattened_vertices, flattened_faces, voxels,
+                vertices.cols(), faces.cols(), 0);
     }
 }
 using namespace BoundaryRemsherHelper;

@@ -8,6 +8,8 @@
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
+#include <MeshUtils/ShortEdgeRemoval.h>
+#include <MeshUtils/SubMesh.h>
 #include <tetgen/TetgenWrapper.h>
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
@@ -61,13 +63,16 @@ void IsotropicPeriodicInflator::clip_to_center_cell() {
     refine_long_clip_box_edges();
     remesh_boundary();
     reflect();
+    merge_boundary();
+    ensure_periodicity();
     update_face_sources();
 }
 
 void IsotropicPeriodicInflator::refine_long_clip_box_edges() {
+    const Float tol = get_distance_threshold();
     const Float max_edge_len = 0.5;
     BoxChecker box(m_octa_cell_bbox_min, m_octa_cell_bbox_max);
-    box.set_tolerance(1e-12);
+    box.set_tolerance(tol);
 
     EdgeSplitter splitter(m_vertices, m_faces);
     EdgeSplitter::IndicatorFunc bd_edge_indicator =
@@ -124,7 +129,7 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
     create_box(m_octa_cell_bbox_min, m_octa_cell_bbox_max,
             box_vertices, box_faces);
 
-    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cgal");
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cork");
     boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
     boolean_engine->set_mesh_2(box_vertices, box_faces);
     boolean_engine->compute_intersection();
@@ -140,22 +145,17 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
 }
 
 void IsotropicPeriodicInflator::clean_up_clipped_mesh() {
+    const Float tol = get_distance_threshold();
     MeshCleaner cleaner;
     cleaner.remove_isolated_vertices(m_vertices, m_faces);
-    cleaner.remove_duplicated_vertices(m_vertices, m_faces, 1e-12);
-    cleaner.remove_short_edges(m_vertices, m_faces, 1e-12);
+    cleaner.remove_duplicated_vertices(m_vertices, m_faces, tol);
+    cleaner.remove_short_edges(m_vertices, m_faces, tol);
 }
 
 void IsotropicPeriodicInflator::remesh_boundary() {
     typedef std::function<bool(const VectorF&)> IndicatorFunc;
-    const Float tol = 1e-6;
+    const Float tol = get_distance_threshold();
     std::vector<IndicatorFunc> bd_indicators;
-    bd_indicators.push_back([=](const VectorF& v)
-            { return fabs(v[0] - m_octa_cell_bbox_min[0]) < tol; });
-    bd_indicators.push_back([=](const VectorF& v)
-            { return fabs(v[1] - m_octa_cell_bbox_min[1]) < tol; });
-    bd_indicators.push_back([=](const VectorF& v)
-            { return fabs(v[2] - m_octa_cell_bbox_min[2]) < tol; });
     bd_indicators.push_back([=](const VectorF& v)
             { return fabs(v[0] - m_octa_cell_bbox_max[0]) < tol; });
     bd_indicators.push_back([=](const VectorF& v)
@@ -183,6 +183,94 @@ void IsotropicPeriodicInflator::remesh_boundary() {
 }
 
 void IsotropicPeriodicInflator::reflect() {
+    const Float tol = get_distance_threshold();
+    typedef std::function<bool(const VectorF&)> IndicatorFunc;
+    std::vector<IndicatorFunc> min_bd_indicators;
+    min_bd_indicators.push_back([=](const VectorF& v)
+            { return fabs(v[0] - m_octa_cell_bbox_min[0]) < tol; });
+    min_bd_indicators.push_back([=](const VectorF& v)
+            { return fabs(v[1] - m_octa_cell_bbox_min[1]) < tol; });
+    min_bd_indicators.push_back([=](const VectorF& v)
+            { return fabs(v[2] - m_octa_cell_bbox_min[2]) < tol; });
+
+    for (auto f : min_bd_indicators) {
+        SubMesh::Ptr submesh = SubMesh::create_raw(m_vertices, m_faces);
+        submesh->filter_vertex_with_custom_function(f);
+        submesh->finalize();
+        m_vertices = submesh->get_unselected_vertices();
+        m_faces = submesh->get_unselected_faces();
+    }
+    
+    for (size_t i=0; i<3; i++) {
+        size_t num_vertices = m_vertices.rows();
+        MatrixFr r_vts = m_vertices;
+        for (size_t j=0; j<num_vertices; j++) {
+            r_vts(j, i) = -r_vts(j, i) + 2 * m_octa_cell_bbox_min[i];
+        }
+
+        MatrixIr r_faces = m_faces.array() + num_vertices;
+        r_faces.col(0).swap(r_faces.col(1));
+
+        m_vertices = MatrixUtils::vstack<MatrixFr>({m_vertices, r_vts});
+        m_faces = MatrixUtils::vstack<MatrixIr>({m_faces, r_faces});
+    }
+}
+
+void IsotropicPeriodicInflator::merge_boundary() {
+    auto bd = Boundary::extract_surface_boundary_raw(m_vertices, m_faces);
+    VectorI bd_vertices = bd->get_boundary_nodes();
+    const size_t num_bd_vertices = bd_vertices.size();
+    const size_t num_vertices = m_vertices.rows();
+    VectorI importance = VectorI::Ones(num_vertices) * -1;
+    for (size_t i=0; i < num_bd_vertices; i++) {
+        importance[bd_vertices[i]] = 0;
+    }
+
+    const Float tol = get_distance_threshold();
+    DuplicatedVertexRemoval remover(m_vertices, m_faces);
+    remover.set_importance_level(importance);
+    remover.run(tol);
+
+    m_vertices = remover.get_vertices();
+    m_faces = remover.get_faces();
+}
+
+void IsotropicPeriodicInflator::ensure_periodicity() {
+    const size_t dim = m_vertices.cols();
+    const Float tol = get_distance_threshold();
+    const size_t num_vertices = m_vertices.rows();
+    VectorI importance = VectorI::Zero(num_vertices);
+
+    BoxChecker box(m_center_cell_bbox_min, m_center_cell_bbox_max);
+    box.set_tolerance(tol);
+    for (size_t i=0; i<num_vertices; i++) {
+        if (box.is_on_boundary(m_vertices.row(i))) {
+            importance[i] = -1;
+            for (size_t j=0; j<dim; j++) {
+                const Float val = m_vertices(i, j);
+                if (fabs(val - m_center_cell_bbox_min[j]) < tol) {
+                    m_vertices(i, j) = m_center_cell_bbox_min[j];
+                } else if (fabs(val - m_center_cell_bbox_max[j]) < tol) {
+                    m_vertices(i, j) = m_center_cell_bbox_max[j];
+                }
+            }
+        }
+    }
+    save_mesh("snapped.msh", m_vertices, m_faces);
+
+    ShortEdgeRemoval remover(m_vertices, m_faces);
+    remover.set_importance(importance);
+    remover.run(1e-3);
+
+    m_vertices = remover.get_vertices();
+    m_faces = remover.get_faces();
+
+    MeshCleaner cleaner;
+    cleaner.remove_isolated_vertices(m_vertices, m_faces);
+    cleaner.remove_fin_faces(m_vertices, m_faces);
+}
+
+void IsotropicPeriodicInflator::reflect_old() {
     TetgenWrapper tetrahedronizer(m_vertices, m_faces);
     tetrahedronizer.run("qpa0.01Q");
 
@@ -247,5 +335,9 @@ void IsotropicPeriodicInflator::update_face_sources() {
 #ifndef NDEBUG
     save_mesh("reflected.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
 #endif
+}
+
+Float IsotropicPeriodicInflator::get_distance_threshold() const {
+    return (m_octa_cell_bbox_max - m_octa_cell_bbox_min).maxCoeff() * 1e-4;
 }
 

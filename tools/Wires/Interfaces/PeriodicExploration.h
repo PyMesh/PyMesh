@@ -57,7 +57,7 @@ class PeriodicExploration {
             m_parameters->load_dofs(filename);
         }
 
-        void periodic_inflate();
+        void periodic_inflate(bool use_reflective_inflator=false);
 
         /**
          * Return true only if tetgen succeeded.

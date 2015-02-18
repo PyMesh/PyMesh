@@ -7,6 +7,7 @@
 #include <MeshUtils/FinFaceRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/ObtuseTriangleRemoval.h>
+#include <Misc/Timer.h>
 
 #include "BoxChecker.h"
 

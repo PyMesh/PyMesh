@@ -62,14 +62,19 @@ void PeriodicExploration::with_profile(size_t num_samples) {
     m_profile = WireProfile::create_isotropic(num_samples);
 }
 
-void PeriodicExploration::periodic_inflate() {
+void PeriodicExploration::periodic_inflate(bool use_reflective_inflator) {
     ParameterCommon::Variables vars;
     MatrixFr offset = m_parameters->evaluate_offset(vars);
     MatrixFr ori_vertices = m_wire_network->get_vertices();
     m_wire_network->set_vertices(ori_vertices+ offset);
 
-    InflatorEngine::Ptr inflator =
-        InflatorEngine::create_parametric(m_wire_network, m_parameters);
+    InflatorEngine::Ptr inflator;
+    if (use_reflective_inflator) {
+        inflator = InflatorEngine::create_isotropic_parametric(
+                m_wire_network, m_parameters);
+    } else {
+        inflator = InflatorEngine::create_parametric(m_wire_network, m_parameters);
+    }
     inflator->set_profile(m_profile);
     inflator->with_shape_velocities();
     if (m_refine_order > 0)
@@ -115,6 +120,7 @@ bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
     // will only append to the existing list of vertices.  Therefore, the face
     // arrays are still valid given the "Y" flag is used.
     MatrixFr vertices = tetgen.get_vertices();
+    assert(vertices.rows() > 0);
     assert((vertices.block(0, 0, num_vertices, dim).array()==m_vertices.array()).all());
     m_vertices = vertices;
     m_voxels = tetgen.get_voxels();

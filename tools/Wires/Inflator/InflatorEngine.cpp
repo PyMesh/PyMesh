@@ -17,6 +17,7 @@
 #include "SimpleInflator.h"
 #include "PeriodicInflator2D.h"
 #include "PeriodicInflator3D.h"
+#include "IsotropicPeriodicInflator.h"
 
 InflatorEngine::Ptr InflatorEngine::create(const std::string& type,
         WireNetwork::Ptr network) {
@@ -32,6 +33,13 @@ InflatorEngine::Ptr InflatorEngine::create(const std::string& type,
             std::stringstream err_msg;
             err_msg << "Unsupported dim: " << dim;
             throw NotImplementedError(err_msg.str());
+        }
+    } else if (type == "reflective") {
+        if (dim == 3) {
+            return std::make_shared<IsotropicPeriodicInflator>(network);
+        } else {
+            throw NotImplementedError(
+                    "Isotropic periodic inflator only support 3D mesh");
         }
     } else {
         std::stringstream err_msg;
@@ -57,6 +65,19 @@ InflatorEngine::Ptr InflatorEngine::create_parametric(WireNetwork::Ptr network,
         std::stringstream err_msg;
         err_msg << "Unsupported dim: " << dim;
         throw NotImplementedError(err_msg.str());
+    }
+}
+
+InflatorEngine::Ptr InflatorEngine::create_isotropic_parametric(
+        WireNetwork::Ptr network, ParameterManager::Ptr manager) {
+    const size_t dim = network->get_dim();
+    if (dim == 3) {
+        auto ptr = std::make_shared<IsotropicPeriodicInflator>(network);
+        ptr->set_parameter(manager);
+        return ptr;
+    } else {
+            throw NotImplementedError(
+                    "Isotropic periodic inflator only support 3D mesh");
     }
 }
 

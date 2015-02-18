@@ -17,8 +17,12 @@ class IsotropicPeriodicInflator : public PeriodicInflator {
         void clean_up_clipped_mesh();
         void refine_long_clip_box_edges();
         void remesh_boundary();
+        void reflect_old();
         void reflect();
+        void merge_boundary();
+        void ensure_periodicity();
         void update_face_sources();
+        Float get_distance_threshold() const;
 
     private:
         VectorF m_center_cell_bbox_min;
