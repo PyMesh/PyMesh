@@ -9,3 +9,4 @@
 %include Inflator/WireProfile.i
 %include Parameters/ParameterCommon.i
 %include Parameters/ParameterManager.i
+%include Misc/SymmetryChecker.i

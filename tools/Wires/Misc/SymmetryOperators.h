@@ -28,6 +28,16 @@ namespace SymmetryOperators {
         throw NotImplementedError(err_msg.str());
     }
 
+    template<int DIM>
+    Operators generate_cubic_symmetry_operators(const VectorF& center) {
+        Operators results;
+        auto reflective_ops = generate_reflective_symmetry_operators<DIM>(center);
+        auto rotational_ops = generate_rotational_symmetry_operators<DIM>(center);
+        results.insert(results.end(), reflective_ops.begin(), reflective_ops.end());
+        results.insert(results.end(), rotational_ops.begin(), rotational_ops.end());
+        return results;
+    }
+
     template<>
     Operators generate_reflective_symmetry_operators<2>(const VectorF& c);
 

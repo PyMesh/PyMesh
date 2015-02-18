@@ -23,6 +23,7 @@
 #include "Misc/BoxCheckerTest.h"
 #include "Misc/DistanceComputationTest.h"
 #include "Misc/EdgeSplitterTest.h"
+#include "Misc/SymmetryCheckerTest.h"
 #include "Misc/SymmetryOperatorsTest.h"
 #include "Misc/TrilinearInterpolationTest.h"
 #include "Parameters/IsotropicDofExtractorTest.h"
