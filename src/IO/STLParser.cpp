@@ -302,7 +302,7 @@ void STLParser::merge_identical_vertices() {
     size_t num_vertices = m_vertices.size();
 
     HashGrid::Ptr hash_grid =
-        HashGrid::create(1e-3 * diagonal_length);
+        HashGrid::create(1e-12 * diagonal_length);
 
     size_t count=0;
     std::vector<int> index_map(num_vertices, -1);
