@@ -7,6 +7,7 @@
 
 #include <igl/cgal/remesh_self_intersections.h>
 #include <igl/outer_hull.h>
+#include <igl/remove_unreferenced.h>
 
 void IGLOuterHullEngine::run() {
     assert(m_vertices.cols() == 3);
@@ -47,8 +48,12 @@ void IGLOuterHullEngine::resolve_self_intersections() {
             ori_face_indices,
             unique_vertex_indices);
 
-    m_vertices = out_vertices;
-    m_faces = out_faces;
+    std::for_each(out_faces.data(),out_faces.data()+out_faces.size(),
+            [&unique_vertex_indices](int & a){
+            a=unique_vertex_indices(a);
+            });
+    igl::remove_unreferenced(out_vertices,out_faces,
+            m_vertices,m_faces,unique_vertex_indices);
 
     const size_t num_out_faces = out_faces.rows();
     Matrix3Fr out_normals = Matrix3Fr::Zero(num_out_faces, 3);
@@ -66,7 +71,7 @@ void IGLOuterHullEngine::extract_outer_hull() {
     igl::outer_hull(
             m_vertices,
             m_faces,
-            m_normals,
+            //m_normals,
             out_faces,
             ori_face_indices,
             ori_face_is_flipped);
