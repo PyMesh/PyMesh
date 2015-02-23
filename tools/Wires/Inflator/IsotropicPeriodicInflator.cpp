@@ -8,12 +8,12 @@
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
+#include <MeshUtils/EdgeSplitter.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/SubMesh.h>
 #include <tetgen/TetgenWrapper.h>
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
-#include <Wires/Misc/EdgeSplitter.h>
 #include <Wires/Misc/MeshCleaner.h>
 
 #include "AABBTree.h"

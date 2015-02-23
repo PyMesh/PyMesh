@@ -14,3 +14,5 @@
 %include Subdivision.i
 %include DuplicatedVertexRemoval.i
 %include IsolatedVertexRemoval.i
+%include LongEdgeRemoval.i
+%include FinFaceRemoval.i

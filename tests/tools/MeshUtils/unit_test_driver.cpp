@@ -1,18 +1,20 @@
 #include <gtest/gtest.h>
+#include "AttributeUtilsTest.h"
 #include "BoundaryEdgesTest.h"
 #include "BoundaryFacesTest.h"
+#include "DuplicatedVertexRemovalTest.h"
+#include "EdgeSplitterTest.h"
+#include "FinFaceRemovalTest.h"
 #include "IndexHeapTest.h"
 #include "IsolatedVertexRemovalTest.h"
-#include "ShortEdgeRemovalTest.h"
-#include "TripletMapTest.h"
-#include "AttributeUtilsTest.h"
-#include "PointLocatorTest.h"
-#include "SimpleSubdivisionTest.h"
 #include "LoopSubdivisionTest.h"
-#include "DuplicatedVertexRemovalTest.h"
-#include "FinFaceRemovalTest.h"
-#include "SubMeshTest.h"
+#include "LongEdgeRemovalTest.h"
 #include "ObtuseTriangleRemovalTest.h"
+#include "PointLocatorTest.h"
+#include "ShortEdgeRemovalTest.h"
+#include "SimpleSubdivisionTest.h"
+#include "TripletMapTest.h"
+#include "SubMeshTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

@@ -51,6 +51,18 @@ class IndexHeap {
             m_indices.pop_back();
         }
 
+        void push(T val) {
+            size_t idx = m_data.size();
+            m_data.push_back(val);
+            m_indices.push_back(idx);
+            std::push_heap(m_indices.begin(), m_indices.end(), m_comp);
+        }
+
+        void update(size_t index, T val) {
+            m_data[index] = val;
+            std::make_heap(m_indices.begin(), m_indices.end(), m_comp);
+        }
+
         size_t size() const {
             return m_indices.size();
         }

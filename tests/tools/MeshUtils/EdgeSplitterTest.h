@@ -6,7 +6,7 @@
 #include <Math/MatrixUtils.h>
 #include <TestBase.h>
 
-#include <Wires/Misc/EdgeSplitter.h>
+#include <MeshUtils/EdgeSplitter.h>
 
 class EdgeSplitterTest : public TestBase {
     protected:

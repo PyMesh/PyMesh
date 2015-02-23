@@ -31,11 +31,13 @@ size_t FinFaceRemoval::run() {
         Triplet key(f[0], f[1], f[2]);
 
         const auto& indices = face_index_map[key];
-        if (indices.size() == 1) {
-            face_list.push_back(f[0]);
-            face_list.push_back(f[1]);
-            face_list.push_back(f[2]);
-            face_indices.push_back(i);
+        if (indices.size() % 2 == 1) {
+            if (i == *std::min_element(indices.begin(), indices.end())) {
+                face_list.push_back(f[0]);
+                face_list.push_back(f[1]);
+                face_list.push_back(f[2]);
+                face_indices.push_back(i);
+            }
         }
     }
 
