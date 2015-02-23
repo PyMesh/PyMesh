@@ -71,7 +71,7 @@ void IGLOuterHullEngine::extract_outer_hull() {
     igl::outer_hull(
             m_vertices,
             m_faces,
-            //m_normals,
+            m_normals,
             out_faces,
             ori_face_indices,
             ori_face_is_flipped);
