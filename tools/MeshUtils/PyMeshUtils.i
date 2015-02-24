@@ -16,3 +16,4 @@
 %include IsolatedVertexRemoval.i
 %include LongEdgeRemoval.i
 %include FinFaceRemoval.i
+%include MeshChecker.i

@@ -30,15 +30,12 @@ size_t MeshSeparator::separate() {
 
 void MeshSeparator::compute_face_connectivity() {
     const size_t num_faces = m_faces.rows();
+    const size_t vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {
-        Vector3I face = m_faces.row(i);
-        Edge e1(face[0], face[1]);
-        Edge e2(face[1], face[2]);
-        Edge e3(face[2], face[0]);
-
-        m_edge_map.insert(e1, i);
-        m_edge_map.insert(e2, i);
-        m_edge_map.insert(e3, i);
+        const auto& f = m_faces.row(i);
+        for (size_t j=0; j<vertex_per_face; j++) {
+            m_edge_map.insert(Edge(f[j], f[(j+1)%vertex_per_face]), i);
+        }
     }
 }
 
@@ -62,7 +59,8 @@ MatrixI MeshSeparator::flood(size_t seed) {
         }
     }
 
-    MatrixI comp_faces(face_list.size(), 3);
+    const size_t vertex_per_face = m_faces.cols();
+    MatrixI comp_faces(face_list.size(), vertex_per_face);
     size_t count = 0;
     for (std::list<size_t>::const_iterator itr = face_list.begin();
             itr != face_list.end(); itr++) {
@@ -75,25 +73,15 @@ MatrixI MeshSeparator::flood(size_t seed) {
 }
 
 std::vector<size_t> MeshSeparator::get_adjacent_faces(size_t fi) {
-    const Vector3I& face = m_faces.row(fi);
-    Edge e1(face[0], face[1]);
-    Edge e2(face[1], face[2]);
-    Edge e3(face[2], face[0]);
-
-    AdjFaces& neighbor1 = m_edge_map[e1];
-    AdjFaces& neighbor2 = m_edge_map[e2];
-    AdjFaces& neighbor3 = m_edge_map[e3];
-
-    const size_t num_neighbors =
-        neighbor1.size() + neighbor2.size() + neighbor3.size();
-    std::vector<size_t> result;
-    result.reserve(num_neighbors);
-
-    result.insert(result.end(), neighbor1.begin(), neighbor1.end());
-    result.insert(result.end(), neighbor2.begin(), neighbor2.end());
-    result.insert(result.end(), neighbor3.begin(), neighbor3.end());
-
-    return result;
+    std::vector<size_t> neighbors;
+    const auto& face = m_faces.row(fi);
+    const size_t vertex_per_face = face.size();
+    for (size_t i=0; i<vertex_per_face; i++) {
+        Edge e(face[i], face[(i+1)%vertex_per_face]);
+        AdjFaces& neighbor = m_edge_map[e];
+        neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
+    }
+    return neighbors;
 }
 
 void MeshSeparator::clear() {
