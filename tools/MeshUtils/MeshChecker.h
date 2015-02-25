@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include <Core/EigenTypedef.h>
 #include "TripletMap.h"
 
@@ -12,22 +14,26 @@ class MeshChecker {
          * Returns true iff 1 ring of every vertex is topologically a disk.
          * (or half disk for boundary vertices.)
          */
-        bool is_manifold();
+        bool is_manifold() const;
 
         /**
          * Returns true iff the mesh does not contain any boundary.
          */
-        bool is_closed();
+        bool is_closed() const;
 
-        size_t get_num_boundary_edges();
+        size_t get_num_boundary_edges() const;
 
-        size_t get_num_boundary_loops();
+        size_t get_num_boundary_loops() const;
 
-        int get_genus();
+        int get_genus() const;
 
-        int get_euler_characteristic();
+        int get_euler_characteristic() const;
 
-        size_t get_num_connected_components();
+        size_t get_num_connected_components() const;
+
+        size_t get_num_isolated_vertices() const;
+
+        size_t get_num_duplicated_faces() const;
 
     private:
         void init_boundary();

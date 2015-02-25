@@ -56,7 +56,7 @@ namespace EdgeUtilsHelper {
             size_t vid = itr->second;
             next.erase(itr);
 
-            if (itr->second == start) break;
+            if (vid == start) break;
             chain.push_back(vid);
         }
         return MatrixUtils::std2eigen(chain).cast<int>();
@@ -64,25 +64,14 @@ namespace EdgeUtilsHelper {
 
     void trace_vertex_chains(const IndexHash& valance, IndexHash& next,
             std::vector<VectorI>& chains) {
-        std::vector<bool> visited(valance.size(), false);
         for (auto target_valance : {1, 2}) {
             for (auto item : valance) {
-                if (visited[item.first]) continue;
                 if (next.find(item.first) == next.end()) continue;
                 if (item.second == target_valance) {
                     chains.push_back(trace(next, item.first));
                     const auto& chain = chains.back();
                     const size_t chain_length = chain.size();
                     assert(chain_length > 1);
-                    for (size_t i=0; i<chain_length; i++) {
-                        visited[chain[i]] = true;
-                    }
-                } else if (item.second != 2) {
-                    std::stringstream err_msg;
-                    err_msg << "Complex edge loop detected!  ";
-                    err_msg << "Vertex " << item.first << " has valance " << item.second
-                        << std::endl;
-                    throw RuntimeError(err_msg.str());
                 }
             }
         }
