@@ -194,7 +194,7 @@ void LongEdgeRemoval::triangulate_chain(
         }
         Q.push(idx);
     }
-    auto visited_sum = (visited.array() > 0).rowwise().count();
+    VectorI visited_sum = (visited.array() > 0).rowwise().count().cast<int>();
     if ((visited_sum.array() > 1).count() == 3) {
         Vector3I face;
         size_t count = 0;
