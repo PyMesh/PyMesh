@@ -14,7 +14,12 @@ class MeshChecker {
          * Returns true iff 1 ring of every vertex is topologically a disk.
          * (or half disk for boundary vertices.)
          */
-        bool is_manifold() const;
+        bool is_vertex_manifold() const;
+
+        /**
+         * Return true iff every edge is adjacent to up to 2 faces.
+         */
+        bool is_edge_manifold() const;
 
         /**
          * Returns true iff the mesh does not contain any boundary.
