@@ -1,6 +1,7 @@
 #include "MeshChecker.h"
 
 #include <iostream>
+#include <sstream>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -18,15 +19,43 @@ MeshChecker::MeshChecker(const MatrixFr& vertices, const MatrixIr& faces)
         init_edge_face_adjacency();
 }
 
-bool MeshChecker::is_manifold() const {
+bool MeshChecker::is_vertex_manifold() const {
+    const size_t num_vertices = m_vertices.rows();
+    const size_t num_faces = m_faces.rows();
+    const size_t vertex_per_face = m_faces.cols();
+    if (vertex_per_face != 3) {
+        std::stringstream err_msg;
+        err_msg << "Vertex manifold check only support triangle mesh";
+        throw NotImplementedError(err_msg.str());
+    }
+
+    std::vector<std::vector<VectorI> > opposite_edges(num_vertices);
+    for (size_t i=0; i<num_faces; i++) {
+        const auto& f = m_faces.row(i);
+        opposite_edges[f[0]].push_back(Vector2I(f[1], f[2]));
+        opposite_edges[f[1]].push_back(Vector2I(f[2], f[0]));
+        opposite_edges[f[2]].push_back(Vector2I(f[0], f[1]));
+    }
+
+    for (const auto& entries: opposite_edges) {
+        if (entries.empty()) continue;
+        try {
+            auto edge_loops = EdgeUtils::chain_edges(
+                    MatrixUtils::rowstack(entries));
+            if (edge_loops.size() != 1) return false;
+        } catch (...) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool MeshChecker::is_edge_manifold() const {
     for (auto adj : m_edge_face_adjacency) {
         if (adj.second.size() > 2) {
             return false;
         }
     }
-    if ((2 - int(get_euler_characteristic())
-                - int(get_num_boundary_loops())) % 2 != 0)
-        return false;
     return true;
 }
 
