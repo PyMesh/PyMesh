@@ -5,6 +5,7 @@
 #include "MeshFactoryTest.h"
 #include "IO/OBJParserTest.h"
 #include "IO/OBJWriterTest.h"
+#include "IO/OFFParserTest.h"
 #include "IO/MSHParserTest.h"
 #include "IO/MSHWriterTest.h"
 #include "IO/PLYParserTest.h"

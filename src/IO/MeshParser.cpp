@@ -5,6 +5,7 @@
 
 #include <Core/Exception.h>
 #include "OBJParser.h"
+#include "OFFParser.h"
 #include "MSHParser.h"
 #include "STLParser.h"
 #include "PLYParser.h"
@@ -16,6 +17,8 @@ MeshParser* MeshParser::create_parser(const std::string& filename) {
     std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
         parser= new OBJParser();
+    } else if (ext == ".off") {
+        parser= new OFFParser();
     } else if (ext == ".msh") {
         parser = new MSHParser();
     } else if (ext == ".stl") {
