@@ -1,11 +1,63 @@
 #include "FinFaceRemoval.h"
 
+#include <cassert>
 #include <list>
 
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
 
 #include "TripletMap.h"
+
+namespace FinFaceRemovalHelper {
+    /**
+     * Compute face orientation based on its vertex indices:
+     * Return  1 if the face orientated the same way as (1, 2, 3).
+     * Return -1 if the face orientated the same way as (1, 3, 2).
+     * Return  0 if the face contains duplicated vertices as (1, 1, 2).
+     */
+    template<typename Derived>
+    int orientation(const Eigen::DenseBase<Derived>& f) {
+        assert(f.size() == 3);
+        int result = 0;
+
+        if (f[0] < f[1]) result++;
+        else if (f[0] > f[1]) result--;
+
+        if (f[1] < f[2]) result++;
+        else if (f[1] > f[2]) result--;
+
+        if (f[2] < f[0]) result++;
+        else if (f[2] > f[0]) result--;
+
+        return result;
+    }
+
+    /**
+     * Return a face that has the correct orientation.
+     */
+    int compute_majority_orientation(
+            const MatrixIr& faces, const std::vector<size_t>& face_indices,
+            size_t& correctly_orientated_face_idx) {
+        size_t positive_fid = 0;
+        size_t negative_fid = 0;
+
+        int majority_orientation = 0;
+        for (size_t fid : face_indices) {
+            int ori = orientation(faces.row(fid));
+            majority_orientation += ori;
+            if (ori > 0) positive_fid = fid;
+            else if (ori < 0) negative_fid = fid;
+        }
+
+        if (majority_orientation > 0)
+            correctly_orientated_face_idx = positive_fid;
+        else if (majority_orientation < 0)
+            correctly_orientated_face_idx = negative_fid;
+
+        return majority_orientation;
+    }
+}
+using namespace FinFaceRemovalHelper;
 
 FinFaceRemoval::FinFaceRemoval(const MatrixFr& vertices, const MatrixIr& faces)
     : m_vertices(vertices), m_faces(faces) {}
@@ -26,26 +78,43 @@ size_t FinFaceRemoval::run() {
 
     std::list<int> face_list;
     std::list<size_t> face_indices;
+    std::vector<bool> visited(num_faces, false);
     for (size_t i=0; i<num_faces; i++) {
+        if (visited[i]) continue;
         const VectorI& f = m_faces.row(i);
         Triplet key(f[0], f[1], f[2]);
 
         const auto& indices = face_index_map[key];
-        if (indices.size() % 2 == 1) {
-            if (i == *std::min_element(indices.begin(), indices.end())) {
+        size_t correctly_orientated_fid = std::numeric_limits<size_t>::max();
+        int majority_orientation = compute_majority_orientation(
+                m_faces, indices, correctly_orientated_fid);
+
+        if (majority_orientation != 0) {
+            assert(correctly_orientated_fid < num_faces);
+            int curr_orientation = orientation(f);
+            if (curr_orientation * majority_orientation >= 0) {
                 face_list.push_back(f[0]);
                 face_list.push_back(f[1]);
                 face_list.push_back(f[2]);
-                face_indices.push_back(i);
+            } else {
+                face_list.push_back(f[0]);
+                face_list.push_back(f[2]);
+                face_list.push_back(f[1]);
             }
+            face_indices.push_back(correctly_orientated_fid);
         }
+
+        std::for_each(indices.begin(), indices.end(), [&](size_t index)
+                { visited[index] = true; });
     }
 
     const size_t num_faces_left = face_indices.size();
     m_faces.resize(num_faces_left, 3);
     m_face_indices.resize(num_faces_left);
-    std::copy(face_list.begin(), face_list.end(), m_faces.data());
-    std::copy(face_indices.begin(), face_indices.end(), m_face_indices.data());
+    if (num_faces_left > 0) {
+        std::copy(face_list.begin(), face_list.end(), m_faces.data());
+        std::copy(face_indices.begin(), face_indices.end(), m_face_indices.data());
+    }
 
     return num_faces - num_faces_left;
 }
