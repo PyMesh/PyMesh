@@ -24,10 +24,12 @@ class OuterHullEngine {
         const MatrixIr get_faces() const { return m_faces; }
         const MatrixFr get_interior_vertices() const { return m_interior_vertices; }
         const MatrixIr get_interior_faces() const { return m_interior_faces; }
+        const VectorF  get_debug_field() const { return m_debug; }
 
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
         MatrixFr m_interior_vertices;
         MatrixIr m_interior_faces;
+        VectorF  m_debug;
 };

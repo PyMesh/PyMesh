@@ -2,6 +2,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <sstream>
 #include <vector>
 #include <Math/MatrixUtils.h>
 
@@ -14,6 +15,7 @@ void IGLOuterHullEngine::run() {
     assert(m_faces.cols() == 3);
 
     extract_face_normals();
+    check_normal_reliability();
     resolve_self_intersections();
     extract_outer_hull();
 }
@@ -27,6 +29,15 @@ void IGLOuterHullEngine::extract_face_normals() {
         Vector3F v1 = m_vertices.row(f[1]);
         Vector3F v2 = m_vertices.row(f[2]);
         m_normals.row(i) = ((v1-v0).cross(v2-v0)).normalized();
+    }
+}
+
+void IGLOuterHullEngine::check_normal_reliability() {
+    if (!m_normals.allFinite()) {
+        std::stringstream err_msg;
+        err_msg << "Normal computation failed: found nan or inf!" << std::endl;
+        err_msg << "The most likely cause is degenerated triangles!";
+        throw RuntimeError(err_msg.str());
     }
 }
 
@@ -84,13 +95,31 @@ void IGLOuterHullEngine::extract_outer_hull() {
         in_outer[ori_face_indices[i]] = true;
     }
 
+    m_debug = VectorF::Zero(num_out_faces);
+    for (size_t i=0; i<num_out_faces; i++) {
+        if (ori_face_is_flipped[ori_face_indices[i]]) {
+            m_debug[i] = 1;
+        }
+    }
+    //for (size_t i=0; i<num_faces; i++) {
+    //    if (ori_face_is_flipped[i]) {
+    //        in_outer[i] = false;
+    //    }
+    //}
+
     std::vector<VectorI> interior_faces;
+    std::vector<VectorI> exterior_faces;
     for (size_t i=0; i<num_faces; i++) {
-        if (in_outer[i]) continue;
-        interior_faces.push_back(m_faces.row(i));
+        if (in_outer[i]) {
+            exterior_faces.push_back(m_faces.row(i));
+        } else {
+            interior_faces.push_back(m_faces.row(i));
+        }
     }
 
-    m_faces = out_faces;
+    assert(exterior_faces.size() > 0);
+    m_faces = MatrixUtils::rowstack(exterior_faces);
+
     if (interior_faces.size() > 0) {
         m_interior_faces = MatrixUtils::rowstack(interior_faces);
     }
