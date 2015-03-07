@@ -10,6 +10,8 @@
 #include <igl/outer_hull.h>
 #include <igl/remove_unreferenced.h>
 
+#include <SelfIntersectionResolver.h>
+
 void IGLOuterHullEngine::run() {
     assert(m_vertices.cols() == 3);
     assert(m_faces.cols() == 3);
@@ -42,34 +44,21 @@ void IGLOuterHullEngine::check_normal_reliability() {
 }
 
 void IGLOuterHullEngine::resolve_self_intersections() {
-    igl::RemeshSelfIntersectionsParam param;
-    MatrixFr out_vertices;
-    MatrixIr out_faces;
-    MatrixIr intersecting_face_pairs;
-    VectorI ori_face_indices;
-    VectorI unique_vertex_indices;
+    const size_t num_faces = m_faces.rows();
 
-    igl::remesh_self_intersections(
-            m_vertices,
-            m_faces,
-            param,
-            out_vertices,
-            out_faces,
-            intersecting_face_pairs,
-            ori_face_indices,
-            unique_vertex_indices);
+    auto resolver = SelfIntersectionResolver::create("igl");
+    resolver->set_mesh(m_vertices, m_faces);
+    resolver->run();
+    m_vertices = resolver->get_vertices();
+    m_faces = resolver->get_faces();
+    auto face_sources = resolver->get_face_sources();
+    assert(face_sources.size() == m_faces.rows());
+    assert((face_sources.array() < num_faces).all());
 
-    std::for_each(out_faces.data(),out_faces.data()+out_faces.size(),
-            [&unique_vertex_indices](int & a){
-            a=unique_vertex_indices(a);
-            });
-    igl::remove_unreferenced(out_vertices,out_faces,
-            m_vertices,m_faces,unique_vertex_indices);
-
-    const size_t num_out_faces = out_faces.rows();
+    const size_t num_out_faces = m_faces.rows();
     Matrix3Fr out_normals = Matrix3Fr::Zero(num_out_faces, 3);
     for (size_t i=0; i<num_out_faces; i++) {
-        out_normals.row(i) = m_normals.row(ori_face_indices[i]);
+        out_normals.row(i) = m_normals.row(face_sources[i]);
     }
     m_normals = out_normals;
 }
