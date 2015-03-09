@@ -123,9 +123,10 @@ size_t MeshChecker::get_num_duplicated_faces() const {
     const size_t vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {
         const auto& f = m_faces.row(i);
-        auto itr = face_counts.find(f);
+        Vector3I key(f.minCoeff(), f.maxCoeff(), f.sum());
+        auto itr = face_counts.find(key);
         if (itr == face_counts.end()) {
-            face_counts.insert(itr, std::make_pair(f, 1));
+            face_counts.insert(itr, std::make_pair(key, 1));
         } else {
             itr->second ++;
         }

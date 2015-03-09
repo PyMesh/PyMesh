@@ -57,4 +57,17 @@ TEST_F(MeshCheckerTest, quad) {
     ASSERT_EQ(1, checker.get_num_boundary_loops());
 }
 
+TEST_F(MeshCheckerTest, duplicated_face_count) {
+    MatrixFr vertices(3, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0;
+
+    MatrixIr faces(2, 3);
+    faces << 0, 1, 2,
+             0, 2, 1;
+
+    MeshChecker checker(vertices, faces);
+    ASSERT_EQ(1, checker.get_num_duplicated_faces());
+}
 
