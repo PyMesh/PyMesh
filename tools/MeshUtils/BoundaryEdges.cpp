@@ -6,8 +6,7 @@
 
 #include <Mesh.h>
 #include <Misc/Triplet.h>
-
-#include "TripletMap.h"
+#include <Misc/TripletMap.h>
 
 
 BoundaryEdges::BoundaryEdges(const Mesh& mesh) {

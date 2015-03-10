@@ -7,9 +7,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
+#include <Misc/TripletMap.h>
 #include <Mesh.h>
-
-#include "TripletMap.h"
 
 BoundaryFaces::BoundaryFaces(const Mesh& mesh) {
     extract_boundary(mesh);

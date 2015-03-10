@@ -2,8 +2,8 @@
 
 #include <cassert>
 #include <iostream>
-#include <MeshUtils/TripletMap.h>
 #include <Misc/HashGrid.h>
+#include <Misc/TripletMap.h>
 
 namespace MeshValidationHelper {
     typedef TripletMap<size_t> EdgeMap;

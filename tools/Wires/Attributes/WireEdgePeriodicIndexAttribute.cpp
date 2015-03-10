@@ -4,8 +4,8 @@
 #include <list>
 
 #include <Misc/Triplet.h>
+#include <Misc/TripletMap.h>
 #include <Misc/HashGrid.h>
-#include <MeshUtils/TripletMap.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
 namespace WireEdgePeriodicIndexAttributeHelper {

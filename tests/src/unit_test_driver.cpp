@@ -13,6 +13,7 @@
 #include "Math/ZSparseMatrixTest.h"
 #include "Math/MatrixUtilsTest.h"
 #include "Misc/TripletTest.h"
+#include "Misc/TripletMapTest.h"
 #include "Misc/TriBox2DTest.h"
 #include "Misc/MultipletTest.h"
 #include "Misc/HashGridTest.h"

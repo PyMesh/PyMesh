@@ -1,7 +1,7 @@
 #include "SymmetryOperators.h"
 
 #include <Misc/HashGrid.h>
-#include <MeshUtils/TripletMap.h>
+#include <Misc/TripletMap.h>
 
 namespace SymmetryOperatorsHelper {
     HashGrid::Ptr compute_vertex_lookup_grid(const MatrixFr& vertices,

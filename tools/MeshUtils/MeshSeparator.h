@@ -3,8 +3,7 @@
 
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
-
-#include "TripletMap.h"
+#include <Misc/TripletMap.h>
 
 class MeshSeparator {
     public:

@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <Core/EigenTypedef.h>
-#include <MeshUtils/TripletMap.h>
+#include <Misc/TripletMap.h>
 
 /**
  * Split edges that match a customized criterion

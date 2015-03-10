@@ -3,7 +3,7 @@
 #include <Core/EigenTypedef.h>
 
 #include <vector>
-#include "TripletMap.h"
+#include <Misc/TripletMap.h>
 
 namespace EdgeUtils {
     /**

@@ -2,8 +2,7 @@
 #include <vector>
 #include <Core/EigenTypedef.h>
 #include <Misc/Triplet.h>
-
-#include "TripletMap.h"
+#include <Misc/TripletMap.h>
 
 class ObtuseTriangleRemoval {
     public:

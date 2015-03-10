@@ -16,7 +16,6 @@
 #include "ShortEdgeRemovalTest.h"
 #include "SimpleSubdivisionTest.h"
 #include "SubMeshTest.h"
-#include "TripletMapTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

@@ -4,8 +4,7 @@
 
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
-
-#include <MeshUtils/TripletMap.h>
+#include <Misc/TripletMap.h>
 
 class TripletMapTest : public ::testing::Test {
     protected:

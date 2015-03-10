@@ -5,8 +5,7 @@
 
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
-
-#include "TripletMap.h"
+#include <Misc/TripletMap.h>
 
 namespace FinFaceRemovalHelper {
     /**
