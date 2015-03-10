@@ -1,6 +1,7 @@
 #include "MeshAttributeFactory.h"
 
 #include "EdgeLengthAttribute.h"
+#include "EdgeDihedralAngleAttribute.h"
 #include "FaceAreaAttribute.h"
 #include "FaceCentroidAttribute.h"
 #include "FaceCircumCenterAttribute.h"
@@ -47,6 +48,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "edge_length") {
         MeshAttribute::Ptr attr(new EdgeLengthAttribute(name));
+        return attr;
+    } else if (name == "edge_dihedral_angle") {
+        MeshAttribute::Ptr attr(new EdgeDihedralAngleAttribute(name));
         return attr;
     } else if (name == "face_area") {
         MeshAttribute::Ptr attr(new FaceAreaAttribute(name));
