@@ -10,6 +10,7 @@
 #include "FaceVoronoiAreaAttribute.h"
 #include "MeshAttribute.h"
 #include "VertexAreaAttribute.h"
+#include "VertexDihedralAngleAttribute.h"
 #include "VertexGaussianCurvatureAttribute.h"
 #include "VertexIndexAttribute.h"
 #include "VertexLaplacianAttribute.h"
@@ -45,6 +46,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "vertex_valance") {
         MeshAttribute::Ptr attr(new VertexValanceAttribute(name));
+        return attr;
+    } else if (name == "vertex_dihedral_angle") {
+        MeshAttribute::Ptr attr(new VertexDihedralAngleAttribute(name));
         return attr;
     } else if (name == "edge_length") {
         MeshAttribute::Ptr attr(new EdgeLengthAttribute(name));

@@ -1,6 +1,7 @@
 #include "EdgeDihedralAngleAttribute.h"
 
 #include <cmath>
+#include <iostream>
 
 #include <Mesh.h>
 
@@ -33,6 +34,11 @@ void EdgeDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
     MatrixFr face_normals =
         MatrixUtils::reshape<MatrixFr>(mesh.get_attribute("face_normal"),
                 num_faces, dim);
+    if (!face_normals.allFinite()) {
+        std::cerr << "Warning: Face normal contains nan or inf!" << std::endl;
+        std::cerr << "         Dihedral angle computation would be unreliable."
+            << std::endl;
+    }
 
     EdgeMap edge_map;
     EdgeMap edge_index;
@@ -61,7 +67,7 @@ void EdgeDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
         } else {
             for (size_t i=0; i<num_adj_faces; i++) {
                 for (size_t j=i+1; j<num_adj_faces; j++) {
-                    normal_angle = std::min(normal_angle,
+                    normal_angle = std::max(normal_angle,
                             angle(face_normals.row(val[0]),
                                 face_normals.row(val[1])));
                 }
