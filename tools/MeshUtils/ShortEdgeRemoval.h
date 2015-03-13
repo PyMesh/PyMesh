@@ -40,6 +40,7 @@ class ShortEdgeRemoval {
         void init_face_indices();
         void init_edges();
         void init_edge_length_heap();
+        void update_vertices();
         void update_faces();
         void update_importance();
         void collapse(Float threshold);

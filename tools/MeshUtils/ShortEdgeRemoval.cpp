@@ -57,6 +57,7 @@ void ShortEdgeRemoval::init() {
 void ShortEdgeRemoval::update() {
     update_faces();
     update_importance();
+    update_vertices();
     init_vertex_map();
     init_edges();
     init_edge_length_heap();
@@ -105,6 +106,11 @@ void ShortEdgeRemoval::init_edge_length_heap() {
         }
     }
     m_heap.init(edge_lengths);
+}
+
+void ShortEdgeRemoval::update_vertices() {
+    m_vertices = get_vertices();
+    m_new_vertices.clear();
 }
 
 void ShortEdgeRemoval::update_faces() {
