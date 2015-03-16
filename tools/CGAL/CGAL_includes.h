@@ -3,11 +3,11 @@
 
 //#ifdef INEXACT_CONSTRUCTION
 // Use this for faster testing, but inexact meshing
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
-typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+//#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+//typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 //#else
-//#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-//typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
 //#endif
 
 // Triangle triangle intersection

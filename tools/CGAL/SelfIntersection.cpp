@@ -10,18 +10,6 @@ namespace SelfIntersectionHelper {
             SelfIntersection* self, const Box& a, const Box& b) {
         self->handle_intersection_candidate(a.handle(), b.handle());
     }
-
-    Vector3F CGAL2Eigen(const Point_3& p) {
-        return Vector3F(p.x(), p.y(), p.z());
-    }
-
-    MatrixF CGAL2Eigen(const Triangle_3& tri) {
-        MatrixF M(3, 3);
-        M << tri[0].x(), tri[0].y(), tri[0].z(),
-             tri[1].x(), tri[1].y(), tri[1].z(),
-             tri[2].x(), tri[2].y(), tri[2].z();
-        return M;
-    }
 }
 using namespace SelfIntersectionHelper;
 
