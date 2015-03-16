@@ -1,5 +1,5 @@
 #include <gtest/gtest.h>
-#include "BoundingBoxTest.h"
+#include "SelfIntersectionTest.h"
 #include "AABBTreeTest.h"
 
 int main(int argc, char** argv) {

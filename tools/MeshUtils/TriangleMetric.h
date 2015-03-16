@@ -12,89 +12,95 @@ typedef Float    Real;
  * http://www.cs.berkeley.edu/~jfc/mirtich/collDet.html
  */
 class TriangleMetric {
-	public:
-		TriangleMetric();
+    public:
+        TriangleMetric();
 
-	public:
-		void update(const Point& p1, const Point& p2, const Point& p3,
-				const Point& p4, const Point& p5, const Point& p6);
-                void update(const MatrixF& tri1, const MatrixF& tri2);
+    public:
+        void update(const Point& p1, const Point& p2, const Point& p3,
+                const Point& p4, const Point& p5, const Point& p6);
 
-		Real getClosestPts(Point& p1, Point& p2) {
-			if (use_lin_canny) {
-				return runLinCanny(p1, p2);
-			} else {
-				return oldCodeWrapper(p1, p2);
-			}
-		}
-                Real getDistance() {
-                    Point p1,p2;
-                    return getClosestPts(p1, p2);
-                }
+        template<typename Derived>
+        void update(const Eigen::MatrixBase<Derived>& tri1,
+                const Eigen::MatrixBase<Derived>& tri2) {
+            update( tri1.row(0), tri1.row(1), tri1.row(2),
+                    tri2.row(0), tri2.row(1), tri2.row(2));
+        }
 
-	private:
-		Real runLinCanny(Point& p1, Point& p2);
-		bool VVCase(int tri1, int tri2, Point& p1, Point& p2);
-		bool VECase(int tri1, int tri2, Point& p1, Point& p2);
-		bool VFCase(int tri1, int tri2, Point& p1, Point& p2);
-		bool EECase(int tri1, int tri2, Point& p1, Point& p2);
-		bool EFCase(int tri1, int tri2, Point& p1, Point& p2);
-		bool FFCase(int tri1, int tri2, Point& p1, Point& p2);
+        Real getClosestPts(Point& p1, Point& p2) {
+            if (use_lin_canny) {
+                return runLinCanny(p1, p2);
+            } else {
+                return oldCodeWrapper(p1, p2);
+            }
+        }
+        Real getDistance() {
+            Point p1,p2;
+            return getClosestPts(p1, p2);
+        }
 
-		void getClosestVEPts(const Point& v,
-				const Point& e1, const Point& e2,
-				Point& p1, Point& p2) const;
-		void getClosestVFPts(const Point& v,
-				const Point& f1, const Point& f2, const Point& f3,
-				Point& p1, Point& p2) const;
-		void getClosestEEPts(const Point& e1, const Point& e2,
-				const Point& e3, const Point& e4,
-				Point& p1, Point& p2) const;
-		void getClosestEFPts(const Point& e1, const Point& e2,
-				const Point& f1, const Point& f2, const Point& f3,
-				Point& p1, Point& p2) const;
+    private:
+        Real runLinCanny(Point& p1, Point& p2);
+        bool VVCase(int tri1, int tri2, Point& p1, Point& p2);
+        bool VECase(int tri1, int tri2, Point& p1, Point& p2);
+        bool VFCase(int tri1, int tri2, Point& p1, Point& p2);
+        bool EECase(int tri1, int tri2, Point& p1, Point& p2);
+        bool EFCase(int tri1, int tri2, Point& p1, Point& p2);
+        bool FFCase(int tri1, int tri2, Point& p1, Point& p2);
 
-		bool vertexConeTest(Point& p, int tri_idx);
-		bool edgeConeTest(Point& p, int tri_idx);
-		bool faceConeTest(Point& p, int tri_idx);
+        void getClosestVEPts(const Point& v,
+                const Point& e1, const Point& e2,
+                Point& p1, Point& p2) const;
+        void getClosestVFPts(const Point& v,
+                const Point& f1, const Point& f2, const Point& f3,
+                Point& p1, Point& p2) const;
+        void getClosestEEPts(const Point& e1, const Point& e2,
+                const Point& e3, const Point& e4,
+                Point& p1, Point& p2) const;
+        void getClosestEFPts(const Point& e1, const Point& e2,
+                const Point& f1, const Point& f2, const Point& f3,
+                Point& p1, Point& p2) const;
 
-		void print() const;
+        bool vertexConeTest(Point& p, int tri_idx);
+        bool edgeConeTest(Point& p, int tri_idx);
+        bool faceConeTest(Point& p, int tri_idx);
 
-	private:
-		Real oldCodeWrapper(Point& p1, Point& p2);
-		// Old distance code.
-		Real getClosestPointsOld(Real &u1, Real &v1, Real &w1,
-				Real &u2, Real &v2, Real &w2);
+        void print() const;
 
-		Real getVertexTriangleDistance(Point &p,
-				Point &a, Point &b, Point &c,
-				Real &t1, Real &t2, Real &t3);
+    private:
+        Real oldCodeWrapper(Point& p1, Point& p2);
+        // Old distance code.
+        Real getClosestPointsOld(Real &u1, Real &v1, Real &w1,
+                Real &u2, Real &v2, Real &w2);
 
-		Real getEdgeEdgeDistance(Point &p1, Point &q1,
-				Point &p2, Point &q2, Real &s, Real &t);
+        Real getVertexTriangleDistance(Point &p,
+                Point &a, Point &b, Point &c,
+                Real &t1, Real &t2, Real &t3);
 
-	public:
-		static void test();
+        Real getEdgeEdgeDistance(Point &p1, Point &q1,
+                Point &p2, Point &q2, Real &s, Real &t);
 
-	private:
-		enum FeatureType {
-			VERTEX,
-			EDGE,
-			FACE
-		};
+    public:
+        static void test();
 
-		// Triangle coordinates.
-		Point m_tris[2][3];
+    private:
+        enum FeatureType {
+            VERTEX,
+            EDGE,
+            FACE
+        };
 
-		FeatureType m_ft_types[2];
-		int m_ft_idx[2];
+        // Triangle coordinates.
+        Point m_tris[2][3];
 
-	public:
-		static void setUseLinCanny(bool v) {
-			use_lin_canny = v;
-		}
+        FeatureType m_ft_types[2];
+        int m_ft_idx[2];
 
-	private:
-		static const Real epsilon;
-		static bool use_lin_canny;
+    public:
+        static void setUseLinCanny(bool v) {
+            use_lin_canny = v;
+        }
+
+    private:
+        static const Real epsilon;
+        static bool use_lin_canny;
 };
