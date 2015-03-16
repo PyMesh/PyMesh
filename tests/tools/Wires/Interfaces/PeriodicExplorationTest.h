@@ -8,7 +8,7 @@
 #include <Mesh.h>
 #include <WireTest.h>
 #include <Wires/Interfaces/PeriodicExploration.h>
-#include <Wires/Inflator/AABBTree.h>
+#include <CGAL/AABBTree.h>
 
 class PeriodicExplorationTest : public WireTest {
     protected:

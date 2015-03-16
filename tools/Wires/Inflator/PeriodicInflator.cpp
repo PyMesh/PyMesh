@@ -6,10 +6,10 @@
 #include <vector>
 
 #include <MeshFactory.h>
+#include <CGAL/AABBTree.h>
 #include <Math/ZSparseMatrix.h>
 #include <Wires/Parameters/ParameterCommon.h>
 
-#include "AABBTree.h"
 #include "SimpleInflator.h"
 #include "PhantomMeshGenerator.h"
 

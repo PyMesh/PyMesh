@@ -1,29 +1,29 @@
 #pragma once
 
-#include <WireTest.h>
-#include <Wires/Inflator/AABBTree.h>
+#include <TestBase.h>
+#include <CGAL/AABBTree.h>
 
 #include <Mesh.h>
 #include <MeshFactory.h>
 
-class AABBTreeTest : public WireTest {
-    protected:
-        typedef Mesh::Ptr MeshPtr;
+class AABBTreeTest : public TestBase {
+    //protected:
+    //    typedef Mesh::Ptr MeshPtr;
 
-        virtual void SetUp() {
-            WireTest::SetUp();
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_mesh_data_dir = project_dir + "/tests/data/";
-        }
+    //    virtual void SetUp() {
+    //        TestBase::SetUp();
+    //        std::string project_dir = Environment::get("PYMESH_PATH");
+    //        m_mesh_data_dir = project_dir + "/tests/data/";
+    //    }
 
-        MeshPtr load_mesh(const std::string& mesh_file) {
-            MeshFactory factory;
-            factory.load_file(m_mesh_data_dir + mesh_file);
-            return factory.create_shared();
-        }
+    //    MeshPtr load_mesh(const std::string& mesh_file) {
+    //        MeshFactory factory;
+    //        factory.load_file(m_mesh_data_dir + mesh_file);
+    //        return factory.create_shared();
+    //    }
 
-    protected:
-        std::string m_mesh_data_dir;
+    //protected:
+    //    std::string m_mesh_data_dir;
 };
 
 TEST_F(AABBTreeTest, cube) {

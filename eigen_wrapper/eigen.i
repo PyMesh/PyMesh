@@ -240,6 +240,22 @@ Know problems:
 }
 
 /**
+ * Convert argument output of type EigenType to numpy array types.
+ * The output will be appended in the return values.
+ */
+%typemap(in, numinputs=0, fragment="NumPy_Fragments",
+        fragment="eigen_type_map") EigenType& ARGOUT(EigenType temp) {
+    $1 = &temp;
+}
+%typemap(argout, fragment="NumPy_Fragments",
+        fragments="eigen_type_map") EigenType& ARGOUT {
+    PyObject* array = ConvertFromEigenToNumpyMatrix(&temp$argnum, temp$argnum.data(), true);
+    if (PyErr_Occurred() != NULL) array=NULL;
+    if (!array) SWIG_fail;
+    $result = SWIG_Python_AppendOutput($result,array);
+}
+
+/**
  * Convert function argument from numpy array to EigenType* or const EigenType*
  * or EigenType& or const EigenType&.
  * Data will always be copied over.

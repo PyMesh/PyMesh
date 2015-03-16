@@ -5,6 +5,7 @@
 #include <sstream>
 
 #include <Boolean/BooleanEngine.h>
+#include <CGAL/AABBTree.h>
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
@@ -15,8 +16,6 @@
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>
-
-#include "AABBTree.h"
 
 namespace IsotropicPeriodicInflator3DHelper {
     void create_box(const VectorF& bbox_min, const VectorF& bbox_max,

@@ -16,8 +16,8 @@ extern "C" {
 }
 }
 
-#include "AABBTree.h"
 #include "PeriodicBoundaryRemesher.h"
+#include <CGAL/AABBTree.h>
 #include <Wires/Misc/DistanceComputation.h>
 #include <Wires/Misc/BoxChecker.h>
 

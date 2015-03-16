@@ -3,4 +3,5 @@
 %include Core/EigenTypedef.i
 %include eigen.i
 %include Core/ExceptionConverter.i
+%include AABBTree.i
 %include BoundingBox.i
