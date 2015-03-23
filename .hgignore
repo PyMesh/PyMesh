@@ -16,3 +16,7 @@ syntax: regexp
 ^bin/
 ^swig/
 ^build/
+^dist/
+^python/pymesh/lib
+^python/pymesh/swig
+^python/pymesh.egg-info/
