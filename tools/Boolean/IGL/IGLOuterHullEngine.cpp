@@ -65,13 +65,18 @@ void IGLOuterHullEngine::resolve_self_intersections() {
 
 void IGLOuterHullEngine::extract_outer_hull() {
     assert(m_faces.rows() == m_normals.rows());
-    MatrixIr out_faces;
+    MatrixI out_faces;
     VectorI ori_face_indices;
     VectorI ori_face_is_flipped;
+
+    // Officially libigl does not support row major matrices.
+    // Thus a copy is needed to convert row major inputs to col major.
+    MatrixF V(m_vertices);
+    MatrixI F(m_faces);
+    Eigen::Matrix<Float, Eigen::Dynamic, 3> N(m_normals);
+
     igl::outer_hull(
-            m_vertices,
-            m_faces,
-            m_normals,
+            V, F, N,
             out_faces,
             ori_face_indices,
             ori_face_is_flipped);
@@ -90,11 +95,6 @@ void IGLOuterHullEngine::extract_outer_hull() {
             m_debug[i] = 1;
         }
     }
-    //for (size_t i=0; i<num_faces; i++) {
-    //    if (ori_face_is_flipped[i]) {
-    //        in_outer[i] = false;
-    //    }
-    //}
 
     std::vector<VectorI> interior_faces;
     std::vector<VectorI> exterior_faces;
