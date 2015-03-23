@@ -1,8 +1,15 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 # Set compiler
-SET(CMAKE_C_COMPILER "clang")
-SET(CMAKE_CXX_COMPILER "clang++")
+IF(APPLE)
+    SET(CMAKE_C_COMPILER "clang")
+    SET(CMAKE_CXX_COMPILER "clang++")
+ELSEIF(UNIX)
+    SET(CMAKE_C_COMPILER "gcc")
+    SET(CMAKE_CXX_COMPILER "g++")
+ELSEIF(WIN32)
+    # TODO: not how the code would work on Windows.
+ENDIF()
 
 PROJECT(Mesh)
 
