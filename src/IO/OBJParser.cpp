@@ -138,6 +138,11 @@ bool OBJParser::parse_vertex_line(char* line) {
             &data[0], &data[1], &data[2], &data[3]);
     if (n < 3) return false;
 
+    if (header[1] == 't' || header[1] == 'p') {
+        // Vertex texture/parameter is not supported.
+        return true;
+    }
+
     // Check to handle homogeneous coordinates.
     if (n == 5) {
         data[0] /= data[3];
