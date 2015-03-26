@@ -178,6 +178,9 @@ void TriangleWrapper::process_2D_input(const std::string& flags,
     }
 
     if (!do_refine) correct_orientation();
+    else {
+        // TODO
+    }
 }
 
 void TriangleWrapper::run_triangle(
