@@ -10,23 +10,9 @@
 #include <Wires/Parameters/VertexThicknessParameterDerivative.h>
 #include <Wires/Inflator/InflatorEngine.h>
 
-class VertexThicknessParameterDerivativeTest : public WireTest {
-    protected:
-        void inflate(WireNetwork::Ptr wire_network, ParameterManager::Ptr manager) {
-            InflatorEngine::Ptr inflator = InflatorEngine::create_parametric(wire_network, manager);
-            inflator->with_shape_velocities();
-            inflator->inflate();
+#include "ParameterDerivativeTest.h"
 
-            MatrixFr vertices = inflator->get_vertices();
-            MatrixIr faces = inflator->get_faces();
-            VectorF face_sources = inflator->get_face_sources().cast<Float>();
-            m_mesh = form_mesh(vertices, faces);
-            m_mesh->add_attribute("face_source");
-            m_mesh->set_attribute("face_source", face_sources);
-        }
-
-    protected:
-        Mesh::Ptr m_mesh;
+class VertexThicknessParameterDerivativeTest : public ParameterDerivativeTest {
 };
 
 TEST_F(VertexThicknessParameterDerivativeTest, cube) {
@@ -39,15 +25,15 @@ TEST_F(VertexThicknessParameterDerivativeTest, cube) {
     manager->set_thickness_type(ParameterCommon::VERTEX);
     manager->add_thickness_parameter(roi, "", 1.5);
 
-    inflate(wire_network, manager);
-    ASSERT_EQ(3, m_mesh->get_dim());
+    Mesh::Ptr mesh = inflate(wire_network, manager);
+    ASSERT_EQ(3, mesh->get_dim());
 
     VectorF flattened_derivative = flatten(
-            manager->compute_shape_velocity(m_mesh).front());
-    m_mesh->add_attribute("derivative");
-    m_mesh->set_attribute("derivative", flattened_derivative);
+            manager->compute_shape_velocity(mesh).front());
+    mesh->add_attribute("derivative");
+    mesh->set_attribute("derivative", flattened_derivative);
 
-    save_mesh("vertex_thickness_derivative_cube.msh", m_mesh, "derivative");
+    save_mesh("vertex_thickness_derivative_cube.msh", mesh, "derivative");
 
     ASSERT_NE(0.0, flattened_derivative.norm());
 }
@@ -62,15 +48,15 @@ TEST_F(VertexThicknessParameterDerivativeTest, brick5) {
     manager->set_thickness_type(ParameterCommon::VERTEX);
     manager->add_thickness_parameter(roi, "", 1.5);
 
-    inflate(wire_network, manager);
-    ASSERT_EQ(3, m_mesh->get_dim());
+    Mesh::Ptr mesh = inflate(wire_network, manager);
+    ASSERT_EQ(3, mesh->get_dim());
 
     VectorF flattened_derivative = flatten(
-            manager->compute_shape_velocity(m_mesh).front());
-    m_mesh->add_attribute("derivative");
-    m_mesh->set_attribute("derivative", flattened_derivative);
+            manager->compute_shape_velocity(mesh).front());
+    mesh->add_attribute("derivative");
+    mesh->set_attribute("derivative", flattened_derivative);
 
-    save_mesh("vertex_thickness_derivative_brick5.msh", m_mesh, "derivative");
+    save_mesh("vertex_thickness_derivative_brick5.msh", mesh, "derivative");
 
     ASSERT_NE(0.0, flattened_derivative.norm());
 }
