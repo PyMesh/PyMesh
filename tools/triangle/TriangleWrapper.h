@@ -1,4 +1,5 @@
 #pragma once
+#include <list>
 #include <string>
 #include <Core/EigenTypedef.h>
 
@@ -6,6 +7,9 @@ class TriangleWrapper {
     public:
         TriangleWrapper(const MatrixFr& points, const MatrixIr& segments) : 
             m_points(points), m_segments(segments), m_max_area(0.0) {}
+
+    public:
+        typedef std::list<size_t> Region;
 
     public:
         /**
@@ -42,6 +46,8 @@ class TriangleWrapper {
                 const MatrixIr& faces,
                 const std::string& flags);
         void poke_holes();
+        bool select_seed_point(const Region& region, VectorF& seed_p);
+        void correct_orientation();
 
     private:
         // Input data

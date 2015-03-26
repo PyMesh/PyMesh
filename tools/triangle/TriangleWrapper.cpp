@@ -47,7 +47,7 @@ namespace TriangleWrapperHelper {
         return flags.str();
     }
 
-    typedef std::list<size_t> Region;
+    typedef TriangleWrapper::Region Region;
     typedef std::list<Region> Regions;
 
     struct HashFunc {
@@ -113,6 +113,16 @@ namespace TriangleWrapperHelper {
 
         return total_angle / (2 * M_PI);
     }
+
+    Float compute_2D_triangle_area(
+            const VectorF& v0,
+            const VectorF& v1,
+            const VectorF& v2) {
+        VectorF u = v1 - v0;
+        VectorF v = v2 - v0;
+        return u[0]*v[1] - u[1]*v[0];
+    }
+
 }
 
 using namespace TriangleWrapperHelper;
@@ -166,6 +176,8 @@ void TriangleWrapper::process_2D_input(const std::string& flags,
             poke_holes();
         }
     }
+
+    if (!do_refine) correct_orientation();
 }
 
 void TriangleWrapper::run_triangle(
@@ -340,7 +352,6 @@ void TriangleWrapper::refine(
 }
 
 void TriangleWrapper::poke_holes() {
-    const Float degeneracy_tol = std::min(m_max_area * 0.01, 1e-6);
     const size_t num_faces = m_faces.rows();
     const size_t num_edges = m_edge_marks.size();
     assert(m_edges.size() == num_edges * 2);
@@ -357,22 +368,8 @@ void TriangleWrapper::poke_holes() {
 
     std::list<size_t> interior_faces;
     for (auto& region : regions) {
-        bool seed_found = false;
         VectorF seed_p;
-        for (auto face_idx : region) {
-            const VectorI& f = m_faces.row(face_idx);
-            const VectorF& v0 = m_vertices.row(f[0]);
-            const VectorF& v1 = m_vertices.row(f[1]);
-            const VectorF& v2 = m_vertices.row(f[2]);
-            VectorF u = v1 - v0;
-            VectorF v = v2 - v0;
-            Float area = u[0]*v[1] - u[1]*v[0];
-            if (area > degeneracy_tol) {
-                seed_found = true;
-                seed_p = (v0+v1+v2)/3.0;
-                break;
-            }
-        }
+        bool seed_found = select_seed_point(region, seed_p);
 
         if (!seed_found) {
             // All faces are degenerated in this region.
@@ -396,5 +393,40 @@ void TriangleWrapper::poke_holes() {
     remover.run();
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
+}
+
+bool TriangleWrapper::select_seed_point(const Region& region, VectorF& seed_p) {
+    const Float degeneracy_tol = std::min(m_max_area * 0.01, 1e-6);
+    bool seed_found = false;
+    for (auto face_idx : region) {
+        const VectorI& f = m_faces.row(face_idx);
+        const VectorF& v0 = m_vertices.row(f[0]);
+        const VectorF& v1 = m_vertices.row(f[1]);
+        const VectorF& v2 = m_vertices.row(f[2]);
+        Float area = compute_2D_triangle_area(v0, v1, v2);
+        if (area > degeneracy_tol) {
+            seed_found = true;
+            seed_p = (v0+v1+v2)/3.0;
+            break;
+        }
+    }
+    return seed_found;
+}
+
+void TriangleWrapper::correct_orientation() {
+    const size_t num_faces = m_faces.rows();
+    if (num_faces == 0) return;
+
+    Region region;
+    for (size_t i=0; i<num_faces; i++) region.push_back(i);
+
+    VectorF seed_p;
+    bool seed_found = select_seed_point(region, seed_p);
+    if (!seed_found) return;
+
+    Float wind_num = compute_winding_number(seed_p, m_points, m_segments);
+    if (wind_num < -0.5) {
+        m_faces.col(1).swap(m_faces.col(2));
+    }
 }
 
