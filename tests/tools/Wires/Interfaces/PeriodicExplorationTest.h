@@ -49,7 +49,7 @@ class PeriodicExplorationTest : public WireTest {
         }
 };
 
-TEST_F(PeriodicExplorationTest, DISABLED_brick5_periodic_timing) {
+TEST_F(PeriodicExplorationTest, brick5_periodic_timing) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -108,7 +108,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_brick5_periodic_timing) {
     std::cout << " done!" << std::endl;;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
+TEST_F(PeriodicExplorationTest, brick5) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -167,7 +167,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_brick5) {
     std::cout << " done!" << std::endl;;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_diamond) {
+TEST_F(PeriodicExplorationTest, diamond) {
     PeriodicExploration explorer(
             m_data_dir + "diamond.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -218,7 +218,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_diamond) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
+TEST_F(PeriodicExplorationTest, finite_difference) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -245,7 +245,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
     for (size_t i=0; i<num_dofs; i++) {
         VectorF modified_dofs = dofs;
         if (explorer.is_thickness_dof(i)) {
-            eps = 1.0;
+            eps = 0.2;
         } else {
             eps = 0.1;
         }
@@ -268,7 +268,6 @@ TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
 
         Float dist = compute_hausdorff_distance(
                 perturbed_vertices, init_faces, vertices);
-        std::cout << dist << std::endl;
         ASSERT_LT(dist, eps);
 
         std::cout << ".";
@@ -277,7 +276,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_finite_difference) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
+TEST_F(PeriodicExplorationTest, gradient_descent) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -346,7 +345,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_debug) {
+TEST_F(PeriodicExplorationTest, debug) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -386,7 +385,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
     }
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_printability) {
+TEST_F(PeriodicExplorationTest, printability) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.5);
     explorer.with_all_isotropic_parameters();
@@ -407,7 +406,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_printability) {
     ASSERT_TRUE(explorer.is_printable());
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_hex_profile) {
+TEST_F(PeriodicExplorationTest, hex_profile) {
     PeriodicExploration explorer(
             m_data_dir + "pattern1065.wire", 5, 0.5);
     explorer.with_all_isotropic_parameters(ParameterCommon::EDGE);
