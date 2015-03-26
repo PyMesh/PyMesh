@@ -153,7 +153,7 @@ void PeriodicInflator::update_shape_velocities() {
     assert(squared_dists.size() == num_vertices);
     for (size_t i=0; i<num_vertices; i++) {
         Float dist = squared_dists[i];
-        if (dist > 1e-3) continue;
+        if (dist > 1e-6) continue;
         size_t face_idx = closest_face_indices[i];
         const VectorI& f = m_phantom_faces.row(face_idx);
         Vector3F weight = compute_barycentric_coord(

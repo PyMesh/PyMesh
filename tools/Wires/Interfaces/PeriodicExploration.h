@@ -69,6 +69,7 @@ class PeriodicExploration {
         MatrixIr get_faces() const { return m_faces; }
         MatrixIr get_voxels() const { return m_voxels; }
         std::vector<MatrixFr> get_shape_velocities() const { return m_shape_velocities; }
+        VectorI get_face_sources() const { return m_face_sources; }
         bool is_printable();
 
 
