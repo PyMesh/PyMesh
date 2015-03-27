@@ -110,9 +110,11 @@ void InflatorEngine::with_shape_velocities() {
 
 void InflatorEngine::set_uniform_thickness(Float thickness) {
     if (m_thickness_type == PER_VERTEX) {
-        set_thickness(VectorF::Ones(m_wire_network->get_num_vertices()));
+        set_thickness(VectorF::Ones(m_wire_network->get_num_vertices())
+                * thickness);
     } else {
-        set_thickness(VectorF::Ones(m_wire_network->get_num_edges()));
+        set_thickness(VectorF::Ones(m_wire_network->get_num_edges())
+                * thickness);
     }
 }
 
