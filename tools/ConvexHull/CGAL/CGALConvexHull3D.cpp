@@ -1,3 +1,4 @@
+/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "CGALConvexHull3D.h"
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>

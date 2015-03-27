@@ -1,3 +1,4 @@
+/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "CGALBooleanEngine.h"
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>

@@ -1,3 +1,4 @@
+# This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou #
 import os
 import os.path
 import unittest

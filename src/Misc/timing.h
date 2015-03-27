@@ -1,3 +1,4 @@
+/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #if defined(__APPLE__) || defined(__linux) || defined(__unix)
 
 #include <sys/time.h>

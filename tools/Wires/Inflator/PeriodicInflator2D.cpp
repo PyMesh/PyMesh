@@ -1,3 +1,4 @@
+/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "PeriodicInflator2D.h"
 #include <Misc/TriBox2D.h>
 #include <Boolean/BooleanEngine.h>

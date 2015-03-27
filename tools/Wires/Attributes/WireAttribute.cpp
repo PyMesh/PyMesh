@@ -1,3 +1,4 @@
+/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "WireAttribute.h"
 #include "WireEdgeCubicSymmetryAttribute.h"
 #include "WireEdgeLengthAttribute.h"
