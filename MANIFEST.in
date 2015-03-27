@@ -1,3 +1,4 @@
 recursive-include src *.h *.cpp *.c *.py *.i
 recursive-include tools *.h *.cpp *.c *.py *.i
 recursive-include tests *.h *.cpp *.c *.py *.i
+recursive-include examples *.h *.cpp *.c *.py *.i
