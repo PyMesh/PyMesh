@@ -1,4 +1,7 @@
-recursive-include src *.h *.cpp *.c *.py *.i
-recursive-include tools *.h *.cpp *.c *.py *.i
-recursive-include tests *.h *.cpp *.c *.py *.i
-recursive-include examples *.h *.cpp *.c *.py *.i
+include README* CMakeLists.txt Settings.cmake
+recursive-include src *
+recursive-include tools *
+recursive-include tests *
+recursive-include examples *
+recursive-include cmake *.cmake
+recursive-include eigen_wrapper *.i
