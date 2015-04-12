@@ -84,10 +84,6 @@ void IsotropicPeriodicInflator::refine_long_clip_box_edges() {
 
     m_vertices = splitter.get_vertices();
     m_faces = splitter.get_faces();
-
-#ifndef NDEBUG
-    save_mesh("splitted.msh", m_vertices, m_faces);
-#endif
 }
 
 void IsotropicPeriodicInflator::initialize_center_cell_and_octa_cell() {
@@ -136,12 +132,6 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
 
     m_vertices = boolean_engine->get_vertices();
     m_faces = boolean_engine->get_faces();
-
-#ifndef NDEBUG
-    save_mesh("clipped.msh", m_vertices, m_faces);
-    save_mesh("phantom.msh", m_phantom_vertices, m_phantom_faces);
-    save_mesh("clip_box.msh",box_vertices, box_faces);
-#endif
 }
 
 void IsotropicPeriodicInflator::clean_up_clipped_mesh() {
@@ -172,12 +162,6 @@ void IsotropicPeriodicInflator::remesh_boundary() {
         assert(m_vertices.rows() > 0);
         assert(m_faces.rows() > 0);
 
-#ifndef NDEBUG
-        VectorF debug = VectorF::Zero(m_vertices.rows());
-        std::stringstream fname;
-        fname << "remeshed_" << count << ".msh";
-        save_mesh(fname.str(), m_vertices, m_faces, debug);
-#endif
         count++;
     }
 }
@@ -256,7 +240,6 @@ void IsotropicPeriodicInflator::ensure_periodicity() {
             }
         }
     }
-    save_mesh("snapped.msh", m_vertices, m_faces);
 
     ShortEdgeRemoval remover(m_vertices, m_faces);
     remover.set_importance(importance);
@@ -331,10 +314,6 @@ void IsotropicPeriodicInflator::update_face_sources() {
             m_face_sources[i] = m_phantom_face_sources[closest_face_indices[i]];
         }
     }
-
-#ifndef NDEBUG
-    save_mesh("reflected.msh", m_vertices, m_faces, m_face_sources.cast<Float>());
-#endif
 }
 
 Float IsotropicPeriodicInflator::get_distance_threshold() const {
