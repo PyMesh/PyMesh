@@ -150,6 +150,10 @@ void OFFParser::check_header(char* line) {
         err_msg << "Incorrect OFF header: " << line;
         throw IOError(err_msg.str());
     }
+
+    if (std::string(line).substr(0, 10) == "OFF BINARY") {
+        throw NotImplementedError("Binary OFF format is not supported.");
+    }
 }
 
 void OFFParser::parse_geometry_counts(char* line) {
