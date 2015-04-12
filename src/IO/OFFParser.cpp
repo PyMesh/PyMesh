@@ -16,7 +16,8 @@ namespace OFFParserHelper {
                 throw IOError("Error parsing OFF file");
             }
             fin.getline(line, LINE_SIZE);
-        } while(strlen(line) == 0 || line[0] == '#');
+        } while(strlen(line) == 0 || line[0] == '#' ||
+                line[0] == '\n' || line[0] == '\r');
     }
 
     size_t lookup_color_index(const std::string& name) {
