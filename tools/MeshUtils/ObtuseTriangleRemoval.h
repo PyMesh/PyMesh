@@ -11,7 +11,7 @@ class ObtuseTriangleRemoval {
 
     public:
         // Angle in radian
-        size_t run(Float max_angle_allowed);
+        size_t run(Float max_angle_allowed, size_t max_iterations=1);
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
 

@@ -21,17 +21,25 @@ using namespace ObtuseTriangleRemovalHelper;
 ObtuseTriangleRemoval::ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces)
     : m_vertices(vertices), m_faces(faces) { }
 
-size_t ObtuseTriangleRemoval::run(Float max_angle_allowed) {
-    clear_intermediate_data();
-    set_all_faces_as_valid();
-    compute_face_angles();
-    compute_opposite_vertices();
-    compute_edge_face_adjacency();
+size_t ObtuseTriangleRemoval::run(Float max_angle_allowed, size_t max_iterations) {
+    size_t total_num_split = 0;
+    size_t count = 0;
+    do {
+        clear_intermediate_data();
+        set_all_faces_as_valid();
+        compute_face_angles();
+        compute_opposite_vertices();
+        compute_edge_face_adjacency();
 
-    size_t num_split = split_obtuse_triangles(max_angle_allowed);
+        size_t num_split = split_obtuse_triangles(max_angle_allowed);
+        total_num_split += num_split;
+        count++;
 
-    finalize_geometry();
-    return num_split;
+        finalize_geometry();
+        if (num_split == 0) break;
+    } while (count < max_iterations);
+
+    return total_num_split;
 }
 
 void ObtuseTriangleRemoval::clear_intermediate_data() {
