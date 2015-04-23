@@ -20,3 +20,4 @@ syntax: regexp
 ^python/pymesh/lib
 ^python/pymesh/swig
 ^python/pymesh.egg-info/
+^doc/_build/

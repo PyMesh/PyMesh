@@ -1,0 +1,6 @@
+Core
+====
+
+.. automodule:: pymesh
+   :members:
+
