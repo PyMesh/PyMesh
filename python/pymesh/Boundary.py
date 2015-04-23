@@ -21,8 +21,8 @@ class Boundary(object):
         self.boundary_nodes = surface_boundary.get_boundary_nodes().ravel();
         self.boundaries = boundaries;
 
-        v1 = self.__mesh.vertices[boundaries[:,0]];
-        v2 = self.__mesh.vertices[boundaries[:,1]];
+        v1 = self.__mesh.vertices_ref[boundaries[:,0]];
+        v2 = self.__mesh.vertices_ref[boundaries[:,1]];
         self.__boundary_areas = norm(v1 - v2, axis=1);
         self.__boundary_node_areas = np.zeros(self.__mesh.num_vertices);
         for i, bd in enumerate(boundaries):
@@ -42,7 +42,7 @@ class Boundary(object):
         self.__add_attribute("face_centroid");
         self.__add_attribute("face_normal");
 
-        self.boundaries = self.__mesh.faces;
+        self.boundaries = self.__mesh.faces_ref;
         self.boundary_nodes = np.unique(self.boundaries.ravel());
         self.__boundary_areas = self.__mesh.get_attribute("face_area").ravel();
         self.__boundary_centers = self.__mesh.get_face_attribute("face_centroid");
