@@ -7,7 +7,7 @@
 #include <triangle/TriangleWrapper.h>
 
 namespace SimpleInflatorHelper {
-    const Float EPSILON = 1e-5;
+    const Float EPSILON = 1e-4;
 
     VectorI map_indices(const VectorI& face, const VectorI& index_map) {
         const size_t vertex_per_face = face.size();
