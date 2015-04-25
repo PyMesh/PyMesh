@@ -8,4 +8,4 @@ ADD_SUBDIRECTORY(eigen)
 ADD_SUBDIRECTORY(swig)
 
 ADD_CUSTOM_TARGET(learning_tests DEPENDS opencl_tests swig_eigen_tests
-    swig_tests)
+    eigen_tests swig_tests)
