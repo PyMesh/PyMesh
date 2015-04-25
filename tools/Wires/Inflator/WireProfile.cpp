@@ -16,8 +16,8 @@ namespace WireProfileHelper {
         const Vector3F Z(0, 0, 1);
 
         Eigen::Quaternion<Float> Q;
-        Float z_proj = dir[2] / dir.norm();
-        if (z_proj < -1.0 + 1e-6) {
+        Float dir_len = dir.norm();
+        if (dir[2] < (-1.0 + 1e-6) * dir_len) {
             // Handle special case: dir ~= -Z
             // Eigen::Quaternion introduce large numeric error for such cases.
             Q = Eigen::Quaternion<Float>(
@@ -25,7 +25,9 @@ namespace WireProfileHelper {
             Q = Eigen::Quaternion<Float>::FromTwoVectors(-Z, dir) * Q;
         } else {
             Q.setFromTwoVectors(Z, dir);
-            if (fabs(dir[0]) > 1e-6 || fabs(dir[1]) > 1e-6) {
+            if (fabs(dir[0]) > 1e-3 * dir_len && fabs(dir[1]) > 1e-3 * dir_len) {
+                // Pre-rotate the profile so all wires has consistent profile
+                // orientation.
                 Q = Q * Eigen::Quaternion<Float>::FromTwoVectors(
                         X, Vector3F(dir[0], dir[1], 0.0));
             }
