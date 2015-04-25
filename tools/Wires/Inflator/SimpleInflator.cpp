@@ -7,7 +7,7 @@
 #include <triangle/TriangleWrapper.h>
 
 namespace SimpleInflatorHelper {
-    const Float EPSILON = 1e-4;
+    const Float EPSILON = 1e-5;
 
     VectorI map_indices(const VectorI& face, const VectorI& index_map) {
         const size_t vertex_per_face = face.size();
@@ -46,6 +46,18 @@ namespace SimpleInflatorHelper {
             faces(i*2+1, 2) = i + loop_size;
         }
         return faces;
+    }
+
+    /**
+     * Return true iff the projection of loop onto line (v0, v1) is completely
+     * between v0 and v1.
+     */
+    bool loop_is_valid(const MatrixFr& loop,
+            const VectorF& v0, const VectorF& v1) {
+        VectorF dir = v1 - v0;
+        Float dir_len = dir.norm();
+        auto proj = (loop.rowwise() - v0.transpose()) * dir / dir_len;
+        return ((proj.array() > 0.0).all() && (proj.array() < dir_len).all());
     }
 }
 
@@ -121,11 +133,13 @@ void SimpleInflator::generate_end_loops() {
                 edge_thickness(i, 0),
                 m_rel_correction, m_abs_correction, m_correction_cap,
                 m_spread_const);
+        assert(loop_is_valid(loop_1, v1, v2));
         MatrixFr loop_2 = m_profile->place(v1, v2,
                 edge_len - m_end_loop_offsets[edge[1]],
                 edge_thickness(i, 1),
                 m_rel_correction, m_abs_correction, m_correction_cap,
                 m_spread_const);
+        assert(loop_is_valid(loop_2, v1, v2));
         m_end_loops.push_back(std::make_pair(loop_1, loop_2));
     }
 }

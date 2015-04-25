@@ -14,12 +14,23 @@ namespace WireProfileHelper {
     MatrixFr rotate_loop_3D(const MatrixFr& loop, const VectorF& dir) {
         const Vector3F X(1, 0, 0);
         const Vector3F Z(0, 0, 1);
+
         Eigen::Quaternion<Float> Q;
-        Q.setFromTwoVectors(Z, dir);
-        if (fabs(dir[0]) > 1e-6 || fabs(dir[1]) > 1e-6) {
-            Q = Q * Eigen::Quaternion<Float>::FromTwoVectors(
-                    X, Vector3F(dir[0], dir[1], 0.0));
+        Float z_proj = dir[2] / dir.norm();
+        if (z_proj < -1.0 + 1e-6) {
+            // Handle special case: dir ~= -Z
+            // Eigen::Quaternion introduce large numeric error for such cases.
+            Q = Eigen::Quaternion<Float>(
+                    Eigen::AngleAxis<Float>(M_PI, Vector3F::UnitX()));
+            Q = Eigen::Quaternion<Float>::FromTwoVectors(-Z, dir) * Q;
+        } else {
+            Q.setFromTwoVectors(Z, dir);
+            if (fabs(dir[0]) > 1e-6 || fabs(dir[1]) > 1e-6) {
+                Q = Q * Eigen::Quaternion<Float>::FromTwoVectors(
+                        X, Vector3F(dir[0], dir[1], 0.0));
+            }
         }
+
         return (Q.toRotationMatrix() * loop.transpose()).transpose();
     }
 
@@ -184,8 +195,6 @@ MatrixFr WireProfile::place(const VectorF& end_1, const VectorF& end_2,
         if (m_correction_table) {
             m_correction_table->apply_correction(dir, loop);
         }
-        //apply_correction(dir, loop, rel_correction, abs_correction,
-        //        correction_cap, spread_const);
     } else {
         assert(false);
         std::stringstream err_msg;
