@@ -33,6 +33,7 @@ void OBJWriter::write(
     }
 
     std::ofstream fout(m_filename.c_str());
+    fout.precision(12);
     fout << "# Generated with PyMesh" << std::endl;
 
     size_t num_vertices = vertices.size() / dim;
