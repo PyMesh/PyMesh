@@ -24,10 +24,9 @@ def generate_box_mesh(box_min, box_max,
         subdiv_order (``int``): (optional) The subdivision order.  Default is 0.
 
     Returns:
-        3 values are returned.
+        2 values are returned.
 
-            * ``output_vertices``: Output vertex array with one vertex per row.
-            * ``output_elements``: Output element array with one element per row.
+            * ``output_mesh`` (:class:`Mesh`): Output mesh.
             * ``information``: A ``dict`` of additional informations.
 
         The following fields are defined in ``information``:
@@ -45,7 +44,7 @@ def generate_box_mesh(box_min, box_max,
                 keep_symmetry, subdiv_order);
 
     info = { "cell_index": cell_index };
-    return mesh.vertices, mesh.elements, info
+    return mesh, info
 
 def generate_2D_box_mesh(box_min, box_max, num_samples, keep_symmetry,
         subdiv_order):

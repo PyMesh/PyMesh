@@ -5,5 +5,7 @@ Modules:
 
 .. toctree::
     core
+    boolean
     meshio
     meshutils
+    misc

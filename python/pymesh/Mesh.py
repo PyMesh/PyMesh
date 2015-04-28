@@ -3,6 +3,7 @@ import sys
 import numpy as np
 
 import PyMesh
+import PyMeshUtils
 
 class Mesh(object):
     """
@@ -37,6 +38,18 @@ class Mesh(object):
 
     def get_attribute_names(self):
         return self.__mesh.get_attribute_names();
+
+    def is_manifold(self):
+        return self.is_vertex_manifold() and self.is_edge_manifold();
+
+    def is_vertex_manifold(self):
+        return self._extra_info.is_vertex_manifold();
+
+    def is_edge_manifold(self):
+        return self._extra_info.is_edge_manifold();
+
+    def is_closed(self):
+        return self._extra_info.is_closed();
 
     @property
     def vertices_ref(self):
@@ -154,4 +167,13 @@ class Mesh(object):
     def attribute_names(self):
         return self.get_attribute_names();
 
+    @property
+    def _extra_info(self):
+        if not hasattr(self, "__extra_info"):
+            self.__extra_info = PyMeshUtils.MeshChecker(
+                    self.vertices_ref, self.faces_ref);
+        return self.__extra_info;
 
+    @property
+    def num_components(self):
+        return self._extra_info.get_num_connected_components();
