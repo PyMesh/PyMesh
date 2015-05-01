@@ -10,12 +10,12 @@
 #include <Misc/Triplet.h>
 #include <Misc/TripletMap.h>
 
-MeshSeparator::MeshSeparator(const MatrixI& faces) : m_faces(faces) {
+MeshSeparator::MeshSeparator(const MatrixI& elements) : m_elements(elements) {
     compute_face_connectivity();
 }
 
 size_t MeshSeparator::separate() {
-    const size_t num_faces = m_faces.rows();
+    const size_t num_faces = m_elements.rows();
 
     m_visited = std::vector<bool>(num_faces, false);
 
@@ -29,13 +29,20 @@ size_t MeshSeparator::separate() {
 }
 
 void MeshSeparator::compute_face_connectivity() {
-    const size_t num_faces = m_faces.rows();
-    const size_t vertex_per_face = m_faces.cols();
+    const size_t num_faces = m_elements.rows();
+    const size_t vertex_per_face = m_elements.cols();
     for (size_t i=0; i<num_faces; i++) {
-        const auto& f = m_faces.row(i);
+        const auto& f = m_elements.row(i);
         for (size_t j=0; j<vertex_per_face; j++) {
             m_edge_map.insert(Edge(f[j], f[(j+1)%vertex_per_face]), i);
         }
+    }
+}
+
+void MeshSeparator::compute_voxel_connectivity() {
+    const size_t num_voxels = m_elements.rows();
+    if (m_elements.cols() != 4) {
+        throw RuntimeError("Only tetrahedron elements are supported");
     }
 }
 
@@ -59,14 +66,14 @@ MatrixI MeshSeparator::flood(size_t seed) {
         }
     }
 
-    const size_t vertex_per_face = m_faces.cols();
+    const size_t vertex_per_face = m_elements.cols();
     MatrixI comp_faces(face_list.size(), vertex_per_face);
     size_t count = 0;
     for (std::list<size_t>::const_iterator itr = face_list.begin();
             itr != face_list.end(); itr++) {
-        assert(count < m_faces.rows());
-        assert(*itr < m_faces.rows());
-        comp_faces.row(count) = m_faces.row(*itr);
+        assert(count < m_elements.rows());
+        assert(*itr < m_elements.rows());
+        comp_faces.row(count) = m_elements.row(*itr);
         count++;
     }
     return comp_faces;
@@ -74,7 +81,7 @@ MatrixI MeshSeparator::flood(size_t seed) {
 
 std::vector<size_t> MeshSeparator::get_adjacent_faces(size_t fi) {
     std::vector<size_t> neighbors;
-    const auto& face = m_faces.row(fi);
+    const auto& face = m_elements.row(fi);
     const size_t vertex_per_face = face.size();
     for (size_t i=0; i<vertex_per_face; i++) {
         Edge e(face[i], face[(i+1)%vertex_per_face]);

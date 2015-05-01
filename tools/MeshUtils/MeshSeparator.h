@@ -8,7 +8,7 @@
 
 class MeshSeparator {
     public:
-        MeshSeparator(const MatrixI& faces);
+        MeshSeparator(const MatrixI& elements);
 
         size_t separate();
         MatrixI get_component(size_t i) {
@@ -19,12 +19,13 @@ class MeshSeparator {
 
     private:
         void compute_face_connectivity();
+        void compute_voxel_connectivity();
         MatrixI flood(size_t seed);
         std::vector<size_t> get_adjacent_faces(size_t fi);
 
     private:
         std::vector<MatrixI> m_components;
-        MatrixI m_faces;
+        MatrixI m_elements;
         std::vector<bool> m_visited;
 
         typedef Triplet Edge;
