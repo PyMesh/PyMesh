@@ -10,7 +10,21 @@ class MeshSeparator {
     public:
         MeshSeparator(const MatrixI& elements);
 
+        enum ConnectivityType {
+            VERTEX,
+            FACE,
+            VOXEL
+        };
+
+        /**
+         * Connectivity type define what is considered as "connected".
+         */
+        void set_connectivity_type(ConnectivityType connectivity) {
+            m_connectivity_type = connectivity;
+        }
+
         size_t separate();
+
         MatrixI get_component(size_t i) {
             return m_components.at(i);
         }
@@ -18,19 +32,24 @@ class MeshSeparator {
         void clear();
 
     private:
+        void compute_connectivity();
+        void compute_vertex_connectivity();
         void compute_face_connectivity();
         void compute_voxel_connectivity();
+
         MatrixI flood(size_t seed);
-        std::vector<size_t> get_adjacent_faces(size_t fi);
+        std::vector<size_t> get_adjacent_element(size_t fi);
 
     private:
         std::vector<MatrixI> m_components;
         MatrixI m_elements;
         std::vector<bool> m_visited;
 
-        typedef Triplet Edge;
-        typedef TripletMap<size_t> EdgeMapI;
-        typedef EdgeMapI::ValueType AdjFaces;
-        EdgeMapI m_edge_map;
+        ConnectivityType m_connectivity_type;
+
+        typedef Triplet Connector;
+        typedef TripletMap<size_t> ConnectorMap;
+        typedef ConnectorMap::ValueType AdjElements;
+        ConnectorMap m_connectivity;
 };
 
