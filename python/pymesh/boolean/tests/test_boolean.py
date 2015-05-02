@@ -73,7 +73,7 @@ class BooleanTest(TestCase):
         self.assertEqual(24, mesh.num_faces);
         self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(2, mesh.num_components);
+        self.assertEqual(1, mesh.num_components);
 
         mesh, info = boolean(
                 mesh_1, mesh_2,
@@ -90,7 +90,7 @@ class BooleanTest(TestCase):
         self.assertEqual(24, mesh.num_faces);
         self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(2, mesh.num_components);
+        self.assertEqual(1, mesh.num_components);
 
     def test_edge_edge_touch(self):
         mesh_1, __ = generate_box_mesh(
@@ -316,7 +316,7 @@ class BooleanTest(TestCase):
         self.assertEqual(26, mesh.num_faces);
         self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(2, mesh.num_components);
+        self.assertEqual(1, mesh.num_components);
 
     def test_face_corner_touch_off_center(self):
         mesh_1, __ = generate_box_mesh(
@@ -336,7 +336,7 @@ class BooleanTest(TestCase):
         self.assertEqual(26, mesh.num_faces);
         self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(2, mesh.num_components);
+        self.assertEqual(1, mesh.num_components);
 
     def test_face_edge_touch(self):
         mesh_1, __ = generate_box_mesh(

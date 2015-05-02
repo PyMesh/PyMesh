@@ -8,7 +8,8 @@
 
 class MeshChecker {
     public:
-        MeshChecker(const MatrixFr& vertices, const MatrixIr& faces);
+        MeshChecker(const MatrixFr& vertices, const MatrixIr& faces,
+                const MatrixIr& voxels);
 
     public:
         /**
@@ -35,7 +36,20 @@ class MeshChecker {
 
         int get_euler_characteristic() const;
 
+        /**
+         * Each component is connected by at least a vertex.
+         */
         size_t get_num_connected_components() const;
+
+        /**
+         * Each component is connected by at least an edge.
+         */
+        size_t get_num_connected_surface_components() const;
+
+        /**
+         * Each component is connected by at least a face.
+         */
+        size_t get_num_connected_volume_components() const;
 
         size_t get_num_isolated_vertices() const;
 
@@ -49,6 +63,7 @@ class MeshChecker {
     private:
         MatrixFr m_vertices;
         MatrixIr m_faces;
+        MatrixIr m_voxels;
         MatrixIr m_boundary_edges;
         TripletMap<size_t> m_edge_face_adjacency;
         size_t m_num_bd_loops;

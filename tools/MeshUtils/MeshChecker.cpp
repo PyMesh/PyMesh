@@ -13,8 +13,9 @@
 #include "EdgeUtils.h"
 #include "MeshSeparator.h"
 
-MeshChecker::MeshChecker(const MatrixFr& vertices, const MatrixIr& faces)
-    : m_vertices(vertices), m_faces(faces) {
+MeshChecker::MeshChecker(const MatrixFr& vertices, const MatrixIr& faces,
+        const MatrixIr& voxels)
+    : m_vertices(vertices), m_faces(faces), m_voxels(voxels) {
         init_boundary();
         init_boundary_loops();
         init_edge_face_adjacency();
@@ -92,6 +93,19 @@ int MeshChecker::get_euler_characteristic() const {
 
 size_t MeshChecker::get_num_connected_components() const {
     MeshSeparator separator(m_faces);
+    separator.set_connectivity_type(MeshSeparator::VERTEX);
+    return separator.separate();
+}
+
+size_t MeshChecker::get_num_connected_surface_components() const {
+    MeshSeparator separator(m_faces);
+    separator.set_connectivity_type(MeshSeparator::FACE);
+    return separator.separate();
+}
+
+size_t MeshChecker::get_num_connected_volume_components() const {
+    MeshSeparator separator(m_voxels);
+    separator.set_connectivity_type(MeshSeparator::VOXEL);
     return separator.separate();
 }
 

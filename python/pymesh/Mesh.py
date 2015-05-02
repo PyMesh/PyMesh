@@ -171,9 +171,24 @@ class Mesh(object):
     def _extra_info(self):
         if not hasattr(self, "__extra_info"):
             self.__extra_info = PyMeshUtils.MeshChecker(
-                    self.vertices_ref, self.faces_ref);
+                    self.vertices_ref, self.faces_ref, self.voxels_ref);
         return self.__extra_info;
 
     @property
     def num_components(self):
+        """ Number of vertex-connected components.
+        """
         return self._extra_info.get_num_connected_components();
+
+    @property
+    def num_surface_components(self):
+        """ Number of edge-connected components.
+        """
+        return self._extra_info.get_num_connected_surface_components();
+
+    @property
+    def num_volume_components(self):
+        """ Number of face-connected components.
+        """
+        return self._extra_info.get_num_connected_volume_components();
+
