@@ -284,12 +284,15 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_all_isotropic_parameters();
-    explorer.with_refinement("loop", 2);
+    explorer.with_refinement("simple", 2);
 
     const size_t num_dofs = explorer.get_num_dofs();
     const size_t num_steps = 5;
     const Float step_size = 0.01;
     for (size_t i=0; i<num_steps; i++) {
+        std::stringstream dof_stream;
+        dof_stream << "exploration_isotropic_brick5_itr_" << i << ".dof";
+        explorer.save_dofs(dof_stream.str());
 
         explorer.periodic_inflate(true);
         bool tetgen_success = explorer.run_tetgen();
@@ -331,10 +334,6 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
         std::stringstream sin;
         sin << "exploration_isotropic_brick5_itr_" << i << ".msh";
         save_mesh(sin.str(), mesh, attr_names);
-
-        std::stringstream dof_stream;
-        dof_stream << "exploration_isotropic_brick5_itr_" << i << ".dof";
-        explorer.save_dofs(dof_stream.str());
 
         VectorF dofs = explorer.get_dofs();
         dofs += grad * step_size;

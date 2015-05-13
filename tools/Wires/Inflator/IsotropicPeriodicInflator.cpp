@@ -59,6 +59,7 @@ IsotropicPeriodicInflator::IsotropicPeriodicInflator(
 void IsotropicPeriodicInflator::clip_to_center_cell() {
     initialize_center_cell_and_octa_cell();
     clip_phantom_mesh_with_octa_cell();
+    snap_to_cell_border();
     clean_up_clipped_mesh();
     refine_long_clip_box_edges();
     remesh_boundary();
@@ -132,6 +133,20 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
 
     m_vertices = boolean_engine->get_vertices();
     m_faces = boolean_engine->get_faces();
+}
+
+void IsotropicPeriodicInflator::snap_to_cell_border() {
+    const Float tol = get_distance_threshold();
+    const size_t num_vertices = m_vertices.rows();
+    for (size_t i=0; i<num_vertices; i++) {
+        for (size_t j=0; j<3; j++) {
+            if (fabs(m_vertices(i,j) - m_octa_cell_bbox_min[j]) < tol) {
+                m_vertices(i,j) = m_octa_cell_bbox_min[j];
+            } else if (fabs(m_vertices(i,j) - m_octa_cell_bbox_max[j]) < tol) {
+                m_vertices(i,j) = m_octa_cell_bbox_max[j];
+            }
+        }
+    }
 }
 
 void IsotropicPeriodicInflator::clean_up_clipped_mesh() {
