@@ -42,7 +42,6 @@ void PeriodicInflator::inflate() {
     refine_phantom_mesh();
     initialize_AABB_tree();
     clip_to_center_cell();
-    clean_up();
     update_shape_velocities();
 }
 
