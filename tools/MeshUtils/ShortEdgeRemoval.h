@@ -41,12 +41,17 @@ class ShortEdgeRemoval {
         void init_face_indices();
         void init_edges();
         void init_edge_length_heap();
+        void init_vertex_face_neighbors();
         void update_vertices();
         void update_faces();
         void update_importance();
         void collapse(Float threshold);
         bool edge_is_valid(size_t edge_idx) const;
         bool edge_can_be_collapsed(size_t edge_idx) const;
+        bool collapse_would_cause_fold_over(size_t edge_idx,
+                const VectorF& v) const;
+        bool face_would_flip(const VectorF& v_old, const VectorF& v_new,
+                const VectorF& v_o1, const VectorF& v_o2) const;
         void collapse_edge(size_t edge_idx);
         VectorF get_vertex(size_t i) const;
         Float min_edge_length() const;
@@ -59,6 +64,7 @@ class ShortEdgeRemoval {
         std::vector<size_t> m_vertex_map;
         std::vector<Edge> m_edges;
         IndexHeap<Float> m_heap;
+        std::vector<std::vector<size_t> > m_vertex_face_neighbors;
 
         MatrixFr m_vertices;
         MatrixIr m_faces;
