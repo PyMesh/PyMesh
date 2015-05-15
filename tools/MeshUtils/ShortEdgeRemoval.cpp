@@ -222,41 +222,42 @@ bool ShortEdgeRemoval::collapse_would_cause_fold_over(
     const Edge& e = m_edges[edge_idx];
     const size_t i1 = e.get_ori_data()[0];
     const size_t i2 = e.get_ori_data()[1];
-    const VectorF v1 = get_vertex(i1);
-    const VectorF v2 = get_vertex(i2);
     const auto& v1_face_neighbors = m_vertex_face_neighbors[i1];
     const auto& v2_face_neighbors = m_vertex_face_neighbors[i2];
+    if (faces_would_flip(i1, i2, v, v1_face_neighbors)) return true;
+    if (faces_would_flip(i1, i2, v, v2_face_neighbors)) return true;
+    return false;
+}
 
-    for (const auto fi : v1_face_neighbors) {
+bool ShortEdgeRemoval::faces_would_flip(size_t i1, size_t i2,
+        const VectorF& v,
+        const std::vector<size_t>& faces) const {
+    auto index_of = [=](const Vector3I& array, size_t val) -> size_t {
+        if (array[0] == val) return 0;
+        if (array[1] == val) return 1;
+        if (array[2] == val) return 2;
+        return std::numeric_limits<size_t>::max();
+    };
+    for (const auto fi : faces) {
         const Vector3I& f = m_faces.row(fi);
-        size_t vi = 0;
-        for (size_t i=0; i<3; i++) {
-            if (f[i] == i1) {
-                vi = i;
-                break;
-            }
+        size_t local_i1 = index_of(f, i1);
+        size_t local_i2 = index_of(f, i2);
+        if (local_i1 < 3 && local_i2 < 3) {
+            // This face contains the edge and would be eliminated after
+            // collapse.
+            continue;
+        } else if (local_i1 < 3) {
+            VectorF v_old = get_vertex(i1);
+            const VectorF vo1 = get_vertex(f[(local_i1+1)%3]);
+            const VectorF vo2 = get_vertex(f[(local_i1+2)%3]);
+            if (face_would_flip(v_old, v, vo1, vo2)) { return true; }
+        } else if (local_i2 < 3) {
+            VectorF v_old = get_vertex(i2);
+            const VectorF vo1 = get_vertex(f[(local_i2+1)%3]);
+            const VectorF vo2 = get_vertex(f[(local_i2+2)%3]);
+            if (face_would_flip(v_old, v, vo1, vo2)) { return true; }
         }
-
-        const VectorF vo1 = get_vertex(f[(vi+1)%3]);
-        const VectorF vo2 = get_vertex(f[(vi+2)%3]);
-        if (face_would_flip(v1, v, vo1, vo2)) { return true; }
     }
-
-    for (const auto fi : v2_face_neighbors) {
-        const Vector3I& f = m_faces.row(fi);
-        size_t vi = 0;
-        for (size_t i=0; i<3; i++) {
-            if (f[i] == i2) {
-                vi = i;
-                break;
-            }
-        }
-
-        const VectorF vo1 = get_vertex(f[(vi+1)%3]);
-        const VectorF vo2 = get_vertex(f[(vi+2)%3]);
-        if (face_would_flip(v2, v, vo1, vo2)) { return true; }
-    }
-
     return false;
 }
 
@@ -281,7 +282,7 @@ bool ShortEdgeRemoval::face_would_flip(
         // To not collapse if new Triangle is degenerated while old one is not.
         return true;
     }
-    return normal_new.dot(normal_old) < 0.5;
+    return normal_new.dot(normal_old) < 0.0;
 }
 
 void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
@@ -313,9 +314,7 @@ void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
         }
     }
 
-    if (collapse_would_cause_fold_over(edge_idx, new_v)) {
-        return;
-    }
+    if (collapse_would_cause_fold_over(edge_idx, new_v)) { return; }
 
     m_new_vertices.push_back(new_v);
     size_t idx_mid = num_ori_vertices + num_new_vertices;

@@ -50,6 +50,8 @@ class ShortEdgeRemoval {
         bool edge_can_be_collapsed(size_t edge_idx) const;
         bool collapse_would_cause_fold_over(size_t edge_idx,
                 const VectorF& v) const;
+        bool faces_would_flip(size_t i1, size_t i2, const VectorF& v,
+                const std::vector<size_t>& faces) const;
         bool face_would_flip(const VectorF& v_old, const VectorF& v_new,
                 const VectorF& v_o1, const VectorF& v_o2) const;
         void collapse_edge(size_t edge_idx);
