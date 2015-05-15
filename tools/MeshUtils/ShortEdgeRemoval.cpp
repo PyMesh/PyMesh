@@ -282,7 +282,7 @@ bool ShortEdgeRemoval::face_would_flip(
         // To not collapse if new Triangle is degenerated while old one is not.
         return true;
     }
-    return normal_new.dot(normal_old) < 0.0;
+    return normal_new.dot(normal_old) < 0.5;
 }
 
 void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
