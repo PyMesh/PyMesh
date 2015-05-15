@@ -1,6 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "MeshParser.h"
 
+#include <algorithm>
 #include <iostream>
 #include <sstream>
 
@@ -16,6 +17,7 @@
 MeshParser* MeshParser::create_parser(const std::string& filename) {
     MeshParser* parser = NULL;
     std::string ext = IOUtils::get_extention(filename);
+    std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == ".obj") {
         parser= new OBJParser();
     } else if (ext == ".off") {
