@@ -102,7 +102,7 @@ class _EdgeCollapser(object):
         self.vertices = remover.get_vertices();
         self.faces = remover.get_faces();
 
-def collapse_short_edges(vertices, faces, abs_threshold=0.0,
+def collapse_short_edges_raw(vertices, faces, abs_threshold=0.0,
         rel_threshold=None, preserve_feature=False):
     """ Convenient function for collapsing short edges.
 
@@ -141,4 +141,36 @@ def collapse_short_edges(vertices, faces, abs_threshold=0.0,
             "source_face_index": collapser.face_index_map
             }
     return collapser.vertices, collapser.faces, info;
+
+def collapse_short_edges(mesh,
+        abs_threshold=0.0, rel_threshold=None, preserve_feature=False):
+    """ Wrapper function of :func:`collapse_short_edges_raw`.
+
+    Args:
+        mesh (:class:`Mesh`): Input mesh.
+        abs_threshold (``float``): (optional) All edge with length below this
+            threshold will be collapsed.  This value is ignored if
+            ``rel_thresold`` is not ``None``.
+        rel_threashold (``float``): (optional) Relative edge length threshold
+            based on average edge length.  e.g. ``rel_threshold=0.1`` means all
+            edges with length less than ``0.1 * ave_edge_length`` will be collapsed.
+        preserve_feature (``bool``): True if shape features should be preserved.
+            Default is false.
+
+    Returns:
+        2 values are returned.
+
+            * ``output_Mesh`` (:class:`Mesh`): Output mesh.
+            * ``information`` (:class:`dict`): A ``dict`` of additional informations.
+
+        The following fields are defined in ``information``:
+
+            * ``num_edge_collapsed``: Number of edge collapsed.
+            * ``source_face_index``: An array tracks the source of each output face.
+              That is face ``i`` of the ``output_faces`` comes from face
+              ``source_face_index[i]`` of the input faces.
+    """
+    vertices, faces, info = collapse_short_edges_raw(mesh.vertices, mesh.faces,
+            abs_threshold, rel_threshold, preserve_feature);
+    return form_mesh(vertices, faces), info;
 

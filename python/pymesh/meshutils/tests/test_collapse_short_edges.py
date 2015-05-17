@@ -1,4 +1,4 @@
-from pymesh.meshutils import collapse_short_edges
+from pymesh.meshutils import collapse_short_edges_raw
 from pymesh.TestCase import TestCase
 
 import numpy as np
@@ -14,7 +14,7 @@ class CollapseShortEdgesTest(TestCase):
             ], dtype=float);
         faces = np.array([[0, 1, 2]], dtype=int);
 
-        out_vertices, out_faces, info = collapse_short_edges(
+        out_vertices, out_faces, info = collapse_short_edges_raw(
                 vertices, faces, 0.1);
 
         numpy.testing.assert_array_equal(vertices, out_vertices);
@@ -30,7 +30,7 @@ class CollapseShortEdgesTest(TestCase):
             ], dtype=float);
         faces = np.array([[0, 1, 2]], dtype=int);
 
-        out_vertices, out_faces, info = collapse_short_edges(
+        out_vertices, out_faces, info = collapse_short_edges_raw(
                 vertices, faces, 1.1);
 
         self.assertEqual(0, len(out_vertices));
@@ -51,7 +51,7 @@ class CollapseShortEdgesTest(TestCase):
             [0, 2, 3],
             ], dtype=int);
 
-        out_vertices, out_faces, info = collapse_short_edges(
+        out_vertices, out_faces, info = collapse_short_edges_raw(
                 vertices, faces, 0.5);
 
         self.assertEqual(3, len(out_vertices));
@@ -74,7 +74,7 @@ class CollapseShortEdgesTest(TestCase):
             [2, 3, 3]
             ], dtype=int);
 
-        out_vertices, out_faces, info = collapse_short_edges(
+        out_vertices, out_faces, info = collapse_short_edges_raw(
                 vertices, faces, 0.5);
 
         self.assertEqual(3, len(out_vertices));
@@ -90,7 +90,7 @@ class CollapseShortEdgesTest(TestCase):
             ], dtype=float);
         faces = np.array([[0, 1, 2]], dtype=int);
 
-        out_vertices, out_faces, info = collapse_short_edges(
+        out_vertices, out_faces, info = collapse_short_edges_raw(
                 vertices, faces, 0.1);
 
         numpy.testing.assert_array_equal(vertices, out_vertices);

@@ -1,6 +1,7 @@
 from math import radians
 
 from .. import timethis
+from ..meshio import form_mesh
 from PyMeshUtils import ObtuseTriangleRemoval
 
 class ObtuseTriangleRemover:
@@ -22,7 +23,7 @@ class ObtuseTriangleRemover:
         self.faces = remover.get_faces();
         return num_triangles_split;
 
-def remove_obtuse_triangles(vertices, faces,
+def remove_obtuse_triangles_raw(vertices, faces,
         max_angle=120,
         max_iterations=5):
     """ Remove all obtuse triangles.
@@ -57,3 +58,27 @@ def remove_obtuse_triangles(vertices, faces,
             };
     return remover.vertices, remover.faces, info;
 
+def remove_obtuse_triangles(mesh, max_angle=120, max_iterations=5):
+    """ Wrapper function of :func:`remove_obtuse_triangles_raw`.
+
+    Args:
+        mesh (:class:`Mesh`): Input mesh.
+        max_angle (``float``): (optional) Maximum obtuse angle in degrees
+            allowed.  All triangle with larger internal angle would be split.
+            Default is 120 degrees.
+        max_iterations (``int``): (optional) Number of iterations to run before
+            quitting.  Default is 5.
+
+    Returns:
+        2 values are returned.
+
+            * ``output_mesh`` (:class:`Mesh`): Output mesh.
+            * ``information`` (:class:`dict`): A ``dict`` of additinal informations.
+
+        The following fields are defiend in ``information``:
+
+            * ``num_triangle_split``: number of triangles split.
+    """
+    vertices, faces, info = remove_obtuse_triangles_raw(
+            mesh.vertices, mesh.faces, max_angle, max_iterations);
+    return form_mesh(vertices, faces), info;

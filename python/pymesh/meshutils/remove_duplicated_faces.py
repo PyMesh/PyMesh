@@ -1,6 +1,8 @@
+import numpy as np
 from PyMeshUtils import FinFaceRemoval
+from ..meshio import form_mesh
 
-def remove_duplicated_faces(vertices, faces):
+def remove_duplicated_faces_raw(vertices, faces):
     """ Remove duplicated faces.
 
     Duplicated faces are defined as faces consist of the same set of vertices.
@@ -43,3 +45,26 @@ def remove_duplicated_faces(vertices, faces):
             "ori_face_index": remover.get_face_indices(),
             };
     return remover.get_vertices(), remover.get_faces(), info;
+
+def remove_duplicated_faces(mesh):
+    """ Wrapper function of :func:`remove_duplicated_faces_raw`.
+
+    Args:
+        mesh (:class:`Mesh`): Input mesh.
+
+    Returns:
+        2 values are returned.
+
+            * ``output_mesh`` (:class:`Mesh`): Output mesh.
+            * ``information`` (:class:`dict`): A ``dict`` of additional informations.
+
+        The following fields are defined in ``information``:
+
+            * ``ori_face_index``: An array of original face indices. I.e. face
+              ``i`` of the ``output_faces`` has index ``ori_face_index[i]`` in
+              the input vertices.
+
+    """
+    vertices, faces, info = remove_duplicated_faces_raw(
+            mesh.vertices, mesh.faces);
+    return form_mesh(vertices, faces), info;

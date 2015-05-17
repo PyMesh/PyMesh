@@ -1,4 +1,4 @@
-from pymesh.meshutils import remove_obtuse_triangles
+from pymesh.meshutils import remove_obtuse_triangles_raw
 from pymesh.TestCase import TestCase
 
 import numpy as np
@@ -17,7 +17,7 @@ class ObtuseTriangleRemovalTest(TestCase):
             [0, 1, 2]
             ]);
 
-        out_vertices, out_faces, info = remove_obtuse_triangles(vertices, faces);
+        out_vertices, out_faces, info = remove_obtuse_triangles_raw(vertices, faces);
 
         numpy.testing.assert_array_equal(vertices, out_vertices);
         numpy.testing.assert_array_equal(faces, out_faces);
@@ -33,7 +33,7 @@ class ObtuseTriangleRemovalTest(TestCase):
             [0, 1, 2]
             ]);
 
-        out_vertices, out_faces, info = remove_obtuse_triangles(vertices, faces);
+        out_vertices, out_faces, info = remove_obtuse_triangles_raw(vertices, faces);
         self.assertEqual(2, len(out_faces));
 
     def test_double_obtuse_triangles_1(self):
@@ -51,7 +51,7 @@ class ObtuseTriangleRemovalTest(TestCase):
             [2, 1, 3],
             ]);
 
-        out_vertices, out_faces, info = remove_obtuse_triangles(vertices, faces);
+        out_vertices, out_faces, info = remove_obtuse_triangles_raw(vertices, faces);
         self.assertEqual(4, len(out_faces));
 
     def test_double_obtuse_triangles_2(self):
@@ -69,5 +69,5 @@ class ObtuseTriangleRemovalTest(TestCase):
             [2, 1, 3],
             ]);
 
-        out_vertices, out_faces, info = remove_obtuse_triangles(vertices, faces);
+        out_vertices, out_faces, info = remove_obtuse_triangles_raw(vertices, faces);
         self.assertLess(4, len(out_faces));

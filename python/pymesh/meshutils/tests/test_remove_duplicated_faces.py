@@ -1,4 +1,4 @@
-from pymesh.meshutils import remove_duplicated_faces
+from pymesh.meshutils import remove_duplicated_faces_raw
 from pymesh.TestCase import TestCase
 
 import numpy as np
@@ -17,7 +17,7 @@ class RemoveDuplicatedFacesTest(TestCase):
             [2, 1, 0],
             ], dtype=int);
 
-        out_vertices, out_faces, info = remove_duplicated_faces(vertices, faces);
+        out_vertices, out_faces, info = remove_duplicated_faces_raw(vertices, faces);
 
         # Vertices are left alone.
         numpy.testing.assert_array_equal(vertices, out_vertices);
@@ -35,7 +35,7 @@ class RemoveDuplicatedFacesTest(TestCase):
             [0, 2, 1],
             ], dtype=int);
 
-        out_vertices, out_faces, info = remove_duplicated_faces(vertices, faces);
+        out_vertices, out_faces, info = remove_duplicated_faces_raw(vertices, faces);
 
         # Vertices are left alone.
         numpy.testing.assert_array_equal(vertices, out_vertices);

@@ -1,4 +1,4 @@
-from pymesh.meshutils import split_long_edges
+from pymesh.meshutils import split_long_edges_raw
 from pymesh.TestCase import TestCase
 
 import numpy as np
@@ -14,7 +14,7 @@ class SplitLongEdgeTest(TestCase):
             ], dtype=float);
         faces = np.array([[0, 1, 2]], dtype=int);
 
-        out_vertices, out_faces, __ = split_long_edges(vertices, faces, 2.0);
+        out_vertices, out_faces, __ = split_long_edges_raw(vertices, faces, 2.0);
 
         numpy.testing.assert_array_equal(vertices, out_vertices);
         numpy.testing.assert_array_equal(faces, out_faces);
@@ -27,7 +27,7 @@ class SplitLongEdgeTest(TestCase):
             ], dtype=float);
         faces = np.array([[0, 1, 2]], dtype=int);
 
-        out_vertices, out_faces, __ = split_long_edges(vertices, faces, 1.4);
+        out_vertices, out_faces, __ = split_long_edges_raw(vertices, faces, 1.4);
 
         self.assertEqual(2, len(out_faces));
 
@@ -39,7 +39,7 @@ class SplitLongEdgeTest(TestCase):
             ], dtype=float);
         faces = np.array([[0, 1, 2]], dtype=int);
 
-        out_vertices, out_faces, __ = split_long_edges(vertices, faces, 0.9);
+        out_vertices, out_faces, __ = split_long_edges_raw(vertices, faces, 0.9);
 
         self.assertLess(2, len(out_faces));
 

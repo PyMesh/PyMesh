@@ -4,8 +4,8 @@ import os.path
 import logging
 
 from ..meshio import form_mesh, save_mesh, load_mesh
-from remove_isolated_vertices import remove_isolated_vertices
-from remove_duplicated_vertices import remove_duplicated_vertices
+from remove_isolated_vertices import remove_isolated_vertices_raw
+from remove_duplicated_vertices import remove_duplicated_vertices_raw
 
 def generate_box_mesh(box_min, box_max,
         num_samples=1, keep_symmetry=False, subdiv_order=0):
@@ -84,8 +84,8 @@ def generate_2D_box_mesh(box_min, box_max, num_samples, keep_symmetry,
     faces = np.vstack(faces);
     quad_indices = np.vstack(quad_indices).ravel(order="C");
 
-    vertices, faces, __ = remove_duplicated_vertices(vertices, faces);
-    vertices, faces, __ = remove_isolated_vertices(vertices, faces);
+    vertices, faces, __ = remove_duplicated_vertices_raw(vertices, faces);
+    vertices, faces, __ = remove_isolated_vertices_raw(vertices, faces);
 
     tets = np.array([], dtype=int);
     mesh = form_mesh(vertices, faces, tets);
@@ -206,8 +206,8 @@ def generate_3D_box_mesh(bbox_min, bbox_max, num_samples, keep_symmetry=False,
     tets = np.vstack(tets);
     hex_indices = np.vstack(hex_indices).ravel(order="C");
 
-    vertices, tets, __ = remove_duplicated_vertices(vertices, tets);
-    vertices, tets, __ = remove_isolated_vertices(vertices, tets);
+    vertices, tets, __ = remove_duplicated_vertices_raw(vertices, tets);
+    vertices, tets, __ = remove_isolated_vertices_raw(vertices, tets);
 
     faces = np.array([], dtype=int);
     mesh = form_mesh(vertices, faces, tets);

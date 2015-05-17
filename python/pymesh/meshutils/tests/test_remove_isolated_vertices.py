@@ -1,4 +1,4 @@
-from pymesh.meshutils import remove_isolated_vertices
+from pymesh.meshutils import remove_isolated_vertices_raw
 from pymesh.TestCase import TestCase
 
 import numpy as np
@@ -16,7 +16,7 @@ class RemoveIsolatedVerticesTest(TestCase):
             [0, 1, 2]
             ]);
 
-        out_vertices, out_faces, info = remove_isolated_vertices(vertices, faces);
+        out_vertices, out_faces, info = remove_isolated_vertices_raw(vertices, faces);
 
         self.assert_array_equal(vertices, out_vertices);
         self.assert_array_equal(faces, out_faces);
@@ -36,7 +36,7 @@ class RemoveIsolatedVerticesTest(TestCase):
             [0, 1, 4]
             ]);
 
-        out_vertices, out_faces, info = remove_isolated_vertices(vertices, faces);
+        out_vertices, out_faces, info = remove_isolated_vertices_raw(vertices, faces);
 
         self.assertEqual(3, len(out_vertices));
         self.assertTrue(np.all(out_faces < len(out_vertices)));
