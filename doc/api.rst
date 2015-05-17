@@ -4,8 +4,8 @@ PyMesh API Reference
 Modules:
 
 .. toctree::
-    core
-    boolean
+    mesh
     meshio
     meshutils
+    boolean
     misc
