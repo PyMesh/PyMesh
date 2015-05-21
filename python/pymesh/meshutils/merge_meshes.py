@@ -5,10 +5,11 @@ def merge_meshes(input_meshes):
     """ Merge multiple meshes into a single mesh.
 
     Args:
-        input_meshes (``list``): a list of :class:`Mesh` objects.
+        input_meshes (``list``): a list of input :class:`Mesh` objects.
 
     Returns:
-        An :class:`Mesh` object that consists of all vertices, faces and voxels
+
+        ``Mesh``: An mesh consists of all vertices, faces and voxels
         from ``input_meshes``.
     """
     vertices = [];
