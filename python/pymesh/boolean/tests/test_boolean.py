@@ -374,9 +374,10 @@ class BooleanTest(TestCase):
         mesh, info = boolean(mesh_1, mesh_2, "union", "igl");
 
         #test_dir = "/Users/qingnanzhou/tests/boolean_test/simple_union/";
-        #self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
-        #self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-        #self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
+        test_dir = os.getcwd();
+        self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
+        self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
+        self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
 
         self.assertTrue(mesh.is_closed());
         self.assertTrue(mesh.is_manifold());
