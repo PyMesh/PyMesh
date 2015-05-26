@@ -5,4 +5,3 @@
 %include Core/ExceptionConverter.i
 %include BooleanEngine.i
 %include OuterHullEngine.i
-%include SelfIntersectionResolver.i
