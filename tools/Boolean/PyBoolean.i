@@ -4,4 +4,3 @@
 %include eigen.i
 %include Core/ExceptionConverter.i
 %include BooleanEngine.i
-%include OuterHullEngine.i
