@@ -19,8 +19,10 @@ def merge_meshes(input_meshes):
 
     for mesh in input_meshes:
         vertices.append(mesh.vertices);
-        faces.append(mesh.faces + vertex_count);
-        voxels.append(mesh.voxels + vertex_count);
+        if mesh.num_faces > 0:
+            faces.append(mesh.faces + vertex_count);
+        if mesh.num_voxels > 0:
+            voxels.append(mesh.voxels + vertex_count);
         vertex_count += mesh.num_vertices;
 
     if len(vertices) > 0:
