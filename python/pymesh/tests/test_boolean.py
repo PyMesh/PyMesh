@@ -1,5 +1,5 @@
 from pymesh.TestCase import TestCase
-from pymesh.boolean import boolean
+from pymesh import boolean
 from pymesh.meshutils import generate_box_mesh
 from pymesh.misc import Quaternion
 from pymesh.meshio import form_mesh
@@ -9,6 +9,7 @@ import math
 import os.path
 import unittest
 
+@unittest.skip("skipped for debugging purposes")
 class BooleanTest(TestCase):
     def test_separated_shapes(self):
         mesh_1, __ = generate_box_mesh(
@@ -358,7 +359,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_closed());
         self.assertEqual(1, mesh.num_components);
 
-    @unittest.skip("this causes crash")
+    #@unittest.skip("this causes crash")
     def test_simple_union(self):
         #TODO: bug
         mesh_1, __ = generate_box_mesh(
@@ -374,10 +375,10 @@ class BooleanTest(TestCase):
         mesh, info = boolean(mesh_1, mesh_2, "union", "igl");
 
         #test_dir = "/Users/qingnanzhou/tests/boolean_test/simple_union/";
-        test_dir = os.getcwd();
-        self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
-        self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-        self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
+        #test_dir = os.getcwd();
+        #self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
+        #self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
+        #self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
 
         self.assertTrue(mesh.is_closed());
         self.assertTrue(mesh.is_manifold());
@@ -488,7 +489,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(1, mesh.num_components);
 
-    @unittest.skip("this causes crash")
+    #@unittest.skip("this causes crash")
     def test_rotate_union_120_degrees(self):
         # TODO: Bug
         mesh_1, __ = generate_box_mesh(
@@ -508,7 +509,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(1, mesh.num_components);
 
-    @unittest.skip("this causes unit test failure")
+    #@unittest.skip("this causes unit test failure")
     def test_rotation_union_stress(self):
         # TODO: Bug
         N = 4;

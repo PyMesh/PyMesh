@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-
 import PyBoolean
 import numpy as np
-from ..meshio import form_mesh
+from meshio import form_mesh
 
-def auto_select_engine(dim):
+def _auto_select_engine(dim):
     if dim == 2:
         engine = "clipper";
     elif dim == 3:
@@ -53,7 +51,7 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
     dim = mesh_1.dim;
 
     if engine == "auto":
-        auto_select_engine(dim);
+        _auto_select_engine(dim);
 
     engine = PyBoolean.BooleanEngine.create(engine);
     engine.set_mesh_1(mesh_1.vertices, mesh_1.faces);
@@ -75,26 +73,3 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
     info = {};
     return output_mesh, info;
 
-def intersection(mesh_1, mesh_2, engine="auto"):
-    """ Wrapper function of :meth:`pymesh.boolean.boolean`
-    with operation = "intersection".
-    """
-    return boolean(mesh_1, mesh_2, "intersection", engine);
-
-def union(mesh_1, mesh_2, engine="auto"):
-    """ Wrapper function of :meth:`pymesh.boolean.boolean`
-    with operation = "union".
-    """
-    return boolean(mesh_1, mesh_2, "union", engine);
-
-def difference(mesh_1, mesh_2, engine="auto"):
-    """ Wrapper function of :meth:`pymesh.boolean.boolean`
-    with operation = "difference".
-    """
-    return boolean(mesh_1, mesh_2, "difference", engine);
-
-def symmetric_difference(mesh_1, mesh_2, engine="auto"):
-    """ Wrapper function of :meth:`pymesh.boolean.boolean`
-    with operation = "symmetric_difference".
-    """
-    return boolean(mesh_1, mesh_2, "symmetric_difference", engine);
