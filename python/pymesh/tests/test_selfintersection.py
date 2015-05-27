@@ -1,9 +1,12 @@
 from pymesh.TestCase import TestCase
 from pymesh import detect_self_intersection, resolve_self_intersection
+from pymesh.meshio import form_mesh
 from pymesh.meshutils import generate_box_mesh
 from pymesh.meshutils import merge_meshes
+from pymesh.misc import Quaternion
 
 import numpy as np
+import math
 import unittest
 
 class SelfIntersectionTest(TestCase):
@@ -43,9 +46,9 @@ class SelfIntersectionTest(TestCase):
         self.assertEqual(0, len(intersecting_faces));
 
     def test_no_intersection(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([3, 3, 3]), np.array([4, 4, 4]));
         mesh = merge_meshes((mesh_1, mesh_2));
 
@@ -58,9 +61,9 @@ class SelfIntersectionTest(TestCase):
         self.assert_even_adj_faces(output_mesh);
 
     def test_simple_intersection(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([2, 2, 2]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([1, 1, 1]), np.array([4, 4, 4]));
         mesh = merge_meshes((mesh_1, mesh_2));
         output_mesh = resolve_self_intersection(mesh);
@@ -70,9 +73,9 @@ class SelfIntersectionTest(TestCase):
         self.assert_even_adj_faces(output_mesh);
 
     def test_corner_corner_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([1, 1, 1]), np.array([4, 4, 4]));
         mesh = merge_meshes((mesh_1, mesh_2));
         output_mesh = resolve_self_intersection(mesh);
@@ -82,9 +85,9 @@ class SelfIntersectionTest(TestCase):
         self.assert_even_adj_faces(output_mesh);
 
     def test_edge_edge_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([0, 1, 1]), np.array([1, 2, 2]));
 
         mesh = merge_meshes((mesh_1, mesh_2));
@@ -94,20 +97,109 @@ class SelfIntersectionTest(TestCase):
         self.assert_no_self_intersect(output_mesh);
         self.assert_even_adj_faces(output_mesh);
 
-    @unittest.skip("How to handle duplicated faces is still undecided.")
     def test_face_face_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([0, 0, 1]), np.array([1, 1, 2]));
 
         mesh = merge_meshes((mesh_1, mesh_2));
-        #print(self.save_mesh("example.ply", mesh));
         output_mesh = resolve_self_intersection(mesh);
 
-        #print(self.save_mesh("face_face_touch.msh", output_mesh));
+        self.assert_self_intersect(mesh);
+        # Since the overlapping faces would be kept so valid nested outer hulls
+        # can be extracted, the resolved mesh would be actually self-intersecting.
+        #self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
+
+    def test_face_edge_touch(self):
+        mesh_1 = generate_box_mesh(
+                np.array([0, 0, 0]), np.array([1, 1, 1]));
+
+        rot = Quaternion.fromData(
+                np.array([1, 0, 1], dtype=float),
+                np.array([0, 0, 1], dtype=float));
+        mesh_2 = form_mesh(
+                np.dot(rot.to_matrix(), mesh_1.vertices.T).T +
+                np.array([0.5, 0.5, 1.0]),
+                mesh_1.faces);
+
+        mesh = merge_meshes((mesh_1, mesh_2));
+        output_mesh = resolve_self_intersection(mesh);
 
         self.assert_self_intersect(mesh);
         self.assert_no_self_intersect(output_mesh);
         self.assert_even_adj_faces(output_mesh);
+
+    def test_face_face_touch_with_different_area(self):
+        mesh_1 = generate_box_mesh(
+                np.array([0, 0, 0]), np.array([1, 1, 1]));
+        mesh_2 = generate_box_mesh(
+                np.array([-1, -1, 1]), np.array([2, 2, 2]));
+
+        mesh = merge_meshes((mesh_1, mesh_2));
+        output_mesh = resolve_self_intersection(mesh);
+
+        self.assert_self_intersect(mesh);
+        #self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
+
+    def test_face_corner_touch(self):
+        mesh_1 = generate_box_mesh(
+                np.array([0, 0, 0]), np.array([1, 1, 1]));
+
+        rot = Quaternion.fromData(
+                np.array([1, 1, 1], dtype=float),
+                np.array([0, 0, 1], dtype=float));
+        mesh_2 = form_mesh(
+                np.dot(rot.to_matrix(), mesh_1.vertices.T).T +
+                np.array([0.5, 0.5, 1.0]),
+                mesh_1.faces);
+
+        mesh = merge_meshes((mesh_1, mesh_2));
+        output_mesh = resolve_self_intersection(mesh);
+
+        self.assert_self_intersect(mesh);
+        self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
+
+    def test_face_corner_touch_off_center(self):
+        mesh_1 = generate_box_mesh(
+                np.array([0, 0, 0]), np.array([1, 1, 1]));
+
+        rot = Quaternion.fromData(
+                np.array([1, 1, 1], dtype=float),
+                np.array([0, 0, 1], dtype=float));
+        mesh_2 = form_mesh(
+                np.dot(rot.to_matrix(), mesh_1.vertices.T).T +
+                np.array([0.6, 0.6, 1.0]),
+                mesh_1.faces);
+
+        mesh = merge_meshes((mesh_1, mesh_2));
+        output_mesh = resolve_self_intersection(mesh);
+
+        self.assert_self_intersect(mesh);
+        self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
+
+    def test_intersect_with_rotated_self(self):
+        mesh_1 = generate_box_mesh(
+                np.array([0, 0, 0]), np.array([1, 1, 1]));
+
+        rot = Quaternion.fromAxisAngle(np.array([1, 1, 0], dtype=float),
+                math.pi * 0.5);
+        mesh_2 = form_mesh(
+                np.dot(rot.to_matrix(), mesh_1.vertices.T).T +
+                np.array([0.5, 0.5, 0.5]),
+                mesh_1.faces);
+
+        mesh = merge_meshes((mesh_1, mesh_2));
+        output_mesh = resolve_self_intersection(mesh);
+
+        self.assert_self_intersect(mesh);
+        #self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
+
+
+
 

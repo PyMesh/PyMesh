@@ -12,9 +12,9 @@ import unittest
 @unittest.skip("skipped for debugging purposes")
 class BooleanTest(TestCase):
     def test_separated_shapes(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([2, 2, 2]), np.array([3, 3, 3]));
 
         mesh, info = boolean(
@@ -53,9 +53,9 @@ class BooleanTest(TestCase):
         self.assertEqual(2, mesh.num_components);
 
     def test_corner_corner_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([1, 1, 1]), np.array([3, 3, 3]));
 
         mesh, info = boolean(
@@ -94,9 +94,9 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_edge_edge_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([0, 1, 1]), np.array([1, 2, 2]));
 
         mesh, info = boolean(
@@ -135,9 +135,9 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_face_face_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([0, 0, 1]), np.array([1, 1, 2]));
 
         mesh, info = boolean(
@@ -176,9 +176,9 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_simple_intersection(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([2, 2, 2]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([1, 1, 1]), np.array([3, 3, 3]));
 
         mesh, info = boolean(
@@ -219,9 +219,9 @@ class BooleanTest(TestCase):
 
     def test_eps_corner_intersection(self):
         eps = np.finfo(np.float64).eps;
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([1, 1, 1]) - eps, np.array([3, 3, 3]));
 
         mesh, info = boolean(
@@ -235,9 +235,9 @@ class BooleanTest(TestCase):
 
     def test_eps_edge_intersection(self):
         eps = np.finfo(np.float64).eps;
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([0, 1-eps, 1-eps]), np.array([1, 2, 2]));
 
         mesh, info = boolean(
@@ -252,9 +252,9 @@ class BooleanTest(TestCase):
 
     def test_eps_face_intersection(self):
         eps = np.finfo(np.float64).eps;
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([0, 0, 1-eps]), np.array([1, 1, 2]));
 
         mesh, info = boolean(
@@ -268,9 +268,9 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_edge_edge_touch_with_different_length(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([-1, 1, 1]), np.array([2, 2, 2]));
 
         mesh, info = boolean(
@@ -284,9 +284,9 @@ class BooleanTest(TestCase):
         self.assertEqual(0, mesh.num_components);
 
     def test_face_face_touch_with_different_area(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([-1, -1, 1]), np.array([2, 2, 2]));
 
         mesh, info = boolean(
@@ -300,7 +300,7 @@ class BooleanTest(TestCase):
         self.assertEqual(0, mesh.num_components);
 
     def test_face_corner_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromData(
@@ -320,7 +320,7 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_face_corner_touch_off_center(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromData(
@@ -340,7 +340,7 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_face_edge_touch(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromData(
@@ -360,9 +360,9 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     #@unittest.skip("this causes crash")
-    def test_simple_union(self):
+    def test_union_with_rotated_self(self):
         #TODO: bug
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromAxisAngle(np.array([1, 1, 0], dtype=float),
@@ -386,7 +386,7 @@ class BooleanTest(TestCase):
 
     def test_edge_edge_orthogonal_touch(self):
         eps = np.finfo(float).eps;
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromAxisAngle(np.array([1, 1, 0], dtype=float),
@@ -404,7 +404,7 @@ class BooleanTest(TestCase):
         self.assertEqual(1, mesh.num_components);
 
     def test_intersection_with_self(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
         mesh, info = boolean(mesh_1, mesh_1, "intersection", "igl");
         self.assertTrue(mesh.is_closed());
@@ -412,7 +412,7 @@ class BooleanTest(TestCase):
         self.assertTrue(1, mesh.num_components);
 
     def test_intersection_with_slighly_rotated_self(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromAxisAngle(np.array([1.0, 1.0, 1.0]), 0.0001);
@@ -426,7 +426,7 @@ class BooleanTest(TestCase):
         self.assertTrue(1, mesh.num_components);
 
     def test_union_with_45_rotated_self(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
 
         rot = Quaternion.fromAxisAngle(np.array([1.0, 1.0, 1.0]), math.pi/4.0);
@@ -440,22 +440,22 @@ class BooleanTest(TestCase):
         self.assertTrue(1, mesh.num_components);
 
     def test_nested_mesh(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([-1, -1, -1]), np.array([2, 2, 2]));
 
-        mesh, __ = boolean(mesh_1, mesh_2, "intersection", "igl");
+        mesh = boolean(mesh_1, mesh_2, "intersection", "igl");
         self.assert_array_equal(mesh_1.bbox, mesh.bbox);
 
-        mesh, __ = boolean(mesh_1, mesh_2, "union", "igl");
+        mesh = boolean(mesh_1, mesh_2, "union", "igl");
         self.assert_array_equal(mesh_2.bbox, mesh.bbox);
 
-        mesh, __ = boolean(mesh_1, mesh_2, "difference", "igl");
+        mesh = boolean(mesh_1, mesh_2, "difference", "igl");
         self.assertEqual(0, mesh.num_vertices);
         self.assertEqual(0, mesh.num_faces);
 
-        mesh, __ = boolean(mesh_2, mesh_1, "difference", "igl");
+        mesh = boolean(mesh_2, mesh_1, "difference", "igl");
         self.assertEqual(16, mesh.num_vertices);
         self.assertEqual(24, mesh.num_faces);
         self.assert_array_equal(mesh_2.bbox, mesh.bbox);
@@ -463,7 +463,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(2, mesh.num_components);
 
-        mesh, __ = boolean(mesh_1, mesh_2, "symmetric_difference", "igl");
+        mesh = boolean(mesh_1, mesh_2, "symmetric_difference", "igl");
         self.assertEqual(16, mesh.num_vertices);
         self.assertEqual(24, mesh.num_faces);
         self.assert_array_equal(mesh_2.bbox, mesh.bbox);
@@ -472,15 +472,15 @@ class BooleanTest(TestCase):
         self.assertEqual(2, mesh.num_components);
 
     def test_cross_union(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
-        mesh_2, __ = generate_box_mesh(
+        mesh_2 = generate_box_mesh(
                 np.array([-1, -2, -1]), np.array([1, 2, 1]));
-        mesh_3, __ = generate_box_mesh(
+        mesh_3 = generate_box_mesh(
                 np.array([-1, -1, -2]), np.array([1, 1, 2]));
 
-        mesh, __ = boolean(mesh_1, mesh_2, "union", "igl");
-        mesh, __ = boolean(mesh, mesh_3, "union", "igl");
+        mesh = boolean(mesh_1, mesh_2, "union", "igl");
+        mesh = boolean(mesh, mesh_3, "union", "igl");
 
         self.assert_array_equal(
                 np.array([[-2, -2, -2], [2, 2, 2]], dtype=float),
@@ -492,7 +492,7 @@ class BooleanTest(TestCase):
     #@unittest.skip("this causes crash")
     def test_rotate_union_120_degrees(self):
         # TODO: Bug
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
 
         rot = Quaternion.fromAxisAngle(
@@ -500,7 +500,7 @@ class BooleanTest(TestCase):
         mesh_2 = form_mesh(
                 np.dot(rot.to_matrix(), mesh_1.vertices.T).T,
                 mesh_1.faces);
-        mesh, __ = boolean(mesh_1, mesh_2, "union", "igl");
+        mesh = boolean(mesh_1, mesh_2, "union", "igl");
         #test_dir = "/Users/qingnanzhou/tests/boolean_test/rot_120/";
         #self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
         #self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
@@ -513,7 +513,7 @@ class BooleanTest(TestCase):
     def test_rotation_union_stress(self):
         # TODO: Bug
         N = 4;
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
 
         mesh = mesh_1;
@@ -528,7 +528,7 @@ class BooleanTest(TestCase):
             self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh);
             self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
 
-            mesh, __ = boolean(mesh, mesh_2, "union", "igl");
+            mesh = boolean(mesh, mesh_2, "union", "igl");
             self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
             self.assertTrue(mesh.is_closed());
             self.assertTrue(mesh.is_manifold());
@@ -538,7 +538,7 @@ class BooleanTest(TestCase):
     def test_rotation_union_stress_2(self):
         # TODO: Bug
         N = 4;
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
 
         mesh = mesh_1;
@@ -551,7 +551,7 @@ class BooleanTest(TestCase):
             test_dir = "/Users/qingnanzhou/tests/boolean_test/coplanar_2/";
             self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh);
             self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-            mesh, __ = boolean(mesh, mesh_2, "union", "igl");
+            mesh = boolean(mesh, mesh_2, "union", "igl");
             self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
 
             self.assertTrue(mesh.is_closed());
@@ -559,7 +559,7 @@ class BooleanTest(TestCase):
             self.assertEqual(1, mesh.num_components);
 
     def test_rotation_180(self):
-        mesh_1, __ = generate_box_mesh(
+        mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
 
         rot = Quaternion.fromAxisAngle(
@@ -567,7 +567,7 @@ class BooleanTest(TestCase):
         mesh_2 = form_mesh(
                 np.dot(rot.to_matrix(), mesh_1.vertices.T).T,
                 mesh_1.faces);
-        mesh, __ = boolean(mesh_1, mesh_2, "union", "cgal");
+        mesh = boolean(mesh_1, mesh_2, "union", "cgal");
         self.assertTrue(mesh.is_closed());
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(1, mesh.num_components);

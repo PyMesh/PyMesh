@@ -52,7 +52,7 @@ def detect_self_intersection(mesh):
         mesh (:class:`Mesh`): The input mesh.
 
     Returns:
-        :py:class:`numpy.ndarray`: A :math:`n \\times 2` array of face indices.  Each
+        :py:class:`numpy.ndarray`: A n by 2 array of face indices.  Each
             row contains the indices of two intersecting faces. :math:`n` is
             the number of intersecting face pairs.
     """

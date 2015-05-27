@@ -24,16 +24,12 @@ def generate_box_mesh(box_min, box_max,
         subdiv_order (``int``): (optional) The subdivision order.  Default is 0.
 
     Returns:
-        2 values are returned.
+        :py:class:`Mesh`: The output box mesh.  The following attributes are
+        defined:
 
-            * ``output_mesh`` (:class:`Mesh`): Output mesh.
-            * ``information``: A ``dict`` of additional informations.
-
-        The following fields are defined in ``information``:
-
-            * ``cell_index``: An array representing the source cell indices.
-              I.e. all triangles/tets with the same cell index belongs to the
-              same cell.
+            * ``cell_index``: An :py:class:`numpy.ndarray` of size :math:`N_e`
+              that maps each element to the index of the cell it belongs to.
+              :math:`N_e` is the number of elements.
     """
     dim = len(box_min);
     if dim == 2:
@@ -43,8 +39,9 @@ def generate_box_mesh(box_min, box_max,
         mesh, cell_index = generate_3D_box_mesh(box_min, box_max, num_samples,
                 keep_symmetry, subdiv_order);
 
-    info = { "cell_index": cell_index };
-    return mesh, info
+    mesh.add_attribute("cell_index");
+    mesh.set_attribute("cell_index", cell_index);
+    return mesh
 
 def generate_2D_box_mesh(box_min, box_max, num_samples, keep_symmetry,
         subdiv_order):
