@@ -1,6 +1,6 @@
-The :mod:`Mesh` package
-==========================
+Mesh Data Structure
+===================
 
-.. automodule:: pymesh
+.. autoclass:: pymesh.Mesh
     :members:
 

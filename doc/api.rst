@@ -1,11 +1,9 @@
 PyMesh API Reference
 ==============================================
 
-Modules:
-
 .. toctree::
     mesh
     meshio
+    geometry_processing
     meshutils
-    boolean
     misc

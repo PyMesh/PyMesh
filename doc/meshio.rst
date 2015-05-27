@@ -1,5 +1,10 @@
-The :mod:`meshio` package
+Reading and Writing Meshes
 ==========================
 
-.. automodule:: pymesh.meshio
-   :members:
+.. autofunction:: pymesh.meshio.load_mesh
+
+.. autofunction:: pymesh.meshio.save_mesh
+
+.. autofunction:: pymesh.meshio.save_mesh_raw
+
+.. autofunction:: pymesh.meshio.form_mesh

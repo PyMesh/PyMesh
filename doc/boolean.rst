@@ -1,5 +1,4 @@
-The :mod:`boolean` package
-==========================
+Boolean opertions
+=================
 
-.. automodule:: pymesh.boolean
-    :members:
+.. autofunction:: pymesh.boolean
