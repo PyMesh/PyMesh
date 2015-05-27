@@ -87,7 +87,7 @@ class Mesh(object):
     def get_attribute(self, name):
         """ Return attribute values in a flattened array.
         """
-        return self.__mesh.get_attribute(name);
+        return self.__mesh.get_attribute(name).ravel();
 
     def get_vertex_attribute(self, name):
         """ Same as :py:meth:`get_attribute` but reshaped to have
