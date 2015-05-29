@@ -25,12 +25,16 @@ class OuterHullTest(TestCase):
     def test_simple_cube(self):
         mesh = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
-        outer_hull = compute_outer_hull(mesh);
+        outer_hull, interior_mesh =\
+                compute_outer_hull(mesh, with_interior=True);
 
         self.assertTrue(outer_hull.is_closed());
         self.assertEqual(mesh.num_vertices, outer_hull.num_vertices);
         self.assertEqual(mesh.num_faces, outer_hull.num_faces);
         self.assert_valid_attributes(mesh, outer_hull);
+
+        self.assertEqual(0, interior_mesh.num_vertices);
+        self.assertEqual(0, interior_mesh.num_faces);
 
     def test_intersecting_cubes(self):
         mesh_1 = generate_box_mesh(
@@ -49,11 +53,16 @@ class OuterHullTest(TestCase):
                 np.array([1, 1, 1]), np.array([2, 2, 2]));
 
         mesh = merge_meshes((mesh_1, mesh_2));
-        outer_hull = compute_outer_hull(mesh);
+        outer_hull, interior_mesh = \
+                compute_outer_hull(mesh, with_interior=True);
 
         self.assertTrue(outer_hull.is_closed());
         self.assertEqual(1, outer_hull.num_components);
         self.assert_valid_attributes(mesh, outer_hull);
+
+        self.assertEqual(8, interior_mesh.num_vertices);
+        self.assert_array_equal(([1, 1, 1], [2, 2, 2]),
+                interior_mesh.bbox);
 
     def test_multiple_components(self):
         mesh_1 = generate_box_mesh(
@@ -62,11 +71,15 @@ class OuterHullTest(TestCase):
                 np.array([2, 2, 2]), np.array([3, 3, 3]));
 
         mesh = merge_meshes((mesh_1, mesh_2));
-        outer_hull = compute_outer_hull(mesh);
+        outer_hull, interior_mesh = \
+                compute_outer_hull(mesh, with_interior=True);
 
         self.assertTrue(outer_hull.is_closed());
         self.assertEqual(2, outer_hull.num_components);
         self.assert_valid_attributes(mesh, outer_hull);
+
+        self.assertEqual(0, interior_mesh.num_vertices);
+        self.assertEqual(0, interior_mesh.num_faces);
 
     def test_face_face_touch(self):
         mesh_1 = generate_box_mesh(
