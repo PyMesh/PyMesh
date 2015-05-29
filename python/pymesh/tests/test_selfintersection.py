@@ -197,9 +197,42 @@ class SelfIntersectionTest(TestCase):
         output_mesh = resolve_self_intersection(mesh);
 
         self.assert_self_intersect(mesh);
+        # The output mesh contains degenerated triangles, which cause CGAL
+        # assertion failure.
         #self.assert_no_self_intersect(output_mesh);
         self.assert_even_adj_faces(output_mesh);
 
+    def test_cross_union(self):
+        mesh_1 = generate_box_mesh(
+                np.array([-2, -1, -1]), np.array([2, 1, 1]));
+        mesh_2 = generate_box_mesh(
+                np.array([-1, -2, -1]), np.array([1, 2, 1]));
+        mesh_3 = generate_box_mesh(
+                np.array([-1, -1, -2]), np.array([1, 1, 2]));
 
+        mesh = merge_meshes((mesh_1, mesh_2, mesh_3));
+        output_mesh = resolve_self_intersection(mesh);
 
+        self.assert_self_intersect(mesh);
+        # The output mesh contains duplicated faces due to input overlaps.
+        #self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
+
+    def test_rotate_120(self):
+        mesh_1 = generate_box_mesh(
+                np.array([-2, -1, -1]), np.array([2, 1, 1]));
+
+        rot = Quaternion.fromAxisAngle(
+                np.array([1.0, 0.0, 0.0]), float(2*math.pi) / 3);
+        mesh_2 = form_mesh(
+                np.dot(rot.to_matrix(), mesh_1.vertices.T).T,
+                mesh_1.faces);
+
+        mesh = merge_meshes((mesh_1, mesh_2));
+        output_mesh = resolve_self_intersection(mesh);
+
+        self.assert_self_intersect(mesh);
+        # The output mesh contains degenerated face.
+        #self.assert_no_self_intersect(output_mesh);
+        self.assert_even_adj_faces(output_mesh);
 

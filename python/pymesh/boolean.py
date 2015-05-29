@@ -39,11 +39,7 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
               <http://www.angusj.com/delphi/clipper.php>`_
 
     Returns:
-        2 values are returned.
-
-            * ``output_mesh`` (:class:`Mesh`): output triangular mesh.
-            * ``infomation`` (:class:`dict`): additional informations.
-
+        :class:`Mesh`: The output mesh.
     """
     assert(mesh_1.dim == mesh_2.dim);
     assert(mesh_1.vertex_per_face == 3);
@@ -70,6 +66,5 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
                 "Unsupported operations: {}".format(operation));
 
     output_mesh = form_mesh(engine.get_vertices(), engine.get_faces());
-    info = {};
-    return output_mesh, info;
+    return output_mesh;
 
