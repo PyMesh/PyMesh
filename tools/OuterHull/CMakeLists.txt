@@ -22,7 +22,7 @@ ENDIF (LIBIGL_FOUND AND CGAL_FOUND)
 
 ADD_LIBRARY(lib_outer_hull SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_outer_hull PROPERTIES OUTPUT_NAME "outer_hull")
-TARGET_LINK_LIBRARIES(lib_outer_hull Mesh lib_self_intersection ${DEPENDENT_LIBS})
+TARGET_LINK_LIBRARIES(lib_outer_hull Mesh lib_MeshUtils lib_self_intersection ${DEPENDENT_LIBS})
 
 IF(NOT WITHOUT_SWIG)
     set(SWG_FILES PyOuterHull.i)
@@ -31,7 +31,7 @@ IF(NOT WITHOUT_SWIG)
     SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
     SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
     SWIG_ADD_MODULE(PyOuterHull python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyOuterHull ${PYTHON_LIBRARIES} Mesh
+    SWIG_LINK_LIBRARIES(PyOuterHull ${PYTHON_LIBRARIES} Mesh lib_MeshUtils
         lib_outer_hull ${DEPENDENT_LIBS})
 
     # Boudle lib, swig wrapper into a single target.

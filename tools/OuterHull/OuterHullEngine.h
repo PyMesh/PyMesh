@@ -25,12 +25,17 @@ class OuterHullEngine {
         const MatrixIr get_faces() const { return m_faces; }
         const MatrixFr get_interior_vertices() const { return m_interior_vertices; }
         const MatrixIr get_interior_faces() const { return m_interior_faces; }
-        const VectorF  get_debug_field() const { return m_debug; }
+        const VectorI  get_face_is_flipped() const { return m_face_is_flipped; }
+        const VectorI  get_ori_face_indices() const { return m_ori_face_indices; }
+
+    protected:
+        void remove_isolated_vertices();
 
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
         MatrixFr m_interior_vertices;
         MatrixIr m_interior_faces;
-        VectorF  m_debug;
+        VectorI  m_face_is_flipped;
+        VectorI  m_ori_face_indices;
 };

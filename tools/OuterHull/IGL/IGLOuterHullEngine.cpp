@@ -7,9 +7,7 @@
 #include <vector>
 #include <Math/MatrixUtils.h>
 
-#include <igl/cgal/remesh_self_intersections.h>
 #include <igl/outer_hull.h>
-#include <igl/remove_unreferenced.h>
 
 #include <SelfIntersection/SelfIntersectionResolver.h>
 
@@ -21,6 +19,7 @@ void IGLOuterHullEngine::run() {
     check_normal_reliability();
     resolve_self_intersections();
     extract_outer_hull();
+    remove_isolated_vertices();
 }
 
 void IGLOuterHullEngine::extract_face_normals() {
@@ -62,12 +61,12 @@ void IGLOuterHullEngine::resolve_self_intersections() {
         out_normals.row(i) = m_normals.row(face_sources[i]);
     }
     m_normals = out_normals;
+    m_ori_face_indices = face_sources;
 }
 
 void IGLOuterHullEngine::extract_outer_hull() {
     assert(m_faces.rows() == m_normals.rows());
     MatrixI out_faces;
-    VectorI ori_face_indices;
     VectorI ori_face_is_flipped;
 
     // Officially libigl does not support row major matrices.
@@ -75,6 +74,7 @@ void IGLOuterHullEngine::extract_outer_hull() {
     MatrixF V(m_vertices);
     MatrixI F(m_faces);
     Eigen::Matrix<Float, Eigen::Dynamic, 3> N(m_normals);
+    VectorI ori_face_indices;
 
     igl::outer_hull(
             V, F, N,
@@ -90,11 +90,17 @@ void IGLOuterHullEngine::extract_outer_hull() {
         in_outer[ori_face_indices[i]] = true;
     }
 
-    m_debug = VectorF::Zero(num_out_faces);
+    m_face_is_flipped = VectorI::Zero(num_out_faces);
     for (size_t i=0; i<num_out_faces; i++) {
         if (ori_face_is_flipped[ori_face_indices[i]]) {
-            m_debug[i] = 1;
+            m_face_is_flipped[i] = 1;
         }
+    }
+
+    auto face_sources = m_ori_face_indices;
+    m_ori_face_indices.resize(num_out_faces);
+    for (size_t i=0; i<num_out_faces; i++) {
+        m_ori_face_indices[i] = face_sources[ori_face_indices[i]];
     }
 
     std::vector<VectorI> interior_faces;
