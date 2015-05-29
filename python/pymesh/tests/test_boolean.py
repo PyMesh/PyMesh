@@ -284,7 +284,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_closed());
         self.assertEqual(0, mesh.num_components);
 
-    #@unittest.skip("Duplicated faces are not handled correctly")
+    @unittest.skip("Duplicated faces are not handled correctly")
     def test_face_face_touch_with_different_area(self):
         mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
