@@ -3,19 +3,22 @@ import numpy as np
 from Mesh import Mesh
 import PyMesh
 
-def load_mesh(filename):
+def load_mesh(filename, drop_zero_dim=False):
     """ Load mesh from a file.
 
     Args:
         filename: input filename.  File format is auto detected based on
             extension.
+        drop_zero_dim (:py:class:`bool`): If true, convert flat 3D mesh into 2D
+            mesh.
 
     Returns:
         A Mesh object.
     """
     factory = PyMesh.MeshFactory();
     factory.load_file(filename);
-    factory.drop_zero_dim();
+    if drop_zero_dim:
+        factory.drop_zero_dim();
     return Mesh(factory.create());
 
 def form_mesh(vertices, faces, voxels=None):
