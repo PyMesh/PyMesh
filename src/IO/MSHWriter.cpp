@@ -143,7 +143,8 @@ void MSHWriter::write_attribute(MshSaver& saver, const std::string& name,
         std::stringstream err_msg;
         err_msg << "Attribute " << name << " has length " << attr_size << std::endl;
         err_msg << "Unable to interpret the attribute type.";
-        throw NotImplementedError(err_msg.str());
+        std::cerr << "Warning: ";
+        std::cerr << err_msg.str() << std::endl;
     }
 }
 
