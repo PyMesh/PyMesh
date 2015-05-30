@@ -50,11 +50,16 @@ def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
     """ Save raw mesh to file.
 
     Args:
-        filename: output file.  File format is auto detected from extension.
-        vertices: ndarray of floats with size (num_vertices, dim).
-        faces: ndarray of ints with size (num_faces, vertex_per_face).
-        voxels: optional ndarray of ints with size (num_voxels,
+        filename (:py:class:`str`): Output file.  File format is auto detected from extension.
+        vertices (:py:class:`numpy.ndarray`): Array of floats with size (num_vertices, dim).
+        faces (:py:class:`numpy.ndarray`): Arrayof ints with size (num_faces, vertex_per_face).
+        voxels (:py:class:`numpy.ndarray`): (optional) ndarray of ints with size (num_voxels,
             vertex_per_voxel).  Use `None` for forming surface meshes.
+        **setting (:py:class:`dict`): (optional) The following keys are recognized.
+
+            * ascii: whether to use ascii encoding, default is false.
+            * use_float: store scalars as float instead of double, default is
+              false.
     """
     if voxels is None:
         voxels = np.zeros((0, 4));
@@ -73,6 +78,8 @@ def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
     writer = PyMesh.MeshWriter.create_writer(filename);
     if setting.get("ascii", False):
         writer.in_ascii();
+    if setting.get("use_float", False):
+        writer.use_float();
     writer.write(
             vertices.ravel(order="C"),
             faces.ravel(order="C"),
@@ -85,14 +92,17 @@ def save_mesh(filename, mesh, *attributes, **setting):
     """ Save mesh to file.
 
     Args:
-        filename: Output file.  File format is auto detected from extension.
-        mesh: Mesh object.
-        *attributes: Attribute names to be saved.  This field would be ignored
-            if the output format does not support attributes (e.g. **.obj** and
-            **.stl** files)
-        **setting:
-            ascii: whether to use ascii encoding, default is false.
-            
+        filename (:py:class:`str`): Output file.  File format is auto detected from extension.
+        mesh (:py:class:`Mesh`): Mesh object.
+        *attributes (:py:class:`list`): (optional) Attribute names to be saved.
+            This field would be ignored if the output format does not support
+            attributes (e.g. **.obj** and **.stl** files)
+        **setting (:py:class:`dict`): (optional) The following keys are recognized.
+
+            * ascii: whether to use ascii encoding, default is false.
+            * use_float: store scalars as float instead of double, default is
+              false.
+
     Raises:
         KeyError: Attributes cannot be found in mesh.
     """
@@ -103,4 +113,6 @@ def save_mesh(filename, mesh, *attributes, **setting):
         writer.with_attribute(attr);
     if setting.get("ascii", False):
         writer.in_ascii();
+    if setting.get("use_float", False):
+        writer.use_float();
     writer.write_mesh(mesh.raw_mesh);
