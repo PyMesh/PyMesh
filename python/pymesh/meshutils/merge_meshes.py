@@ -1,5 +1,6 @@
 from ..meshio import form_mesh
 import numpy as np
+import logging
 
 def merge_meshes(input_meshes):
     """ Merge multiple meshes into a single mesh.
@@ -18,6 +19,7 @@ def merge_meshes(input_meshes):
         * ``voxel_sources``: Indices of source voxels from the input mesh if the
           output contains at least 1 voxel.
     """
+    logger = logging.getLogger(__name__);
     vertices = [];
     faces = [];
     voxels = [];
@@ -52,10 +54,17 @@ def merge_meshes(input_meshes):
         faces = np.zeros((0, 3), dtype=int)
         face_sources = np.array([]);
 
-    if len(voxels) > 0:
+    if len(voxels) == len(input_meshes):
         voxels = np.vstack(voxels);
         voxel_sources = np.concatenate(voxel_sources);
     else:
+        # Not all input meshes contains voxels.  So the merged mesh will not be
+        # a valid volume representation.  It is probably base to drop all
+        # voxels.
+        if (len(voxels) > 0):
+            logger.warning("Not all input meshes represent a volume, "
+                    "so dropping all voxels.");
+
         voxels = np.zeros((0, 4), dtype=int);
         voxel_sources = np.array([]);
 
