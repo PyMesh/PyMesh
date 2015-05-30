@@ -1,4 +1,4 @@
 Outer Hull
 ==========
 
-.. autofunction:: pymesh.outer_hull
+.. autofunction:: pymesh.compute_outer_hull
