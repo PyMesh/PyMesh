@@ -109,12 +109,12 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
     assert(num_vertices > 0);
     assert_success(ply_add_element(ply, "vertex", num_vertices),
             "Add element failed");
-    assert_success(ply_add_scalar_property(ply, "x", PLY_FLOAT),
+    assert_success(ply_add_scalar_property(ply, "x", m_scalar),
             "Add X coordinate failed");
-    assert_success(ply_add_scalar_property(ply, "y", PLY_FLOAT),
+    assert_success(ply_add_scalar_property(ply, "y", m_scalar),
             "Add Y coordinate failed");
     if (dim == 3) {
-        assert_success(ply_add_scalar_property(ply, "z", PLY_FLOAT),
+        assert_success(ply_add_scalar_property(ply, "z", m_scalar),
                 "Add Z coordinate failed");
     }
 
@@ -123,7 +123,7 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
         const std::string& name = *itr;
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_vertex_size = attr.size() / num_vertices;
-        e_ply_type ply_type = PLY_FLOAT;
+        e_ply_type ply_type = m_scalar;
         if (name == "red" || name == "green" || name == "blue") {
             ply_type = PLY_UCHAR;
         }
@@ -150,7 +150,7 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
         const std::string& name = *itr;
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_face_size = attr.size() / num_faces;
-        e_ply_type ply_type = PLY_FLOAT;
+        e_ply_type ply_type = m_scalar;
         if (name == "red" || name == "green" || name == "blue") {
             ply_type = PLY_UCHAR;
         }
@@ -177,7 +177,7 @@ void PLYWriter::add_voxel_elements_header(Mesh& mesh, p_ply& ply) {
         const std::string& name = *itr;
         const VectorF& attr = mesh.get_attribute(name);
         const size_t per_voxel_size = attr.size() / num_voxels;
-        e_ply_type ply_type = PLY_FLOAT;
+        e_ply_type ply_type = m_scalar;
         if (name == "red" || name == "green" || name == "blue") {
             ply_type = PLY_UCHAR;
         }

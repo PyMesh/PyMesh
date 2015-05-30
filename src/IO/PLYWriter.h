@@ -11,12 +11,13 @@
 
 class PLYWriter : public MeshWriter {
     public:
-        PLYWriter() : m_in_ascii(false) {}
+        PLYWriter() : m_in_ascii(false), m_scalar(PLY_DOUBLE) {}
         virtual ~PLYWriter() {}
 
     public:
         virtual void with_attribute(const std::string& attr_name);
         virtual void in_ascii() { m_in_ascii=true; }
+        virtual void use_float() { m_scalar = PLY_FLOAT; }
         virtual void write_mesh(Mesh& mesh);
         virtual void write(
                 const VectorF& vertices,
@@ -44,4 +45,5 @@ class PLYWriter : public MeshWriter {
         NameArray m_voxel_attr_names;
 
         bool m_in_ascii;
+        e_ply_type m_scalar;
 };

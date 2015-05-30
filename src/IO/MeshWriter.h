@@ -31,6 +31,7 @@ class MeshWriter {
     public:
         virtual void with_attribute(const std::string& attr_name)=0;
         virtual void in_ascii() {}
+        virtual void use_float() {}
 
         virtual void write_mesh(Mesh& mesh)=0;
         virtual void write(const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
