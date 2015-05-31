@@ -206,6 +206,8 @@ class Mesh(object):
 
     @property
     def bbox(self):
+        if self.num_vertices == 0:
+            raise RuntimeError("Cannot compute bbox with 0 vertices!");
         vts = self.vertices_ref.reshape((-1,self.dim), order='C');
         bmin = np.amin(vts, axis=0);
         bmax = np.amax(vts, axis=0);
