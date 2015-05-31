@@ -47,18 +47,22 @@ class WriterTest : public TestBase {
             const VectorF& vertices1 = mesh1->get_vertices();
             const VectorF& vertices2 = mesh2->get_vertices();
             ASSERT_EQ(vertices1.size(), vertices2.size());
-            VectorF diff = vertices1 - vertices2;
-            ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
-            ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
+            if (vertices1.size() > 0) {
+                VectorF diff = vertices1 - vertices2;
+                ASSERT_FLOAT_EQ(0.0, diff.minCoeff());
+                ASSERT_FLOAT_EQ(0.0, diff.maxCoeff());
+            }
         }
 
         void assert_eq_faces(MeshPtr mesh1, MeshPtr mesh2) {
             const VectorI& faces1 = mesh1->get_faces();
             const VectorI& faces2 = mesh2->get_faces();
             ASSERT_EQ(faces1.size(), faces2.size());
-            VectorI diff = faces1 - faces2;
-            ASSERT_EQ(0, diff.minCoeff());
-            ASSERT_EQ(0, diff.maxCoeff());
+            if (faces1.size() > 0) {
+                VectorI diff = faces1 - faces2;
+                ASSERT_EQ(0, diff.minCoeff());
+                ASSERT_EQ(0, diff.maxCoeff());
+            }
         }
 
         void assert_eq_voxels(MeshPtr mesh1, MeshPtr mesh2) {

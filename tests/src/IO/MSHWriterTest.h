@@ -9,6 +9,25 @@
 class MSHWriterTest : public WriterTest {
 };
 
+TEST_F(MSHWriterTest, EmptyMesh) {
+    MatrixFr vertices = MatrixFr::Zero(0, 3);
+    MatrixIr faces    = MatrixIr::Zero(0, 3);
+    MatrixIr voxels   = MatrixIr::Zero(0, 4);
+    MeshPtr mesh = load_data(vertices, faces, voxels);
+
+    std::string tmp_name = "empty.msh";
+    MSHWriter writer;
+    writer.set_output_filename(m_tmp_dir + tmp_name);
+    writer.write_mesh(*mesh);
+
+    MeshPtr mesh2 = load_tmp_mesh(tmp_name);
+    assert_eq_vertices(mesh, mesh2);
+    assert_eq_faces(mesh, mesh2);
+    assert_eq_voxels(mesh, mesh2);
+
+    remove(tmp_name);
+}
+
 TEST_F(MSHWriterTest, SurfaceMesh) {
     std::string filename = "cube.obj";
     MeshPtr mesh = load_mesh(filename);

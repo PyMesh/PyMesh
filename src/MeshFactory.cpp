@@ -134,6 +134,7 @@ void MeshFactory::initialize_attributes(MeshParser* parser) {
 
 void MeshFactory::compute_and_drop_zero_dim() {
     const size_t num_vertices = m_mesh->get_num_vertices();
+    if (num_vertices == 0) return;
     int zero_dim = m_mesh->get_geometry()->project_out_zero_dim();
     if (zero_dim < 0) return;
     const char axis[3] = {'X', 'Y', 'Z'};

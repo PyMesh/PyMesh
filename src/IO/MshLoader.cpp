@@ -224,7 +224,14 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     }
 
     m_nodes_per_element = nodes_per_element;
-    m_element_type = glob_elem_type;
+    if (glob_elem_type != -1) {
+        m_element_type = glob_elem_type;
+    } else if (m_elements.rows() == 0) {
+        // No elements specified, use triangle as element type.
+        m_element_type = 2;
+    } else {
+        throw INVALID_FORMAT;
+    }
 }
 
 void MshLoader::parse_node_field(std::ifstream& fin) {

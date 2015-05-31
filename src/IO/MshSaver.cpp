@@ -291,30 +291,32 @@ void MshSaver::save_binary_mesh(const VectorF& nodes, const VectorI& elements,
     fout << "$Elements" << std::endl;
     fout << m_num_elements << std::endl;
 
-    int elem_type = 0;
-    if (nodes_per_element == 3) {
-        elem_type = 2;
-    } else if (m_dim == 2 && nodes_per_element == 4) {
-        elem_type = 3;
-    } else if (m_dim == 3 && nodes_per_element == 4) {
-        elem_type = 4;
-    } else if (nodes_per_element == 8) {
-        elem_type = 5;
-    } else {
-        assert(false);
-    }
+    if (m_num_elements > 0) {
+        int elem_type = 0;
+        if (nodes_per_element == 3) {
+            elem_type = 2;
+        } else if (m_dim == 2 && nodes_per_element == 4) {
+            elem_type = 3;
+        } else if (m_dim == 3 && nodes_per_element == 4) {
+            elem_type = 4;
+        } else if (nodes_per_element == 8) {
+            elem_type = 5;
+        } else {
+            assert(false);
+        }
 
-    int num_elems = m_num_elements;
-    int tags = 0;
-    fout.write((char*)&elem_type, sizeof(int));
-    fout.write((char*)&num_elems, sizeof(int));
-    fout.write((char*)&tags, sizeof(int));
-    for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
-        int elem_num = i/nodes_per_element + 1;
-        VectorI elem = elements.segment(i, nodes_per_element) +
-            VectorI::Ones(nodes_per_element);
-        fout.write((char*)&elem_num, sizeof(int));
-        fout.write((char*)elem.data(), sizeof(int)*nodes_per_element);
+        int num_elems = m_num_elements;
+        int tags = 0;
+        fout.write((char*)&elem_type, sizeof(int));
+        fout.write((char*)&num_elems, sizeof(int));
+        fout.write((char*)&tags, sizeof(int));
+        for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
+            int elem_num = i/nodes_per_element + 1;
+            VectorI elem = elements.segment(i, nodes_per_element) +
+                VectorI::Ones(nodes_per_element);
+            fout.write((char*)&elem_num, sizeof(int));
+            fout.write((char*)elem.data(), sizeof(int)*nodes_per_element);
+        }
     }
     fout << "$EndElements" << std::endl;
     fout.flush();
