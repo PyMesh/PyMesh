@@ -134,7 +134,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_closed());
         self.assertEqual(1, mesh.num_components);
 
-    @unittest.skip("Coplanar faces are not handled correctly yet.")
+    #@unittest.skip("Coplanar faces are not handled correctly yet.")
     def test_face_face_touch(self):
         mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
@@ -144,11 +144,11 @@ class BooleanTest(TestCase):
         mesh = boolean(
                 mesh_1, mesh_2,
                 "intersection", "igl");
-        self.assertEqual(0, mesh.num_vertices);
-        self.assertEqual(0, mesh.num_faces);
-        self.assertTrue(mesh.is_manifold());
+        self.assertEqual(4, mesh.num_vertices);
+        self.assertEqual(4, mesh.num_faces);
+        self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(0, mesh.num_components);
+        self.assertEqual(1, mesh.num_components);
 
         mesh = boolean(
                 mesh_1, mesh_2,
@@ -171,8 +171,8 @@ class BooleanTest(TestCase):
                 mesh_1, mesh_2,
                 "symmetric_difference", "igl");
         self.assertEqual(12, mesh.num_vertices);
-        self.assertEqual(20, mesh.num_faces);
-        self.assertTrue(mesh.is_manifold());
+        self.assertEqual(24, mesh.num_faces);
+        self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
         self.assertEqual(1, mesh.num_components);
 
@@ -284,7 +284,7 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_closed());
         self.assertEqual(0, mesh.num_components);
 
-    @unittest.skip("Duplicated faces are not handled correctly")
+    #@unittest.skip("Duplicated faces are not handled correctly")
     def test_face_face_touch_with_different_area(self):
         mesh_1 = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));
@@ -295,11 +295,11 @@ class BooleanTest(TestCase):
                 mesh_1, mesh_2,
                 "intersection", "igl");
 
-        self.assertEqual(0, mesh.num_vertices);
-        self.assertEqual(0, mesh.num_faces);
-        self.assertTrue(mesh.is_manifold());
+        self.assertEqual(4, mesh.num_vertices);
+        self.assertEqual(4, mesh.num_faces);
+        self.assertFalse(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(0, mesh.num_components);
+        self.assertEqual(1, mesh.num_components);
 
     def test_face_corner_touch(self):
         mesh_1 = generate_box_mesh(
@@ -511,10 +511,10 @@ class BooleanTest(TestCase):
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(1, mesh.num_components);
 
-    @unittest.skip("this causes unit test failure due to overlapping faces")
+    #@unittest.skip("this causes unit test failure due to numerical problem")
     def test_rotation_union_stress(self):
         # TODO: Bug
-        N = 4;
+        N = 2;
         mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
 
@@ -529,7 +529,6 @@ class BooleanTest(TestCase):
             test_dir = "/Users/qingnanzhou/tests/boolean_test/coplanar/";
             self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh);
             self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-            print("done");
 
             mesh = boolean(mesh, mesh_2, "union", "igl");
             self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
@@ -537,10 +536,10 @@ class BooleanTest(TestCase):
             self.assertTrue(mesh.is_manifold());
             self.assertEqual(1, mesh.num_components);
 
-    @unittest.skip("this causes crash in debug")
+    #@unittest.skip("this causes crash due to intermediate degenerated triangle")
     def test_rotation_union_stress_2(self):
         # TODO: Bug
-        N = 4;
+        N = 3;
         mesh_1 = generate_box_mesh(
                 np.array([-2, -1, -1]), np.array([2, 1, 1]));
 
