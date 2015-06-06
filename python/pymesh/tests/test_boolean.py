@@ -376,12 +376,6 @@ class BooleanTest(TestCase):
 
         mesh = boolean(mesh_1, mesh_2, "union", "igl");
 
-        #test_dir = "/Users/qingnanzhou/tests/boolean_test/simple_union/";
-        #test_dir = os.getcwd();
-        #self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
-        #self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-        #self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
-
         self.assertTrue(mesh.is_closed());
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(1, mesh.num_components);
@@ -503,10 +497,6 @@ class BooleanTest(TestCase):
                 np.dot(rot.to_matrix(), mesh_1.vertices.T).T,
                 mesh_1.faces);
         mesh = boolean(mesh_1, mesh_2, "union", "igl");
-        #test_dir = "/Users/qingnanzhou/tests/boolean_test/rot_120/";
-        #self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh_1);
-        #self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-        #self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
         self.assertTrue(mesh.is_closed());
         self.assertTrue(mesh.is_manifold());
         self.assertEqual(1, mesh.num_components);
@@ -526,12 +516,7 @@ class BooleanTest(TestCase):
                     np.dot(rot.to_matrix(), mesh_1.vertices.T).T,
                     mesh_1.faces);
 
-            test_dir = "/Users/qingnanzhou/tests/boolean_test/coplanar/";
-            self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh);
-            self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
-
             mesh = boolean(mesh, mesh_2, "union", "igl");
-            self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
             self.assertTrue(mesh.is_closed());
             self.assertTrue(mesh.is_manifold());
             self.assertEqual(1, mesh.num_components);
@@ -550,11 +535,7 @@ class BooleanTest(TestCase):
             mesh_2 = form_mesh(
                     np.dot(rot.to_matrix(), mesh_1.vertices.T).T,
                     mesh_1.faces);
-            test_dir = "/Users/qingnanzhou/tests/boolean_test/coplanar_2/";
-            self.save_mesh(os.path.join(test_dir, "mesh_1.ply"), mesh);
-            self.save_mesh(os.path.join(test_dir, "mesh_2.ply"), mesh_2);
             mesh = boolean(mesh, mesh_2, "union", "igl");
-            self.save_mesh(os.path.join(test_dir, "union_output.ply"), mesh);
 
             self.assertTrue(mesh.is_closed());
             self.assertTrue(mesh.is_manifold());
