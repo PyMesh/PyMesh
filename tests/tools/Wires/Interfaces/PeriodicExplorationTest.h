@@ -168,9 +168,9 @@ TEST_F(PeriodicExplorationTest, brick5) {
     std::cout << " done!" << std::endl;;
 }
 
-TEST_F(PeriodicExplorationTest, diamond) {
+TEST_F(PeriodicExplorationTest, pattern0050) {
     PeriodicExploration explorer(
-            m_data_dir + "diamond.wire", 5, 0.5);
+            m_data_dir + "pattern0050.wire", 5, 0.5);
     explorer.with_all_parameters();
     explorer.with_refinement("loop", 2);
 
@@ -190,6 +190,7 @@ TEST_F(PeriodicExplorationTest, diamond) {
         }
         explorer.set_dofs(modified_dofs);
         explorer.periodic_inflate(true);
+        write_mesh("debug.msh", explorer.get_mesh());
         bool tetgen_success = explorer.run_tetgen();
 
         Mesh::Ptr mesh = explorer.get_mesh();
@@ -543,4 +544,3 @@ TEST_F(PeriodicExplorationTest, shape_velocity) {
     save_mesh("shape_velocity_compare_normal.msh", normal_mesh,
             normal_mesh->get_attribute_names());
 }
-
