@@ -6,6 +6,10 @@ processing.  **PyMesh** is written using both C++ and python, where
 computational intensive functionalities are realized in C++, and Python is used
 for create minimalistic and easy to use interfaces.
 
+### Docuementation ###
+
+[Latest documentation](http://pymesh.readthedocs.org/en/latest/)
+
 ### Download Source ###
 
 To retrieve the code:
