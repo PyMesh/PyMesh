@@ -23,13 +23,9 @@ def coo2ZSparseMatrix(mat):
     return zmat;
 %}
 %pythonprepend SparseSolver::analyze_pattern(const ZSparseMatrix& matrix) %{
-if len(args) == 1:
-    M = coo2ZSparseMatrix(args[0]);
-    args = tuple([M]);
+matrix = coo2ZSparseMatrix(matrix);
 %}
 %pythonprepend SparseSolver::factorize(const ZSparseMatrix& matrix) %{
-if len(args) == 1:
-    M = coo2ZSparseMatrix(args[0]);
-    args = tuple([M]);
+matrix = coo2ZSparseMatrix(matrix);
 %}
 %include "SparseSolver.h"
