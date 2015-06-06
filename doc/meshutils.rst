@@ -1,6 +1,6 @@
 The :mod:`meshutils` package
 ============================
 
-.. automodule:: pymesh.meshutils
-    :members:
+.. autofunction:: pymesh.meshutils.collapse_short_edges
+
 
