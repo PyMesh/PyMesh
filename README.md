@@ -1,3 +1,11 @@
+### About PyMesh ###
+
+**PyMesh** is a code base developed by Qingnan Zhou for his PhD research at New
+York University.  It is a rapid prototyping platform focused on geometry
+processing.  **PyMesh** is written using both C++ and python, where
+computational intensive functionalities are realized in C++, and Python is used
+for create minimalistic and easy to use interfaces.
+
 ### Download Source ###
 
 To retrieve the code:
