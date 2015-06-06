@@ -7,7 +7,7 @@
 #include <vector>
 #include <Math/MatrixUtils.h>
 
-#include <igl/outer_hull.h>
+#include <igl/cgal/outer_hull.h>
 
 #include <SelfIntersection/SelfIntersectionResolver.h>
 

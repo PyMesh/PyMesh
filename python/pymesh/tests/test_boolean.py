@@ -144,11 +144,11 @@ class BooleanTest(TestCase):
         mesh = boolean(
                 mesh_1, mesh_2,
                 "intersection", "igl");
-        self.assertEqual(4, mesh.num_vertices);
-        self.assertEqual(4, mesh.num_faces);
-        self.assertFalse(mesh.is_manifold());
+        self.assertEqual(0, mesh.num_vertices);
+        self.assertEqual(0, mesh.num_faces);
+        self.assertTrue(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(1, mesh.num_components);
+        self.assertEqual(0, mesh.num_components);
 
         mesh = boolean(
                 mesh_1, mesh_2,
@@ -171,8 +171,8 @@ class BooleanTest(TestCase):
                 mesh_1, mesh_2,
                 "symmetric_difference", "igl");
         self.assertEqual(12, mesh.num_vertices);
-        self.assertEqual(24, mesh.num_faces);
-        self.assertFalse(mesh.is_manifold());
+        self.assertEqual(20, mesh.num_faces);
+        self.assertTrue(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
         self.assertEqual(1, mesh.num_components);
 
@@ -295,11 +295,11 @@ class BooleanTest(TestCase):
                 mesh_1, mesh_2,
                 "intersection", "igl");
 
-        self.assertEqual(4, mesh.num_vertices);
-        self.assertEqual(4, mesh.num_faces);
-        self.assertFalse(mesh.is_manifold());
+        self.assertEqual(0, mesh.num_vertices);
+        self.assertEqual(0, mesh.num_faces);
+        self.assertTrue(mesh.is_manifold());
         self.assertTrue(mesh.is_closed());
-        self.assertEqual(1, mesh.num_components);
+        self.assertEqual(0, mesh.num_components);
 
     def test_face_corner_touch(self):
         mesh_1 = generate_box_mesh(
