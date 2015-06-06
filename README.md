@@ -2,7 +2,7 @@
 
 To retrieve the code:
 
-    hg clone https://subversive.cims.nyu.edu/geonum/zhou/PyMesh/
+    git clone git@github.com:qnzhou/PyMesh.git
 
 Be sure to save the root directory of PyMesh in the environment variable
 PYMESH_PATH:
@@ -18,7 +18,7 @@ PyMesh depends on the following tools/libraries:
 * [Python](https://www.python.org/) v2.7 or higher, note that Python 3.x is not tested.
 * [NumPy](http://www.numpy.org/) v1.8 or higher
 * [SciPy](http://www.scipy.org/) v0.13 or higher
-* [SWIG](http://www.swig.org/)
+* [SWIG](http://www.swig.org/) v3.0.5 or higher
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) v3.2 or higher
 
 Optional library:
