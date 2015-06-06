@@ -299,7 +299,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['numpy', 'numpy.testing', 'PyMesh',
+MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh',
 'PyMeshUtils', 'PyBoolean', 'PyAssembler', 'PyCGAL', 'PyConvexHull',
 'PyEigenUtils', 'PyEnvelope', 'PyOuterHull', 'PySelfIntersection',
 'PySparseSolver', 'PyTetgen', 'PyTetrahedronization', 'PyTriangle', 'PyWires'];
