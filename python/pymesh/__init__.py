@@ -27,4 +27,6 @@ __all__ = [
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull"
+        "meshutils",
+        "misc"
         ];
