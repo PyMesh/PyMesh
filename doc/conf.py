@@ -299,7 +299,8 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['numpy', 'numpy.testing', 'PyMesh', 'PyMeshUtils', 'PyBoolean', 'PyAssembler', 'PyCGAL',
-'PyConvexHull', 'PyEigenUtils', 'PyEnvelope', 'PyOuterHull', 'PySelfIntersection', 'PySparseSolver',
-'PyTetgen', 'PyTetrahedronization', 'PyTriangle', 'PyWires'];
+MOCK_MODULES = ['numpy', 'numpy.testing', 'meshutils', 'misc', 'PyMesh',
+'PyMeshUtils', 'PyBoolean', 'PyAssembler', 'PyCGAL', 'PyConvexHull',
+'PyEigenUtils', 'PyEnvelope', 'PyOuterHull', 'PySelfIntersection',
+'PySparseSolver', 'PyTetgen', 'PyTetrahedronization', 'PyTriangle', 'PyWires'];
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
