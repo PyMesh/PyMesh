@@ -2,8 +2,12 @@ import PyMeshSetting
 
 from timethis import timethis
 
-from numpy.testing import Tester
-test = Tester().test
+try:
+    from numpy.testing import Tester
+    test = Tester().test
+except ImportError:
+    # Numpy not installed.
+    pass;
 
 # Set default logging handler to avoid "No handler found" warnings.
 import logging
