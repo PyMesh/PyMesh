@@ -3,14 +3,60 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-===============================
-PyMesh --- Easy Mesh Processing
-===============================
+=================================================
+PyMesh --- Geometry Processing Library for Python
+=================================================
 
-Quick start:
-============
+PyMesh is a rapid prototyping platform focused on geometry processing.
+It provides a set of common mesh processing functionalities and interfaces
+with a number of state-of-the-art open source packages to combine their power
+seamlessly under a single developing environment.
 
-TODO
+Mesh process should be simple in python.  PyMesh promotes human readable,
+minimalistic interface and works with native python data structures such as
+`numpy.ndarray
+<http://docs.scipy.org/doc/numpy/reference/generated/numpy.ndarray.html>`_.
+
+Load mesh from file:
+
+.. code:: python
+
+    >>> import pymesh
+    >>> mesh = pymesh.meshio.load_mesh("cube.obj");
+
+Access mesh vertices:
+
+.. code:: python
+
+    >>> mesh.vertices
+    array([[-1., -1.,  1.],
+           ...
+           [ 1.,  1.,  1.]])
+    >>> type(mesh.vertices)
+    <type 'numpy.ndarray'>
+
+Compute Gaussian curvature for each vertex:
+
+.. code:: python
+
+    >>> mesh.add_attribute("vertex_gaussian_curvature");
+    >>> mesh.get_attribute("vertex_gaussian_curvature");
+    array([ 1.57079633,  1.57079633,  1.57079633,  1.57079633,  1.57079633,
+            1.57079633,  1.57079633,  1.57079633])
+
+Features:
+=========
+
+* Read/write 2D and 3D mesh in ``.obj``, ``.ply`` and ``.msh`` formats.
+  Read support for ``.stl`` and ``.off`` files.
+* Support load and save per vertex/face/voxel scalar and vector fields.
+* Local mesh processing such edge collapse/split, duplicated vertex/face removal
+  etc.
+* Mesh boolean support from CGAL, Cork and LibIGL.
+* Mesh generation support from CGAL, Triangle and Tetgen.
+* Wire network and inflation of wire networks.
+* Finite element matrix assembly. (supports Laplacian, stiffness, mass, etc.)
+
 
 Contents:
 =========
