@@ -24,6 +24,17 @@ def main():
 
     outer_hull, interior = pymesh.compute_outer_hull(mesh, engine=args.engine,
             with_interior=True);
+    if args.remove_duplicated_faces:
+        new_outer_hull, info = pymesh.meshutils.remove_duplicated_faces(outer_hull);
+        for attr_name in outer_hull.get_attribute_names():
+            attr = outer_hull.get_attribute(attr_name);
+            if len(attr) % outer_hull.num_faces == 0:
+                attr = attr.reshape((outer_hull.num_faces, -1), order="C");
+                attr = attr[info["ori_face_index"]];
+                new_outer_hull.add_attribute(attr_name);
+                new_outer_hull.set_attribute(attr_name, attr.ravel(order="C"));
+        outer_hull = new_outer_hull;
+
     pymesh.meshio.save_mesh(args.output_mesh, outer_hull,
             *outer_hull.get_attribute_names());
 
