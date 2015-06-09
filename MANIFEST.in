@@ -5,3 +5,4 @@ recursive-include tests *
 recursive-include examples *
 recursive-include cmake *.cmake
 recursive-include eigen_wrapper *.i
+recursive-include scripts *.py

@@ -3,6 +3,7 @@
 from setuptools import setup
 from distutils.command.build import build
 from subprocess import check_call;
+import os
 import os.path
 
 root_dir = os.path.abspath(os.path.dirname(__file__));
@@ -40,6 +41,7 @@ class cmake_build(build):
 
 setup(
         name = "pymesh",
+        description = "Mesh Processing for Python",
         version = "0.1",
         author = "Qingnan Zhou",
         author_email = "qnzhou@gmail.com",
@@ -49,4 +51,13 @@ setup(
         package_data = {"pymesh": ["swig/*.py", "lib/*.so", "lib/*.dylib", "lib/*.dll"]},
         include_package_data = True,
         cmdclass={'build': cmake_build},
+        scripts=[
+            "scripts/add_index.py",
+            "scripts/box_gen.py",
+            "scripts/curvature.py",
+            "scripts/fix_mesh.py",
+            "scripts/merge.py",
+            "scripts/outer_hull.py",
+            "scripts/point_cloud.py",
+            ],
         );
