@@ -20,6 +20,8 @@ from boolean import boolean
 from selfintersection import resolve_self_intersection
 from selfintersection import detect_self_intersection
 from outerhull import compute_outer_hull
+import meshutils
+import misc
 
 __all__ = [
         "Mesh",
