@@ -126,7 +126,7 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
     create_box(m_octa_cell_bbox_min, m_octa_cell_bbox_max,
             box_vertices, box_faces);
 
-    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cork");
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("igl");
     boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
     boolean_engine->set_mesh_2(box_vertices, box_faces);
     boolean_engine->compute_intersection();
