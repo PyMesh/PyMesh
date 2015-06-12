@@ -84,7 +84,7 @@
 %#define array_type(a)          (int)(PyArray_TYPE(a))
 %#define array_numdims(a)       (((PyArrayObject *)a)->nd)
 %#define array_dimensions(a)    (((PyArrayObject *)a)->dimensions)
-%#define array_size(a,i)        (((PyArrayObject *)a)->dimensions[i])
+%#define py_array_size(a,i)        (((PyArrayObject *)a)->dimensions[i])
 %#define array_data(a)          (((PyArrayObject *)a)->data)
 %#define array_is_contiguous(a) (PyArray_ISCONTIGUOUS(a))
 %#define array_is_native(a)     (PyArray_ISNOTSWAPPED(a))
@@ -414,7 +414,7 @@
     char actual_dims[255] = "[";
     for(i=0; i < n;i++)
     {
-      if (size[i] != -1 &&  size[i] != array_size(ary,i))
+      if (size[i] != -1 &&  size[i] != py_array_size(ary,i))
       {
         success = 0;
       }
@@ -437,7 +437,7 @@
       desired_dims[len-1] = ']';
       for (i = 0; i < n; i++)
       {
-        sprintf(s, "%ld,", (long int)array_size(ary,i));
+        sprintf(s, "%ld,", (long int)py_array_size(ary,i));
         strcat(actual_dims,s);
       }
       len = strlen(actual_dims);
@@ -464,7 +464,7 @@
     /* Recompute the strides */
     ary->strides[0] = ary->strides[nd-1];
     for (i=1; i < nd; ++i)
-      ary->strides[i] = ary->strides[i-1] * array_size(ary,i-1);
+      ary->strides[i] = ary->strides[i-1] * py_array_size(ary,i-1);
     return success;
   }
 }
@@ -633,7 +633,7 @@
   if (!array || !require_dimensions(array, 1) ||
       !require_size(array, size, 1)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,0);
 }
 %typemap(freearg)
   (DATA_TYPE* IN_ARRAY1, DIM_TYPE DIM1)
@@ -660,7 +660,7 @@
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 1) ||
       !require_size(array, size, 1)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
+  $1 = (DIM_TYPE) py_array_size(array,0);
   $2 = (DATA_TYPE*) array_data(array);
 }
 %typemap(freearg)
@@ -716,8 +716,8 @@
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
 }
 %typemap(freearg)
   (DATA_TYPE* IN_ARRAY2, DIM_TYPE DIM1, DIM_TYPE DIM2)
@@ -744,8 +744,8 @@
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
   $3 = (DATA_TYPE*) array_data(array);
 }
 %typemap(freearg)
@@ -774,8 +774,8 @@
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2) || !require_fortran(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
 }
 %typemap(freearg)
   (DATA_TYPE* IN_FARRAY2, DIM_TYPE DIM1, DIM_TYPE DIM2)
@@ -802,8 +802,8 @@
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 2) ||
       !require_size(array, size, 2) || !require_fortran(array)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
   $3 = (DATA_TYPE*) array_data(array);
 }
 %typemap(freearg)
@@ -860,9 +860,9 @@
   if (!array || !require_dimensions(array, 3) ||
       !require_size(array, size, 3)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
-  $4 = (DIM_TYPE) array_size(array,2);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
+  $4 = (DIM_TYPE) py_array_size(array,2);
 }
 %typemap(freearg)
   (DATA_TYPE* IN_ARRAY3, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3)
@@ -890,9 +890,9 @@
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 3) ||
       !require_size(array, size, 3)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
-  $3 = (DIM_TYPE) array_size(array,2);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
+  $3 = (DIM_TYPE) py_array_size(array,2);
   $4 = (DATA_TYPE*) array_data(array);
 }
 %typemap(freearg)
@@ -922,9 +922,9 @@
   if (!array || !require_dimensions(array, 3) ||
       !require_size(array, size, 3) | !require_fortran(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
-  $4 = (DIM_TYPE) array_size(array,2);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
+  $4 = (DIM_TYPE) py_array_size(array,2);
 }
 %typemap(freearg)
   (DATA_TYPE* IN_FARRAY3, DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3)
@@ -952,9 +952,9 @@
                                                    &is_new_object);
   if (!array || !require_dimensions(array, 3) ||
       !require_size(array, size, 3) || !require_fortran(array)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
-  $3 = (DIM_TYPE) array_size(array,2);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
+  $3 = (DIM_TYPE) py_array_size(array,2);
   $4 = (DATA_TYPE*) array_data(array);
 }
 %typemap(freearg)
@@ -1008,7 +1008,7 @@
       || !require_native(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
   $2 = 1;
-  for (i=0; i < array_numdims(array); ++i) $2 *= array_size(array,i);
+  for (i=0; i < array_numdims(array); ++i) $2 *= py_array_size(array,i);
 }
 
 /* Typemap suite for (DIM_TYPE DIM1, DATA_TYPE* INPLACE_ARRAY1)
@@ -1029,7 +1029,7 @@
   if (!array || !require_dimensions(array,1) || !require_contiguous(array)
       || !require_native(array)) SWIG_fail;
   $1 = 1;
-  for (i=0; i < array_numdims(array); ++i) $1 *= array_size(array,i);
+  for (i=0; i < array_numdims(array); ++i) $1 *= py_array_size(array,i);
   $2 = (DATA_TYPE*) array_data(array);
 }
 
@@ -1072,8 +1072,8 @@
   if (!array || !require_dimensions(array,2) || !require_contiguous(array)
       || !require_native(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
 }
 
 /* Typemap suite for (DIM_TYPE DIM1, DIM_TYPE DIM2, DATA_TYPE* INPLACE_ARRAY2)
@@ -1093,8 +1093,8 @@
   array = obj_to_array_no_conversion($input, DATA_TYPECODE);
   if (!array || !require_dimensions(array,2) || !require_contiguous(array) ||
       !require_native(array)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
   $3 = (DATA_TYPE*) array_data(array);
 }
 
@@ -1116,8 +1116,8 @@
   if (!array || !require_dimensions(array,2) || !require_contiguous(array)
       || !require_native(array) || !require_fortran(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
 }
 
 /* Typemap suite for (DIM_TYPE DIM1, DIM_TYPE DIM2, DATA_TYPE* INPLACE_FARRAY2)
@@ -1137,8 +1137,8 @@
   array = obj_to_array_no_conversion($input, DATA_TYPECODE);
   if (!array || !require_dimensions(array,2) || !require_contiguous(array) ||
       !require_native(array) || !require_fortran(array)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
   $3 = (DATA_TYPE*) array_data(array);
 }
 
@@ -1182,9 +1182,9 @@
   if (!array || !require_dimensions(array,3) || !require_contiguous(array) ||
       !require_native(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
-  $4 = (DIM_TYPE) array_size(array,2);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
+  $4 = (DIM_TYPE) py_array_size(array,2);
 }
 
 /* Typemap suite for (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3,
@@ -1205,9 +1205,9 @@
   array = obj_to_array_no_conversion($input, DATA_TYPECODE);
   if (!array || !require_dimensions(array,3) || !require_contiguous(array)
       || !require_native(array)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
-  $3 = (DIM_TYPE) array_size(array,2);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
+  $3 = (DIM_TYPE) py_array_size(array,2);
   $4 = (DATA_TYPE*) array_data(array);
 }
 
@@ -1230,9 +1230,9 @@
   if (!array || !require_dimensions(array,3) || !require_contiguous(array) ||
       !require_native(array) || !require_fortran(array)) SWIG_fail;
   $1 = (DATA_TYPE*) array_data(array);
-  $2 = (DIM_TYPE) array_size(array,0);
-  $3 = (DIM_TYPE) array_size(array,1);
-  $4 = (DIM_TYPE) array_size(array,2);
+  $2 = (DIM_TYPE) py_array_size(array,0);
+  $3 = (DIM_TYPE) py_array_size(array,1);
+  $4 = (DIM_TYPE) py_array_size(array,2);
 }
 
 /* Typemap suite for (DIM_TYPE DIM1, DIM_TYPE DIM2, DIM_TYPE DIM3,
@@ -1253,9 +1253,9 @@
   array = obj_to_array_no_conversion($input, DATA_TYPECODE);
   if (!array || !require_dimensions(array,3) || !require_contiguous(array)
       || !require_native(array) || !require_fortran(array)) SWIG_fail;
-  $1 = (DIM_TYPE) array_size(array,0);
-  $2 = (DIM_TYPE) array_size(array,1);
-  $3 = (DIM_TYPE) array_size(array,2);
+  $1 = (DIM_TYPE) py_array_size(array,0);
+  $2 = (DIM_TYPE) py_array_size(array,1);
+  $3 = (DIM_TYPE) py_array_size(array,2);
   $4 = (DATA_TYPE*) array_data(array);
 }
 

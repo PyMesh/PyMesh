@@ -142,7 +142,7 @@ Know problems:
         }
         else if (array_numdims(in) == 1)
         {
-            rows = array_size(in,0);
+            rows = py_array_size(in,0);
             cols = 1;
             if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != rows))
             {
@@ -157,14 +157,14 @@ Know problems:
         }
         else if (array_numdims(in) == 2)
         {
-            rows = array_size(in,0);
-            cols = array_size(in,1);
-            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != array_size(in,0)))
+            rows = py_array_size(in,0);
+            cols = py_array_size(in,1);
+            if ((Derived::RowsAtCompileTime != Eigen::Dynamic) && (Derived::RowsAtCompileTime != py_array_size(in,0)))
             {
                 PyErr_SetString(PyExc_ValueError, "Row dimension mismatch between NumPy and Eigen objects (2D).");
                 return;
             }
-            else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != array_size(in,1)))
+            else if ((Derived::ColsAtCompileTime != Eigen::Dynamic) && (Derived::ColsAtCompileTime != py_array_size(in,1)))
             {
                 PyErr_SetString(PyExc_ValueError, "Column dimension mismatch between NumPy and Eigen objects (2D).");
                 return;
