@@ -278,7 +278,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, gradient_descent) {
+TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -384,6 +384,35 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
     } catch (const std::exception& e) {
         // TODO: min boundary not match.
     }
+}
+
+TEST_F(PeriodicExplorationTest, pattern0746) {
+    PeriodicExploration explorer(
+            m_data_dir + "pattern0746.wire", 5, 0.5);
+    explorer.with_all_isotropic_parameters(ParameterCommon::EDGE);
+    ASSERT_EQ(8, explorer.get_num_dofs());
+    VectorF dofs(8);
+    dofs <<
+        0.39285681306678,
+        0.3,
+        0.4958823475419841,
+        0.2691458184615363,
+        0.01749434265440056,
+        0.1024791517948697,
+        0.08633985074680689,
+        0.07698883225800063;
+
+    explorer.set_dofs(dofs);
+    explorer.periodic_inflate(true);
+
+    MeshPtr mesh = explorer.get_mesh();
+    write_mesh("pattern0746.msh", mesh);
+
+
+    explorer.run_tetgen();
+
+    MatrixFr vertices = explorer.get_vertices();
+    ASSERT_LT(0, vertices.rows());
 }
 
 TEST_F(PeriodicExplorationTest, printability) {

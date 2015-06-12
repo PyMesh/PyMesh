@@ -79,6 +79,7 @@ class PeriodicExploration {
 
     private:
         void update_mesh();
+        void save_mesh(const std::string& filename) const;
 
     private:
         Float m_default_thickness;

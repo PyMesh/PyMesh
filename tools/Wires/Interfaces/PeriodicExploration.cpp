@@ -4,6 +4,8 @@
 #include <cmath>
 #include <iostream>
 #include <Core/Exception.h>
+#include <IO/MeshWriter.h>
+#include <Math/MatrixUtils.h>
 #include <MeshFactory.h>
 #include <tetgen/TetgenWrapper.h>
 #include <tetgen/TetgenException.h>
@@ -111,7 +113,10 @@ bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
     try {
         tetgen.run(flags.str());
     } catch (TetgenException& e) {
+        save_mesh("tetgen_debug.msh");
+        std::cerr << "Tetgen failed!  Flags: " << flags.str() << std::endl;
         std::cerr << e.what() << std::endl;
+        std::cerr << "Data saved in tetgen_debug.msh" << std::endl;
         return false;
     }
 
@@ -172,5 +177,15 @@ void PeriodicExploration::update_mesh() {
 
     m_mesh->add_attribute("face_source");
     m_mesh->set_attribute("face_source", face_sources);
+}
+
+void PeriodicExploration::save_mesh(const std::string& filename) const {
+    auto flattened_vertices = MatrixUtils::flatten<VectorF>(m_vertices);
+    auto flattened_faces = MatrixUtils::flatten<VectorI>(m_faces);
+    auto flattened_voxels = MatrixUtils::flatten<VectorI>(m_voxels);
+
+    MeshWriter::Ptr writer = MeshWriter::create(filename);
+    writer->write(flattened_vertices, flattened_faces, flattened_voxels,
+            m_vertices.cols(), m_faces.cols(), m_voxels.cols());
 }
 

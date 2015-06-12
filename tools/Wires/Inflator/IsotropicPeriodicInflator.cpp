@@ -153,7 +153,7 @@ void IsotropicPeriodicInflator::clean_up_clipped_mesh() {
     const Float tol = get_distance_threshold();
     MeshCleaner cleaner;
     cleaner.remove_isolated_vertices(m_vertices, m_faces);
-    cleaner.remove_duplicated_vertices(m_vertices, m_faces, tol);
+    //cleaner.remove_duplicated_vertices(m_vertices, m_faces, tol);
     cleaner.remove_short_edges(m_vertices, m_faces, tol);
 }
 
