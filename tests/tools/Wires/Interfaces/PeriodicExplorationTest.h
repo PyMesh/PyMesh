@@ -278,7 +278,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
     std::cout << " done!" << std::endl;
 }
 
-TEST_F(PeriodicExplorationTest, DISABLED_gradient_descent) {
+TEST_F(PeriodicExplorationTest, gradient_descent) {
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
