@@ -240,9 +240,15 @@ bool STLParser::parse_binary(const std::string& filename) {
 
     // 80 bytes header, no data significance.
     fin.read(buf, 80);
+    if (!fin.good()) {
+        throw IOError("Unable to parse STL header.");
+    }
 
     fin.read(buf, 4);
     size_t num_faces = *reinterpret_cast<unsigned int*>(buf);
+    if (!fin.good()) {
+        throw IOError("Unable to parse STL number of faces.");
+    }
 
     for (size_t i=0; i<num_faces; i++) {
         // Parse normal
@@ -291,7 +297,11 @@ bool STLParser::parse_binary(const std::string& filename) {
         m_faces.push_back(face);
 
         assert(fin.good());
-        if (!fin.good()) return false;
+        if (!fin.good()) {
+            std::stringstream err_msg;
+            err_msg << "Failed to parse face " << i << " from STL file";
+            throw IOError(err_msg.str());
+        }
     }
 
     fin.close();
