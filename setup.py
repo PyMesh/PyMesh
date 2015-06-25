@@ -60,5 +60,6 @@ setup(
             "scripts/outer_hull.py",
             "scripts/point_cloud.py",
             "scripts/separate.py",
+            "scripts/highlight_self_intersection.py"
             ],
         );
