@@ -118,8 +118,8 @@ bool STLParser::is_binary(const std::string& filename) {
     char header[HEADER_SIZE];
     std::ifstream fin(filename.c_str(), std::ifstream::binary);
     fin.read(header, HEADER_SIZE);
-    if (!is_prefix("solid", header)) return false;
-    if (!fin.good()) return true;
+    if (!is_prefix("solid", header)) return true;
+    if (!fin.good()) return false;
 
     // Check if filesize matches the number of faces claimed.
     char buf[4];
