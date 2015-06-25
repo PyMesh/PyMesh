@@ -105,7 +105,8 @@ class TestCase(unittest.TestCase):
     def assert_mesh_equal(self, mesh1, mesh2, attr_names=[]):
         self.assertEqual(mesh1.dim, mesh2.dim);
         self.assertEqual(mesh1.vertex_per_face, mesh2.vertex_per_face);
-        self.assertEqual(mesh1.vertex_per_voxel, mesh2.vertex_per_voxel);
+        if (mesh1.num_voxels > 0 or mesh2.num_voxels > 0):
+            self.assertEqual(mesh1.vertex_per_voxel, mesh2.vertex_per_voxel);
         numpy.testing.assert_array_equal(mesh1.vertices, mesh2.vertices);
         numpy.testing.assert_array_equal(mesh1.faces, mesh2.faces);
         numpy.testing.assert_array_equal(mesh1.voxels, mesh2.voxels);

@@ -16,9 +16,9 @@ def parse_args():
 
 def main():
     args = parse_args();
-    mesh = pymesh.meshio.load_mesh(args.input_mesh);
+    mesh = pymesh.load_mesh(args.input_mesh);
     mesh.add_attribute("face_index");
-    pymesh.meshio.save_mesh(args.output_mesh, mesh, "face_index");
+    pymesh.save_mesh(args.output_mesh, mesh, "face_index");
 
 if __name__ == "__main__":
     main();

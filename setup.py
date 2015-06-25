@@ -59,5 +59,6 @@ setup(
             "scripts/merge.py",
             "scripts/outer_hull.py",
             "scripts/point_cloud.py",
+            "scripts/separate.py",
             ],
         );

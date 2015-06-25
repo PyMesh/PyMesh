@@ -16,19 +16,24 @@ except ImportError:
 logging.getLogger(__name__).addHandler(NullHandler())
 
 from Mesh import Mesh
+from meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
 from boolean import boolean
 from selfintersection import resolve_self_intersection
 from selfintersection import detect_self_intersection
 from outerhull import compute_outer_hull
-import meshutils
-import misc
+from meshutils import *
+from misc import *
 
 __all__ = [
         "Mesh",
+        "load_mesh",
+        "form_mesh",
+        "save_mesh",
+        "save_mesh_raw",
         "boolean",
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull",
-        "meshutils",
-        "misc"
         ];
+__all__ += meshutils.__all__;
+__all__ += misc.__all__;
