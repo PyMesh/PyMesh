@@ -33,7 +33,7 @@ class STLParser : public MeshParser {
 
     protected:
         bool attribute_exists(const std::string& name) const;
-        bool parse_header(char* line);
+        bool is_binary(const std::string& filename);
         bool parse_ascii(const std::string& filename);
         bool parse_ascii_facet(std::ifstream& fin);
         bool parse_ascii_normal(char* line);

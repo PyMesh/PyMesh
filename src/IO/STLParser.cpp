@@ -14,27 +14,12 @@
 using namespace IOUtils;
 
 bool STLParser::parse(const std::string& filename) {
-    const size_t LINE_SIZE = 256;
-    char line[LINE_SIZE];
-
-    std::ifstream fin(filename.c_str());
-    if (!fin.is_open()) {
-        std::stringstream err_msg;
-        err_msg << "failed to open file \"" << filename << "\"";
-        throw IOError(err_msg.str());
-    }
-
-    fin.getline(line, LINE_SIZE);
-    bool is_binary = parse_header(line);
-    fin.close();
-
     bool success = false;
-    if (is_binary) {
+    if (is_binary(filename)) {
         success = parse_binary(filename);
     } else {
         success = parse_ascii(filename);
     }
-    assert(success);
     if (!success) return false;
 
     validate_normals();
@@ -128,8 +113,23 @@ bool STLParser::attribute_exists(const std::string& name) const {
     return has_normal() && (name == "face_normal");
 }
 
-bool STLParser::parse_header(char* line) {
-    return !is_prefix("solid", line);
+bool STLParser::is_binary(const std::string& filename) {
+    const size_t HEADER_SIZE = 80;
+    char header[HEADER_SIZE];
+    std::ifstream fin(filename.c_str(), std::ifstream::binary);
+    fin.read(header, HEADER_SIZE);
+    if (!is_prefix("solid", header)) return false;
+    if (!fin.good()) return true;
+
+    // Check if filesize matches the number of faces claimed.
+    char buf[4];
+    fin.read(buf, 4);
+    size_t num_faces = *reinterpret_cast<unsigned int*>(buf);
+    fin.seekg(0, fin.end);
+    size_t file_size = fin.tellg();
+
+    if (file_size == 80 + 4 + (4*12 + 2) * num_faces) return true;
+    else return false;
 }
 
 bool STLParser::parse_ascii(const std::string& filename) {
@@ -138,6 +138,11 @@ bool STLParser::parse_ascii(const std::string& filename) {
     bool success = true;
 
     std::ifstream fin(filename.c_str());
+    if (!fin.is_open()) {
+        std::stringstream err_msg;
+        err_msg << "failed to open file \"" << filename << "\"";
+        throw IOError(err_msg.str());
+    }
 
     // skip header line.
     fin.getline(line, LINE_SIZE);
@@ -232,6 +237,11 @@ bool STLParser::parse_ascii_vertex(char* line) {
 
 bool STLParser::parse_binary(const std::string& filename) {
     std::ifstream fin(filename.c_str());
+    if (!fin.is_open()) {
+        std::stringstream err_msg;
+        err_msg << "failed to open file \"" << filename << "\"";
+        throw IOError(err_msg.str());
+    }
 
     size_t float_size = sizeof(float);
     assert(float_size == 4);
