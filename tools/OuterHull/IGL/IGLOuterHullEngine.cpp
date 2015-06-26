@@ -1,6 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "IGLOuterHullEngine.h"
 
+#include <algorithm>
 #include <cassert>
 #include <iostream>
 #include <sstream>
@@ -8,8 +9,74 @@
 #include <Math/MatrixUtils.h>
 
 #include <igl/cgal/outer_hull.h>
+#include <igl/cgal/remesh_self_intersections.h>
+#include <igl/remove_unreferenced.h>
+
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 
 #include <SelfIntersection/SelfIntersectionResolver.h>
+
+namespace IGLOuterHullEngineHelper {
+    typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
+    typedef Kernel::FT ExactScalar;
+    typedef Eigen::Matrix<ExactScalar, Eigen::Dynamic, Eigen::Dynamic> MatrixE;
+    typedef Eigen::Matrix<ExactScalar, Eigen::Dynamic, Eigen::Dynamic,
+            Eigen::RowMajor> MatrixEr;
+
+    void resolve_self_intersections_exactly(
+            const MatrixFr& vertices, 
+            const MatrixIr& faces,
+            MatrixE& out_vertices,
+            MatrixI& out_faces,
+            VectorI& face_sources) {
+        igl::RemeshSelfIntersectionsParam param;
+        MatrixIr intersecting_face_pairs;
+        VectorI unique_vertex_indices;
+
+        MatrixE tmp_vertices;
+        MatrixI tmp_faces;
+
+        igl::remesh_self_intersections(
+                vertices,
+                faces,
+                param,
+                tmp_vertices,
+                tmp_faces,
+                intersecting_face_pairs,
+                face_sources,
+                unique_vertex_indices);
+
+        std::for_each(tmp_faces.data(),tmp_faces.data()+tmp_faces.size(),
+                [&unique_vertex_indices](int & a){
+                a=unique_vertex_indices(a);
+                });
+
+        igl::remove_unreferenced(tmp_vertices,tmp_faces,
+                out_vertices,out_faces,unique_vertex_indices);
+    }
+
+    template<typename Derived>
+    Derived row_slice(const Eigen::MatrixBase<Derived>& data, const VectorI& indices) {
+        const size_t num_rows = indices.rows();
+        const size_t num_cols = data.cols();
+        Derived result = Derived::Zero(num_rows, num_cols);
+        for (size_t i=0; i<num_rows; i++) {
+            result.row(i) = data.row(indices[i]);
+        }
+
+        return result;
+    }
+
+    MatrixF exact_to_float(const MatrixE& data) {
+        MatrixF result(data.rows(), data.cols());
+        std::transform(data.data(),
+                data.data() + data.rows() * data.cols(),
+                result.data(),
+                [&](const ExactScalar& val) {return CGAL::to_double(val); });
+        return result;
+    }
+}
+using namespace IGLOuterHullEngineHelper;
 
 void IGLOuterHullEngine::run() {
     assert(m_vertices.cols() == 3);
@@ -17,7 +84,7 @@ void IGLOuterHullEngine::run() {
 
     extract_face_normals();
     check_normal_reliability();
-    resolve_self_intersections();
+    //resolve_self_intersections();
     extract_outer_hull();
     remove_isolated_vertices();
 }
@@ -65,15 +132,20 @@ void IGLOuterHullEngine::resolve_self_intersections() {
 }
 
 void IGLOuterHullEngine::extract_outer_hull() {
-    assert(m_faces.rows() == m_normals.rows());
+    // resolve self-intersection.
+    MatrixE V;
+    MatrixI F;
+    VectorI face_sources;
+    resolve_self_intersections_exactly(
+            m_vertices, m_faces, V, F, face_sources);
+    m_vertices = exact_to_float(V);
+    Eigen::Matrix<Float, Eigen::Dynamic, 3> N(m_normals);
+    N = row_slice(N, face_sources);
+    assert(F.rows() == N.rows());
+
+    // Compute outer hull.
     MatrixI out_faces;
     VectorI ori_face_is_flipped;
-
-    // Officially libigl does not support row major matrices.
-    // Thus a copy is needed to convert row major inputs to col major.
-    MatrixF V(m_vertices);
-    MatrixI F(m_faces);
-    Eigen::Matrix<Float, Eigen::Dynamic, 3> N(m_normals);
     VectorI ori_face_indices;
 
     igl::outer_hull(
@@ -82,7 +154,7 @@ void IGLOuterHullEngine::extract_outer_hull() {
             ori_face_indices,
             ori_face_is_flipped);
 
-    const size_t num_faces = m_faces.rows();
+    const size_t num_faces = F.rows();
     const size_t num_out_faces = out_faces.rows();
     assert(ori_face_indices.size() == num_out_faces);
     std::vector<bool> in_outer(num_faces, false);
@@ -97,19 +169,15 @@ void IGLOuterHullEngine::extract_outer_hull() {
         }
     }
 
-    auto face_sources = m_ori_face_indices;
-    m_ori_face_indices.resize(num_out_faces);
-    for (size_t i=0; i<num_out_faces; i++) {
-        m_ori_face_indices[i] = face_sources[ori_face_indices[i]];
-    }
+    m_ori_face_indices = row_slice(face_sources, ori_face_indices);
 
     std::vector<VectorI> interior_faces;
     std::vector<VectorI> exterior_faces;
     for (size_t i=0; i<num_faces; i++) {
         if (in_outer[i]) {
-            exterior_faces.push_back(m_faces.row(i));
+            exterior_faces.push_back(F.row(i));
         } else {
-            interior_faces.push_back(m_faces.row(i));
+            interior_faces.push_back(F.row(i));
         }
     }
 
