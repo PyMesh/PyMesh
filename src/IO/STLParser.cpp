@@ -297,6 +297,10 @@ bool STLParser::parse_binary(const std::string& filename) {
         Vector3F v2(v2x, v2y, v2z);
         Vector3F v3(v3x, v3y, v3z);
 
+        assert(v1.allFinite());
+        assert(v2.allFinite());
+        assert(v3.allFinite());
+
         m_facet_normals.push_back(normal);
         m_vertices.push_back(v1);
         m_vertices.push_back(v2);

@@ -209,6 +209,7 @@ void PLYParser::init_vertices() {
             m_vertices[j*m_dim + i] = coord[j];
         }
     }
+    assert(m_vertices.allFinite());
 }
 
 void PLYParser::init_faces() {
