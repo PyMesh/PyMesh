@@ -72,7 +72,6 @@ namespace EdgeUtilsHelper {
                     chains.push_back(trace(next, item.first));
                     const auto& chain = chains.back();
                     const size_t chain_length = chain.size();
-                    assert(chain_length > 1);
                 }
             }
         }
