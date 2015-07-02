@@ -297,9 +297,9 @@ bool STLParser::parse_binary(const std::string& filename) {
         Vector3F v2(v2x, v2y, v2z);
         Vector3F v3(v3x, v3y, v3z);
 
-        assert(v1.allFinite());
-        assert(v2.allFinite());
-        assert(v3.allFinite());
+        if (!v1.allFinite() || !v2.allFinite() || !v3.allFinite()) {
+            throw IOError("NaN or Inf detected in input file.");
+        }
 
         m_facet_normals.push_back(normal);
         m_vertices.push_back(v1);

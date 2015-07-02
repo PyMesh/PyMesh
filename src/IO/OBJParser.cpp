@@ -194,7 +194,9 @@ bool OBJParser::parse_face_line(char* line) {
         return false;
     }
 
-    assert(m_vertex_per_face == 0 || m_vertex_per_face == i);
+    if (m_vertex_per_face != 0 && m_vertex_per_face != i) {
+        throw IOError("Mixing face types (e.g. triangle and quad) is not supported.");
+    }
     m_vertex_per_face = i;
     if (i == 3) {
         m_faces.push_back(Vector3I(idx[0], idx[1], idx[2]));

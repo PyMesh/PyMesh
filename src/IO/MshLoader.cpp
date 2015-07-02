@@ -128,7 +128,9 @@ void MshLoader::parse_nodes(std::ifstream& fin) {
                 >> m_nodes[node_idx*3+2];
         }
     }
-    assert(m_nodes.allFinite());
+    if (!m_nodes.allFinite()) {
+        throw IOError("NaN or Inf detected in input file.");
+    }
 }
 
 void MshLoader::parse_elements(std::ifstream& fin) {

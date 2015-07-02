@@ -209,7 +209,9 @@ void PLYParser::init_vertices() {
             m_vertices[j*m_dim + i] = coord[j];
         }
     }
-    assert(m_vertices.allFinite());
+    if (!m_vertices.allFinite()) {
+        throw IOError("NaN or Inf detected in input file.");
+    }
 }
 
 void PLYParser::init_faces() {
