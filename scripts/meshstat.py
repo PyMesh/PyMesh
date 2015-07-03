@@ -136,7 +136,7 @@ def print_self_intersection_info(mesh, info):
     if info["min_face_area"] != 0.0:
         intersecting_faces = pymesh.detect_self_intersection(mesh);
         num_intersections = len(intersecting_faces);
-        info["self_intersect"] = num_intersections;
+        info["self_intersect"] = num_intersections > 0;
     else:
         # Self-intersection would surely occur if any triangle has 0 area.
         info["self_intersect"] = True;
