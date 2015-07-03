@@ -133,10 +133,14 @@ def print_extended_info(mesh, info):
     info["edge_manifold"] = is_edge_manifold;
 
 def print_self_intersection_info(mesh, info):
-    intersecting_faces = pymesh.detect_self_intersection(mesh);
-    num_intersections = len(intersecting_faces);
-    info["num_self_intersection"] = num_intersections;
-    print("num_self_intersection: {}".format(num_intersections));
+    if info["min_face_area"] != 0.0:
+        intersecting_faces = pymesh.detect_self_intersection(mesh);
+        num_intersections = len(intersecting_faces);
+        info["self_intersect"] = num_intersections;
+    else:
+        # Self-intersection would surely occur if any triangle has 0 area.
+        info["self_intersect"] = True;
+    print("self_intersect: {}".format(info["self_intersect"]));
 
 def load_info(mesh_file):
     basename, ext = os.path.splitext(mesh_file);
