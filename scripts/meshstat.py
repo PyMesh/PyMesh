@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Print out useful info about an input mesh.
+"""
+
 import argparse
 import json
 import numpy as np
@@ -157,7 +161,7 @@ def parse_args():
     parser = argparse.ArgumentParser(
             description="Show statistics on mesh");
     parser.add_argument("--extended", "-x", action="store_true",
-            help="check for manifold, genus, and closedness");
+            help="check for manifold, closedness, connected components and more ");
     parser.add_argument("--self-intersection", "-s", action="store_true",
             help="check for self-intersection, maybe slow");
     parser.add_argument("--export", "-e", action="store_true",
