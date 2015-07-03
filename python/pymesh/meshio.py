@@ -1,4 +1,5 @@
 import numpy as np
+import os.path
 
 from Mesh import Mesh
 import PyMesh
@@ -15,6 +16,8 @@ def load_mesh(filename, drop_zero_dim=False):
     Returns:
         A Mesh object.
     """
+    if not os.path.exists(filename):
+        raise IOError("File not found: {}".format(filename));
     factory = PyMesh.MeshFactory();
     factory.load_file(filename);
     if drop_zero_dim:

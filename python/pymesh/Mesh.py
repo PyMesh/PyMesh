@@ -287,3 +287,11 @@ class Mesh(object):
     def num_volume_components(self):
         return self._extra_info.get_num_connected_volume_components();
 
+    @property
+    def num_isolated_vertices(self):
+        return self._extra_info.get_num_isolated_vertices();
+
+    @property
+    def num_duplicated_faces(self):
+        return self._extra_info.get_num_duplicated_faces();
+
