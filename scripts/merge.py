@@ -8,8 +8,8 @@ import argparse
 import logging
 import numpy as np
 import pymesh
-from pymesh.meshio import load_mesh, save_mesh
-from pymesh.meshutils import merge_meshes
+from pymesh import load_mesh, save_mesh
+from pymesh import merge_meshes
 
 def parse_args():
     parser = argparse.ArgumentParser(

@@ -8,8 +8,8 @@ import argparse
 import numpy as np
 
 import pymesh
-from pymesh.meshutils import generate_box_mesh
-from pymesh.meshio import save_mesh
+from pymesh import generate_box_mesh
+from pymesh import save_mesh
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);

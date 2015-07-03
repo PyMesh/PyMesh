@@ -10,7 +10,7 @@ reconstruction code by Michael Misha Kazhdan
 import argparse
 import pymesh
 import numpy as np
-from pymesh.meshio import load_mesh, save_mesh, form_mesh
+from pymesh import load_mesh, save_mesh, form_mesh
 
 def parse_args():
     parser = argparse.ArgumentParser(

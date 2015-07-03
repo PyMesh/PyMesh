@@ -16,10 +16,10 @@ def parse_args():
 def main():
     args = parse_args();
 
-    mesh = pymesh.meshio.load_mesh(args.input_mesh);
+    mesh = pymesh.load_mesh(args.input_mesh);
     mesh.add_attribute("vertex_gaussian_curvature");
     mesh.add_attribute("vertex_mean_curvature");
-    pymesh.meshio.save_mesh(args.output_mesh, mesh, *mesh.get_attribute_names());
+    pymesh.save_mesh(args.output_mesh, mesh, *mesh.get_attribute_names());
 
 if __name__ == "__main__":
     main();

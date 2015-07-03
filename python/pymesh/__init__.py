@@ -23,6 +23,7 @@ from selfintersection import detect_self_intersection
 from outerhull import compute_outer_hull
 from meshutils import *
 from misc import *
+from timethis import timethis
 
 __all__ = [
         "Mesh",
@@ -34,6 +35,7 @@ __all__ = [
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull",
+        "timethis",
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;

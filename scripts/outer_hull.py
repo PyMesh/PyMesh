@@ -20,12 +20,12 @@ def parse_args():
 
 def main():
     args = parse_args();
-    mesh = pymesh.meshio.load_mesh(args.input_mesh);
+    mesh = pymesh.load_mesh(args.input_mesh);
 
     outer_hull, interior = pymesh.compute_outer_hull(mesh, engine=args.engine,
             with_interior=True);
     if args.remove_duplicated_faces:
-        new_outer_hull, info = pymesh.meshutils.remove_duplicated_faces(outer_hull);
+        new_outer_hull, info = pymesh.remove_duplicated_faces(outer_hull);
         for attr_name in outer_hull.get_attribute_names():
             attr = outer_hull.get_attribute(attr_name);
             if len(attr) % outer_hull.num_faces == 0:
@@ -35,11 +35,11 @@ def main():
                 new_outer_hull.set_attribute(attr_name, attr.ravel(order="C"));
         outer_hull = new_outer_hull;
 
-    pymesh.meshio.save_mesh(args.output_mesh, outer_hull,
+    pymesh.save_mesh(args.output_mesh, outer_hull,
             *outer_hull.get_attribute_names());
 
     if args.interior is not None:
-        pymesh.meshio.save_mesh(args.interior, interior);
+        pymesh.save_mesh(args.interior, interior);
 
 
 if __name__ == "__main__":
