@@ -63,5 +63,6 @@ setup(
             "scripts/highlight_self_intersection.py",
             "scripts/meshstat.py",
             "scripts/print_utils.py",
+            "scripts/inflate.py"
             ],
         );
