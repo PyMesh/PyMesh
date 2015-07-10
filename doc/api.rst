@@ -7,3 +7,4 @@ PyMesh API Reference
     geometry_processing
     meshutils
     misc
+    wires

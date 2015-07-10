@@ -36,6 +36,7 @@ __all__ = [
         "detect_self_intersection",
         "compute_outer_hull",
         "timethis",
+        "wires"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
