@@ -11,6 +11,22 @@ class WireNetwork(object):
     specified. Optional, each vertex and edge could have multiple attributes.
     """
 
+    @classmethod
+    def create_empty(cls):
+        return cls();
+
+    @classmethod
+    def create_from_file(cls, wire_file):
+        wire_network = cls();
+        wire_network.load_from_file(wire_file);
+        return wire_network;
+
+    @classmethod
+    def create_from_data(cls, vertice, edges):
+        wire_network = cls();
+        wire_network.load(vertices, edges);
+        return wire_network;
+
     def __init__(self):
         """ Create empty a wire network.
         """

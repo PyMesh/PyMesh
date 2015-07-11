@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+"""
+Inflate a given wire file into 2D or 3D meshes.
+"""
+
 import argparse
 import numpy as np
 import pymesh.wires

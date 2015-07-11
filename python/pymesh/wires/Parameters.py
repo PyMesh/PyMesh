@@ -194,3 +194,7 @@ class Parameters(object):
     def default_thickness(self, value):
         self.raw_parameters.set_default_thickness(value);
 
+    @property
+    def per_vertex_thickness(self):
+        return self.raw_parameters.get_thickness_type() == PyWires.VERTEX;
+

@@ -17,7 +17,10 @@ class Tiler(object):
     def tile_with_guide_bbox(self, bbox_min, bbox_max, reps, parameters):
         tiler = PyWires.WireTiler(self.raw_pattern);
         tiler.with_parameters(parameters.raw_parameters);
-        self.raw_wire_network = tiler.tile_with_guide_bbox(bbox_min, bbox_max, reps);
+        self.raw_wire_network = tiler.tile_with_guide_bbox(
+                np.array(bbox_min, dtype=float),
+                np.array(bbox_max, dtype=float),
+                np.array(reps, dtype=int));
         self.__apply_vertex_offset();
 
     def tile_with_guide_mesh(self, mesh, parameters):
