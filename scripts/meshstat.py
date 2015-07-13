@@ -33,7 +33,7 @@ def print_basic_info(mesh, info):
 def print_bbox(mesh, info):
     print_green("Boundding box:");
     bbox_min, bbox_max = mesh.bbox;
-    print_format = "[{v[0]:^10.6g} {v[1]:^10.6g} {v[2]:^10.6g}]";
+    print_format = "[{v[0]:^20.10g} {v[1]:^20.10g} {v[2]:^20.10g}]";
     print("bbox_min:  " + print_format.format(v=bbox_min));
     print("bbox_max:  " + print_format.format(v=bbox_max));
     print("bbox_size: " + print_format.format(v=bbox_max - bbox_min));
