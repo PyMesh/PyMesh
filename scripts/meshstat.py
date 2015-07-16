@@ -54,9 +54,12 @@ def print_face_info(mesh, info):
     face_areas = mesh.get_attribute("face_area");
     total_area = np.sum(face_areas);
     ave_area = np.mean(face_areas);
+    num_nonzero_faces = np.count_nonzero(face_areas);
+    num_degenerated = mesh.num_faces - num_nonzero_faces;
 
     print("ave: {:.6g}         total: {:.6g}".format(
         ave_area, total_area));
+    print("# degenerated faces: {}".format(num_degenerated));
 
     min_area, p25_area, median_area, p75_area, max_area = \
             print_percentage(face_areas);
@@ -66,6 +69,7 @@ def print_face_info(mesh, info):
     info["min_face_area"] = min_area;
     info["ave_face_area"] = ave_area;
     info["median_face_area"] = median_area;
+    info["num_degenerated_faces"] = num_degenerated;
 
 def print_voxel_info(mesh, info):
     if (mesh.num_voxels == 0): return;
