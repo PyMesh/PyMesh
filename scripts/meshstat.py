@@ -59,10 +59,9 @@ def print_face_info(mesh, info):
 
     print("ave: {:.6g}         total: {:.6g}".format(
         ave_area, total_area));
-    print("num of degenerated faces: {}".format(num_degenerated));
-
     min_area, p25_area, median_area, p75_area, max_area = \
             print_percentage(face_areas);
+    print("num of degenerated faces: {}".format(num_degenerated));
 
     info["total_face_area"] = total_area;
     info["max_face_area"] = max_area;

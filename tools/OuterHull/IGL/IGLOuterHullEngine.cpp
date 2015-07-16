@@ -29,14 +29,14 @@ namespace IGLOuterHullEngineHelper {
             MatrixE& out_vertices,
             MatrixI& out_faces,
             VectorI& face_sources) {
-        igl::RemeshSelfIntersectionsParam param;
+        igl::cgal::RemeshSelfIntersectionsParam param;
         MatrixIr intersecting_face_pairs;
         VectorI unique_vertex_indices;
 
         MatrixE tmp_vertices;
         MatrixI tmp_faces;
 
-        igl::remesh_self_intersections(
+        igl::cgal::remesh_self_intersections(
                 vertices,
                 faces,
                 param,
@@ -148,7 +148,7 @@ void IGLOuterHullEngine::extract_outer_hull() {
     VectorI ori_face_is_flipped;
     VectorI ori_face_indices;
 
-    igl::outer_hull(
+    igl::cgal::outer_hull(
             V, F, N,
             out_faces,
             ori_face_indices,

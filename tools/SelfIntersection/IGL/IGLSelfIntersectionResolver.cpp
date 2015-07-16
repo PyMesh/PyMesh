@@ -5,13 +5,13 @@
 #include <igl/remove_unreferenced.h>
 
 void IGLSelfIntersectionResolver::run() {
-    igl::RemeshSelfIntersectionsParam param;
+    igl::cgal::RemeshSelfIntersectionsParam param;
     MatrixFr out_vertices;
     MatrixIr out_faces;
     MatrixIr intersecting_face_pairs;
     VectorI unique_vertex_indices;
 
-    igl::remesh_self_intersections(
+    igl::cgal::remesh_self_intersections(
             m_vertices,
             m_faces,
             param,
