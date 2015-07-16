@@ -8,13 +8,12 @@ def load_mesh(filename, drop_zero_dim=False):
     """ Load mesh from a file.
 
     Args:
-        filename: input filename.  File format is auto detected based on
+        filename: Input filename.  File format is auto detected based on
             extension.
-        drop_zero_dim (:py:class:`bool`): If true, convert flat 3D mesh into 2D
-            mesh.
+        drop_zero_dim (bool): If true, convert flat 3D mesh into 2D mesh.
 
     Returns:
-        A Mesh object.
+        :py:class:`~pymesh.Mesh`: The loaded mesh.
     """
     if not os.path.exists(filename):
         raise IOError("File not found: {}".format(filename));
@@ -28,10 +27,11 @@ def form_mesh(vertices, faces, voxels=None):
     """ Convert raw mesh data into a Mesh object.
 
     Args:
-        vertices: ndarray of floats with size (num_vertices, dim).
+        vertices (`numpy.ndarray`): ndarray of floats with size (num_vertices,
+            dim).
         faces: ndarray of ints with size (num_faces, vertex_per_face).
         voxels: optional ndarray of ints with size (num_voxels,
-            vertex_per_voxel).  Use `None` for forming surface meshes.
+            vertex_per_voxel).  Use ``None`` for forming surface meshes.
 
     Returns:
         A Mesh object.
@@ -60,7 +60,7 @@ def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
         vertices (:py:class:`numpy.ndarray`): Array of floats with size (num_vertices, dim).
         faces (:py:class:`numpy.ndarray`): Arrayof ints with size (num_faces, vertex_per_face).
         voxels (:py:class:`numpy.ndarray`): (optional) ndarray of ints with size (num_voxels,
-            vertex_per_voxel).  Use `None` for forming surface meshes.
+            vertex_per_voxel).  Use ``None`` for forming surface meshes.
         **setting (:py:class:`dict`): (optional) The following keys are recognized.
 
             * ascii: whether to use ascii encoding, default is false.

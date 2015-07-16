@@ -90,21 +90,21 @@ class Mesh(object):
         return self.__mesh.get_attribute(name).ravel();
 
     def get_vertex_attribute(self, name):
-        """ Same as :py:meth:`get_attribute` but reshaped to have
+        """ Same as :py:meth:`.get_attribute` but reshaped to have
         :py:attr:`num_vertices` rows.
         """
         return self.__mesh.get_attribute(name).reshape(
                 (self.num_vertices, -1), order="");
 
     def get_face_attribute(self, name):
-        """ Same as :py:meth:`get_attribute` but reshaped to have
+        """ Same as :py:meth:`.get_attribute` but reshaped to have
         :py:attr:`num_faces` rows.
         """
         return self.__mesh.get_attribute(name).reshape(
                 (self.num_faces, -1), order="C");
 
     def get_voxel_attribute(self, name):
-        """ Same as :py:meth:`get_attribute` but reshaped to have
+        """ Same as :py:meth:`.get_attribute` but reshaped to have
         :py:attr:`num_voxels` rows.
         """
         return self.__mesh.get_attribute(name).reshape(

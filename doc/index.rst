@@ -22,7 +22,7 @@ Load mesh from file:
 .. code:: python
 
     >>> import pymesh
-    >>> mesh = pymesh.meshio.load_mesh("cube.obj");
+    >>> mesh = pymesh.load_mesh("cube.obj");
 
 Access mesh vertices:
 

@@ -9,7 +9,7 @@ The following illustrate a simple use case:
 Initialize two triangles.  One of them has a short edge.
 
     >>> import numpy as np
-    >>> from pymesh.meshutils import collapse_short_edges
+    >>> from pymesh import collapse_short_edges
     >>> V = np.array([
     ...     [ 0.0, 0.0, 0.001 ],
     ...     [ 0.0, 0.0, 0.0   ],
