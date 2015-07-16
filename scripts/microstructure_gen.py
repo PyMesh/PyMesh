@@ -122,8 +122,10 @@ def tile_with_guide_box(config):
     tiler = Tiler();
     tiler.set_base_pattern(network);
     tiler.tile_with_guide_bbox(
-            config["bbox_min"], config["bbox_max"],
-            config["repeats"], parameters);
+            config["bbox_min"][:network.dim],
+            config["bbox_max"][:network.dim],
+            config["repeats"][:network.dim],
+            parameters);
     network = tiler.wire_network;
 
     inflator = Inflator(network);
