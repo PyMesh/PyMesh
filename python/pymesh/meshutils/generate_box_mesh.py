@@ -8,7 +8,7 @@ from remove_isolated_vertices import remove_isolated_vertices_raw
 from remove_duplicated_vertices import remove_duplicated_vertices_raw
 
 def generate_box_mesh(box_min, box_max,
-        num_samples=1, keep_symmetry=False, subdiv_order=0):
+        num_samples=1, keep_symmetry=False, subdiv_order=0, using_simplex=True):
     """ Generate axis-aligned box mesh.
 
     Each box is made of a number of cells (a square in 2D and cube in 3D), and
@@ -22,6 +22,8 @@ def generate_box_mesh(box_min, box_max,
         keep_symmetry (``bool``): (optional) If true, ensure mesh connectivity
             respect all reflective symmetries of the box.  Default is true.
         subdiv_order (``int``): (optional) The subdivision order.  Default is 0.
+        using_simplex (``bool``): If true, build box using simplex elements
+            (i.e. triangle or tets), otherwise, use quad or hex element.
 
     Returns:
         :py:class:`Mesh`: The output box mesh.  The following attributes are
@@ -34,17 +36,17 @@ def generate_box_mesh(box_min, box_max,
     dim = len(box_min);
     if dim == 2:
         mesh, cell_index = generate_2D_box_mesh(box_min, box_max, num_samples,
-                keep_symmetry, subdiv_order);
+                keep_symmetry, subdiv_order, using_simplex);
     elif dim == 3:
         mesh, cell_index = generate_3D_box_mesh(box_min, box_max, num_samples,
-                keep_symmetry, subdiv_order);
+                keep_symmetry, subdiv_order, using_simplex);
 
     mesh.add_attribute("cell_index");
     mesh.set_attribute("cell_index", cell_index);
     return mesh
 
 def generate_2D_box_mesh(box_min, box_max, num_samples, keep_symmetry,
-        subdiv_order):
+        subdiv_order, using_simplex):
     if isinstance(num_samples, int):
         num_samples = [num_samples, num_samples];
     step_size = np.divide((box_max - box_min), num_samples);
@@ -64,12 +66,16 @@ def generate_2D_box_mesh(box_min, box_max, num_samples, keep_symmetry,
                     [p[0]             , p[1]+step_size[1]] ]);
             subcell_corners = subdivide_quad(corners, subdiv_order);
             for corners in subcell_corners:
-                if keep_symmetry:
-                    cell_vertices, cell_faces =\
-                            split_quad_into_tris_symmetrically(corners);
+                if using_simplex:
+                    if keep_symmetry:
+                        cell_vertices, cell_faces =\
+                                split_quad_into_tris_symmetrically(corners);
+                    else:
+                        cell_vertices, cell_faces =\
+                                split_quad_into_tris(corners);
                 else:
-                    cell_vertices, cell_faces =\
-                            split_quad_into_tris(corners);
+                    cell_vertices = corners;
+                    cell_faces = np.array([[0, 1, 2, 3]]);
                 vertices.append(cell_vertices);
                 faces.append(cell_faces + num_vertices);
                 num_vertices += len(cell_vertices);
@@ -160,7 +166,7 @@ def reorientate_tets(vertices, tets):
     return tets;
 
 def generate_3D_box_mesh(bbox_min, bbox_max, num_samples, keep_symmetry=False,
-        subdiv_order=0):
+        subdiv_order=0, using_simplex=True):
     if isinstance(num_samples, int):
         num_samples = [num_samples, num_samples, num_samples];
     step_size = np.divide((bbox_max - bbox_min), num_samples);
@@ -186,16 +192,20 @@ def generate_3D_box_mesh(bbox_min, bbox_max, num_samples, keep_symmetry=False,
                         ];
                 subcell_corners = subdivide_hex(corners, subdiv_order);
                 for corners in subcell_corners:
-                    if keep_symmetry:
-                        cell_vertices, cell_tets =\
-                                split_hex_into_tets_symmetrically(corners);
+                    if using_simplex:
+                        if keep_symmetry:
+                            cell_vertices, cell_elems =\
+                                    split_hex_into_tets_symmetrically(corners);
+                        else:
+                            cell_vertices, cell_elems =\
+                                    split_hex_into_tets(corners);
                     else:
-                        cell_vertices, cell_tets =\
-                                split_hex_into_tets(corners);
+                        cell_vertices = corners;
+                        cell_elems = np.array([[0, 1, 2, 3, 4, 5, 6, 7]]);
                     vertices.append(cell_vertices);
-                    tets.append(cell_tets + num_vertices);
+                    tets.append(cell_elems + num_vertices);
                     num_vertices += len(cell_vertices);
-                    hex_indices.append(np.ones(len(cell_tets)) * hex_index);
+                    hex_indices.append(np.ones(len(cell_elems)) * hex_index);
 
                 hex_index +=1;
 

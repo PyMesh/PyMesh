@@ -36,20 +36,31 @@ def form_mesh(vertices, faces, voxels=None):
     Returns:
         A Mesh object.
     """
-    if voxels is None:
-        voxels = np.zeros((0, 4));
-    dim = vertices.shape[1];
+    if voxels is None or voxels.ndim == 1:
+        assert(faces.ndim == 2)
+        if faces.shape[1] == 3:
+            voxels = np.zeros((0, 4));
+        elif faces.shape[1] == 4:
+            voxels = np.zeros((0, 8));
+        else:
+            raise NotImplementedError("Face type not supported.");
+    if faces is None or faces.ndim == 1:
+        assert(voxels is not None and voxels.ndim == 2);
+        if voxels.shape[1] == 4:
+            faces = np.zeros((0, 3));
+        elif voxels.shape[1] == 8:
+            faces = np.zeros((0, 4));
+        else:
+            raise NotImplementedError("Voxel type not supported");
+
     factory = PyMesh.MeshFactory();
-    if dim == 3:
-        factory.load_data(
-                vertices.ravel(order="C"),
-                faces.ravel(order="C"),
-                voxels.ravel(order="C"), 3, 3, 4);
-    elif dim == 2:
-        factory.load_data(
-                vertices.ravel(order="C"),
-                faces.ravel(order="C"),
-                voxels.ravel(order="C"), 2, 3, 4);
+    factory.load_data(
+            vertices.ravel(order="C"),
+            faces.ravel(order="C"),
+            voxels.ravel(order="C"),
+            vertices.shape[1],
+            faces.shape[1],
+            voxels.shape[1]);
     return Mesh(factory.create());
 
 def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):

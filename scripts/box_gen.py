@@ -28,6 +28,10 @@ def parse_args():
     parser.add_argument("--num-samples-Z", help="Z samples", type=int, default=None);
     parser.add_argument("--subdiv", help="subdivision order", type=int,
             default=0);
+    parser.add_argument("--with-hex", action="store_true",
+            help="Use hex to build the 3D box, by default tet is used.");
+    parser.add_argument("--with-quad", action="store_true",
+            help="Use quad to build the 2D box, by default triangle is used.");
     parser.add_argument("output", help="output_mesh");
     args = parser.parse_args();
     return args;
@@ -50,8 +54,9 @@ def main():
     if args.dim == 3 and args.num_samples_Z is not None:
         num_samples[2] = args.num_samples_Z;
 
+    using_simplex = not(args.with_quad or args.with_hex);
     mesh = generate_box_mesh(-0.5 * side_lengths, 0.5 * side_lengths,
-            num_samples, args.symmetric, args.subdiv);
+            num_samples, args.symmetric, args.subdiv, using_simplex);
     save_mesh(args.output, mesh, "cell_index");
 
 if __name__ == "__main__":
