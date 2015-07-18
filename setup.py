@@ -66,5 +66,6 @@ setup(
             "scripts/inflate.py",
             "scripts/microstructure_gen.py",
             "scripts/find_file.py",
+            "scripts/add_element_attribute.py",
             ],
         );
