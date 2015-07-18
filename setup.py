@@ -65,5 +65,6 @@ setup(
             "scripts/print_utils.py",
             "scripts/inflate.py",
             "scripts/microstructure_gen.py",
+            "scripts/find_file.py",
             ],
         );
