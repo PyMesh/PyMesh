@@ -23,6 +23,32 @@ def load_mesh(filename, drop_zero_dim=False):
         factory.drop_zero_dim();
     return Mesh(factory.create());
 
+def deduce_face_type(faces, voxels):
+    if faces is None or faces.ndim == 1 or len(faces) == 0:
+        assert(voxels is not None and voxels.ndim == 2);
+        if voxels.shape[1] == 4:
+            faces = np.zeros((0, 3));
+        elif voxels.shape[1] == 8:
+            faces = np.zeros((0, 4));
+        elif len(voxels) == 0:
+            faces = np.zeros((0, 3));
+        else:
+            raise NotImplementedError("Face type cannot be deduced from voxel.");
+    return faces;
+
+def deduce_voxel_type(faces, voxels):
+    if voxels is None or voxels.ndim == 1 or len(voxels) == 0:
+        assert(faces.ndim == 2)
+        if faces.shape[1] == 3:
+            voxels = np.zeros((0, 4));
+        elif faces.shape[1] == 4:
+            voxels = np.zeros((0, 8));
+        elif len(faces) == 0:
+            voxels = np.zeros((0, 4));
+        else:
+            raise NotImplementedError("Voxel type cannot be deduced from face.");
+    return voxels;
+
 def form_mesh(vertices, faces, voxels=None):
     """ Convert raw mesh data into a Mesh object.
 
@@ -36,26 +62,8 @@ def form_mesh(vertices, faces, voxels=None):
     Returns:
         A Mesh object.
     """
-    if voxels is None or voxels.ndim == 1 or len(voxels) == 0:
-        assert(faces.ndim == 2)
-        if faces.shape[1] == 3:
-            voxels = np.zeros((0, 4));
-        elif faces.shape[1] == 4:
-            voxels = np.zeros((0, 8));
-        elif len(faces) == 0:
-            voxels = np.zeros((0, 4));
-        else:
-            raise NotImplementedError("Voxel type cannot be deduced from face.");
-    if faces is None or faces.ndim == 1 or len(faces) == 0:
-        assert(voxels is not None and voxels.ndim == 2);
-        if voxels.shape[1] == 4:
-            faces = np.zeros((0, 3));
-        elif voxels.shape[1] == 8:
-            faces = np.zeros((0, 4));
-        elif len(voxels) == 0:
-            faces = np.zeros((0, 3));
-        else:
-            raise NotImplementedError("Face type cannot be deduced from voxel.");
+    voxels = deduce_voxel_type(faces, voxels);
+    faces = deduce_face_type(faces, voxels);
 
     factory = PyMesh.MeshFactory();
     factory.load_data(
@@ -82,8 +90,8 @@ def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
             * use_float: store scalars as float instead of double, default is
               false.
     """
-    if voxels is None:
-        voxels = np.zeros((0, 4));
+    voxels = deduce_voxel_type(faces, voxels);
+    faces = deduce_face_type(faces, voxels);
 
     if not isinstance(vertices, np.ndarray):
         vertices = np.array(vertices, copy=False, order='C');
