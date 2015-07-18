@@ -36,22 +36,26 @@ def form_mesh(vertices, faces, voxels=None):
     Returns:
         A Mesh object.
     """
-    if voxels is None or voxels.ndim == 1:
+    if voxels is None or voxels.ndim == 1 or len(voxels) == 0:
         assert(faces.ndim == 2)
         if faces.shape[1] == 3:
             voxels = np.zeros((0, 4));
         elif faces.shape[1] == 4:
             voxels = np.zeros((0, 8));
+        elif len(faces) == 0:
+            voxels = np.zeros((0, 4));
         else:
-            raise NotImplementedError("Face type not supported.");
-    if faces is None or faces.ndim == 1:
+            raise NotImplementedError("Voxel type cannot be deduced from face.");
+    if faces is None or faces.ndim == 1 or len(faces) == 0:
         assert(voxels is not None and voxels.ndim == 2);
         if voxels.shape[1] == 4:
             faces = np.zeros((0, 3));
         elif voxels.shape[1] == 8:
             faces = np.zeros((0, 4));
+        elif len(voxels) == 0:
+            faces = np.zeros((0, 3));
         else:
-            raise NotImplementedError("Voxel type not supported");
+            raise NotImplementedError("Face type cannot be deduced from voxel.");
 
     factory = PyMesh.MeshFactory();
     factory.load_data(
