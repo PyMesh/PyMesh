@@ -25,7 +25,7 @@ def remove_degenerated_triangles_raw(vertices, faces, num_iterations=5):
     return remover.get_vertices(), remover.get_faces();
 
 def remove_degenerated_triangles(mesh, num_iterations=5):
-    """ Wrapper function of :func:`remove_degenerated_triangles`.
+    """ Wrapper function of :func:`remove_degenerated_triangles_raw`.
 
     Args:
         mesh (:class:`Mesh`): Input mesh.
