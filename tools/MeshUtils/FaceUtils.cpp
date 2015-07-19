@@ -8,6 +8,7 @@ bool FaceUtils::is_colinear_2D(
         const Vector2F& v0,
         const Vector2F& v1,
         const Vector2F& v2) {
+    exactinit();
     double v0_xy[2] = {v0[0], v0[1]};
     double v1_xy[2] = {v1[0], v1[1]};
     double v2_xy[2] = {v2[0], v2[1]};
@@ -18,6 +19,7 @@ bool FaceUtils::is_colinear_3D(
         const Vector3F& v0,
         const Vector3F& v1,
         const Vector3F& v2) {
+    exactinit();
     double v0_xy[2] = {v0[0], v0[1]};
     double v1_xy[2] = {v1[0], v1[1]};
     double v2_xy[2] = {v2[0], v2[1]};
@@ -41,7 +43,7 @@ std::vector<size_t> FaceUtils::get_degenerated_faces(
     std::vector<size_t> result;
     const size_t num_faces = faces.rows();
     const size_t dim = vertices.cols();
-
+    exactinit();
 
     if (dim == 3) {
         for (size_t i=0; i<num_faces; i++) {

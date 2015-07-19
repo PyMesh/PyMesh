@@ -69,5 +69,6 @@ setup(
             "scripts/find_file.py",
             "scripts/add_element_attribute.py",
             "scripts/remove_degenerated_triangles.py",
+            "scripts/submesh.py",
             ],
         );
