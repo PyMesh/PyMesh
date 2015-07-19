@@ -18,3 +18,4 @@
 %include FinFaceRemoval.i
 %include MeshChecker.i
 %include DegeneratedTriangleRemoval.i
+%include FaceUtils.i

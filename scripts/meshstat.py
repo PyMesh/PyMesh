@@ -54,8 +54,7 @@ def print_face_info(mesh, info):
     face_areas = mesh.get_attribute("face_area");
     total_area = np.sum(face_areas);
     ave_area = np.mean(face_areas);
-    num_nonzero_faces = np.count_nonzero(face_areas);
-    num_degenerated = mesh.num_faces - num_nonzero_faces;
+    num_degenerated = len(pymesh.get_degenerated_faces(mesh));
 
     print("ave: {:.6g}         total: {:.6g}".format(
         ave_area, total_area));

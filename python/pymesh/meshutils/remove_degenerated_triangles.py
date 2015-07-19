@@ -34,5 +34,5 @@ def remove_degenerated_triangles(mesh, num_iterations=5):
         ``Mesh``: Output mesh without degenerated triangles.
     """
     vertices, faces = remove_degenerated_triangles_raw(
-            mesh.vertices, mesh.faces);
+            mesh.vertices, mesh.faces, num_iterations);
     return form_mesh(vertices, faces);

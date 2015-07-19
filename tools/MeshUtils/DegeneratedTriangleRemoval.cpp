@@ -6,10 +6,8 @@
 #include <set>
 #include <vector>
 
-extern "C" {
-#include <Predicates/predicates.h>
-}
 #include <Math/MatrixUtils.h>
+#include <MeshUtils/FaceUtils.h>
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 
@@ -30,10 +28,13 @@ void DegeneratedTriangleRemoval::run(size_t num_iterations) {
     size_t count = 0;
     do {
         num_removed = 0;
-        num_removed += remove_zero_edges();
-        num_removed += remove_line_faces();
+        size_t e_removed = remove_zero_edges();
+        std::cout << "num edges collapsed: " << e_removed << std::endl;
+        size_t e_flipped = remove_line_faces();
+        std::cout << "num edges flipped: " << e_flipped << std::endl;
         remove_isolated_vertices();
         count++;
+        num_removed += (e_removed + e_flipped);
     } while (num_removed != 0 && count < num_iterations);
 
     if (num_removed != 0) {
@@ -47,6 +48,22 @@ size_t DegeneratedTriangleRemoval::remove_zero_edges() {
     size_t num_removed = remover.run(0.0);
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
+
+    //const size_t num_faces = m_faces.rows();
+    //for (size_t i=0; i<num_faces; i++) {
+    //    if (is_degenerated(i)) {
+    //        std::cerr.precision(20);
+    //        const auto f = m_faces.row(i);
+    //        const auto v0 = m_vertices.row(f[0]);
+    //        const auto v1 = m_vertices.row(f[1]);
+    //        const auto v2 = m_vertices.row(f[2]);
+    //        std::cerr << (m_vertices.row(f[0]) - m_vertices.row(f[1])).norm() << std::endl;
+    //        std::cerr << (m_vertices.row(f[1]) - m_vertices.row(f[2])).norm() << std::endl;
+    //        std::cerr << (m_vertices.row(f[2]) - m_vertices.row(f[0])).norm() << std::endl;
+    //        std::cerr << (v0[1] < v1[1]) << "  " << (v0[1] > v1[1]) << std::endl;
+    //        const size_t fi_opp_v = find_longest_edge(i);
+    //    }
+    //}
     return num_removed;
 }
 
@@ -77,6 +94,8 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
         Triplet edge(vi_0, vi_1);
         edges_to_remove.insert(edge);
         longest_edges[fi] = fi_opp_v;
+        std::cerr << vi_0 << " : " << vi_1 << std::endl;
+        //std::cerr << m_vertices.row(vi_0) << " : " << m_vertices.row(vi_1) << std::endl;
     }
 
     std::vector<VectorI> new_faces;
@@ -161,32 +180,12 @@ void DegeneratedTriangleRemoval::init_edge_map() {
 }
 
 bool DegeneratedTriangleRemoval::is_degenerated(size_t i) const {
-    // A triangle is degenerated if all three points are colinear.
-    // Colinear test is done by checking the orientation of triangle projected
-    // onto XY, YZ and ZX plane.  I am using exact predicate from Shewchuk.
-    // https://www.cs.cmu.edu/~quake/robust.html
-
     const auto& f = m_faces.row(i);
     const auto& v0 = m_vertices.row(f[0]);
     const auto& v1 = m_vertices.row(f[1]);
     const auto& v2 = m_vertices.row(f[2]);
 
-    double v0_xy[2] = {v0[0], v0[1]};
-    double v1_xy[2] = {v1[0], v1[1]};
-    double v2_xy[2] = {v2[0], v2[1]};
-
-    double v0_yz[2] = {v0[1], v0[2]};
-    double v1_yz[2] = {v1[1], v1[2]};
-    double v2_yz[2] = {v2[1], v2[2]};
-
-    double v0_zx[2] = {v0[2], v0[0]};
-    double v1_zx[2] = {v1[2], v1[0]};
-    double v2_zx[2] = {v2[2], v2[0]};
-
-    bool colinear_xy = orient2d(v0_xy, v1_xy, v2_xy) == 0;
-    bool colinear_yz = orient2d(v0_yz, v1_yz, v2_yz) == 0;
-    bool colinear_zx = orient2d(v0_zx, v1_zx, v2_zx) == 0;
-    return colinear_xy && colinear_yz && colinear_zx;
+    return FaceUtils::is_colinear_3D(v0, v1, v2);
 }
 
 size_t DegeneratedTriangleRemoval::find_longest_edge(size_t fi) const {
@@ -196,18 +195,22 @@ size_t DegeneratedTriangleRemoval::find_longest_edge(size_t fi) const {
     const auto& v1 = m_vertices.row(f[1]);
     const auto& v2 = m_vertices.row(f[2]);
     size_t i = 0;
-    if (!(v0[0] == v1[0] && v0[0] == v2[0])) {
+    if (!(v0[0] == v1[0] || v0[0] == v2[0] || v1[0] == v2[0])) {
         i = 0;
-    } else if (!(v0[1] == v1[1] && v0[1] == v2[1])) {
+    } else if (!(v0[1] == v1[1] || v0[1] == v2[1] || v1[1] == v2[1])) {
         i = 1;
-    } else if (!(v0[2] == v1[2] && v0[2] == v2[2])) {
+    } else if (!(v0[2] == v1[2] || v0[2] == v2[2] || v1[2] == v2[2])) {
         i = 2;
     } else {
         // The triangle degenerates to a point, which should be removed prior to
         // calling this function..
+        std::cerr << f[0] << ": " << v0 << std::endl;
+        std::cerr << f[1] << ": " << v1 << std::endl;
+        std::cerr << f[2] << ": " << v2 << std::endl;
         throw RuntimeError("Triangle degenerates to a point, report this bug");
     }
 
+    //std::cerr << "coordinate selected: " << i << std::endl;
     if (v0[i] < v1[i] && v0[i] > v2[i]) return 0;
     if (v0[i] > v1[i] && v0[i] < v2[i]) return 0;
     if (v1[i] < v0[i] && v1[i] > v2[i]) return 1;

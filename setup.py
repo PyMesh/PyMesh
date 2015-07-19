@@ -60,6 +60,7 @@ setup(
             "scripts/outer_hull.py",
             "scripts/point_cloud.py",
             "scripts/separate.py",
+            "scripts/highlight_degenerated_faces.py",
             "scripts/highlight_self_intersection.py",
             "scripts/meshstat.py",
             "scripts/print_utils.py",
@@ -67,5 +68,6 @@ setup(
             "scripts/microstructure_gen.py",
             "scripts/find_file.py",
             "scripts/add_element_attribute.py",
+            "scripts/remove_degenerated_triangles.py",
             ],
         );
