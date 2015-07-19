@@ -22,7 +22,8 @@ IF(NOT WITHOUT_SWIG)
     SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
     SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
     SWIG_ADD_MODULE(PyMeshUtils python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyMeshUtils ${PYTHON_LIBRARIES} lib_MeshUtils Mesh Predicates)
+    SWIG_LINK_LIBRARIES(PyMeshUtils ${PYTHON_LIBRARIES} lib_MeshUtils Mesh
+        lib_predicates)
 
     # Boudle lib, swig wrapper into a single target.
     # Usage: make MeshUtils
