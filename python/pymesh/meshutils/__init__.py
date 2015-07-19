@@ -2,6 +2,8 @@ from collapse_short_edges import collapse_short_edges
 from collapse_short_edges import collapse_short_edges_raw
 from generate_box_mesh import generate_box_mesh
 from merge_meshes import merge_meshes
+from remove_degenerated_triangles import remove_degenerated_triangles
+from remove_degenerated_triangles import remove_degenerated_triangles_raw
 from remove_duplicated_faces import remove_duplicated_faces
 from remove_duplicated_faces import remove_duplicated_faces_raw
 from remove_duplicated_vertices import remove_duplicated_vertices
@@ -19,6 +21,8 @@ __all__ = [
         "collapse_short_edges_raw",
         "generate_box_mesh",
         "merge_meshes",
+        "remove_degenerated_triangles",
+        "remove_degenerated_triangles_raw",
         "remove_duplicated_faces",
         "remove_duplicated_faces_raw",
         "remove_duplicated_vertices",

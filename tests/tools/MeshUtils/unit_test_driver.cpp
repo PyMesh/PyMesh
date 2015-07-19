@@ -4,6 +4,7 @@
 #include "BoundaryEdgesTest.h"
 #include "BoundaryFacesTest.h"
 #include "DuplicatedVertexRemovalTest.h"
+#include "DegeneratedTriangleRemovalTest.h"
 #include "EdgeSplitterTest.h"
 #include "EdgeUtilsTest.h"
 #include "FinFaceRemovalTest.h"

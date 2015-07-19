@@ -17,3 +17,4 @@
 %include LongEdgeRemoval.i
 %include FinFaceRemoval.i
 %include MeshChecker.i
+%include DegeneratedTriangleRemoval.i

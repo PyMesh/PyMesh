@@ -21,6 +21,7 @@ def parse_args():
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
+    mesh = pymesh.remove_degenerated_triangles(mesh);
 
     outer_hull, interior = pymesh.compute_outer_hull(mesh, engine=args.engine,
             with_interior=True);
