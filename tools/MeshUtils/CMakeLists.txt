@@ -13,7 +13,7 @@ FILE(GLOB INC_FILES *.h)
 
 ADD_LIBRARY(lib_MeshUtils SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_MeshUtils PROPERTIES OUTPUT_NAME "MeshUtils")
-TARGET_LINK_LIBRARIES(lib_MeshUtils Mesh Predicates)
+TARGET_LINK_LIBRARIES(lib_MeshUtils Mesh predicates)
 
 IF(NOT WITHOUT_SWIG)
     set(SWG_FILES PyMeshUtils.i)
