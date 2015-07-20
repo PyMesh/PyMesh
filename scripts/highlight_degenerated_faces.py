@@ -8,7 +8,7 @@ from submesh import extract_submesh
 
 def parse_args():
     parser = argparse.ArgumentParser(
-            description="highlight degenerated faces");
+            description="Highlight degenerated faces");
     parser.add_argument("--extract-region", help="exact problematic_region",
             default=None);
     parser.add_argument("input_mesh", help="input mesh");
