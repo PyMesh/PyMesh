@@ -1,6 +1,7 @@
 from collapse_short_edges import collapse_short_edges
 from collapse_short_edges import collapse_short_edges_raw
 from generate_box_mesh import generate_box_mesh
+from hex_to_tet import hex_to_tet
 from merge_meshes import merge_meshes
 from remove_degenerated_triangles import remove_degenerated_triangles
 from remove_degenerated_triangles import remove_degenerated_triangles_raw
@@ -25,6 +26,7 @@ __all__ = [
         "generate_box_mesh",
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
+        "hex_to_tet",
         "is_colinear",
         "merge_meshes",
         "remove_degenerated_triangles",

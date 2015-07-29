@@ -36,13 +36,13 @@ def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=Non
                     "Vertex importance must be of the same size as vertices");
         remover.set_importance_level(importance);
     num_merged = remover.run(tol);
-    vertices = remover.get_vertices();
-    elements = remover.get_faces();
+    new_vertices = remover.get_vertices();
+    new_elements = remover.get_faces();
     info = {
             "num_vertex_merged": num_merged,
             "index_map": remover.get_index_map().ravel(),
             };
-    return vertices, elements, info;
+    return new_vertices, new_elements, info;
 
 def remove_duplicated_vertices(mesh, tol=1e-12, importance=None):
     """ Wrapper function of :func:`remove_duplicated_vertices_raw`.
