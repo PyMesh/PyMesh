@@ -92,7 +92,7 @@ Make sure all unit tests are passed before using the library.
 
 ### Install ###
 
-The output of building PyMesh consists a set of C++ librries and a python
+The output of building PyMesh consists a set of C++ libraries and a python
 module. Installing the C++ library is currently not available.  However,
 installing the python package can be done:
 
