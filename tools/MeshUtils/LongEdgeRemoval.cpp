@@ -14,7 +14,7 @@ namespace LongEdgeRemovalHelper {
     void split(std::list<VectorF>& end_points,
             std::list<VectorF>::iterator begin_itr,
             Float length, Float threshold) {
-        if (length < threshold) return;
+        if (length <= threshold) return;
 
         auto end_itr = std::next(begin_itr);
         assert(end_itr != end_points.end());

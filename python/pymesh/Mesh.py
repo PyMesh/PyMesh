@@ -120,6 +120,30 @@ class Mesh(object):
         """
         return self.__mesh.get_attribute_names();
 
+    def enable_connectivity(self):
+        self.__mesh.enable_connectivity();
+
+    def get_vertex_adjacent_vertices(self, vi):
+        return self.__mesh.get_vertex_adjacent_vertices(vi).ravel();
+
+    def get_vertex_adjacent_faces(self, vi):
+        return self.__mesh.get_vertex_adjacent_faces(vi).ravel();
+
+    def get_vertex_adjacent_voxels(self, vi):
+        return self.__mesh.get_vertex_adjacent_voxels(vi).ravel();
+
+    def get_face_adjacent_faces(self, fi):
+        return self.__mesh.get_face_adjacent_faces(fi).ravel();
+
+    def get_face_adjacent_voxels(self, fi):
+        return self.__mesh.get_face_adjacent_voxels(fi).ravel();
+
+    def get_voxel_adjacent_faces(self, Vi):
+        return self.__mesh.get_voxel_adjacent_faces(Vi).ravel();
+
+    def get_voxel_adjacent_voxels(self, Vi):
+        return self.__mesh.get_voxel_adjacent_voxels(Vi).ravel();
+
     def is_manifold(self):
         """ Return true iff this mesh is both vertex-manifold and edge-manifold.
         """

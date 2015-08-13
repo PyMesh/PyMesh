@@ -109,9 +109,9 @@ def collapse_short_edges_raw(vertices, faces, abs_threshold=0.0,
     Args:
         vertices (``numpy.ndarray``): Vertex array. One vertex per row.
         faces (``numpy.ndarray``): Face array. One face per row.
-        abs_threshold (``float``): (optional) All edge with length below this
-            threshold will be collapsed.  This value is ignored if
-            ``rel_thresold`` is not ``None``.
+        abs_threshold (``float``): (optional) All edge with length below or
+            equal to this threshold will be collapsed.  This value is ignored
+            if ``rel_thresold`` is not ``None``.
         rel_threashold (``float``): (optional) Relative edge length threshold
             based on average edge length.  e.g. ``rel_threshold=0.1`` means all
             edges with length less than ``0.1 * ave_edge_length`` will be collapsed.
@@ -148,9 +148,9 @@ def collapse_short_edges(mesh,
 
     Args:
         mesh (:class:`Mesh`): Input mesh.
-        abs_threshold (``float``): (optional) All edge with length below this
-            threshold will be collapsed.  This value is ignored if
-            ``rel_thresold`` is not ``None``.
+        abs_threshold (``float``): (optional) All edge with length below or
+            equal to this threshold will be collapsed.  This value is ignored
+            if ``rel_thresold`` is not ``None``.
         rel_threashold (``float``): (optional) Relative edge length threshold
             based on average edge length.  e.g. ``rel_threshold=0.1`` means all
             edges with length less than ``0.1 * ave_edge_length`` will be collapsed.

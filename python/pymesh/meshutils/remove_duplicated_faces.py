@@ -42,7 +42,7 @@ def remove_duplicated_faces_raw(vertices, faces):
     remover = FinFaceRemoval(vertices, faces);
     remover.run();
     info = {
-            "ori_face_index": remover.get_face_indices(),
+            "ori_face_index": remover.get_face_indices().ravel(),
             };
     return remover.get_vertices(), remover.get_faces(), info;
 
