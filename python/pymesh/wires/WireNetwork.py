@@ -22,7 +22,7 @@ class WireNetwork(object):
         return wire_network;
 
     @classmethod
-    def create_from_data(cls, vertice, edges):
+    def create_from_data(cls, vertices, edges):
         wire_network = cls();
         wire_network.load(vertices, edges);
         return wire_network;
