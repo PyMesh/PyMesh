@@ -24,6 +24,7 @@ from outerhull import compute_outer_hull
 from meshutils import *
 from misc import *
 from timethis import timethis
+import wires
 
 __all__ = [
         "Mesh",
