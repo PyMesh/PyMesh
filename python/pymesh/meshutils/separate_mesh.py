@@ -1,6 +1,7 @@
 import os.path
 
 import logging
+import numpy as np
 
 from PyMeshUtils import MeshSeparator
 
