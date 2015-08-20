@@ -54,7 +54,7 @@ def separate_mesh(mesh, connectivity_type="auto"):
         vertices, comp, __ = remove_isolated_vertices_raw(
                 mesh.vertices, comp);
         if is_voxel_mesh:
-            comp_meshes.append(form_mesh(vertices, np.zero(0, 3), comp));
+            comp_meshes.append(form_mesh(vertices, np.zeros((0, 3)), comp));
         else:
             comp_meshes.append(form_mesh(vertices, comp));
 
