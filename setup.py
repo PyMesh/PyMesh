@@ -71,5 +71,7 @@ setup(
             "scripts/add_element_attribute.py",
             "scripts/remove_degenerated_triangles.py",
             "scripts/submesh.py",
+            "scripts/mesh_diff.py",
+            "scripts/self_union.py",
             ],
         );
