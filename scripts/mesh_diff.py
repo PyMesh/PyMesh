@@ -4,6 +4,8 @@ import argparse
 import pymesh
 import numpy as np
 
+from meshstat import load_info, dump_info
+
 def grid_sample(bbox_min, bbox_max, num_samples):
     x_samples = np.linspace(bbox_min[0], bbox_max[0], num_samples);
     y_samples = np.linspace(bbox_min[1], bbox_max[1], num_samples);
@@ -28,6 +30,8 @@ def parse_args():
             help="winding number tolerance");
     parser.add_argument("--output", "-o", help="Highlighted output",
             default=None);
+    parser.add_argument("--export", "-e", help="export information",
+            action="store_true");
     parser.add_argument("input_mesh_1", help="first input mesh");
     parser.add_argument("input_mesh_2", help="secondinput mesh");
     return parser.parse_args();
@@ -72,6 +76,10 @@ def main():
         mesh.set_attribute("diff", np.repeat(diff, box.num_faces));
         pymesh.save_mesh(args.output, mesh, "diff");
 
+    if args.export:
+        info = load_info(args.input_mesh_2);
+        info["diff"] = num_diff
+        dump_info(args.input_mesh_2, info);
 
 if __name__ == "__main__":
     main();
