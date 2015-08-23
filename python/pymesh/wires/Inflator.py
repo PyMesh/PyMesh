@@ -32,9 +32,12 @@ class Inflator(object):
         self.geometry_spread = geometry_spread;
         self.geometry_correction_lookup = geometry_correction_lookup;
 
-    def inflate(self, thickness, per_vertex_thickness=True):
+    def inflate(self, thickness, per_vertex_thickness=True,
+            allow_self_intersection=False):
         wires = self.wire_network.raw_wires;
         inflator = PyWires.InflatorEngine.create("simple", wires);
+        if not allow_self_intersection:
+            inflator.self_intersection_is_fatal();
 
         if per_vertex_thickness:
             if isinstance(thickness, (float, int, long)):
