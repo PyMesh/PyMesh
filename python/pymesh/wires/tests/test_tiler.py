@@ -13,8 +13,7 @@ class TilerTest(WireTestCase):
         bbox_max = np.ones(3) * 5 * 2;
         reps = np.ones(3) * 2;
 
-        tiler = Tiler();
-        tiler.set_base_pattern(wire_network);
+        tiler = Tiler(wire_network);
         tiler.tile_with_guide_bbox(bbox_min, bbox_max, reps, params);
         tiled_wire_network = tiler.wire_network;
 
@@ -34,13 +33,11 @@ class TilerTest(WireTestCase):
         wire_network = self.load_wires("brick5.wire");
         params = Parameters(wire_network, 0.5);
 
-        tiler = Tiler();
-        tiler.set_base_pattern(wire_network);
+        tiler = Tiler(wire_network);
 
         mesh = self.load_mesh("hex_s1.msh");
 
-        tiler = Tiler();
-        tiler.set_base_pattern(wire_network);
+        tiler = Tiler(wire_network);
         tiler.tile_with_guide_mesh(mesh, params);
         tiled_wire_network = tiler.wire_network;
 
@@ -79,8 +76,7 @@ class TilerTest(WireTestCase):
             mesh.add_attribute(dof_name);
             mesh.set_attribute(dof_name, dof);
 
-        tiler = Tiler();
-        tiler.set_base_patterns(wire_networks);
+        tiler = Tiler(wire_networks);
         tiler.tile_with_mixed_patterns(mesh);
         tiled_wire_network = tiler.wire_network;
 

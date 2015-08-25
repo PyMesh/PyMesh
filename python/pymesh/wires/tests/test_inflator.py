@@ -54,3 +54,27 @@ class InflatorTest(WireTestCase):
         self.assertLess(0, mesh.num_faces);
         self.assertTrue(mesh.is_closed());
 
+    def test_profile(self):
+        wire_network = self.load_wires("brick5.wire");
+        params = Parameters(wire_network, 0.1);
+        tiler = Tiler();
+        tiler.set_base_pattern(wire_network);
+        tiler.tile_with_guide_bbox(
+                np.zeros(3), np.ones(3), np.ones(3)*2, params);
+        tiled_wire_network = tiler.wire_network;
+
+        inflator = Inflator(tiled_wire_network);
+        inflator.inflate(
+                tiled_wire_network.get_attribute("thickness").ravel());
+        mesh1 = inflator.mesh;
+
+        inflator.set_profile(6);
+        inflator.inflate(
+                tiled_wire_network.get_attribute("thickness").ravel());
+        mesh2 = inflator.mesh;
+
+        self.assertTrue(mesh1.is_closed());
+        self.assertTrue(mesh2.is_closed());
+        self.assertLess(mesh1.num_vertices, mesh2.num_vertices);
+        self.assertLess(mesh1.num_faces, mesh2.num_faces);
+
