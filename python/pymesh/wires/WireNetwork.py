@@ -152,7 +152,7 @@ class WireNetwork(object):
 
     def get_attribute(self, name):
         assert(self.has_attribute(name));
-        return self.raw_wires.get_attribute(name);
+        return self.raw_wires.get_attribute(name).squeeze();
 
     def is_vertex_attribute(self, name):
         assert(self.has_attribute(name));
@@ -165,7 +165,7 @@ class WireNetwork(object):
     def get_vertex_neighbors(self, i):
         if not self.raw_wires.with_connectivity():
             self.raw_wires.compute_connectivity();
-        return self.raw_wires.get_vertex_neighbors(i);
+        return self.raw_wires.get_vertex_neighbors(i).squeeze();
 
     def __initialize_wires(self):
         self.raw_wires.compute_connectivity();
