@@ -16,6 +16,9 @@ class Inflator(object):
         self.geometry_spread = None;
         self.geometry_correction_lookup = None;
 
+        # Wire profile
+        self.profile = None;
+
         # Post-subdivision
         self.subdivide_order = 1;
         self.subdivide_method="simple";
@@ -31,6 +34,30 @@ class Inflator(object):
         self.geometry_correction_cap = geometry_correction_cap;
         self.geometry_spread = geometry_spread;
         self.geometry_correction_lookup = geometry_correction_lookup;
+
+    def set_profile(self, N):
+        """ Set the cross section shape of each wire to N-gon.
+        """
+        if self.wire_network.dim != 3:
+            raise NotImplementedError("Wire profile only works in 3D.");
+        self.profile = PyWires.WireProfile.create_isotropic(N);
+
+    def set_refinement(self, order=1, method="loop"):
+        """ Refine the output mesh using subdivision.
+
+        Arguments:
+            order: how many times to subdivide.
+            mehtod: which subdivision scheme to use.
+                    Options are ``loop`` and ``simple``.
+        """
+        if not isinstance(order, int) or order < 0:
+            raise RuntimeError("Invalid subdivision order: {}".format(order));
+        if method not in ("loop", "simple"):
+            raise NotImplementedError(
+                    "Unsupport subdivision method: {}".format(method));
+
+        self.subdivide_order = order;
+        self.subdivide_method = method;
 
     def inflate(self, thickness, per_vertex_thickness=True,
             allow_self_intersection=False):
@@ -53,6 +80,7 @@ class Inflator(object):
 
         self.__setup_geometry_correction(inflator);
         self.__setup_subdivision(inflator);
+        self.__setup_profile(inflator);
 
         inflator.inflate();
 
@@ -76,6 +104,7 @@ class Inflator(object):
 
         self.__setup_geometry_correction(inflator);
         self.__setup_subdivision(inflator);
+        self.__setup_profile(inflator);
 
         inflator.inflate();
         self.mesh_vertices = inflator.get_vertices();
@@ -103,6 +132,10 @@ class Inflator(object):
     def __setup_subdivision(self, inflator):
         inflator.with_refinement(
                 self.subdivide_method, self.subdivide_order);
+
+    def __setup_profile(self, inflator):
+        if self.profile is not None:
+            inflator.set_profile(self.profile);
 
     @property
     def mesh(self):
