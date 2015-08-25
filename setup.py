@@ -47,7 +47,7 @@ setup(
         author_email = "qnzhou@gmail.com",
         license = "MPL",
         package_dir = {"": "python"},
-        packages = ["pymesh", "pymesh.misc", "pymesh.meshutils"],
+        packages = ["pymesh", "pymesh.misc", "pymesh.meshutils", "pymesh.wires"],
         package_data = {"pymesh": ["swig/*.py", "lib/*.so", "lib/*.dylib", "lib/*.dll"]},
         include_package_data = True,
         cmdclass={'build': cmake_build},
