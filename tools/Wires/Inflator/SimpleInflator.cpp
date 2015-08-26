@@ -55,12 +55,12 @@ namespace SimpleInflatorHelper {
     bool loop_is_valid(const MatrixFr& loop,
             const VectorF& v0, const VectorF& v1) {
         VectorF dir = v1 - v0;
-        Float dir_len = dir.norm();
-        if (dir_len == 0.0) {
+        Float dir_sq_len = dir.squaredNorm();
+        if (dir_sq_len == 0.0) {
             throw RuntimeError("Zero edge encountered.");
         }
-        auto proj = (loop.rowwise() - v0.transpose()) * dir / dir_len;
-        return ((proj.array() > 0.0).all() && (proj.array() < dir_len).all());
+        VectorF proj = (loop.rowwise() - v0.transpose()) * dir / dir_sq_len;
+        return ((proj.array() > 0.0).all() && (proj.array() < 1.0).all());
     }
 }
 
