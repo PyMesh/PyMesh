@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 
 """
 Compute the outer hull of the input mesh.

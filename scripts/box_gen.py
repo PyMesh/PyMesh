@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 
 """
 Generate axis-aligned box meshes.

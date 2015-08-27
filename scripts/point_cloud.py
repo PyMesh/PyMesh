@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 
 """
 Extract vertices and normals from a surface mesh and store it as a point cloud

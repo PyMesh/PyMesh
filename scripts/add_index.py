@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 
 """
 Add face index attribute to mesh.

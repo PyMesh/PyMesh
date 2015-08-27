@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 
 """
 Remesh the input mesh to remove degeneracies and improve triangle quality.

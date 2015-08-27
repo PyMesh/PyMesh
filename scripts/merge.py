@@ -1,4 +1,4 @@
-#!python
+#!/usr/bin/env python
 
 """
 Merge multiple meshes into a single mesh.
