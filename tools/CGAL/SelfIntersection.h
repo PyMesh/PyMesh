@@ -41,6 +41,5 @@ class SelfIntersection {
     private:
         std::vector<Vector2I> m_intersecting_pairs;
         Points m_points;
-        MatrixFr m_vertices;
         MatrixIr m_faces;
 };
