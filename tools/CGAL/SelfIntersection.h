@@ -7,9 +7,16 @@
 #include <Core/EigenTypedef.h>
 #include <Math/MatrixUtils.h>
 
-#include "CGAL_includes.h"
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
 class SelfIntersection {
+    public:
+        typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
+        typedef CGAL::Point_3<Kernel>    Point_3;
+        typedef CGAL::Segment_3<Kernel>  Segment_3;
+        typedef CGAL::Triangle_3<Kernel> Triangle_3;
+        typedef std::vector<Point_3>     Points;
+
     public:
         SelfIntersection(const MatrixFr& vertices, const MatrixIr& faces);
 
@@ -26,16 +33,14 @@ class SelfIntersection {
         }
 
     public:
-        void handle_intersection_candidate(
-                const TrianglesIterator& b1, const TrianglesIterator& b2);
+        void handle_intersection_candidate(size_t f_idx_1, size_t f_idx_2);
 
     private:
-        std::vector<Box> get_triangle_bboxes();
-        size_t topological_overlap(size_t id1, size_t id2) const;
+        std::vector<size_t> topological_overlap(size_t id1, size_t id2) const;
 
     private:
         std::vector<Vector2I> m_intersecting_pairs;
-        Triangles m_mesh;
+        Points m_points;
         MatrixFr m_vertices;
         MatrixIr m_faces;
 };
