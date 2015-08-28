@@ -21,13 +21,8 @@ OuterHullEngine::Ptr OuterHullEngine::create(const std::string& engine_name) {
 }
 
 void OuterHullEngine::remove_isolated_vertices() {
-    IsolatedVertexRemoval outer_hull_remover(m_vertices, m_faces);
-    outer_hull_remover.run();
-    m_vertices = outer_hull_remover.get_vertices();
-    m_faces = outer_hull_remover.get_faces();
-
-    IsolatedVertexRemoval interior_remover(m_interior_vertices, m_interior_faces);
-    interior_remover.run();
-    m_interior_vertices = interior_remover.get_vertices();
-    m_interior_faces = interior_remover.get_faces();
+    IsolatedVertexRemoval remover(m_vertices, m_faces);
+    remover.run();
+    m_vertices = remover.get_vertices();
+    m_faces = remover.get_faces();
 }

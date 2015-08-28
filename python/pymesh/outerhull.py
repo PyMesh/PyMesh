@@ -1,9 +1,9 @@
 import PyOuterHull
 import numpy as np
 from meshio import form_mesh
+from meshutils import remove_isolated_vertices_raw
 
-
-def compute_outer_hull(mesh, engine="auto", with_interior=False):
+def compute_outer_hull(mesh, engine="auto", all_layers=False):
     """ Compute the outer hull of the input mesh.
 
     Args:
@@ -13,16 +13,16 @@ def compute_outer_hull(mesh, engine="auto", with_interior=False):
             * ``igl``: `libigl's outer hull support
               <https://github.com/libigl/libigl>`_
 
-        with_interior (:py:class:`bool`): (optional) If true, return the interior
-            mesh too.
+        all_layers (:py:class:`bool`): (optional) If true, recursively peel
+            outer hull layers.
 
     Returns:
-        If ``with_interior`` is false, just return the outer hull mesh.
+        If ``all_layers`` is false, just return the outer hull mesh.
 
-        If ``with_interior`` is ture, return the tuple
-        ``(outer_hull_mesh, interior_mesh)``.
+        If ``all_layers`` is ture, return a recursively peeled outer hull
+            layers, from the outer most layer to the inner most layer.
 
-        The following mesh attirbutes are defined in the outer hull mesh:
+        The following mesh attirbutes are defined in each outer hull mesh:
 
         * ``flipped``: A per-face attribute that is true if a face in outer
           hull is orientated differently comparing to its corresponding face
@@ -42,22 +42,28 @@ def compute_outer_hull(mesh, engine="auto", with_interior=False):
 
     vertices = engine.get_vertices();
     faces = engine.get_faces();
-    flipped = engine.get_face_is_flipped();
-    ori_faces = engine.get_ori_face_indices();
+    flipped = engine.get_face_is_flipped().squeeze();
+    ori_faces = engine.get_ori_face_indices().squeeze();
+    layers = engine.get_outer_hull_layers().squeeze();
 
-    outer_hull_mesh = form_mesh(vertices, faces);
-    outer_hull_mesh.add_attribute("flipped");
-    outer_hull_mesh.set_attribute("flipped", flipped);
-    outer_hull_mesh.add_attribute("face_sources");
-    outer_hull_mesh.set_attribute("face_sources", ori_faces);
+    def extract_layer(i):
+        selected_faces = layers == i;
+        o_faces = faces[selected_faces];
+        o_flipped = flipped[selected_faces];
+        o_ori_faces = ori_faces[selected_faces];
+        o_vertices, o_faces, __ = remove_isolated_vertices_raw(vertices, o_faces);
+        outer_hull = form_mesh(o_vertices, o_faces);
+        outer_hull.add_attribute("flipped");
+        outer_hull.set_attribute("flipped", o_flipped);
+        outer_hull.add_attribute("face_sources");
+        outer_hull.set_attribute("face_sources", o_ori_faces);
+        return outer_hull;
 
-    if with_interior:
-        interior_vertices = engine.get_interior_vertices();
-        interior_faces = engine.get_interior_faces();
-
-        interior_mesh = form_mesh(interior_vertices, interior_faces);
-
-        return outer_hull_mesh, interior_mesh;
+    if not all_layers:
+        result = extract_layer(0);
     else:
-        return outer_hull_mesh;
+        num_layers = np.amax(layers);
+        result = [extract_layer(i) for i in range(num_layers)];
+
+    return result;
 

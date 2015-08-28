@@ -23,8 +23,7 @@ class OuterHullEngine {
 
         const MatrixFr get_vertices() const { return m_vertices; }
         const MatrixIr get_faces() const { return m_faces; }
-        const MatrixFr get_interior_vertices() const { return m_interior_vertices; }
-        const MatrixIr get_interior_faces() const { return m_interior_faces; }
+        const VectorI  get_outer_hull_layers() const { return m_layers; }
         const VectorI  get_face_is_flipped() const { return m_face_is_flipped; }
         const VectorI  get_ori_face_indices() const { return m_ori_face_indices; }
 
@@ -34,8 +33,7 @@ class OuterHullEngine {
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
-        MatrixFr m_interior_vertices;
-        MatrixIr m_interior_faces;
+        VectorI  m_layers;
         VectorI  m_face_is_flipped;
         VectorI  m_ori_face_indices;
 };

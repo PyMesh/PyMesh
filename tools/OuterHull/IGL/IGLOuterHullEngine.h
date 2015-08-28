@@ -13,7 +13,6 @@ class IGLOuterHullEngine : public OuterHullEngine {
     private:
         void extract_face_normals();
         void check_normal_reliability();
-        void resolve_self_intersections();
         void extract_outer_hull();
 
     private:
