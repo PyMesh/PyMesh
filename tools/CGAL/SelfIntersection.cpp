@@ -33,7 +33,7 @@ namespace SelfIntersectionHelper {
         self->handle_intersection_candidate(a.id(), b.id());
     }
 
-    Vector2I get_opposite_edge(Vector3I f, size_t v) {
+    Vector2I get_opposite_edge(const Vector3I& f, size_t v) {
         if (f[0] == v) {
             return Vector2I(f[1], f[2]);
         } else if (f[1] == v) {
@@ -121,6 +121,7 @@ void SelfIntersection::handle_intersection_candidate(
     const size_t num_duplicated_vertices = duplicated_vertices.size();
     switch (num_duplicated_vertices) {
         case 0:
+            // triangles do not touch.
             is_intersecting = CGAL::do_intersect(t1, t2);
             break;
         case 3:
@@ -129,7 +130,7 @@ void SelfIntersection::handle_intersection_candidate(
             break;
         case 1:
             {
-                // sharing a vertex.
+                // touch at a vertex.
                 size_t shared_vertex = duplicated_vertices[0];
                 Vector2I opp_edge_1 = get_opposite_edge(f1, shared_vertex);
                 Vector2I opp_edge_2 = get_opposite_edge(f2, shared_vertex);
@@ -142,7 +143,7 @@ void SelfIntersection::handle_intersection_candidate(
             break;
         case 2:
             {
-                // sharing an edge.
+                // touch at an edge.
                 Vector2I shared_edge(duplicated_vertices[0],
                         duplicated_vertices[1]);
                 size_t v1 = get_opposite_vertex(f1, shared_edge);
