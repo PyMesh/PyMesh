@@ -12,8 +12,17 @@ import os.path
 
 from print_utils import print_bold, print_header, print_green, print_red
 
+def print_property(name, val, expected=None):
+    if expected is not None and val != expected:
+        print_red("{:-<35}: {}".format(name, val));
+    else:
+        print("{:-<35}: {}".format(name, val));
+
+def print_section_header(val):
+    print_green("{:_^45}".format(val));
+
 def print_basic_info(mesh, info):
-    print_green("Basic information:");
+    print_section_header("Basic information");
     print("dim: {}".format(mesh.dim));
 
     num_vertices = mesh.num_vertices;
@@ -21,7 +30,7 @@ def print_basic_info(mesh, info):
     num_voxels = mesh.num_voxels;
     print("#v: {}\t#f: {}\t#V: {}".format(
         num_vertices, num_faces, num_voxels));
-    print("vertex per face:  {}".format(mesh.vertex_per_face));
+    print("vertex per face : {}".format(mesh.vertex_per_face));
     print("vertex per voxel: {}".format(mesh.vertex_per_voxel));
 
     info["num_vertices"] = num_vertices;
@@ -31,9 +40,9 @@ def print_basic_info(mesh, info):
     info["vertex_per_voxel"] = mesh.vertex_per_voxel;
 
 def print_bbox(mesh, info):
-    print_green("Boundding box:");
+    print_section_header("Boundding box");
     bbox_min, bbox_max = mesh.bbox;
-    print_format = "[{v[0]:^20.10g} {v[1]:^20.10g} {v[2]:^20.10g}]";
+    print_format = "[{v[0]:^10.6g} {v[1]:^10.6g} {v[2]:^10.6g}]";
     print("bbox_min:  " + print_format.format(v=bbox_min));
     print("bbox_max:  " + print_format.format(v=bbox_max));
     print("bbox_size: " + print_format.format(v=bbox_max - bbox_min));
@@ -49,30 +58,27 @@ def print_percentage(data):
     return p0, p25, p50, p75, p100;
 
 def print_face_info(mesh, info):
-    print_green("Face info:");
+    print_section_header("Face info");
     mesh.add_attribute("face_area");
     face_areas = mesh.get_attribute("face_area");
     total_area = np.sum(face_areas);
     ave_area = np.mean(face_areas);
-    num_degenerated = len(pymesh.get_degenerated_faces(mesh));
 
     print("ave: {:.6g}         total: {:.6g}".format(
         ave_area, total_area));
     min_area, p25_area, median_area, p75_area, max_area = \
             print_percentage(face_areas);
-    print("num of degenerated faces: {}".format(num_degenerated));
 
     info["total_face_area"] = total_area;
     info["max_face_area"] = max_area;
     info["min_face_area"] = min_area;
     info["ave_face_area"] = ave_area;
     info["median_face_area"] = median_area;
-    info["num_degenerated_faces"] = num_degenerated;
 
 def print_voxel_info(mesh, info):
     if (mesh.num_voxels == 0): return;
 
-    print_green("Voxel info:");
+    print_section_header("Voxel info");
     mesh.add_attribute("voxel_volume");
     voxel_volume = mesh.get_attribute("voxel_volume");
 
@@ -91,13 +97,7 @@ def print_voxel_info(mesh, info):
     info["median_voxel_volume"] = median_volume;
 
 def print_extended_info(mesh, info):
-    def print_property(name, val):
-        if val:
-            print("{}: {}".format(name, val));
-        else:
-            print_red("{}: {}".format(name, val));
-
-    print_green("Extended info:");
+    print_section_header("Extended info");
 
     num_cc = mesh.num_components;
     num_f_cc = mesh.num_surface_components;
@@ -107,30 +107,33 @@ def print_extended_info(mesh, info):
         num_v_cc = 0;
     isolated_vertices = mesh.num_isolated_vertices;
     duplicated_faces = mesh.num_duplicated_faces;
+    num_degenerated = len(pymesh.get_degenerated_faces(mesh));
 
-    print("num of connected components: {}".format(num_cc));
-    print("num of connected surface components: {}".format(num_f_cc));
-    print("num of connected volume components: {}".format(num_v_cc));
-    print("num isolated vertices: {}".format(isolated_vertices));
-    print("num duplicated faces: {}".format(duplicated_faces));
+    print_property("num connected components", num_cc);
+    print_property("num connected surface components", num_f_cc);
+    print_property("num connected volume components", num_v_cc);
+    print_property("num isolated vertices", isolated_vertices, 0);
+    print_property("num duplicated faces", duplicated_faces, 0);
+    print_property("num boundary edges", mesh.num_boundary_edges);
+    print_property("num boundary loops", mesh.num_boundary_loops);
+    print_property("num degenerated faces", num_degenerated, 0)
 
     info["num_connected_components"] = num_cc;
     info["num_connected_surface_components"] = num_f_cc;
     info["num_connected_volume_components"] = num_v_cc;
     info["num_isolated_vertices"] = isolated_vertices;
     info["num_duplicated_faces"] = duplicated_faces;
+    info["num_boundary_edges"] = mesh.num_boundary_edges;
+    info["num_boundary_loops"] = mesh.num_boundary_loops;
+    info["num_degenerated_faces"] = num_degenerated;
 
     is_closed = mesh.is_closed();
-    info["closed"] = is_closed;
-    if (not is_closed):
-        print_red("closed  : {}".format(is_closed));
-    else:
-        print("closed  : {}".format(is_closed));
-
     is_edge_manifold = mesh.is_edge_manifold();
     is_vertex_manifold = mesh.is_vertex_manifold();
-    print_property("edge manifold", is_edge_manifold);
-    print_property("vertex manifold", is_vertex_manifold);
+    print_property("closed", is_closed, True)
+    print_property("edge manifold", is_edge_manifold, True);
+    print_property("vertex manifold", is_vertex_manifold, True);
+    info["closed"] = is_closed;
     info["vertex_manifold"] = is_vertex_manifold;
     info["edge_manifold"] = is_edge_manifold;
 
@@ -142,7 +145,7 @@ def print_self_intersection_info(mesh, info):
     else:
         # Self-intersection would surely occur if any triangle has 0 area.
         info["self_intersect"] = True;
-    print("self_intersect: {}".format(info["self_intersect"]));
+    print_property("self intersect", info["self_intersect"], False);
 
 def load_info(mesh_file):
     basename, ext = os.path.splitext(mesh_file);
@@ -180,7 +183,8 @@ def main():
     mesh = pymesh.load_mesh(args.input_mesh);
     info = load_info(args.input_mesh);
 
-    print_header("=== Summary of {} ===".format(args.input_mesh));
+    header = "Summary of {}".format(args.input_mesh);
+    print_header("{:=^45}".format(header));
     print_basic_info(mesh, info);
     print_bbox(mesh, info);
     print_face_info(mesh, info);

@@ -294,10 +294,12 @@ class Mesh(object):
 
     @property
     def _extra_info(self):
-        if not hasattr(self, "__extra_info"):
+        try:
+            return self.__extra_info;
+        except AttributeError:
             self.__extra_info = PyMeshUtils.MeshChecker(
                     self.vertices_ref, self.faces_ref, self.voxels_ref);
-        return self.__extra_info;
+            return self.__extra_info;
 
     @property
     def num_components(self):
@@ -318,4 +320,26 @@ class Mesh(object):
     @property
     def num_duplicated_faces(self):
         return self._extra_info.get_num_duplicated_faces();
+
+    @property
+    def num_boundary_edges(self):
+        return self._extra_info.get_num_boundary_edges();
+
+    @property
+    def boundary_edges(self):
+        return self._extra_info.get_boundary_edges();
+
+    @property
+    def num_boundary_loops(self):
+        if self._extra_info.has_complex_boundary():
+            return -1;
+        else:
+            return self._extra_info.get_num_boundary_loops();
+
+    @property
+    def boundary_loops(self):
+        if self._extra_info.has_complex_boundary():
+            return None
+        else:
+            return self._extra_info.get_boundary_loops();
 

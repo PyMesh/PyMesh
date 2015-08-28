@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 
-#include <iostream>
+#include <vector>
 
 #include <Core/EigenTypedef.h>
 #include <Misc/TripletMap.h>
@@ -28,9 +28,22 @@ class MeshChecker {
          */
         bool is_closed() const;
 
+        /**
+         * Returns true iff mesh boundary does not form simple loops.
+         */
+        bool has_complex_boundary() const { return m_complex_bd; }
+
         size_t get_num_boundary_edges() const;
 
         size_t get_num_boundary_loops() const;
+
+        MatrixIr get_boundary_edges() const {
+            return m_boundary_edges;
+        }
+
+        std::vector<VectorI> get_boundary_loops() const {
+            return m_boundary_loops;
+        }
 
         int get_genus() const;
 
@@ -66,5 +79,6 @@ class MeshChecker {
         MatrixIr m_voxels;
         MatrixIr m_boundary_edges;
         TripletMap<size_t> m_edge_face_adjacency;
-        size_t m_num_bd_loops;
+        std::vector<VectorI> m_boundary_loops;
+        bool m_complex_bd;
 };

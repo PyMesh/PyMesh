@@ -70,7 +70,7 @@ size_t MeshChecker::get_num_boundary_edges() const {
 }
 
 size_t MeshChecker::get_num_boundary_loops() const {
-    return m_num_bd_loops;
+    return m_boundary_loops.size();
 }
 
 int MeshChecker::get_genus() const {
@@ -159,12 +159,12 @@ void MeshChecker::init_boundary() {
 }
 
 void MeshChecker::init_boundary_loops() {
-    m_num_bd_loops = std::numeric_limits<size_t>::max();
+    m_complex_bd = false;
     try {
-        auto chains = EdgeUtils::chain_edges(m_boundary_edges);
-        m_num_bd_loops = chains.size();
+        m_boundary_loops = EdgeUtils::chain_edges(m_boundary_edges);
     } catch (RuntimeError& e) {
-        std::cerr << e.what() << std::endl;
+        m_complex_bd = true;
+        std::cerr << "Warning: " << e.what() << std::endl;
     }
 }
 
