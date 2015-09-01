@@ -62,7 +62,7 @@ def compute_outer_hull(mesh, engine="auto", all_layers=False):
     if not all_layers:
         result = extract_layer(0);
     else:
-        num_layers = np.amax(layers);
+        num_layers = np.amax(layers) + 1;
         result = [extract_layer(i) for i in range(num_layers)];
 
     return result;
