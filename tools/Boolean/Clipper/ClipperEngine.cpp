@@ -2,6 +2,7 @@
 #include "ClipperEngine.h"
 #include <Core/Exception.h>
 #include <MeshUtils/Boundary.h>
+#include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <triangle/TriangleWrapper.h>
 
 #include <cassert>
@@ -94,6 +95,13 @@ namespace ClipperEngineHelper {
         }
         return loop;
     }
+
+    void remove_duplicated_vertices(MatrixFr& vertices, MatrixIr& segments) {
+        DuplicatedVertexRemoval remover(vertices, segments);
+        size_t num_removed = remover.run(std::numeric_limits<Float>::min());
+        vertices = remover.get_vertices();
+        segments = remover.get_faces();
+    }
 }
 
 using namespace ClipperEngineHelper;
@@ -128,6 +136,8 @@ void ClipperEngine::clip(ClipperLib::ClipType type) {
 void ClipperEngine::initialize_if_needed() {
     m_vertices = MatrixFr::Zero(0,2);
     m_faces = MatrixIr::Zero(0,3);
+    if (m_vertices_1.cols() != 2) { m_vertices_1 = m_vertices_1.leftCols(2); }
+    if (m_vertices_2.cols() != 2) { m_vertices_2 = m_vertices_2.leftCols(2); }
     m_loops_1.clear();
     m_loops_2.clear();
     extract_boundary_loops();
@@ -187,6 +197,8 @@ void ClipperEngine::extract_result(const ClipperLib::Paths& paths) {
     }
 
     if (num_segments > 0) {
+        // Known issue: duplicated vertices from different loops cause triangle to crash.
+        ::remove_duplicated_vertices(loop_vertices, segments);
         TriangleWrapper tri_wrapper(loop_vertices, segments);
         tri_wrapper.run(std::numeric_limits<Float>::max(), false, true, false);
 
