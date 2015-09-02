@@ -3,7 +3,7 @@ import numpy as np
 import re
 import os.path
 
-from WireNetwork import WireNetwork
+from .WireNetwork import WireNetwork
 import PyWires
 
 class Parameters(object):

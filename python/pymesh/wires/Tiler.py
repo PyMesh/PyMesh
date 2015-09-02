@@ -1,8 +1,8 @@
 import numpy as np
 
 import PyWires
-from WireNetwork import WireNetwork
-from Parameters import Parameters
+from .WireNetwork import WireNetwork
+from .Parameters import Parameters
 
 class Tiler(object):
     def __init__(self, base_pattern=None):

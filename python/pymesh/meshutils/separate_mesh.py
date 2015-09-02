@@ -6,7 +6,7 @@ import numpy as np
 from PyMeshUtils import MeshSeparator
 
 from ..meshio import form_mesh
-from remove_isolated_vertices import remove_isolated_vertices_raw
+from .remove_isolated_vertices import remove_isolated_vertices_raw
 
 def separate_mesh(mesh, connectivity_type="auto"):
     """ Split mesh into connected components.

@@ -1,5 +1,5 @@
 import PySelfIntersection
-from meshio import form_mesh
+from .meshio import form_mesh
 
 def resolve_self_intersection(mesh, engine="auto"):
     """ Resolve all self-intersections.

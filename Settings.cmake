@@ -11,6 +11,17 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 SET(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Os")
 SET(CMAKE_LIBRARY_PATH /opt/local/lib ${CMAKE_LIBRARY_PATH})
 
+# Hide -Wdeprecated-declarations warnings
+Include (CheckCXXCompilerFlag)
+
+SET(MY_FLAGS "-Wno-deprecated-declarations")
+Foreach (FLAG ${MY_FLAGS})
+	Check_CXX_Compiler_Flag("${FLAG}" IS_SUPPORTED_${FLAG})
+	If (IS_SUPPORTED_${FLAG})
+		Set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${FLAG}")
+	Endif ()
+Endforeach ()
+
 # Set output directories
 SET(LIBRARY_OUTPUT_PATH    ${PROJECT_SOURCE_DIR}/lib)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -40,4 +51,3 @@ SET(CMAKE_MACOSX_RPATH ON)
 
 # Include all libraries
 FIND_PACKAGE(AllDependencies)
-

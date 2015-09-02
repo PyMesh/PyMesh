@@ -6,7 +6,7 @@
 
 class TriangleWrapper {
     public:
-        TriangleWrapper(const MatrixFr& points, const MatrixIr& segments) : 
+        TriangleWrapper(const MatrixFr& points, const MatrixIr& segments) :
             m_points(points), m_segments(segments), m_max_area(0.0) {}
 
     public:
@@ -23,7 +23,7 @@ class TriangleWrapper {
         void set_holes(const MatrixFr& holes) { m_holes = holes; }
 
         /**
-         * Depending on the column of segments, either triangulate a PLSG or
+         * Depending on the column of segments, either triangulate a PSLG or
          * refine an existing triangulation.
          */
         void run(Float max_area,

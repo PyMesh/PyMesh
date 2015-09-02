@@ -1,7 +1,7 @@
 import numpy as np
 import os.path
 
-from Mesh import Mesh
+from .Mesh import Mesh
 import PyMesh
 
 def load_mesh(filename, drop_zero_dim=False):
