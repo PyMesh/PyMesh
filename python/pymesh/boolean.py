@@ -1,6 +1,6 @@
 import PyBoolean
 import numpy as np
-from meshio import form_mesh
+from .meshio import form_mesh
 
 def _auto_select_engine(dim):
     if dim == 2:

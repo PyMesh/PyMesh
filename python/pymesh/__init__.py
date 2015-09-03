@@ -1,6 +1,6 @@
-import PyMeshSetting
+from . import PyMeshSetting
 
-from timethis import timethis
+from .timethis import timethis
 
 from numpy.testing import Tester
 test = Tester().test
@@ -15,17 +15,17 @@ except ImportError:
             pass
 logging.getLogger(__name__).addHandler(NullHandler())
 
-from Mesh import Mesh
-from meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
-from boolean import boolean
-from selfintersection import resolve_self_intersection
-from selfintersection import detect_self_intersection
-from outerhull import compute_outer_hull
-from winding_number import compute_winding_number
-from meshutils import *
-from misc import *
-from timethis import timethis
-import wires
+from .Mesh import Mesh
+from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
+from .boolean import boolean
+from .selfintersection import resolve_self_intersection
+from .selfintersection import detect_self_intersection
+from .outerhull import compute_outer_hull
+from .winding_number import compute_winding_number
+from .meshutils import *
+from .misc import *
+from .timethis import timethis
+from . import wires
 
 __all__ = [
         "Mesh",

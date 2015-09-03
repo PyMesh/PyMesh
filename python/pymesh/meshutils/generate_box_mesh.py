@@ -4,8 +4,8 @@ import os.path
 import logging
 
 from ..meshio import form_mesh, save_mesh, load_mesh
-from remove_isolated_vertices import remove_isolated_vertices_raw
-from remove_duplicated_vertices import remove_duplicated_vertices_raw
+from .remove_isolated_vertices import remove_isolated_vertices_raw
+from .remove_duplicated_vertices import remove_duplicated_vertices_raw
 
 def generate_box_mesh(box_min, box_max,
         num_samples=1, keep_symmetry=False, subdiv_order=0, using_simplex=True):

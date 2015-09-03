@@ -7,7 +7,7 @@
 # Triangle_LIBRARIES
 
 # Find include directory.
-find_path (Triangle_INCLUDE_DIRS triangle.h 
+find_path (Triangle_INCLUDE_DIRS triangle.h
     $ENV{TRIANGLE_PATH}
     $ENV{TRIANGLE_PATH}/include
     /opt/local/include
@@ -15,8 +15,8 @@ find_path (Triangle_INCLUDE_DIRS triangle.h
     /usr/includes
 )
 
-FIND_LIBRARY(Triangle_LIBRARIES triangle
-           $ENV{TRIANGLE_PATH}
+FIND_LIBRARY(Triangle_LIBRARIES NAMES libtriangle.a triangle
+     PATHS $ENV{TRIANGLE_PATH}
            $ENV{TRIANGLE_PATH}/lib
            /opt/local/lib
            /usr/local/lib

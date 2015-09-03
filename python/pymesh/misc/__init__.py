@@ -1,3 +1,3 @@
-from quaternion import Quaternion
+from .quaternion import Quaternion
 
 __all__ = ["Quaternion"];

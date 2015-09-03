@@ -1,10 +1,10 @@
 import numpy as np
 
 from ..meshio import form_mesh
-from remove_isolated_vertices import remove_isolated_vertices_raw
-from remove_duplicated_vertices import remove_duplicated_vertices_raw
-from generate_box_mesh import split_hex_into_tets, split_hex_into_tets_symmetrically
-from generate_box_mesh import subdivide_hex
+from .remove_isolated_vertices import remove_isolated_vertices_raw
+from .remove_duplicated_vertices import remove_duplicated_vertices_raw
+from .generate_box_mesh import split_hex_into_tets, split_hex_into_tets_symmetrically
+from .generate_box_mesh import subdivide_hex
 
 def hex_to_tet(mesh, keep_symmetry=False, subdiv_order=0):
     assert(mesh.num_voxels > 0);

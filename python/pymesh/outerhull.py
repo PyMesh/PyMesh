@@ -1,7 +1,7 @@
 import PyOuterHull
 import numpy as np
-from meshio import form_mesh
-from meshutils import remove_isolated_vertices_raw
+from .meshio import form_mesh
+from .meshutils import remove_isolated_vertices_raw
 
 def compute_outer_hull(mesh, engine="auto", all_layers=False):
     """ Compute the outer hull of the input mesh.

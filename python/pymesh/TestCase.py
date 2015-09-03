@@ -1,7 +1,7 @@
 import unittest
 
 import os.path
-from meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
+from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
 import numpy.testing
 import tempfile
 
