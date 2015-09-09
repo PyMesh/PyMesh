@@ -25,6 +25,7 @@ m_vertices(vertices), m_faces(faces) {
     assert(m_vertices.cols() == 3);
     assert(m_faces.cols() == 3);
     exactinit();
+    init_ori_face_indices();
 }
 
 void DegeneratedTriangleRemoval::run(size_t num_iterations) {
@@ -45,11 +46,33 @@ void DegeneratedTriangleRemoval::run(size_t num_iterations) {
     }
 }
 
+void DegeneratedTriangleRemoval::init_ori_face_indices() {
+    const size_t num_faces = m_faces.rows();
+    m_ori_face_indices.resize(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        m_ori_face_indices[i] = i;
+    }
+}
+
 size_t DegeneratedTriangleRemoval::remove_zero_edges() {
     ShortEdgeRemoval remover(m_vertices, m_faces);
     size_t num_removed = remover.run(0.0);
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
+
+    auto sources = remover.get_face_indices();
+    const size_t num_faces = m_faces.rows();
+    assert(num_faces == sources.rows());
+    assert(sources.size() == 0 || sources.minCoeff() >= 0);
+    assert(sources.size() == 0 ||
+            sources.maxCoeff() < m_ori_face_indices.size());
+
+    VectorI updated_ori_face_indices(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        updated_ori_face_indices[i] = m_ori_face_indices[sources[i]];
+    }
+    m_ori_face_indices = updated_ori_face_indices;
+
     return num_removed;
 }
 
@@ -83,6 +106,7 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
     }
 
     std::vector<VectorI> new_faces;
+    std::vector<VectorI::Scalar> new_ori_face_indices;
     std::vector<bool> is_valid(num_faces, true);
     size_t count = 0;
 
@@ -126,6 +150,8 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
             const size_t vj_1 = neighbor_face[(fj_opp_v+2)%3];
             new_faces.push_back(Vector3I(vi_opp, vj_opp, vj_0));
             new_faces.push_back(Vector3I(vi_opp, vj_1, vj_opp));
+            new_ori_face_indices.push_back(m_ori_face_indices[fj]);
+            new_ori_face_indices.push_back(m_ori_face_indices[fj]);
         }
         count++;
     }
@@ -134,12 +160,16 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
     for (size_t fi=0; fi<num_faces; fi++) {
         if (is_valid[fi]) {
             new_faces.push_back(m_faces.row(fi));
+            new_ori_face_indices.push_back(m_ori_face_indices[fi]);
         }
     }
-    if (!new_faces.empty())
+    if (!new_faces.empty()) {
         m_faces = MatrixUtils::rowstack(new_faces);
-    else
+        m_ori_face_indices = MatrixUtils::std2eigen(new_ori_face_indices);
+    } else {
         m_faces = MatrixIr(0, 3);
+        m_ori_face_indices.resize(0);
+    }
     assert(m_faces.rows() == new_faces.size());
     return count;
 }
