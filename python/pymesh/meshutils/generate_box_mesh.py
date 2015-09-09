@@ -33,6 +33,10 @@ def generate_box_mesh(box_min, box_max,
               that maps each element to the index of the cell it belongs to.
               :math:`N_e` is the number of elements.
     """
+    if not isinstance(box_min, np.ndarray):
+        box_min = np.array(box_min);
+    if not isinstance(box_max, np.ndarray):
+        box_max = np.array(box_max);
     dim = len(box_min);
     if dim == 2:
         mesh, cell_index = generate_2D_box_mesh(box_min, box_max, num_samples,
