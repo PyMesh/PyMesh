@@ -83,32 +83,8 @@ void IGLOuterHullEngine::run() {
     assert(m_vertices.cols() == 3);
     assert(m_faces.cols() == 3);
 
-    extract_face_normals();
-    check_normal_reliability();
-    //resolve_self_intersections();
     extract_outer_hull();
     remove_isolated_vertices();
-}
-
-void IGLOuterHullEngine::extract_face_normals() {
-    const size_t num_faces = m_faces.rows();
-    m_normals = Matrix3Fr::Zero(num_faces, 3);
-    for (size_t i=0; i<num_faces; i++) {
-        const auto& f = m_faces.row(i);
-        Vector3F v0 = m_vertices.row(f[0]);
-        Vector3F v1 = m_vertices.row(f[1]);
-        Vector3F v2 = m_vertices.row(f[2]);
-        m_normals.row(i) = ((v1-v0).cross(v2-v0)).normalized();
-    }
-}
-
-void IGLOuterHullEngine::check_normal_reliability() {
-    if (!m_normals.allFinite()) {
-        std::stringstream err_msg;
-        err_msg << "Normal computation failed: found nan or inf!" << std::endl;
-        err_msg << "The most likely cause is degenerated triangles!";
-        throw RuntimeError(err_msg.str());
-    }
 }
 
 void IGLOuterHullEngine::extract_outer_hull() {
@@ -118,11 +94,8 @@ void IGLOuterHullEngine::extract_outer_hull() {
     resolve_self_intersections_exactly(
             m_vertices, m_faces, V, F, m_ori_face_indices);
     m_vertices = exact_to_float(V);
-    Eigen::Matrix<Float, Eigen::Dynamic, 3> N(m_normals);
-    N = row_slice(N, m_ori_face_indices);
-    assert(F.rows() == N.rows());
 
     // Compute outer hull.
-    igl::cgal::peel_outer_hull_layers(V, F, N, m_layers, m_face_is_flipped);
+    igl::cgal::peel_outer_hull_layers(V, F, m_layers, m_face_is_flipped);
     m_faces = F;
 }
