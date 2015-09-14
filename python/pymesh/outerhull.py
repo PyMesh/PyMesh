@@ -2,6 +2,7 @@ import PyOuterHull
 import numpy as np
 from .meshio import form_mesh
 from .meshutils import remove_isolated_vertices_raw
+from .meshutils import remove_degenerated_triangles_raw
 
 def compute_outer_hull(mesh, engine="auto", all_layers=False):
     """ Compute the outer hull of the input mesh.
@@ -52,6 +53,10 @@ def compute_outer_hull(mesh, engine="auto", all_layers=False):
         o_flipped = flipped[selected_faces];
         o_ori_faces = ori_faces[selected_faces];
         o_vertices, o_faces, __ = remove_isolated_vertices_raw(vertices, o_faces);
+        o_vertices, o_faces, info = remove_degenerated_triangles_raw(
+                o_vertices, o_faces);
+        o_flipped = o_flipped[info["ori_face_indices"]];
+        o_ori_faces = o_ori_faces[info["ori_face_indices"]];
         outer_hull = form_mesh(o_vertices, o_faces);
         outer_hull.add_attribute("flipped");
         outer_hull.set_attribute("flipped", o_flipped);
