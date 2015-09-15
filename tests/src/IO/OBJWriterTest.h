@@ -28,6 +28,15 @@ class OBJWriterTest : public WriterTest {
         }
 };
 
+TEST_F(OBJWriterTest, EmptyMesh) {
+    MeshPtr m1 = load_mesh("empty.obj");
+    MeshPtr m2 = write_and_load("empty.obj", m1);
+
+    ASSERT_EQ(m1->get_num_vertices(), m2->get_num_vertices());
+    ASSERT_EQ(m1->get_num_faces(), m2->get_num_faces());
+    ASSERT_EQ(m1->get_num_voxels(), m2->get_num_voxels());
+}
+
 TEST_F(OBJWriterTest, WriteCube) {
     MeshPtr m1 = load_mesh("cube.obj");
     MeshPtr m2 = write_and_load("cube.obj", m1);

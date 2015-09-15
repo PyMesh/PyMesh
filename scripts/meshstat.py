@@ -41,6 +41,9 @@ def print_basic_info(mesh, info):
 
 def print_bbox(mesh, info):
     print_section_header("Boundding box");
+    if mesh.num_vertices == 0:
+        print_red("Cannot compute bbox on empty mesh.");
+        return;
     bbox_min, bbox_max = mesh.bbox;
     print_format = "[{v[0]:^10.6g} {v[1]:^10.6g} {v[2]:^10.6g}]";
     print("bbox_min:  " + print_format.format(v=bbox_min));
@@ -58,6 +61,7 @@ def print_percentage(data):
     return p0, p25, p50, p75, p100;
 
 def print_face_info(mesh, info):
+    if (mesh.num_faces == 0): return;
     print_section_header("Face info");
     mesh.add_attribute("face_area");
     face_areas = mesh.get_attribute("face_area");

@@ -108,3 +108,12 @@ TEST_F(OBJParserTest, 2DSquareCentroid) {
     ASSERT_NEAR(0.0, coord_sum, 1e-6);
 }
 
+TEST_F(OBJParserTest, Empty) {
+    std::string mesh_file = m_data_dir + "empty.obj";
+    parse(mesh_file);
+    const size_t num_vertices = m_parser->num_vertices();
+
+    ASSERT_EQ(0, m_parser->num_vertices());
+    ASSERT_EQ(0, m_parser->num_faces());
+}
+

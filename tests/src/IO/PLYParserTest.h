@@ -27,7 +27,7 @@ TEST_F(PLYParserTest, ParseCube) {
     ASSERT_EQ(3,  m_parser->dim());
 }
 
-TEST_F(OBJParserTest, CubeCentroid) {
+TEST_F(PLYParserTest, CubeCentroid) {
     std::string mesh_file = m_data_dir + "cube.ply";
     parse(mesh_file);
 
@@ -38,4 +38,12 @@ TEST_F(OBJParserTest, CubeCentroid) {
     m_parser->export_vertices(vertices.data());
     Float coord_sum = vertices.sum();
     ASSERT_NEAR(0.0, coord_sum, 1e-6);
+}
+
+TEST_F(PLYParserTest, Empty) {
+    std::string mesh_file = m_data_dir + "empty.ply";
+    parse(mesh_file);
+
+    ASSERT_EQ(0, m_parser->num_vertices());
+    ASSERT_EQ(0, m_parser->num_faces());
 }

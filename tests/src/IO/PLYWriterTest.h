@@ -16,6 +16,15 @@ class PLYWriterTest : public WriterTest {
         }
 };
 
+TEST_F(PLYWriterTest, EmptyMesh) {
+    MeshPtr m1 = load_mesh("empty.ply");
+    MeshPtr m2 = write_and_load("empty.ply", m1);
+
+    ASSERT_EQ(m1->get_num_vertices(), m2->get_num_vertices());
+    ASSERT_EQ(m1->get_num_faces(), m2->get_num_faces());
+    ASSERT_EQ(m1->get_num_voxels(), m2->get_num_voxels());
+}
+
 TEST_F(PLYWriterTest, SurfaceMesh) {
     MeshPtr mesh = load_mesh("cube.ply");
     MeshPtr mesh2 = write_and_load("tmp_cube.ply", mesh);

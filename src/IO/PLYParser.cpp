@@ -220,8 +220,8 @@ void PLYParser::init_faces() {
         throw IOError("Cannot parse face.");
     }
     const std::vector<Float>& faces = face_attr_itr->second;
-    assert(faces.size() % m_num_faces == 0);
-    m_vertex_per_face = faces.size() / m_num_faces;
+    assert(faces.size() == 0 || faces.size() % m_num_faces == 0);
+    m_vertex_per_face = m_num_faces == 0 ? 3:faces.size() / m_num_faces;
     m_faces = VectorI(faces.size());
     std::copy(faces.begin(), faces.end(), m_faces.data());
 }

@@ -76,3 +76,11 @@ TEST_F(MSHParserTest, HexCentroid) {
     Float coord_sum = vertices.sum();
     ASSERT_NEAR(0.0, coord_sum, 1e-6);
 }
+
+TEST_F(MSHParserTest, Empty) {
+    std::string mesh_file = m_data_dir + "empty.msh";
+    parse(mesh_file);
+
+    ASSERT_EQ(0, m_parser->num_vertices());
+    ASSERT_EQ(0, m_parser->num_faces());
+}

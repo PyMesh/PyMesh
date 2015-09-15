@@ -42,6 +42,13 @@ bool OBJParser::parse(const std::string& filename) {
     }
 
     fin.close();
+
+    if (m_vertices.size() == 0) {
+        m_dim = 3; // default: 3D
+    }
+    if (m_faces.size() == 0) {
+        m_vertex_per_face = 3; // default: triangle
+    }
     return true;
 }
 

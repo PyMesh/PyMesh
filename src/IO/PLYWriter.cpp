@@ -106,7 +106,6 @@ void PLYWriter::regroup_attribute_names(Mesh& mesh) {
 void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
     const size_t dim = mesh.get_dim();
     const size_t num_vertices = mesh.get_num_vertices();
-    assert(num_vertices > 0);
     assert_success(ply_add_element(ply, "vertex", num_vertices),
             "Add element failed");
     assert_success(ply_add_scalar_property(ply, "x", m_scalar),
@@ -140,7 +139,6 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
 void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
     const size_t dim = mesh.get_dim();
     const size_t num_faces = mesh.get_num_faces();
-    assert(num_faces > 0);
     assert_success(ply_add_element(ply, "face", num_faces), "Add face failed");
     assert_success(ply_add_list_property(ply, "vertex_indices", PLY_UCHAR,
                 PLY_INT), "Add face vertex indices failed");
