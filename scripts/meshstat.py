@@ -142,6 +142,10 @@ def print_extended_info(mesh, info):
     info["edge_manifold"] = is_edge_manifold;
 
 def print_self_intersection_info(mesh, info):
+    if mesh.num_vertices == 0:
+        print_red("Self-intersection check does not support empty mesh.");
+        return;
+
     if info["min_face_area"] != 0.0:
         intersecting_faces = pymesh.detect_self_intersection(mesh);
         num_intersections = len(intersecting_faces);
