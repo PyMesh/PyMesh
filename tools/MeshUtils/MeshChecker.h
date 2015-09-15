@@ -29,6 +29,23 @@ class MeshChecker {
         bool is_closed() const;
 
         /**
+         * Returns true iff the mesh contains edges with odd number of adjacent
+         * faces.
+         */
+        bool has_edge_with_odd_adj_faces() const;
+
+        /**
+         * A surface is oriented if its normal vector field changes continuously
+         * over the surface.  In the discrete setting, it means that all faces
+         * are consistantly oriented (e.g. all ccw around outward pointing
+         * normal).
+         *
+         * Note that this method will return true if the surface is oriented but
+         * with normals pointing inward.
+         */
+        bool is_oriented() const;
+
+        /**
          * Returns true iff mesh boundary does not form simple loops.
          */
         bool has_complex_boundary() const { return m_complex_bd; }

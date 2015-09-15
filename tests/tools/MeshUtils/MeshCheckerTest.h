@@ -35,6 +35,7 @@ TEST_F(MeshCheckerTest, cube) {
     ASSERT_EQ(0, checker.get_genus());
     ASSERT_EQ(0, checker.get_num_boundary_edges());
     ASSERT_EQ(0, checker.get_num_boundary_loops());
+    ASSERT_TRUE(checker.is_oriented());
 }
 
 TEST_F(MeshCheckerTest, square) {
@@ -48,6 +49,7 @@ TEST_F(MeshCheckerTest, square) {
     ASSERT_EQ(0, checker.get_genus());
     ASSERT_EQ(4, checker.get_num_boundary_edges());
     ASSERT_EQ(1, checker.get_num_boundary_loops());
+    ASSERT_TRUE(checker.is_oriented());
 }
 
 TEST_F(MeshCheckerTest, quad) {
@@ -61,6 +63,7 @@ TEST_F(MeshCheckerTest, quad) {
     ASSERT_EQ(0, checker.get_genus());
     ASSERT_EQ(4, checker.get_num_boundary_edges());
     ASSERT_EQ(1, checker.get_num_boundary_loops());
+    ASSERT_TRUE(checker.is_oriented());
 }
 
 TEST_F(MeshCheckerTest, duplicated_face_count) {
@@ -77,5 +80,27 @@ TEST_F(MeshCheckerTest, duplicated_face_count) {
 
     MeshChecker checker(vertices, faces, voxels);
     ASSERT_EQ(1, checker.get_num_duplicated_faces());
+    ASSERT_TRUE(checker.is_oriented());
+}
+
+TEST_F(MeshCheckerTest, odd_adj_faces) {
+    MatrixFr vertices(4, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0;
+    MatrixIr faces(5, 3);
+    faces << 0, 2, 1,
+             0, 3, 2,
+             0, 3, 1,
+             1, 2, 3,
+             1, 2, 3;
+
+    MatrixIr voxels(0, 4);
+
+    MeshChecker checker(vertices, faces, voxels);
+    ASSERT_EQ(1, checker.get_num_duplicated_faces());
+    ASSERT_TRUE(checker.has_edge_with_odd_adj_faces());
+    ASSERT_FALSE(checker.is_oriented());
 }
 

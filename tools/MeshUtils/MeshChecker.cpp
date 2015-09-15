@@ -61,8 +61,47 @@ bool MeshChecker::is_edge_manifold() const {
     return true;
 }
 
+bool MeshChecker::is_oriented() const {
+    // For each edge (s, d), check to see if the number of faces containing
+    // (s, d) as an edge and the number of faces containing (d, s) as an edge
+    // are equal.
+    //
+    // Boundary edges are skipped.
+    const size_t num_vertex_per_face = m_faces.cols();
+    for (auto adj : m_edge_face_adjacency) {
+        if (adj.second.size() == 1) continue;
+
+        const auto& e = adj.first.get_ori_data();
+        int consistent_count = 0;
+        for (auto fid : adj.second) {
+            VectorI f = m_faces.row(fid);
+            for (size_t i=0; i<num_vertex_per_face; i++) {
+                if (f[i] == e[0] && f[(i+1)%num_vertex_per_face] == e[1]) {
+                    consistent_count++;
+                    break;
+                } else if (f[i] == e[1] &&
+                        f[(i+1)%num_vertex_per_face] == e[0]) {
+                    consistent_count--;
+                    break;
+                }
+            }
+        }
+        if (consistent_count != 0) return false;
+    }
+    return true;
+}
+
 bool MeshChecker::is_closed() const {
     return m_boundary_edges.rows() == 0;
+}
+
+bool MeshChecker::has_edge_with_odd_adj_faces() const {
+    for (auto adj : m_edge_face_adjacency) {
+        if (adj.second.size() % 2 != 0) {
+            return true;
+        }
+    }
+    return false;
 }
 
 size_t MeshChecker::get_num_boundary_edges() const {

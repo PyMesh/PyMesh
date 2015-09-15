@@ -174,6 +174,14 @@ class Mesh(object):
         """
         return self._extra_info.is_closed();
 
+    def is_oriented(self):
+        """ Return true iff the mesh is consistently oriented.
+
+        That is all non-bonary edges must represent locally 2-manifold or
+        intersection of 2-manifold surfaces.
+        """
+        return self._extra_info.is_oriented();
+
     @property
     def vertices_ref(self):
         return self.__mesh.get_vertices().reshape(
