@@ -15,7 +15,7 @@ def parse_args():
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
-    mesh = pymesh.remove_degenerated_triangles(mesh, args.num_iterations);
+    mesh, __ = pymesh.remove_degenerated_triangles(mesh, args.num_iterations);
     pymesh.save_mesh(args.output_mesh, mesh);
 
 if __name__ == "__main__":

@@ -11,6 +11,8 @@ def parse_args():
             description="Highlight degenerated faces");
     parser.add_argument("--extract-region", help="exact problematic_region",
             default=None);
+    parser.add_argument("--verbose", "-v", action="store_true",
+            help="print degenerated face indices");
     parser.add_argument("input_mesh", help="input mesh");
     parser.add_argument("output_mesh", help="output mesh");
     return parser.parse_args();
@@ -36,6 +38,8 @@ def main():
 
     print("{} degenerated faces, consisting of {} vertices.".format(
         len(f_indices), np.count_nonzero(degenerated)));
+    if args.verbose:
+        print("Degenerated faces indices: {}".format(f_indices));
 
     pymesh.save_mesh(args.output_mesh, mesh, "degenerated", "degenerated_faces");
 
