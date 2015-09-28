@@ -17,6 +17,7 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
+from .aabb_tree import AABBTree, distance_to_mesh
 from .boolean import boolean
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
@@ -33,6 +34,8 @@ __all__ = [
         "form_mesh",
         "save_mesh",
         "save_mesh_raw",
+        "AABBTree",
+        "distance_to_mesh",
         "boolean",
         "resolve_self_intersection",
         "detect_self_intersection",

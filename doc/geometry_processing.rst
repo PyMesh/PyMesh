@@ -5,4 +5,5 @@ Geometry Processing Functions
     boolean
     self_intersection
     outer_hull
+    distance_to_mesh
 
