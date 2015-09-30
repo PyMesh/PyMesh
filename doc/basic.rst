@@ -192,7 +192,7 @@ To retrieve the names of all defined attributes for a given mesh::
 
 Saving Mesh:
 ------------
-The following formats are supported for saving meshes: .obj, .off, .ply, .msh.
+The following formats are supported for saving meshes: .obj, .off, .ply, .mesh, .msh.
 Saving in .stl format is not supported because STL files use more disk space and
 stores less information.  To save a mesh::
 
