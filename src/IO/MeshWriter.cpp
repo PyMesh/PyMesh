@@ -8,6 +8,7 @@
 #include <Mesh.h>
 
 #include "IOUtils.h"
+#include "MEDITWriter.h"
 #include "MSHWriter.h"
 #include "OBJWriter.h"
 #include "PLYWriter.h"
@@ -17,6 +18,8 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
     std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
         writer = new OBJWriter();
+    } else if (ext == ".mesh") {
+        writer = new MEDITWriter();
     } else if (ext == ".msh") {
         writer = new MSHWriter();
     } else if (ext == ".ply") {
