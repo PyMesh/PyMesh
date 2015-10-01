@@ -46,6 +46,8 @@ def compute_outer_hull(mesh, engine="auto", all_layers=False):
     flipped = engine.get_face_is_flipped().squeeze();
     ori_faces = engine.get_ori_face_indices().squeeze();
     layers = engine.get_outer_hull_layers().squeeze();
+    to_flip = flipped != 0;
+    faces[to_flip] = np.fliplr(faces[to_flip]);
 
     def extract_layer(i):
         selected_faces = layers == i;
