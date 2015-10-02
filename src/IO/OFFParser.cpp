@@ -196,6 +196,9 @@ void OFFParser::parse_face_line(char* line) {
     VectorI face(n);
     for (size_t i=0; i<n; i++) {
         field = strtok(NULL, WHITE_SPACE);
+        if (field == NULL) {
+            throw IOError("Error parsing faces.");
+        }
         face[i] = atoi(field);
     }
     m_faces.push_back(face);

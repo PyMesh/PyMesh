@@ -11,6 +11,7 @@
 #include "MEDITWriter.h"
 #include "MSHWriter.h"
 #include "OBJWriter.h"
+#include "OFFWriter.h"
 #include "PLYWriter.h"
 
 MeshWriter* MeshWriter::create_writer(const std::string& filename) {
@@ -18,6 +19,8 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
     std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
         writer = new OBJWriter();
+    } else if (ext == ".off") {
+        writer = new OFFWriter();
     } else if (ext == ".mesh") {
         writer = new MEDITWriter();
     } else if (ext == ".msh") {
