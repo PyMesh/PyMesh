@@ -30,7 +30,7 @@ From file::
 
     >>> mesh = pymesh.load_mesh("model.obj")
 
-PyMesh supports parsing the following formats: .obj, .ply, .off, .stl and .msh.
+PyMesh supports parsing the following formats: .obj, .ply, .off, .stl .mesh and .msh.
 
 From raw data::
 
@@ -192,9 +192,10 @@ To retrieve the names of all defined attributes for a given mesh::
 
 Saving Mesh:
 ------------
-The following formats are supported for saving meshes: .obj, .off, .ply, .mesh, .msh.
-Saving in .stl format is not supported because STL files use more disk space and
-stores less information.  To save a mesh::
+The following formats are supported for saving meshes: .obj, .off, .ply, .mesh and .msh.
+Saving in .stl format is not supported because `STL files use more disk space and
+stores less information
+<https://medium.com/3d-printing-stories/why-stl-format-is-bad-fea9ecf5e45>`_.  To save a mesh::
 
     >>> pymesh.save_mesh("filename.obj", mesh);
 

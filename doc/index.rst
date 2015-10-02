@@ -47,8 +47,8 @@ Compute Gaussian curvature for each vertex:
 Features:
 =========
 
-* Read/write 2D and 3D mesh in ``.obj``, ``.ply``, ``.mesh`` (`MEDIT <http://www.ann.jussieu.fr/frey/publications/RT-0253.pdf>`_) and ``.msh`` (`Gmsh <http://geuz.org/gmsh/doc/texinfo/gmsh.html#File-formats>`_) formats.
-  Read support for ``.stl`` and ``.off`` files.
+* Read/write 2D and 3D mesh in ``.obj``, ``.off``, ``.ply``, ``.mesh`` (`MEDIT <http://www.ann.jussieu.fr/frey/publications/RT-0253.pdf>`_) and ``.msh`` (`Gmsh <http://geuz.org/gmsh/doc/texinfo/gmsh.html#File-formats>`_) formats.
+  Read support for ``.stl`` files.
 * Support load and save per vertex/face/voxel scalar and vector fields.
 * Local mesh processing such edge collapse/split, duplicated vertex/face removal
   etc.
