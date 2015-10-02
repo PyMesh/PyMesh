@@ -62,6 +62,7 @@ setup(
             "scripts/separate.py",
             "scripts/highlight_degenerated_faces.py",
             "scripts/highlight_self_intersection.py",
+            "scripts/highlight_non_oriented_edges.py",
             "scripts/highlight_zero_area_faces.py",
             "scripts/meshstat.py",
             "scripts/print_utils.py",
