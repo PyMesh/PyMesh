@@ -41,7 +41,10 @@ namespace SelfIntersectionHelper {
         } else if (f[2] == v) {
             return Vector2I(f[0], f[1]);
         } else {
-            throw RuntimeError("Vertex does not belong to this triangle");
+            std::stringstream err_msg;
+            err_msg << "Vertex " << v << " does not belong to triangle ("
+                << f.transpose() << ")";
+            throw RuntimeError(err_msg.str());
         }
     }
 
@@ -122,7 +125,17 @@ void SelfIntersection::handle_intersection_candidate(
     switch (num_duplicated_vertices) {
         case 0:
             // triangles do not touch.
-            is_intersecting = CGAL::do_intersect(t1, t2);
+            {
+                bool t1_degenerate = t1.is_degenerate();
+                bool t2_degenerate = t2.is_degenerate();
+                if (t1_degenerate || t2_degenerate) {
+                    // Degenerated triangles are considered as
+                    // self-intersecting.
+                    is_intersecting = true;
+                } else {
+                    is_intersecting = CGAL::do_intersect(t1, t2);
+                }
+            }
             break;
         case 3:
             // duplicated face
@@ -158,15 +171,18 @@ void SelfIntersection::handle_intersection_candidate(
                     } else if (CGAL::collinear(p3, p4, p2)) {
                         is_intersecting = true;
                     } else {
-                        is_intersecting =
-                            CGAL::do_intersect(t1, p2) ||
-                            CGAL::do_intersect(t2, p1) ||
-                            CGAL::do_intersect(
-                                    Segment_3(p1, p3),
-                                    Segment_3(p2, p4)) ||
-                            CGAL::do_intersect(
-                                    Segment_3(p2, p3),
-                                    Segment_3(p1, p4));
+                        switch (CGAL::coplanar_orientation(p3, p4, p1, p2)) {
+                            case CGAL::POSITIVE:
+                                is_intersecting = true;
+                                break;
+                            case CGAL::NEGATIVE:
+                                is_intersecting = false;
+                                break;
+                            case CGAL::COLLINEAR:
+                                throw RuntimeError(
+                                        "Inconsistent CGAL predicate output");
+                                break;
+                        }
                     }
                 } else {
                     is_intersecting = false;
@@ -186,23 +202,14 @@ void SelfIntersection::handle_intersection_candidate(
 std::vector<size_t> SelfIntersection::topological_overlap(size_t id1, size_t id2) const {
     Vector3I f1 = m_faces.row(id1);
     Vector3I f2 = m_faces.row(id2);
-    int v_idx[6] = {f1[0], f1[1], f1[2], f2[0], f2[1], f2[2]};
-    std::sort(v_idx, v_idx + 6);
-
     std::vector<size_t> duplicated_vertices;
     duplicated_vertices.reserve(3);
-    size_t i=0;
-    size_t j=1;
-    while (i < 6) {
-        for (j=i+1; j<6 && v_idx[i] == v_idx[j]; j++) { }
-        if (j != i+1) {
-            if (j != i+2) {
-                throw RuntimeError("Topologically degenerated triangle detected");
+    for (size_t i=0; i<3; i++) {
+        for (size_t j=0; j<3; j++) {
+            if (f1[i] == f2[j]) {
+                duplicated_vertices.push_back(f1[i]);
             }
-            duplicated_vertices.push_back(v_idx[i]);
         }
-        i = j;
     }
-
     return duplicated_vertices;
 }

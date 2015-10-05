@@ -82,7 +82,7 @@ TEST_F(SelfIntersectionTest, IdentiticalTriangles) {
     ASSERT_EQ(1, result.rows());
 }
 
-TEST_F(SelfIntersectionTest, DISABLED_SingleDegeneratedTriangles) {
+TEST_F(SelfIntersectionTest, SingleDegeneratedTriangles) {
     MatrixI faces(2, 3);
     faces << 0, 3, 3,
              1, 2, 4;
@@ -90,7 +90,7 @@ TEST_F(SelfIntersectionTest, DISABLED_SingleDegeneratedTriangles) {
     ASSERT_EQ(1, result.rows());
 }
 
-TEST_F(SelfIntersectionTest, DISABLED_DoubleDegeneratedTriangles) {
+TEST_F(SelfIntersectionTest, DoubleDegeneratedTriangles) {
     MatrixI faces(2, 3);
     faces << 0, 5, 5,
              1, 2, 2;
@@ -98,7 +98,7 @@ TEST_F(SelfIntersectionTest, DISABLED_DoubleDegeneratedTriangles) {
     ASSERT_EQ(1, result.rows());
 }
 
-TEST_F(SelfIntersectionTest, DISABLED_PointLikeTriangles) {
+TEST_F(SelfIntersectionTest, PointLikeTriangles) {
     MatrixI faces(2, 3);
     faces << 2, 2, 2,
              0, 4, 3;
