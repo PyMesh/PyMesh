@@ -73,6 +73,7 @@ setup(
             "scripts/remove_degenerated_triangles.py",
             "scripts/submesh.py",
             "scripts/mesh_diff.py",
+            "scripts/meshconvert.py",
             "scripts/self_union.py",
             ],
         );
