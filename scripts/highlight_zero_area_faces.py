@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Highlight faces with zero area in floating point computation.
+"""
+
 import argparse
 import numpy as np
 import pymesh
@@ -7,8 +11,7 @@ import pymesh
 from submesh import extract_submesh
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="Highlight faces with zero area");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("input_mesh", help="input mesh");
     parser.add_argument("output_mesh", help="output mesh");
     return parser.parse_args();

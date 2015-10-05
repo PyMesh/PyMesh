@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Highlight exactly degenerated faces.
+"""
+
 import argparse
 import numpy as np
 import pymesh
@@ -7,8 +11,7 @@ import pymesh
 from submesh import extract_submesh
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="Highlight degenerated faces");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--extract-region", help="exact problematic_region",
             default=None);
     parser.add_argument("--verbose", "-v", action="store_true",

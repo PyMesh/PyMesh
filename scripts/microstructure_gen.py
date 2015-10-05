@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Tile a given wire network pattern according to a grid or hex mesh.
+"""
+
 import argparse
 import json
 import numpy as np
@@ -168,7 +172,7 @@ def tile_with_mixed_patterns(config):
     return inflator.mesh;
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Tile a given pattern");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("config_file", help="pattern configuration file.");
     parser.add_argument("output", help="output mesh");
     args = parser.parse_args();

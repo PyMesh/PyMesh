@@ -1,12 +1,16 @@
 #!/usr/bin/env python
 
+"""
+Highlight non-oriented edges.  A non-oriented edge has inconsistent normals in
+its adjacent faces.
+"""
+
 import argparse
 import numpy as np
 import pymesh
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="Highlight non-oriented edges");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("input_mesh");
     parser.add_argument("output_mesh");
     return parser.parse_args();

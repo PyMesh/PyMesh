@@ -63,7 +63,7 @@ class Formula:
         return escaped_name
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Added element attribute to mesh");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--name", help="attribute name");
     parser.add_argument("--formula", help="formula to compute new attribute");
     parser.add_argument("input_mesh", help="input mesh");

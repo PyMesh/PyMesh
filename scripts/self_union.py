@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 
+"""
+Resolve self-intersection and nested shells using self-union.
+"""
+
 import argparse
 import numpy as np
 import pymesh
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Self union");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("input_mesh", help="Input mesh");
     parser.add_argument("output_mesh", help="Output mesh");
     return parser.parse_args();

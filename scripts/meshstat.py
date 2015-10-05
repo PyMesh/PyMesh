@@ -178,8 +178,7 @@ def dump_info(mesh_file, info):
         json.dump(info, fout, indent=4, sort_keys=True);
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="Show statistics on mesh");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--extended", "-x", action="store_true",
             help="check for manifold, closedness, connected components and more ");
     parser.add_argument("--self-intersection", "-s", action="store_true",

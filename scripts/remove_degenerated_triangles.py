@@ -1,11 +1,14 @@
 #!/usr/bin/env python
 
+"""
+Remove exactly degenerated triangles.
+"""
+
 import argparse
 import pymesh
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="Remove degenerated triangles");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--num-iterations", "-n", type=int,
             default=5, help="max number of iterations");
     parser.add_argument("input_mesh", help="input triangular mesh");

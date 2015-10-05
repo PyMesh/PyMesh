@@ -9,7 +9,7 @@ import numpy as np
 import pymesh.wires
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Inflate wires");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--thickness", "-t", type=float, help="wire thickness");
     parser.add_argument("--refinement-order", "-r", type=int, default=1,
             help="refinement order");

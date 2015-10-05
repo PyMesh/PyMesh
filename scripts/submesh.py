@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Extract a subset of faces of the input mesh.
+"""
+
 import argparse
 import numpy as np
 import pymesh
@@ -33,8 +37,7 @@ def extract_submesh(mesh, face_indices, n_ring):
     return mesh;
 
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="Exact subset of the faces");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--n-ring", "-n", type=int, default=0,
             help="Expand the selection by n-rings");
     parser.add_argument("input_mesh", help="input mesh");

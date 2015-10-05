@@ -4,9 +4,12 @@ import argparse
 import numpy as np
 import pymesh
 
+"""
+Highlight self-intersecting faces.
+"""
+
 def parse_args():
-    parser = argparse.ArgumentParser(
-            description="highlight intersecting faces");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("input_mesh", help="input mesh");
     parser.add_argument("output_mesh", help="output mesh");
     return parser.parse_args();

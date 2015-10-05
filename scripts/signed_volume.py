@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-This is a simple script to compute the signed volume of an input surface mesh.
+Compute the signed volume of an input surface mesh.
 """
 
 import argparse
@@ -9,7 +9,7 @@ import numpy as np
 import pymesh
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Compute the signed volume");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("input_mesh", help="input mesh");
     return parser.parse_args();
 

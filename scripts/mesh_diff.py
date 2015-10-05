@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""
+Compare two meshes to see if they represent the same volume.
+Warning: this is a Monte-Carlo algorithm.
+"""
+
 import argparse
 import pymesh
 import numpy as np
@@ -23,7 +28,7 @@ def random_sample(bbox_min, bbox_max, num_samples):
     return samples;
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="compare two meshes");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--num-samples", "-n", type=int, default=5,
             help="number of samples");
     parser.add_argument("--tol", type=float, default=1e-6,

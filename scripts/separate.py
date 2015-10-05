@@ -1,11 +1,19 @@
 #!/usr/bin/env python
+
+"""
+Separate/highlight the disconnected components of the input mesh.
+
+Connectivity can be defined as sharing a vertex/edge or face using
+the --connectivity-type option.
+"""
+
 import argparse
 import os.path
 from pymesh import load_mesh, save_mesh
 from pymesh import separate_mesh, merge_meshes
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Wrapper around mesh_cc");
+    parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--force", help="force separation", action="store_true");
     parser.add_argument("--connectivity-type", "-c",
             choices=["auto", "vertex", "face", "voxel"],
