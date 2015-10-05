@@ -21,7 +21,11 @@ def separate_mesh(mesh, connectivity_type="auto"):
             * ``voxel``: Group component based on voxel connectivity.
 
     Returns:
-        A list of meshes, each represent a single connected component.
+        A list of meshes, each represent a single connected component.  Each
+        output component have the following attributes defined:
+
+            * ``ori_vertex_index``: The input vertex index of each output vertex.
+            * ``ori_elem_index``: The input element index of each output element.
     """
     is_voxel_mesh = mesh.num_voxels > 0;
     if connectivity_type == "auto":
@@ -51,12 +55,18 @@ def separate_mesh(mesh, connectivity_type="auto"):
     comp_meshes = [];
     for i in range(num_comps):
         comp = separator.get_component(i);
-        vertices, comp, __ = remove_isolated_vertices_raw(
+        elem_sources = separator.get_sources(i);
+        vertices, comp, info = remove_isolated_vertices_raw(
                 mesh.vertices, comp);
         if is_voxel_mesh:
-            comp_meshes.append(form_mesh(vertices, np.zeros((0, 3)), comp));
+            comp_mesh = form_mesh(vertices, np.zeros((0, 3)), comp);
         else:
-            comp_meshes.append(form_mesh(vertices, comp));
+            comp_mesh = form_mesh(vertices, comp);
+        comp_mesh.add_attribute("ori_vertex_index");
+        comp_mesh.set_attribute("ori_vertex_index", info["ori_vertex_index"]);
+        comp_mesh.add_attribute("ori_elem_index");
+        comp_mesh.set_attribute("ori_elem_index", elem_sources);
+        comp_meshes.append(comp_mesh);
 
     return comp_meshes;
 

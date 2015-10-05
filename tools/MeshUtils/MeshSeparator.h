@@ -25,8 +25,12 @@ class MeshSeparator {
 
         size_t separate();
 
-        MatrixI get_component(size_t i) {
+        MatrixI get_component(size_t i) const {
             return m_components.at(i);
+        }
+
+        VectorI get_sources(size_t i) const {
+            return m_sources.at(i);
         }
 
         void clear();
@@ -37,11 +41,12 @@ class MeshSeparator {
         void compute_face_connectivity();
         void compute_voxel_connectivity();
 
-        MatrixI flood(size_t seed);
+        MatrixI flood(size_t seed, VectorI& sources);
         std::vector<size_t> get_adjacent_element(size_t fi);
 
     private:
         std::vector<MatrixI> m_components;
+        std::vector<VectorI> m_sources;
         MatrixI m_elements;
         std::vector<bool> m_visited;
 

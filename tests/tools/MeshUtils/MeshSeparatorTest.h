@@ -6,6 +6,17 @@
 
 class MeshSeparatorTest : public TestBase {
     protected:
+        void assert_sources_are_correct(
+                const MatrixIr& elements,
+                const MatrixIr& component,
+                const VectorI& sources) {
+            ASSERT_EQ(component.rows(), sources.size());
+            const size_t num_elems = component.rows();
+            for (size_t i=0; i<num_elems; i++) {
+                ASSERT_TRUE((component.row(i).eval().array() ==
+                            elements.row(sources[i]).eval().array()).all());
+            }
+        }
 };
 
 TEST_F(MeshSeparatorTest, single_surface_component) {
@@ -18,6 +29,7 @@ TEST_F(MeshSeparatorTest, single_surface_component) {
 
     auto comp = separator.get_component(0);
     ASSERT_EQ(mesh->get_num_faces(), comp.rows());
+    assert_sources_are_correct(faces, comp, separator.get_sources(0));
 }
 
 TEST_F(MeshSeparatorTest, single_volume_component) {
@@ -31,6 +43,7 @@ TEST_F(MeshSeparatorTest, single_volume_component) {
 
     auto comp = separator.get_component(0);
     ASSERT_EQ(mesh->get_num_voxels(), comp.rows());
+    assert_sources_are_correct(voxels, comp, separator.get_sources(0));
 }
 
 TEST_F(MeshSeparatorTest, vertex_connected) {
@@ -43,10 +56,16 @@ TEST_F(MeshSeparatorTest, vertex_connected) {
     separator.set_connectivity_type(MeshSeparator::VERTEX);
     size_t num_comps = separator.separate();
     ASSERT_EQ(1, num_comps);
+    assert_sources_are_correct(elements,
+            separator.get_component(0), separator.get_sources(0));
 
     separator.set_connectivity_type(MeshSeparator::FACE);
     num_comps = separator.separate();
     ASSERT_EQ(2, num_comps);
+    assert_sources_are_correct(elements,
+            separator.get_component(0), separator.get_sources(0));
+    assert_sources_are_correct(elements,
+            separator.get_component(1), separator.get_sources(1));
 }
 
 TEST_F(MeshSeparatorTest, face_connected) {
@@ -59,10 +78,14 @@ TEST_F(MeshSeparatorTest, face_connected) {
     separator.set_connectivity_type(MeshSeparator::VERTEX);
     size_t num_comps = separator.separate();
     ASSERT_EQ(1, num_comps);
+    assert_sources_are_correct(elements,
+            separator.get_component(0), separator.get_sources(0));
 
     separator.set_connectivity_type(MeshSeparator::FACE);
     num_comps = separator.separate();
     ASSERT_EQ(1, num_comps);
+    assert_sources_are_correct(elements,
+            separator.get_component(0), separator.get_sources(0));
 }
 
 TEST_F(MeshSeparatorTest, voxel_connected) {
@@ -75,8 +98,14 @@ TEST_F(MeshSeparatorTest, voxel_connected) {
     separator.set_connectivity_type(MeshSeparator::VERTEX);
     size_t num_comps = separator.separate();
     ASSERT_EQ(1, num_comps);
+    assert_sources_are_correct(elements,
+            separator.get_component(0), separator.get_sources(0));
 
     separator.set_connectivity_type(MeshSeparator::VOXEL);
     num_comps = separator.separate();
     ASSERT_EQ(2, num_comps);
+    assert_sources_are_correct(elements,
+            separator.get_component(0), separator.get_sources(0));
+    assert_sources_are_correct(elements,
+            separator.get_component(1), separator.get_sources(1));
 }

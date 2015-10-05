@@ -8,9 +8,10 @@ the --connectivity-type option.
 """
 
 import argparse
-import os.path
+import numpy as np
 from pymesh import load_mesh, save_mesh
-from pymesh import separate_mesh, merge_meshes
+from pymesh import separate_mesh
+import os.path
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
@@ -32,13 +33,27 @@ def main():
     comps = separate_mesh(mesh, args.connectivity_type);
 
     if args.highlight:
-        mesh = merge_meshes(comps);
+        if (args.connectivity_type == "face"):
+            comp_indicator = np.zeros(mesh.num_faces);
+        elif (args.connectivity_type == "voxel"):
+            comp_indicator = np.zeros(mesh.num_voxels);
+        elif (mesh.num_voxels > 0):
+            comp_indicator = np.zeros(mesh.num_voxels);
+        else:
+            comp_indicator = np.zeros(mesh.num_faces);
+
+        for i in range(len(comps)):
+            elem_sources = comps[i].get_attribute("ori_elem_index")\
+                    .ravel().astype(int);
+            comp_indicator[elem_sources] = i;
+        mesh.add_attribute("component_index");
+        mesh.set_attribute("component_index", comp_indicator);
         save_mesh(args.mesh_out, mesh, *mesh.get_attribute_names());
     else:
         basename, ext = os.path.splitext(args.mesh_out);
         for i,comp in enumerate(comps):
             filename = "{}_cc{}{}".format(basename, i, ext);
-            save_mesh(filename, comp);
+            save_mesh(filename, comp, *comp.get_attribute_names());
 
 if __name__ == "__main__":
     main();

@@ -17,13 +17,16 @@ size_t MeshSeparator::separate() {
     compute_connectivity();
 
     m_components.clear();
+    m_sources.clear();
     const size_t num_elements = m_elements.rows();
     m_visited = std::vector<bool>(num_elements, false);
 
     for (size_t i=0; i<num_elements; i++) {
         if (m_visited[i]) continue;
-        MatrixI comp_f = flood(i);
+        VectorI sources;
+        MatrixI comp_f = flood(i, sources);
         m_components.push_back(comp_f);
+        m_sources.push_back(sources);
     }
 
     return m_components.size();
@@ -85,7 +88,7 @@ void MeshSeparator::compute_voxel_connectivity() {
     }
 }
 
-MatrixI MeshSeparator::flood(size_t seed) {
+MatrixI MeshSeparator::flood(size_t seed, VectorI& sources) {
     std::queue<size_t> Q;
     Q.push(seed);
     m_visited[seed] = true;
@@ -107,12 +110,14 @@ MatrixI MeshSeparator::flood(size_t seed) {
 
     const size_t vertex_per_element = m_elements.cols();
     MatrixI comp(element_list.size(), vertex_per_element);
+    sources.resize(element_list.size());
     size_t count = 0;
     for (std::list<size_t>::const_iterator itr = element_list.begin();
             itr != element_list.end(); itr++) {
         assert(count < m_elements.rows());
         assert(*itr < m_elements.rows());
         comp.row(count) = m_elements.row(*itr);
+        sources[count] = *itr;
         count++;
     }
     return comp;
@@ -154,6 +159,7 @@ std::vector<size_t> MeshSeparator::get_adjacent_element(size_t index) {
 
 void MeshSeparator::clear() {
     m_components.clear();
+    m_sources.clear();
     m_visited.clear();
     m_connectivity.clear();
 }
