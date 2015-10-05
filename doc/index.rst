@@ -51,7 +51,6 @@ Features:
   ``.mesh`` (`MEDIT <http://www.ann.jussieu.fr/frey/publications/RT-0253.pdf>`_)
   and ``.msh`` (`Gmsh <http://geuz.org/gmsh/doc/texinfo/gmsh.html#File-formats>`_)
   formats.
-  Read support for ``.stl`` files.
 * Support load and save per vertex/face/voxel scalar and vector fields.
 * Local mesh processing such edge collapse/split, duplicated vertex/face removal
   etc.
