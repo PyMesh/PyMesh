@@ -192,16 +192,17 @@ To retrieve the names of all defined attributes for a given mesh::
 
 Saving Mesh:
 ------------
-The following formats are supported for saving meshes: .obj, .off, .ply, .mesh and .msh.
-Saving in .stl format is not supported because `STL files use more disk space and
-stores less information
-<https://medium.com/3d-printing-stories/why-stl-format-is-bad-fea9ecf5e45>`_.  To save a mesh::
+The following formats are supported for saving meshes: .obj, .off, .ply, .mesh,
+.stl and .msh. However, saving in .stl format is strongly discouraged because
+`STL files use more disk space and stores less information
+<https://medium.com/3d-printing-stories/why-stl-format-is-bad-fea9ecf5e45>`_.
+To save a mesh::
 
     >>> pymesh.save_mesh("filename.obj", mesh);
 
-For certain formats (e.g. .ply, .msh), it is possible to save either as an ASCII
-file or a binary file.  By default, PyMesh will always use the binary format.
-To save in ASCII::
+For certain formats (e.g. .ply, .msh, .stl), it is possible to save either as
+an ASCII file or a binary file.  By default, PyMesh will always use the binary
+format. To save in ASCII, just set the ``ascii`` argument::
 
     >>> pymesh.save_mesh("filename.obj", mesh, ascii=True)
 
