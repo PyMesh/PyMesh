@@ -6,7 +6,7 @@
 #include <Core/Exception.h>
 
 void OFFWriter::with_attribute(const std::string& attr_name) {
-    std::cerr << "Error: .obj format does not support attributes." << std::endl;
+    std::cerr << "Error: .off format does not support attributes." << std::endl;
 }
 
 void OFFWriter::write_mesh(Mesh& mesh) {

@@ -20,8 +20,9 @@ class WriterTest : public TestBase {
             return mesh;
         }
 
-        void write_tmp_mesh(const std::string& mesh_file, MeshPtr mesh) {
-            write_mesh(m_tmp_dir + mesh_file, mesh);
+        void write_tmp_mesh(const std::string& mesh_file, MeshPtr mesh,
+                bool in_ascii=false) {
+            write_mesh(m_tmp_dir + mesh_file, mesh, in_ascii);
         }
 
         void write_tmp_mesh_raw(const std::string& mesh_file,
@@ -30,10 +31,11 @@ class WriterTest : public TestBase {
                 VectorI& voxels,
                 size_t dim,
                 size_t vertex_per_face,
-                size_t vertex_per_voxel) {
+                size_t vertex_per_voxel,
+                bool in_ascii=false) {
             write_mesh_raw(m_tmp_dir + mesh_file,
                     vertices, faces, voxels,
-                    dim, vertex_per_face, vertex_per_voxel);
+                    dim, vertex_per_face, vertex_per_voxel, in_ascii);
         }
 
         void remove(const std::string& filename) {
@@ -130,6 +132,26 @@ class WriterTest : public TestBase {
                 throw RuntimeError(err_msg.str());
             }
             return tensor;
+        }
+
+        MeshPtr write_and_load(const std::string& filename, MeshPtr mesh,
+                bool in_ascii=false) {
+            write_tmp_mesh(filename, mesh, in_ascii);
+            MeshPtr r = load_tmp_mesh(filename);
+            remove(filename);
+            return r;
+        }
+
+        MeshPtr write_and_load_raw(const std::string& filename, MeshPtr mesh) {
+            write_tmp_mesh_raw(
+                    filename,
+                    mesh->get_vertices(),
+                    mesh->get_faces(),
+                    mesh->get_voxels(),
+                    mesh->get_dim(),
+                    mesh->get_vertex_per_face(),
+                    mesh->get_vertex_per_voxel());
+            return load_tmp_mesh(filename);
         }
 
     protected:

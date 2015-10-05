@@ -13,6 +13,7 @@
 #include "OBJWriter.h"
 #include "OFFWriter.h"
 #include "PLYWriter.h"
+#include "STLWriter.h"
 
 MeshWriter* MeshWriter::create_writer(const std::string& filename) {
     MeshWriter* writer = NULL;
@@ -27,6 +28,8 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
         writer = new MSHWriter();
     } else if (ext == ".ply") {
         writer = new PLYWriter();
+    } else if (ext == ".stl") {
+        writer = new STLWriter();
     } else {
         std::cerr << "Error: extention (" << ext << ") is not supported"
             << std::endl;

@@ -1,9 +1,10 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "OBJWriter.h"
 
+#include <cassert>
 #include <iostream>
 #include <fstream>
-#include <cassert>
+#include <sstream>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -27,9 +28,10 @@ void OBJWriter::write(
         const VectorI& voxels,
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
     if (vertex_per_face != 3 && vertex_per_face != 4) {
-        std::cerr << "Error: non-triangle non-quad face with "
+        std::stringstream err_msg;
+        err_msg << "OBJ format does not support non-triangle non-quad face with "
             << vertex_per_face << " vertices." << std::endl;
-        throw RuntimeError("Unsupported face type.");
+        throw RuntimeError(err_msg.str());
     }
 
     std::ofstream fout(m_filename.c_str());

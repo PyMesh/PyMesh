@@ -13,6 +13,8 @@
 #include "IO/MSHWriterTest.h"
 #include "IO/PLYParserTest.h"
 #include "IO/PLYWriterTest.h"
+#include "IO/STLParserTest.h"
+#include "IO/STLWriterTest.h"
 #include "Math/ZSparseMatrixTest.h"
 #include "Math/MatrixUtilsTest.h"
 #include "Misc/TripletTest.h"

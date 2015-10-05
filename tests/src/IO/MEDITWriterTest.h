@@ -7,25 +7,6 @@
 #include "WriterTest.h"
 
 class MEDITWriterTest : public WriterTest {
-    protected:
-        MeshPtr write_and_load(const std::string& filename, MeshPtr mesh) {
-            write_tmp_mesh(filename, mesh);
-            MeshPtr r = load_tmp_mesh(filename);
-            remove(filename);
-            return r;
-        }
-
-        MeshPtr write_and_load_raw(const std::string& filename, MeshPtr mesh) {
-            write_tmp_mesh_raw(
-                    filename,
-                    mesh->get_vertices(),
-                    mesh->get_faces(),
-                    mesh->get_voxels(),
-                    mesh->get_dim(),
-                    mesh->get_vertex_per_face(),
-                    mesh->get_vertex_per_voxel());
-            return load_tmp_mesh(filename);
-        }
 };
 
 TEST_F(MEDITWriterTest, EmptyMesh) {

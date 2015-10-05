@@ -48,8 +48,10 @@ class TestBase : public ::testing::Test {
                     vertices.cols(), faces.cols(), voxels.cols());
         }
 
-        virtual void write_mesh(const std::string& mesh_file, MeshPtr mesh) {
+        virtual void write_mesh(const std::string& mesh_file, MeshPtr mesh,
+                bool in_ascii=false) {
             MeshWriter::Ptr writer = MeshWriter::create(mesh_file);
+            if (in_ascii) writer->in_ascii();
             writer->write_mesh(*mesh);
         }
 
@@ -57,8 +59,10 @@ class TestBase : public ::testing::Test {
                 const Eigen::Ref<const VectorF>& vertices,
                 const Eigen::Ref<const VectorI>& faces,
                 const Eigen::Ref<const VectorI>& voxels,
-                size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
+                size_t dim, size_t vertex_per_face, size_t vertex_per_voxel,
+                bool in_ascii=false) {
             MeshWriter::Ptr writer = MeshWriter::create(mesh_file);
+            if (in_ascii) writer->in_ascii();
             writer->write(vertices, faces, voxels,
                     dim, vertex_per_face, vertex_per_voxel);
         }
@@ -66,24 +70,26 @@ class TestBase : public ::testing::Test {
         virtual void write_mesh_raw(const std::string& mesh_file,
                 const Eigen::Ref<const MatrixFr>& vertices,
                 const Eigen::Ref<const MatrixIr>& faces,
-                const Eigen::Ref<const MatrixIr>& voxels) {
+                const Eigen::Ref<const MatrixIr>& voxels,
+                bool in_ascii=false) {
             auto flattened_vertices = MatrixUtils::flatten<VectorF>(vertices);
             auto flattened_faces = MatrixUtils::flatten<VectorI>(faces);
             auto flattened_voxels = MatrixUtils::flatten<VectorI>(voxels);
             write_mesh_raw(mesh_file,
                     flattened_vertices, flattened_faces, flattened_voxels,
-                    vertices.cols(), faces.cols(), voxels.cols());
+                    vertices.cols(), faces.cols(), voxels.cols(), in_ascii);
         }
 
         virtual void write_mesh_raw(const std::string& mesh_file,
                 const Eigen::Ref<const MatrixFr>& vertices,
-                const Eigen::Ref<const MatrixIr>& faces) {
+                const Eigen::Ref<const MatrixIr>& faces,
+                bool in_ascii=false) {
             auto flattened_vertices = MatrixUtils::flatten<VectorF>(vertices);
             auto flattened_faces = MatrixUtils::flatten<VectorI>(faces);
             VectorI flattened_voxels = VectorI::Zero(0);
             write_mesh_raw(mesh_file,
                     flattened_vertices, flattened_faces, flattened_voxels,
-                    vertices.cols(), faces.cols(), 0);
+                    vertices.cols(), faces.cols(), 0, in_ascii);
         }
 
     protected:

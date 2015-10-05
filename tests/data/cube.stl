@@ -1,0 +1,86 @@
+solid generated with PyMesh
+facet normal 0 0 0
+outer loop
+vertex -1 1 1
+vertex -1 1 -1
+vertex -1 -1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -1 1 -1
+vertex 1 1 -1
+vertex 1 -1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 1 1 -1
+vertex 1 1 1
+vertex 1 -1 1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 1 1 1
+vertex -1 1 1
+vertex -1 -1 1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -1 -1 1
+vertex -1 -1 -1
+vertex 1 -1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 1 1 1
+vertex 1 1 -1
+vertex -1 1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -1 -1 1
+vertex -1 1 1
+vertex -1 -1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -1 -1 -1
+vertex -1 1 -1
+vertex 1 -1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 1 -1 -1
+vertex 1 1 -1
+vertex 1 -1 1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 1 -1 1
+vertex 1 1 1
+vertex -1 -1 1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex 1 -1 1
+vertex -1 -1 1
+vertex 1 -1 -1
+endloop
+endfacet
+facet normal 0 0 0
+outer loop
+vertex -1 1 1
+vertex 1 1 1
+vertex -1 1 -1
+endloop
+endfacet
+endsolid generated with PyMesh

@@ -8,12 +8,6 @@
 
 class PLYWriterTest : public WriterTest {
     protected:
-        MeshPtr write_and_load(const std::string& filename, MeshPtr mesh) {
-            write_tmp_mesh(filename, mesh);
-            MeshPtr r = load_tmp_mesh(filename);
-            remove(filename);
-            return r;
-        }
 };
 
 TEST_F(PLYWriterTest, EmptyMesh) {
