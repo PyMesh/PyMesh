@@ -1,4 +1,5 @@
 from . import PyMeshSetting
+from .timethis import timethis
 
 from numpy.testing import Tester
 test = Tester().test
@@ -23,7 +24,6 @@ from .outerhull import compute_outer_hull
 from .winding_number import compute_winding_number
 from .meshutils import *
 from .misc import *
-from .timethis import timethis
 from . import wires
 
 __all__ = [
