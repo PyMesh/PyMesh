@@ -168,9 +168,16 @@ size_t MeshChecker::get_num_isolated_vertices() const {
     const size_t num_faces = m_faces.rows();
     const size_t vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {
-        const auto& f = m_faces.row(i);
         for (size_t j=0; j<vertex_per_face; j++) {
-            visited[f[j]] = true;
+            visited[m_faces(i,j)] = true;
+        }
+    }
+
+    const size_t num_voxels = m_voxels.rows();
+    const size_t vertex_per_voxel = m_voxels.cols();
+    for (size_t i=0; i<num_voxels; i++) {
+        for (size_t j=0; j<vertex_per_voxel; j++) {
+            visited[m_voxels(i,j)] = true;
         }
     }
     return std::count(visited.begin(), visited.end(), false);
