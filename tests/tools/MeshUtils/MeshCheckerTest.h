@@ -57,7 +57,7 @@ TEST_F(MeshCheckerTest, quad) {
     MeshChecker checker = create(mesh);
     ASSERT_FALSE(checker.is_closed());
     ASSERT_TRUE(checker.is_edge_manifold());
-    ASSERT_THROW(checker.is_vertex_manifold(), NotImplementedError);
+    ASSERT_TRUE(checker.is_vertex_manifold());
     ASSERT_EQ(1, checker.get_euler_characteristic());
     ASSERT_EQ(1, checker.get_num_connected_surface_components());
     ASSERT_EQ(0, checker.get_genus());
@@ -102,5 +102,20 @@ TEST_F(MeshCheckerTest, odd_adj_faces) {
     ASSERT_EQ(1, checker.get_num_duplicated_faces());
     ASSERT_TRUE(checker.has_edge_with_odd_adj_faces());
     ASSERT_FALSE(checker.is_oriented());
+}
+
+TEST_F(MeshCheckerTest, hex) {
+    Mesh::Ptr mesh = load_mesh("hex.msh");
+    MeshChecker checker = create(mesh);
+    ASSERT_TRUE(checker.is_closed());
+    ASSERT_TRUE(checker.is_edge_manifold());
+    ASSERT_TRUE(checker.is_vertex_manifold());
+    ASSERT_EQ(2, checker.get_euler_characteristic());
+    ASSERT_EQ(1, checker.get_num_connected_surface_components());
+    ASSERT_EQ(1, checker.get_num_connected_volume_components());
+    ASSERT_EQ(0, checker.get_genus());
+    ASSERT_EQ(0, checker.get_num_boundary_edges());
+    ASSERT_EQ(0, checker.get_num_boundary_loops());
+    ASSERT_TRUE(checker.is_oriented());
 }
 
