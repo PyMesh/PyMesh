@@ -165,7 +165,7 @@ class WireNetwork(object):
     def get_vertex_neighbors(self, i):
         if not self.raw_wires.with_connectivity():
             self.raw_wires.compute_connectivity();
-        return self.raw_wires.get_vertex_neighbors(i).squeeze();
+        return self.raw_wires.get_vertex_neighbors(i).ravel();
 
     def __initialize_wires(self):
         self.raw_wires.compute_connectivity();
