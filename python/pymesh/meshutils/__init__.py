@@ -13,7 +13,7 @@ from .remove_isolated_vertices import remove_isolated_vertices
 from .remove_isolated_vertices import remove_isolated_vertices_raw
 from .remove_obtuse_triangles import remove_obtuse_triangles
 from .remove_obtuse_triangles import remove_obtuse_triangles_raw
-from .separate_mesh import separate_mesh
+from .separate_mesh import separate_mesh, separate_graph
 from .split_long_edges import split_long_edges
 from .split_long_edges import split_long_edges_raw
 from .face_utils import is_colinear
@@ -40,6 +40,7 @@ __all__ = [
         "remove_obtuse_triangles",
         "remove_obtuse_triangles_raw",
         "separate_mesh",
+        "separate_graph",
         "split_long_edges",
         "split_long_edges_raw",
         ];

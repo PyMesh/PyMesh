@@ -6,7 +6,7 @@
 #include <CGAL/AABB_tree.h>
 #include <CGAL/AABB_traits.h>
 #include <CGAL/AABB_triangle_primitive.h>
-#include <CGAL/Cartesian.h>
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
 #include <cassert>
 #include <vector>
@@ -16,8 +16,9 @@ class AABBTree {
     public:
         typedef std::shared_ptr<AABBTree> Ptr;
 
-        typedef CGAL::Cartesian<Float> K;
+        typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
         typedef K::Point_3 Point;
+        typedef K::Segment_3 Segment;
         typedef K::Triangle_3 Triangle;
 
         typedef std::vector<Triangle> Triangles;
@@ -43,6 +44,26 @@ class AABBTree {
 
             m_tree = std::make_shared<Tree>(m_triangles.begin(), m_triangles.end());
             m_tree->accelerate_distance_queries();
+        }
+
+    public:
+        /**
+         * Determine if each edge intersects the mesh.
+         */
+        VectorI do_intersect_segments(
+                const MatrixFr& vertices, const MatrixIr& edges) {
+            assert(vertices.cols() == m_dim);
+            assert(edges.cols() == 2);
+            const size_t num_edges = edges.rows();
+            VectorI results = VectorI::Zero(num_edges);
+            for (size_t i=0; i<num_edges; i++) {
+                Vector2I e = edges.row(i);
+                const auto p1 = to_cgal_point(vertices.row(e[0]));
+                const auto p2 = to_cgal_point(vertices.row(e[1]));
+                Segment s(p1, p2);
+                results[i] = m_tree->do_intersect(s);
+            }
+            return results;
         }
 
         void look_up(const MatrixFr& points,

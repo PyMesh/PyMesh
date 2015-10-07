@@ -55,7 +55,7 @@ def separate_mesh(mesh, connectivity_type="auto"):
     comp_meshes = [];
     for i in range(num_comps):
         comp = separator.get_component(i);
-        elem_sources = separator.get_sources(i);
+        elem_sources = separator.get_sources(i).ravel();
         vertices, comp, info = remove_isolated_vertices_raw(
                 mesh.vertices, comp);
         if is_voxel_mesh:
@@ -69,4 +69,23 @@ def separate_mesh(mesh, connectivity_type="auto"):
         comp_meshes.append(comp_mesh);
 
     return comp_meshes;
+
+def separate_graph(edges):
+    """ Split graph into disconnected components.
+
+    Args:
+        edges (:class:`numpy.ndarray`): edges of the graph.
+
+    Returns:
+        An array of indices indicating the component each edge belongs to.
+    """
+    separator = MeshSeparator(edges);
+    separator.set_connectivity_type(MeshSeparator.VERTEX);
+    num_comps = separator.separate();
+
+    comp_indices = np.zeros(len(edges));
+    for i in range(num_comps):
+        src_idx = separator.get_sources(i).ravel();
+        comp_indices[src_idx] = i;
+    return comp_indices;
 
