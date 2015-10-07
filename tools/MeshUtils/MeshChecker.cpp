@@ -25,18 +25,32 @@ bool MeshChecker::is_vertex_manifold() const {
     const size_t num_vertices = m_vertices.rows();
     const size_t num_faces = m_faces.rows();
     const size_t vertex_per_face = m_faces.cols();
-    if (vertex_per_face != 3) {
-        std::stringstream err_msg;
-        err_msg << "Vertex manifold check only support triangle mesh";
-        throw NotImplementedError(err_msg.str());
-    }
 
     std::vector<std::vector<VectorI> > opposite_edges(num_vertices);
-    for (size_t i=0; i<num_faces; i++) {
-        const auto& f = m_faces.row(i);
-        opposite_edges[f[0]].push_back(Vector2I(f[1], f[2]));
-        opposite_edges[f[1]].push_back(Vector2I(f[2], f[0]));
-        opposite_edges[f[2]].push_back(Vector2I(f[0], f[1]));
+    if (vertex_per_face == 3) {
+        for (size_t i=0; i<num_faces; i++) {
+            const auto& f = m_faces.row(i);
+            opposite_edges[f[0]].push_back(Vector2I(f[1], f[2]));
+            opposite_edges[f[1]].push_back(Vector2I(f[2], f[0]));
+            opposite_edges[f[2]].push_back(Vector2I(f[0], f[1]));
+        }
+    } else if (vertex_per_face == 4) {
+        for (size_t i=0; i<num_faces; i++) {
+            const auto& f = m_faces.row(i);
+            opposite_edges[f[0]].push_back(Vector2I(f[1], f[2]));
+            opposite_edges[f[0]].push_back(Vector2I(f[2], f[3]));
+            opposite_edges[f[1]].push_back(Vector2I(f[2], f[3]));
+            opposite_edges[f[1]].push_back(Vector2I(f[3], f[0]));
+            opposite_edges[f[2]].push_back(Vector2I(f[3], f[0]));
+            opposite_edges[f[2]].push_back(Vector2I(f[0], f[1]));
+            opposite_edges[f[3]].push_back(Vector2I(f[0], f[1]));
+            opposite_edges[f[3]].push_back(Vector2I(f[1], f[2]));
+        }
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Vertex manifold check does not support face with "
+            << vertex_per_face << " vertices.";
+        throw NotImplementedError(err_msg.str());
     }
 
     for (const auto& entries: opposite_edges) {

@@ -7,8 +7,8 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 
 MeshSeparator::MeshSeparator(const MatrixI& elements)
     : m_elements(elements), m_connectivity_type(VERTEX) { }
@@ -76,15 +76,34 @@ void MeshSeparator::compute_face_connectivity() {
 
 void MeshSeparator::compute_voxel_connectivity() {
     const size_t num_elements= m_elements.rows();
-    if (m_elements.cols() != 4) {
-        throw RuntimeError("Only tetrahedron elements are supported");
-    }
-    for (size_t i=0; i<num_elements; i++) {
-        const auto& voxel = m_elements.row(i);
-        m_connectivity.insert(Connector(voxel[0], voxel[1], voxel[2]), i);
-        m_connectivity.insert(Connector(voxel[1], voxel[2], voxel[3]), i);
-        m_connectivity.insert(Connector(voxel[2], voxel[3], voxel[0]), i);
-        m_connectivity.insert(Connector(voxel[3], voxel[0], voxel[1]), i);
+    const size_t vertex_per_element = m_elements.cols();
+    if (vertex_per_element == 4) {
+        for (size_t i=0; i<num_elements; i++) {
+            const auto& voxel = m_elements.row(i);
+            m_connectivity.insert(Connector(voxel[0], voxel[1], voxel[2]), i);
+            m_connectivity.insert(Connector(voxel[1], voxel[2], voxel[3]), i);
+            m_connectivity.insert(Connector(voxel[2], voxel[3], voxel[0]), i);
+            m_connectivity.insert(Connector(voxel[3], voxel[0], voxel[1]), i);
+        }
+    } else if (vertex_per_element == 8) {
+        for (size_t i=0; i<num_elements; i++) {
+            const auto& voxel = m_elements.row(i);
+            m_connectivity.insert(
+                    Connector(voxel[0], voxel[1], voxel[2], voxel[3]), i);
+            m_connectivity.insert(
+                    Connector(voxel[4], voxel[5], voxel[6], voxel[7]), i);
+            m_connectivity.insert(
+                    Connector(voxel[0], voxel[4], voxel[7], voxel[3]), i);
+            m_connectivity.insert(
+                    Connector(voxel[1], voxel[5], voxel[6], voxel[2]), i);
+            m_connectivity.insert(
+                    Connector(voxel[0], voxel[1], voxel[4], voxel[5]), i);
+            m_connectivity.insert(
+                    Connector(voxel[3], voxel[2], voxel[6], voxel[7]), i);
+        }
+    } else {
+        throw RuntimeError(
+                "Only tetrahedron and hexahedron elements are supported");
     }
 }
 
@@ -144,12 +163,29 @@ std::vector<size_t> MeshSeparator::get_adjacent_element(size_t index) {
             }
             break;
         case VOXEL:
-            for (size_t i=0; i<vertex_per_element; i++) {
-                Connector conn(element[i],
-                        element[(i+1)%vertex_per_element],
-                        element[(i+2)%vertex_per_element]);
-                AdjElements& neighbor = m_connectivity[conn];
-                neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
+            if (vertex_per_element == 4) {
+                for (size_t i=0; i<vertex_per_element; i++) {
+                    Connector conn(element[i],
+                            element[(i+1)%vertex_per_element],
+                            element[(i+2)%vertex_per_element]);
+                    AdjElements& neighbor = m_connectivity[conn];
+                    neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
+                }
+            } else if (vertex_per_element == 8) {
+                Connector connectors[] = {
+                    Connector(element[0], element[1], element[2], element[3]),
+                    Connector(element[4], element[5], element[6], element[7]),
+                    Connector(element[0], element[4], element[7], element[3]),
+                    Connector(element[1], element[5], element[6], element[2]),
+                    Connector(element[0], element[1], element[4], element[5]),
+                    Connector(element[3], element[2], element[6], element[7])
+                };
+                for (size_t i=0; i<6; i++) {
+                    AdjElements& neighbor = m_connectivity[connectors[i]];
+                    neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
+                }
+            } else {
+                throw RuntimeError("Only tet and hex elements are supported.");
             }
             break;
     }

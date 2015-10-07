@@ -40,8 +40,22 @@ class Multiplet {
         const VectorI& get_ori_data() const { return m_ori_data; }
 
         int hash() const {
-            throw NotImplementedError(
-                    "Hash computation is not supported for Multiplet.");
+            if (m_data.size() != 4) {
+                throw NotImplementedError(
+                        "Hash computation is not supported for Multiplet.");
+            }
+            const int primes[] = {
+                // Magic primes from http://planetmath.org/goodhashtableprimes
+                402653189,
+                805306457,
+                201326611,
+                100663319
+            };
+            int r = (m_data.coeff(0)*primes[0]) ^ 
+                    (m_data.coeff(1)*primes[1]) ^ 
+                    (m_data.coeff(2)*primes[2]) ^ 
+                    (m_data.coeff(3)*primes[3]);
+            return r;
         }
 
     private:

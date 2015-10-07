@@ -4,7 +4,7 @@
 
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 class MeshSeparator {
     public:
@@ -52,8 +52,8 @@ class MeshSeparator {
 
         ConnectivityType m_connectivity_type;
 
-        typedef Triplet Connector;
-        typedef TripletMap<size_t> ConnectorMap;
+        typedef Multiplet Connector;
+        typedef MultipletMap<size_t> ConnectorMap;
         typedef ConnectorMap::ValueType AdjElements;
         ConnectorMap m_connectivity;
 };
