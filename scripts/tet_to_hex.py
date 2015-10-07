@@ -42,6 +42,8 @@ def tet_to_hex(mesh):
 
     out_vertices = np.vstack(out_vertices);
     out_voxels = np.vstack(out_voxels);
+    out_vertices, out_voxels, __ = pymesh.remove_duplicated_vertices_raw(
+            out_vertices, out_voxels);
     mesh = pymesh.form_mesh(out_vertices, None, out_voxels);
     return mesh;
 
