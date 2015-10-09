@@ -115,6 +115,20 @@ class WireNetwork(object):
             if len(self.vertices) == 0:
                 raise RuntimeError("Zero vertices left after trimming.");
 
+    def filter_vertices(self, to_keep):
+        """ Remove all vertices other than the ones marked with to_keep.
+        Edges are updated accordingly.
+        """
+        self.raw_wires.filter_vertices(to_keep);
+        self.__initialize_wires();
+
+    def filter_edges(self, to_keep):
+        """ Remove all edges unless marked with to keep.
+        Vertices are left unchanged.
+        """
+        self.raw_wires.filter_edges(to_keep);
+        self.__initialize_wires();
+
     def compute_symmetry_orbits(self):
         """ Compute the following symmetry orbits:
 
@@ -144,9 +158,9 @@ class WireNetwork(object):
     def has_attribute(self, name):
         return self.raw_wires.has_attribute(name);
 
-    def add_attribute(self, name, value=None):
+    def add_attribute(self, name, value=None, vertex_wise=True):
         if not self.has_attribute(name):
-            self.raw_wires.add_attribute(name);
+            self.raw_wires.add_attribute(name, vertex_wise);
         if value is not None:
             self.raw_wires.set_attribute(name, value);
 
