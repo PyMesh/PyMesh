@@ -170,7 +170,7 @@ bool OBJParser::parse_vertex_line(char* line) {
 }
 
 bool OBJParser::parse_face_line(char* line) {
-    const char WHITE_SPACE[] = " \t\n";
+    const char WHITE_SPACE[] = " \t\n\r";
     char* field = strtok(line, WHITE_SPACE);
     assert(field != NULL);
 

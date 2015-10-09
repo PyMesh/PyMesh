@@ -387,7 +387,7 @@ void MshLoader::parse_unknown_field(std::ifstream& fin,
 
 void MshLoader::eat_white_space(std::ifstream& fin) {
     char next = fin.peek();
-    while (next == '\n' || next == ' ' || next == '\t') {
+    while (next == '\n' || next == ' ' || next == '\t' || next == '\r') {
         fin.get();
         next = fin.peek();
     }
