@@ -75,5 +75,6 @@ setup(
             "scripts/mesh_diff.py",
             "scripts/meshconvert.py",
             "scripts/self_union.py",
+            "scripts/subdivide.py",
             ],
         );
