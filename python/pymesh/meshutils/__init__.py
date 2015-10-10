@@ -19,6 +19,7 @@ from .split_long_edges import split_long_edges_raw
 from .face_utils import is_colinear
 from .face_utils import get_degenerated_faces
 from .face_utils import get_degenerated_faces_raw
+from .subdivide import subdivide
 
 __all__ = [
         "collapse_short_edges",
@@ -43,4 +44,5 @@ __all__ = [
         "separate_graph",
         "split_long_edges",
         "split_long_edges_raw",
+        "subdivide",
         ];
