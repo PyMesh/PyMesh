@@ -24,6 +24,7 @@ from .outerhull import compute_outer_hull
 from .winding_number import compute_winding_number
 from .meshutils import *
 from .misc import *
+from .triangulate import triangulate, retriangulate, retriangulate_raw
 from . import wires
 
 __all__ = [
@@ -40,6 +41,9 @@ __all__ = [
         "detect_self_intersection",
         "compute_outer_hull",
         "timethis",
+        "triangulate",
+        "retriangulate",
+        "retriangulate_raw",
         "wires"
         ];
 __all__ += meshutils.__all__;

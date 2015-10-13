@@ -121,3 +121,6 @@ class TestCase(unittest.TestCase):
     def assert_array_equal(self, array1, array2):
         numpy.testing.assert_array_equal(array1, array2);
 
+    def assert_array_almost_equal(self, array1, array2, decimal=6):
+        numpy.testing.assert_array_almost_equal(array1, array2, decimal);
+
