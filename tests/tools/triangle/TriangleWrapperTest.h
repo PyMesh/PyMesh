@@ -272,7 +272,7 @@ TEST_F(TriangleWrapperTest, refinement) {
         1, 0, 3;
 
     TriangleWrapper tri(input_vertices, input_faces);
-    tri.run(0.25, false, true, true);
+    tri.run(0.25, true, false, true);
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
