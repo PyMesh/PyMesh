@@ -42,7 +42,8 @@ installed using package management softwares for your OS.
 * tetgen_: is needed by tetrahedronization and wire inflation.
 * libigl_: is needed by outer hull, boolean computations and wire inflation.
 * cork_: is used by boolean computation.
-* triangle_: is used by triangulation and 2D wire inflation.
+* triangle_: is used by triangulation and 2D wire inflation (See
+  :doc:`triangle_compilation_note`).
 * qhull_: is used for computing convex hull.
 * Clipper_: is used for 2D boolean operations.
 * Carve_: is not currently used, but its support is on the way.

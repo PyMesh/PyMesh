@@ -6,4 +6,5 @@ Geometry Processing Functions
     self_intersection
     outer_hull
     distance_to_mesh
+    triangulation
 
