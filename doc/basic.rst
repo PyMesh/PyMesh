@@ -64,7 +64,7 @@ Geometry data can be directly accessed::
            ...
            [4, 5, 6]])
 
-    >>> mesh.voxles
+    >>> mesh.voxels
     array([[0, 1, 2, 3],
            ...
            [4, 5, 6, 7]])
