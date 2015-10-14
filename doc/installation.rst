@@ -174,7 +174,7 @@ Install PyMesh:
 
 The output of building PyMesh consists a set of C++ libraries and a python
 module. Installing the C++ library is currently not available.  However,
-installing the python package can be done:
+installing the python package can be done::
 
     ./setup.py build # This an alternative way of calling cmake/make
     ./setup.py install
