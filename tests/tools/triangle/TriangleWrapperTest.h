@@ -258,3 +258,25 @@ TEST_F(TriangleWrapperTest, debug2) {
 
     //save_mesh("triangle_debug_2.obj", vertices, faces);
 }
+
+TEST_F(TriangleWrapperTest, refinement) {
+    MatrixFr input_vertices(4, 3);
+    input_vertices <<
+        -2.077770, 1.136427, 0.0,
+        1.922230, 1.136427, 0.0,
+        -2.077770, -1.122556, 0.0,
+        1.922230, -1.122556, 0.0;
+    MatrixIr input_faces(2, 3);
+    input_faces <<
+        2, 3, 0,
+        1, 0, 3;
+
+    TriangleWrapper tri(input_vertices, input_faces);
+    tri.run(0.25, false, true, true);
+
+    MatrixFr vertices = tri.get_vertices();
+    MatrixIr faces = tri.get_faces();
+
+    ASSERT_LT(0, faces.rows());
+}
+
