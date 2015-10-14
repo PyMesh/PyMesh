@@ -76,5 +76,6 @@ setup(
             "scripts/meshconvert.py",
             "scripts/self_union.py",
             "scripts/subdivide.py",
+            "scripts/retriangulate.py",
             ],
         );
