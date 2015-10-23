@@ -45,7 +45,10 @@ def print_bbox(mesh, info):
         print_red("Cannot compute bbox on empty mesh.");
         return;
     bbox_min, bbox_max = mesh.bbox;
-    print_format = "[{v[0]:^10.6g} {v[1]:^10.6g} {v[2]:^10.6g}]";
+    if mesh.dim == 3:
+        print_format = "[{v[0]:^10.6g} {v[1]:^10.6g} {v[2]:^10.6g}]";
+    elif mesh.dim == 2:
+        print_format = "[{v[0]:^10.6g} {v[1]:^10.6g}]";
     print("bbox_min:  " + print_format.format(v=bbox_min));
     print("bbox_max:  " + print_format.format(v=bbox_max));
     print("bbox_size: " + print_format.format(v=bbox_max - bbox_min));
