@@ -7,6 +7,7 @@
 #include <map>
 
 #include <Mesh.h>
+#include <Core/Exception.h>
 
 typedef std::set<int> IndexSet;
 typedef std::vector<IndexSet> SetArray;
@@ -110,53 +111,130 @@ bool MeshConnectivity::voxel_adjacencies_computed() const {
 void MeshConnectivity::init_vertex_adjacencies(Mesh* mesh) {
     if (vertex_adjacencies_computed()) return;
 
-    size_t num_vertices = mesh->get_num_vertices();
-    size_t num_faces = mesh->get_num_faces();
-    size_t num_voxels = mesh->get_num_voxels();
+    const size_t num_vertices = mesh->get_num_vertices();
+    const size_t num_faces = mesh->get_num_faces();
+    const size_t num_voxels = mesh->get_num_voxels();
+    const size_t vertex_per_face = mesh->get_vertex_per_face();
+    const size_t vertex_per_voxel = mesh->get_vertex_per_voxel();
 
     std::vector<IndexSet> neighbor_vertices(num_vertices);
     std::vector<IndexSet> neighbor_faces(num_vertices);
     std::vector<IndexSet> neighbor_voxels(num_vertices);
 
 
-    for (size_t i=0; i<num_faces; i++) {
-        VectorI face = mesh->get_face(i);
-        assert(face.size() == 3);
-        neighbor_vertices[face[0]].insert(face[1]);
-        neighbor_vertices[face[0]].insert(face[2]);
-        neighbor_vertices[face[1]].insert(face[0]);
-        neighbor_vertices[face[1]].insert(face[2]);
-        neighbor_vertices[face[2]].insert(face[0]);
-        neighbor_vertices[face[2]].insert(face[1]);
+    if (vertex_per_face == 3) {
+        for (size_t i=0; i<num_faces; i++) {
+            VectorI face = mesh->get_face(i);
+            neighbor_vertices[face[0]].insert(face[1]);
+            neighbor_vertices[face[0]].insert(face[2]);
+            neighbor_vertices[face[1]].insert(face[0]);
+            neighbor_vertices[face[1]].insert(face[2]);
+            neighbor_vertices[face[2]].insert(face[0]);
+            neighbor_vertices[face[2]].insert(face[1]);
 
-        neighbor_faces[face[0]].insert(i);
-        neighbor_faces[face[1]].insert(i);
-        neighbor_faces[face[2]].insert(i);
+            neighbor_faces[face[0]].insert(i);
+            neighbor_faces[face[1]].insert(i);
+            neighbor_faces[face[2]].insert(i);
+        }
+    } else if (vertex_per_face == 4) {
+        for (size_t i=0; i<num_faces; i++) {
+            VectorI face = mesh->get_face(i);
+            neighbor_vertices[face[0]].insert(face[1]);
+            neighbor_vertices[face[0]].insert(face[3]);
+            neighbor_vertices[face[1]].insert(face[0]);
+            neighbor_vertices[face[1]].insert(face[2]);
+            neighbor_vertices[face[2]].insert(face[1]);
+            neighbor_vertices[face[2]].insert(face[3]);
+            neighbor_vertices[face[3]].insert(face[0]);
+            neighbor_vertices[face[3]].insert(face[2]);
+
+            neighbor_faces[face[0]].insert(i);
+            neighbor_faces[face[1]].insert(i);
+            neighbor_faces[face[2]].insert(i);
+            neighbor_faces[face[3]].insert(i);
+        }
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Unsupported face with " << vertex_per_face
+            << " vertices per face";
+        throw RuntimeError(err_msg.str());
     }
 
-    for (size_t i=0; i<num_voxels; i++) {
-        VectorI voxel = mesh->get_voxel(i);
-        assert(voxel.size() == 4);
-        neighbor_vertices[voxel[0]].insert(voxel[1]);
-        neighbor_vertices[voxel[0]].insert(voxel[2]);
-        neighbor_vertices[voxel[0]].insert(voxel[3]);
+    if (vertex_per_voxel == 4) {
+        for (size_t i=0; i<num_voxels; i++) {
+            VectorI voxel = mesh->get_voxel(i);
+            neighbor_vertices[voxel[0]].insert(voxel[1]);
+            neighbor_vertices[voxel[0]].insert(voxel[2]);
+            neighbor_vertices[voxel[0]].insert(voxel[3]);
 
-        neighbor_vertices[voxel[1]].insert(voxel[0]);
-        neighbor_vertices[voxel[1]].insert(voxel[2]);
-        neighbor_vertices[voxel[1]].insert(voxel[3]);
+            neighbor_vertices[voxel[1]].insert(voxel[0]);
+            neighbor_vertices[voxel[1]].insert(voxel[2]);
+            neighbor_vertices[voxel[1]].insert(voxel[3]);
 
-        neighbor_vertices[voxel[2]].insert(voxel[0]);
-        neighbor_vertices[voxel[2]].insert(voxel[1]);
-        neighbor_vertices[voxel[2]].insert(voxel[3]);
+            neighbor_vertices[voxel[2]].insert(voxel[0]);
+            neighbor_vertices[voxel[2]].insert(voxel[1]);
+            neighbor_vertices[voxel[2]].insert(voxel[3]);
 
-        neighbor_vertices[voxel[3]].insert(voxel[0]);
-        neighbor_vertices[voxel[3]].insert(voxel[1]);
-        neighbor_vertices[voxel[3]].insert(voxel[2]);
+            neighbor_vertices[voxel[3]].insert(voxel[0]);
+            neighbor_vertices[voxel[3]].insert(voxel[1]);
+            neighbor_vertices[voxel[3]].insert(voxel[2]);
 
-        neighbor_voxels[voxel[0]].insert(i);
-        neighbor_voxels[voxel[1]].insert(i);
-        neighbor_voxels[voxel[2]].insert(i);
-        neighbor_voxels[voxel[3]].insert(i);
+            neighbor_voxels[voxel[0]].insert(i);
+            neighbor_voxels[voxel[1]].insert(i);
+            neighbor_voxels[voxel[2]].insert(i);
+            neighbor_voxels[voxel[3]].insert(i);
+        }
+    } else if (vertex_per_voxel == 8) {
+        for (size_t i=0; i<num_voxels; i++) {
+            VectorI voxel = mesh->get_voxel(i);
+            neighbor_vertices[voxel[0]].insert(voxel[1]);
+            neighbor_vertices[voxel[0]].insert(voxel[3]);
+            neighbor_vertices[voxel[0]].insert(voxel[4]);
+
+            neighbor_vertices[voxel[1]].insert(voxel[0]);
+            neighbor_vertices[voxel[1]].insert(voxel[2]);
+            neighbor_vertices[voxel[1]].insert(voxel[5]);
+
+            neighbor_vertices[voxel[2]].insert(voxel[1]);
+            neighbor_vertices[voxel[2]].insert(voxel[3]);
+            neighbor_vertices[voxel[2]].insert(voxel[6]);
+
+            neighbor_vertices[voxel[3]].insert(voxel[0]);
+            neighbor_vertices[voxel[3]].insert(voxel[2]);
+            neighbor_vertices[voxel[3]].insert(voxel[7]);
+
+            neighbor_vertices[voxel[4]].insert(voxel[0]);
+            neighbor_vertices[voxel[4]].insert(voxel[5]);
+            neighbor_vertices[voxel[4]].insert(voxel[7]);
+
+            neighbor_vertices[voxel[5]].insert(voxel[1]);
+            neighbor_vertices[voxel[5]].insert(voxel[4]);
+            neighbor_vertices[voxel[5]].insert(voxel[6]);
+
+            neighbor_vertices[voxel[6]].insert(voxel[2]);
+            neighbor_vertices[voxel[6]].insert(voxel[5]);
+            neighbor_vertices[voxel[6]].insert(voxel[7]);
+
+            neighbor_vertices[voxel[7]].insert(voxel[3]);
+            neighbor_vertices[voxel[7]].insert(voxel[4]);
+            neighbor_vertices[voxel[7]].insert(voxel[6]);
+
+            neighbor_voxels[voxel[0]].insert(i);
+            neighbor_voxels[voxel[1]].insert(i);
+            neighbor_voxels[voxel[2]].insert(i);
+            neighbor_voxels[voxel[3]].insert(i);
+            neighbor_voxels[voxel[4]].insert(i);
+            neighbor_voxels[voxel[5]].insert(i);
+            neighbor_voxels[voxel[6]].insert(i);
+            neighbor_voxels[voxel[7]].insert(i);
+        }
+    } else {
+        if (num_voxels > 0) {
+            std::stringstream err_msg;
+            err_msg << "Unsupported voxel with " << vertex_per_voxel
+                << " vertices per voxel";
+            throw RuntimeError(err_msg.str());
+        }
     }
 
     set_array_to_adj_list(

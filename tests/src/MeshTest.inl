@@ -81,6 +81,21 @@ void MeshTest::check_vertex_voxel_adjacency(const MeshPtr& mesh) {
     }
 }
 
+void MeshTest::check_vertex_vertex_adjacency_is_symmetric(const MeshPtr& mesh) {
+    mesh->enable_vertex_connectivity();
+    const size_t num_vertices = mesh->get_num_vertices();
+    for (size_t i=0; i<num_vertices; i++) {
+        const VectorI& neighbor_vertices = mesh->get_vertex_adjacent_vertices(i);
+        for (size_t j=0; j<neighbor_vertices.size(); j++) {
+            const VectorI& neighbor_vertices_j = mesh->get_vertex_adjacent_vertices(
+                    neighbor_vertices[j]);
+            std::vector<int> neighbor_vertices_j_vector = to_vector(
+                    neighbor_vertices_j.size(), neighbor_vertices_j.data());
+            ASSERT_THAT(neighbor_vertices_j_vector, Contains(i));
+        }
+    }
+}
+
 void MeshTest::check_face_face_adjacency_is_symmetric(const MeshPtr& mesh) {
     mesh->enable_face_connectivity();
     const size_t num_faces = mesh->get_num_faces();

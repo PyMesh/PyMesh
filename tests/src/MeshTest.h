@@ -15,6 +15,7 @@ class MeshTest : public TestBase {
             m_cube_tet = load_mesh("cube.msh");
             m_square_tri = load_mesh("square_2D.obj");
             m_cube_hex = load_mesh("hex.msh");
+            m_quad = load_mesh("quad.obj");
         }
 
     protected:
@@ -27,6 +28,7 @@ class MeshTest : public TestBase {
         void check_vertex_in_voxel_are_adjacent(const MeshPtr& mesh);
         void check_vertex_face_adjacency(const MeshPtr& mesh);
         void check_vertex_voxel_adjacency(const MeshPtr& mesh);
+        void check_vertex_vertex_adjacency_is_symmetric(const MeshPtr& mesh);
         void check_face_face_adjacency_is_symmetric(const MeshPtr& mesh);
         void check_voxel_voxel_adjacency_is_symmetric(const MeshPtr& mesh);
         void check_face_voxel_adjacency(const MeshPtr& mesh);
@@ -37,6 +39,7 @@ class MeshTest : public TestBase {
         MeshPtr m_cube_tet;
         MeshPtr m_square_tri;
         MeshPtr m_cube_hex;
+        MeshPtr m_quad;
 };
 #include "MeshTest.inl"
 
@@ -226,5 +229,28 @@ TEST_F(MeshTest, VoxelAdjFace) {
     check_voxel_face_adjacency(m_square_tri);
 }
 
+TEST_F(MeshTest, QuadAdj) {
+    m_quad->enable_connectivity();
+    ASSERT_EQ(2, m_quad->get_vertex_adjacent_vertices(0).size());
+    ASSERT_EQ(2, m_quad->get_vertex_adjacent_vertices(1).size());
+    ASSERT_EQ(2, m_quad->get_vertex_adjacent_vertices(2).size());
+    ASSERT_EQ(2, m_quad->get_vertex_adjacent_vertices(3).size());
 
+    check_vertex_vertex_adjacency_is_symmetric(m_quad);
+}
+
+TEST_F(MeshTest, HexAdj) {
+    m_cube_hex->enable_connectivity();
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(0).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(1).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(2).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(3).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(4).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(5).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(6).size());
+    ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(7).size());
+
+    check_face_face_adjacency_is_symmetric(m_cube_hex);
+    check_vertex_vertex_adjacency_is_symmetric(m_cube_hex);
+}
 
