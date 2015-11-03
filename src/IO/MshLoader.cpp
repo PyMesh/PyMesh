@@ -138,8 +138,45 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     fin >> num_elements;
 
     // Tmp storage of elements;
-    std::vector<int> elements;
-    std::vector<int> element_idx;
+    std::vector<int> triangle_element_idx;
+    std::vector<int> triangle_elements;
+    std::vector<int> quad_element_idx;
+    std::vector<int> quad_elements;
+    std::vector<int> tet_element_idx;
+    std::vector<int> tet_elements;
+    std::vector<int> hex_element_idx;
+    std::vector<int> hex_elements;
+
+    auto get_element_storage = [&](int elem_type) -> std::vector<int>* {
+        switch (elem_type) {
+            case 2:
+                return &triangle_elements;
+            case 3:
+                return &quad_elements;
+            case 4:
+                return &tet_elements;
+            case 5:
+                return &hex_elements;
+            default:
+                throw IOError("Unsupported element type encountered");
+        };
+    };
+
+    auto get_element_idx_storage = [&](int elem_type) -> std::vector<int>* {
+        switch (elem_type) {
+            case 2:
+                return &triangle_element_idx;
+            case 3:
+                return &quad_element_idx;
+            case 4:
+                return &tet_element_idx;
+            case 5:
+                return &hex_element_idx;
+            default:
+                throw IOError("Unsupported element type encountered");
+        };
+    };
+
     size_t nodes_per_element;
     int glob_elem_type = -1;
 
@@ -153,15 +190,8 @@ void MshLoader::parse_elements(std::ifstream& fin) {
             fin.read((char*)&num_elems, sizeof(int));
             fin.read((char*)&num_tags, sizeof(int));
             nodes_per_element = num_nodes_per_elem_type(elem_type);
-
-            // check for element type consistency.
-            if (glob_elem_type == -1) {
-                glob_elem_type = elem_type;
-            } else if (glob_elem_type != elem_type) {
-                std::cerr << "Error: all elements must have the same type." << std::endl;
-                throw NOT_IMPLEMENTED;
-                return;
-            }
+            std::vector<int>& elements = *get_element_storage(elem_type);
+            std::vector<int>& element_idx = *get_element_idx_storage(elem_type);
 
             for (size_t i=0; i<num_elems; i++) {
                 int elem_idx;
@@ -195,18 +225,11 @@ void MshLoader::parse_elements(std::ifstream& fin) {
                 fin >> tag;
             }
             nodes_per_element = num_nodes_per_elem_type(elem_type);
+            std::vector<int>& elements = *get_element_storage(elem_type);
+            std::vector<int>& element_idx = *get_element_idx_storage(elem_type);
 
             elem_num -= 1;
             element_idx.push_back(elem_num);
-
-            // check for element type consistency.
-            if (glob_elem_type == -1) {
-                glob_elem_type = elem_type;
-            } else if (glob_elem_type != elem_type) {
-                std::cerr << "Error: all elements must have the same type." << std::endl;
-                throw NOT_IMPLEMENTED;
-                return;
-            }
 
             // Parse node idx.
             for (size_t j=0; j<nodes_per_element; j++) {
@@ -217,23 +240,33 @@ void MshLoader::parse_elements(std::ifstream& fin) {
         }
     }
 
-    // Copy to m_element.
-    m_elements.resize(elements.size());
-    for (size_t i=0; i<element_idx.size(); i++) {
-        for (size_t j=0; j<nodes_per_element; j++) {
-            m_elements[element_idx[i]*nodes_per_element+j] =
-                elements[i*nodes_per_element+j];
+    auto copy_to_array = [&](
+            const std::vector<int>& elements,
+            const int nodes_per_element) {
+        const size_t num_elements = elements.size() / nodes_per_element;
+        if (elements.size() % nodes_per_element != 0) {
+            throw IOError("Parsing elements failed!");
         }
-    }
+        m_elements.resize(elements.size());
+        std::copy(elements.begin(), elements.end(), m_elements.data());
+        m_nodes_per_element = nodes_per_element;
+    };
 
-    m_nodes_per_element = nodes_per_element;
-    if (glob_elem_type != -1) {
-        m_element_type = glob_elem_type;
-    } else if (m_elements.rows() == 0) {
-        // No elements specified, use triangle as element type.
+    if (!tet_elements.empty()) {
+        copy_to_array(tet_elements, 4);
+        m_element_type = 4;
+    } else if (!hex_elements.empty()) {
+        copy_to_array(hex_elements, 8);
+        m_element_type = 5;
+    } else if (!triangle_elements.empty()) {
+        copy_to_array(triangle_elements, 3);
         m_element_type = 2;
+    } else if (!quad_elements.empty()) {
+        copy_to_array(quad_elements, 4);
+        m_element_type = 3;
     } else {
-        throw INVALID_FORMAT;
+        // 0 elements, use triangle by default.
+        m_element_type = 2;
     }
 }
 
