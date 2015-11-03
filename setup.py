@@ -74,6 +74,7 @@ setup(
             "scripts/submesh.py",
             "scripts/mesh_diff.py",
             "scripts/meshconvert.py",
+            "scripts/scale_mesh.py",
             "scripts/self_union.py",
             "scripts/subdivide.py",
             "scripts/retriangulate.py",
