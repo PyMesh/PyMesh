@@ -22,7 +22,7 @@ def main():
             np.zeros((0, mesh.dim)),
             np.zeros((0, mesh.vertex_per_face)));
     result = pymesh.boolean(mesh, empty_mesh, "union", engine="igl");
-    result, __ = pymesh.remove_degenerated_triangles(result, 100);
+    #result, __ = pymesh.remove_degenerated_triangles(result, 100);
     pymesh.save_mesh(args.output_mesh, result);
 
 if __name__ == "__main__":
