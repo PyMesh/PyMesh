@@ -1,17 +1,17 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "IGLSelfIntersectionResolver.h"
 
-#include <igl/cgal/remesh_self_intersections.h>
+#include <igl/copyleft/cgal/remesh_self_intersections.h>
 #include <igl/remove_unreferenced.h>
 
 void IGLSelfIntersectionResolver::run() {
-    igl::cgal::RemeshSelfIntersectionsParam param;
+    igl::copyleft::cgal::RemeshSelfIntersectionsParam param;
     MatrixFr out_vertices;
     MatrixIr out_faces;
     MatrixIr intersecting_face_pairs;
     VectorI unique_vertex_indices;
 
-    igl::cgal::remesh_self_intersections(
+    igl::copyleft::cgal::remesh_self_intersections(
             m_vertices,
             m_faces,
             param,

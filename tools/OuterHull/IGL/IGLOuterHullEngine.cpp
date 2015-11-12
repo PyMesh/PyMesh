@@ -9,8 +9,8 @@
 #include <Math/MatrixUtils.h>
 
 //#include <igl/cgal/outer_hull.h>
-#include <igl/cgal/peel_outer_hull_layers.h>
-#include <igl/cgal/remesh_self_intersections.h>
+#include <igl/copyleft/cgal/peel_outer_hull_layers.h>
+#include <igl/copyleft/cgal/remesh_self_intersections.h>
 #include <igl/remove_unreferenced.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
@@ -30,14 +30,14 @@ namespace IGLOuterHullEngineHelper {
             MatrixE& out_vertices,
             MatrixI& out_faces,
             VectorI& face_sources) {
-        igl::cgal::RemeshSelfIntersectionsParam param;
+        igl::copyleft::cgal::RemeshSelfIntersectionsParam param;
         MatrixIr intersecting_face_pairs;
         VectorI unique_vertex_indices;
 
         MatrixE tmp_vertices;
         MatrixI tmp_faces;
 
-        igl::cgal::remesh_self_intersections(
+        igl::copyleft::cgal::remesh_self_intersections(
                 vertices,
                 faces,
                 param,
@@ -96,6 +96,6 @@ void IGLOuterHullEngine::extract_outer_hull() {
     m_vertices = exact_to_float(V);
 
     // Compute outer hull.
-    igl::cgal::peel_outer_hull_layers(V, F, m_layers, m_face_is_flipped);
+    igl::copyleft::cgal::peel_outer_hull_layers(V, F, m_layers, m_face_is_flipped);
     m_faces = F;
 }
