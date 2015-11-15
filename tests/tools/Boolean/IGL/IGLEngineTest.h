@@ -275,3 +275,14 @@ TEST_F(IGLEngineTest, open_surface) {
 
     // LIBIGL does not handle open surface.
 }
+
+TEST_F(IGLEngineTest, face_source) {
+    MeshPtr mesh = load_mesh("cube.obj");
+    BooleanPtr igl_engine = get_disjoint_setting(mesh);
+    igl_engine->compute_union();
+    VectorI face_sources = igl_engine->get_face_sources();
+    const MatrixIr& faces = igl_engine->get_faces();
+
+    ASSERT_EQ(faces.rows(), face_sources.size());
+    ASSERT_TRUE(face_sources.maxCoeff() < mesh->get_num_faces() * 2);
+}

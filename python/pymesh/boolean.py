@@ -66,5 +66,12 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
                 "Unsupported operations: {}".format(operation));
 
     output_mesh = form_mesh(engine.get_vertices(), engine.get_faces());
+    face_sources = engine.get_face_sources();
+    if len(face_sources) != 0:
+        output_mesh.add_attribute("source_face");
+        output_mesh.set_attribute("source_face", face_sources);
+        output_mesh.add_attribute("source");
+        sources = face_sources < mesh_1.num_faces;
+        output_mesh.set_attribute("source", sources);
     return output_mesh;
 

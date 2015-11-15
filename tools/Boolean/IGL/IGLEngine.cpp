@@ -8,7 +8,7 @@ void IGLEngine::compute_union() {
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
             igl::copyleft::boolean::MESH_BOOLEAN_TYPE_UNION,
-            m_vertices, m_faces);
+            m_vertices, m_faces, m_face_sources);
 }
 
 void IGLEngine::compute_intersection() {
@@ -16,7 +16,7 @@ void IGLEngine::compute_intersection() {
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
             igl::copyleft::boolean::MESH_BOOLEAN_TYPE_INTERSECT,
-            m_vertices, m_faces);
+            m_vertices, m_faces, m_face_sources);
 }
 
 void IGLEngine::compute_difference() {
@@ -24,7 +24,7 @@ void IGLEngine::compute_difference() {
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
             igl::copyleft::boolean::MESH_BOOLEAN_TYPE_MINUS,
-            m_vertices, m_faces);
+            m_vertices, m_faces, m_face_sources);
 }
 
 void IGLEngine::compute_symmetric_difference() {
@@ -32,5 +32,5 @@ void IGLEngine::compute_symmetric_difference() {
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
             igl::copyleft::boolean::MESH_BOOLEAN_TYPE_XOR,
-            m_vertices, m_faces);
+            m_vertices, m_faces, m_face_sources);
 }

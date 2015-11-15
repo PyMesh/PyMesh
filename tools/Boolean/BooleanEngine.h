@@ -33,6 +33,9 @@ class BooleanEngine {
         virtual void compute_intersection() =0;
         virtual void compute_difference() =0;
         virtual void compute_symmetric_difference() =0;
+        virtual VectorI get_face_sources() const {
+            return VectorI::Zero(0);
+        };
 
     protected:
         void remove_duplicated_vertices();

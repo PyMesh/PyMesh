@@ -12,4 +12,11 @@ class IGLEngine : public BooleanEngine {
         virtual void compute_intersection();
         virtual void compute_difference();
         virtual void compute_symmetric_difference();
+
+        virtual VectorI get_face_sources() const {
+            return m_face_sources;
+        }
+
+    private:
+        VectorI m_face_sources;
 };
