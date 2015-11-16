@@ -78,7 +78,7 @@ setup(
             "scripts/self_union.py",
             "scripts/subdivide.py",
             "scripts/retriangulate.py",
-            "scripts/rigit_transform.py",
+            "scripts/rigid_transform.py",
             "scripts/extract_self_intersecting_faces.py",
             ],
         );
