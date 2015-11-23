@@ -26,6 +26,12 @@ bool OBJParser::parse(const std::string& filename) {
     bool success;
     while (!fin.eof()) {
         fin.getline(line, LINE_SIZE);
+        char* continue_char = strchr(line, '\\');
+        while (continue_char != NULL) {
+            fin.getline(continue_char, LINE_SIZE-(continue_char - line + 1));
+            continue_char = strchr(line, '\\');
+        }
+
         switch (line[0]) {
             case 'v':
                 success = parse_vertex_line(line);
