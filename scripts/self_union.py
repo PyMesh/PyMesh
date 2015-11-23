@@ -17,7 +17,7 @@ def parse_args():
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
-    mesh, __ = pymesh.remove_degenerated_triangles(mesh, 100);
+    #mesh, __ = pymesh.remove_degenerated_triangles(mesh, 100);
     empty_mesh = pymesh.form_mesh(
             np.zeros((0, mesh.dim)),
             np.zeros((0, mesh.vertex_per_face)));
