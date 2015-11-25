@@ -1,6 +1,7 @@
 from .collapse_short_edges import collapse_short_edges
 from .collapse_short_edges import collapse_short_edges_raw
 from .generate_box_mesh import generate_box_mesh
+from .generate_icosphere import generate_icosphere
 from .hex_to_tet import hex_to_tet
 from .merge_meshes import merge_meshes
 from .remove_degenerated_triangles import remove_degenerated_triangles
@@ -25,6 +26,7 @@ __all__ = [
         "collapse_short_edges",
         "collapse_short_edges_raw",
         "generate_box_mesh",
+        "generate_icosphere",
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
         "hex_to_tet",
