@@ -38,13 +38,15 @@ void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         Float sq_l1 = e1.squaredNorm();
         Float sq_l2 = e2.squaredNorm();
 
-        Float cot_0 = e2.dot(-e1) / e2.cross(-e1).norm();
-        Float cot_1 = e0.dot(-e2) / e0.cross(-e2).norm();
-        Float cot_2 = e1.dot(-e0) / e1.cross(-e0).norm();
+        Vector3F coeff(
+                sq_l0 * (sq_l1 + sq_l2 - sq_l0),
+                sq_l1 * (sq_l0 + sq_l2 - sq_l1),
+                sq_l2 * (sq_l0 + sq_l1 - sq_l2));
+        coeff /= coeff.sum();
 
         circum_centers.segment(i*dim, dim) =
-            v0 * sq_l0 * cot_0 +
-            v1 * sq_l1 * cot_1 +
-            v2 * sq_l2 * cot_2;
+            v0 * coeff[0] +
+            v1 * coeff[1] +
+            v2 * coeff[2];
     }
 }
