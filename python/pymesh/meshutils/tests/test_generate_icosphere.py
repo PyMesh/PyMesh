@@ -11,7 +11,8 @@ class GenerateIcosphereTest(TestCase):
         dist_to_center = norm(mesh.vertices - center, axis=1);
         self.assertAlmostEqual(1.0, np.amax(dist_to_center));
         self.assertAlmostEqual(1.0, np.amin(dist_to_center));
-        
+        self.assertTrue(mesh.is_oriented());
+
     def test_with_offset(self):
         mesh = generate_icosphere(1.0, center=np.array([1.0, 1.5, -1.0]));
         center = np.average(mesh.bbox, axis=0);
@@ -19,6 +20,7 @@ class GenerateIcosphereTest(TestCase):
         dist_to_center = norm(mesh.vertices - center, axis=1);
         self.assertAlmostEqual(1.0, np.amax(dist_to_center));
         self.assertAlmostEqual(1.0, np.amin(dist_to_center));
+        self.assertTrue(mesh.is_oriented());
 
     def test_with_offset_and_refinement(self):
         mesh = generate_icosphere(1.0, center=np.array([1.0, 1.5, -1.0]),
@@ -29,3 +31,4 @@ class GenerateIcosphereTest(TestCase):
         dist_to_center = norm(mesh.vertices - center, axis=1);
         self.assertAlmostEqual(1.0, np.amax(dist_to_center));
         self.assertAlmostEqual(1.0, np.amin(dist_to_center));
+        self.assertTrue(mesh.is_oriented());

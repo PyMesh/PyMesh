@@ -48,7 +48,7 @@ def generate_icosphere(radius, center, refinement_order=0):
         [3, 2, 6],
         [3, 6, 8],
         [3, 8, 9],
-        [4, 5, 9],
+        [5, 4, 9],
         [2, 4, 11],
         [6, 2, 10],
         [8, 6, 7],
