@@ -12,6 +12,7 @@
 #endif
 #ifdef WITH_CGAL
 #include "CGAL/CGALBooleanEngineTest.h"
+#include "CGAL/CGALCorefinementEngineTest.h"
 #endif
 
 int main(int argc, char** argv) {

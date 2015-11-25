@@ -12,6 +12,7 @@
 #endif 
 #ifdef WITH_CGAL
 #include "CGAL/CGALBooleanEngine.h"
+#include "CGAL/CGALCorefinementEngine.h"
 #endif 
 
 #include <sstream>
@@ -44,6 +45,9 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #endif
 #ifdef WITH_CGAL
     if (engine_name == "cgal") { return Ptr(new CGALBooleanEngine()); }
+    if (engine_name == "corefinement") {
+        return Ptr(new CGALCorefinementEngine());
+    }
 #endif
     engine_not_found(engine_name);
     return Ptr(NULL);
