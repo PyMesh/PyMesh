@@ -152,14 +152,12 @@ def print_self_intersection_info(mesh, info):
         print_red("Self-intersection check does not support empty mesh.");
         return;
 
-    if info["min_face_area"] != 0.0:
-        intersecting_faces = pymesh.detect_self_intersection(mesh);
-        num_intersections = len(intersecting_faces);
-        info["self_intersect"] = num_intersections > 0;
-    else:
-        # Self-intersection would surely occur if any triangle has 0 area.
-        info["self_intersect"] = True;
+    intersecting_faces = pymesh.detect_self_intersection(mesh);
+    num_intersections = len(intersecting_faces);
+    info["self_intersect"] = num_intersections > 0;
+    info["num_self_intersections"] = num_intersections;
     print_property("self intersect", info["self_intersect"], False);
+    print_property("num self intersections", info["num_self_intersections"], 0);
 
 def load_info(mesh_file):
     basename, ext = os.path.splitext(mesh_file);
