@@ -113,31 +113,33 @@ void MshSaver::save_elements(
     fout << "$Elements" << std::endl;
     fout << m_num_elements << std::endl;
 
-    int elem_type = type;
-    int num_elems = m_num_elements;
-    int tags = 0;
-    if (!m_binary) {
-        for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
-            int elem_num = i/nodes_per_element + 1;
-            VectorI elem = elements.segment(i, nodes_per_element) +
-                VectorI::Ones(nodes_per_element);
+    if (m_num_elements > 0) {
+        int elem_type = type;
+        int num_elems = m_num_elements;
+        int tags = 0;
+        if (!m_binary) {
+            for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
+                int elem_num = i/nodes_per_element + 1;
+                VectorI elem = elements.segment(i, nodes_per_element) +
+                    VectorI::Ones(nodes_per_element);
 
-            fout << elem_num << " " << elem_type << " " << tags << " ";
-            for (size_t j=0; j<nodes_per_element; j++) {
-                fout << elem[j] << " ";
+                fout << elem_num << " " << elem_type << " " << tags << " ";
+                for (size_t j=0; j<nodes_per_element; j++) {
+                    fout << elem[j] << " ";
+                }
+                fout << std::endl;
             }
-            fout << std::endl;
-        }
-    } else {
-        fout.write((char*)&elem_type, sizeof(int));
-        fout.write((char*)&num_elems, sizeof(int));
-        fout.write((char*)&tags, sizeof(int));
-        for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
-            int elem_num = i/nodes_per_element + 1;
-            VectorI elem = elements.segment(i, nodes_per_element) +
-                VectorI::Ones(nodes_per_element);
-            fout.write((char*)&elem_num, sizeof(int));
-            fout.write((char*)elem.data(), sizeof(int)*nodes_per_element);
+        } else {
+            fout.write((char*)&elem_type, sizeof(int));
+            fout.write((char*)&num_elems, sizeof(int));
+            fout.write((char*)&tags, sizeof(int));
+            for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
+                int elem_num = i/nodes_per_element + 1;
+                VectorI elem = elements.segment(i, nodes_per_element) +
+                    VectorI::Ones(nodes_per_element);
+                fout.write((char*)&elem_num, sizeof(int));
+                fout.write((char*)elem.data(), sizeof(int)*nodes_per_element);
+            }
         }
     }
     fout << "$EndElements" << std::endl;
