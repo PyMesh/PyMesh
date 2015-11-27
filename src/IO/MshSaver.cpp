@@ -3,13 +3,17 @@
 
 #include <cassert>
 #include <iostream>
+#include <sstream>
+
+#include <Core/Exception.h>
 
 MshSaver::MshSaver(const std::string& filename, bool binary) :
     m_binary(binary), m_num_nodes(0), m_num_elements(0), m_dim(0) {
         fout.open(filename.c_str(), std::fstream::out);
         if (!fout) {
-            std::cerr << "Error opening " << filename << " to write msh file." << std::endl;
-            throw INVALID_FORMAT;
+            std::stringstream err_msg;
+            err_msg << "Error opening " << filename << " to write msh file." << std::endl;
+            throw IOError(err_msg.str());
         }
 }
 
@@ -18,25 +22,126 @@ MshSaver::~MshSaver() {
 }
 
 void MshSaver::save_mesh(const VectorF& nodes, const VectorI& elements,
-        size_t dim, size_t nodes_per_element) {
-    if (nodes_per_element != 3 &&
-            nodes_per_element != 4 &&
-            nodes_per_element != 8) {
-        std::cerr << "Error saving msh: "
-            << "Only triangle, quad, tet and hexahedron elements are supported!" << std::endl;
-        throw NOT_IMPLEMENTED;
-    }
+        size_t dim, MshSaver::ElementType type) {
     if (dim != 2 && dim != 3) {
-        std::cerr << "Only support 2 or 3 dimentional mesh!" << std::endl;
-        throw NOT_IMPLEMENTED;
+        std::stringstream err_msg;
+        err_msg << dim << "D mesh is not supported!" << std::endl;
+        throw NotImplementedError(err_msg.str());
     }
     m_dim = dim;
 
-    if (m_binary) {
-        save_binary_mesh(nodes, elements, nodes_per_element);
+    save_header();
+    save_nodes(nodes);
+    save_elements(elements, type);
+}
+
+void MshSaver::save_header() {
+    if (!m_binary) {
+        fout << "$MeshFormat" << std::endl;
+        fout << "2.2 0 " << sizeof(double) << std::endl;
+        fout << "$EndMeshFormat" << std::endl;
     } else {
-        save_ascii_mesh(nodes, elements, nodes_per_element);
+        fout << "$MeshFormat" << std::endl;
+        fout << "2.2 1 " << sizeof(double) << std::endl;
+        int one = 1;
+        fout.write((char*)&one, sizeof(int));
+        fout << "$EndMeshFormat" << std::endl;
     }
+    fout.flush();
+}
+
+void MshSaver::save_nodes(const VectorF& nodes) {
+    // Save nodes.
+    m_num_nodes = nodes.size() / m_dim;
+    fout << "$Nodes" << std::endl;
+    fout << m_num_nodes << std::endl;
+    if (!m_binary) {
+        for (size_t i=0; i<nodes.size(); i+=m_dim) {
+            const VectorF& v = nodes.segment(i,m_dim);
+            int node_idx = i/m_dim+1;
+            fout << node_idx << " " << v[0] << " " << v[1] << " ";
+            if (m_dim == 2) {
+                fout << 0.0 << std::endl;
+            } else {
+                fout << v[2] << std::endl;
+            }
+        }
+    } else {
+        for (size_t i=0; i<nodes.size(); i+=m_dim) {
+            const VectorF& v = nodes.segment(i,m_dim);
+            int node_idx = i/m_dim+1;
+            fout.write((char*)&node_idx, sizeof(int));
+            fout.write((char*)v.data(), sizeof(Float)*m_dim);
+
+            // for 2D shapes, z coordinate is always 0.
+            if (m_dim == 2) {
+                const Float zero = 0.0;
+                fout.write((char*)&zero, sizeof(Float));
+            }
+        }
+    }
+    fout << "$EndNodes" << std::endl;
+    fout.flush();
+}
+
+void MshSaver::save_elements(
+        const VectorI& elements, MshSaver::ElementType type) {
+    size_t nodes_per_element = 0;
+    switch (type) {
+        case TRI:
+            nodes_per_element = 3;
+            break;
+        case QUAD:
+            nodes_per_element = 4;
+            break;
+        case TET:
+            nodes_per_element = 4;
+            break;
+        case HEX:
+            nodes_per_element = 8;
+            break;
+        default:
+            {
+                std::stringstream err_msg;
+                err_msg << "Unsupported element type " << type;
+                throw NotImplementedError(err_msg.str());
+            }
+    }
+    m_num_elements = elements.size() / nodes_per_element;
+
+    // Save elements.
+    fout << "$Elements" << std::endl;
+    fout << m_num_elements << std::endl;
+
+    int elem_type = type;
+    int num_elems = m_num_elements;
+    int tags = 0;
+    if (!m_binary) {
+        for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
+            int elem_num = i/nodes_per_element + 1;
+            VectorI elem = elements.segment(i, nodes_per_element) +
+                VectorI::Ones(nodes_per_element);
+
+            fout << elem_num << " " << elem_type << " " << tags << " ";
+            for (size_t j=0; j<nodes_per_element; j++) {
+                fout << elem[j] << " ";
+            }
+            fout << std::endl;
+        }
+    } else {
+        fout.write((char*)&elem_type, sizeof(int));
+        fout.write((char*)&num_elems, sizeof(int));
+        fout.write((char*)&tags, sizeof(int));
+        for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
+            int elem_num = i/nodes_per_element + 1;
+            VectorI elem = elements.segment(i, nodes_per_element) +
+                VectorI::Ones(nodes_per_element);
+            fout.write((char*)&elem_num, sizeof(int));
+            fout.write((char*)elem.data(), sizeof(int)*nodes_per_element);
+        }
+    }
+    fout << "$EndElements" << std::endl;
+    fout.flush();
 }
 
 void MshSaver::save_scalar_field(const std::string& fieldname, const VectorF& field) {
@@ -256,127 +361,5 @@ void MshSaver::save_elem_tensor_field(const std::string& fieldname, const Vector
     }
 
     fout << "$EndElementData" << std::endl;
-    fout.flush();
-}
-
-void MshSaver::save_binary_mesh(const VectorF& nodes, const VectorI& elements,
-        size_t nodes_per_element) {
-    m_num_nodes = nodes.size() / m_dim;
-    m_num_elements = elements.size() / nodes_per_element;
-
-    fout << "$MeshFormat" << std::endl;
-    fout << "2.2 1 " << sizeof(double) << std::endl;
-    int one = 1;
-    fout.write((char*)&one, sizeof(int));
-    fout << "$EndMeshFormat" << std::endl;
-
-    // Save nodes.
-    fout << "$Nodes" << std::endl;
-    fout << m_num_nodes << std::endl;
-    for (size_t i=0; i<nodes.size(); i+=m_dim) {
-        const VectorF& v = nodes.segment(i,m_dim);
-        int node_idx = i/m_dim+1;
-        fout.write((char*)&node_idx, sizeof(int));
-        fout.write((char*)v.data(), sizeof(Float)*m_dim);
-
-        // for 2D shapes, z coordinate is always 0.
-        if (m_dim == 2) {
-            const Float zero = 0.0;
-            fout.write((char*)&zero, sizeof(Float));
-        }
-    }
-    fout << "$EndNodes" << std::endl;
-
-    // Save elements.
-    fout << "$Elements" << std::endl;
-    fout << m_num_elements << std::endl;
-
-    if (m_num_elements > 0) {
-        int elem_type = 0;
-        if (nodes_per_element == 3) {
-            elem_type = 2;
-        } else if (m_dim == 2 && nodes_per_element == 4) {
-            elem_type = 3;
-        } else if (m_dim == 3 && nodes_per_element == 4) {
-            elem_type = 4;
-        } else if (nodes_per_element == 8) {
-            elem_type = 5;
-        } else {
-            assert(false);
-        }
-
-        int num_elems = m_num_elements;
-        int tags = 0;
-        fout.write((char*)&elem_type, sizeof(int));
-        fout.write((char*)&num_elems, sizeof(int));
-        fout.write((char*)&tags, sizeof(int));
-        for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
-            int elem_num = i/nodes_per_element + 1;
-            VectorI elem = elements.segment(i, nodes_per_element) +
-                VectorI::Ones(nodes_per_element);
-            fout.write((char*)&elem_num, sizeof(int));
-            fout.write((char*)elem.data(), sizeof(int)*nodes_per_element);
-        }
-    }
-    fout << "$EndElements" << std::endl;
-    fout.flush();
-}
-
-void MshSaver::save_ascii_mesh(const VectorF& nodes, const VectorI& elements,
-        size_t nodes_per_element) {
-    m_num_nodes = nodes.size() / m_dim;
-    m_num_elements = elements.size() / nodes_per_element;
-
-    fout << "$MeshFormat" << std::endl;
-    fout << "2.2 0 " << sizeof(double) << std::endl;
-    fout << "$EndMeshFormat" << std::endl;
-
-    // Save nodes.
-    fout << "$Nodes" << std::endl;
-    fout << m_num_nodes << std::endl;
-    for (size_t i=0; i<nodes.size(); i+=m_dim) {
-        const VectorF& v = nodes.segment(i,m_dim);
-        int node_idx = i/m_dim+1;
-        fout << node_idx << " " << v[0] << " " << v[1] << " ";
-        if (m_dim == 2) {
-            fout << 0.0 << std::endl;
-        } else {
-            fout << v[2] << std::endl;
-        }
-    }
-    fout << "$EndNodes" << std::endl;
-
-    // Save elements.
-    fout << "$Elements" << std::endl;
-    fout << m_num_elements << std::endl;
-
-    int elem_type = 0;
-    if (nodes_per_element == 3) {
-        elem_type = 2;
-    } else if (m_dim == 2 && nodes_per_element == 4) {
-        elem_type = 3;
-    } else if (m_dim == 3 && nodes_per_element == 4) {
-        elem_type = 4;
-    } else if (nodes_per_element == 8) {
-        elem_type = 5;
-    } else {
-        assert(false);
-    }
-
-    int num_elems = m_num_elements;
-    int tags = 0;
-    for (size_t i=0; i<elements.size(); i+=nodes_per_element) {
-        int elem_num = i/nodes_per_element + 1;
-        VectorI elem = elements.segment(i, nodes_per_element) +
-            VectorI::Ones(nodes_per_element);
-
-        fout << elem_num << " " << elem_type << " " << tags << " ";
-        for (size_t j=0; j<nodes_per_element; j++) {
-            fout << elem[j] << " ";
-        }
-        fout << std::endl;
-    }
-    fout << "$EndElements" << std::endl;
-
     fout.flush();
 }

@@ -31,6 +31,38 @@ namespace MSHWriterHelper {
             }
         }
     }
+
+    MshSaver::ElementType get_face_type(size_t vertex_per_face) {
+        MshSaver::ElementType type;
+        switch (vertex_per_face) {
+            case 3:
+                type = MshSaver::TRI;
+                break;
+            case 4:
+                type = MshSaver::QUAD;
+                break;
+            default:
+                throw NotImplementedError("Unsupported face type");
+                break;
+        }
+        return type;
+    }
+
+    MshSaver::ElementType get_voxel_type(size_t vertex_per_voxel) {
+        MshSaver::ElementType type;
+        switch (vertex_per_voxel) {
+            case 4:
+                type = MshSaver::TET;
+                break;
+            case 8:
+                type = MshSaver::HEX;
+                break;
+            default:
+                throw NotImplementedError("Unsupported voxel type");
+                break;
+        }
+        return type;
+    }
 }
 
 using namespace MSHWriterHelper;
@@ -50,10 +82,13 @@ void MSHWriter::write_mesh(Mesh& mesh) {
 void MSHWriter::write(const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
     MshSaver saver(m_filename, !m_in_ascii);
+    MshSaver::ElementType type;
     if (voxels.size() == 0) {
-        write_geometry(saver, vertices, faces, dim, vertex_per_face);
+        type = get_face_type(vertex_per_face);
+        saver.save_mesh(vertices, faces, dim, type);
     } else {
-        write_geometry(saver, vertices, voxels, dim, vertex_per_voxel);
+        type = get_voxel_type(vertex_per_voxel);
+        saver.save_mesh(vertices, voxels, dim, type);
     }
     if (m_attr_names.size() != 0) {
         std::cerr << "Warning: all attributes are ignored." << std::endl;
@@ -69,11 +104,8 @@ void MSHWriter::write_surface_mesh(Mesh& mesh) {
     size_t num_faces = mesh.get_num_faces();
     size_t vertex_per_face = mesh.get_vertex_per_face();
 
-    write_geometry(saver,
-            mesh.get_vertices(),
-            mesh.get_faces(),
-            dim,
-            vertex_per_face);
+    saver.save_mesh(mesh.get_vertices(), mesh.get_faces(), dim,
+            get_face_type(vertex_per_face));
 
     for (AttrNames::const_iterator itr = m_attr_names.begin();
             itr != m_attr_names.end(); itr++) {
@@ -96,11 +128,8 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
     size_t num_voxels = mesh.get_num_voxels();
     size_t vertex_per_voxel = mesh.get_vertex_per_voxel();
 
-    write_geometry(saver,
-            mesh.get_vertices(),
-            mesh.get_voxels(),
-            dim,
-            vertex_per_voxel);
+    saver.save_mesh(mesh.get_vertices(), mesh.get_voxels(), dim,
+            get_voxel_type(vertex_per_voxel));
 
     for (AttrNames::const_iterator itr = m_attr_names.begin();
             itr != m_attr_names.end(); itr++) {
@@ -113,14 +142,6 @@ void MSHWriter::write_volume_mesh(Mesh& mesh) {
         VectorF& attr = mesh.get_attribute(*itr);
         write_attribute(saver, *itr, attr, dim, num_vertices, num_voxels);
     }
-}
-
-void MSHWriter::write_geometry(MshSaver& saver, const VectorF& vertices,
-        const VectorI& elements, size_t dim, size_t vertex_per_element) {
-    //if (dim == 3 && vertex_per_element == 4) {
-    //    correct_tet_orientation(vertices, elements);
-    //}
-    saver.save_mesh(vertices, elements, dim, vertex_per_element);
 }
 
 void MSHWriter::write_attribute(MshSaver& saver, const std::string& name,
@@ -147,7 +168,3 @@ void MSHWriter::write_attribute(MshSaver& saver, const std::string& name,
         std::cerr << err_msg.str() << std::endl;
     }
 }
-
-
-
-

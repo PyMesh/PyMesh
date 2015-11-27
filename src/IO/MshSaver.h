@@ -12,8 +12,20 @@ class MshSaver {
         ~MshSaver();
 
     public:
+        // Only these element types are supported.
+        enum ElementType {
+            TRI = 2,
+            QUAD = 3,
+            TET = 4,
+            HEX = 5
+        };
+
+    public:
         void save_mesh(const VectorF& nodes, const VectorI& elements,
-                size_t dim, size_t nodes_per_element);
+                size_t dim, ElementType type);
+        void save_header();
+        void save_nodes(const VectorF& nodes);
+        void save_elements(const VectorI& elements, ElementType type);
         void save_scalar_field(const std::string& fieldname, const VectorF& field);
         void save_vector_field(const std::string& fieldname, const VectorF& field);
         void save_elem_scalar_field(const std::string& fieldname, const VectorF& field);
@@ -25,12 +37,6 @@ class MshSaver {
             INVALID_FORMAT,
             NOT_IMPLEMENTED
         };
-
-    private:
-        void save_ascii_mesh(const VectorF& nodes, const VectorI& elements,
-                size_t nodes_per_element);
-        void save_binary_mesh(const VectorF& nodes, const VectorI& elements,
-                size_t nodes_per_element);
 
     private:
         bool m_binary;

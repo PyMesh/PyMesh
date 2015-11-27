@@ -26,8 +26,6 @@ class MSHWriter : public MeshWriter {
     private:
         void write_volume_mesh(Mesh& mesh);
         void write_surface_mesh(Mesh& mesh);
-        void write_geometry(MshSaver& saver, const VectorF& vertices,
-                const VectorI& elements, size_t dim, size_t vertex_per_element);
         void write_attribute(MshSaver& saver, const std::string& name,
                 VectorF& value, size_t dim, size_t num_vertices, size_t num_elements);
 
