@@ -177,7 +177,8 @@ def print_self_intersection_info(mesh, info):
     info["self_intersect"] = num_intersections > 0;
     info["num_self_intersections"] = num_intersections;
     print_property("self intersect", info["self_intersect"], False);
-    print_property("num self intersections", info["num_self_intersections"], 0);
+    if num_intersections > 0:
+        print_property("num self intersections", num_intersections, 0);
 
 def load_info(mesh_file):
     basename, ext = os.path.splitext(mesh_file);
