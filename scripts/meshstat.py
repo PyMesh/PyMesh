@@ -114,7 +114,13 @@ def print_extended_info(mesh, info):
         num_v_cc = 0;
     isolated_vertices = mesh.num_isolated_vertices;
     duplicated_faces = mesh.num_duplicated_faces;
-    num_degenerated = len(pymesh.get_degenerated_faces(mesh));
+
+    degenerated_faces = mesh.faces[pymesh.get_degenerated_faces(mesh)];
+    num_degenerated = len(degenerated_faces);
+    combinatorially_degenerated_faces = \
+            [len(set(f)) == len(f) for f in degenerated_faces];
+    num_combinatorial_degenerated_faces =\
+            len(combinatorially_degenerated_faces);
 
     print_property("num connected components", num_cc);
     print_property("num connected surface components", num_f_cc);
@@ -124,6 +130,10 @@ def print_extended_info(mesh, info):
     print_property("num boundary edges", mesh.num_boundary_edges);
     print_property("num boundary loops", mesh.num_boundary_loops);
     print_property("num degenerated faces", num_degenerated, 0)
+    print_property("  combinatorially degenerated",
+            num_combinatorial_degenerated_faces, 0);
+    print_property("  geometrically degenerated",
+            num_degenerated - num_combinatorial_degenerated_faces, 0);
 
     info["num_connected_components"] = num_cc;
     info["num_connected_surface_components"] = num_f_cc;
@@ -133,6 +143,10 @@ def print_extended_info(mesh, info):
     info["num_boundary_edges"] = mesh.num_boundary_edges;
     info["num_boundary_loops"] = mesh.num_boundary_loops;
     info["num_degenerated_faces"] = num_degenerated;
+    info["num_combinatorial_degenerated_faces"] =\
+            num_combinatorial_degenerated_faces;
+    info["num_geometrical_degenerated_faces"] =\
+            num_degenerated - num_combinatorial_degenerated_faces;
 
     is_closed = mesh.is_closed();
     is_edge_manifold = mesh.is_edge_manifold();
