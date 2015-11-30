@@ -48,8 +48,8 @@ def main():
             if e[1] == f[2] and e[0] == f[0]:
                 count-=1;
         if count != 0:
-            non_oriented_vertices[f[0]] = 1;
-            non_oriented_vertices[f[1]] = 1;
+            non_oriented_vertices[e[0]] = 1;
+            non_oriented_vertices[e[1]] = 1;
 
     mesh.add_attribute("non_oriented");
     mesh.set_attribute("non_oriented", non_oriented_vertices);

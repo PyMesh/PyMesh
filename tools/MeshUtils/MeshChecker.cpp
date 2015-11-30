@@ -92,15 +92,12 @@ bool MeshChecker::is_oriented() const {
             for (size_t i=0; i<num_vertex_per_face; i++) {
                 if (f[i] == e[0] && f[(i+1)%num_vertex_per_face] == e[1]) {
                     consistent_count++;
-                    break;
                 } else if (f[i] == e[1] &&
                         f[(i+1)%num_vertex_per_face] == e[0]) {
                     consistent_count--;
-                    break;
                 }
             }
         }
-        if (consistent_count != 0) return false;
     }
     return true;
 }
