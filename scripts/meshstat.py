@@ -115,12 +115,17 @@ def print_extended_info(mesh, info):
     isolated_vertices = mesh.num_isolated_vertices;
     duplicated_faces = mesh.num_duplicated_faces;
 
-    degenerated_faces = mesh.faces[pymesh.get_degenerated_faces(mesh)];
-    num_degenerated = len(degenerated_faces);
-    combinatorially_degenerated_faces = \
-            [len(set(f)) == len(f) for f in degenerated_faces];
-    num_combinatorial_degenerated_faces =\
-            len(combinatorially_degenerated_faces);
+    degenerated_indices = pymesh.get_degenerated_faces(mesh);
+    num_degenerated = len(degenerated_indices);
+
+    if num_degenerated > 0:
+        degenerated_faces = mesh.faces[degenerated_indices];
+        combinatorially_degenerated_faces = \
+                [len(set(f)) == len(f) for f in degenerated_faces];
+        num_combinatorial_degenerated_faces =\
+                len(combinatorially_degenerated_faces);
+    else:
+        num_combinatorial_degenerated_faces = 0;
 
     print_property("num connected components", num_cc);
     print_property("num connected surface components", num_f_cc);
