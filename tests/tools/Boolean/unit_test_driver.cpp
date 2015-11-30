@@ -9,6 +9,7 @@
 #endif
 #ifdef WITH_IGL
 #include "IGL/IGLEngineTest.h"
+#include "IGL/IGLCSGTreeTest.h"
 #endif
 #ifdef WITH_CGAL
 #include "CGAL/CGALBooleanEngineTest.h"

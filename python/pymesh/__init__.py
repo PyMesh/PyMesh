@@ -18,6 +18,7 @@ from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
 from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
 from .boolean import boolean
+from .CSGTree import CSGTree
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
 from .outerhull import compute_outer_hull
@@ -37,6 +38,7 @@ __all__ = [
         "distance_to_mesh",
         "do_intersect",
         "boolean",
+        "CSGTree",
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull",

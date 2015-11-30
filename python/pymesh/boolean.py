@@ -6,7 +6,7 @@ def _auto_select_engine(dim):
     if dim == 2:
         engine = "clipper";
     elif dim == 3:
-        engine = "cork";
+        engine = "igl";
     else:
         raise NotImplementedError("Dimension {} is not supported".format(dim));
     return engine;
