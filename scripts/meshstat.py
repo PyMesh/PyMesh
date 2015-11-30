@@ -135,10 +135,11 @@ def print_extended_info(mesh, info):
     print_property("num boundary edges", mesh.num_boundary_edges);
     print_property("num boundary loops", mesh.num_boundary_loops);
     print_property("num degenerated faces", num_degenerated, 0)
-    print_property("  combinatorially degenerated",
-            num_combinatorial_degenerated_faces, 0);
-    print_property("  geometrically degenerated",
-            num_degenerated - num_combinatorial_degenerated_faces, 0);
+    if num_degenerated > 0:
+        print_property("  combinatorially degenerated",
+                num_combinatorial_degenerated_faces, 0);
+        print_property("  geometrically degenerated",
+                num_degenerated - num_combinatorial_degenerated_faces, 0);
 
     info["num_connected_components"] = num_cc;
     info["num_connected_surface_components"] = num_f_cc;
