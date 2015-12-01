@@ -98,6 +98,7 @@ bool MeshChecker::is_oriented() const {
                 }
             }
         }
+        if (consistent_count != 0) return false;
     }
     return true;
 }
