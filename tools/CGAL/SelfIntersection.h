@@ -21,6 +21,9 @@ class SelfIntersection {
         SelfIntersection(const MatrixFr& vertices, const MatrixIr& faces);
 
     public:
+        /**
+         * Detect triangle-triangle intersections for non-degenerated triangles.
+         */
         void detect_self_intersection();
 
         void clear();

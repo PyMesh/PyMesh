@@ -65,6 +65,10 @@ namespace SelfIntersectionHelper {
             const std::vector<SelfIntersection::Point_3> corners{
                 pts[f[0]], pts[f[1]], pts[f[2]]
             };
+            if (CGAL::collinear(pts[f[0]], pts[f[1]], pts[f[2]])) {
+                // Triangle is degenerated.
+                continue;
+            }
             boxes.emplace_back(CGAL::bbox_3(corners.begin(), corners.end()));
             boxes.back().set_id(i);
         }
