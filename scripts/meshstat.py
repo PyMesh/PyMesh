@@ -121,7 +121,7 @@ def print_extended_info(mesh, info):
     if num_degenerated > 0:
         degenerated_faces = mesh.faces[degenerated_indices];
         combinatorially_degenerated_faces = \
-                [len(set(f)) == len(f) for f in degenerated_faces];
+                [f for f in degenerated_faces if len(set(f)) != len(f) ];
         num_combinatorial_degenerated_faces =\
                 len(combinatorially_degenerated_faces);
     else:
