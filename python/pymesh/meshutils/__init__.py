@@ -3,6 +3,7 @@ from .collapse_short_edges import collapse_short_edges_raw
 from .generate_box_mesh import generate_box_mesh
 from .generate_icosphere import generate_icosphere
 from .hex_to_tet import hex_to_tet
+from .quad_to_tri import quad_to_tri
 from .merge_meshes import merge_meshes
 from .remove_degenerated_triangles import remove_degenerated_triangles
 from .remove_degenerated_triangles import remove_degenerated_triangles_raw
@@ -30,6 +31,7 @@ __all__ = [
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
         "hex_to_tet",
+        "quad_to_tri",
         "is_colinear",
         "merge_meshes",
         "remove_degenerated_triangles",

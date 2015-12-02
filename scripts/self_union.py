@@ -7,6 +7,7 @@ Resolve self-intersection and nested shells using self-union.
 import argparse
 import numpy as np
 import pymesh
+import logging
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
@@ -20,6 +21,9 @@ def parse_args():
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
+    if mesh.vertex_per_face == 4:
+        logging.warning("Converting quad mesh to triangle mesh.");
+        mesh = pymesh.quad_to_tri(mesh);
     #mesh, __ = pymesh.remove_degenerated_triangles(mesh, 100);
     if args.engine == "igl":
         empty_mesh = pymesh.form_mesh(
