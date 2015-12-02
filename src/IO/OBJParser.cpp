@@ -26,8 +26,9 @@ bool OBJParser::parse(const std::string& filename) {
     bool success;
     while (!fin.eof()) {
         fin.getline(line, LINE_SIZE);
-        char* continue_char = strchr(line, '\\');
-        while (continue_char != NULL) {
+        char* continue_char = strrchr(line, '\\');
+        while (continue_char != NULL &&
+                (continue_char - line + 1) == strlen(line)) {
             fin.getline(continue_char, LINE_SIZE-(continue_char - line + 1));
             continue_char = strchr(line, '\\');
         }
