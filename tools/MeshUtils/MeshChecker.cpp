@@ -86,19 +86,25 @@ bool MeshChecker::is_oriented() const {
         if (adj.second.size() == 1) continue;
 
         const auto& e = adj.first.get_ori_data();
-        int consistent_count = 0;
-        for (auto fid : adj.second) {
-            VectorI f = m_faces.row(fid);
-            for (size_t i=0; i<num_vertex_per_face; i++) {
-                if (f[i] == e[0] && f[(i+1)%num_vertex_per_face] == e[1]) {
-                    consistent_count++;
-                } else if (f[i] == e[1] &&
-                        f[(i+1)%num_vertex_per_face] == e[0]) {
-                    consistent_count--;
+        if (e[0] == e[1]) {
+            // It is impossible to determine the orientaiton of faces such as
+            // [a, b, b] or [a, a, a].
+            return false;
+        } else {
+            int consistent_count = 0;
+            for (auto fid : adj.second) {
+                VectorI f = m_faces.row(fid);
+                for (size_t i=0; i<num_vertex_per_face; i++) {
+                    if (f[i] == e[0] && f[(i+1)%num_vertex_per_face] == e[1]) {
+                        consistent_count++;
+                    } else if (f[i] == e[1] &&
+                            f[(i+1)%num_vertex_per_face] == e[0]) {
+                        consistent_count--;
+                    }
                 }
             }
+            if (consistent_count != 0) return false;
         }
-        if (consistent_count != 0) return false;
     }
     return true;
 }

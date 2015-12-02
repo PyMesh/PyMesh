@@ -33,6 +33,11 @@ def main():
 
     non_oriented_vertices = np.zeros(mesh.num_vertices);
     for e,faces in edge_faces.iteritems():
+        if e[0] == e[1]:
+            non_oriented_vertices[e[0]] = 1;
+            non_oriented_vertices[e[1]] = 1;
+            continue;
+
         count = 0;
         for f in faces:
             if e[0] == f[0] and e[1] == f[1]:
