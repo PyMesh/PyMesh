@@ -7,6 +7,19 @@ from .generate_box_mesh import split_hex_into_tets, split_hex_into_tets_symmetri
 from .generate_box_mesh import subdivide_hex
 
 def hex_to_tet(mesh, keep_symmetry=False, subdiv_order=0):
+    """
+    Convert hex mesh into tet mesh.
+
+    Args:
+        mesh (:class:`Mesh`): Input hex mesh.
+        keep_symmetry (`boolean`): (optional) Whether to split hex symmetrically
+            into tets.  Default is False.
+        subdiv_order (`int`): (optional) Number of times to subdiv the hex
+            before splitting.  Default is 0.
+
+    Returns:
+        The resulting tet mesh.
+    """
     assert(mesh.num_voxels > 0);
     num_vertices = 0;
     vertices = [];
