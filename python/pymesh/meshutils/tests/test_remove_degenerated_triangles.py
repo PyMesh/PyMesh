@@ -1,12 +1,13 @@
-from pymesh.meshutils import remove_degenerated_triangles
-from pymesh.meshutils import remove_degenerated_triangles_raw
+from pymesh import remove_degenerated_triangles
+from pymesh import remove_degenerated_triangles_raw
+from pymesh import generate_box_mesh
 from pymesh.TestCase import TestCase
 
 import numpy as np
 
 class RemoveDegeneratedTrianglesTest(TestCase):
     def test_no_degeneracy(self):
-        mesh = self.load_mesh("cube.obj");
+        mesh = generate_box_mesh(np.ones(3)*-1, np.ones(3));
 
         result, info = remove_degenerated_triangles(mesh);
         self.assertEqual(8, result.num_vertices);
