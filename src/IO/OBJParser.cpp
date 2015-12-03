@@ -49,6 +49,7 @@ bool OBJParser::parse(const std::string& filename) {
     }
 
     fin.close();
+    unify_faces();
 
     if (m_vertices.size() == 0) {
         m_dim = 3; // default: 3D
@@ -208,14 +209,38 @@ bool OBJParser::parse_face_line(char* line) {
         return false;
     }
 
-    if (m_vertex_per_face != 0 && m_vertex_per_face != i) {
-        throw IOError("Mixing face types (e.g. triangle and quad) is not supported.");
+    if (i != 3 && i != 4) {
+        std::stringstream err_msg;
+        err_msg << "Only triangle and quad are supported in OBJ parsing." <<
+            std::endl;
+        err_msg << "Detecting face with " << i << " vertices!";
+        throw IOError(err_msg.str());
     }
-    m_vertex_per_face = i;
+
     if (i == 3) {
-        m_faces.push_back(Vector3I(idx[0], idx[1], idx[2]));
+        m_tris.push_back(Vector3I(idx[0], idx[1], idx[2]));
     } else if (i == 4) {
-        m_faces.push_back(Vector4I(idx[0], idx[1], idx[2], idx[3]));
+        m_quads.push_back(Vector4I(idx[0], idx[1], idx[2], idx[3]));
     }
     return true;
+}
+
+void OBJParser::unify_faces() {
+    if (m_tris.size() > 0 && m_quads.size() == 0) {
+        m_faces = std::move(m_tris);
+        m_vertex_per_face = 3;
+    } else if (m_tris.size() == 0 && m_quads.size() > 0) {
+        m_faces = std::move(m_quads);
+        m_vertex_per_face = 4;
+    } else if (m_tris.size() > 0 && m_quads.size() > 0){
+        std::cerr << "Mixed triangle and quads in the input file" << std::endl;
+        std::cerr << "Converting quads in triangles, face order is not kept!"
+            << std::endl;
+        m_faces = std::move(m_tris);
+        for (auto& quad : m_quads) {
+            m_faces.push_back(Vector3I(quad[0], quad[1], quad[2]));
+            m_faces.push_back(Vector3I(quad[0], quad[2], quad[3]));
+        }
+        m_vertex_per_face = 3;
+    }
 }

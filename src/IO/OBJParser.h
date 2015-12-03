@@ -40,6 +40,7 @@ class OBJParser : public MeshParser {
         bool attribute_exists(const std::string& name) const;
         bool parse_vertex_line(char* line);
         bool parse_face_line(char* line);
+        void unify_faces();
 
         typedef std::list<VectorF> VertexList;
         typedef std::list<VectorI> FaceList;
@@ -48,6 +49,8 @@ class OBJParser : public MeshParser {
 
         VertexList m_vertices;
         FaceList   m_faces;
+        FaceList   m_tris;
+        FaceList   m_quads;
         VoxelList  m_voxels;
         NormalList m_vertex_normals;
         size_t     m_dim;
