@@ -43,6 +43,8 @@ TEST_F(FaceCircumCenterAttributeTest, 2D) {
     for (size_t i=0; i<num_faces; i++) {
         VectorI face = square->get_face(i);
         VectorF center = circumcenters.segment(i*dim, dim);
+        ASSERT_FLOAT_EQ(0.0, center[0]);
+        ASSERT_FLOAT_EQ(0.0, center[1]);
         assert_equal_dist_to_vertices(center,
                 square->get_vertex(face[0]),
                 square->get_vertex(face[1]),
@@ -66,5 +68,71 @@ TEST_F(FaceCircumCenterAttributeTest, 3D) {
                 cube->get_vertex(face[1]),
                 cube->get_vertex(face[2]));
     }
+}
+
+TEST_F(FaceCircumCenterAttributeTest, equilateral_triangle) {
+    MatrixFr vertices(3, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.5, sqrt(3)*0.5, 0.0;
+
+    MatrixIr faces(1, 3);
+    faces << 0, 1, 2;
+
+    MatrixIr voxels(0, 3);
+
+    MeshPtr mesh = load_data(vertices, faces, voxels);
+    mesh->add_attribute("face_circumcenter");
+    ASSERT_TRUE(mesh->has_attribute("face_circumcenter"));
+    const VectorF circumcenters = mesh->get_attribute("face_circumcenter");
+
+    mesh->add_attribute("face_centroid");
+    const VectorF centroid = mesh->get_attribute("face_centroid");
+
+    ASSERT_EQ(3, circumcenters.size());
+    ASSERT_FLOAT_EQ(centroid[0], circumcenters[0]);
+    ASSERT_FLOAT_EQ(centroid[1], circumcenters[1]);
+    ASSERT_FLOAT_EQ(centroid[2], circumcenters[2]);
+}
+
+TEST_F(FaceCircumCenterAttributeTest, right_triangle) {
+    MatrixFr vertices(3, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                1.0, 1.0, 0.0;
+
+    MatrixIr faces(1, 3);
+    faces << 0, 1, 2;
+
+    MatrixIr voxels(0, 3);
+
+    MeshPtr mesh = load_data(vertices, faces, voxels);
+    mesh->add_attribute("face_circumcenter");
+    ASSERT_TRUE(mesh->has_attribute("face_circumcenter"));
+    const VectorF circumcenters = mesh->get_attribute("face_circumcenter");
+
+    ASSERT_EQ(3, circumcenters.size());
+    ASSERT_FLOAT_EQ(0.5, circumcenters[0]);
+    ASSERT_FLOAT_EQ(0.5, circumcenters[1]);
+    ASSERT_FLOAT_EQ(0.0, circumcenters[2]);
+}
+
+TEST_F(FaceCircumCenterAttributeTest, degenerated_triangle) {
+    MatrixFr vertices(2, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0;
+
+    MatrixIr faces(1, 3);
+    faces << 0, 1, 1;
+
+    MatrixIr voxels(0, 3);
+
+    MeshPtr mesh = load_data(vertices, faces, voxels);
+    mesh->add_attribute("face_circumcenter");
+    ASSERT_TRUE(mesh->has_attribute("face_circumcenter"));
+    const VectorF circumcenters = mesh->get_attribute("face_circumcenter");
+
+    ASSERT_EQ(3, circumcenters.size());
+    ASSERT_TRUE(circumcenters.hasNaN());
 }
 
