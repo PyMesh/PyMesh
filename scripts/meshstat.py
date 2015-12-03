@@ -172,6 +172,10 @@ def print_self_intersection_info(mesh, info):
         print_red("Self-intersection check does not support empty mesh.");
         return;
 
+    if mesh.vertex_per_face == 4:
+        print_red("Converting quad to tri for self-intersection check.");
+        mesh = pymesh.quad_to_tri(mesh);
+
     intersecting_faces = pymesh.detect_self_intersection(mesh);
     num_intersections = len(intersecting_faces);
     info["self_intersect"] = num_intersections > 0;
