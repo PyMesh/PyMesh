@@ -15,8 +15,6 @@ class TestCase(unittest.TestCase):
 
     Attributes:
         pymesh_path: Path to the root directory of the project.
-        data_dir: Test data directory.  Testing data are shared between C++
-            unit tests and pymesh unit tests.
         tmp_dir: Temp data directory for dumping temporary results.  In contrast
             to just using `/tmp`, `tmp_dir` is system independent and works
             even under Windows.
@@ -27,11 +25,9 @@ class TestCase(unittest.TestCase):
         cur_path = os.path.dirname(__file__);
         self.pymesh_path = os.path.join(cur_path, "../../");
         self.pymesh_path = os.path.abspath(self.pymesh_path);
-        self.data_dir = os.path.join(self.pymesh_path, "tests/data/");
         self.tmp_dir = tempfile.gettempdir();
 
         self.assertTrue(os.path.exists(self.pymesh_path));
-        self.assertTrue(os.path.exists(self.data_dir));
 
     def load_mesh(self, filename):
         """ Load mesh from file.
@@ -55,8 +51,6 @@ class TestCase(unittest.TestCase):
                     mesh2 = self.load_mesh(os.path.abspath("./cube.msh"));
 
         """
-        if not os.path.isabs(filename):
-            filename = os.path.join(self.data_dir, filename);
         self.assertTrue(os.path.exists(filename));
         return load_mesh(filename);
 

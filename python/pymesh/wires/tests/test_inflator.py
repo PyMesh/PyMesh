@@ -10,7 +10,7 @@ from numpy.linalg import norm
 
 class InflatorTest(WireTestCase):
     def test_simple(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         wire_network.scale(5);
         inflator = Inflator(wire_network);
         inflator.inflate(0.5);
@@ -21,7 +21,7 @@ class InflatorTest(WireTestCase):
         self.assertTrue(mesh.is_closed());
 
     def test_tiled(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         params = Parameters(wire_network, 0.1);
         tiler = Tiler();
         tiler.set_base_pattern(wire_network);
@@ -39,11 +39,10 @@ class InflatorTest(WireTestCase):
         self.assertTrue(mesh.is_closed());
 
     def test_periodic(self):
-        wire_network = self.load_wires("pattern1065.wire");
+        wire_network = self.get_pattern1065();
         wire_network.scale(5);
 
         params = Parameters(wire_network, 0.5);
-        params.load_dof_file(self.find_file("pattern1065.dof"));
 
         inflator = Inflator(wire_network);
         inflator.subdivide_order = 0;
@@ -55,7 +54,7 @@ class InflatorTest(WireTestCase):
         self.assertTrue(mesh.is_closed());
 
     def test_profile(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         params = Parameters(wire_network, 0.1);
         tiler = Tiler();
         tiler.set_base_pattern(wire_network);

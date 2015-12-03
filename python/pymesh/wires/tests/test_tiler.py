@@ -1,5 +1,6 @@
 import unittest
 import numpy as np
+from pymesh import generate_box_mesh
 from pymesh.wires import WireNetwork
 from pymesh.wires import Tiler
 from pymesh.wires import Parameters
@@ -7,7 +8,7 @@ from WireTestCase import WireTestCase
 
 class TilerTest(WireTestCase):
     def test_tile_with_bbox(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         params = Parameters(wire_network, 0.5);
         bbox_min = np.zeros(3);
         bbox_max = np.ones(3) * 5 * 2;
@@ -30,12 +31,13 @@ class TilerTest(WireTestCase):
                 tiled_wire_network.get_attribute("thickness").ravel());
 
     def test_tile_with_guide_mesh(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         params = Parameters(wire_network, 0.5);
 
         tiler = Tiler(wire_network);
 
-        mesh = self.load_mesh("hex_s1.msh");
+        mesh = generate_box_mesh(np.zeros(3), np.ones(3), subdiv_order=1,
+                using_simplex=False);
 
         tiler = Tiler(wire_network);
         tiler.tile_with_guide_mesh(mesh, params);
@@ -55,16 +57,17 @@ class TilerTest(WireTestCase):
 
     def test_tile_with_mixed_patterns(self):
         wire_networks = [
-                self.load_wires("pattern0746.wire"),
-                self.load_wires("pattern1065.wire"), ];
-        params = [Parameters(wire_networks[0], 0.5),
-                Parameters(wire_networks[1], 0.5)];
+                self.get_brick5(),
+                self.get_cross_3D() ];
+        params = [Parameters(wire_networks[0], 0.1),
+                Parameters(wire_networks[0], 0.0)];
         map(lambda p: p.load_default_isotropic_parameters(), params);
 
         max_num_dofs = max(params[0].num_dofs, params[1].num_dofs);
         pattern_id = np.array([0, 1, 1, 0, 1, 0, 0, 1]);
 
-        mesh = self.load_mesh("hex_s1.msh");
+        mesh = generate_box_mesh(np.zeros(3), np.ones(3), subdiv_order=1,
+                using_simplex=False);
         mesh.add_attribute("pattern_id");
         mesh.set_attribute("pattern_id", pattern_id);
         for i in range(max_num_dofs):
@@ -88,6 +91,6 @@ class TilerTest(WireTestCase):
                 tiled_wire_network.num_edges);
         self.assertEqual(
                 (wire_networks[0].num_vertices +
-                    wire_networks[1].num_vertices) * 4 - 4 * 4 * 3,
+                    wire_networks[1].num_vertices) * 4 - 4 * 3,
                 tiled_wire_network.num_vertices);
 

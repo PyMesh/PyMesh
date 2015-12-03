@@ -7,30 +7,30 @@ from math import sqrt
 
 class WireNetworkTest(WireTestCase):
     def test_creation(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         self.assertEqual(20, wire_network.num_vertices);
         self.assertEqual(30, wire_network.num_edges);
 
     def test_connectivity(self):
-        wire_network = self.load_wires("star_3D.wire");
+        wire_network = self.get_star_3D();
         self.assertEqual(3, wire_network.dim);
         for i in range(8):
             self.assertEqual([8], wire_network.get_vertex_neighbors(i));
         self.assertEqual(range(8), sorted(wire_network.get_vertex_neighbors(8)));
 
     def test_total_length(self):
-        wire_network = self.load_wires("star_2D.wire");
+        wire_network = self.get_star_2D();
         self.assertEqual(2, wire_network.dim);
         self.assertAlmostEqual(2*sqrt(2), wire_network.total_wire_length);
 
     def test_trim(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         wire_network.trim();
         self.assertEqual(14, wire_network.num_vertices);
         self.assertEqual(24, wire_network.num_edges);
 
     def test_2D_wire(self):
-        wire_network = self.load_wires("star_2D.wire");
+        wire_network = self.get_star_2D();
         self.assertEqual(2, wire_network.dim);
         self.assertEqual(5, wire_network.num_vertices);
         self.assertEqual(4, wire_network.num_edges);
@@ -39,7 +39,7 @@ class WireNetworkTest(WireTestCase):
         self.assertListEqual([0.5, 0.5], bbox_center.tolist());
 
     def test_symmetry_orbits(self):
-        wire_network = self.load_wires("brick5.wire");
+        wire_network = self.get_brick5();
         wire_network.compute_symmetry_orbits();
 
         self.assertTrue(wire_network.has_attribute("vertex_symmetry_orbit"));
