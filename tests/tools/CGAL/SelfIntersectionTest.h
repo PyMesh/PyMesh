@@ -83,25 +83,28 @@ TEST_F(SelfIntersectionTest, IdentiticalTriangles) {
 }
 
 TEST_F(SelfIntersectionTest, SingleDegeneratedTriangles) {
+    // Degenerated faces are skipped.
     MatrixI faces(2, 3);
     faces << 0, 3, 3,
              1, 2, 4;
     MatrixIr result = check_self_intersection(m_vertices, faces);
-    ASSERT_EQ(1, result.rows());
+    ASSERT_EQ(0, result.rows());
 }
 
 TEST_F(SelfIntersectionTest, DoubleDegeneratedTriangles) {
+    // Degenerated faces are skipped.
     MatrixI faces(2, 3);
     faces << 0, 5, 5,
              1, 2, 2;
     MatrixIr result = check_self_intersection(m_vertices, faces);
-    ASSERT_EQ(1, result.rows());
+    ASSERT_EQ(0, result.rows());
 }
 
 TEST_F(SelfIntersectionTest, PointLikeTriangles) {
+    // Degenerated faces are skipped.
     MatrixI faces(2, 3);
     faces << 2, 2, 2,
              0, 4, 3;
     MatrixIr result = check_self_intersection(m_vertices, faces);
-    ASSERT_EQ(1, result.rows());
+    ASSERT_EQ(0, result.rows());
 }
