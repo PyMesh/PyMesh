@@ -2,9 +2,9 @@ PyMesh API Reference
 ==============================================
 
 .. toctree::
-    mesh
-    meshio
+    package_mesh
+    package_meshio
     geometry_processing
-    meshutils
-    misc
-    wires
+    package_meshutils
+    package_misc
+    package_wires

@@ -19,8 +19,8 @@ def remove_degenerated_triangles_raw(vertices, faces, num_iterations=5):
             * ``output_faces``: Output face array, one face per row.
             * ``info``: Additional information dict.  The following fields are
               defined:
-                * ``ori_face_indices``: index array that maps each output face
-                  to an input face that contains it.
+            * ``ori_face_indices``: index array that maps each output face
+              to an input face that contains it.
     """
     if (faces.shape[1] != 3):
         raise RuntimeError("Faces are not triangles!");
