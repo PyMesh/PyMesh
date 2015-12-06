@@ -26,6 +26,7 @@ from .winding_number import compute_winding_number
 from .meshutils import *
 from .misc import *
 from .triangulate import triangulate, retriangulate, retriangulate_raw
+from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from . import wires
 
 __all__ = [
@@ -46,6 +47,10 @@ __all__ = [
         "triangulate",
         "retriangulate",
         "retriangulate_raw",
+        "oriented_3D",
+        "oriented_2D",
+        "in_circle",
+        "in_sphere",
         "wires"
         ];
 __all__ += meshutils.__all__;
