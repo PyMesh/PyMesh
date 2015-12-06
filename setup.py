@@ -59,7 +59,7 @@ setup(
             "scripts/extract_self_intersecting_faces.py",
             "scripts/find_file.py",
             "scripts/fix_mesh.py",
-            "scripts/highlight_boundary_edges.py"
+            "scripts/highlight_boundary_edges.py",
             "scripts/highlight_degenerated_faces.py",
             "scripts/highlight_non_oriented_edges.py",
             "scripts/highlight_self_intersection.py",
@@ -73,7 +73,7 @@ setup(
             "scripts/outer_hull.py",
             "scripts/point_cloud.py",
             "scripts/print_utils.py",
-            "scripts/quad_to_try.py",
+            "scripts/quad_to_tri.py",
             "scripts/remove_degenerated_triangles.py",
             "scripts/retriangulate.py",
             "scripts/rigid_transform.py",
