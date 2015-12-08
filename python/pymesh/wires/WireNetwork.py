@@ -1,3 +1,4 @@
+import numbers
 import numpy as np
 from numpy.linalg import norm
 
@@ -82,7 +83,7 @@ class WireNetwork(object):
                 scalar.  If ``factors`` is an array, scale each dimension
                 separately (dimension ``i`` is scaled by factors[i]).
         """
-        if isinstance(factors, (float, int, long)):
+        if isinstance(factors, numbers.Number):
             factors = np.ones(self.dim) * factors;
         self.raw_wires.scale(factors);
 

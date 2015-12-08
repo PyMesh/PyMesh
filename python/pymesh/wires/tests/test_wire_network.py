@@ -16,7 +16,9 @@ class WireNetworkTest(WireTestCase):
         self.assertEqual(3, wire_network.dim);
         for i in range(8):
             self.assertEqual([8], wire_network.get_vertex_neighbors(i));
-        self.assertEqual(range(8), sorted(wire_network.get_vertex_neighbors(8)));
+        self.assert_array_equal(
+                range(8),
+                sorted(wire_network.get_vertex_neighbors(8)));
 
     def test_total_length(self):
         wire_network = self.get_star_2D();

@@ -1,3 +1,4 @@
+import numbers
 import numpy as np
 import logging
 
@@ -67,12 +68,12 @@ class Inflator(object):
             inflator.self_intersection_is_fatal();
 
         if per_vertex_thickness:
-            if isinstance(thickness, (float, int, long)):
+            if isinstance(thickness, numbers.Number):
                 thickness = np.ones(self.wire_network.num_vertices) * thickness;
             assert(len(thickness) == self.wire_network.num_vertices);
             inflator.set_thickness_type(PyWires.VERTEX);
         else:
-            if isinstance(thickness, (float, int, long)):
+            if isinstance(thickness, numbers.Number):
                 thickness = np.ones(self.wire_network.num_edges) * thickness;
             assert(len(thickness) == self.wire_network.num_edges);
             inflator.set_thickness_type(PyWires.EDGE);

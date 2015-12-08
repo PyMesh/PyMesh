@@ -60,8 +60,9 @@ class TilerTest(WireTestCase):
                 self.get_brick5(),
                 self.get_cross_3D() ];
         params = [Parameters(wire_networks[0], 0.1),
-                Parameters(wire_networks[0], 0.0)];
-        map(lambda p: p.load_default_isotropic_parameters(), params);
+                Parameters(wire_networks[1], 0.0)];
+        params[0].load_default_isotropic_parameters();
+        params[1].load_default_isotropic_parameters();
 
         max_num_dofs = max(params[0].num_dofs, params[1].num_dofs);
         pattern_id = np.array([0, 1, 1, 0, 1, 0, 0, 1]);

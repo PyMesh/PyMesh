@@ -30,7 +30,7 @@ class SelfIntersectionTest(TestCase):
         """ Ensure all edges have an even number of adjacent faces.
         """
         edge_adj_faces = self.get_edge_adj_faces(mesh);
-        for e, adj_faces in edge_adj_faces.iteritems():
+        for e, adj_faces in edge_adj_faces.items():
             self.assertEqual(0, len(adj_faces) % 2);
 
     def assert_self_intersect(self, mesh):
