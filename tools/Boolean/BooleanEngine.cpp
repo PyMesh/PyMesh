@@ -14,6 +14,9 @@
 #include "CGAL/CGALBooleanEngine.h"
 #include "CGAL/CGALCorefinementEngine.h"
 #endif 
+#ifdef WITH_CARVE
+#include "Carve/CarveEngine.h"
+#endif 
 
 #include <sstream>
 #include <iostream>
@@ -48,6 +51,9 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
     if (engine_name == "corefinement") {
         return Ptr(new CGALCorefinementEngine());
     }
+#endif
+#ifdef WITH_CARVE
+    if (engine_name == "carve") { return Ptr(new CarveEngine()); }
 #endif
     engine_not_found(engine_name);
     return Ptr(NULL);

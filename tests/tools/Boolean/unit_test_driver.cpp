@@ -15,6 +15,9 @@
 #include "CGAL/CGALBooleanEngineTest.h"
 #include "CGAL/CGALCorefinementEngineTest.h"
 #endif
+#ifdef WITH_CARVE
+#include "Carve/CarveEngineTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

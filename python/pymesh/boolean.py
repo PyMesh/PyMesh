@@ -28,7 +28,7 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
         engine (``string``): (optional) Boolean engine name.  Valid engines include:
 
             * ``auto``: Using the default boolean engine
-              (``cork`` for 3D and ``clipper`` for 2D).  This is the default.
+              (``igl`` for 3D and ``clipper`` for 2D).  This is the default.
             * ``cork``: `Cork 3D boolean libary
               <https://github.com/gilbo/cork>`_
             * ``cgal``: `CGAL 3D boolean operations on Nef Polyhedra
@@ -37,6 +37,8 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
               <https://github.com/libigl/libigl>`_
             * ``clipper``: `Clipper 2D boolean library
               <http://www.angusj.com/delphi/clipper.php>`_
+            * ``carve``: `Carve solid geometry library
+              <https://code.google.com/p/carve/>`_
 
     Returns:
         :class:`Mesh`: The output mesh.

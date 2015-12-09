@@ -5,7 +5,7 @@
 
 class CarveEngine : public BooleanEngine {
     public:
-        virtual ~CarveEngine();
+        virtual ~CarveEngine() {}
 
     public:
         virtual void compute_union();
