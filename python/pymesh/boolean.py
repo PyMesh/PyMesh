@@ -33,6 +33,8 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
               <https://github.com/gilbo/cork>`_
             * ``cgal``: `CGAL 3D boolean operations on Nef Polyhedra
               <http://doc.cgal.org/latest/Nef_3/index.html>`_
+            * ``corefinement``: The undocumented CGAL boolean function that does
+              not use Nef Polyhedra.
             * ``igl``: `libigl's 3D boolean support
               <https://github.com/libigl/libigl>`_
             * ``clipper``: `Clipper 2D boolean library
