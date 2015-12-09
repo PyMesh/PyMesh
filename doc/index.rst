@@ -54,7 +54,7 @@ Features:
 * Support load and save per vertex/face/voxel scalar and vector fields.
 * Local mesh processing such edge collapse/split, duplicated vertex/face removal
   etc.
-* Mesh boolean support from CGAL, Cork Carve, Clipper (2D only) and libigl.
+* Mesh boolean support from CGAL, Cork, Carve, Clipper (2D only) and libigl.
 * Mesh generation support from CGAL, Triangle and Tetgen.
 * Wire network and inflation of wire networks.
 * Finite element matrix assembly. (supports Laplacian, stiffness, mass, etc.)
