@@ -6,11 +6,10 @@ import numpy as np
 
 class MeshIOTest(TestCase):
     def write_and_load(self, mesh, filename,
-            attr_names=[], use_ascii=False):
-        if use_ascii:
-            setting = {"ascii": True};
-        else:
-            setting = {};
+            attr_names=[], use_ascii=False, anonymous=False):
+        setting = {};
+        setting["ascii"] = use_ascii;
+        setting["anonymous"] = anonymous;
 
         filename = self.save_mesh(filename, mesh, *attr_names, **setting);
         mesh2 = self.load_mesh(filename);
@@ -54,4 +53,23 @@ class MeshIOTest(TestCase):
         mesh3 = self.write_and_load(mesh, "cube.msh",
                 attr_names=["vertex_index"], use_ascii=True);
         self.assert_mesh_equal(mesh, mesh3, attr_names=["vertex_index"]);
+
+    def test_anonymous(self):
+        vertices = np.array([
+            [0.0, 0.0, 0.0],
+            [1.0, 0.0, 0.0],
+            [0.0, 1.0, 0.0],
+            ]);
+        faces = np.array([[0, 1, 2]]);
+        mesh = form_mesh(vertices, faces);
+
+        for ext in [".msh", ".obj", ".stl", ".ply", ".mesh", ".off"]:
+            mesh1 = self.write_and_load(mesh,
+                    "anonymous_test{}".format(ext), use_ascii=True,
+                    anonymous=True);
+            self.assert_mesh_equal(mesh, mesh1);
+            mesh2 = self.write_and_load(mesh,
+                    "anonymous_test{}".format(ext), use_ascii=False,
+                    anonymous=True);
+            self.assert_mesh_equal(mesh, mesh2);
 

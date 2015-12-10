@@ -71,7 +71,11 @@ void STLWriter::write_ascii(
     check_mesh(vertices, faces, voxels, dim, vertex_per_face, vertex_per_voxel);
     std::ofstream fout(m_filename.c_str());
     fout.precision(16);
-    fout << "solid generated with PyMesh" << std::endl;
+    if (is_anonymous()) {
+        fout << "solid" << std::endl;
+    } else {
+        fout << "solid generated with PyMesh" << std::endl;
+    }
 
     auto get_vertex = [&](size_t i)->Vector3F {
         Vector3F v(0.0, 0.0, 0.0);
@@ -107,7 +111,9 @@ void STLWriter::write_binary(
     std::ofstream fout(m_filename.c_str());
 
     char header[80];
-    strcpy(header, "Generated with PyMesh");
+    if (!is_anonymous()) {
+        strcpy(header, "Generated with PyMesh");
+    }
     fout.write(header, 80);
 
     auto get_vertex = [&](size_t i)->Vector3F {

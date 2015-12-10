@@ -26,6 +26,7 @@ class MeshWriter {
         static Ptr create(const std::string& filename);
 
     public:
+        MeshWriter() : m_anonymous(false) {}
         virtual ~MeshWriter() {}
 
     public:
@@ -42,6 +43,13 @@ class MeshWriter {
             m_filename = filename;
         }
 
+        /**
+         * Do not indicate PyMesh as the generator.
+         */
+        void set_anonymous() { m_anonymous=true; }
+        bool is_anonymous() const { return m_anonymous; }
+
     protected:
         std::string m_filename;
+        bool m_anonymous;
 };

@@ -36,7 +36,9 @@ void OBJWriter::write(
 
     std::ofstream fout(m_filename.c_str());
     fout.precision(16);
-    fout << "# Generated with PyMesh" << std::endl;
+    if (!is_anonymous()) {
+        fout << "# Generated with PyMesh" << std::endl;
+    }
 
     size_t num_vertices = vertices.size() / dim;
     for (size_t i=0; i<num_vertices; i++) {

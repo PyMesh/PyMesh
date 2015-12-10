@@ -52,7 +52,9 @@ void OFFWriter::write(
     std::ofstream fout(m_filename.c_str());
     fout.precision(16);
     fout << "OFF" << std::endl;
-    fout << "# Generated with PyMesh" << std::endl;
+    if (!is_anonymous()) {
+        fout << "# Generated with PyMesh" << std::endl;
+    }
     fout << num_vertices << " " << num_faces << " 0" << std::endl;
     if (dim == 3) {
         for (size_t i=0; i<num_vertices; i++) {

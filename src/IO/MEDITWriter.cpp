@@ -25,7 +25,9 @@ void MEDITWriter::write(
     fout.precision(16);
     fout << "MeshVersionFormatted 1" << std::endl;
     fout << "Dimension 3" << std::endl;
-    fout << "# Generated with PyMesh" << std::endl;
+    if (!is_anonymous()) {
+        fout << "# Generated with PyMesh" << std::endl;
+    }
 
     write_vertices(fout, vertices, dim);
     write_faces(fout, faces, vertex_per_face);
