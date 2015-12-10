@@ -8,7 +8,9 @@
 #
 # It searches the environment variable $CARVE_PATH automatically.
 
-FIND_PATH(CARVE_INCLUDE_DIRS carve.hpp
+FIND_PATH(CARVE_INCLUDE_DIRS
+    name carve.hpp
+    PATHS
     $ENV{CARVE_PATH}
     $ENV{CARVE_PATH}/include/
     /opt/local/include/
