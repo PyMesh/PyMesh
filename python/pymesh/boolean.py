@@ -2,6 +2,8 @@ import PyBoolean
 import numpy as np
 from .meshio import form_mesh
 
+from . import boolean_unsupported
+
 def _auto_select_engine(dim):
     if dim == 2:
         engine = "clipper";
@@ -52,6 +54,8 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
 
     if engine == "auto":
         _auto_select_engine(dim);
+    elif engine == "quick_csg":
+        return boolean_unsupported.quick_csg(mesh_1, mesh_2, operation);
 
     engine = PyBoolean.BooleanEngine.create(engine);
     engine.set_mesh_1(mesh_1.vertices, mesh_1.faces);
