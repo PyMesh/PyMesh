@@ -168,16 +168,15 @@ def print_extended_info(mesh, info):
     info["edge_manifold"] = is_edge_manifold;
 
 def print_self_intersection_info(mesh, info):
-    if mesh.num_vertices == 0:
-        print_red("Self-intersection check does not support empty mesh.");
-        return;
-
     if mesh.vertex_per_face == 4:
         print_red("Converting quad to tri for self-intersection check.");
         mesh = pymesh.quad_to_tri(mesh);
 
-    intersecting_faces = pymesh.detect_self_intersection(mesh);
-    num_intersections = len(intersecting_faces);
+    if mesh.num_vertices == 0 or mesh.num_faces == 0:
+        num_intersections = 0;
+    else:
+        intersecting_faces = pymesh.detect_self_intersection(mesh);
+        num_intersections = len(intersecting_faces);
     info["self_intersect"] = num_intersections > 0;
     info["num_self_intersections"] = num_intersections;
     print_property("self intersect", info["self_intersect"], False);
