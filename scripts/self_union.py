@@ -27,13 +27,18 @@ def main():
         logging.warning("Converting quad mesh to triangle mesh.");
         mesh = pymesh.quad_to_tri(mesh);
 
-    bbox = mesh.bbox;
-    center = (bbox[0] + bbox[1]) * 0.5;
-    box = pymesh.generate_box_mesh(
-            (bbox[0]-center)*1.1 + center,
-            (bbox[1]-center)*1.1 + center);
-    result = pymesh.boolean(
-            mesh, box, "intersection", engine=args.engine);
+    if mesh.num_vertices ==0 or mesh.num_faces == 0:
+        # Empty input mesh, output empty mesh as well.
+        result = pymesh.form_mesh(np.zeros((0,3),dtype=float),
+                np.zeros((0,3),dtype=int));
+    else:
+        bbox = mesh.bbox;
+        center = (bbox[0] + bbox[1]) * 0.5;
+        box = pymesh.generate_box_mesh(
+                (bbox[0]-center)*1.1 + center,
+                (bbox[1]-center)*1.1 + center);
+        result = pymesh.boolean(
+                mesh, box, "intersection", engine=args.engine);
     pymesh.save_mesh(args.output_mesh, result);
 
 if __name__ == "__main__":
