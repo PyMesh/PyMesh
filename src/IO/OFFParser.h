@@ -40,12 +40,15 @@ class OFFParser : public MeshParser {
         void parse_geometry_counts(char* line);
         void parse_vertex_line(char* line);
         void parse_face_line(char* line);
+        void unify_faces();
         void finalize_colors();
         void export_color(const ColorList& colors, const std::string& name, Float* buffer);
 
     protected:
         VertexList m_vertices;
         FaceList   m_faces;
+        FaceList   m_tris;
+        FaceList   m_quads;
         ColorList  m_vertex_colors;
         ColorList  m_face_colors;
         size_t     m_num_vertices;

@@ -69,9 +69,16 @@ bool OFFParser::parse(const std::string& filename) {
     }
 
     fin.close();
+    unify_faces();
     finalize_colors();
-    return true;
 
+    if (m_vertices.size() == 0) {
+        m_dim = 3; // default: 3D
+    }
+    if (m_faces.size() == 0) {
+        m_vertex_per_face = 3; // default: triangle
+    }
+    return true;
 }
 
 size_t OFFParser::num_attributes() const {
@@ -188,10 +195,12 @@ void OFFParser::parse_face_line(char* line) {
     assert(field != NULL);
 
     const size_t n = atoi(field);
-    if (m_vertex_per_face == 0) {
-        m_vertex_per_face = n;
-    } else if (m_vertex_per_face != n) {
-        throw IOError("OFF file contains mixed face types.");
+    if (n != 3 && n != 4) {
+        std::stringstream err_msg;
+        err_msg << "Only triangle and quad are supported in OFF parsing." <<
+            std::endl;
+        err_msg << "Error line: " << line << std::endl;
+        throw IOError(err_msg.str());
     }
 
     VectorI face(n);
@@ -202,20 +211,44 @@ void OFFParser::parse_face_line(char* line) {
         }
         face[i] = atoi(field);
     }
-    m_faces.push_back(face);
-
-    bool with_color = true;
-    Vector4F color;
-    for (size_t i=0; i<4; i++) {
-        field = strtok(NULL, WHITE_SPACE);
-        if (field == NULL) {
-            with_color = false;
-            break;
-        }
-        color[i] = atof(field);
+    if (n == 3) m_tris.push_back(face);
+    else if (n == 4) m_quads.push_back(face);
+    else {
+        throw IOError("Non-triangle, non-quad face detected!");
     }
-    if (with_color) {
-        m_face_colors.push_back(color);
+
+    //bool with_color = true;
+    //Vector4F color;
+    //for (size_t i=0; i<4; i++) {
+    //    field = strtok(NULL, WHITE_SPACE);
+    //    if (field == NULL) {
+    //        with_color = false;
+    //        break;
+    //    }
+    //    color[i] = atof(field);
+    //}
+    //if (with_color) {
+    //    m_face_colors.push_back(color);
+    //}
+}
+
+void OFFParser::unify_faces() {
+    if (m_tris.size() > 0 && m_quads.size() == 0) {
+        m_faces = std::move(m_tris);
+        m_vertex_per_face = 3;
+    } else if (m_tris.size() == 0 && m_quads.size() > 0) {
+        m_faces = std::move(m_quads);
+        m_vertex_per_face = 4;
+    } else if (m_tris.size() > 0 && m_quads.size() > 0){
+        std::cerr << "Mixed triangle and quads in the input file" << std::endl;
+        std::cerr << "Converting quads in triangles, face order is not kept!"
+            << std::endl;
+        m_faces = std::move(m_tris);
+        for (auto& quad : m_quads) {
+            m_faces.push_back(Vector3I(quad[0], quad[1], quad[2]));
+            m_faces.push_back(Vector3I(quad[0], quad[2], quad[3]));
+        }
+        m_vertex_per_face = 3;
     }
 }
 
