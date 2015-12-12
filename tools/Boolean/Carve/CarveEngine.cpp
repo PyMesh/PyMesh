@@ -15,35 +15,41 @@
 namespace CarveEngineHelper {
     typedef carve::csg::CSG::meshset_t CarveMesh;
     typedef std::shared_ptr<CarveMesh> CarveMeshPtr;
+    typedef CarveMesh::vertex_t CarveVertex;
+    typedef CarveVertex::vector_t CarveVector;
 
     CarveMeshPtr create_mesh(const MatrixFr& vertices, const MatrixIr& faces) {
-        typedef CarveMesh::vertex_t CarveVertex;
-        typedef CarveMesh::face_t   CarveFace;
-
         const size_t num_vertices = vertices.rows();
         const size_t num_faces = faces.rows();
-        assert(vertices.cols() == 3);
-        assert(faces.cols() == 3);
 
-        std::vector<CarveVertex> carve_vertices;
-        std::vector<CarveFace *> carve_faces;
+        if (vertices.cols() != 3) {
+            throw NotImplementedError("Only 3D mesh is supported.");
+        }
+        if (faces.cols() != 3) {
+            throw NotImplementedError("Only triangle mesh is supported.");
+        }
+
+        std::vector<CarveVector> points;
 
         for (size_t i=0; i<num_vertices; i++) {
             const auto& v = vertices.row(i);
-            carve_vertices.push_back(
-                    CarveVertex(carve::geom::VECTOR(v[0], v[1], v[2])));
+            CarveVector p;
+            p.v[0] = v[0];
+            p.v[1] = v[1];
+            p.v[2] = v[2];
+            points.push_back(p);
         }
 
+        std::vector<int> raw_faces;
+        raw_faces.reserve((num_faces + 1)* 3);
         for (size_t i=0; i<num_faces; i++) {
-            const auto& f = faces.row(i);
-            carve_faces.push_back(
-                    new CarveFace(
-                        &carve_vertices[f[0]],
-                        &carve_vertices[f[1]],
-                        &carve_vertices[f[2]]));
+            raw_faces.push_back(3);
+            raw_faces.push_back(faces(i,0));
+            raw_faces.push_back(faces(i,1));
+            raw_faces.push_back(faces(i,2));
         }
 
-        return CarveMeshPtr(new CarveMesh(carve_faces));
+        return CarveMeshPtr(new CarveMesh(points, num_faces, raw_faces));
     }
 
     void extract_data(CarveMeshPtr mesh, MatrixFr& vertices, MatrixIr& faces) {
