@@ -41,7 +41,7 @@ namespace CarveEngineHelper {
         }
 
         std::vector<int> raw_faces;
-        raw_faces.reserve((num_faces + 1)* 3);
+        raw_faces.reserve(num_faces * 4);
         for (size_t i=0; i<num_faces; i++) {
             raw_faces.push_back(3);
             raw_faces.push_back(faces(i,0));
