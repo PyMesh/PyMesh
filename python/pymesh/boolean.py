@@ -1,5 +1,6 @@
 import PyBoolean
 import numpy as np
+from time import time
 from .meshio import form_mesh
 
 from . import boolean_unsupported
@@ -13,7 +14,7 @@ def _auto_select_engine(dim):
         raise NotImplementedError("Dimension {} is not supported".format(dim));
     return engine;
 
-def boolean(mesh_1, mesh_2, operation, engine="auto"):
+def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False):
     """ Perform boolean operations on input meshes.
 
     Args:
@@ -44,6 +45,8 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
             * ``carve``: `Carve solid geometry library
               <https://code.google.com/p/carve/>`_
 
+        with_timing (``boolean``): (optional) Whether to time the code.
+
     Returns:
         :class:`Mesh`: The output mesh.
     """
@@ -55,11 +58,15 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
     if engine == "auto":
         _auto_select_engine(dim);
     elif engine == "quick_csg":
-        return boolean_unsupported.quick_csg(mesh_1, mesh_2, operation);
+        return boolean_unsupported.quick_csg(mesh_1, mesh_2, operation,
+                with_timing);
 
     engine = PyBoolean.BooleanEngine.create(engine);
     engine.set_mesh_1(mesh_1.vertices, mesh_1.faces);
     engine.set_mesh_2(mesh_2.vertices, mesh_2.faces);
+
+    if with_timing:
+        start_time = time();
 
     if (operation == "intersection"):
         engine.compute_intersection();
@@ -73,6 +80,10 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
         raise NotImplementedError(
                 "Unsupported operations: {}".format(operation));
 
+    if with_timing:
+        finish_time = time();
+        running_time = finish_time - start_time;
+
     output_mesh = form_mesh(engine.get_vertices(), engine.get_faces());
     face_sources = engine.get_face_sources();
     if len(face_sources) != 0:
@@ -81,5 +92,9 @@ def boolean(mesh_1, mesh_2, operation, engine="auto"):
         output_mesh.add_attribute("source");
         sources = face_sources < mesh_1.num_faces;
         output_mesh.set_attribute("source", sources);
-    return output_mesh;
+
+    if with_timing:
+        return output_mesh, running_time;
+    else:
+        return output_mesh;
 

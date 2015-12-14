@@ -12,6 +12,7 @@ import os
 import os.path
 from subprocess import check_call
 import tempfile
+from time import time
 from .meshio import save_mesh, load_mesh, form_mesh
 
 def which(program):
@@ -35,7 +36,7 @@ def which(program):
 
     return None
 
-def quick_csg(mesh_1, mesh_2, operation):
+def quick_csg(mesh_1, mesh_2, operation, with_timing=False):
     exe_name = None;
     for suffix in ["mac", "linux", "win.exe"]:
         exe_name = which("mesh_csg_{}".format(suffix));
@@ -65,7 +66,13 @@ def quick_csg(mesh_1, mesh_2, operation):
 
     command = "{} -tess3 {} -O {} {} {}".format(
             exe_name, op_flag[operation], output_file, file_1, file_2);
+    if with_timing:
+        start_time = time();
     check_call(command.split());
+    if with_timing:
+        finish_time = time();
+        running_time = finish_time - start_time;
+
     assert(os.path.exists(output_file));
     mesh = load_mesh(output_file);
 
@@ -73,4 +80,8 @@ def quick_csg(mesh_1, mesh_2, operation):
     os.remove(file_2);
     os.remove(output_file);
     os.rmdir(tmp_dir);
-    return mesh;
+
+    if with_timing:
+        return mesh, running_time
+    else:
+        return mesh;

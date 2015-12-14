@@ -5,10 +5,24 @@ Resolve self-intersection and nested shells using self-union.
 """
 
 import argparse
-import numpy as np
-import pymesh
 import logging
+import json
+import numpy as np
 import os
+import os.path
+import pymesh
+
+def update_info(output_file, running_time):
+    name,ext = os.path.splitext(output_file);
+    info_file = name + ".info";
+    if os.path.exists(info_file):
+        with open(info_file, 'r') as fin:
+            info = json.load(fin);
+            info["running_time"] = running_time;
+    else:
+        info = {};
+    with open(info_file, 'w') as fout:
+        json.dump(info, fout, indent=4);
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
@@ -16,6 +30,8 @@ def parse_args():
             choices=["igl", "carve", "cgal", "cork", "corefinement",
                 "quick_csg"],
             default="igl", help="Boolean engine to use");
+    parser.add_argument("--timing", "-t",
+            action="store_true", help="Report timing info");
     parser.add_argument("input_mesh", help="Input mesh");
     parser.add_argument("output_mesh", help="Output mesh");
     return parser.parse_args();
@@ -37,8 +53,14 @@ def main():
         box = pymesh.generate_box_mesh(
                 (bbox[0]-center)*1.1 + center,
                 (bbox[1]-center)*1.1 + center);
-        result = pymesh.boolean(
-                mesh, box, "intersection", engine=args.engine);
+        r = pymesh.boolean(
+                mesh, box, "intersection", engine=args.engine,
+                with_timing = args.timing);
+        if args.timing:
+            result, timing = r;
+            update_info(args.output_mesh, timing);
+        else:
+            result = r;
     pymesh.save_mesh(args.output_mesh, result);
 
 if __name__ == "__main__":
