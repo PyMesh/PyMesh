@@ -18,9 +18,10 @@ def update_info(output_file, running_time):
     if os.path.exists(info_file):
         with open(info_file, 'r') as fin:
             info = json.load(fin);
-            info["running_time"] = running_time;
     else:
         info = {};
+
+    info = {"running_time": running_time};
     with open(info_file, 'w') as fout:
         json.dump(info, fout, indent=4);
 
