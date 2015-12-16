@@ -52,8 +52,8 @@ def main():
         bbox = mesh.bbox;
         center = (bbox[0] + bbox[1]) * 0.5;
         box = pymesh.generate_box_mesh(
-                (bbox[0]-center)*1.1 + center,
-                (bbox[1]-center)*1.1 + center);
+                bbox[0] - np.ones(mesh.dim),
+                bbox[1] + np.ones(mesh.dim));
         r = pymesh.boolean(
                 mesh, box, "intersection", engine=args.engine,
                 with_timing = args.timing);
