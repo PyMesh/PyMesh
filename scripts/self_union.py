@@ -48,6 +48,8 @@ def main():
         # Empty input mesh, output empty mesh as well.
         result = pymesh.form_mesh(np.zeros((0,3),dtype=float),
                 np.zeros((0,3),dtype=int));
+        if args.timing:
+            update_info(args.output_mesh, 0);
     else:
         bbox = mesh.bbox;
         center = (bbox[0] + bbox[1]) * 0.5;
