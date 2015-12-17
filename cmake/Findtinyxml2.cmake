@@ -7,7 +7,7 @@
 #
 # It searches the environment variable $TINYXML2_PATH automatically.
 
-FIND_PATH(TINYXML2_INCLUDE_DIRS TINYXML2.h
+FIND_PATH(TINYXML2_INCLUDE_DIRS tinyxml2.h
     $ENV{TINYXML2_PATH}
     $ENV{TINYXML2_PATH}/include/
     /opt/local/include/
