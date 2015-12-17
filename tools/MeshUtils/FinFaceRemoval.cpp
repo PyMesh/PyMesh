@@ -38,8 +38,8 @@ namespace FinFaceRemovalHelper {
     int compute_majority_orientation(
             const MatrixIr& faces, const std::vector<size_t>& face_indices,
             size_t& correctly_orientated_face_idx) {
-        size_t positive_fid = 0;
-        size_t negative_fid = 0;
+        size_t positive_fid = std::numeric_limits<size_t>::max();
+        size_t negative_fid = std::numeric_limits<size_t>::max();
 
         int majority_orientation = 0;
         for (size_t fid : face_indices) {
@@ -49,10 +49,13 @@ namespace FinFaceRemovalHelper {
             else if (ori < 0) negative_fid = fid;
         }
 
-        if (majority_orientation > 0)
+        if (majority_orientation > 0) {
             correctly_orientated_face_idx = positive_fid;
-        else if (majority_orientation < 0)
+            assert(correctly_orientated_face_idx < faces.rows());
+        } else if (majority_orientation < 0) {
             correctly_orientated_face_idx = negative_fid;
+            assert(correctly_orientated_face_idx < faces.rows());
+        }
 
         return majority_orientation;
     }
@@ -60,7 +63,7 @@ namespace FinFaceRemovalHelper {
 using namespace FinFaceRemovalHelper;
 
 FinFaceRemoval::FinFaceRemoval(const MatrixFr& vertices, const MatrixIr& faces)
-    : m_vertices(vertices), m_faces(faces) {}
+    : m_vertices(vertices), m_faces(faces), m_fins_only(false) {}
 
 size_t FinFaceRemoval::run() {
     const size_t num_vertex_per_face = m_faces.cols();
@@ -82,26 +85,27 @@ size_t FinFaceRemoval::run() {
     for (size_t i=0; i<num_faces; i++) {
         if (visited[i]) continue;
         const VectorI& f = m_faces.row(i);
+        if (f[0] == f[1] || f[1] == f[2] || f[2] == f[0]) {
+            // Ignore combinatorially degenerated faces.
+            continue;
+        }
         Triplet key(f[0], f[1], f[2]);
 
         const auto& indices = face_index_map[key];
         size_t correctly_orientated_fid = std::numeric_limits<size_t>::max();
-        int majority_orientation = compute_majority_orientation(
+        const int majority_orientation = compute_majority_orientation(
                 m_faces, indices, correctly_orientated_fid);
 
         if (majority_orientation != 0) {
-            assert(correctly_orientated_fid < num_faces);
-            int curr_orientation = orientation(f);
-            if (curr_orientation * majority_orientation >= 0) {
-                face_list.push_back(f[0]);
-                face_list.push_back(f[1]);
-                face_list.push_back(f[2]);
-            } else {
-                face_list.push_back(f[0]);
-                face_list.push_back(f[2]);
-                face_list.push_back(f[1]);
+            size_t duplicity = m_fins_only ? abs(majority_orientation) : 1;
+            for (size_t j=0; j<duplicity; j++) {
+                assert(correctly_orientated_fid < num_faces);
+                const auto& cf = m_faces.row(correctly_orientated_fid).eval();
+                face_list.push_back(cf[0]);
+                face_list.push_back(cf[1]);
+                face_list.push_back(cf[2]);
+                face_indices.push_back(correctly_orientated_fid);
             }
-            face_indices.push_back(correctly_orientated_fid);
         }
 
         std::for_each(indices.begin(), indices.end(), [&](size_t index)

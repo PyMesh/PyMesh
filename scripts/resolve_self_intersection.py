@@ -23,7 +23,7 @@ def main():
     counter = 0;
     while len(intersecting_faces) > 0 and counter < args.max_iterations:
         mesh = pymesh.resolve_self_intersection(mesh, "igl");
-        mesh, __ = pymesh.remove_duplicated_faces(mesh);
+        mesh, __ = pymesh.remove_duplicated_faces(mesh, fins_only=True);
         intersecting_faces = pymesh.detect_self_intersection(mesh);
         counter += 1;
 

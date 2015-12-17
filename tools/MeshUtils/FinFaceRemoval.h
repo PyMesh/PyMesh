@@ -13,6 +13,19 @@ class FinFaceRemoval {
 
     public:
         /**
+         * Only remove fins.  A fin is defined as a pair of faces with identical
+         * vertices but opposite orientaiton.
+         */
+        void set_fins_only() {
+            m_fins_only = true;
+        }
+
+        /**
+         * When set_fins_only() is called:
+         * Only fins are removed.
+         *
+         * Otherwise:
+         *
          * For each set of duplicated faces, if there is a majority orientation,
          * all but a single face is removed.  The face kept has the same
          * orientation as the majority orientation.  This is necessary to remove
@@ -27,6 +40,7 @@ class FinFaceRemoval {
         VectorI  get_face_indices() const { return m_face_indices; }
 
     private:
+        bool     m_fins_only;
         MatrixFr m_vertices;
         MatrixIr m_faces;
         VectorI  m_face_indices;

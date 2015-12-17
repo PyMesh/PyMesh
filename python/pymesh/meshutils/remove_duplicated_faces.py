@@ -2,28 +2,31 @@ import numpy as np
 from PyMeshUtils import FinFaceRemoval
 from ..meshio import form_mesh
 
-def remove_duplicated_faces_raw(vertices, faces):
+def remove_duplicated_faces_raw(vertices, faces, fins_only=False):
     """ Remove duplicated faces.
 
     Duplicated faces are defined as faces consist of the same set of vertices.
-    Depending on the face orientation, there could be two different outcomes.
+    Depending on the face orientation.  A special case of duplicated faces is
+    a fin.  A fin is defined as two duplicated faces with opposite orientaiton.
+
+    If fins_only is set to True, all fins in the mesh are removed.  The output
+    mesh could still contain duplicated faces but no fins.
+
+    If fins_only is not True, all duplicated faces will be removed.  There could
+    be two caes:
 
     If there is a dominant orientation, that is more than half of the faces are
-    consistently orientated, one face with the dominant orientation will be
-    kept while all other faces are removed.
+    consistently orientated, and fins_only is False, one face with the dominant
+    orientation will be kept while all other faces are removed.
 
     If there is no dominant orientation, i.e. half of the face are positively
     orientated and the other half is negatively orientated, all faces are
     discarded.
 
-    The reason for this design is that when there is no dominant orientation,
-    the faces are likely to be "fins."  Thus they are removed completely.  On
-    the other hand, when there exists a dominant orientation, the faces are
-    likely from "folds", so one face should be kept.
-
     Args:
         vertices (``numpy.ndarray``): Vertex array with one vertex per row.
         faces (``numpy.ndarray``): Face array with one face per row.
+        fins_only (``bool``): If set, only remove fins.
 
     Returns:
         3 values are returned.
@@ -40,17 +43,19 @@ def remove_duplicated_faces_raw(vertices, faces):
 
     """
     remover = FinFaceRemoval(vertices, faces);
+    if fins_only: remover.set_fins_only();
     remover.run();
     info = {
             "ori_face_index": remover.get_face_indices().ravel(),
             };
     return remover.get_vertices(), remover.get_faces(), info;
 
-def remove_duplicated_faces(mesh):
+def remove_duplicated_faces(mesh, fins_only=False):
     """ Wrapper function of :func:`remove_duplicated_faces_raw`.
 
     Args:
         mesh (:class:`Mesh`): Input mesh.
+        fins_only (``bool``): If set, only remove fins.
 
     Returns:
         2 values are returned.
@@ -66,5 +71,5 @@ def remove_duplicated_faces(mesh):
 
     """
     vertices, faces, info = remove_duplicated_faces_raw(
-            mesh.vertices, mesh.faces);
+            mesh.vertices, mesh.faces, fins_only);
     return form_mesh(vertices, faces), info;
