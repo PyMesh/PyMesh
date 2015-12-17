@@ -33,6 +33,8 @@ def parse_args():
             default="igl", help="Boolean engine to use");
     parser.add_argument("--timing", "-t",
             action="store_true", help="Report timing info");
+    parser.add_argument("--exact", "-e",
+            action="store_true", help="Store output in exact format");
     parser.add_argument("input_mesh", help="Input mesh");
     parser.add_argument("output_mesh", help="Output mesh");
     return parser.parse_args();
@@ -56,9 +58,17 @@ def main():
         box = pymesh.generate_box_mesh(
                 bbox[0] - np.ones(mesh.dim),
                 bbox[1] + np.ones(mesh.dim));
+
+        if args.exact:
+            name,ext = os.path.splitext(args.output_mesh);
+            exact_mesh_file = name + ".xml";
+        else:
+            exact_mesh_file = None;
+
         r = pymesh.boolean(
                 mesh, box, "intersection", engine=args.engine,
-                with_timing = args.timing);
+                with_timing = args.timing,
+                exact_mesh_file=exact_mesh_file);
         if args.timing:
             result, timing = r;
             update_info(args.output_mesh, timing);

@@ -14,7 +14,8 @@ def _auto_select_engine(dim):
         raise NotImplementedError("Dimension {} is not supported".format(dim));
     return engine;
 
-def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False):
+def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
+        exact_mesh_file=None):
     """ Perform boolean operations on input meshes.
 
     Args:
@@ -46,9 +47,10 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False):
               <https://code.google.com/p/carve/>`_
 
         with_timing (``boolean``): (optional) Whether to time the code.
+        exact_mesh_file (``str``): (optional) Filename to store the XML
+            serialized exact output.
 
-    Returns:
-        :class:`Mesh`: The output mesh.
+    Returns: The output mesh.
     """
     assert(mesh_1.dim == mesh_2.dim);
     assert(mesh_1.vertex_per_face == 3);
@@ -92,6 +94,9 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False):
         output_mesh.add_attribute("source");
         sources = face_sources < mesh_1.num_faces;
         output_mesh.set_attribute("source", sources);
+
+    if exact_mesh_file is not None:
+        engine.serialize_xml(exact_mesh_file);
 
     if with_timing:
         return output_mesh, running_time;
