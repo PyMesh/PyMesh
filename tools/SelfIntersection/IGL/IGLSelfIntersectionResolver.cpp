@@ -3,10 +3,14 @@
 
 #include <igl/copyleft/cgal/remesh_self_intersections.h>
 #include <igl/remove_unreferenced.h>
+#include <iostream>
 
 void IGLSelfIntersectionResolver::run() {
+    typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
+    typedef Eigen::Matrix<Kernel::FT, Eigen::Dynamic, Eigen::Dynamic,
+            Eigen::RowMajor> MatrixEr;
     igl::copyleft::cgal::RemeshSelfIntersectionsParam param;
-    MatrixFr out_vertices;
+    MatrixEr out_vertices;
     MatrixIr out_faces;
     MatrixIr intersecting_face_pairs;
     VectorI unique_vertex_indices;
@@ -26,6 +30,12 @@ void IGLSelfIntersectionResolver::run() {
             a=unique_vertex_indices(a);
             });
 
+    MatrixEr final_vertices;
     igl::remove_unreferenced(out_vertices,out_faces,
-            m_vertices,m_faces,unique_vertex_indices);
+            final_vertices,m_faces,unique_vertex_indices);
+
+    m_vertices.resize(final_vertices.rows(), final_vertices.cols());
+    std::transform(final_vertices.data(), final_vertices.data() +
+            final_vertices.rows() * final_vertices.cols(), m_vertices.data(),
+            [](const Kernel::FT& val) { return CGAL::to_double(val); });
 }
