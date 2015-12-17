@@ -32,7 +32,7 @@ def main():
                 edge_faces[tuple(e)] = [f];
 
     non_oriented_vertices = np.zeros(mesh.num_vertices);
-    for e,faces in edge_faces.iteritems():
+    for e,faces in edge_faces.items():
         if e[0] == e[1]:
             non_oriented_vertices[e[0]] = 1;
             non_oriented_vertices[e[1]] = 1;
