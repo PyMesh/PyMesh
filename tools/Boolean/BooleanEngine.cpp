@@ -85,3 +85,7 @@ void BooleanEngine::remove_isolated_vertices() {
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 }
+
+void BooleanEngine::serialize_xml(const std::string& filename) const {
+    throw NotImplementedError("Serialization is not supported");
+}

@@ -37,6 +37,8 @@ class BooleanEngine {
             return VectorI::Zero(0);
         };
 
+        virtual void serialize_xml(const std::string& filename) const;
+
     protected:
         void remove_duplicated_vertices();
         void remove_short_edges();
