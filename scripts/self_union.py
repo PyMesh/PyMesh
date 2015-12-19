@@ -46,6 +46,12 @@ def main():
         logging.warning("Converting quad mesh to triangle mesh.");
         mesh = pymesh.quad_to_tri(mesh);
 
+    if args.exact:
+        name,ext = os.path.splitext(args.output_mesh);
+        exact_mesh_file = name + ".xml";
+    else:
+        exact_mesh_file = None;
+
     if mesh.num_vertices ==0 or mesh.num_faces == 0:
         # Empty input mesh, output empty mesh as well.
         result = pymesh.form_mesh(np.zeros((0,3),dtype=float),
@@ -53,27 +59,31 @@ def main():
         if args.timing:
             update_info(args.output_mesh, 0);
     else:
-        bbox = mesh.bbox;
-        center = (bbox[0] + bbox[1]) * 0.5;
-        box = pymesh.generate_box_mesh(
-                bbox[0] - np.ones(mesh.dim),
-                bbox[1] + np.ones(mesh.dim));
-
-        if args.exact:
-            name,ext = os.path.splitext(args.output_mesh);
-            exact_mesh_file = name + ".xml";
+        if args.engine == "igl":
+            empty = pymesh.form_mesh(np.zeros((0,3)), np.zeros((0,3)));
+            r = pymesh.boolean(
+                    mesh, empty, "union", engine=args.engine,
+                    with_timing = args.timing,
+                    exact_mesh_file=exact_mesh_file);
         else:
-            exact_mesh_file = None;
+            # Empty mesh is valid for these libraries, using bbox instead.
+            bbox = mesh.bbox;
+            center = (bbox[0] + bbox[1]) * 0.5;
+            box = pymesh.generate_box_mesh(
+                    bbox[0] - np.ones(mesh.dim),
+                    bbox[1] + np.ones(mesh.dim));
 
-        r = pymesh.boolean(
-                mesh, box, "intersection", engine=args.engine,
-                with_timing = args.timing,
-                exact_mesh_file=exact_mesh_file);
+            r = pymesh.boolean(
+                    mesh, box, "intersection", engine=args.engine,
+                    with_timing = args.timing,
+                    exact_mesh_file=exact_mesh_file);
+
         if args.timing:
             result, timing = r;
             update_info(args.output_mesh, timing);
         else:
             result = r;
+
     pymesh.save_mesh(args.output_mesh, result);
 
 if __name__ == "__main__":
