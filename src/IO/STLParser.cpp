@@ -360,7 +360,6 @@ void STLParser::merge_identical_vertices() {
         count++;
     }
     assert((index_map.array() >= 0).all());
-    std::cout << num_vertices << " " << count << std::endl;
 
     std::swap(m_vertices, sorted_vertices);
     const size_t num_faces = m_faces.size();
