@@ -7,7 +7,6 @@
 #include <vector>
 #include <limits>
 
-#include <Misc/HashGrid.h>
 #include <Core/Exception.h>
 
 #include "IOUtils.h"
@@ -323,60 +322,52 @@ bool STLParser::parse_binary(const std::string& filename) {
 }
 
 void STLParser::merge_identical_vertices() {
-    Float diagonal_length = compute_bbox_diagonal_length();
+    const auto index_comp = [&](size_t i1, size_t i2) {
+        const auto& v1 = m_vertices[i1];
+        const auto& v2 = m_vertices[i2];
+        if (v1[0] != v2[0]) {
+            return v1[0] < v2[0];
+        } else if (v1[1] != v2[1]) {
+            return v1[1] < v2[1];
+        } else if (v1[2] != v2[2]){
+            return v1[2] < v2[2];
+        }
+        return false;
+    };
+
     size_t num_vertices = m_vertices.size();
+    VectorI indices(num_vertices);
+    indices.setLinSpaced(num_vertices, 0, num_vertices-1);
+    std::sort(indices.data(), indices.data()+num_vertices,
+            index_comp);
 
-    HashGrid::Ptr hash_grid =
-        HashGrid::create(1e-12 * diagonal_length);
-
-    size_t count=0;
-    std::vector<int> index_map(num_vertices, -1);
-    std::vector<const Vector3F*> vertex_array(num_vertices);
-    for (VertexList::iterator itr = m_vertices.begin();
-            itr != m_vertices.end(); itr++) {
-        hash_grid->insert(count, *itr);
-        vertex_array[count] = &*itr;
-        count++;
-    }
-
-    count=0;
-    size_t v_count=0;
-    for (VertexList::iterator itr = m_vertices.begin();
-            itr != m_vertices.end(); itr++) {
-        if (index_map[count] == -1) {
-            VectorI nearby_vts = hash_grid->get_items_near_point(*itr);
-            const size_t num_nearby_vts = nearby_vts.size();
-            assert(num_nearby_vts > 0);
-            for (size_t i=0; i<num_nearby_vts; i++) {
-                Float dist = (*itr - *vertex_array[nearby_vts[i]]).norm();
-                if (dist == 0) {
-                    assert(nearby_vts[i] >= count);
-                    index_map[nearby_vts[i]] = v_count;
-                }
+    VectorI index_map(num_vertices);
+    index_map.setConstant(-1);
+    VertexList sorted_vertices;
+    size_t count = 0;
+    size_t idx = 0;
+    while (idx < num_vertices) {
+        const auto& v = m_vertices[indices[idx]];
+        sorted_vertices.push_back(v);
+        while (idx < num_vertices) {
+            if (m_vertices[indices[idx]] == v) {
+                index_map[indices[idx]] = count;
+                idx++;
+            } else {
+                break;
             }
-            v_count++;
         }
         count++;
     }
+    assert((index_map.array() >= 0).all());
+    std::cout << num_vertices << " " << count << std::endl;
 
-    std::vector<const Vector3F*> vertex_merged_array(v_count, NULL);
-    for(size_t i=0; i<num_vertices; i++) {
-        assert(index_map[i] != -1);
-        if (vertex_merged_array[index_map[i]] == NULL)
-            vertex_merged_array[index_map[i]] = vertex_array[i];
-    }
-
-    VertexList v_list;
-    for (size_t i=0; i<v_count; i++) {
-        v_list.push_back(*vertex_merged_array[i]);
-    }
-    m_vertices = v_list;
-
-    for (FaceList::iterator itr = m_faces.begin();
-            itr != m_faces.end(); itr++) {
-        for (size_t i=0; i<3; i++) {
-            (*itr)[i] = index_map[(*itr)[i]];
-        }
+    std::swap(m_vertices, sorted_vertices);
+    const size_t num_faces = m_faces.size();
+    for (auto& f : m_faces) {
+        f[0] = index_map[f[0]];
+        f[1] = index_map[f[1]];
+        f[2] = index_map[f[2]];
     }
 }
 

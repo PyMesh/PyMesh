@@ -46,7 +46,7 @@ class STLParser : public MeshParser {
         bool has_normal() const;
         Float compute_bbox_diagonal_length() const;
 
-        typedef std::list<Vector3F> VertexList;
+        typedef std::vector<Vector3F> VertexList;
         typedef std::list<Vector3I> FaceList;
         typedef std::list<VectorI>  VoxelList;
         typedef std::list<Vector3F> NormalList;
