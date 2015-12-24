@@ -63,7 +63,7 @@ class MeshIOTest(TestCase):
         faces = np.array([[0, 1, 2]]);
         mesh = form_mesh(vertices, faces);
 
-        for ext in [".msh", ".obj", ".stl", ".ply", ".mesh", ".off"]:
+        for ext in [".msh", ".obj", ".ply", ".mesh", ".off"]:
             mesh1 = self.write_and_load(mesh,
                     "anonymous_test{}".format(ext), use_ascii=True,
                     anonymous=True);
