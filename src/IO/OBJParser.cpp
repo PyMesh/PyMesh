@@ -10,7 +10,11 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
-OBJParser::OBJParser() : m_dim(0), m_vertex_per_face(0) { }
+OBJParser::OBJParser() :
+    m_dim(0),
+    m_vertex_per_face(0),
+    m_texture_dim(0),
+    m_parameter_dim(0){ }
 
 bool OBJParser::parse(const std::string& filename) {
     const size_t LINE_SIZE = 256;
@@ -57,27 +61,42 @@ bool OBJParser::parse(const std::string& filename) {
     if (m_faces.size() == 0) {
         m_vertex_per_face = 3; // default: triangle
     }
+    finalize_textures();
+    finalize_normals();
+    finalize_parameters();
     return true;
 }
 
 size_t OBJParser::num_attributes() const {
-    if (has_normals()) return 1;
-    else return 0;
+    size_t r = 0;
+    if (m_vertex_normals.size() > 0) r++;
+    if (m_textures.size() > 0) r++;
+    if (m_parameters.size() > 0) r++;
+    return r;
 }
 
 OBJParser::AttrNames OBJParser::get_attribute_names() const {
     OBJParser::AttrNames attr_names;
-    if (has_normals())
+    if (m_vertex_normals.size() > 0)
         attr_names.push_back("vertex_normal");
+    if (m_textures.size() > 0)
+        attr_names.push_back("vertex_texture");
+    if (m_parameters.size() > 0)
+        attr_names.push_back("vertex_parameter");
     return attr_names;
 }
 
 size_t OBJParser::get_attribute_size(const std::string& name) const {
-    if (!attribute_exists(name)) {
+    if (name == "vertex_normal")
+        return m_vertex_normals.size() * m_dim;
+    else if (name == "vertex_texture")
+        return m_textures.size() * m_texture_dim;
+    else if (name == "vertex_parameter")
+        return m_parameters.size() * m_parameter_dim;
+    else {
         std::cerr << "Attribute " << name << " does not exist." << std::endl;
         return 0;
     }
-    return m_vertex_normals.size() * m_dim;
 }
 
 void OBJParser::export_vertices(Float* buffer) {
@@ -119,45 +138,69 @@ void OBJParser::export_voxels(int* buffer) {
 }
 
 void OBJParser::export_attribute(const std::string& name, Float* buffer) {
-    if (!attribute_exists(name)) {
+    if (name == "vertex_normal")
+        export_normals(buffer);
+    else if (name == "vertex_texture")
+        export_textures(buffer);
+    else if (name == "vertex_parameter")
+        export_parameters(buffer);
+    else {
         std::cerr << "Warning: mesh does not have attribute with name "
             << name << std::endl;
-        return;
     }
+}
 
+void OBJParser::export_normals(Float* buffer) const {
     const size_t dim = m_dim;
     size_t count=0;
-    for (NormalList::const_iterator ni = m_vertex_normals.begin();
-            ni != m_vertex_normals.end(); ni++) {
-        const VectorF& normal = *ni;
-        for (size_t i=0; i<dim; i++) {
-            buffer[dim * count + i] = normal[i];
-        }
+    for (const auto& n : m_vertex_normals) {
+        std::copy(n.data(), n.data() + dim, buffer+count*dim);
         count++;
     }
 }
 
-
-bool OBJParser::has_normals() const {
-    return !(m_vertex_normals.size() == 0);
+void OBJParser::export_textures(Float* buffer) const {
+    const size_t dim = m_texture_dim;
+    size_t count=0;
+    for (const auto& t : m_textures) {
+        std::copy(t.data(), t.data() + dim, buffer+count*dim);
+        count++;
+    }
 }
 
-bool OBJParser::attribute_exists(const std::string& name) const {
-    // Only normal attributes are supported.
-    return (name == "vertex_normal");
+void OBJParser::export_parameters(Float* buffer) const {
+    const size_t dim = m_parameter_dim;
+    size_t count=0;
+    for (const auto& p : m_parameters) {
+        std::copy(p.data(), p.data() + dim, buffer+count*dim);
+        count++;
+    }
 }
 
 bool OBJParser::parse_vertex_line(char* line) {
+    assert(line[0] == 'v');
+    switch (line[1]) {
+        case ' ':
+        case '\t':
+            return parse_vertex_coordinate(line);
+        case 't':
+            return parse_vertex_texture(line);
+        case 'n':
+            return parse_vertex_normal(line);
+        case 'p':
+            return parse_vertex_parameter(line);
+        default:
+            throw IOError("Invalid vertex line");
+    }
+}
+
+bool OBJParser::parse_vertex_coordinate(char* line) {
     char header[8];
     Float data[4];
     size_t n = sscanf(line, "%s %lf %lf %lf %lf", header,
             &data[0], &data[1], &data[2], &data[3]);
     if (n < 3) return false;
-
-    if (header[1] == 't' || header[1] == 'p') {
-        // Vertex texture/parameter is not supported.
-        return true;
-    }
+    assert(header == "v");
 
     // Check to handle homogeneous coordinates.
     if (n == 5) {
@@ -170,10 +213,40 @@ bool OBJParser::parse_vertex_line(char* line) {
     else if (m_dim != n-1) { return false; }
 
     Eigen::Map<VectorF> coord(data, m_dim);
-    if (header[1] == '\0')
-        m_vertices.push_back(coord);
-    else if (header[1] == 'n')
-        m_vertex_normals.push_back(coord);
+    m_vertices.push_back(coord);
+    return true;
+}
+
+bool OBJParser::parse_vertex_normal(char* line) {
+    char header[8];
+    Float data[3];
+    size_t n = sscanf(line, "%s %lf %lf %lf", header,
+            &data[0], &data[1], &data[2]);
+    if (n < 3) return false;
+    assert(header == "vn");
+    m_vertex_normals.emplace_back(Eigen::Map<VectorF>(data, n-1));
+    return true;
+}
+
+bool OBJParser::parse_vertex_texture(char* line) {
+    char header[8];
+    Float data[3];
+    size_t n = sscanf(line, "%s %lf %lf %lf", header,
+            &data[0], &data[1], &data[2]);
+    if (n < 3) return false;
+    assert(header == "vt");
+    m_textures.emplace_back(Eigen::Map<VectorF>(data, n-1));
+    return true;
+}
+
+bool OBJParser::parse_vertex_parameter(char* line) {
+    char header[8];
+    Float data[3];
+    size_t n = sscanf(line, "%s %lf %lf %lf", header,
+            &data[0], &data[1], &data[2]);
+    if (n < 3) return false;
+    assert(header == "vp");
+    m_parameters.emplace_back(Eigen::Map<VectorF>(data, n-1));
     return true;
 }
 
@@ -242,5 +315,65 @@ void OBJParser::unify_faces() {
             m_faces.push_back(Vector3I(quad[0], quad[2], quad[3]));
         }
         m_vertex_per_face = 3;
+    }
+}
+
+void OBJParser::finalize_textures() {
+    if (m_textures.empty()) return;
+    if (m_textures.size() != m_vertices.size()) {
+        std::cerr << "Mismatch between vertex and vertex texture."
+            << std::endl;
+        m_textures.clear();
+    }
+    m_texture_dim = m_textures.front().size();
+    for (const auto& t: m_textures) {
+        if (t.size() != m_texture_dim) {
+            std::cerr << "Inconsistently texture dimension" << std::endl;
+            m_texture_dim = 0;
+            break;
+        }
+    }
+    if (m_texture_dim == 0) {
+        m_textures.clear();
+    }
+}
+
+void OBJParser::finalize_normals() {
+    if (m_vertex_normals.empty()) return;
+    if (m_vertex_normals.size() != m_vertices.size()) {
+        std::cerr << "Mismatch between vertex and vertex normal."
+            << std::endl;
+        m_vertex_normals.clear();
+    }
+    bool normal_is_valid = true;
+    for (const auto& n : m_vertex_normals) {
+        if (n.size() != m_dim) {
+            std::cerr << "Inconsistent normal dimension" << std::endl;
+            normal_is_valid = false;
+            break;
+        }
+    }
+    if (!normal_is_valid) {
+        m_vertex_normals.clear();
+    }
+}
+
+void OBJParser::finalize_parameters() {
+    if (m_parameters.empty()) return;
+    if (m_parameters.size() != m_vertices.size()) {
+        std::cerr << "Mismatch between vertex and vertex parameters."
+            << std::endl;
+        m_parameters.clear();
+    }
+    m_parameter_dim = m_parameters.front().size();
+    for (const auto& n : m_parameters) {
+        if (n.size() != m_parameter_dim) {
+            std::cerr << "Inconsistent parameter dimension" << std::endl;
+            m_parameter_dim = 0;
+            break;
+        }
+    }
+    if (m_parameter_dim == 0) {
+        m_parameters.clear();
     }
 }

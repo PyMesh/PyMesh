@@ -36,16 +36,26 @@ class OBJParser : public MeshParser {
         virtual void export_attribute(const std::string& name, Float* buffer);
 
     protected:
-        bool has_normals() const;
-        bool attribute_exists(const std::string& name) const;
+        void export_normals(Float* buffer) const;
+        void export_textures(Float* buffer) const;
+        void export_parameters(Float* buffer) const;
         bool parse_vertex_line(char* line);
+        bool parse_vertex_coordinate(char* line);
+        bool parse_vertex_normal(char* line);
+        bool parse_vertex_texture(char* line);
+        bool parse_vertex_parameter(char* line);
         bool parse_face_line(char* line);
         void unify_faces();
+        void finalize_textures();
+        void finalize_normals();
+        void finalize_parameters();
 
         typedef std::list<VectorF> VertexList;
         typedef std::list<VectorI> FaceList;
         typedef std::list<VectorI>  VoxelList;
         typedef std::list<VectorF> NormalList;
+        typedef std::list<VectorF> TextureList;
+        typedef std::list<VectorF> ParameterList;
 
         VertexList m_vertices;
         FaceList   m_faces;
@@ -53,6 +63,10 @@ class OBJParser : public MeshParser {
         FaceList   m_quads;
         VoxelList  m_voxels;
         NormalList m_vertex_normals;
+        TextureList   m_textures;
+        ParameterList m_parameters;
         size_t     m_dim;
         size_t     m_vertex_per_face;
+        size_t     m_texture_dim;
+        size_t     m_parameter_dim;
 };
