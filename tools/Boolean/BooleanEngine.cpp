@@ -17,6 +17,9 @@
 #ifdef WITH_CARVE
 #include "Carve/CarveEngine.h"
 #endif 
+#ifdef WITH_BSP
+#include "BSP/BSPEngine.h"
+#endif
 
 #include <sstream>
 #include <iostream>
@@ -54,6 +57,9 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #endif
 #ifdef WITH_CARVE
     if (engine_name == "carve") { return Ptr(new CarveEngine()); }
+#endif
+#ifdef WITH_BSP
+    if (engine_name == "bsp") { return Ptr(new BSPEngine()); }
 #endif
     engine_not_found(engine_name);
     return Ptr(NULL);
