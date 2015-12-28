@@ -31,7 +31,9 @@ class CSGTree:
             }
         """
 
-        if "mesh" in tree:
+        if isinstance(tree, CSGTree):
+            self.tree = tree.tree;
+        elif "mesh" in tree:
             # leaf case
             mesh = tree["mesh"];
             self.tree = PyBoolean.CSGTree.create_leaf("igl",
