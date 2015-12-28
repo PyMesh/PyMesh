@@ -31,8 +31,13 @@ class CSGTree {
         virtual VectorI get_face_sources() const {
             return VectorI::Zero(0);
         };
+        virtual VectorI get_mesh_sources() const {
+            return VectorI::Zero(0);
+        }
         virtual MatrixFr get_vertices() const { return m_vertices; }
         virtual MatrixIr get_faces() const { return m_faces; }
+        virtual size_t get_num_vertices() const { return m_vertices.rows(); }
+        virtual size_t get_num_faces() const { return m_faces.rows(); }
 
     protected:
         MatrixFr m_vertices;
