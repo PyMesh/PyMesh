@@ -351,3 +351,11 @@ class Mesh(object):
         else:
             return self._extra_info.get_boundary_loops();
 
+    @property
+    def euler_characteristic(self):
+        return self._extra_info.get_euler_characteristic();
+
+    @property
+    def genus(self):
+        return self._extra_info.get_genus();
+

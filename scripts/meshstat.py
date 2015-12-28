@@ -158,14 +158,17 @@ def print_extended_info(mesh, info):
     is_edge_manifold = mesh.is_edge_manifold();
     is_vertex_manifold = mesh.is_vertex_manifold();
     is_oriented = mesh.is_oriented();
+    euler = mesh.euler_characteristic;
     print_property("oriented", is_oriented, True);
     print_property("closed", is_closed, True)
     print_property("edge manifold", is_edge_manifold, True);
     print_property("vertex manifold", is_vertex_manifold, True);
+    print_property("euler characteristic", euler);
     info["oriented"] = is_oriented;
     info["closed"] = is_closed;
     info["vertex_manifold"] = is_vertex_manifold;
     info["edge_manifold"] = is_edge_manifold;
+    info["euler_characteristic"] = euler;
 
 def print_self_intersection_info(mesh, info):
     if mesh.vertex_per_face == 4:
