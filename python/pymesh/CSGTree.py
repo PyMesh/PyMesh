@@ -84,9 +84,9 @@ class CSGTree:
         mesh = form_mesh(self.vertices, self.faces);
         face_sources = self.tree.get_face_sources();
         sources = self.tree.get_mesh_sources();
-        mesh.add_attribute("face_sources");
-        mesh.set_attribute("face_sources", face_sources);
-        mesh.add_attribute("sources");
-        mesh.set_attribute("sources", sources);
+        mesh.add_attribute("source_face");
+        mesh.set_attribute("source_face", face_sources);
+        mesh.add_attribute("source");
+        mesh.set_attribute("source", sources);
         return mesh;
 
