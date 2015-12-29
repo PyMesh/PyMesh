@@ -2,6 +2,7 @@
 #include "MeshChecker.h"
 
 #include <iostream>
+#include <numeric>
 #include <sstream>
 
 #include <Core/EigenTypedef.h>
@@ -143,8 +144,16 @@ int MeshChecker::get_genus() const {
 
 int MeshChecker::get_euler_characteristic() const {
     int num_vertices = m_vertices.rows();
-    int num_edges = m_edge_face_adjacency.size();
-    int num_faces = m_faces.rows();
+    if (m_voxels.rows() > 0) {
+        // Only count surface vertices.
+        std::vector<bool> on_surface(num_vertices, false);
+        std::for_each(m_faces.data(), m_faces.data() + m_faces.size(),
+                [&](int i) { on_surface[i] = true; } );
+        num_vertices = std::accumulate(on_surface.begin(),
+                on_surface.end(), 0);
+    }
+    const int num_edges = m_edge_face_adjacency.size();
+    const int num_faces = m_faces.rows();
     return num_vertices - num_edges + num_faces;
 }
 
