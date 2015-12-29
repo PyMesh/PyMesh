@@ -64,6 +64,7 @@ setup(
             "scripts/highlight_non_oriented_edges.py",
             "scripts/highlight_self_intersection.py",
             "scripts/highlight_zero_area_faces.py",
+            "scripts/icosphere_gen.py",
             "scripts/inflate.py",
             "scripts/merge.py",
             "scripts/mesh_diff.py",
