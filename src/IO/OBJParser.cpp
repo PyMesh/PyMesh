@@ -200,7 +200,7 @@ bool OBJParser::parse_vertex_coordinate(char* line) {
     size_t n = sscanf(line, "%s %lf %lf %lf %lf", header,
             &data[0], &data[1], &data[2], &data[3]);
     if (n < 3) return false;
-    assert(header == "v");
+    assert(strcmp(header, "v") == 0);
 
     // Check to handle homogeneous coordinates.
     if (n == 5) {
@@ -223,7 +223,7 @@ bool OBJParser::parse_vertex_normal(char* line) {
     size_t n = sscanf(line, "%s %lf %lf %lf", header,
             &data[0], &data[1], &data[2]);
     if (n < 3) return false;
-    assert(header == "vn");
+    assert(strcmp(header, "vn") == 0);
     m_vertex_normals.emplace_back(Eigen::Map<VectorF>(data, n-1));
     return true;
 }
@@ -234,7 +234,7 @@ bool OBJParser::parse_vertex_texture(char* line) {
     size_t n = sscanf(line, "%s %lf %lf %lf", header,
             &data[0], &data[1], &data[2]);
     if (n < 3) return false;
-    assert(header == "vt");
+    assert(strcmp(header, "vt") == 0);
     m_textures.emplace_back(Eigen::Map<VectorF>(data, n-1));
     return true;
 }
@@ -245,7 +245,7 @@ bool OBJParser::parse_vertex_parameter(char* line) {
     size_t n = sscanf(line, "%s %lf %lf %lf", header,
             &data[0], &data[1], &data[2]);
     if (n < 3) return false;
-    assert(header == "vp");
+    assert(strcmp(header, "vp") == 0);
     m_parameters.emplace_back(Eigen::Map<VectorF>(data, n-1));
     return true;
 }
