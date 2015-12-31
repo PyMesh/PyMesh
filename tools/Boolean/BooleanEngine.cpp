@@ -29,16 +29,6 @@
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 
-namespace BooleanEngineHelper {
-    void engine_not_found(const std::string& engine_name) {
-        std::stringstream err_msg;
-        err_msg << "Boolean engine \"" << engine_name
-            << "\" is not supported." << std::endl;
-        throw NotImplementedError(err_msg.str());
-    }
-}
-using namespace BooleanEngineHelper;
-
 BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #ifdef WITH_CORK
     if (engine_name == "cork") { return Ptr(new CorkEngine()); }
@@ -61,7 +51,10 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #ifdef WITH_BSP
     if (engine_name == "bsp") { return Ptr(new BSPEngine()); }
 #endif
-    engine_not_found(engine_name);
+    std::stringstream err_msg;
+    err_msg << "Boolean engine \"" << engine_name
+        << "\" is not supported." << std::endl;
+    throw NotImplementedError(err_msg.str());
 }
 
 void BooleanEngine::clean_up() {
