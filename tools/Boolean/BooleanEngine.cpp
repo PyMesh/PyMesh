@@ -62,7 +62,6 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
     if (engine_name == "bsp") { return Ptr(new BSPEngine()); }
 #endif
     engine_not_found(engine_name);
-    return Ptr(NULL);
 }
 
 void BooleanEngine::clean_up() {

@@ -198,7 +198,7 @@ size_t MeshChecker::get_num_isolated_vertices() const {
 
 size_t MeshChecker::get_num_duplicated_faces() const {
     const size_t num_faces = m_faces.rows();
-    auto hash_fn = [](const VectorI& key) {
+    auto hash_fn = [](const VectorI& key) -> size_t {
         const size_t size = key.size();
         size_t hash = 0;
         for (size_t i=0; i<size; i++)

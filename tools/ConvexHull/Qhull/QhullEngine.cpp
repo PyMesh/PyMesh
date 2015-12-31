@@ -7,9 +7,14 @@
 #include <vector>
 
 #include <Core/Exception.h>
+
+#ifdef __INTEL_COMPILER
+#include <qhull_a.h>
+#else
 extern "C" {
 #include <qhull_a.h>
 }
+#endif
 
 void QhullEngine::run(const MatrixFr& points) {
     const size_t num_points = points.rows();

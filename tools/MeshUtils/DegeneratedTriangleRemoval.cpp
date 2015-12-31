@@ -81,7 +81,7 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
     // loop through faces, check if a face is a colinear.
     // If so, flip the longest edge.
 
-    auto comp = [&](const Triplet& e1, const Triplet& e2) {
+    auto comp = [&](const Triplet& e1, const Triplet& e2) -> bool{
         // Return true if e1 is longer than e2.
         auto v1 = m_vertices.row(e1.get_ori_data()[0]);
         auto v2 = m_vertices.row(e1.get_ori_data()[1]);

@@ -16,7 +16,6 @@ CSGTree::Ptr CSGTree::create(const std::string& engine_name) {
     std::stringstream err_msg;
     err_msg << "CSG engine " << engine_name << " is not supported";
     throw NotImplementedError(err_msg.str());
-    return Ptr(NULL);
 }
 
 CSGTree::Ptr CSGTree::create_leaf(const std::string& engine_name,
@@ -30,5 +29,4 @@ CSGTree::Ptr CSGTree::create_leaf(const std::string& engine_name,
     std::stringstream err_msg;
     err_msg << "CSG engine " << engine_name << " is not supported";
     throw NotImplementedError(err_msg.str());
-    return Ptr(NULL);
 }
