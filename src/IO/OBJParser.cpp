@@ -259,11 +259,11 @@ bool OBJParser::parse_face_line(char* line) {
     field = strtok(NULL, WHITE_SPACE);
 
     // Extract vertex idx
-    size_t idx[4];
+    std::vector<size_t> idx;
     int v_idx, vt_idx, vn_idx;
     size_t n;
     size_t i=0;
-    for (i=0; i<4 && field != NULL; i++) {
+    while (field != NULL) {
         // Note each vertex field could be in any of the following formats:
         // v_idx  or  v_idx/vt_idx  or  v_idx/vt_idx/vn_idx
         // Only v_idx is extracted for now.
@@ -272,28 +272,24 @@ bool OBJParser::parse_face_line(char* line) {
             return false;
         }
         assert(v_idx > 0);
-        idx[i] = v_idx-1; // OBJ has index starting from 1
+        idx.push_back(v_idx-1); // OBJ has index starting from 1
 
         // Get next token
         field = strtok(NULL, WHITE_SPACE);
     }
-    if (field != NULL) {
-        std::cerr << "Only triangle and quad meshes are supported" << std::endl;
-        return false;
-    }
 
-    if (i != 3 && i != 4) {
-        std::stringstream err_msg;
-        err_msg << "Only triangle and quad are supported in OBJ parsing." <<
-            std::endl;
-        err_msg << "Detecting face with " << i << " vertices!";
-        throw IOError(err_msg.str());
-    }
-
-    if (i == 3) {
+    const size_t num_idx_parsed = idx.size();
+    if (num_idx_parsed == 3) {
         m_tris.push_back(Vector3I(idx[0], idx[1], idx[2]));
-    } else if (i == 4) {
+    } else if (num_idx_parsed == 4) {
         m_quads.push_back(Vector4I(idx[0], idx[1], idx[2], idx[3]));
+    } else {
+        // N-gon detected, assuming it is convex and break it into triangles.
+        std::cerr << num_idx_parsed << "-gon detected, converting to triangles"
+            << std::endl;
+        for (size_t i=1; i<num_idx_parsed-1; i++) {
+            m_tris.push_back(Vector3I(idx[0], idx[i], idx[i+1]));
+        }
     }
     return true;
 }
