@@ -170,6 +170,24 @@ def print_extended_info(mesh, info):
     info["edge_manifold"] = is_edge_manifold;
     info["euler_characteristic"] = euler;
 
+def coplanar_analysis(mesh, intersecting_faces):
+    intersect_and_coplanar = set();
+    vertices = mesh.vertices;
+    faces = mesh.faces;
+    for fi, fj in intersecting_faces:
+        p0 = vertices[faces[fi, 0]];
+        p1 = vertices[faces[fi, 1]];
+        p2 = vertices[faces[fi, 2]];
+        q0 = vertices[faces[fj, 0]];
+        q1 = vertices[faces[fj, 1]];
+        q2 = vertices[faces[fj, 2]];
+        if pymesh.orient_3D(p0, p1, p2, q0) == 0 and \
+           pymesh.orient_3D(p0, p1, p2, q1) == 0 and \
+           pymesh.orient_3D(p0, p1, p2, q2) == 0:
+               intersect_and_coplanar.add(fi);
+               intersect_and_coplanar.add(fj);
+    return intersect_and_coplanar;
+
 def print_self_intersection_info(mesh, info):
     if mesh.vertex_per_face == 4:
         print_red("Converting quad to tri for self-intersection check.");
@@ -177,14 +195,20 @@ def print_self_intersection_info(mesh, info):
 
     if mesh.num_vertices == 0 or mesh.num_faces == 0:
         num_intersections = 0;
+        num_coplanar_intersecting_faces = 0;
     else:
         intersecting_faces = pymesh.detect_self_intersection(mesh);
         num_intersections = len(intersecting_faces);
+        intersect_and_coplanar = coplanar_analysis(mesh, intersecting_faces);
+        num_coplanar_intersecting_faces = len(intersect_and_coplanar);
     info["self_intersect"] = num_intersections > 0;
     info["num_self_intersections"] = num_intersections;
+    info["num_coplanar_intersecting_faces"] = num_coplanar_intersecting_faces;
     print_property("self intersect", info["self_intersect"], False);
     if num_intersections > 0:
         print_property("num self intersections", num_intersections, 0);
+        print_property("num coplanar intersecting faces",
+                num_coplanar_intersecting_faces, 0);
 
 def load_info(mesh_file):
     basename, ext = os.path.splitext(mesh_file);
