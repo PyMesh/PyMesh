@@ -17,7 +17,7 @@ OBJParser::OBJParser() :
     m_parameter_dim(0){ }
 
 bool OBJParser::parse(const std::string& filename) {
-    const size_t LINE_SIZE = 256;
+    const size_t LINE_SIZE = 4096;
     char line[LINE_SIZE];
 
     std::ifstream fin(filename.c_str());
