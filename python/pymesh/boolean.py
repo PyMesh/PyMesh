@@ -58,7 +58,7 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
     dim = mesh_1.dim;
 
     if engine == "auto":
-        _auto_select_engine(dim);
+        engine = _auto_select_engine(dim);
     elif engine == "quick_csg":
         return boolean_unsupported.quick_csg(mesh_1, mesh_2, operation,
                 with_timing);
