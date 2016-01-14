@@ -28,7 +28,7 @@ def update_info(output_file, running_time):
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--engine",
-            choices=["igl", "carve", "cgal", "cork", "corefinement",
+            choices=["igl", "bsp", "carve", "cgal", "cork", "corefinement",
                 "quick_csg"],
             default="igl", help="Boolean engine to use");
     parser.add_argument("--timing", "-t",
