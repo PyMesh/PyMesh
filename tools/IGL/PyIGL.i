@@ -4,3 +4,4 @@
 %include eigen.i
 %include Core/ExceptionConverter.i
 %include CellPartition.i
+%include MinkowskiSum.i

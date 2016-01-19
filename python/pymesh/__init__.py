@@ -25,6 +25,7 @@ from .selfintersection import detect_self_intersection
 from .outerhull import compute_outer_hull
 from .winding_number import compute_winding_number
 from .meshutils import *
+from .minkowski_sum import minkowski_sum
 from .misc import *
 from .triangulate import triangulate, retriangulate, retriangulate_raw
 from .predicates import orient_3D, orient_2D, in_circle, in_sphere
@@ -41,6 +42,7 @@ __all__ = [
         "do_intersect",
         "boolean",
         "partition_into_cells",
+        "minkowski_sum",
         "CSGTree",
         "resolve_self_intersection",
         "detect_self_intersection",
