@@ -303,5 +303,5 @@ MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh',
 'PyMeshUtils', 'PyBoolean', 'PyAssembler', 'PyCGAL', 'PyConvexHull',
 'PyEigenUtils', 'PyEnvelope', 'PyOuterHull', 'PyPredicates',
 'PySelfIntersection', 'PySparseSolver', 'PyTetgen', 'PyTetrahedronization',
-'PyTriangle', 'PyWires', 'PyWindingNumber'];
+'PyTriangle', 'PyWires', 'PyWindingNumber', 'PyIGL'];
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
