@@ -102,7 +102,7 @@ def print_face_info(mesh, info):
     face_areas = mesh.get_attribute("face_area");
     quantile_breakdown(face_areas, "area", info);
 
-def print_other_info(mesh, info):
+def print_quantile_info(mesh, info):
     mesh.add_attribute("vertex_valance");
     vertex_valance = mesh.get_attribute("vertex_valance");
     quantile_breakdown(vertex_valance, "valance", info,
@@ -112,6 +112,11 @@ def print_other_info(mesh, info):
     aspect_ratios = mesh.get_attribute("face_aspect_ratio");
     quantile_breakdown(aspect_ratios, "aspect_ratio", info,
             title = "Face Aspect Ratio", with_total=False);
+
+    mesh.add_attribute("edge_dihedral_angle");
+    dihedral_angles = mesh.get_attribute("edge_dihedral_angle");
+    quantile_breakdown(dihedral_angles, "dihedral_angle", info,
+            title = "Dihedral Angle", with_total=False);
 
 def print_voxel_info(mesh, info):
     if (mesh.num_voxels == 0): return;
@@ -269,7 +274,7 @@ def main():
     print_face_info(mesh, info);
     print_voxel_info(mesh, info);
     if (args.extended):
-        print_other_info(mesh, info);
+        print_quantile_info(mesh, info);
         print_extended_info(mesh, info);
     if (args.self_intersection):
         print_self_intersection_info(mesh, info);
