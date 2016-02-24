@@ -14,12 +14,12 @@ from print_utils import print_bold, print_header, print_green, print_red
 
 def print_property(name, val, expected=None):
     if expected is not None and val != expected:
-        print_red("{:-<35}: {}".format(name, val));
+        print_red("{:-<48}: {}".format(name, val));
     else:
-        print("{:-<35}: {}".format(name, val));
+        print("{:-<48}: {}".format(name, val));
 
 def print_section_header(val):
-    print_green("{:_^45}".format(val));
+    print_green("{:_^55}".format(val));
 
 def print_basic_info(mesh, info):
     print_section_header("Basic information");
@@ -56,52 +56,69 @@ def print_bbox(mesh, info):
     info["bbox_min"] = bbox_min.tolist();
     info["bbox_max"] = bbox_max.tolist();
 
-def print_percentage(data):
-    p0, p25, p50, p75, p100= np.percentile(data, [0, 25, 50, 75, 100]);
-    table_format = "{:^7.3}  {:^7.3}  {:^7.3}  {:^7.3}  {:^7.3}";
-    print(table_format.format("min", "25%", "50%", "75%", "max"));
-    print(table_format.format(p0, p25, p50, p75, p100));
-    return p0, p25, p50, p75, p100;
+def quantile_breakdown(data, name, info, title=None, with_total=True):
+    if title is None:
+        title = "{} info".format(name.capitalize());
+    print_section_header(title);
+
+    # Filter out inf/nan values.
+    is_valid = np.isfinite(data);
+    data = data[is_valid];
+    num_bad_values = len(is_valid) - len(data);
+    info["bad_{}".format(name)] = num_bad_values;
+    if not np.all(is_valid):
+        print_red("Skipping {} non-finite values".format(num_bad_values));
+
+    ave = np.mean(data);
+    ave_text = "ave: {:.6g}".format(ave);
+    print("{: <27}".format(ave_text), end="");
+    if with_total:
+        total = np.sum(data);
+        total_text = "total: {:.6g}".format(total);
+        print("{: >28}".format(total_text));
+    else:
+        print();
+
+    p0, p25, p50, p75, p90, p95, p100 =\
+            np.percentile(data, [0, 25, 50, 75, 90, 95, 100]);
+    table_format = "{:^7.3} {:^7.3} {:^7.3} {:^7.3} {:^7.3} {:^7.3} {:^7.3}";
+    print(table_format.format("min", "25%", "50%", "75%", "90%", "95%", "max"));
+    print(table_format.format(p0, p25, p50, p75, p90, p95, p100));
+
+    info["ave_{}".format(name)] = ave;
+    info["min_{}".format(name)] = p0;
+    info["p25_{}".format(name)] = p25;
+    info["median_{}".format(name)] = p50;
+    info["p75_{}".format(name)] = p75;
+    info["p90_{}".format(name)] = p90;
+    info["p95_{}".format(name)] = p95;
+    info["max_{}".format(name)] = p100;
+    if with_total:
+        info["total_{}".format(name)] = total;
 
 def print_face_info(mesh, info):
     if (mesh.num_faces == 0): return;
-    print_section_header("Face info");
     mesh.add_attribute("face_area");
     face_areas = mesh.get_attribute("face_area");
-    total_area = np.sum(face_areas);
-    ave_area = np.mean(face_areas);
+    quantile_breakdown(face_areas, "area", info);
 
-    print("ave: {:.6g}         total: {:.6g}".format(
-        ave_area, total_area));
-    min_area, p25_area, median_area, p75_area, max_area = \
-            print_percentage(face_areas);
+def print_other_info(mesh, info):
+    mesh.add_attribute("vertex_valance");
+    vertex_valance = mesh.get_attribute("vertex_valance");
+    quantile_breakdown(vertex_valance, "valance", info,
+            title = "Vertex Valance", with_total=False);
 
-    info["total_face_area"] = total_area;
-    info["max_face_area"] = max_area;
-    info["min_face_area"] = min_area;
-    info["ave_face_area"] = ave_area;
-    info["median_face_area"] = median_area;
+    mesh.add_attribute("face_aspect_ratio");
+    aspect_ratios = mesh.get_attribute("face_aspect_ratio");
+    quantile_breakdown(aspect_ratios, "aspect_ratio", info,
+            title = "Face Aspect Ratio", with_total=False);
 
 def print_voxel_info(mesh, info):
     if (mesh.num_voxels == 0): return;
 
-    print_section_header("Voxel info");
     mesh.add_attribute("voxel_volume");
     voxel_volume = mesh.get_attribute("voxel_volume");
-
-    total_volume = np.sum(voxel_volume);
-    ave_volume = np.mean(voxel_volume);
-    print("ave: {:.6g}         total: {:.6g}".format(
-        ave_volume, total_volume));
-
-    min_volume, p25_volume, median_volume, p75_volume, max_volume = \
-            print_percentage(voxel_volume);
-
-    info["total_voxel_volume"] = total_volume;
-    info["max_voxel_volume"] = max_volume;
-    info["min_voxel_volume"] = min_volume;
-    info["ave_voxel_volume"] = ave_volume;
-    info["median_voxel_volume"] = median_volume;
+    quantile_breakdown(voxel_volume, "volume", info);
 
 def print_extended_info(mesh, info):
     print_section_header("Extended info");
@@ -246,12 +263,13 @@ def main():
     info = load_info(args.input_mesh);
 
     header = "Summary of {}".format(args.input_mesh);
-    print_header("{:=^45}".format(header));
+    print_header("{:=^55}".format(header));
     print_basic_info(mesh, info);
     print_bbox(mesh, info);
     print_face_info(mesh, info);
     print_voxel_info(mesh, info);
     if (args.extended):
+        print_other_info(mesh, info);
         print_extended_info(mesh, info);
     if (args.self_intersection):
         print_self_intersection_info(mesh, info);
