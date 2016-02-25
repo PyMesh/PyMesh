@@ -4,6 +4,7 @@
 Print out useful info about an input mesh.
 """
 
+from __future__ import print_function
 import argparse
 import json
 import numpy as np
