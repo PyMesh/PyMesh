@@ -61,6 +61,9 @@ def quantile_breakdown(data, name, info, title=None, with_total=True):
     if title is None:
         title = "{} info".format(name.capitalize());
     print_section_header(title);
+    if len(data) == 0:
+        print_red("Empty");
+        return;
 
     # Filter out inf/nan values.
     is_valid = np.isfinite(data);
