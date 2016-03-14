@@ -56,7 +56,7 @@ def parse_config_file(config_file):
 
     def convert_to_abs_path(field_name):
         field = config[field_name];
-        if isinstance(field, (unicode, str)):
+        if isinstance(field, str):
             config[field_name] = str(find_file(field, config_dir));
 
     if "wire_network" in config:
@@ -132,6 +132,9 @@ def tile_with_guide_box(config):
             parameters);
     network = tiler.wire_network;
 
+    if config.get("trim", False):
+        network.trim();
+
     inflator = Inflator(network);
     inflator.inflate(network.get_attribute("thickness").ravel(),
             parameters.per_vertex_thickness);
@@ -147,6 +150,9 @@ def tile_with_guide_mesh(config):
     tiler.set_base_pattern(network);
     tiler.tile_with_guide_mesh(guide_mesh, parameters);
     network = tiler.wire_network;
+
+    if config.get("trim", False):
+        network.trim();
 
     inflator = Inflator(network);
     inflator.inflate(network.get_attribute("thickness").ravel(),
@@ -165,6 +171,9 @@ def tile_with_mixed_patterns(config):
     tiler.tile_with_mixed_patterns(mesh,
             per_vertex_thickness, options["dof_type"] == "isotropic");
     network = tiler.wire_network;
+
+    if config.get("trim", False):
+        network.trim();
 
     inflator = Inflator(network);
     inflator.inflate(network.get_attribute("thickness").ravel(),
