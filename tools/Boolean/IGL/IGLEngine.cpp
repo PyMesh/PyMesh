@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "IGLEngine.h"
 
-#include <igl/copyleft/boolean/mesh_boolean.h>
+#include <igl/copyleft/cgal/mesh_boolean.h>
 
 namespace IGLEngineHelper {
     void exact_to_float(const IGLEngine::MatrixEr& m_e, MatrixFr& m_f) {
@@ -54,37 +54,37 @@ namespace serialization_xml {
 #endif
 
 void IGLEngine::compute_union() {
-    igl::copyleft::boolean::mesh_boolean(
+    igl::copyleft::cgal::mesh_boolean(
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
-            igl::copyleft::boolean::MESH_BOOLEAN_TYPE_UNION,
+            igl::MESH_BOOLEAN_TYPE_UNION,
             m_exact_vertices, m_faces, m_face_sources);
     exact_to_float(m_exact_vertices, m_vertices);
 }
 
 void IGLEngine::compute_intersection() {
-    igl::copyleft::boolean::mesh_boolean(
+    igl::copyleft::cgal::mesh_boolean(
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
-            igl::copyleft::boolean::MESH_BOOLEAN_TYPE_INTERSECT,
+            igl::MESH_BOOLEAN_TYPE_INTERSECT,
             m_exact_vertices, m_faces, m_face_sources);
     exact_to_float(m_exact_vertices, m_vertices);
 }
 
 void IGLEngine::compute_difference() {
-    igl::copyleft::boolean::mesh_boolean(
+    igl::copyleft::cgal::mesh_boolean(
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
-            igl::copyleft::boolean::MESH_BOOLEAN_TYPE_MINUS,
+            igl::MESH_BOOLEAN_TYPE_MINUS,
             m_exact_vertices, m_faces, m_face_sources);
     exact_to_float(m_exact_vertices, m_vertices);
 }
 
 void IGLEngine::compute_symmetric_difference() {
-    igl::copyleft::boolean::mesh_boolean(
+    igl::copyleft::cgal::mesh_boolean(
             m_vertices_1, m_faces_1, 
             m_vertices_2, m_faces_2,
-            igl::copyleft::boolean::MESH_BOOLEAN_TYPE_XOR,
+            igl::MESH_BOOLEAN_TYPE_XOR,
             m_exact_vertices, m_faces, m_face_sources);
     exact_to_float(m_exact_vertices, m_vertices);
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Boolean/CSGTree.h>
-#include <igl/copyleft/boolean/CSGTree.h>
+#include <igl/copyleft/cgal/CSGTree.h>
 
 class IGLCSGTree : public CSGTree {
     public:
@@ -24,6 +24,6 @@ class IGLCSGTree : public CSGTree {
         virtual std::vector<size_t> get_birth_face_sizes() const;
 
     protected:
-        typedef igl::copyleft::boolean::CSGTree IGLTree;
+        typedef igl::copyleft::cgal::CSGTree IGLTree;
         IGLTree m_igl_tree;
 };

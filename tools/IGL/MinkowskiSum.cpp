@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #include "MinkowskiSum.h"
 #include <Math/MatrixUtils.h>
-#include <igl/copyleft/boolean/minkowski_sum.h>
+#include <igl/copyleft/cgal/minkowski_sum.h>
 
 #include <vector>
 
@@ -37,7 +37,7 @@ void MinkowskiSum::run(const MatrixFr& path) {
         MatrixIr F;
         VectorI J;
 
-        igl::copyleft::boolean::minkowski_sum(m_vertices, m_faces,
+        igl::copyleft::cgal::minkowski_sum(m_vertices, m_faces,
                 s, d, V, F, J);
         vertices.emplace_back(V);
         faces.emplace_back(F);
