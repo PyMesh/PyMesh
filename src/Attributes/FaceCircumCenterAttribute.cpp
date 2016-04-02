@@ -46,4 +46,10 @@ void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
             v1 * coeff[1] +
             v2 * coeff[2];
     }
+
+    if (!circum_centers.allFinite()) {
+        std::cerr << "Warning: "
+            << "circumcenter is not all finite due to degenearte triangles"
+            << std::endl;
+    }
 }
