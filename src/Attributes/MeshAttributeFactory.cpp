@@ -8,6 +8,7 @@
 #include "FaceCentroidAttribute.h"
 #include "FaceCircumCenterAttribute.h"
 #include "FaceIncircleCenterAttribute.h"
+#include "FaceIncircleRadiusAttribute.h"
 #include "FaceIndexAttribute.h"
 #include "FaceNormalAttribute.h"
 #include "FaceVoronoiAreaAttribute.h"
@@ -73,6 +74,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "face_incircle_center") {
         MeshAttribute::Ptr attr(new FaceIncircleCenterAttribute(name));
+        return attr;
+    } else if (name == "face_incircle_radius") {
+        MeshAttribute::Ptr attr(new FaceIncircleRadiusAttribute(name));
         return attr;
     } else if (name == "face_index") {
         MeshAttribute::Ptr attr(new FaceIndexAttribute(name));

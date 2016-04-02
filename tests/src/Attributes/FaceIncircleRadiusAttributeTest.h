@@ -6,33 +6,38 @@
 
 #include <TestBase.h>
 
-class FaceIncircleCenterAttributeTest : public TestBase {
+class FaceIncircleRadiusAttributeTest : public TestBase {
     protected:
         MeshPtr load_mesh(const std::string& filename) {
             MeshPtr r = TestBase::load_mesh(filename);
-            r->add_attribute("face_incircle_center");
+            r->add_attribute("face_incircle_radius");
             return r;
         }
 
-        void check_incircle_centers(MeshPtr mesh) {
+        void check_incircle_radii(MeshPtr mesh) {
+            if (!mesh->has_attribute("face_incircle_radius")) {
+                mesh->add_attribute("face_incircle_radius");
+            }
             if (!mesh->has_attribute("face_incircle_center")) {
                 mesh->add_attribute("face_incircle_center");
             }
 
             const VectorF& centers = mesh->get_attribute("face_incircle_center");
+            const VectorF& radii = mesh->get_attribute("face_incircle_radius");
             const size_t dim = mesh->get_dim();
             const size_t num_faces = mesh->get_num_faces();
             for (size_t i=0; i<num_faces; i++) {
                 VectorI face = mesh->get_face(i);
                 VectorF center = centers.segment(i*dim, dim);
-                check_incircle_center(center,
+                check_incircle_radius(radii[i], center,
                         mesh->get_vertex(face[0]),
                         mesh->get_vertex(face[1]),
                         mesh->get_vertex(face[2]));
             }
         }
 
-        void check_incircle_center(
+        void check_incircle_radius(
+                const Float r,
                 const VectorF& center,
                 const VectorF& p1,
                 const VectorF& p2,
@@ -44,29 +49,26 @@ class FaceIncircleCenterAttributeTest : public TestBase {
             const Float o2 = (p1 - p3).norm();
             const Float o3 = (p1 - p2).norm();
 
-            const Float ratio1 = cp1==0.0 ? 0.0 : cp1*cp1/(o2*o3);
-            const Float ratio2 = cp2==0.0 ? 0.0 : cp2*cp2/(o1*o3);
-            const Float ratio3 = cp3==0.0 ? 0.0 : cp3*cp3/(o1*o2);
-
-            if (ratio1 != 0.0 || ratio2 != 0.0 || ratio2 != 0.0) {
-                ASSERT_FLOAT_EQ(1.0, ratio1+ratio2+ratio3);
-            }
+            ASSERT_FLOAT_EQ(o1 + o2 + o3,
+                    2 * sqrt(cp1*cp1-r*r) +
+                    2 * sqrt(cp2*cp2-r*r) +
+                    2 * sqrt(cp3*cp3-r*r));
         }
 };
 
-TEST_F(FaceIncircleCenterAttributeTest, 2D) {
+TEST_F(FaceIncircleRadiusAttributeTest, 2D) {
     MeshPtr square = load_mesh("square_2D.obj");
-    ASSERT_TRUE(square->has_attribute("face_incircle_center"));
-    check_incircle_centers(square);
+    ASSERT_TRUE(square->has_attribute("face_incircle_radius"));
+    check_incircle_radii(square);
 }
 
-TEST_F(FaceIncircleCenterAttributeTest, 3D) {
-    MeshPtr cube = load_mesh("cube.obj");
-    ASSERT_TRUE(cube->has_attribute("face_incircle_center"));
-    check_incircle_centers(cube);
+TEST_F(FaceIncircleRadiusAttributeTest, 3D) {
+    MeshPtr tet = load_mesh("tet.obj");
+    ASSERT_TRUE(tet->has_attribute("face_incircle_radius"));
+    check_incircle_radii(tet);
 }
 
-TEST_F(FaceIncircleCenterAttributeTest, DegenerateTriangle) {
+TEST_F(FaceIncircleRadiusAttributeTest, DegenerateTriangle) {
     MatrixFr vertices(2, 3);
     vertices << 0.0, 0.0, 0.0,
                 1.0, 0.0, 0.0;
@@ -75,10 +77,10 @@ TEST_F(FaceIncircleCenterAttributeTest, DegenerateTriangle) {
     MatrixIr voxels(0, 3);
 
     MeshPtr mesh = load_data(vertices, faces, voxels);
-    check_incircle_centers(mesh);
+    check_incircle_radii(mesh);
 }
 
-TEST_F(FaceIncircleCenterAttributeTest, DegenerateTriangle2) {
+TEST_F(FaceIncircleRadiusAttributeTest, DegenerateTriangle2) {
     MatrixFr vertices(2, 3);
     vertices << 0.0, 0.0, 0.0,
                 1.0, 0.0, 0.0;
@@ -87,5 +89,5 @@ TEST_F(FaceIncircleCenterAttributeTest, DegenerateTriangle2) {
     MatrixIr voxels(0, 3);
 
     MeshPtr mesh = load_data(vertices, faces, voxels);
-    check_incircle_centers(mesh);
+    check_incircle_radii(mesh);
 }
