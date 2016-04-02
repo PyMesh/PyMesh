@@ -9,6 +9,7 @@
 #include "FaceCentroidAttribute.h"
 #include "FaceCircumCenterAttribute.h"
 #include "FaceCircumRadiusAttribute.h"
+#include "FaceEdgeRatioAttribute.h"
 #include "FaceIncircleCenterAttribute.h"
 #include "FaceIncircleRadiusAttribute.h"
 #include "FaceIndexAttribute.h"
@@ -79,6 +80,9 @@ MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
         return attr;
     } else if (name == "face_circumradius") {
         MeshAttribute::Ptr attr(new FaceCircumRadiusAttribute(name));
+        return attr;
+    } else if (name == "face_edge_ratio") {
+        MeshAttribute::Ptr attr(new FaceEdgeRatioAttribute(name));
         return attr;
     } else if (name == "face_incircle_center") {
         MeshAttribute::Ptr attr(new FaceIncircleCenterAttribute(name));

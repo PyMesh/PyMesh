@@ -1,6 +1,7 @@
 #include "FaceCircumRadiusAttribute.h"
 
 #include <iostream>
+#include <limits>
 
 #include <Mesh.h>
 #include <Core/Exception.h>
@@ -29,8 +30,12 @@ void FaceCircumRadiusAttribute::compute_from_mesh(Mesh& mesh) {
 
     for (size_t i=0; i<num_faces; i++) {
         VectorI face = mesh.get_face(i);
-        circumradii[i] = (edge_length[3*i] * edge_length[3*i+1] *
-                edge_length[3*i+2]) / (4*face_area[i]);
+        if (face_area[i] == 0.0) {
+            circumradii[i] = std::numeric_limits<Float>::infinity();
+        } else {
+            circumradii[i] = (edge_length[3*i] * edge_length[3*i+1] *
+                    edge_length[3*i+2]) / (4*face_area[i]);
+        }
     }
 
     if (!circumradii.allFinite()) {

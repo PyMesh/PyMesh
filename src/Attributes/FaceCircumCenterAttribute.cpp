@@ -4,6 +4,7 @@
 #include <Mesh.h>
 #include <Core/Exception.h>
 #include <iostream>
+#include <limits>
 
 void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();
@@ -39,7 +40,12 @@ void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
                 sq_l0 * (sq_l1 + sq_l2 - sq_l0),
                 sq_l1 * (sq_l0 + sq_l2 - sq_l1),
                 sq_l2 * (sq_l0 + sq_l1 - sq_l2));
-        coeff /= coeff.sum();
+        Float sum = coeff.sum();
+        if (sum == 0.0) {
+            coeff.setConstant(std::numeric_limits<Float>::infinity());
+        } else {
+            coeff /= coeff.sum();
+        }
 
         circum_centers.segment(i*dim, dim) =
             v0 * coeff[0] +
