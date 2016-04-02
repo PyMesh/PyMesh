@@ -14,6 +14,11 @@ void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         throw RuntimeError("Circumcenter is only defined for triangle faces.");
     }
 
+    if (!mesh.has_attribute("edge_squared_length")) {
+        mesh.add_attribute("edge_squared_length");
+    }
+    VectorF edge_sq_length = mesh.get_attribute("edge_squared_length");
+
     VectorF& circum_centers = m_values;
     circum_centers.resize(num_faces * dim);
 
@@ -26,17 +31,9 @@ void FaceCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         VectorF v1 = vertices.segment(face[1]*dim, dim);
         VectorF v2 = vertices.segment(face[2]*dim, dim);
 
-        Vector3F e0 = Vector3F::Zero();
-        Vector3F e1 = Vector3F::Zero();
-        Vector3F e2 = Vector3F::Zero();
-
-        e0.segment(0,dim) = v2 - v1;
-        e1.segment(0,dim) = v0 - v2;
-        e2.segment(0,dim) = v1 - v0;
-
-        Float sq_l0 = e0.squaredNorm();
-        Float sq_l1 = e1.squaredNorm();
-        Float sq_l2 = e2.squaredNorm();
+        Float sq_l0 = edge_sq_length[i*3+1];
+        Float sq_l1 = edge_sq_length[i*3+2];
+        Float sq_l2 = edge_sq_length[i*3+0];
 
         Vector3F coeff(
                 sq_l0 * (sq_l1 + sq_l2 - sq_l0),

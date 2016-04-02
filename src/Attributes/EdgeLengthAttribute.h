@@ -15,7 +15,4 @@ class EdgeLengthAttribute : public MeshAttribute {
 
     public:
         virtual void compute_from_mesh(Mesh& mesh);
-
-    private:
-        VectorF compute_edge_length_on_face(Mesh& mesh, size_t face_idx);
 };
