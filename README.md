@@ -43,7 +43,8 @@ Optional library:
 * [triangle](http://www.cs.cmu.edu/~quake/triangle.html)
 * [qhull](http://www.qhull.org/)
 * [Clipper](http://www.angusj.com/delphi/clipper.php)
-* [Carve](https://code.google.com/p/carve/)
+* [Carve](https://github.com/qnzhou/carve) - Minor modification made by me
+  for linux/mac compilation.
 
 ### Environment Variables ###
 

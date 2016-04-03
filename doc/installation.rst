@@ -46,7 +46,8 @@ installed using package management softwares for your OS.
   :doc:`triangle_compilation_note`).
 * qhull_: is used for computing convex hull.
 * Clipper_: is used for 2D boolean operations.
-* Carve_: is not currently used, but its support is on the way.
+* Carve_: is used for 3D boolean operations.  Minor modification is added by me
+  for linux/mac compilation.
 
 .. _SparseHash: https://code.google.com/p/sparsehash/
 .. _CGAL: https://www.cgal.org
@@ -56,7 +57,7 @@ installed using package management softwares for your OS.
 .. _triangle: http://www.cs.cmu.edu/~quake/triangle.html
 .. _qhull: http://www.qhull.org/
 .. _Clipper: http://www.angusj.com/delphi/clipper.php
-.. _Carve: https://code.google.com/p/carve/
+.. _Carve: https://github.com/qnzhou/carve
 
 Environment Variables:
 ----------------------
