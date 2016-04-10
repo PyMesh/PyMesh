@@ -16,6 +16,7 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
+from .matrixio import load_matrix, save_matrix
 from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
 from .boolean import boolean
 from .cell_partition import partition_into_cells
