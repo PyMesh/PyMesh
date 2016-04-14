@@ -27,6 +27,7 @@ def parse_config_file(config_file):
         "geometry_correction_cap": #,
         "geometry_spread": #
         "geometry_correction_lookup": filename,
+        "output_wire_network": filename,
 
         # options for specifying parameters
         "thickness": float,
@@ -174,6 +175,8 @@ def tile_with_mixed_patterns(config):
 
     if config.get("trim", False):
         network.trim();
+    if "output_wire_network" in config:
+        network.write_to_file(config["output_wire_network"]);
 
     inflator = Inflator(network);
     inflator.inflate(network.get_attribute("thickness").ravel(),
