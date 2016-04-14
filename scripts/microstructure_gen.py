@@ -135,6 +135,8 @@ def tile_with_guide_box(config):
 
     if config.get("trim", False):
         network.trim();
+    if "output_wire_network" in config:
+        network.write_to_file(config["output_wire_network"]);
 
     inflator = Inflator(network);
     inflator.inflate(network.get_attribute("thickness").ravel(),
@@ -154,6 +156,8 @@ def tile_with_guide_mesh(config):
 
     if config.get("trim", False):
         network.trim();
+    if "output_wire_network" in config:
+        network.write_to_file(config["output_wire_network"]);
 
     inflator = Inflator(network);
     inflator.inflate(network.get_attribute("thickness").ravel(),
