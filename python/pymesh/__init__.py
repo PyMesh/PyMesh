@@ -30,6 +30,7 @@ from .minkowski_sum import minkowski_sum
 from .misc import *
 from .triangulate import triangulate, retriangulate, retriangulate_raw
 from .predicates import orient_3D, orient_2D, in_circle, in_sphere
+from .slice_mesh import slice_mesh
 from . import wires
 
 __all__ = [
@@ -56,6 +57,7 @@ __all__ = [
         "oriented_2D",
         "in_circle",
         "in_sphere",
+        "slice_mesh",
         "wires"
         ];
 __all__ += meshutils.__all__;

@@ -63,7 +63,12 @@ class Quaternion:
             axis = v[2,:];
         else:
             axis = np.cross(v1, v2)
-            axis /= norm(axis);
+            l = norm(axis);
+            if l > 0.0:
+                axis /= norm(axis);
+            else:
+                # Parallel vectors.
+                axis = v1;
 
         w_sq = 0.5 * (1.0 + c);
         l = sqrt(1.0 - w_sq) * axis;
