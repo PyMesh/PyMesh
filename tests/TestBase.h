@@ -29,23 +29,34 @@ class TestBase : public ::testing::Test {
         }
 
         virtual MeshPtr load_data(
-                Eigen::Ref<VectorF> vertices,
-                Eigen::Ref<VectorI> faces,
-                Eigen::Ref<VectorI> voxels,
+                const Eigen::Ref<const VectorF>& vertices,
+                const Eigen::Ref<const VectorI>& faces,
+                const Eigen::Ref<const VectorI>& voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
             return MeshFactory().load_data(vertices, faces, voxels,
                         dim, vertex_per_face, vertex_per_voxel).create_shared();
         }
 
         virtual MeshPtr load_data(
-                Eigen::Ref<MatrixFr> vertices,
-                Eigen::Ref<MatrixIr> faces,
-                Eigen::Ref<MatrixIr> voxels) {
+                const Eigen::Ref<const MatrixFr>& vertices,
+                const Eigen::Ref<const MatrixIr>& faces,
+                const Eigen::Ref<const MatrixIr>& voxels) {
             return load_data(
                     MatrixUtils::flatten<VectorF>(vertices),
                     MatrixUtils::flatten<VectorI>(faces),
                     MatrixUtils::flatten<VectorI>(voxels),
                     vertices.cols(), faces.cols(), voxels.cols());
+        }
+
+        virtual MeshPtr load_data(
+                const Eigen::Ref<const MatrixFr>& vertices,
+                const Eigen::Ref<const MatrixIr>& faces) {
+            VectorI voxels;
+            return load_data(
+                    MatrixUtils::flatten<VectorF>(vertices),
+                    MatrixUtils::flatten<VectorI>(faces),
+                    voxels,
+                    vertices.cols(), faces.cols(), 4);
         }
 
         virtual void write_mesh(const std::string& mesh_file, MeshPtr mesh,
@@ -90,6 +101,22 @@ class TestBase : public ::testing::Test {
             write_mesh_raw(mesh_file,
                     flattened_vertices, flattened_faces, flattened_voxels,
                     vertices.cols(), faces.cols(), 0, in_ascii);
+        }
+
+        MatrixFr extract_vertices(MeshPtr mesh) {
+            MatrixFr out_vertices(mesh->get_num_vertices(), mesh->get_dim());
+            const VectorF& vertices = mesh->get_vertices();
+            std::copy(vertices.data(), vertices.data() + vertices.size(),
+                    out_vertices.data());
+            return out_vertices;
+        }
+
+        MatrixIr extract_faces(MeshPtr mesh) {
+            MatrixIr out_faces(mesh->get_num_faces(), mesh->get_vertex_per_face());
+            const VectorI& faces = mesh->get_faces();
+            std::copy(faces.data(), faces.data() + faces.size(),
+                    out_faces.data());
+            return out_faces;
         }
 
     protected:
