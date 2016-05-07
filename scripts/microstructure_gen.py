@@ -139,6 +139,8 @@ def tile_with_guide_box(config):
         network.write_to_file(config["output_wire_network"]);
 
     inflator = Inflator(network);
+    inflator.subdivide_order = options["subdiv"];
+    inflator.subdivide_method = options["subdiv_method"];
     inflator.inflate(network.get_attribute("thickness").ravel(),
             parameters.per_vertex_thickness);
     return inflator.mesh;
@@ -160,6 +162,8 @@ def tile_with_guide_mesh(config):
         network.write_to_file(config["output_wire_network"]);
 
     inflator = Inflator(network);
+    inflator.subdivide_order = options["subdiv"];
+    inflator.subdivide_method = options["subdiv_method"];
     inflator.inflate(network.get_attribute("thickness").ravel(),
             parameters.per_vertex_thickness);
     return inflator.mesh;
@@ -183,6 +187,8 @@ def tile_with_mixed_patterns(config):
         network.write_to_file(config["output_wire_network"]);
 
     inflator = Inflator(network);
+    inflator.subdivide_order = options["subdiv"];
+    inflator.subdivide_method = options["subdiv_method"];
     inflator.inflate(network.get_attribute("thickness").ravel(),
             per_vertex_thickness);
     return inflator.mesh;
