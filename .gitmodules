@@ -1,0 +1,3 @@
+[submodule "third_party/libigl"]
+	path = third_party/libigl
+	url = git@github.com:qnzhou/libigl.git
