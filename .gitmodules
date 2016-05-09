@@ -1,3 +1,12 @@
 [submodule "third_party/libigl"]
 	path = third_party/libigl
 	url = git@github.com:qnzhou/libigl.git
+[submodule "third_party/cork"]
+	path = third_party/cork
+	url = https://github.com/gilbo/cork.git
+[submodule "third_party/carve"]
+	path = third_party/carve
+	url = git@github.com:qnzhou/carve.git
+[submodule "third_party/cgal"]
+	path = third_party/cgal
+	url = https://github.com/CGAL/cgal.git
