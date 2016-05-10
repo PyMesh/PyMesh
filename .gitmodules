@@ -7,3 +7,15 @@
 [submodule "third_party/cork"]
 	path = third_party/cork
 	url = git@github.com:qnzhou/cork.git
+[submodule "third_party/tetgen"]
+	path = third_party/tetgen
+	url = git@github.com:qnzhou/tetgen.git
+[submodule "third_party/triangle"]
+	path = third_party/triangle
+	url = git@github.com:qnzhou/triangle.git
+[submodule "third_party/qhull"]
+	path = third_party/qhull
+	url = git@github.com:qnzhou/qhull.git
+[submodule "third_party/Clipper"]
+	path = third_party/Clipper
+	url = git@github.com:qnzhou/Clipper.git

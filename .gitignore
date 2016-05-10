@@ -19,3 +19,5 @@ python/pymesh/lib
 python/pymesh/swig
 python/pymesh.egg-info/
 doc/_build/
+third_party/build/
+third_party/local/
