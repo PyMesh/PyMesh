@@ -36,7 +36,7 @@ PyMesh depends on the following tools/libraries:
 Optional library:
 
 * [SparseHash](https://code.google.com/p/sparsehash/)
-* [CGAL](https://www.cgal.org/) *
+* [CGAL](https://www.cgal.org/)
 * [tetgen](http://wias-berlin.de/software/tetgen/) *
 * [libigl](http://igl.ethz.ch/projects/libigl/) *
 * [cork](https://github.com/gilbo/cork) *
@@ -77,7 +77,7 @@ The first step is to compile the optional third party dependencies:
     make
     make install
 
-Third party dependencies will be installed at `$PYMESH_PATH/third_party/local`
+Third party dependencies will be installed in `$PYMESH_PATH/third_party/local`
 directory.
 
 Now we can build the main project.  It is recommended to build out of source:
