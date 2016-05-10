@@ -10,6 +10,7 @@
 FIND_PATH(CORK_INCLUDE_DIRS cork.h
     $ENV{CORK_PATH}
     $ENV{CORK_PATH}/include/
+    ${PROJECT_SOURCE_DIR}/third_party/local/include/
     /opt/local/include/
     /usr/local/include/
     /usr/include/)
@@ -17,6 +18,7 @@ FIND_PATH(CORK_INCLUDE_DIRS cork.h
 FIND_LIBRARY(CORK_LIBRARIES cork
     $ENV{CORK_PATH}
     $ENV{CORK_PATH}/lib/
+    ${PROJECT_SOURCE_DIR}/third_party/local/lib/
     /opt/local/lib/
     /usr/local/lib/
     /usr/lib/)

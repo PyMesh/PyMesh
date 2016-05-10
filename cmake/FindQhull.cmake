@@ -23,6 +23,7 @@ find_file(QHULL_HEADER
           NAMES libqhull/libqhull.h qhull.h
           HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}" "${QHULL_INCLUDE_DIR}"
           PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+          ${PROJECT_SOURCE_DIR}/third_party/local/include/
           PATH_SUFFIXES qhull src/libqhull libqhull include)
 
 set(QHULL_HEADER "${QHULL_HEADER}" CACHE INTERNAL "QHull header" FORCE )
@@ -47,6 +48,7 @@ find_library(QHULL_LIBRARY
              NAMES ${QHULL_RELEASE_NAME}
              HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
              PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+             ${PROJECT_SOURCE_DIR}/third_party/local/lib/
              PATH_SUFFIXES project build bin lib)
 
 find_library(QHULL_LIBRARY_DEBUG 
