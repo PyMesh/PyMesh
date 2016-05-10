@@ -14,7 +14,7 @@ for create minimalistic and easy to use interfaces.
 
 To retrieve the code:
 
-    git clone git@github.com:qnzhou/PyMesh.git
+    git clone --recursive https://github.com/qnzhou/PyMesh.git
 
 Be sure to save the root directory of PyMesh in the environment variable
 PYMESH_PATH:
@@ -36,15 +36,16 @@ PyMesh depends on the following tools/libraries:
 Optional library:
 
 * [SparseHash](https://code.google.com/p/sparsehash/)
-* [CGAL](https://www.cgal.org/)
-* [tetgen](http://wias-berlin.de/software/tetgen/)
-* [libigl](http://igl.ethz.ch/projects/libigl/)
-* [cork](https://github.com/gilbo/cork)
-* [triangle](http://www.cs.cmu.edu/~quake/triangle.html)
-* [qhull](http://www.qhull.org/)
-* [Clipper](http://www.angusj.com/delphi/clipper.php)
-* [Carve](https://github.com/qnzhou/carve) - Minor modification made by me
-  for linux/mac compilation.
+* [CGAL](https://www.cgal.org/) *
+* [tetgen](http://wias-berlin.de/software/tetgen/) *
+* [libigl](http://igl.ethz.ch/projects/libigl/) *
+* [cork](https://github.com/gilbo/cork) *
+* [triangle](http://www.cs.cmu.edu/~quake/triangle.html) *
+* [qhull](http://www.qhull.org/) *
+* [Clipper](http://www.angusj.com/delphi/clipper.php) *
+* [Carve](https://github.com/qnzhou/carve) *
+
+Libraries marked with `*` are included in `$PYMESH_PATH/third_party` directory.
 
 ### Environment Variables ###
 
@@ -67,7 +68,19 @@ varaibles:
 
 ### Build ###
 
-It is recommended to build out of source:
+The first step is to compile the optional third party dependencies:
+
+    cd $PYMESH_PATH/third_party
+    mkdir build
+    cd build
+    cmake ..
+    make
+    make install
+
+Third party dependencies will be installed at `$PYMESH_PATH/third_party/local`
+directory.
+
+Now we can build the main project.  It is recommended to build out of source:
 
     cd $PYMESH_PATH
     mkdir build
