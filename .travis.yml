@@ -1,20 +1,20 @@
 language: cpp
-sudo: false
+sudo: true
 addons:
     apt:
         packages:
-            -g++-4.9
-            -cmake
-            -libcgal-dev
-            -libeigen3-dev
-            -libgmp-dev
-            -libumfpack5.6.2
-            -python-numpy
-            -python-scipy
-            -python-setuptools
-            -python
-            -swig
-sciprt:
+            - g++-4.9
+            - cmake
+            - libcgal-dev
+            - libeigen3-dev
+            - libgmp-dev
+            - libumfpack5.6.2
+            - python-numpy
+            - python-scipy
+            - python-setuptools
+            - python
+            - swig
+script:
     - git submodule update --init --recursive
     - mkdir third_party/build
     - cd third_party/build
