@@ -14,7 +14,6 @@ addons:
             -python-setuptools
             -python
             -swig
-
 sciprt:
     - git submodule update --init --recursive
     - mkdir third_party/build
@@ -25,10 +24,8 @@ sciprt:
     - cd ../..
     - ./setup.py build
     - ./setup.py install --user
-
 env:
     - PYMESH_PATH=$TRAVIS_BUILD_DIR
-
 after_success:
     - cd build
     - make all_tests
