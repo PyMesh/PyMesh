@@ -2,6 +2,8 @@ language: cpp
 sudo: true
 before_install:
     - sudo apt-get -qq update
+virtualenv:
+  system_site_packages: true
 addons:
     apt:
         sources:
