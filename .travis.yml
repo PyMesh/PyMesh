@@ -4,9 +4,11 @@ before_install:
     - sudo apt-get -qq update
 addons:
     apt:
+        sources:
+            - ubuntu-toolchain-r-test
+            - george-edison55-precise-backports
         packages:
-            #- g++-4.9
-            - g++-4.8
+            - g++-4.9
             - cmake
             - libcgal-dev
             - libeigen3-dev
