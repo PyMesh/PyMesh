@@ -9,6 +9,7 @@ addons:
         sources:
             - ubuntu-toolchain-r-test
             - george-edison55-precise-backports
+            - debian-sid
         packages:
             - g++-4.9
             - cmake
@@ -33,7 +34,6 @@ script:
     - cd build
     - python --version
     - python -c "import numpy as n; print(n.__version__); print(n.get_include());"
-    - ls /usr/lib/
     - cmake -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
     - make
     - make tools
