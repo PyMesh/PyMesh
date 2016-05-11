@@ -5,12 +5,13 @@ before_install:
 addons:
     apt:
         packages:
-            - g++-4.9
+            #- g++-4.9
+            - g++-4.8
             - cmake
             - libcgal-dev
             - libeigen3-dev
             - libgmp-dev
-            - libumfpack5.6.2
+            #- libumfpack5.6.2
             - python-numpy
             - python-scipy
             - python-setuptools
