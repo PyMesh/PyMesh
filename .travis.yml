@@ -1,5 +1,7 @@
 language: cpp
 sudo: true
+before_install:
+    - sudo apt-get -qq update
 addons:
     apt:
         packages:
