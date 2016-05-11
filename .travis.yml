@@ -10,6 +10,7 @@ addons:
         packages:
             - g++-4.9
             - cmake
+            - cmake-data
             - libcgal-dev
             - libeigen3-dev
             - libgmp-dev
