@@ -21,6 +21,12 @@ addons:
             - python-setuptools
             - swig
 script:
+    - wget http://repo.continuum.io/miniconda/Miniconda-3.8.3-Linux-x86_64.sh -O miniconda.sh
+    - chmod +x miniconda.sh
+    - export PATH=/home/travis/miniconda/bin:$PATH
+    - conda install --yes numpy=1.8
+    - conda install --yes scipy
+    - conda install --yes setuptools
     - git submodule update --init --recursive
     - mkdir third_party/build
     - cd third_party/build
