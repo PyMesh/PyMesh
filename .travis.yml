@@ -16,7 +16,8 @@ addons:
             - libcgal-dev
             - libgmp-dev
             #- libumfpack5.6.2
-            - python3.4
+            - python3
+            - libpython3-dev
             - python3-numpy
             - python3-scipy
             - python3-setuptools
@@ -31,7 +32,7 @@ script:
     - cd ../..
     - mkdir -p build
     - cd build
-    - alias python=python3.4
+    - alias python=python3
     - python --version
     - python -c "import numpy as n; print(n.__version__); print(n.get_include());"
     - cmake -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
