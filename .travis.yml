@@ -4,6 +4,9 @@ before_install:
     - sudo apt-get -qq update
 virtualenv:
   system_site_packages: true
+branches:
+    only:
+        - travis_ci
 addons:
     apt:
         sources:
