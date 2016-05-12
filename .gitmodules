@@ -19,3 +19,6 @@
 [submodule "third_party/Clipper"]
 	path = third_party/Clipper
 	url = https://github.com/qnzhou/Clipper.git
+[submodule "third_party/eigen"]
+	path = third_party/eigen
+	url = https://github.com/qnzhou/eigen.git

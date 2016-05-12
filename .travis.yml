@@ -9,13 +9,11 @@ addons:
         sources:
             - ubuntu-toolchain-r-test
             - george-edison55-precise-backports
-            - debian-sid
         packages:
             - g++-4.9
             - cmake
             - cmake-data
             - libcgal-dev
-            - libeigen3-dev
             - libgmp-dev
             #- libumfpack5.6.2
             - python3-numpy

@@ -20,6 +20,7 @@ find_path(EIGEN_INCLUDE_DIRS
     PATHS
     $ENV{EIGEN_INC}
     $ENV{EIGEN_PATH}
+    ${PROJECT_SOURCE_DIR}/third_party/local/include
     /opt/local/include
     /usr/local/include
     /usr/include
