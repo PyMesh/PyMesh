@@ -32,6 +32,7 @@ script:
     - conda install --yes numpy=1.8
     - conda install --yes scipy
     - conda install --yes setuptools
+    - git checkout travis_ci
     - git submodule update --init --recursive
     - mkdir third_party/build
     - cd third_party/build
