@@ -23,7 +23,12 @@ addons:
 script:
     - wget http://repo.continuum.io/miniconda/Miniconda-3.8.3-Linux-x86_64.sh -O miniconda.sh
     - chmod +x miniconda.sh
-    - export PATH=/home/travis/miniconda/bin:$PATH
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
+    - conda info -a
     - conda install --yes numpy=1.8
     - conda install --yes scipy
     - conda install --yes setuptools
