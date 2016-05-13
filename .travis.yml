@@ -20,6 +20,7 @@ addons:
             - libcgal-dev
             - libgmp-dev
             #- libumfpack5.6.2
+            - libboost1.55-dev
             - libsuitesparse-dev
             - python-numpy
             - python-scipy
