@@ -19,6 +19,7 @@ addons:
             - libcgal-dev
             - libgmp-dev
             #- libumfpack5.6.2
+            - libsuitesparse-dev
             - python-numpy
             - python-scipy
             - python-setuptools
@@ -46,7 +47,7 @@ script:
     - cd ../..
     - mkdir -p build
     - cd build
-    - cmake -DPYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.dylib -DDPYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7 -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
+    - cmake -DPYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.dylib -DPYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7 -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
     - make
     - make tools
     - ./setup.py build
