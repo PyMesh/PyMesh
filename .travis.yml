@@ -20,7 +20,7 @@ addons:
             #- libcgal-dev
             - libgmp-dev
             #- libumfpack5.6.2
-            - libboost-all-dev
+            - libboost1.55-all-dev
             - libmpfr-dev
             - libsuitesparse-dev
             - python-numpy
@@ -28,6 +28,7 @@ addons:
             - python-setuptools
             - swig
 script:
+    - apt-cache search boost
     - wget http://repo.continuum.io/miniconda/Miniconda-3.8.3-Linux-x86_64.sh -O miniconda.sh
     - chmod +x miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
