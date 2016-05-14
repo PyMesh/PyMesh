@@ -21,9 +21,12 @@ endif(QHULL_USE_STATIC)
 
 find_file(QHULL_HEADER
           NAMES libqhull/libqhull.h qhull.h
-          HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}" "${QHULL_INCLUDE_DIR}"
-          PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+          HINTS
+          "${PROJECT_SOURCE_DIR}/third_party/local/include/"
+          "${QHULL_ROOT}" "$ENV{QHULL_ROOT}" "${QHULL_INCLUDE_DIR}"
+          PATHS
           ${PROJECT_SOURCE_DIR}/third_party/local/include/
+          "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
           PATH_SUFFIXES qhull src/libqhull libqhull include)
 
 set(QHULL_HEADER "${QHULL_HEADER}" CACHE INTERNAL "QHull header" FORCE )
@@ -46,15 +49,22 @@ set(QHULL_INCLUDE_DIR "${QHULL_INCLUDE_DIR}" CACHE PATH "QHull include dir." FOR
 
 find_library(QHULL_LIBRARY 
              NAMES ${QHULL_RELEASE_NAME}
-             HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
-             PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+             HINTS
              ${PROJECT_SOURCE_DIR}/third_party/local/lib/
+             "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
+             PATHS
+             ${PROJECT_SOURCE_DIR}/third_party/local/lib/
+             "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
              PATH_SUFFIXES project build bin lib)
 
 find_library(QHULL_LIBRARY_DEBUG 
              NAMES ${QHULL_DEBUG_NAME} ${QHULL_RELEASE_NAME}
-             HINTS "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
-             PATHS "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
+             HINTS
+             ${PROJECT_SOURCE_DIR}/third_party/local/lib/
+             "${QHULL_ROOT}" "$ENV{QHULL_ROOT}"
+             PATHS
+             ${PROJECT_SOURCE_DIR}/third_party/local/lib/
+             "$ENV{PROGRAMFILES}/QHull" "$ENV{PROGRAMW6432}/QHull" 
              PATH_SUFFIXES project build bin lib)
 
 if(NOT QHULL_LIBRARY_DEBUG)
