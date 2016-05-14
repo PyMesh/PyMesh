@@ -6,7 +6,7 @@ virtualenv:
   system_site_packages: true
 branches:
     only:
-        - travis_ci
+        - packaging
 addons:
     apt:
         sources:
@@ -17,7 +17,7 @@ addons:
             - g++-4.9
             - cmake
             - cmake-data
-            - libcgal-dev
+            #- libcgal-dev
             - libgmp-dev
             #- libumfpack5.6.2
             - libboost-all-dev
@@ -45,6 +45,13 @@ script:
     - mkdir third_party/build
     - cd third_party/build
     - cmake -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
+    - make
+    - make install
+    - cd ..
+    - git clone https://github.com/qnzhou/cgal.git
+    - mkdir -p cgal/build
+    - cd cgal/build
+    - cmake -DCMAKE_INSTALL_PREFIX:PATH=../local .
     - make
     - make install
     - cd ../..
