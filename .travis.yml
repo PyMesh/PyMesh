@@ -26,10 +26,9 @@ addons:
             - python-numpy
             - python-scipy
             - python-setuptools
-            - swig3.0
+            - swig
 script:
-    - apt-cache search boost
-    - alias swig=swig3.0
+    - apt-cache search swig 
     - wget http://repo.continuum.io/miniconda/Miniconda-3.8.3-Linux-x86_64.sh -O miniconda.sh
     - chmod +x miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
