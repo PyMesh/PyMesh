@@ -57,7 +57,7 @@ script:
     - cd ../../..
     - mkdir -p build
     - cd build
-    - cmake -CCGAL_DIR=../third_party/local/lib/CGAL -DPYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7 -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
+    - cmake -DCGAL_DIR=$PYMESH_PATH/third_party/local/lib/CGAL -DPYTHON_LIBRARY=$(python-config --prefix)/lib/libpython2.7.so -DPYTHON_INCLUDE_DIR=$(python-config --prefix)/include/python2.7 -DCMAKE_C_COMPILER=gcc-4.9 -DCMAKE_CXX_COMPILER=g++-4.9 ..
     - make
     - make tools
     - ./setup.py build
