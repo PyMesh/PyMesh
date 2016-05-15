@@ -51,7 +51,7 @@ script:
     - git clone https://github.com/qnzhou/cgal.git
     - mkdir -p cgal/build
     - cd cgal/build
-    - cmake -DCMAKE_INSTALL_PREFIX:PATH=../../local ..
+    - cmake -DCMAKE_INSTALL_PREFIX:PATH=$PYMESH_PATH/third_party/local ..
     - make
     - make install
     - cd ../../..
