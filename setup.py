@@ -56,6 +56,7 @@ setup(
             "scripts/add_element_attribute.py",
             "scripts/add_index.py",
             "scripts/box_gen.py",
+            "scripts/boolean.py",
             "scripts/curvature.py",
             "scripts/extract_self_intersecting_faces.py",
             "scripts/find_file.py",
