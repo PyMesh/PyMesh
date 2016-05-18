@@ -9,6 +9,7 @@ libgmp-dev \
 libgmpxx4ldbl \
 libumfpack5.6.2 \
 libcgal-dev \
+python-nose \
 python-numpy \
 python-scipy \
 python-setuptools \
