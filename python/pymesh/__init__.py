@@ -1,3 +1,4 @@
+from .version import __version__
 from . import PyMeshSetting
 from .timethis import timethis
 
