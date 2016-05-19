@@ -25,9 +25,7 @@ ENV PYMESH_PATH /root/PyMesh
 RUN mkdir -p $PYMESH_PATH/third_party/build && mkdir -p $PYMESH_PATH/build
 WORKDIR $PYMESH_PATH/third_party/build
 RUN cmake .. && make && make install && make clean
-WORKDIR $PYMESH_PATH
-RUN mkdir -p $PYMESH_PATH/build
 WORKDIR $PYMESH_PATH/build
-RUN cmake .. && make && make tools && make all_tests;
+RUN cmake .. && make && make tools && make all_tests
 WORKDIR $PYMESH_PATH
 RUN ./setup.py build && ./setup.py install && rm -rf build
