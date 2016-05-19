@@ -8,6 +8,7 @@ import os.path
 
 root_dir = os.path.abspath(os.path.dirname(__file__));
 package_dir = os.path.join(root_dir, "python/pymesh");
+exec(open(os.path.join(package_dir, 'version.py')).read())
 
 class cmake_build(build):
     def run(self):
@@ -25,24 +26,12 @@ class cmake_build(build):
         check_call(command.split());
         os.chdir(root_dir);
 
-        lib_dir = os.path.join(root_dir, "lib");
-        package_lib_dir = os.path.join(package_dir, "lib");
-        if (os.path.exists(package_lib_dir)):
-            os.unlink(package_lib_dir);
-        os.symlink(lib_dir, package_lib_dir);
-
-        swig_dir = os.path.join(root_dir, "swig");
-        package_swig_dir = os.path.join(package_dir, "swig");
-        if (os.path.exists(package_swig_dir)):
-            os.unlink(package_swig_dir);
-        os.symlink(swig_dir, package_swig_dir);
-
         build.run(self);
 
 setup(
         name = "pymesh",
         description = "Mesh Processing for Python",
-        version = "0.1",
+        version = __version__,
         author = "Qingnan Zhou",
         author_email = "qnzhou@gmail.com",
         license = "MPL",
