@@ -21,7 +21,7 @@ addons:
             #- libcgal-dev
             - libgmp-dev
             #- libumfpack5.6.2
-            - libboost1.55-all-dev
+            #- libboost1.55-all-dev
             - libmpfr-dev
             - libsuitesparse-dev
             - python-numpy
