@@ -3,6 +3,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class BoxChecker {
     public:
         BoxChecker(const VectorF& bbox_min, const VectorF& bbox_max);
@@ -26,3 +28,5 @@ class BoxChecker {
         VectorF m_bbox_size;
         Float m_tol;
 };
+
+}

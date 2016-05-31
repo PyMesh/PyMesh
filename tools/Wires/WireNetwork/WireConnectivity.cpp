@@ -7,6 +7,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void WireConnectivity::compute() {
     const size_t num_vertices = m_wire_network->get_num_vertices();
     const size_t num_edges = m_wire_network->get_num_edges();

@@ -8,6 +8,8 @@
 
 #include "ElementWiseMaterial.h"
 
+namespace PyMesh {
+
 class ElementWiseSymmetricMaterial : public ElementWiseMaterial {
     public:
         ElementWiseSymmetricMaterial(Float density, MeshPtr material_mesh,
@@ -25,3 +27,5 @@ class ElementWiseSymmetricMaterial : public ElementWiseMaterial {
     private:
         const std::string m_matrix_field_name;
 };
+
+}

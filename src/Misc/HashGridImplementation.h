@@ -2,6 +2,8 @@
 #pragma once
 #include "HashGrid.h"
 
+namespace PyMesh {
+
 template<typename Trait>
 class HashGridImplementation : public HashGrid {
     protected:
@@ -40,5 +42,7 @@ class HashGridImplementation : public HashGrid {
     protected:
         HashMapPtr m_hash_map;
 };
+
+}
 
 #include "HashGridImplementation.inl"

@@ -4,6 +4,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 /**
  * MeshGeometry class stores the geometry and geometry only.
  * Explicitly, it keeps an array of vertices, faces and voxels.
@@ -64,3 +66,4 @@ class MeshGeometry {
         VectorI m_voxels;
 };
 
+}

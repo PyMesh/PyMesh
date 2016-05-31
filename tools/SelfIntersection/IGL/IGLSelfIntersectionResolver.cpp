@@ -5,6 +5,8 @@
 #include <igl/remove_unreferenced.h>
 #include <iostream>
 
+using namespace PyMesh;
+
 void IGLSelfIntersectionResolver::run() {
     typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
     typedef Eigen::Matrix<Kernel::FT, Eigen::Dynamic, Eigen::Dynamic,

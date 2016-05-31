@@ -7,6 +7,7 @@
 #include <Wires/Parameters/ParameterCommon.h>
 
 #include "MeshTilerHelper.h"
+using namespace PyMesh;
 using namespace MeshTilerHelper;
 
 MeshTiler::MeshTiler(WireNetwork::Ptr unit_wire_network, MeshTiler::MeshPtr mesh) :

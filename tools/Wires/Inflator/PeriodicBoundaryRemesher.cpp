@@ -19,6 +19,8 @@
 #include <Wires/Misc/MeshCleaner.h>
 #include <Wires/Misc/VertexSnapper.h>
 
+using namespace PyMesh;
+
 namespace PeriodicBoundaryRemesherHelper {
     enum Axis { X=0, Y=1, Z=2 };
     const short min_axis_marker[3] = {-1, -2, -3};

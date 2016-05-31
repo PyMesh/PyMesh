@@ -9,6 +9,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MshLoader;
 
 class MSHParser : public MeshParser {
@@ -48,3 +50,5 @@ class MSHParser : public MeshParser {
         size_t m_vertex_per_face;
         size_t m_vertex_per_voxel;
 };
+
+}

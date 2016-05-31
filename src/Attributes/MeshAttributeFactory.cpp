@@ -29,7 +29,10 @@
 #include "VoxelIndexAttribute.h"
 #include "VoxelVolumeAttribute.h"
 
-MeshAttribute::Ptr MeshAttributeFactory::create(const std::string& name) {
+using namespace PyMesh;
+
+MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
+        const std::string& name) {
     if (name == "vertex_normal") {
         MeshAttribute::Ptr attr(new VertexNormalAttribute(name));
         return attr;

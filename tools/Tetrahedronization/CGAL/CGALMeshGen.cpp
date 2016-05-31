@@ -13,6 +13,8 @@
 #include <CGAL/make_mesh_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
 
+using namespace PyMesh;
+
 // Domain 
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K;
 typedef CGAL::Polyhedral_mesh_domain_with_features_3<K> Mesh_domain;

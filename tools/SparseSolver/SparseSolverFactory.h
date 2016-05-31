@@ -3,6 +3,8 @@
 #include <string>
 #include "SparseSolver.h"
 
+namespace PyMesh {
+
 class SparseSolverFactory {
     public:
         typedef SparseSolver::Ptr SparseSolverPtr;
@@ -14,3 +16,5 @@ class SparseSolverFactory {
     private:
         SparseSolverPtr m_solver;
 };
+
+}

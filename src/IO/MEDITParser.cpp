@@ -6,6 +6,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 bool MEDITParser::parse(const std::string& filename) {
     std::ifstream fin(filename.c_str());
     if (!fin.is_open()) {

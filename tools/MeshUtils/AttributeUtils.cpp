@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
 
+using namespace PyMesh;
+
 namespace AttributeUtilsHelper {
     VectorF convert_vertex_attribute_to_face_attribute(Mesh& mesh,
             const VectorF& attribute) {

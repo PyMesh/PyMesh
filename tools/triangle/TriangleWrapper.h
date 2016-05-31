@@ -4,6 +4,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class TriangleWrapper {
     public:
         TriangleWrapper(const MatrixFr& points, const MatrixIr& segments) :
@@ -64,3 +66,5 @@ class TriangleWrapper {
         VectorI  m_edges;
         VectorI  m_edge_marks;
 };
+
+}

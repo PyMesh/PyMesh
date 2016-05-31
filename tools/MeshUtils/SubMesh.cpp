@@ -8,6 +8,8 @@
 #include <Math/MatrixUtils.h>
 #include "IsolatedVertexRemoval.h"
 
+using namespace PyMesh;
+
 SubMesh::Ptr SubMesh::create(Mesh::Ptr mesh) {
     const size_t dim = mesh->get_dim();
     const size_t num_vertices = mesh->get_num_vertices();

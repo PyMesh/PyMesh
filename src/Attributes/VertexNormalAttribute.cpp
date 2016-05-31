@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void VertexNormalAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();
     if (dim == 3) {

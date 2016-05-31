@@ -8,6 +8,8 @@
 #include <Wires/Parameters/ParameterCommon.h>
 #include <Wires/Parameters/ParameterManager.h>
 
+namespace PyMesh {
+
 class MixedMeshTiler : public TilerEngine {
     public:
         typedef Mesh::Ptr MeshPtr;
@@ -46,3 +48,5 @@ class MixedMeshTiler : public TilerEngine {
         std::vector<MatrixFr> m_tiled_thicknesses;
         std::vector<MatrixFr> m_tiled_offsets;
 };
+
+}

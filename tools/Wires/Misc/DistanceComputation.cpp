@@ -2,6 +2,7 @@
 #include "DistanceComputation.h"
 #include <iostream>
 
+using namespace PyMesh;
 namespace DistanceComputationHelper {
     const Float epsilon = 1e-8;
 }

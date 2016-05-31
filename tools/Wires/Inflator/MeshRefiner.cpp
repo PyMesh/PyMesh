@@ -3,6 +3,8 @@
 
 #include <cassert>
 
+using namespace PyMesh;
+
 MeshRefiner::MeshRefiner(const std::string& method) {
     m_refiner = Subdivision::create(method);
 }

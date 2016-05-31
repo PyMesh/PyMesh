@@ -10,6 +10,8 @@
 #include "WireProfile.h"
 #include <Wires/Parameters/ParameterManager.h>
 
+namespace PyMesh {
+
 class InflatorEngine {
     public:
         typedef std::shared_ptr<InflatorEngine> Ptr;
@@ -89,3 +91,5 @@ class InflatorEngine {
          */
         VectorI m_face_sources;
 };
+
+}

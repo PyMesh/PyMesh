@@ -1,4 +1,3 @@
-%include Mesh.i
 %{
 #include "FEAssembler.h"
 %}

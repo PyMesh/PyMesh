@@ -6,6 +6,8 @@
 #include "LinearTriangleIntegrator.h"
 #include "LinearTetrahedronIntegrator.h"
 
+using namespace PyMesh;
+
 Integrator::Ptr Integrator::create(Integrator::FEMeshPtr mesh,
         Integrator::ShapeFuncPtr shape_func) {
     const size_t dim = mesh->getDim();

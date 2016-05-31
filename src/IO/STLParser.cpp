@@ -10,6 +10,7 @@
 #include <Core/Exception.h>
 
 #include "IOUtils.h"
+using namespace PyMesh;
 using namespace IOUtils;
 
 bool STLParser::parse(const std::string& filename) {

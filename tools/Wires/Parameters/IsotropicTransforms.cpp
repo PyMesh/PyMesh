@@ -6,6 +6,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 MatrixF IsotropicTransforms::fit(
         const VectorF& from_dir, const VectorF& to_dir) const {
     const Float tol = 1e-12;

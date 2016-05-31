@@ -9,6 +9,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class OBJParser : public MeshParser {
     // TODO: only triangular mesh is supported
     public:
@@ -70,3 +72,5 @@ class OBJParser : public MeshParser {
         size_t     m_texture_dim;
         size_t     m_parameter_dim;
 };
+
+}

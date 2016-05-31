@@ -9,6 +9,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void OBJWriter::with_attribute(const std::string& attr_name) {
     std::cerr << "Error: .obj format does not support attributes." << std::endl;
 }

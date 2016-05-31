@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 /**
  * Compute the Voronoi area of each corner of the face.
  */
@@ -17,3 +19,5 @@ class FaceVoronoiAreaAttribute : public MeshAttribute {
     private:
         VectorF compute_triangle_voronoi_area(Mesh& mesh, size_t face_idx);
 };
+
+}

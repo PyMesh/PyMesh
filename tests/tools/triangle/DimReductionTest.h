@@ -2,8 +2,9 @@
 #pragma once
 
 #include <triangle/DimReduction.h>
+#include <TestBase.h>
 
-class DimReductionTest : public ::testing::Test {
+class DimReductionTest : public TestBase {
 };
 
 TEST_F(DimReductionTest, 3Dto2D) {

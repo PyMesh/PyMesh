@@ -14,6 +14,8 @@
 #include "SimpleInflator.h"
 #include "PhantomMeshGenerator.h"
 
+using namespace PyMesh;
+
 namespace PeriodicInflatorHelper {
     Vector3F compute_barycentric_coord(
             const VectorF& p,

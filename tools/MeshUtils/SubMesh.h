@@ -8,6 +8,8 @@
 #include <Mesh.h>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class SubMesh {
     public:
         typedef std::shared_ptr<SubMesh> Ptr;
@@ -87,3 +89,5 @@ class SubMesh {
 
         std::vector<bool> m_vertex_selection;
 };
+
+}

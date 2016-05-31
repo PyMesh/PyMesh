@@ -5,6 +5,8 @@
 #include <vector>
 #include <map>
 
+namespace PyMesh {
+
 class PeriodicBoundaryRemesher {
     public:
         PeriodicBoundaryRemesher(
@@ -59,3 +61,5 @@ class PeriodicBoundaryRemesher {
         typedef std::map<short, MatrixIr> BoundaryLoops;
         BoundaryLoops m_bd_loops;
 };
+
+}

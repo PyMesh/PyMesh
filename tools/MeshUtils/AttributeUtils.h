@@ -4,6 +4,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class Mesh;
 
 namespace AttributeUtils {
@@ -24,4 +26,6 @@ namespace AttributeUtils {
 
     VectorF convert_to_voxel_attribute_from_name(
             Mesh& mesh, const std::string& attribute_name);
+}
+
 }

@@ -6,6 +6,8 @@
 
 #include "Grid.h"
 
+namespace PyMesh {
+
 template<int DIM>
 class Eroder {
     public:
@@ -23,5 +25,7 @@ class Eroder {
     protected:
         Mask m_mask;
 };
+
+}
 
 #include "Eroder.inl"

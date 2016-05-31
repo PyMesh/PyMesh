@@ -10,6 +10,8 @@
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 
+using namespace PyMesh;
+
 CellPartition::Ptr CellPartition::create(const Mesh::Ptr& mesh) {
     const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
             mesh->get_vertices(), mesh->get_num_vertices(), mesh->get_dim());

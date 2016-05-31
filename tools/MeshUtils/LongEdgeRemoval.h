@@ -5,6 +5,8 @@
 #include <Core/EigenTypedef.h>
 #include <Misc/TripletMap.h>
 
+namespace PyMesh {
+
 class LongEdgeRemoval {
     public:
         LongEdgeRemoval(const MatrixFr& vertices, const MatrixIr& faces) :
@@ -33,3 +35,5 @@ class LongEdgeRemoval {
 
         TripletMap<size_t> m_edge_map;
 };
+
+}

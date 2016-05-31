@@ -9,6 +9,7 @@
 #include <Mesh.h>
 
 using ::testing::Contains;
+using namespace PyMesh;
 
 namespace GeometryChecker {
     typedef Elements::Ptr ElementsPtr;

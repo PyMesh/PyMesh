@@ -9,6 +9,8 @@
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
+namespace PyMesh {
+
 class SelfIntersection {
     public:
         typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
@@ -46,3 +48,5 @@ class SelfIntersection {
         Points m_points;
         MatrixIr m_faces;
 };
+
+}

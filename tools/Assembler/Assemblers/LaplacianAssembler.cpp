@@ -11,6 +11,8 @@
 #include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
 
+using namespace PyMesh;
+
 ZSparseMatrix LaplacianAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
     typedef FESetting::FEBasisPtr FEBasisPtr;

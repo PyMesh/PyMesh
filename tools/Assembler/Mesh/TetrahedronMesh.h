@@ -5,6 +5,8 @@
 #include <Mesh.h>
 #include "FEMeshAdaptor.h"
 
+namespace PyMesh {
+
 class TetrahedronMesh : public FEMeshAdaptor {
     public:
         typedef Mesh::Ptr MeshPtr;
@@ -68,3 +70,5 @@ class TetrahedronMesh : public FEMeshAdaptor {
         VectorI m_bd_node_adj;
         VectorI m_bd_node_adj_idx;
 };
+
+}

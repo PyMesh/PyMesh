@@ -2,6 +2,8 @@
 #pragma once
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 /**
  * This class removes duplicated vertices and nothing else.  In particular,
  * nothing is done to faces that become degenerated after the removal.
@@ -34,3 +36,5 @@ class DuplicatedVertexRemoval {
         VectorI  m_index_map;
         VectorI  m_importance_level;
 };
+
+}

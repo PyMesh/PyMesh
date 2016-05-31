@@ -5,6 +5,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class Mesh;
 
 class TetgenWrapper {
@@ -26,3 +28,5 @@ class TetgenWrapper {
         MatrixIr m_tet_faces;
         MatrixIr m_tet_voxels;
 };
+
+}

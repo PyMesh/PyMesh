@@ -1,8 +1,9 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 #include <Core/EigenTypedef.h>
+#include <TestBase.h>
 
-class ConvexHullEngineTest : public ::testing::Test {
+class ConvexHullEngineTest : public TestBase {
     protected:
         void ASSERT_SAME_BBOX(const MatrixFr& pts_1, const MatrixFr& pts_2) {
             VectorF bbox_min_1 = pts_1.colwise().minCoeff();

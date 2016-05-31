@@ -4,6 +4,8 @@
 #include <queue>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+using namespace PyMesh;
+
 namespace WireVertexSupportAttributeHelper {
     const Float EPS = 1e-3;
     const Float SUPPORTED = 1.0;

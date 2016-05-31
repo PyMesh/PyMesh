@@ -4,7 +4,9 @@
 #include <Core/EigenTypedef.h>
 #include <Envelope/Grid.h>
 
-class GridTest : public ::testing::Test {
+#include <TestBase.h>
+
+class GridTest : public TestBase {
     protected:
         typedef Grid<2, short> ShortGrid2D;
         typedef Grid<3, short> ShortGrid3D;

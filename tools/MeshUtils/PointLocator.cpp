@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Misc/HashGrid.h>
 
+using namespace PyMesh;
+
 PointLocator::PointLocator(Mesh::Ptr mesh) : m_mesh(mesh) {
     init_elements();
     init_barycentric_solvers();

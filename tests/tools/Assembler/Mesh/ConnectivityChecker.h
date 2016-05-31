@@ -8,6 +8,7 @@
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 
 using ::testing::Contains;
+using namespace PyMesh;
 
 namespace ConnectivityChecker {
     typedef FEMeshAdaptor::Ptr FEMeshPtr;

@@ -5,6 +5,8 @@
 
 #include "SymmetryOperators.h"
 
+using namespace PyMesh;
+
 SymmetryChecker::SymmetryChecker(WireNetwork::Ptr wire_network) :
     m_wire_network(wire_network) {
         update();

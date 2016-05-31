@@ -2,6 +2,8 @@
 #include "EdgeThicknessParameter.h"
 #include <cassert>
 
+using namespace PyMesh;
+
 void EdgeThicknessParameter::apply(VectorF& results,
         const PatternParameter::Variables& vars) {
     const size_t num_edges = m_wire_network->get_num_edges();

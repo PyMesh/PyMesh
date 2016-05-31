@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "LinearTriangleIntegrator.h"
 
+using namespace PyMesh;
+
 LinearTriangleIntegrator::LinearTriangleIntegrator(FEMeshPtr mesh, ShapeFuncPtr shape_func)
     : m_mesh(mesh), m_shape_func(shape_func) { }
 

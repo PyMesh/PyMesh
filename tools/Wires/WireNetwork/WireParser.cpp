@@ -9,6 +9,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 WireParser::WireParser() : m_dim(0) { }
 
 void WireParser::parse(const std::string& filename) {

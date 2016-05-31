@@ -3,6 +3,7 @@
 
 #include <vector>
 
+namespace PyMesh {
 namespace MatrixUtils {
     /**
      * This method stack multiple matrices into a single matrix by joining rows.
@@ -68,6 +69,7 @@ namespace MatrixUtils {
      */
     template<typename T>
     T range(const size_t n);
+}
 }
 
 #include "MatrixUtils.inl"

@@ -13,6 +13,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 typedef CGAL::Exact_predicates_inexact_constructions_kernel  K;
 typedef CGAL::Polyhedron_items_with_id_3          Items;
 typedef CGAL::Polyhedron_3<K, Items>              Polyhedron_3;

@@ -5,6 +5,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class CSGTree {
     public:
         typedef std::shared_ptr<CSGTree> Ptr;
@@ -47,3 +49,4 @@ class CSGTree {
         Ptr m_tree_2;
 };
 
+}

@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class FaceAreaAttribute : public MeshAttribute {
     public:
         FaceAreaAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -20,3 +22,5 @@ class FaceAreaAttribute : public MeshAttribute {
             return ((v2 - v0).cross(v1 - v0)).norm() * 0.5;
         }
 };
+
+}

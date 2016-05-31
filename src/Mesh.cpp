@@ -8,6 +8,8 @@
 #include <Core/EigenTypedef.h>
 #include <Geometry/MeshGeometry.h>
 
+using namespace PyMesh;
+
 Mesh::Mesh() {
     m_geometry     = GeometryPtr    (new MeshGeometry());
     m_connectivity = ConnectivityPtr(new MeshConnectivity());

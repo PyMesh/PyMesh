@@ -3,6 +3,8 @@
 
 #include "Integrator.h"
 
+namespace PyMesh {
+
 class LinearTriangleIntegrator : public Integrator {
     public:
         LinearTriangleIntegrator(FEMeshPtr mesh, ShapeFuncPtr shape_func);
@@ -22,3 +24,5 @@ class LinearTriangleIntegrator : public Integrator {
         FEMeshPtr m_mesh;
         ShapeFuncPtr m_shape_func;
 };
+
+}

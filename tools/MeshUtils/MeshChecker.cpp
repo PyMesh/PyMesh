@@ -14,6 +14,8 @@
 #include "EdgeUtils.h"
 #include "MeshSeparator.h"
 
+using namespace PyMesh;
+
 MeshChecker::MeshChecker(const MatrixFr& vertices, const MatrixIr& faces,
         const MatrixIr& voxels)
     : m_vertices(vertices), m_faces(faces), m_voxels(voxels) {

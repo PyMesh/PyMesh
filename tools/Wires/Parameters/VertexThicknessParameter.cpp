@@ -2,6 +2,8 @@
 #include "VertexThicknessParameter.h"
 #include <cassert>
 
+using namespace PyMesh;
+
 void VertexThicknessParameter::apply(VectorF& results,
         const PatternParameter::Variables& vars) {
     const size_t num_vertices = m_wire_network->get_num_vertices();

@@ -8,6 +8,8 @@
 
 #include "ElementWiseMaterial.h"
 
+namespace PyMesh {
+
 class ElementWiseIsotropicMaterial : public ElementWiseMaterial {
     public:
         ElementWiseIsotropicMaterial(Float density, MeshPtr material_mesh,
@@ -27,3 +29,5 @@ class ElementWiseIsotropicMaterial : public ElementWiseMaterial {
         const std::string m_young_field_name;
         const std::string m_poisson_field_name;
 };
+
+}

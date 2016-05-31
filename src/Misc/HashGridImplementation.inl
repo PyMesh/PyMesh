@@ -9,6 +9,8 @@ extern "C" {
 }
 #include "TriBox2D.h"
 
+using namespace PyMesh;
+
 namespace HashGridImplementationHelper {
     template<typename T>
     std::vector<Eigen::Matrix<T, 2, 1> >

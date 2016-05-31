@@ -9,6 +9,8 @@
 
 #include "Grid.h"
 
+namespace PyMesh {
+
 template<int DIM>
 class VoxelGrid : public Grid<DIM, short>{
     public:
@@ -43,8 +45,12 @@ class VoxelGrid : public Grid<DIM, short>{
         HashGrid::Ptr m_hash_grid;
 };
 
+}
+
 #include "VoxelGrid.inl"
 
+namespace PyMesh {
 typedef VoxelGrid<2> VoxelGrid2D;
 typedef VoxelGrid<3> VoxelGrid3D;
+}
 

@@ -10,6 +10,8 @@
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 
+namespace PyMesh {
+
 class FESetting {
     public:
         typedef std::shared_ptr<FESetting> Ptr;
@@ -35,3 +37,5 @@ class FESetting {
         FEBasisPtr m_basis;
         MaterialPtr m_material;
 };
+
+}

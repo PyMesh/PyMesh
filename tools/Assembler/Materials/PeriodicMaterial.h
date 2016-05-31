@@ -3,6 +3,9 @@
 #include <vector>
 #include "Material.h"
 
+
+namespace PyMesh {
+
 class PeriodicMaterial : public Material {
     public:
         /**
@@ -38,3 +41,5 @@ class PeriodicMaterial : public Material {
         VectorF m_axis;
         std::vector<Material::Ptr> m_materials;
 };
+
+}

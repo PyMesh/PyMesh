@@ -1,6 +1,7 @@
 #include "OpenCLWrapperHelper.h"
 #include <iostream>
 
+namespace PyMesh {
 namespace OpenCLWrapperHelper {
     std::string get_event_type(cl_event event) {
         cl_command_type type;
@@ -87,3 +88,4 @@ namespace OpenCLWrapperHelper {
     }
 }
 
+}

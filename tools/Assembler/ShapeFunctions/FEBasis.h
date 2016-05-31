@@ -10,6 +10,8 @@
 #include "ShapeFunction.h"
 #include "Integrator.h"
 
+namespace PyMesh {
+
 /**
  * This class is a facade of all concepts implemented here, including
  *   + Shape function
@@ -50,3 +52,5 @@ class FEBasis {
         ShapeFunctionPtr m_shape_func;
         IntegratorPtr m_integrator;
 };
+
+}

@@ -8,6 +8,8 @@
 
 #include "ShapeFunction.h"
 
+using namespace PyMesh;
+
 LinearShapeFunctionOverTriangle::LinearShapeFunctionOverTriangle(
         ShapeFunction::FEMeshPtr mesh) : m_mesh(mesh) {
     compute_shape_gradient();

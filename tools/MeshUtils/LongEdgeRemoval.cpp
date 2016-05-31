@@ -10,6 +10,8 @@
 
 #include "EdgeSplitter.h"
 
+using namespace PyMesh;
+
 namespace LongEdgeRemovalHelper {
     void split(std::list<VectorF>& end_points,
             std::list<VectorF>::iterator begin_itr,

@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(CellPartition);
+%shared_ptr(PyMesh::CellPartition);
 %{
 #include "CellPartition.h"
 %}

@@ -4,6 +4,8 @@
 #include <Assembler/FESetting/FESetting.h>
 #include <Assembler/FESetting/FESettingFactory.h>
 
+using namespace PyMesh;
+
 FEAssembler FEAssembler::create(
         Mesh::Ptr mesh, Material::Ptr material) {
     return FEAssembler(mesh, material);

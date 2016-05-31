@@ -3,6 +3,8 @@
 
 #include "Interpolation.h"
 
+namespace PyMesh {
+
 class BilinearInterpolation : public Interpolation {
     public:
         BilinearInterpolation(const MatrixFr& control_pts);
@@ -14,3 +16,5 @@ class BilinearInterpolation : public Interpolation {
 
         static const Functions m_shape_functions;
 };
+
+}

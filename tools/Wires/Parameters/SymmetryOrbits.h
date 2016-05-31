@@ -6,6 +6,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 /**
  * This class is dedicated to parsing the orbit file.
  */
@@ -39,3 +41,5 @@ class SymmetryOrbits {
         std::vector<VectorI> m_vertex_orbits;
         std::vector<VectorI> m_edge_orbits;
 };
+
+}

@@ -6,6 +6,8 @@
 #include <MeshUtils/Boundary.h>
 #include "FEMeshAdaptor.h"
 
+namespace PyMesh {
+
 class TriangleMesh : public FEMeshAdaptor {
     public:
         typedef Mesh::Ptr MeshPtr;
@@ -89,3 +91,4 @@ class TriangleMesh : public FEMeshAdaptor {
         MatrixFr m_boundary_vertex_normals;
 };
 
+}

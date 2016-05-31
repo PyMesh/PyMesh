@@ -4,6 +4,8 @@
 #include <iostream>
 #include <vector>
 
+using namespace PyMesh;
+
 void ZSparseMatrix::import_raw_csc(
         size_t num_rows, size_t num_cols,
         int* inner_idx_array, size_t inner_size,

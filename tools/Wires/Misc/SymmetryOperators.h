@@ -11,6 +11,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 namespace SymmetryOperators {
     typedef std::vector<std::function<VectorF(const VectorF&)> > Operators;
     typedef std::vector<std::set<size_t> > SymmetryConnectivity;
@@ -59,4 +61,6 @@ namespace SymmetryOperators {
 
     VectorI label_connected_components(size_t num_entries,
             const SymmetryConnectivity& connectivity);
+}
+
 }

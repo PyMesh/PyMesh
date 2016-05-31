@@ -3,6 +3,7 @@
 #include "TriangleMesh.h"
 #include "TetrahedronMesh.h"
 
+using namespace PyMesh;
 using namespace FEMeshFactory;
 
 FEMeshPtr FEMeshFactory::adapt(MeshPtr mesh) {

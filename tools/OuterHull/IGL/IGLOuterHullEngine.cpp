@@ -17,6 +17,8 @@
 
 #include <SelfIntersection/SelfIntersectionResolver.h>
 
+using namespace PyMesh;
+
 namespace IGLOuterHullEngineHelper {
     typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
     typedef Kernel::FT ExactScalar;

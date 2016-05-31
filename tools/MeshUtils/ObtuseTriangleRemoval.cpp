@@ -7,6 +7,8 @@
 
 #include "IndexHeap.h"
 
+using namespace PyMesh;
+
 namespace ObtuseTriangleRemovalHelper {
     Float angle(const Vector3F& v1, const Vector3F& v2) {
         Float sin_val = v1.cross(v2).norm();

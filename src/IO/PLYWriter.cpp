@@ -12,6 +12,8 @@
 
 #include "rply.h"
 
+using namespace PyMesh;
+
 namespace PLYWriterHelper {
     void assert_success(bool val, std::string message="") {
         if (!val) {

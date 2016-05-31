@@ -7,6 +7,8 @@
 #include <fstream>
 #include <sstream>
 
+using namespace PyMesh;
+
 void WireWriter::write(const std::string& filename, const WireNetwork& wires) {
     const MatrixFr& vertices = wires.get_vertices();
     const MatrixIr& edges = wires.get_edges();

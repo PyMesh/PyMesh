@@ -2,6 +2,8 @@
 #include "LinearTetrahedronIntegrator.h"
 #include <iostream>
 
+using namespace PyMesh;
+
 LinearTetrahedronIntegrator::LinearTetrahedronIntegrator(FEMeshPtr mesh, ShapeFuncPtr shape_func)
     : m_mesh(mesh), m_shape_func(shape_func) { }
 

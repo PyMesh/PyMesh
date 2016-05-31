@@ -7,6 +7,8 @@
 #include <Core/EigenTypedef.h>
 #include <Misc/TripletMap.h>
 
+namespace PyMesh {
+
 /**
  * Split edges that match a customized criterion
  */
@@ -38,3 +40,5 @@ class EdgeSplitter {
         std::vector<VectorF> m_new_vertices;
         std::vector<Vector3I> m_new_faces;
 };
+
+}

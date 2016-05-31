@@ -10,6 +10,8 @@
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
 
+namespace PyMesh {
+
 template <typename T>
 class TripletMap {
     public:
@@ -82,3 +84,5 @@ class TripletMap {
     private:
         TripletHashMap m_map;
 };
+
+}

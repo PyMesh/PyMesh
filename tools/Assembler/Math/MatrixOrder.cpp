@@ -3,6 +3,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 MatrixI MatrixOrder::get_order(size_t dim) {
     MatrixI order(dim, dim);
     switch (dim) {

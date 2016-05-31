@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <cassert>
 
+using namespace PyMesh;
+
 ElementWiseMaterial::ElementWiseMaterial(Float density, MeshPtr material_mesh) :
     m_density(density), m_material_mesh(material_mesh) {
         const size_t dim = m_material_mesh->get_dim();

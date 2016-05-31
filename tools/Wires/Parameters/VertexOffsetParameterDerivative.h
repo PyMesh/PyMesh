@@ -4,6 +4,8 @@
 #include <vector>
 #include "ParameterDerivative.h"
 
+namespace PyMesh {
+
 class VertexOffsetParameterDerivative : public ParameterDerivative {
     public:
         VertexOffsetParameterDerivative(
@@ -33,3 +35,5 @@ class VertexOffsetParameterDerivative : public ParameterDerivative {
                 MatrixFr& derivative_v,
                 VectorF& weights);
 };
+
+}

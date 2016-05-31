@@ -4,6 +4,8 @@
 #include <iostream>
 #include <Eigen/Geometry>
 
+using namespace PyMesh;
+
 namespace WireProfileHelper {
     MatrixFr rotate_loop_2D(const MatrixFr& loop, const VectorF& dir) {
         const Float angle = atan2(-dir[0], dir[1]);

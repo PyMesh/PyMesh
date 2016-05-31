@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexVolumeAttribute : public MeshAttribute {
     public:
         VertexVolumeAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -14,3 +16,5 @@ class VertexVolumeAttribute : public MeshAttribute {
     private:
         VectorF& get_voxel_volumes(Mesh& mesh);
 };
+
+}

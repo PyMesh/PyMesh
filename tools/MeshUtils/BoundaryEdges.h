@@ -2,6 +2,8 @@
 #pragma once
 #include "Boundary.h"
 
+namespace PyMesh {
+
 class BoundaryEdges : public Boundary {
     public:
         BoundaryEdges(const Mesh& mesh);
@@ -24,3 +26,5 @@ class BoundaryEdges : public Boundary {
         VectorI  m_boundary_faces;
         VectorI  m_boundary_nodes;
 };
+
+}

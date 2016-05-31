@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+namespace PyMesh {
+
 template <typename Engine>
 class SparseSolverImplementation : public SparseSolver {
     public:
@@ -102,4 +104,4 @@ class SparseSolverImplementation<UmfpackFactorizer> : public SparseSolver {
 };
 
 
-
+}

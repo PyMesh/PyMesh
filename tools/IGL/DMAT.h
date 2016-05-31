@@ -5,6 +5,7 @@
 #include <igl/readDMAT.h>
 #include <igl/writeDMAT.h>
 
+namespace PyMesh {
 namespace DMAT {
     template<typename Derived>
     Derived load_matrix(const std::string& filename) {
@@ -19,4 +20,6 @@ namespace DMAT {
             bool in_ascii=false) {
         igl::writeDMAT(filename, M, in_ascii);
     }
-};
+}
+
+}

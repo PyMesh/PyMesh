@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void FaceCentroidAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();
     const size_t num_faces = mesh.get_num_faces();

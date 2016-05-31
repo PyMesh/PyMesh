@@ -7,6 +7,8 @@
 
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 namespace OrthotropicMaterialHelper {
     void check_material_parameters(size_t dim, const VectorF& young_modulus, 
             const VectorF& poisson_ratio, const VectorF& shear_modulus) {
@@ -151,3 +153,5 @@ class OrthotropicMaterial<3> : public SymmetricMaterial {
         }
 
 };
+
+}

@@ -6,6 +6,7 @@
 
 #include "numpy.hpp"
 
+namespace PyMesh {
 namespace MatrixIO {
     using namespace aoba;
 
@@ -36,4 +37,5 @@ namespace MatrixIO {
         std::copy(data.begin(), data.end(), M.data());
         return M;
     }
+}
 }

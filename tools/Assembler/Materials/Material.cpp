@@ -13,6 +13,8 @@
 #include "SymmetricMaterial.h"
 #include "UniformMaterial.h"
 
+using namespace PyMesh;
+
 Material::Ptr Material::create(Float density, const MatrixF& material_tensor) {
     return Ptr(new UniformMaterial(density, material_tensor));
 }

@@ -3,6 +3,7 @@
 %include Core/EigenTypedef.i
 %include eigen.i
 %include Core/ExceptionConverter.i
+%include Math/ZSparseMatrix.i
 %include AttributeUtils.i
 %include TriangleMetric.i
 %include ObtuseTriangleRemoval.i

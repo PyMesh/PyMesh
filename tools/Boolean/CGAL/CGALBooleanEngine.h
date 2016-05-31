@@ -3,6 +3,8 @@
 
 #include <Boolean/BooleanEngine.h>
 
+namespace PyMesh {
+
 class CGALBooleanEngine : public BooleanEngine {
     public:
         virtual ~CGALBooleanEngine() {}
@@ -13,3 +15,5 @@ class CGALBooleanEngine : public BooleanEngine {
         virtual void compute_difference();
         virtual void compute_symmetric_difference();
 };
+
+}

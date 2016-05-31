@@ -4,6 +4,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 BoxChecker::BoxChecker(const VectorF& bbox_min, const VectorF& bbox_max) :
     m_bbox_min(bbox_min), m_bbox_max(bbox_max) {
         if (!(m_bbox_max.array() >= m_bbox_min.array()).all()) {

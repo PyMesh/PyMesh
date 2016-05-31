@@ -6,6 +6,7 @@
 #include <Math/MatrixUtils.h>
 
 #include "MeshTilerHelper.h"
+using namespace PyMesh;
 using namespace MeshTilerHelper;
 using namespace MatrixUtils;
 

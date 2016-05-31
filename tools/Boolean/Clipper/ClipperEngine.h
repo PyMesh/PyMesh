@@ -4,6 +4,8 @@
 #include <Boolean/BooleanEngine.h>
 #include <clipper.hpp>
 
+namespace PyMesh {
+
 class ClipperEngine : public BooleanEngine {
     public:
         virtual ~ClipperEngine() {}
@@ -24,3 +26,5 @@ class ClipperEngine : public BooleanEngine {
         ClipperLib::Paths m_loops_1;
         ClipperLib::Paths m_loops_2;
 };
+
+}

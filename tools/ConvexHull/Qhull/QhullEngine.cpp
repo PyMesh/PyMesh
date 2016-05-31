@@ -16,6 +16,8 @@ extern "C" {
 }
 #endif
 
+using namespace PyMesh;
+
 void QhullEngine::run(const MatrixFr& points) {
     const size_t num_points = points.rows();
     const size_t dim = points.cols();

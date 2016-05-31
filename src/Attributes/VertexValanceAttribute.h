@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexValanceAttribute : public MeshAttribute {
     public:
         VertexValanceAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -16,3 +18,5 @@ class VertexValanceAttribute : public MeshAttribute {
         void compute_from_tet_mesh(Mesh& mesh);
         void compute_from_hex_mesh(Mesh& mesh);
 };
+
+}

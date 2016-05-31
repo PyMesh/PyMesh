@@ -3,6 +3,8 @@
 #include "Boundary.h"
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class BoundaryFaces : public Boundary {
     public:
         BoundaryFaces(const Mesh& mesh);
@@ -25,3 +27,5 @@ class BoundaryFaces : public Boundary {
         VectorI m_boundary_voxels;
         VectorI m_boundary_nodes;
 };
+
+}

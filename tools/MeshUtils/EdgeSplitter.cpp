@@ -10,6 +10,8 @@
 #include <Misc/Triplet.h>
 #include <MeshUtils/IndexHeap.h>
 
+using namespace PyMesh;
+
 namespace EdgeSplitterHelper {
     void split(std::list<VectorF>& end_points,
             std::list<VectorF>::iterator begin_itr,

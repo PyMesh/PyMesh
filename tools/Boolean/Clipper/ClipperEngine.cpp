@@ -11,6 +11,8 @@
 #include <limits>
 #include <vector>
 
+using namespace PyMesh;
+
 namespace ClipperEngineHelper {
     typedef std::list<size_t> Loop;
     typedef std::list<Loop> Loops;

@@ -4,6 +4,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 // Shape function order according to hex vertex order:
 //
 //   3 ________ 2

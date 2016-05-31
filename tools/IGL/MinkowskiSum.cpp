@@ -5,6 +5,8 @@
 
 #include <vector>
 
+using namespace PyMesh;
+
 MinkowskiSum::Ptr MinkowskiSum::create(const Mesh::Ptr& mesh) {
     const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
             mesh->get_vertices(), mesh->get_num_vertices(), mesh->get_dim());

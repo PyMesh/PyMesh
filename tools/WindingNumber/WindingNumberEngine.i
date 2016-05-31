@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(WindingNumberEngine);
+%shared_ptr(PyMesh::WindingNumberEngine);
 %{
 #include "WindingNumberEngine.h"
 %}

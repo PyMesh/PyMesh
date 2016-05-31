@@ -3,6 +3,8 @@
 #include <Core/EigenTypedef.h>
 #include <tetgen.h>
 
+namespace PyMesh {
+
 class TetgenMeshConverter {
     public:
         TetgenMeshConverter(
@@ -28,3 +30,5 @@ class TetgenMeshConverter {
         MatrixIr m_faces;
         MatrixIr m_tets;
 };
+
+}

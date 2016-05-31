@@ -3,6 +3,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class WireNetwork;
 
 class WireConnectivity {
@@ -47,3 +49,5 @@ class WireConnectivity {
         VectorI m_vertex_adjacencies;
         VectorI m_vertex_adjacency_index;
 };
+
+}

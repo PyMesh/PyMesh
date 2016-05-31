@@ -5,6 +5,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexGaussianCurvatureAttribute : public MeshAttribute {
     public:
         VertexGaussianCurvatureAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -16,3 +18,4 @@ class VertexGaussianCurvatureAttribute : public MeshAttribute {
     private:
         VectorF compute_face_angles(const Mesh& mesh, size_t face_idx);
 };
+}

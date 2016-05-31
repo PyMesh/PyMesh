@@ -3,6 +3,8 @@
 
 #include "Interpolation.h"
 
+namespace PyMesh {
+
 class TrilinearInterpolation : public Interpolation {
     public:
         TrilinearInterpolation(const MatrixFr& control_pts);
@@ -14,3 +16,5 @@ class TrilinearInterpolation : public Interpolation {
 
         static const Functions m_shape_functions;
 };
+
+}

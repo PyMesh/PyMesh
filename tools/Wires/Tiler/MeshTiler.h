@@ -4,6 +4,8 @@
 #include "TilerEngine.h"
 #include <Mesh.h>
 
+namespace PyMesh {
+
 class MeshTiler : public TilerEngine {
     public:
         typedef Mesh::Ptr MeshPtr;
@@ -30,3 +32,5 @@ class MeshTiler : public TilerEngine {
     private:
         MeshPtr m_mesh;
 };
+
+}

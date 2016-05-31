@@ -8,6 +8,8 @@
 #include <Misc/Triplet.h>
 #include <Misc/TripletMap.h>
 
+using namespace PyMesh;
+
 namespace FinFaceRemovalHelper {
     /**
      * Compute face orientation based on its vertex indices:

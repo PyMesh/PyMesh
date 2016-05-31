@@ -4,6 +4,8 @@
 #include <Boolean/BooleanEngine.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 
+namespace PyMesh {
+
 class IGLEngine : public BooleanEngine {
     public:
         virtual ~IGLEngine() {}
@@ -32,3 +34,5 @@ class IGLEngine : public BooleanEngine {
         VectorI m_face_sources;
         MatrixEr m_exact_vertices;
 };
+
+}

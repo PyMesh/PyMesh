@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(CSGTree);
+%shared_ptr(PyMesh::CSGTree);
 %{
 #include "CSGTree.h"
 %}

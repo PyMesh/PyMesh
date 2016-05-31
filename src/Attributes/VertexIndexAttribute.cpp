@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void VertexIndexAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_vertices = mesh.get_num_vertices();
     VectorF& indices = m_values;

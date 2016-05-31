@@ -4,6 +4,8 @@
 #include <Core/Exception.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void FaceVoronoiAreaAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_faces = mesh.get_num_faces();
     size_t vertex_per_face = mesh.get_vertex_per_face();

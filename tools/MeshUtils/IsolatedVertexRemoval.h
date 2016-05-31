@@ -2,6 +2,8 @@
 #pragma once
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class IsolatedVertexRemoval {
     public:
         IsolatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces);
@@ -16,3 +18,5 @@ class IsolatedVertexRemoval {
         MatrixIr m_faces;
         VectorI m_ori_vertex_indices;
 };
+
+}

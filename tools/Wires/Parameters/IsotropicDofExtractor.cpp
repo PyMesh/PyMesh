@@ -5,6 +5,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 IsotropicDofExtractor::IsotropicDofExtractor(WireNetwork::Ptr wire_network) :
     m_wire_network(wire_network) {
         m_bbox_min = wire_network->get_bbox_min();

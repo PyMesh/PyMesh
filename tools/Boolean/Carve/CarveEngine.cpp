@@ -12,6 +12,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 namespace CarveEngineHelper {
     typedef carve::csg::CSG::meshset_t CarveMesh;
     typedef std::shared_ptr<CarveMesh> CarveMeshPtr;

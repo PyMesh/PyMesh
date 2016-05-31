@@ -14,6 +14,8 @@
 #include "EngineerStrainStressAssembler.h"
 #include "RigidMotionAssembler.h"
 
+using namespace PyMesh;
+
 Assembler::Ptr Assembler::create(const std::string& matrix_name) {
     if (matrix_name == "stiffness") {
         return Ptr(new StiffnessAssembler());

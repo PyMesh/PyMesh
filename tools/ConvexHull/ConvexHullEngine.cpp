@@ -15,6 +15,8 @@
 #include "Qhull/QhullEngine.h"
 #endif
 
+using namespace PyMesh;
+
 namespace ConvexHullEngineHelper {
     bool is_positively_oriented(
             const Vector3F& v0, const Vector3F& v1, const Vector3F& v2) {

@@ -25,6 +25,8 @@ extern "C" {
 #include <triangle.h>
 }
 
+using namespace PyMesh;
+
 namespace TriangleWrapperHelper {
     const int REGION_BOUNDARY = 2;
     std::string form_flags(Float max_area, bool split_boundary, bool refine,

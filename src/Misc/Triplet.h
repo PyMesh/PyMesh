@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class Triplet {
     public:
         Triplet(int v1=0, int v2=0, int v3=0) : m_ori_data(v1, v2, v3) {
@@ -48,3 +50,5 @@ class Triplet {
         Vector3I m_data;
         Vector3I m_ori_data;
 };
+
+}

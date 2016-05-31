@@ -7,6 +7,8 @@
 
 #include "GeometryCorrectionTable.h"
 
+namespace PyMesh {
+
 class WireProfile {
     public:
         typedef std::shared_ptr<WireProfile> Ptr;
@@ -51,3 +53,5 @@ class WireProfile {
         VectorF m_offset_dir;
         GeometryCorrectionTable::Ptr m_correction_table;
 };
+
+}

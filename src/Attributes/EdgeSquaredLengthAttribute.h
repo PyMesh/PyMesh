@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 /**
  * Edge length will be a face attribute with x Float associated with each face,
  * where x is the number vertices per face.
@@ -19,3 +21,5 @@ class EdgeSquaredLengthAttribute : public MeshAttribute {
     private:
         VectorF compute_edge_squared_length_on_face(Mesh& mesh, size_t face_idx);
 };
+
+}

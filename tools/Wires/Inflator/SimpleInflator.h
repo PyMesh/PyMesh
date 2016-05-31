@@ -6,6 +6,8 @@
 #include <list>
 #include <vector>
 
+namespace PyMesh {
+
 class SimpleInflator : public InflatorEngine {
     public:
         SimpleInflator(WireNetwork::Ptr wire_network)
@@ -41,3 +43,5 @@ class SimpleInflator : public InflatorEngine {
         std::list<MatrixIr> m_face_list;
         std::list<int> m_face_source_list;
 };
+
+}

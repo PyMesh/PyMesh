@@ -2,6 +2,8 @@
 #include "VertexIsotropicOffsetParameter.h"
 #include "IsotropicTransforms.h"
 
+using namespace PyMesh;
+
 VertexIsotropicOffsetParameter::VertexIsotropicOffsetParameter(
         WireNetwork::Ptr wire_network, const VectorF& dof_dir)
 : PatternParameter(wire_network), m_dof_dir(dof_dir) {

@@ -3,6 +3,8 @@
 #include <Core/Exception.h>
 #include <iostream>
 
+using namespace PyMesh;
+
 void MEDITWriter::with_attribute(const std::string& attr_name) {
     std::cerr << "Error: .mesh format does not support attributes." << std::endl;
 }

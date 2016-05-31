@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void VoxelCentroidAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_voxels = mesh.get_num_voxels();
     const size_t vertex_per_voxel = mesh.get_vertex_per_voxel();

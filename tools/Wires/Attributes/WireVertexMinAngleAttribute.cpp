@@ -6,6 +6,8 @@
 #include <Core/Exception.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+using namespace PyMesh;
+
 namespace WireVertexMinAngleAttributeHelper {
     template<size_t DIM>
     class Angle {

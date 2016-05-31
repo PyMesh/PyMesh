@@ -4,6 +4,8 @@
 #include <Misc/HashGrid.h>
 #include <Misc/TripletMap.h>
 
+using namespace PyMesh;
+
 namespace SymmetryOperatorsHelper {
     HashGrid::Ptr compute_vertex_lookup_grid(const MatrixFr& vertices,
             Float cell_size) {

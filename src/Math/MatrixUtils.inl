@@ -3,6 +3,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 template<typename T>
 T MatrixUtils::vstack(const std::vector<T>& matrices) {
     if (matrices.empty()) {

@@ -7,6 +7,7 @@
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
 
+using namespace PyMesh;
 using namespace MeshUtils;
 
 MatrixI MeshUtils::extract_exterior_faces(const MatrixI& voxels) {

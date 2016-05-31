@@ -18,6 +18,8 @@
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>
 
+using namespace PyMesh;
+
 namespace IsotropicPeriodicInflator3DHelper {
     void create_box(const VectorF& bbox_min, const VectorF& bbox_max,
             MatrixFr& box_vertices, MatrixIr& box_faces) {

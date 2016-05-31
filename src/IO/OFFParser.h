@@ -6,6 +6,8 @@
 
 #include "MeshParser.h"
 
+namespace PyMesh {
+
 class OFFParser : public MeshParser {
     public:
         typedef MeshParser::AttrNames AttrNames;
@@ -56,3 +58,5 @@ class OFFParser : public MeshParser {
         size_t     m_dim;
         size_t     m_vertex_per_face;
 };
+
+}

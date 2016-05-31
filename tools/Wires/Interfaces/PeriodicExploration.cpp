@@ -13,6 +13,8 @@
 #include <Wires/Inflator/MeshRefiner.h>
 #include <Wires/Parameters/ParameterCommon.h>
 
+using namespace PyMesh;
+
 PeriodicExploration::PeriodicExploration(const std::string& wire_file,
         Float cell_size,
         Float default_thickness) {

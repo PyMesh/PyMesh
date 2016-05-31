@@ -10,6 +10,8 @@
 
 #include "rply.h"
 
+using namespace PyMesh;
+
 namespace PLYParserHelper {
     void throw_attribute_not_found_exception(
             const std::string& name) {

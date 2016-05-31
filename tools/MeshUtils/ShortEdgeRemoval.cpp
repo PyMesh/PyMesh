@@ -10,6 +10,8 @@
 
 #include "IndexHeap.h"
 
+using namespace PyMesh;
+
 const size_t ShortEdgeRemoval::UNMAPPED = std::numeric_limits<size_t>::max();
 const Float  ShortEdgeRemoval::INFINITE = std::numeric_limits<Float>::max();
 

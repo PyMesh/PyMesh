@@ -10,6 +10,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 OBJParser::OBJParser() :
     m_dim(0),
     m_vertex_per_face(0),

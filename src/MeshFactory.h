@@ -4,6 +4,7 @@
 
 #include "Mesh.h"
 
+namespace PyMesh {
 class MeshParser;
 
 /**
@@ -42,3 +43,4 @@ class MeshFactory {
     private:
         Mesh* m_mesh;
 };
+}

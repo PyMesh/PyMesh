@@ -29,6 +29,8 @@
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 
+using namespace PyMesh;
+
 BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #ifdef WITH_CORK
     if (engine_name == "cork") { return Ptr(new CorkEngine()); }

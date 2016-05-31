@@ -4,6 +4,7 @@
 
 #include <vector>
 
+namespace PyMesh {
 namespace FaceUtils {
     /**
      * Return true if all three points are exactly colinear.
@@ -33,4 +34,5 @@ namespace FaceUtils {
     std::vector<size_t> get_degenerated_faces(
             const MatrixFr& vertices,
             const MatrixIr& faces);
+}
 }

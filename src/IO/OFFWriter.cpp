@@ -5,6 +5,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void OFFWriter::with_attribute(const std::string& attr_name) {
     std::cerr << "Error: .off format does not support attributes." << std::endl;
 }

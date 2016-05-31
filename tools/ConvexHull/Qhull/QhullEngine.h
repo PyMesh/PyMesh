@@ -5,6 +5,8 @@
 
 #include <mutex>
 
+namespace PyMesh {
+
 class QhullEngine : public ConvexHullEngine {
     public:
         QhullEngine(): ConvexHullEngine() { }
@@ -18,3 +20,5 @@ class QhullEngine : public ConvexHullEngine {
     protected:
         std::mutex m_lock;
 };
+
+}

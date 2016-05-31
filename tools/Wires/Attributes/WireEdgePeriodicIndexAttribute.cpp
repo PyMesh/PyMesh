@@ -9,6 +9,8 @@
 #include <Misc/HashGrid.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+using namespace PyMesh;
+
 namespace WireEdgePeriodicIndexAttributeHelper {
     typedef std::list<std::function<VectorF(const VectorF&)> > FunctionList;
 

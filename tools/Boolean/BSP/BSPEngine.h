@@ -3,6 +3,8 @@
 
 #include <Boolean/BooleanEngine.h>
 
+namespace PyMesh {
+
 class BSPEngine : public BooleanEngine {
     public:
         virtual ~BSPEngine() {}
@@ -13,3 +15,5 @@ class BSPEngine : public BooleanEngine {
         virtual void compute_difference();
         virtual void compute_symmetric_difference();
 };
+
+}

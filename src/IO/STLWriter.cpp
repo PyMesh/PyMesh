@@ -6,6 +6,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void STLWriter::with_attribute(const std::string& attr_name) {
     std::cerr << "Error: .stl format does not support attributes." << std::endl;
 }

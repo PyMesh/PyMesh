@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void FaceEdgeRatioAttribute::compute_from_mesh(Mesh& mesh) {
     if (!mesh.has_attribute("edge_length")) {
         mesh.add_attribute("edge_length");

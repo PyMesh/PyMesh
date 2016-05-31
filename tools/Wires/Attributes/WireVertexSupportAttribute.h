@@ -3,6 +3,8 @@
 
 #include "WireAttribute.h"
 
+namespace PyMesh {
+
 class WireVertexSupportAttribute : public WireAttribute {
     public:
         WireVertexSupportAttribute(const Vector3F& print_dir)
@@ -23,3 +25,5 @@ class WireVertexSupportAttribute : public WireAttribute {
     protected:
         Vector3F m_print_dir;
 };
+
+}

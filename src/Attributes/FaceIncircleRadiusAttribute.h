@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class FaceIncircleRadiusAttribute : public MeshAttribute {
     public:
         FaceIncircleRadiusAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -11,3 +13,5 @@ class FaceIncircleRadiusAttribute : public MeshAttribute {
     public:
         virtual void compute_from_mesh(Mesh& mesh);
 };
+
+}

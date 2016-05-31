@@ -4,6 +4,8 @@
 #include <Core/EigenTypedef.h>
 #include <Math/ZSparseMatrix.h>
 
+namespace PyMesh {
+
 class SparseSolver {
     public:
         typedef std::shared_ptr<SparseSolver> Ptr;
@@ -16,3 +18,5 @@ class SparseSolver {
 
         virtual VectorF solve(const VectorF& rhs) =0;
 };
+
+}

@@ -22,6 +22,8 @@ extern "C" {
 #include <Wires/Misc/DistanceComputation.h>
 #include <Wires/Misc/BoxChecker.h>
 
+using namespace PyMesh;
+
 namespace PeriodicInflator3DHelper {
     void create_box(const VectorF& bbox_min, const VectorF& bbox_max,
             MatrixFr& box_vertices, MatrixIr& box_faces) {

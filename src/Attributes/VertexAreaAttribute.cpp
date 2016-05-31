@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void VertexAreaAttribute::compute_from_mesh(Mesh& mesh) {
     size_t num_faces = mesh.get_num_faces();
     size_t num_vertices = mesh.get_num_vertices();

@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "VertexOffsetParameterDerivative.h"
 
+using namespace PyMesh;
+
 namespace VertexOffsetParameterDerivativeHelper {
     Float compute_projection_ratio(
             const VectorF& p, const VectorF& end_0, const VectorF& end_1) {

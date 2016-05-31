@@ -3,6 +3,8 @@
 
 #include "PeriodicInflator.h"
 
+namespace PyMesh {
+
 class PeriodicInflator3D : public PeriodicInflator {
     public:
         PeriodicInflator3D(WireNetwork::Ptr wire_network) :
@@ -19,3 +21,5 @@ class PeriodicInflator3D : public PeriodicInflator {
         VectorF m_center_cell_bbox_min;
         VectorF m_center_cell_bbox_max;
 };
+
+}

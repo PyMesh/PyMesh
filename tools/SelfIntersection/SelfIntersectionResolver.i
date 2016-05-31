@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(SelfIntersectionResolver);
+%shared_ptr(PyMesh::SelfIntersectionResolver);
 %{
 #include "SelfIntersectionResolver.h"
 %}

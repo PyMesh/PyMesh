@@ -9,6 +9,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MEDITParser : public MeshParser {
     public:
         typedef MeshParser::AttrNames AttrNames;
@@ -50,3 +52,5 @@ class MEDITParser : public MeshParser {
         size_t m_vertex_per_face;
         size_t m_vertex_per_voxel;
 };
+
+}

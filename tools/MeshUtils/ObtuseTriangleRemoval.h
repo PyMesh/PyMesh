@@ -5,6 +5,7 @@
 #include <Misc/Triplet.h>
 #include <Misc/TripletMap.h>
 
+namespace PyMesh {
 class ObtuseTriangleRemoval {
     public:
         ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces);
@@ -47,3 +48,4 @@ class ObtuseTriangleRemoval {
         MatrixFr m_vertices;
         MatrixIr m_faces;
 };
+}

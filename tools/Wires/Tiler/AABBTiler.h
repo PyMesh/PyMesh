@@ -3,6 +3,8 @@
 
 #include "TilerEngine.h"
 
+namespace PyMesh {
+
 class AABBTiler : public TilerEngine {
     public:
         AABBTiler(WireNetwork::Ptr unit_wire_network,
@@ -27,3 +29,5 @@ class AABBTiler : public TilerEngine {
         VectorF m_bbox_max;
         VectorI m_repetitions;
 };
+
+}

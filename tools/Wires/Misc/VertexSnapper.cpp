@@ -7,6 +7,8 @@
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include "BoxChecker.h"
 
+using namespace PyMesh;
+
 void VertexSnapper::snap_vertices_to_border(
         MatrixFr& vertices, MatrixIr& faces,
         const VectorF& bbox_min, const VectorF& bbox_max, Float tol) {

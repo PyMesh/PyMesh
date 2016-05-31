@@ -3,6 +3,7 @@
 %include Core/EigenTypedef.i
 %include eigen.i
 %include Core/ExceptionConverter.i
+%include Mesh.i
 %include CellPartition.i
 %include MinkowskiSum.i
 %include DMAT.i

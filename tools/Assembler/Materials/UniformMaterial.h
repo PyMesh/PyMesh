@@ -2,6 +2,8 @@
 #pragma once
 #include "Material.h"
 
+namespace PyMesh {
+
 class UniformMaterial : public Material {
     public:
         /**
@@ -31,3 +33,5 @@ class UniformMaterial : public Material {
         Float m_density;
         MatrixF m_material_tensor;
 };
+
+}

@@ -7,6 +7,8 @@
 #include <Core/Exception.h>
 #include <Math/MatrixUtils.h>
 
+using namespace PyMesh;
+
 namespace EdgeUtilsHelper {
     typedef std::unordered_map<size_t, size_t> IndexHash;
 

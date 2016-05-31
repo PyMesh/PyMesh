@@ -10,6 +10,8 @@
 
 #include "Material.h"
 
+namespace PyMesh {
+
 class ElementWiseMaterial : public Material {
     public:
         typedef Mesh::Ptr MeshPtr;
@@ -37,3 +39,5 @@ class ElementWiseMaterial : public Material {
         //mutable PointLocator m_locator;
         HashGrid::Ptr m_grid;
 };
+
+}

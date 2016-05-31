@@ -10,6 +10,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 namespace CGALCorefinementEngineHelper {
     typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
     typedef CGAL::Polyhedron_3<Kernel>  Polyhedron;

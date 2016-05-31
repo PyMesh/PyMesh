@@ -5,6 +5,8 @@
 #include <fstream>
 #include "MeshWriter.h"
 
+namespace PyMesh {
+
 class MEDITWriter : public MeshWriter {
     public:
         virtual ~MEDITWriter() {}
@@ -28,3 +30,5 @@ class MEDITWriter : public MeshWriter {
                 std::ofstream& fout, const VectorI& voxels,
                 const size_t vertex_per_voxel);
 };
+
+}

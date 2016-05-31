@@ -6,6 +6,8 @@
 #include <iostream>
 #include <list>
 
+using namespace PyMesh;
+
 namespace PeriodicInflator2DHelper {
     enum Location { INSIDE, ON_BORDER, OUTSIDE };
     Location bbox_check(

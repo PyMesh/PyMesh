@@ -8,6 +8,8 @@
 
 #include "Material.h"
 
+using namespace PyMesh;
+
 ElementWiseOrthotropicMaterial::ElementWiseOrthotropicMaterial(
         Float density, MeshPtr material_mesh,
         const ElementWiseOrthotropicMaterial::FieldNames& young_field_names,

@@ -10,6 +10,7 @@
 #include <Misc/Environment.h>
 #include <Math/MatrixUtils.h>
 
+using namespace PyMesh;
 /**
  * Base test class.  This class provides some common method often needed during
  * unit testing.

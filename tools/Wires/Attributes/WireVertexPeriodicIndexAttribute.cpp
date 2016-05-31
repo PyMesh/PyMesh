@@ -11,6 +11,8 @@
 #include <Wires/WireNetwork/WireNetwork.h>
 #include <Misc/HashGrid.h>
 
+using namespace PyMesh;
+
 namespace WireVertexPeriodicIndexAttributeHelper {
     typedef std::list<std::function<VectorF(const VectorF&)> > FunctionList;
 

@@ -3,6 +3,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void SimpleSubdivision::subdivide(
         MatrixFr vertices, MatrixIr faces, size_t num_iterations) {
     if (faces.cols() != 3) {

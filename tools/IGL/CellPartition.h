@@ -5,6 +5,8 @@
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
+namespace PyMesh {
+
 class CellPartition {
     public:
         typedef std::shared_ptr<CellPartition> Ptr;
@@ -38,3 +40,5 @@ class CellPartition {
         VectorI  m_patches;
         MatrixIr m_winding_number;
 };
+
+}

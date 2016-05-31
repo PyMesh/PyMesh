@@ -9,7 +9,9 @@
 #include <SparseSolver/SparseSolver.h>
 #include <SparseSolver/SparseSolverFactory.h>
 
-class SparseSolverTest : public ::testing::Test {
+#include <TestBase.h>
+
+class SparseSolverTest : public TestBase {
     protected:
         typedef ZSparseMatrix SMat;
         typedef Eigen::Triplet<Float> T;

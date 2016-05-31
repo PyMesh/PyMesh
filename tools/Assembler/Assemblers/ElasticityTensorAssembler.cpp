@@ -4,6 +4,8 @@
 #include <Assembler/Materials/Material.h>
 #include <Assembler/Math/MatrixOrder.h>
 
+using namespace PyMesh;
+
 ZSparseMatrix ElasticityTensorAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
     typedef FESetting::MaterialPtr MaterialPtr;

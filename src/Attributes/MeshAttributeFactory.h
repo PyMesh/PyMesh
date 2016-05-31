@@ -4,6 +4,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class MeshAttributeFactory {
     public:
 
@@ -18,3 +20,5 @@ class MeshAttributeFactory {
          */
         static MeshAttribute::Ptr create(const std::string& name);
 };
+
+}

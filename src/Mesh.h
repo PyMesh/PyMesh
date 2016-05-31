@@ -7,6 +7,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MeshAttributes;
 class MeshConnectivity;
 class MeshFactory;
@@ -117,3 +119,5 @@ class Mesh {
         ConnectivityPtr m_connectivity;
         AttributesPtr   m_attributes;
 };
+
+}

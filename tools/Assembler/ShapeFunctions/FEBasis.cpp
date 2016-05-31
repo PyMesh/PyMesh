@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "FEBasis.h"
 
+using namespace PyMesh;
+
 FEBasis::FEBasis(FEBasis::FEMeshPtr mesh) {
     m_shape_func = ShapeFunction::create(mesh, "linear");
     m_integrator = Integrator::create(mesh, m_shape_func);

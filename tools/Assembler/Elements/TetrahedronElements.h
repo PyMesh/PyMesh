@@ -5,6 +5,8 @@
 
 #include "Elements.h"
 
+namespace PyMesh {
+
 class TetrahedronElements : public Elements {
     public:
         TetrahedronElements(Mesh::Ptr mesh);
@@ -29,3 +31,5 @@ class TetrahedronElements : public Elements {
     private:
         Mesh::Ptr m_mesh;
 };
+
+}

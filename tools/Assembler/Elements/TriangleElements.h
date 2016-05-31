@@ -5,6 +5,8 @@
 
 #include "Elements.h"
 
+namespace PyMesh {
+
 class TriangleElements : public Elements {
     public:
         TriangleElements(Mesh::Ptr mesh);
@@ -29,3 +31,5 @@ class TriangleElements : public Elements {
     private:
         Mesh::Ptr m_mesh;
 };
+
+}

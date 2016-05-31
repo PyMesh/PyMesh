@@ -6,6 +6,8 @@
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
+namespace PyMesh {
+
 class Elements {
     public:
         typedef std::shared_ptr<Elements> Ptr;
@@ -31,3 +33,5 @@ class Elements {
         virtual Float getElementVolume(size_t ei) const=0;
         virtual VectorF getElementCenter(size_t ei) const=0;
 };
+
+}

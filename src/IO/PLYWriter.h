@@ -9,6 +9,8 @@
 #include "MeshWriter.h"
 #include "rply.h"
 
+namespace PyMesh {
+
 class PLYWriter : public MeshWriter {
     public:
         PLYWriter() : m_in_ascii(false), m_scalar(PLY_DOUBLE) {}
@@ -47,3 +49,5 @@ class PLYWriter : public MeshWriter {
         bool m_in_ascii;
         e_ply_type m_scalar;
 };
+
+}

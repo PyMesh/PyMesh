@@ -3,6 +3,8 @@
 #include <Misc/HashGrid.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+namespace PyMesh {
+
 class SymmetryChecker {
     public:
         SymmetryChecker(WireNetwork::Ptr wire_network);
@@ -19,3 +21,5 @@ class SymmetryChecker {
         WireNetwork::Ptr m_wire_network;
         HashGrid::Ptr m_grid;
 };
+
+}

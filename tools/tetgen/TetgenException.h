@@ -4,6 +4,8 @@
 #include <Core/Exception.h>
 #include <sstream>
 
+namespace PyMesh {
+
 class TetgenException : public PyMeshException {
     public:
         TetgenException(int error_code) :
@@ -51,3 +53,5 @@ class TetgenException : public PyMeshException {
         int m_error_code;
         std::string m_error_msg;
 };
+
+}

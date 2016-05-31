@@ -4,6 +4,8 @@
 #include <Core/Exception.h>
 #include <MeshUtils/Boundary.h>
 
+using namespace PyMesh;
+
 EdgeElements::EdgeElements(Mesh::Ptr mesh) : m_mesh(mesh) {
     check_mesh();
     extract_boundary_edges();

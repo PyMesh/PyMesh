@@ -7,6 +7,8 @@
 #include <Core/Exception.h>
 #include <Mesh.h>
 
+namespace PyMesh {
+
 class Material {
     public:
         typedef std::shared_ptr<Material> Ptr;
@@ -37,3 +39,5 @@ class Material {
 
         virtual void update() {throw NotImplementedError("updata() is not implemented by subclasses."); }
 };
+
+}

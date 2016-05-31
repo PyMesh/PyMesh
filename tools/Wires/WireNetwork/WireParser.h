@@ -6,6 +6,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class WireParser {
     public:
         WireParser();
@@ -32,3 +34,5 @@ class WireParser {
         VertexList m_vertices;
         EdgeList   m_edges;
 };
+
+}

@@ -3,6 +3,8 @@
 
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class VertexThicknessParameter : public PatternParameter {
     public:
         VertexThicknessParameter(WireNetwork::Ptr wire_network)
@@ -14,3 +16,5 @@ class VertexThicknessParameter : public PatternParameter {
         virtual MatrixFr compute_derivative() const;
         virtual ParameterType get_type() const { return VERTEX_THICKNESS; }
 };
+
+}

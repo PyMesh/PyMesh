@@ -7,6 +7,8 @@
 
 #include "WireAttribute.h"
 
+namespace PyMesh {
+
 class WireNetwork;
 
 class WireAttributes {
@@ -27,3 +29,5 @@ class WireAttributes {
         typedef std::map<std::string, WireAttribute::Ptr> AttrMap;
         AttrMap m_attr_map;
 };
+
+}

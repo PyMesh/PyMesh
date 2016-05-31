@@ -8,6 +8,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 template <typename T, int dim>
 class VectorHashKey {
     public:
@@ -62,3 +64,4 @@ class VectorHashKey {
         static const long p3 = 83492791;
 };
 
+}

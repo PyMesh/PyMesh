@@ -5,8 +5,10 @@
 
 #include "FEMeshAdaptor.h"
 
+namespace PyMesh {
 namespace FEMeshFactory {
     typedef Mesh::Ptr MeshPtr;
     typedef FEMeshAdaptor::Ptr FEMeshPtr;
     FEMeshPtr adapt(MeshPtr mesh);
+}
 }

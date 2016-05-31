@@ -15,6 +15,8 @@
 #include "TetGen/TetGenEngine.h"
 #endif
 
+using namespace PyMesh;
+
 TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
         const std::string& engine_name) {
 #if WITH_CGAL

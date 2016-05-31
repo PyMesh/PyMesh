@@ -4,6 +4,8 @@
 #include <vector>
 #include "ParameterDerivative.h"
 
+namespace PyMesh {
+
 class VertexThicknessParameterDerivative : public ParameterDerivative {
     public:
         VertexThicknessParameterDerivative(
@@ -32,3 +34,5 @@ class VertexThicknessParameterDerivative : public ParameterDerivative {
                 VectorF& weights);
 
 };
+
+}

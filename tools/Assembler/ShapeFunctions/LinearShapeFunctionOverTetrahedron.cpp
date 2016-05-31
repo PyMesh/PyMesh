@@ -5,6 +5,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 LinearShapeFunctionOverTetrahedron::LinearShapeFunctionOverTetrahedron(
         ShapeFunction::FEMeshPtr mesh) : m_mesh(mesh) {
     compute_shape_gradient();

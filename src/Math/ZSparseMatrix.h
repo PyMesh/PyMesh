@@ -5,6 +5,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor, int> {
     public:
         typedef Eigen::SparseMatrix<Float, Eigen::ColMajor, int> ParentType;
@@ -61,3 +63,5 @@ class ZSparseMatrix : public Eigen::SparseMatrix<Float, Eigen::ColMajor, int> {
                 int* col_indices, size_t num_col_indices,
                 double* value_array, size_t value_size);
 };
+
+}

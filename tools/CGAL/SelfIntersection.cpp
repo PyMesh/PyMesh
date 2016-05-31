@@ -9,6 +9,8 @@
 
 #include <CGAL/box_intersection_d.h>
 
+using namespace PyMesh;
+
 namespace SelfIntersectionHelper {
     class Box : public CGAL::Box_intersection_d::Box_d<Float,
           3, CGAL::Box_intersection_d::ID_NONE> {

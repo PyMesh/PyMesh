@@ -8,6 +8,8 @@
 #include <sstream>
 #include <MeshUtils/IsolatedVertexRemoval.h>
 
+using namespace PyMesh;
+
 OuterHullEngine::Ptr OuterHullEngine::create(const std::string& engine_name) {
 #ifdef WITH_IGL
     if (engine_name == "igl") {

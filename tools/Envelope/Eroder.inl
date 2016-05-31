@@ -1,6 +1,8 @@
 #include <cassert>
 #include <vector>
 
+using namespace PyMesh;
+
 namespace EroderHelper {
     void erode(Eroder<2>::Mask& mask) {
         typedef Eroder<2>::Vector_i Vector_i;

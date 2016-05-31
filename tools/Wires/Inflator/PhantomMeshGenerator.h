@@ -7,6 +7,8 @@
 #include <Wires/Parameters/ParameterManager.h>
 #include "WireProfile.h"
 
+namespace PyMesh {
+
 class PhantomMeshGenerator {
     public:
         PhantomMeshGenerator(
@@ -83,3 +85,5 @@ class PhantomMeshGenerator {
         VectorF m_abs_geometry_correction;
         Float m_geometry_correction_cap;
 };
+
+}

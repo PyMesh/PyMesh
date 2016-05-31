@@ -5,6 +5,8 @@
 #include <Core/EigenTypedef.h>
 #include "WireNetwork.h"
 
+namespace PyMesh {
+
 class WireWriter {
     public:
         WireWriter() {}
@@ -15,3 +17,5 @@ class WireWriter {
                 const MatrixFr& vertices,
                 const MatrixIr& edges);
 };
+
+}

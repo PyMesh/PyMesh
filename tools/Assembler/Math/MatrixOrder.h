@@ -3,6 +3,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
 namespace MatrixOrder {
     MatrixI get_order(size_t dim);
+}
 }

@@ -10,6 +10,8 @@
 #include <Assembler/ShapeFunctions/ShapeFunction.h>
 #include <Assembler/Materials/Material.h>
 
+namespace PyMesh {
+
 class Integrator {
     public:
         typedef std::shared_ptr<Integrator> Ptr;
@@ -50,3 +52,5 @@ class Integrator {
                 size_t local_func_i, size_t local_func_j,
                 const Material::Ptr material)=0;
 };
+
+}

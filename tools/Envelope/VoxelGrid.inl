@@ -9,6 +9,8 @@
 
 #include "Eroder.h"
 
+using namespace PyMesh;
+
 namespace VoxelGridHelper {
     bool nonzero(short i) { return i!=0; }
 

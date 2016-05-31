@@ -4,6 +4,8 @@
 #include <functional>
 #include "PeriodicInflator.h"
 
+namespace PyMesh {
+
 class IsotropicPeriodicInflator : public PeriodicInflator {
     public:
         IsotropicPeriodicInflator(WireNetwork::Ptr wire_network);
@@ -36,3 +38,5 @@ class IsotropicPeriodicInflator : public PeriodicInflator {
         typedef std::function<VectorF(const MatrixFr& v)> SymmetryOperation;
         std::vector<SymmetryOperation> m_reflection_operators;
 };
+
+}

@@ -10,6 +10,8 @@
 #include <Misc/Multiplet.h>
 #include <Misc/MultipletMap.h>
 
+using namespace PyMesh;
+
 MeshSeparator::MeshSeparator(const MatrixI& elements)
     : m_elements(elements), m_connectivity_type(VERTEX) { }
 

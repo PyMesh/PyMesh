@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexAreaAttribute : public MeshAttribute {
     public:
         VertexAreaAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -14,3 +16,5 @@ class VertexAreaAttribute : public MeshAttribute {
     private:
         VectorF& get_face_areas(Mesh& mesh);
 };
+
+}

@@ -4,6 +4,8 @@
 #include <Mesh.h>
 #include "MeshWriter.h"
 
+namespace PyMesh {
+
 class OBJWriter : public MeshWriter {
     public:
         virtual ~OBJWriter() {}
@@ -17,3 +19,5 @@ class OBJWriter : public MeshWriter {
                 const VectorI& voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel);
 };
+
+}

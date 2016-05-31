@@ -3,6 +3,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void EigenSolver::compute(const MatrixF& matrix) {
     m_solver.compute(matrix);
     m_eigen_values = m_solver.eigenvalues().real();

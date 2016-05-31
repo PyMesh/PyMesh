@@ -3,6 +3,8 @@
 
 #include <TetrahedronizationEngine.h>
 
+namespace PyMesh {
+
 class CGALMeshGen : public TetrahedronizationEngine {
     public:
         virtual ~CGALMeshGen() {}
@@ -10,3 +12,5 @@ class CGALMeshGen : public TetrahedronizationEngine {
     public:
         virtual void run();
 };
+
+}

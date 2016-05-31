@@ -19,6 +19,7 @@
 #include "VertexOffsetParameter.h"
 #include "VertexOffsetParameterDerivative.h"
 
+using namespace PyMesh;
 using namespace ParameterCommon;
 
 namespace ParameterManagerHelper {

@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "VertexCustomOffsetParameter.h"
 
+using namespace PyMesh;
+
 VertexCustomOffsetParameter::VertexCustomOffsetParameter(
         WireNetwork::Ptr wire_network, const MatrixFr& offset) :
     PatternParameter(wire_network), m_derivative(offset) {

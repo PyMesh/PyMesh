@@ -7,6 +7,8 @@
 
 #include "IndexHeap.h"
 
+namespace PyMesh {
+
 class ShortEdgeRemoval {
     public:
         ShortEdgeRemoval(const MatrixFr& vertices, const MatrixIr& faces);
@@ -81,3 +83,5 @@ class ShortEdgeRemoval {
         static const size_t UNMAPPED;
         static const Float INFINITE;
 };
+
+}
