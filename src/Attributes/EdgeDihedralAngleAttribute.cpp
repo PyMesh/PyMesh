@@ -11,6 +11,8 @@
 #include <Misc/Triplet.h>
 #include <Misc/TripletMap.h>
 
+using namespace PyMesh;
+
 namespace EdgeDihedralAngleAttributeHelper {
     Float angle(const Eigen::Ref<Vector3F>& n1,
             const Eigen::Ref<Vector3F>& n2) {

@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+using namespace PyMesh;
+
 namespace VertexThicknessParameterDerivativeHelper {
     Float compute_projection_ratio(
             const VectorF& p, const VectorF& end_0, const VectorF& end_1) {

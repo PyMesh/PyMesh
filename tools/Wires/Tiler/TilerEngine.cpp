@@ -11,6 +11,8 @@
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <Misc/Triplet.h>
 
+using namespace PyMesh;
+
 namespace TilerEngineHelper {
     struct hash {
         size_t operator()(const Triplet& value) const {

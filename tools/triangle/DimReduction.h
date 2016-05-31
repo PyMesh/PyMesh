@@ -6,6 +6,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 template<size_t FROM_DIM, size_t TO_DIM>
 class DimReduction {
     public:
@@ -50,3 +52,5 @@ class DimReduction {
         VectorF m_mean;
         MatrixF m_basis;
 };
+
+}

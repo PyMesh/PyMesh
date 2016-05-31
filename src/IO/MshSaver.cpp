@@ -7,6 +7,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 MshSaver::MshSaver(const std::string& filename, bool binary) :
     m_binary(binary), m_num_nodes(0), m_num_elements(0), m_dim(0) {
         fout.open(filename.c_str(), std::fstream::out);

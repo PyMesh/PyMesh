@@ -3,6 +3,8 @@
 
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class EdgeThicknessParameter : public PatternParameter {
     public:
         EdgeThicknessParameter(WireNetwork::Ptr wire_network)
@@ -14,3 +16,5 @@ class EdgeThicknessParameter : public PatternParameter {
         virtual MatrixFr compute_derivative() const;
         virtual ParameterType get_type() const { return EDGE_THICKNESS; }
 };
+
+}

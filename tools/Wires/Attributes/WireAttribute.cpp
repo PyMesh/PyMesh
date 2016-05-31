@@ -12,6 +12,8 @@
 
 #include <cassert>
 
+using namespace PyMesh;
+
 WireAttribute::Ptr WireAttribute::create(const std::string& name,
         WireAttribute::AttributeType type) {
     if (name == "vertex_min_angle") {

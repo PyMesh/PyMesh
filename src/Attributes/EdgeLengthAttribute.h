@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 /**
  * Edge length will be a face attribute with x Float associated with each face,
  * where x is the number vertices per face.
@@ -16,3 +18,5 @@ class EdgeLengthAttribute : public MeshAttribute {
     public:
         virtual void compute_from_mesh(Mesh& mesh);
 };
+
+}

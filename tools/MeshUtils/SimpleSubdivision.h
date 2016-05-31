@@ -7,6 +7,8 @@
 
 #include <Misc/Triplet.h>
 
+namespace PyMesh {
+
 class SimpleSubdivision : public Subdivision {
     public:
         virtual ~SimpleSubdivision() {}
@@ -31,3 +33,5 @@ class SimpleSubdivision : public Subdivision {
         std::map<Triplet, size_t> m_edge_index_map;
         std::vector<ZSparseMatrix> m_subdivision_matrices;
 };
+
+}

@@ -12,6 +12,8 @@
 
 #include "SparseSolverImplementation.h"
 
+using namespace PyMesh;
+
 SparseSolverFactory::SparseSolverFactory(const std::string& solver_type) {
     if (solver_type == "LDLT") {
         m_solver = SparseSolverPtr(

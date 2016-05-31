@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(OuterHullEngine);
+%shared_ptr(PyMesh::OuterHullEngine);
 %{
 #include "OuterHullEngine.h"
 %}

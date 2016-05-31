@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(TetrahedronizationEngine);
+%shared_ptr(PyMesh::TetrahedronizationEngine);
 %{
 #include "TetrahedronizationEngine.h"
 %}

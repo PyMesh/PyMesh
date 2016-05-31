@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexIndexAttribute : public MeshAttribute {
     public:
         VertexIndexAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -11,3 +13,5 @@ class VertexIndexAttribute : public MeshAttribute {
     public:
         virtual void compute_from_mesh(Mesh& mesh);
 };
+
+}

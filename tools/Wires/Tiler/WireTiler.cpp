@@ -8,6 +8,8 @@
 #include "MixedMeshTiler.h"
 #include "TilerEngine.h"
 
+using namespace PyMesh;
+
 WireNetwork::Ptr WireTiler::tile_with_guide_bbox(
         const VectorF& bbox_min,
         const VectorF& bbox_max,

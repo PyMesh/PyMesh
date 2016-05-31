@@ -4,6 +4,8 @@
 #include "PeriodicInflator.h"
 #include <list>
 
+namespace PyMesh {
+
 class PeriodicInflator2D : public PeriodicInflator {
     public:
         PeriodicInflator2D(WireNetwork::Ptr wire_network) :
@@ -16,3 +18,5 @@ class PeriodicInflator2D : public PeriodicInflator {
         void clip_phantom_mesh(std::list<Float>& vertices,
                 std::list<size_t>& faces, std::list<int>& face_sources);
 };
+
+}

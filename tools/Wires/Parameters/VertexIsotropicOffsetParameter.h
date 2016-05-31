@@ -3,6 +3,8 @@
 
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class VertexIsotropicOffsetParameter : public PatternParameter {
     public:
         /**
@@ -30,3 +32,5 @@ class VertexIsotropicOffsetParameter : public PatternParameter {
         VectorF m_dof_dir;
         std::vector<MatrixF> m_transforms;
 };
+
+}

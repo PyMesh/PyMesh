@@ -7,6 +7,8 @@
 #include <Core/Exception.h>
 #include <Misc/HashGrid.h>
 
+using namespace PyMesh;
+
 DuplicatedVertexRemoval::DuplicatedVertexRemoval(const MatrixFr& vertices, const MatrixIr& faces):
     m_vertices(vertices), m_faces(faces) {
         m_importance_level = VectorI::Zero(m_vertices.rows());

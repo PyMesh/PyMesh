@@ -3,6 +3,8 @@
 #include <igl/MeshBooleanType.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void IGLCSGTree::compute_union() {
     IGLCSGTree* tree_1 = dynamic_cast<IGLCSGTree*>(m_tree_1.get());
     IGLCSGTree* tree_2 = dynamic_cast<IGLCSGTree*>(m_tree_2.get());

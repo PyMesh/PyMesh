@@ -3,6 +3,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 ParameterDerivative::ParameterDerivative(Mesh::Ptr mesh, PatternParameter::Ptr param)
     : m_mesh(mesh), m_parameter(param) {
         initialize_wires();

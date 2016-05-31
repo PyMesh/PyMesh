@@ -4,6 +4,8 @@
 #include <functional>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class BoundaryRemesher {
     public:
         BoundaryRemesher(const MatrixFr& vertices, const MatrixIr& faces);
@@ -31,3 +33,5 @@ class BoundaryRemesher {
         MatrixFr m_non_bd_vertices;
         MatrixIr m_non_bd_faces;
 };
+
+}

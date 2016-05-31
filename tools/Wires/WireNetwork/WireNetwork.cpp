@@ -9,6 +9,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 namespace WireNetworkHelper {
     template<typename Derived>
     void filter(const Eigen::MatrixBase<Derived>& data,

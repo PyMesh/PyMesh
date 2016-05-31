@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Assembler/Math/MatrixOrder.h>
 
+namespace PyMesh {
+
 /**
  * Symmetric material class assumes full symmetry in the material tensor.
  * Namely C_ijkl = C_jikl, C_ijkl = C_ijlk and C_ijkl = C_klij.
@@ -102,3 +104,5 @@ class SymmetricMaterial : public UniformMaterial {
     protected:
         MatrixI m_index_map;
 };
+
+}

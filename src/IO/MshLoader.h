@@ -8,6 +8,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MshLoader {
     public:
         typedef std::map<std::string, VectorF> FieldMap;
@@ -75,3 +77,5 @@ class MshLoader {
         FieldMap m_node_fields;
         FieldMap m_element_fields;
 };
+
+}

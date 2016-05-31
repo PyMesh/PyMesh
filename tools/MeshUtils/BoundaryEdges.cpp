@@ -9,6 +9,7 @@
 #include <Misc/Triplet.h>
 #include <Misc/TripletMap.h>
 
+using namespace PyMesh;
 
 BoundaryEdges::BoundaryEdges(const Mesh& mesh) {
     extract_boundary(mesh);

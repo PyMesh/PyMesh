@@ -6,6 +6,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MshSaver {
     public:
         MshSaver(const std::string& filename, bool binary=true);
@@ -46,3 +48,5 @@ class MshSaver {
 
         std::ofstream fout;
 };
+
+}

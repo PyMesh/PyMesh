@@ -13,6 +13,8 @@
 #include <triangle/TriangleWrapper.h>
 #include "MeshCleaner.h"
 
+using namespace PyMesh;
+
 namespace BoundaryRemsherHelper {
     void triangulate(MatrixFr vertices, MatrixIr edges,
             MatrixFr& output_vertices, MatrixIr& output_faces, Float max_area) {

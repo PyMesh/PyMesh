@@ -3,6 +3,8 @@
 
 #include <igl/copyleft/cgal/mesh_boolean.h>
 
+using namespace PyMesh;
+
 namespace IGLEngineHelper {
     void exact_to_float(const IGLEngine::MatrixEr& m_e, MatrixFr& m_f) {
         m_f.resize(m_e.rows(), m_e.cols());

@@ -5,6 +5,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void ThicknessParameters::add(const VectorI& roi,
         const std::string& formula, Float value) {
     if (m_type == ParameterCommon::VERTEX) {

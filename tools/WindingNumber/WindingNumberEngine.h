@@ -5,6 +5,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class WindingNumberEngine {
     public:
         typedef std::shared_ptr<WindingNumberEngine> Ptr;
@@ -25,3 +27,5 @@ class WindingNumberEngine {
         MatrixFr m_vertices;
         MatrixIr m_faces;
 };
+
+}

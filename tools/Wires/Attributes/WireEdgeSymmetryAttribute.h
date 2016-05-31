@@ -3,6 +3,8 @@
 
 #include "WireAttribute.h"
 
+namespace PyMesh {
+
 class WireEdgeSymmetryAttribute : public WireAttribute {
     public:
         WireEdgeSymmetryAttribute() {
@@ -13,3 +15,5 @@ class WireEdgeSymmetryAttribute : public WireAttribute {
     public:
         virtual void compute(const WireNetwork& network);
 };
+
+}

@@ -8,6 +8,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class STLParser : public MeshParser {
     public:
         typedef MeshParser::AttrNames AttrNames;
@@ -56,3 +58,5 @@ class STLParser : public MeshParser {
         VoxelList  m_voxels;
         NormalList m_facet_normals;
 };
+
+}

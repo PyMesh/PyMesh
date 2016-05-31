@@ -9,6 +9,8 @@
 #include <Wires/Attributes/WireAttributes.h>
 #include "WireConnectivity.h"
 
+namespace PyMesh {
+
 class WireNetwork {
     public:
         typedef std::shared_ptr<WireNetwork> Ptr;
@@ -117,3 +119,5 @@ class WireNetwork {
         VectorF m_bbox_min;
         VectorF m_bbox_max;
 };
+
+}

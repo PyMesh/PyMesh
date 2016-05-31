@@ -10,6 +10,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 namespace CorkEngineHelper {
     void ensure_3D_triangle_mesh(const MatrixFr& vertices, const MatrixIr& faces) {
         if (vertices.cols() != 3) {

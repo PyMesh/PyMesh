@@ -8,6 +8,8 @@
 #include <Math/ZSparseMatrix.h>
 #include <Misc/Triplet.h>
 
+namespace PyMesh {
+
 class LoopSubdivision : public Subdivision {
     public:
         virtual ~LoopSubdivision() {}
@@ -39,3 +41,5 @@ class LoopSubdivision : public Subdivision {
         std::vector<size_t> m_vertex_valance;
         std::vector<ZSparseMatrix> m_subdivision_matrices;
 };
+
+}

@@ -4,6 +4,7 @@
 #include <Mesh.h>
 #include "MeshWriter.h"
 
+namespace PyMesh {
 class STLWriter : public MeshWriter {
     public:
         STLWriter() : m_in_ascii(false) {}
@@ -48,3 +49,5 @@ class STLWriter : public MeshWriter {
     private:
         bool m_in_ascii;
 };
+
+}

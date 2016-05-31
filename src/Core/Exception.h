@@ -3,6 +3,8 @@
 #include <exception>
 #include <string>
 
+namespace PyMesh {
+
 class PyMeshException : public std::exception {
     public:
         PyMeshException(const std::string& description) :
@@ -38,3 +40,4 @@ class NotImplementedError : public PyMeshException {
             PyMeshException(description) {}
         virtual ~NotImplementedError() throw() {}
 };
+}

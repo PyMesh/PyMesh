@@ -4,6 +4,8 @@
 #include <vector>
 #include <algorithm>
 
+namespace PyMesh {
+
 template<typename T>
 class IndexHeap {
     public:
@@ -77,3 +79,4 @@ class IndexHeap {
         std::vector<size_t> m_indices;
         IndexComp m_comp;
 };
+}

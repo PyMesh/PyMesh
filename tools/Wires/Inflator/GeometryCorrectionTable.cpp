@@ -9,6 +9,8 @@
 #include <fstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 namespace GeometryCorrectionTableHelper {
     const size_t num_offset_pixel = 0;
     const Float min_thickness = 0.1;

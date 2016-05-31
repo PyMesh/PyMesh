@@ -5,6 +5,8 @@
 
 #include <Math/MatrixUtils.h>
 
+using namespace PyMesh;
+
 IsolatedVertexRemoval::IsolatedVertexRemoval(
         const MatrixFr& vertices, const MatrixIr& faces) :
     m_vertices(vertices), m_faces(faces) { }

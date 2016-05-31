@@ -43,6 +43,8 @@
   if(x2<min) min=x2;\
   if(x2>max) max=x2;
 
+using namespace PyMesh;
+
 int planeBoxOverlap(const Float normal[3], const Float vert[3], const Float maxbox[3])	// -NJMP-
 {
   int q;

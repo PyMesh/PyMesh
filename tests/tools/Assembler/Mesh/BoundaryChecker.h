@@ -6,6 +6,7 @@
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 
 using ::testing::Contains;
+using namespace PyMesh;
 
 namespace BoundaryChecker {
     typedef FEMeshAdaptor::Ptr FEMeshPtr;

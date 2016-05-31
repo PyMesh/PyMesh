@@ -10,6 +10,8 @@
 #include <Wires/Parameters/ParameterManager.h>
 #include <Wires/Inflator/WireProfile.h>
 
+namespace PyMesh {
+
 class PeriodicExploration {
     public:
         PeriodicExploration(const std::string& wire_file,
@@ -97,3 +99,5 @@ class PeriodicExploration {
         std::string m_refine_algorithm;
         size_t m_refine_order;
 };
+
+}

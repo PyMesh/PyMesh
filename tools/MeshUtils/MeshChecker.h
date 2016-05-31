@@ -6,6 +6,8 @@
 #include <Core/EigenTypedef.h>
 #include <Misc/TripletMap.h>
 
+namespace PyMesh {
+
 class MeshChecker {
     public:
         MeshChecker(const MatrixFr& vertices, const MatrixIr& faces,
@@ -99,3 +101,5 @@ class MeshChecker {
         std::vector<VectorI> m_boundary_loops;
         bool m_complex_bd;
 };
+
+}

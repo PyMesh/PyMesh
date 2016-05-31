@@ -2,6 +2,8 @@
 #include "WireEdgeLengthAttribute.h"
 #include <Wires/WireNetwork/WireNetwork.h>
 
+using namespace PyMesh;
+
 void WireEdgeLengthAttribute::compute(const WireNetwork& network) {
     const size_t num_edges = network.get_num_edges();
     const MatrixFr& vertices = network.get_vertices();

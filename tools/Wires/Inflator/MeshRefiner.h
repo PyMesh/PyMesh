@@ -5,6 +5,8 @@
 #include <Core/EigenTypedef.h>
 #include <MeshUtils/Subdivision.h>
 
+namespace PyMesh {
+
 class MeshRefiner {
     public:
         MeshRefiner(const std::string& method);
@@ -23,3 +25,5 @@ class MeshRefiner {
     private:
         Subdivision::Ptr m_refiner;
 };
+
+}

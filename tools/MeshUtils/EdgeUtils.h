@@ -6,6 +6,7 @@
 #include <vector>
 #include <Misc/TripletMap.h>
 
+namespace PyMesh {
 namespace EdgeUtils {
     /**
      * Form the longest edge chains possible from the input edges.
@@ -14,4 +15,5 @@ namespace EdgeUtils {
     std::vector<VectorI> chain_edges(const MatrixIr& edges);
 
     TripletMap<size_t> compute_edge_face_adjacency(const MatrixIr& faces);
+}
 }

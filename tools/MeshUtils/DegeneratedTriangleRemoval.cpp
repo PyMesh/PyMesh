@@ -14,6 +14,8 @@ extern "C" {
 #include <Predicates/predicates.h>
 }
 
+using namespace PyMesh;
+
 namespace DegeneratedTriangleRemovalHelper {
     const size_t INVALID = std::numeric_limits<size_t>::max();
 }

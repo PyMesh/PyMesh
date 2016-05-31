@@ -10,6 +10,8 @@
 #include <metricPolygon.hpp>
 #include <convexPolygon.hpp>
 
+using namespace PyMesh;
+
 namespace BSPEngineHelper {
     typedef std::vector<BSPlib::ConvexPolygon> BRep;
     typedef boost::shared_ptr<BSPlib::Bsp> BSPPtr;

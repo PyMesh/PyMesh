@@ -12,6 +12,8 @@
 #include <Assembler/ShapeFunctions/FEBasis.h>
 #include <Assembler/Materials/Material.h>
 
+using namespace PyMesh;
+
 FESettingFactory::FESettingFactory(FESettingFactory::MeshPtr mesh) {
     m_mesh = Elements::adapt(mesh);
     m_basis = FEBasisPtr(new FEBasis(m_mesh));

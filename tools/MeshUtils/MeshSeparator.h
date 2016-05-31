@@ -6,6 +6,8 @@
 #include <Mesh.h>
 #include <Misc/MultipletMap.h>
 
+namespace PyMesh {
+
 class MeshSeparator {
     public:
         MeshSeparator(const MatrixI& elements);
@@ -58,3 +60,4 @@ class MeshSeparator {
         ConnectorMap m_connectivity;
 };
 
+}

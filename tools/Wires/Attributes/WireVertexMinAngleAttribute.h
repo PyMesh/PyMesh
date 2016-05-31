@@ -3,6 +3,8 @@
 
 #include "WireAttribute.h"
 
+namespace PyMesh {
+
 class WireVertexMinAngleAttribute : public WireAttribute {
     public:
         WireVertexMinAngleAttribute() {
@@ -13,3 +15,5 @@ class WireVertexMinAngleAttribute : public WireAttribute {
     public:
         virtual void compute(const WireNetwork& network);
 };
+
+}

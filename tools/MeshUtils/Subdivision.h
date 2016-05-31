@@ -6,6 +6,7 @@
 #include <Core/EigenTypedef.h>
 #include <Math/ZSparseMatrix.h>
 
+namespace PyMesh {
 class Subdivision {
     public:
         typedef std::shared_ptr<Subdivision> Ptr;
@@ -38,3 +39,4 @@ class Subdivision {
         MatrixIr m_faces;
         VectorI  m_face_indices;
 };
+}

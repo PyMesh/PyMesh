@@ -6,6 +6,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 template<size_t dim>
 class IsotropicMaterial : public SymmetricMaterial {
     public:
@@ -77,3 +79,4 @@ class IsotropicMaterial<3> : public SymmetricMaterial {
         }
 };
 
+}

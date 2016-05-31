@@ -2,6 +2,8 @@
 #include "VertexOffsetParameter.h"
 #include <iostream>
 
+using namespace PyMesh;
+
 VertexOffsetParameter::VertexOffsetParameter(
         WireNetwork::Ptr wire_network, size_t axis)
 : PatternParameter(wire_network), m_axis(axis) {

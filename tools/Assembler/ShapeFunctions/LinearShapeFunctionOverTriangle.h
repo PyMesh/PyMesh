@@ -3,6 +3,8 @@
 
 #include "ShapeFunction.h"
 
+namespace PyMesh {
+
 class LinearShapeFunctionOverTriangle : public ShapeFunction {
     public:
         LinearShapeFunctionOverTriangle(FEMeshPtr mesh);
@@ -21,3 +23,5 @@ class LinearShapeFunctionOverTriangle : public ShapeFunction {
         FEMeshPtr m_mesh;
         MatrixFr m_shape_grad;
 };
+
+}

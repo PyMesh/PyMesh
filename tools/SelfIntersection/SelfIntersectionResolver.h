@@ -5,6 +5,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class SelfIntersectionResolver {
     public:
         typedef std::shared_ptr<SelfIntersectionResolver> Ptr;
@@ -30,3 +32,5 @@ class SelfIntersectionResolver {
         MatrixIr m_faces;
         VectorI m_face_sources;
 };
+
+}

@@ -5,6 +5,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class Mesh;
 
 /**
@@ -53,3 +55,5 @@ class MeshWriter {
         std::string m_filename;
         bool m_anonymous;
 };
+
+}

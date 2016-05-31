@@ -3,6 +3,8 @@
 
 #include "WireAttribute.h"
 
+namespace PyMesh {
+
 /**
  * Two vertices belong the same orbit if they can be mapped to each other by any
  * symmetry transformation that maps a cube to itself.
@@ -17,3 +19,5 @@ class WireVertexCubicSymmetryAttribute : public WireAttribute {
     public:
         virtual void compute(const WireNetwork& network);
 };
+
+}

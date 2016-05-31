@@ -3,7 +3,11 @@
 
 #include "CGALConvexHull.h"
 
+namespace PyMesh {
+
 class CGALConvexHull2D : public CGALConvexHull {
     public:
         virtual void run(const MatrixFr& points);
 };
+
+}

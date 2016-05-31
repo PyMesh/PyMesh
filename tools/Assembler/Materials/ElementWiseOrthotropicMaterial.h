@@ -9,6 +9,8 @@
 
 #include "ElementWiseMaterial.h"
 
+namespace PyMesh {
+
 class ElementWiseOrthotropicMaterial : public ElementWiseMaterial {
     public:
         typedef std::vector<std::string> FieldNames;
@@ -31,3 +33,5 @@ class ElementWiseOrthotropicMaterial : public ElementWiseMaterial {
         const FieldNames m_poisson_field_names;
         const FieldNames m_shear_field_names;
 };
+
+}

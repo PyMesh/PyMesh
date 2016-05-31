@@ -5,6 +5,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexMeanCurvatureAttribute : public MeshAttribute {
     public:
         VertexMeanCurvatureAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -17,3 +19,5 @@ class VertexMeanCurvatureAttribute : public MeshAttribute {
         VectorF compute_laplacian_vectors(Mesh& mesh);
         VectorF compute_vertex_normals(Mesh& mesh);
 };
+
+}

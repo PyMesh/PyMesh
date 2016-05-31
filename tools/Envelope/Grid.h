@@ -7,6 +7,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 template<int DIM, typename T>
 class Grid {
     public:
@@ -105,3 +107,5 @@ class Grid {
         Vector_f m_grid_base_coord;
         Vector_f m_cell_size;
 };
+
+}

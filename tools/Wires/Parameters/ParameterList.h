@@ -7,6 +7,8 @@
 
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class ParameterList {
     public:
         typedef ParameterCommon::TargetType TargetType;
@@ -51,3 +53,5 @@ class ParameterList {
     protected:
         std::list<PatternParameter::Ptr> m_params;
 };
+
+}

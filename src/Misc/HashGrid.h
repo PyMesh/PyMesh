@@ -11,6 +11,8 @@
 #define DEFAULT_HASH STL_HASH
 #endif
 
+namespace PyMesh {
+
 class HashGrid {
     public:
         enum ImplementationType {
@@ -45,3 +47,5 @@ class HashGrid {
     protected:
         Float m_cell_size;
 };
+
+}

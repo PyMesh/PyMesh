@@ -3,6 +3,8 @@
 #include <Boolean/CSGTree.h>
 #include <igl/copyleft/cgal/CSGTree.h>
 
+namespace PyMesh {
+
 class IGLCSGTree : public CSGTree {
     public:
         IGLCSGTree() {}
@@ -27,3 +29,5 @@ class IGLCSGTree : public CSGTree {
         typedef igl::copyleft::cgal::CSGTree IGLTree;
         IGLTree m_igl_tree;
 };
+
+}

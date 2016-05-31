@@ -3,6 +3,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 void PatternParameter::evaluate_formula(
         const PatternParameter::Variables& vars) {
     Variables::const_iterator itr = vars.find(m_formula);

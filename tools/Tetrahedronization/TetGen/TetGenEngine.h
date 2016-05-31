@@ -3,6 +3,8 @@
 
 #include <TetrahedronizationEngine.h>
 
+namespace PyMesh {
+
 class TetGenEngine : public TetrahedronizationEngine {
     public:
         virtual ~TetGenEngine() {}
@@ -10,3 +12,5 @@ class TetGenEngine : public TetrahedronizationEngine {
     public:
         virtual void run();
 };
+
+}

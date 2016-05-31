@@ -9,6 +9,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 namespace OFFParserHelper {
     void next_line(std::ifstream& fin, char* line, size_t LINE_SIZE) {
         do {

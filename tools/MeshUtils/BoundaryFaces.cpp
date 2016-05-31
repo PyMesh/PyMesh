@@ -11,6 +11,8 @@
 #include <Misc/TripletMap.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 BoundaryFaces::BoundaryFaces(const Mesh& mesh) {
     extract_boundary(mesh);
     extract_boundary_nodes();

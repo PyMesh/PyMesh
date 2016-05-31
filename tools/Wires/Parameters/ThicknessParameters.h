@@ -9,6 +9,8 @@
 #include "PatternParameter.h"
 #include "ParameterList.h"
 
+namespace PyMesh {
+
 class ThicknessParameters : public ParameterList {
     public:
         ThicknessParameters(
@@ -39,3 +41,5 @@ class ThicknessParameters : public ParameterList {
         TargetType m_type;
         Float m_default_thickness;
 };
+
+}

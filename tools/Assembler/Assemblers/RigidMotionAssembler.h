@@ -3,7 +3,11 @@
 
 #include "Assembler.h"
 
+namespace PyMesh {
+
 class RigidMotionAssembler : public Assembler {
     public:
         virtual ZSparseMatrix assemble(FESettingPtr setting);
 };
+
+}

@@ -5,6 +5,8 @@
 
 #include "Elements.h"
 
+namespace PyMesh {
+
 class EdgeElements : public Elements {
     public:
         EdgeElements(Mesh::Ptr mesh);
@@ -33,3 +35,5 @@ class EdgeElements : public Elements {
         MatrixIr m_edges;
         VectorF m_edge_lengths;
 };
+
+}

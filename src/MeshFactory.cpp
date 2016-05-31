@@ -10,6 +10,8 @@
 #include <IO/MeshParser.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 MeshFactory::MeshFactory() {
     m_mesh = new Mesh();
 }
@@ -53,7 +55,8 @@ MeshFactory& MeshFactory::load_data(
     return *this;
 }
 
-MeshFactory& MeshFactory::with_connectivity(const std::string& conn_type) {
+MeshFactory& MeshFactory::with_connectivity(
+        const std::string& conn_type) {
     // Valid conn_type are: vertex, face, voxel, all
     // Using minimal prefix to distinguish them.
     const size_t l = conn_type.size();
@@ -75,7 +78,8 @@ MeshFactory& MeshFactory::with_connectivity(const std::string& conn_type) {
     return *this;
 }
 
-MeshFactory& MeshFactory::with_attribute(const std::string& attr_name) {
+MeshFactory& MeshFactory::with_attribute(
+        const std::string& attr_name) {
     Mesh::AttributesPtr attributes = m_mesh->get_attributes();
     attributes->add_attribute(attr_name, *m_mesh);
     return *this;

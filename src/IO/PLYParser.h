@@ -9,6 +9,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class PLYParser : public MeshParser {
     public:
         typedef MeshParser::AttrNames AttrNames;
@@ -60,3 +62,5 @@ class PLYParser : public MeshParser {
         size_t       m_num_faces;
         size_t       m_num_voxels;
 };
+
+}

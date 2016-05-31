@@ -8,6 +8,8 @@
 #include "BoundaryEdges.h"
 #include "BoundaryFaces.h"
 
+using namespace PyMesh;
+
 Boundary::Ptr Boundary::extract_surface_boundary(const Mesh& mesh) {
     return Ptr(new BoundaryEdges(mesh));
 }

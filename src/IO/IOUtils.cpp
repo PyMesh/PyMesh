@@ -2,6 +2,8 @@
 #include "IOUtils.h"
 #include <cstring>
 
+using namespace PyMesh;
+
 std::string IOUtils::get_extention(const std::string& filename) {
     size_t pos = filename.find_last_of('.');
     return filename.substr(pos);

@@ -9,6 +9,8 @@
 #include <Core/Exception.h>
 #include <Misc/Multiplet.h>
 
+namespace PyMesh {
+
 template <typename T>
 class MultipletMap {
     public:
@@ -81,3 +83,5 @@ class MultipletMap {
     private:
         MultipletHashMap m_map;
 };
+
+}

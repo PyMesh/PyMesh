@@ -7,6 +7,8 @@
 
 #include <Wires/Parameters/ParameterCommon.h>
 
+using namespace PyMesh;
+
 namespace AABBTilerHelper {
     std::vector<VectorI> enumerate(const VectorI& repetitions) {
         std::vector<VectorI> result;

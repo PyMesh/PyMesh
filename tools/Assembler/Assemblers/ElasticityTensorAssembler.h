@@ -3,6 +3,8 @@
 
 #include "Assembler.h"
 
+namespace PyMesh {
+
 /**
  * Assemble matrix that convert flattened strain to flattened stress.
  * Given the following strain matrix:
@@ -23,3 +25,5 @@ class ElasticityTensorAssembler : public Assembler {
     public:
         virtual ZSparseMatrix assemble(FESettingPtr setting);
 };
+
+}

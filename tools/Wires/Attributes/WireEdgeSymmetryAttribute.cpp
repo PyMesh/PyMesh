@@ -4,6 +4,8 @@
 #include <Wires/WireNetwork/WireNetwork.h>
 #include <Wires/Misc/SymmetryOperators.h>
 
+using namespace PyMesh;
+
 namespace WireEdgeSymmetryAttributeHelper {
     using namespace SymmetryOperators;
 

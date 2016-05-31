@@ -10,6 +10,8 @@
 #include <Misc/Triplet.h>
 #include <Misc/Multiplet.h>
 
+using namespace PyMesh;
+
 void MeshGeometry::extract_faces_from_voxels() {
     if (m_vertex_per_voxel == 4) {
         extract_faces_from_tets();

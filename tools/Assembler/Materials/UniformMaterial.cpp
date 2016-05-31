@@ -2,6 +2,8 @@
 #include "UniformMaterial.h"
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 UniformMaterial::UniformMaterial(
         Float density, const MatrixF& material_tensor) :
         m_density(density), m_material_tensor(material_tensor) {

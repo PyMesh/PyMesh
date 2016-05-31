@@ -3,6 +3,8 @@
 
 #include <SelfIntersectionResolver.h>
 
+namespace PyMesh {
+
 class IGLSelfIntersectionResolver : public SelfIntersectionResolver {
     public:
         virtual ~IGLSelfIntersectionResolver() {}
@@ -10,3 +12,5 @@ class IGLSelfIntersectionResolver : public SelfIntersectionResolver {
     public:
         virtual void run();
 };
+
+}

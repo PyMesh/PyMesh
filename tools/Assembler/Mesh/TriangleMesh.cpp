@@ -9,6 +9,8 @@
 #include <Mesh.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 TriangleMesh::TriangleMesh(TriangleMesh::MeshPtr mesh) : m_mesh(mesh) {
     verify_triangle_mesh();
     init_boundary();

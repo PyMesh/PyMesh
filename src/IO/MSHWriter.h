@@ -6,6 +6,8 @@
 
 #include "MeshWriter.h"
 
+namespace PyMesh {
+
 class MshSaver;
 
 class MSHWriter : public MeshWriter {
@@ -34,3 +36,5 @@ class MSHWriter : public MeshWriter {
         AttrNames m_attr_names;
         bool m_in_ascii;
 };
+
+}

@@ -9,6 +9,8 @@
 #include <Assembler/Mesh/FEMeshAdaptor.h>
 #include <Assembler/Elements/Elements.h>
 
+namespace PyMesh {
+
 /**
  * Shape function represent the basis function of the finite element space for
  * an scalar field defined over the mesh.
@@ -44,3 +46,5 @@ class ShapeFunction {
         virtual VectorF evaluate_grad(size_t elem_idx, size_t local_func_idx,
                 const VectorF& coord)=0;
 };
+
+}

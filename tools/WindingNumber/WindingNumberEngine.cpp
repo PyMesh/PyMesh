@@ -7,6 +7,8 @@
 
 #include <sstream>
 
+using namespace PyMesh;
+
 WindingNumberEngine::Ptr WindingNumberEngine::create(
         const std::string& engine_name) {
 #ifdef WITH_IGL

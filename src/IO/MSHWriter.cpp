@@ -10,6 +10,8 @@
 
 #include "MshSaver.h"
 
+using namespace PyMesh;
+
 namespace MSHWriterHelper {
     bool positive_orientated(
             const Vector3F& v1, const Vector3F& v2,

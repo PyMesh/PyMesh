@@ -6,6 +6,8 @@
 #include <Core/Exception.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+using namespace PyMesh;
+
 namespace WireAttributesHelper {
     void throw_attribute_not_found_error(const std::string& name) {
         std::stringstream err_msg;

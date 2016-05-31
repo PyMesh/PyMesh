@@ -3,6 +3,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 TetrahedronElements::TetrahedronElements(Mesh::Ptr mesh) : m_mesh(mesh) {
     check_mesh();
 }

@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(Boundary);
+%shared_ptr(PyMesh::Boundary);
 %include "Mesh.i"
 %{
 #include "Boundary.h"

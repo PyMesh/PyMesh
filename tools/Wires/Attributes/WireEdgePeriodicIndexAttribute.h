@@ -3,6 +3,8 @@
 
 #include "WireAttribute.h"
 
+namespace PyMesh {
+
 /**
  * This attribute assign an index to each wire edge.  Edges share the same
  * index only if they are periodic edges.  I.e. they coincide during tiling.
@@ -17,3 +19,5 @@ class WireEdgePeriodicIndexAttribute : public WireAttribute {
     public:
         virtual void compute(const WireNetwork& network);
 };
+
+}

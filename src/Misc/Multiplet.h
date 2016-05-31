@@ -4,6 +4,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 /**
  * Multiplet generalized the concept of combination.
  * i.e. the same set items but with different orders are considered equal.
@@ -70,3 +72,5 @@ class Multiplet {
         VectorI m_data;
         VectorI m_ori_data;
 };
+
+}

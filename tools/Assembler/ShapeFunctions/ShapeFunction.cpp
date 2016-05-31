@@ -8,6 +8,8 @@
 #include "LinearShapeFunctionOverTriangle.h"
 #include "LinearShapeFunctionOverTetrahedron.h"
 
+using namespace PyMesh;
+
 ShapeFunction::Ptr ShapeFunction::create(
         ShapeFunction::FEMeshPtr mesh, const std::string& func_type) {
     const size_t dim = mesh->getDim();

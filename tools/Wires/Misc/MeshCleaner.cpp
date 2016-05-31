@@ -12,6 +12,8 @@
 
 #include "BoxChecker.h"
 
+using namespace PyMesh;
+
 void MeshCleaner::clean(MatrixFr& vertices, MatrixIr& faces, Float tol) {
     remove_isolated_vertices(vertices, faces);
     remove_duplicated_vertices(vertices, faces, tol);

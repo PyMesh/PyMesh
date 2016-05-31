@@ -5,6 +5,7 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
 class Mesh;
 
 /**
@@ -30,3 +31,4 @@ class MeshAttribute {
         std::string m_name;
         VectorF m_values;
 };
+}

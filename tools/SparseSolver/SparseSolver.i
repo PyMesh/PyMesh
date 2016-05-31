@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(SparseSolver);
+%shared_ptr(PyMesh::SparseSolver);
 %{
 #include "SparseSolver.h"
 %}
@@ -22,10 +22,10 @@ def coo2ZSparseMatrix(mat):
     zmat.import_raw_coo(mat.shape[0], mat.shape[1], mat.row, mat.col, mat.data);
     return zmat;
 %}
-%pythonprepend SparseSolver::analyze_pattern(const ZSparseMatrix& matrix) %{
+%pythonprepend PyMesh::SparseSolver::analyze_pattern(const PyMesh::ZSparseMatrix& matrix) %{
 matrix = coo2ZSparseMatrix(matrix);
 %}
-%pythonprepend SparseSolver::factorize(const ZSparseMatrix& matrix) %{
+%pythonprepend PyMesh::SparseSolver::factorize(const PyMesh::ZSparseMatrix& matrix) %{
 matrix = coo2ZSparseMatrix(matrix);
 %}
 %include "SparseSolver.h"

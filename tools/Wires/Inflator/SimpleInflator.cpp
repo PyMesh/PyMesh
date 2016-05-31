@@ -6,6 +6,8 @@
 #include <ConvexHull/ConvexHullEngine.h>
 #include <triangle/TriangleWrapper.h>
 
+using namespace PyMesh;
+
 namespace SimpleInflatorHelper {
     const Float EPSILON = 1e-5;
 

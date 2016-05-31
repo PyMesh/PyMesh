@@ -5,6 +5,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VertexLaplacianAttribute : public MeshAttribute {
     public:
         VertexLaplacianAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -17,3 +19,5 @@ class VertexLaplacianAttribute : public MeshAttribute {
         VectorF compute_cotan_weights(const VectorF& v0,
                 const VectorF& v1, const VectorF& v2);
 };
+
+}

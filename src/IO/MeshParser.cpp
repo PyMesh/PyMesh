@@ -14,6 +14,8 @@
 #include "PLYParser.h"
 #include "IOUtils.h"
 
+using namespace PyMesh;
+
 // Static factory method
 MeshParser* MeshParser::create_parser(const std::string& filename) {
     MeshParser* parser = NULL;

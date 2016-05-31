@@ -8,6 +8,8 @@
 
 #include "Material.h"
 
+using namespace PyMesh;
+
 ElementWiseSymmetricMaterial::ElementWiseSymmetricMaterial(
         Float density, MeshPtr material_mesh,
         const std::string& matrix_field_name) :

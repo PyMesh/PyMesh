@@ -4,6 +4,8 @@
 #include <Misc/Timer.h>
 #include <Core/EigenTypedef.h>
 
+using namespace PyMesh;
+
 MatrixFr generate_evenly_spaced(size_t resolution) {
     MatrixFr points(resolution*resolution*resolution, 3);
     for (size_t i=0; i<resolution; i++) {

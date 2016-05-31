@@ -4,6 +4,8 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 
+namespace PyMesh {
+
 typedef double Float;
 typedef Eigen::VectorXd VectorF;
 typedef Eigen::VectorXi VectorI;
@@ -25,3 +27,5 @@ typedef Eigen::Matrix4i Matrix4I;
 
 typedef Eigen::Matrix<int  , Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixIr;
 typedef Eigen::Matrix<Float, Eigen::Dynamic, Eigen::Dynamic, Eigen::RowMajor> MatrixFr;
+
+}

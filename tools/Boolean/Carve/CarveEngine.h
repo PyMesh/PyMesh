@@ -3,6 +3,8 @@
 
 #include <Boolean/BooleanEngine.h>
 
+namespace PyMesh {
+
 class CarveEngine : public BooleanEngine {
     public:
         virtual ~CarveEngine() {}
@@ -13,3 +15,5 @@ class CarveEngine : public BooleanEngine {
         virtual void compute_difference();
         virtual void compute_symmetric_difference();
 };
+
+}

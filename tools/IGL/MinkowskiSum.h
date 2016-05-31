@@ -5,6 +5,8 @@
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
+namespace PyMesh {
+
 class MinkowskiSum {
     public:
         typedef std::shared_ptr<MinkowskiSum> Ptr;
@@ -26,3 +28,5 @@ class MinkowskiSum {
         MatrixFr m_out_vertices;
         MatrixIr m_out_faces;
 };
+
+}

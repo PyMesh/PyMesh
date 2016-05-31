@@ -5,6 +5,7 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
 class Interpolation {
     public:
         typedef std::function<Float(const VectorF&)> Function;
@@ -20,3 +21,4 @@ class Interpolation {
     protected:
         MatrixFr m_control_pts;
 };
+}

@@ -5,6 +5,8 @@
 #include <Core/Exception.h>
 #include <iostream>
 
+using namespace PyMesh;
+
 void FaceIncircleCenterAttribute::compute_from_mesh(Mesh& mesh) {
     if (!mesh.has_attribute("edge_length")) {
         mesh.add_attribute("edge_length");

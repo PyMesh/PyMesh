@@ -7,6 +7,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class GeometryCorrectionTable {
     public:
         typedef std::shared_ptr<GeometryCorrectionTable> Ptr;
@@ -37,3 +39,5 @@ class GeometryCorrectionTable {
         std::vector<Vector2F> m_design_sizes;
         std::vector<Vector2F> m_measurements;
 };
+
+}

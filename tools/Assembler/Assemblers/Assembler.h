@@ -6,6 +6,8 @@
 #include <Assembler/FESetting/FESetting.h>
 #include <Math/ZSparseMatrix.h>
 
+namespace PyMesh {
+
 class Assembler {
     public:
         typedef std::shared_ptr<Assembler> Ptr;
@@ -15,3 +17,5 @@ class Assembler {
 
         virtual ZSparseMatrix assemble(FESettingPtr setting)=0;
 };
+
+}

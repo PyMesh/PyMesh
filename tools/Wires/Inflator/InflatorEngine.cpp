@@ -20,6 +20,8 @@
 #include "PeriodicInflator3D.h"
 #include "IsotropicPeriodicInflator.h"
 
+using namespace PyMesh;
+
 InflatorEngine::Ptr InflatorEngine::create(const std::string& type,
         WireNetwork::Ptr network) {
     const size_t dim = network->get_dim();

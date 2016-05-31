@@ -5,6 +5,8 @@
 #include <Wires/WireNetwork/WireNetwork.h>
 #include <Wires/Parameters/ParameterManager.h>
 
+namespace PyMesh {
+
 class TilerEngine {
     public:
         TilerEngine(WireNetwork::Ptr unit_wire_network)
@@ -40,3 +42,5 @@ class TilerEngine {
         WireNetwork::Ptr m_unit_wire_network;
         ParameterManager::Ptr m_params;
 };
+
+}

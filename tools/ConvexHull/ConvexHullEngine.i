@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(ConvexHullEngine);
+%shared_ptr(PyMesh::ConvexHullEngine);
 %{
 #include <ConvexHullEngine.h>
 %}

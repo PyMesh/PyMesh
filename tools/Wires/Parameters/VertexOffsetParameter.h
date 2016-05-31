@@ -3,6 +3,8 @@
 
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class VertexOffsetParameter : public PatternParameter {
     public:
         VertexOffsetParameter(WireNetwork::Ptr wire_network, size_t axis);
@@ -17,3 +19,5 @@ class VertexOffsetParameter : public PatternParameter {
     private:
         size_t m_axis;
 };
+
+}

@@ -4,6 +4,8 @@ extern "C" {
 #include <Predicates/predicates.h>
 }
 
+using namespace PyMesh;
+
 bool FaceUtils::is_colinear_2D(
         const Vector2F& v0,
         const Vector2F& v1,

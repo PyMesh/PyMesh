@@ -4,9 +4,9 @@
 %include eigen.i
 %include Core/ExceptionConverter.i
 %include WireNetwork/WireNetwork.i
+%include Parameters/ParameterCommon.i
+%include Parameters/ParameterManager.i
 %include Tiler/WireTiler.i
 %include Inflator/InflatorEngine.i
 %include Inflator/WireProfile.i
-%include Parameters/ParameterCommon.i
-%include Parameters/ParameterManager.i
 %include Misc/SymmetryChecker.i

@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "TetgenMeshConverter.h"
 
+using namespace PyMesh;
+
 TetgenMeshConverter::TetgenMeshConverter(const tetgenio& mesh) {
     extract_vertices(mesh);
     extract_faces(mesh);

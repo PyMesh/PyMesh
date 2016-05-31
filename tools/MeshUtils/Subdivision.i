@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(Subdivision);
+%shared_ptr(PyMesh::Subdivision);
 %{
 #include "Subdivision.h"
 %}

@@ -2,7 +2,11 @@
 #pragma once
 #include "Assembler.h"
 
+namespace PyMesh {
+
 class MassAssembler : public Assembler {
     public:
         virtual ZSparseMatrix assemble(FESettingPtr setting);
 };
+
+}

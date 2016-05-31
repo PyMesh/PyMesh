@@ -5,6 +5,8 @@
 #include <Core/EigenTypedef.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
+namespace PyMesh {
+
 class IsotropicDofExtractor {
     public:
         IsotropicDofExtractor(WireNetwork::Ptr wire_network);
@@ -27,3 +29,4 @@ class IsotropicDofExtractor {
         Float m_bbox_half_size;
 };
 
+}

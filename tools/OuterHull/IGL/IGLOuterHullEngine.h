@@ -3,6 +3,8 @@
 
 #include <OuterHullEngine.h>
 
+namespace PyMesh {
+
 class IGLOuterHullEngine : public OuterHullEngine {
     public:
         virtual ~IGLOuterHullEngine() {}
@@ -16,3 +18,5 @@ class IGLOuterHullEngine : public OuterHullEngine {
     private:
         typedef Eigen::Matrix<Float, Eigen::Dynamic, 3, Eigen::RowMajor> Matrix3Fr;
 };
+
+}

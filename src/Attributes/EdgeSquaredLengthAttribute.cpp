@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void EdgeSquaredLengthAttribute::compute_from_mesh(Mesh& mesh) {
     size_t num_faces = mesh.get_num_faces();
     size_t num_vertex_per_face = mesh.get_vertex_per_face();

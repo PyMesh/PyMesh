@@ -4,6 +4,8 @@
 #include <cassert>
 #include <map>
 
+using namespace PyMesh;
+
 namespace CGALConvexHullHelper {
     struct VectorFComp {
         bool operator()(const VectorF& first, const VectorF& second) const {

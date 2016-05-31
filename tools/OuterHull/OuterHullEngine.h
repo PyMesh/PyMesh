@@ -5,6 +5,7 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
 class OuterHullEngine {
     public:
         typedef std::shared_ptr<OuterHullEngine> Ptr;
@@ -37,3 +38,4 @@ class OuterHullEngine {
         VectorI  m_face_is_flipped;
         VectorI  m_ori_face_indices;
 };
+}

@@ -6,6 +6,7 @@
 
 #include "OpenCLWrapperHelper.h"
 
+using namespace PyMesh;
 using namespace OpenCLWrapperHelper;
 
 OpenCLWrapper::OpenCLWrapper(bool profile) : m_profile(profile) {

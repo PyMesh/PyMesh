@@ -6,6 +6,8 @@
 #include <Misc/HashGrid.h>
 #include <Mesh.h>
 
+namespace PyMesh {
+
 class PointLocator {
     public:
         PointLocator(Mesh::Ptr mesh);
@@ -48,3 +50,5 @@ class PointLocator {
         VectorI m_voxel_idx;
         MatrixFr m_barycentric_coords;
 };
+
+}

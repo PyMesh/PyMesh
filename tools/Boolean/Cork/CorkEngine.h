@@ -3,6 +3,8 @@
 
 #include <Boolean/BooleanEngine.h>
 
+namespace PyMesh {
+
 class CorkEngine : public BooleanEngine {
     public:
         virtual ~CorkEngine();
@@ -13,3 +15,5 @@ class CorkEngine : public BooleanEngine {
         virtual void compute_difference();
         virtual void compute_symmetric_difference();
 };
+
+}

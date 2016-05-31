@@ -9,6 +9,8 @@
 #include "VertexCustomOffsetParameter.h"
 #include "VertexIsotropicOffsetParameter.h"
 
+using namespace PyMesh;
+
 OffsetParameters::OffsetParameters(WireNetwork::Ptr wire_network,
         OffsetParameters::TargetType type,
         Float default_value) :

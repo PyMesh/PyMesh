@@ -5,6 +5,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class TetrahedronizationEngine {
     public:
         typedef std::shared_ptr<TetrahedronizationEngine> Ptr;
@@ -67,3 +69,5 @@ class TetrahedronizationEngine {
         Float m_cell_radius_edge_ratio;
         Float m_cell_size;
 };
+
+}

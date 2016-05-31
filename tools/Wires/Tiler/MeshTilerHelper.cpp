@@ -7,6 +7,8 @@
 #include <Wires/Misc/BilinearInterpolation.h>
 #include <Wires/Misc/TrilinearInterpolation.h>
 
+using namespace PyMesh;
+
 TilerEngine::FuncList MeshTilerHelper::get_2D_tiling_operators(Mesh::Ptr mesh) {
     const size_t num_cells = mesh->get_num_faces();
     const size_t num_vertex_per_cell = mesh->get_vertex_per_face();

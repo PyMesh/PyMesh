@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class ParameterDerivative {
     public:
         typedef std::shared_ptr<ParameterDerivative> Ptr;
@@ -37,3 +39,5 @@ class ParameterDerivative {
         MatrixFr m_face_normals;
         MatrixFr m_face_voronoi_areas;
 };
+
+}

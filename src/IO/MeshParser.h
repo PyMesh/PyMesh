@@ -5,6 +5,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MeshParser {
     public:
         static MeshParser* create_parser(const std::string& filename);
@@ -36,3 +38,5 @@ class MeshParser {
         virtual size_t vertex_per_voxel() const {return 0;}
         virtual size_t vertex_per_face() const  {return 3;}
 };
+
+}

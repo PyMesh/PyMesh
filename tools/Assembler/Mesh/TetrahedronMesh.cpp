@@ -7,6 +7,8 @@
 #include <Mesh.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 TetrahedronMesh::TetrahedronMesh(TetrahedronMesh::MeshPtr mesh) : m_mesh(mesh) {
     verify_voxel_mesh();
     init_attributes();

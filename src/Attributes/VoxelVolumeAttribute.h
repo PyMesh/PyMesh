@@ -3,6 +3,8 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
+
 class VoxelVolumeAttribute : public MeshAttribute {
     public:
         VoxelVolumeAttribute(const std::string& name) : MeshAttribute(name) {}
@@ -15,3 +17,5 @@ class VoxelVolumeAttribute : public MeshAttribute {
         Float compute_tet_volume(Mesh& mesh, size_t voxel_idx);
         Float compute_hex_volume(Mesh& mesh, size_t voxel_idx);
 };
+
+}

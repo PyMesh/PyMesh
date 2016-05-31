@@ -5,6 +5,8 @@
 #include <sstream>
 #include <tetgen/TetgenWrapper.h>
 
+using namespace PyMesh;
+
 void TetGenEngine::run() {
     preprocess();
 

@@ -7,6 +7,8 @@
 #include "IGL/IGLCSGTree.h"
 #endif 
 
+using namespace PyMesh;
+
 CSGTree::Ptr CSGTree::create(const std::string& engine_name) {
 #ifdef WITH_IGL
     if (engine_name == "igl") {

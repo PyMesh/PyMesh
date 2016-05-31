@@ -6,6 +6,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 /**
  * ConvexHullEngine defines the minimalistic interface that compute the convex
  * hull of a set of input points.  The output is the vertices and faces of the
@@ -37,3 +39,5 @@ class ConvexHullEngine {
         MatrixIr m_faces;
         VectorI  m_index_map;
 };
+
+}

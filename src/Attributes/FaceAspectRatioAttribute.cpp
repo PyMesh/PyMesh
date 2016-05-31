@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void FaceAspectRatioAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_vertex_per_face = mesh.get_vertex_per_face();
     if (num_vertex_per_face != 3 && num_vertex_per_face != 4) {

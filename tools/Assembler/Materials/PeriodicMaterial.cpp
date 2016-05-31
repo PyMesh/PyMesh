@@ -3,6 +3,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 PeriodicMaterial::PeriodicMaterial(Material::Ptr mat1, Material::Ptr mat2,
         VectorF axis, Float period, Float ratio, Float phase) :
     m_axis(axis), m_period(period), m_ratio(ratio), m_phase(phase) {

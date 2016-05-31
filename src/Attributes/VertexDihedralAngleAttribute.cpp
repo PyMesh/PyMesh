@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void VertexDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_vertices = mesh.get_num_vertices();
     const size_t num_faces = mesh.get_num_faces();

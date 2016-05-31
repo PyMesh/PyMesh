@@ -3,6 +3,8 @@
 #include <Core/EigenTypedef.h>
 #include <Misc/TripletMap.h>
 
+namespace PyMesh {
+
 class DegeneratedTriangleRemoval {
     public:
         DegeneratedTriangleRemoval(
@@ -30,3 +32,5 @@ class DegeneratedTriangleRemoval {
         TripletMap<size_t> m_edge_map;
         VectorI m_ori_face_indices;
 };
+
+}

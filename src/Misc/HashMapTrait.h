@@ -10,6 +10,8 @@
 
 #include "HashKey.h"
 
+namespace PyMesh {
+
 /**
  * Typedefs for std hash types.
  * HashType: 1 google sparse
@@ -120,3 +122,5 @@ struct HashMapTrait<DIM, 2> {
 };
 
 #endif //USE_SPARSEHASH
+
+}

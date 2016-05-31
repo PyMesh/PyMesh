@@ -3,6 +3,8 @@
 #include <Core/EigenTypedef.h>
 #include <Eigen/Eigenvalues>
 
+namespace PyMesh {
+
 /**
  * A thin wrapper around Eigen::EigenSolver<MatrixF>
  */
@@ -30,3 +32,5 @@ class EigenSolver {
         VectorF m_eigen_values;
         MatrixF m_eigen_vectors;
 };
+
+}

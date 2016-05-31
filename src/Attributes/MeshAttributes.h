@@ -8,6 +8,7 @@
 
 #include "MeshAttribute.h"
 
+namespace PyMesh {
 class Mesh;
 
 class MeshAttributes {
@@ -32,3 +33,4 @@ class MeshAttributes {
         typedef std::pair<std::string, MeshAttribute::Ptr> AttributeMapEntry;
         AttributeMap m_attributes;
 };
+}

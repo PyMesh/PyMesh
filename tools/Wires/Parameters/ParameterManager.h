@@ -12,6 +12,8 @@
 #include "ThicknessParameters.h"
 #include "OffsetParameters.h"
 
+namespace PyMesh {
+
 class ParameterManager {
     public:
         typedef ParameterCommon::TargetType TargetType;
@@ -91,11 +93,11 @@ class ParameterManager {
             m_thickness_params.set_default(thickness);
         }
 
-        const ThicknessParameters& get_thickness_params() const { return m_thickness_params; }
-        ThicknessParameters& get_thickness_params() { return m_thickness_params; }
+        const PyMesh::ThicknessParameters& get_thickness_params() const { return m_thickness_params; }
+        PyMesh::ThicknessParameters& get_thickness_params() { return m_thickness_params; }
 
-        const OffsetParameters& get_offset_params() const { return m_offset_params; }
-        OffsetParameters& get_offset_params() { return m_offset_params; }
+        const PyMesh::OffsetParameters& get_offset_params() const { return m_offset_params; }
+        PyMesh::OffsetParameters& get_offset_params() { return m_offset_params; }
 
     public:
         // The following methods are mostly used for parameter sweep
@@ -147,3 +149,5 @@ class ParameterManager {
         OffsetParameters m_offset_params;
         DofType m_dof_type;
 };
+
+}

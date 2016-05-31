@@ -7,6 +7,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 HashGrid::Ptr HashGrid::create(Float cell_size, size_t dim, HashGrid::ImplementationType impl_type) {
     if (dim == 3) {
         switch (impl_type) {

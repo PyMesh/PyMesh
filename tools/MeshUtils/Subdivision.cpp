@@ -7,6 +7,8 @@
 
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 Subdivision::Ptr Subdivision::create(const std::string& type) {
     if (type == "simple") {
         return Ptr(new SimpleSubdivision());

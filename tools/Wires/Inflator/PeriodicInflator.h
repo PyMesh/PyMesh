@@ -7,6 +7,8 @@
 
 #include "InflatorEngine.h"
 
+namespace PyMesh {
+
 class AABBTree;
 
 class PeriodicInflator : public InflatorEngine {
@@ -48,3 +50,5 @@ class PeriodicInflator : public InflatorEngine {
         std::vector<MatrixFr> m_shape_velocities;
         std::shared_ptr<AABBTree> m_tree;
 };
+
+}

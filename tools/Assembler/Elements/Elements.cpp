@@ -9,6 +9,8 @@
 #include "TetrahedronElements.h"
 #include "TriangleElements.h"
 
+using namespace PyMesh;
+
 Elements::Ptr Elements::adapt(Mesh::Ptr mesh) {
     if (mesh->get_num_voxels() > 0) {
         const size_t vertex_per_voxel = mesh->get_vertex_per_voxel();

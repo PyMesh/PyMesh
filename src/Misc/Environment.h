@@ -4,6 +4,8 @@
 #include <string>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 /**
  * A simple wrapper class to access environment variables.
  * Usage:
@@ -27,3 +29,5 @@ class Environment {
             return std::string(val);
         }
 };
+
+}

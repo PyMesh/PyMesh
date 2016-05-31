@@ -12,6 +12,7 @@
 #include <vector>
 #include <memory>
 
+namespace PyMesh {
 class AABBTree {
     public:
         typedef std::shared_ptr<AABBTree> Ptr;
@@ -121,3 +122,5 @@ class AABBTree {
         TreePtr m_tree;
         Triangles m_triangles;
 };
+
+}

@@ -8,6 +8,8 @@
 #include <IGL/IGLSelfIntersectionResolver.h>
 #endif
 
+using namespace PyMesh;
+
 SelfIntersectionResolver::Ptr SelfIntersectionResolver::create(
         const std::string& engine_name) {
 #ifdef WITH_IGL

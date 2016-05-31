@@ -2,6 +2,8 @@
 #pragma once
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class Mesh;
 
 /**
@@ -54,3 +56,5 @@ class MeshConnectivity {
         VectorI m_voxel_face_adjacency;
         VectorI m_voxel_face_adjacency_idx;
 };
+
+}

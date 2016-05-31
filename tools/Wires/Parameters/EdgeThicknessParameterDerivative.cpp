@@ -4,6 +4,8 @@
 #include <cassert>
 #include <vector>
 
+using namespace PyMesh;
+
 MatrixFr EdgeThicknessParameterDerivative::compute() {
     WireNetwork::Ptr wire_network = m_parameter->get_wire_network();
 

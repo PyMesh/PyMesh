@@ -7,6 +7,8 @@
 #include <Wires/WireNetwork/WireNetwork.h>
 #include <Wires/Parameters/ParameterManager.h>
 
+namespace PyMesh {
+
 class WireTiler {
     public:
         typedef Mesh::Ptr MeshPtr;
@@ -34,3 +36,5 @@ class WireTiler {
         WireNetwork::Ptr m_unit_wire_network;
         ParameterManager::Ptr m_params;
 };
+
+}

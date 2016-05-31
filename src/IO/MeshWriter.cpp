@@ -15,6 +15,8 @@
 #include "PLYWriter.h"
 #include "STLWriter.h"
 
+using namespace PyMesh;
+
 MeshWriter* MeshWriter::create_writer(const std::string& filename) {
     MeshWriter* writer = NULL;
     std::string ext = IOUtils::get_extention(filename);

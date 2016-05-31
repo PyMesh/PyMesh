@@ -3,6 +3,8 @@
 
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 void EdgeLengthAttribute::compute_from_mesh(Mesh& mesh) {
     if (!mesh.has_attribute("edge_squared_length")) {
         mesh.add_attribute("edge_squared_length");

@@ -3,6 +3,8 @@
 
 #include "PatternParameter.h"
 
+namespace PyMesh {
+
 class VertexCustomOffsetParameter : public PatternParameter {
     public:
         VertexCustomOffsetParameter(WireNetwork::Ptr wire_network,
@@ -17,3 +19,5 @@ class VertexCustomOffsetParameter : public PatternParameter {
     private:
         MatrixFr m_derivative;
 };
+
+}

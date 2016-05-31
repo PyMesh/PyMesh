@@ -7,6 +7,8 @@
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
 
+using namespace PyMesh;
+
 namespace VoxelVolumeAttributeHelper {
     Float compute_tet_volume(
             const Vector3F& v0, const Vector3F& v1,

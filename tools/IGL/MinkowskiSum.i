@@ -1,5 +1,5 @@
 %include "std_shared_ptr.i"
-%shared_ptr(MinkowskiSum);
+%shared_ptr(PyMesh::MinkowskiSum);
 %{
 #include "MinkowskiSum.h"
 %}

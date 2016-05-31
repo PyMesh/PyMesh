@@ -3,6 +3,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class MeshCleaner {
     public:
         void clean(MatrixFr& vertices, MatrixIr& faces, Float tol);
@@ -14,3 +16,5 @@ class MeshCleaner {
         void remove_obtuse_triangle(MatrixFr& vertices, MatrixIr& faces);
         void remove_fin_faces(MatrixFr& vertices, MatrixIr& faces);
 };
+
+}

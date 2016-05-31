@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "RigidMotionAssembler.h"
 
+using namespace PyMesh;
+
 ZSparseMatrix RigidMotionAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
 

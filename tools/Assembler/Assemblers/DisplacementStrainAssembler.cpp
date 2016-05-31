@@ -10,6 +10,8 @@
 #include <Assembler/FESetting/FESetting.h>
 #include <Assembler/Math/MatrixOrder.h>
 
+using namespace PyMesh;
+
 ZSparseMatrix DisplacementStrainAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
     typedef FESetting::FEBasisPtr FEBasisPtr;

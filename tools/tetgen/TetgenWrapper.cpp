@@ -9,6 +9,8 @@
 #include "TetgenMeshConverter.h"
 #include "TetgenException.h"
 
+using namespace PyMesh;
+
 TetgenWrapper::TetgenWrapper(const MatrixFr& vertices, const MatrixIr& faces) :
     m_ori_vertices(vertices),
     m_ori_faces(faces) {

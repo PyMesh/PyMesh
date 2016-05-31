@@ -11,6 +11,8 @@
 
 #include "MshLoader.h"
 
+using namespace PyMesh;
+
 bool MSHParser::parse(const std::string& filename) {
     m_loader = LoaderPtr(new MshLoader(filename));
     extract_faces_and_voxels();

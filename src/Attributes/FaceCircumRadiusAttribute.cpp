@@ -6,6 +6,7 @@
 #include <Mesh.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
 
 void FaceCircumRadiusAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t dim = mesh.get_dim();

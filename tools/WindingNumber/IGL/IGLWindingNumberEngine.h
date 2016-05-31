@@ -3,6 +3,8 @@
 
 #include <WindingNumberEngine.h>
 
+namespace PyMesh {
+
 class IGLWindingNumberEngine : public WindingNumberEngine {
     public:
         virtual ~IGLWindingNumberEngine() {}
@@ -10,3 +12,5 @@ class IGLWindingNumberEngine : public WindingNumberEngine {
     public:
         virtual VectorF run(const MatrixFr& queries);
 };
+
+}

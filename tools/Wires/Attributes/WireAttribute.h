@@ -8,6 +8,8 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
+
 class WireNetwork;
 
 class WireAttribute {
@@ -34,3 +36,5 @@ class WireAttribute {
         AttributeType m_type;
         MatrixFr m_values;
 };
+
+}

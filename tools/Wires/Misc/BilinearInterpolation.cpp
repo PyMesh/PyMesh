@@ -4,6 +4,8 @@
 #include <sstream>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 // Shape functions ordered according to quad vertex order:
 //
 //  3 +---+ 2

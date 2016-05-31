@@ -9,6 +9,8 @@
 
 #include "ParameterCommon.h"
 
+namespace PyMesh {
+
 class PatternParameter {
     public:
         typedef std::shared_ptr<PatternParameter> Ptr;
@@ -68,3 +70,5 @@ class PatternParameter {
         Float m_value;
         std::string m_formula;
 };
+
+}

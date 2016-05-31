@@ -5,6 +5,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class BooleanEngine {
     public:
         typedef std::shared_ptr<BooleanEngine> Ptr;
@@ -54,3 +56,5 @@ class BooleanEngine {
         MatrixFr m_vertices;
         MatrixIr m_faces;
 };
+
+}

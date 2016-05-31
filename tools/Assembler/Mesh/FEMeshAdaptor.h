@@ -5,6 +5,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 /**
  * FEMeshAdaptor is an adaptor interface to represent finite element mesh structure.
  */
@@ -54,3 +56,5 @@ class FEMeshAdaptor {
         virtual VectorI getBoundaryNodeAdjacentBoundaryFaces(size_t bvi) const=0;
         virtual VectorI getBoundaryNodeAdjacentBoundaryNodes(size_t bvi) const=0;
 };
+
+}

@@ -5,6 +5,7 @@
 #include <CGAL/Polyhedron_incremental_builder_3.h>
 #include <Core/Exception.h>
 
+namespace PyMesh {
 namespace CGALUtils {
     template <class HDS>
     class PolyhedronBuilder : public CGAL::Modifier_base<HDS> {
@@ -99,4 +100,5 @@ namespace CGALUtils {
             f_count++;
         }
     }
+}
 }

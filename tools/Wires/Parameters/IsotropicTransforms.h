@@ -5,6 +5,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class IsotropicTransforms {
     public:
         IsotropicTransforms(size_t dim) : m_dim(dim) {
@@ -28,3 +30,5 @@ class IsotropicTransforms {
         std::vector<MatrixF> m_reflections;
         std::vector<MatrixF> m_rotations;
 };
+
+}

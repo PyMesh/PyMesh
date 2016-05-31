@@ -6,9 +6,9 @@
 %exception {
     try {
         $action
-    } catch (const IOError& e) {
+    } catch (const PyMesh::IOError& e) {
         SWIG_exception(SWIG_IOError, e.what());
-    } catch (const RuntimeError& e) {
+    } catch (const PyMesh::RuntimeError& e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::exception& e) {
         SWIG_exception(SWIG_UnknownError, e.what());

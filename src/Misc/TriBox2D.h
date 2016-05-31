@@ -3,6 +3,7 @@
 #include <Core/EigenTypedef.h>
 #include <iostream>
 
+namespace PyMesh {
 namespace TriBox2D {
 
 bool get_orientation(const Float triverts[3][2]) {
@@ -78,4 +79,5 @@ int triBoxOverlap(const Float boxcenter[2], const Float boxhalfsize[2], const Fl
     return 1;
 }
 
+}
 }

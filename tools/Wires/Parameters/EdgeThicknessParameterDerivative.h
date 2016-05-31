@@ -3,6 +3,8 @@
 
 #include "ParameterDerivative.h"
 
+namespace PyMesh {
+
 class EdgeThicknessParameterDerivative : public ParameterDerivative {
     public:
         EdgeThicknessParameterDerivative(
@@ -14,3 +16,5 @@ class EdgeThicknessParameterDerivative : public ParameterDerivative {
     public:
         virtual MatrixFr compute();
 };
+
+}

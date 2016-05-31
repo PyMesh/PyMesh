@@ -7,6 +7,8 @@ extern "C" {
 #include "cl-helper.h"
 }
 
+namespace PyMesh {
+
 class OpenCLWrapper {
     public:
         OpenCLWrapper(bool profile=false);
@@ -125,3 +127,5 @@ class OpenCLWrapper {
         bool           m_profile;
         size_t         m_work_group_size;
 };
+
+}

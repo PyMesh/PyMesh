@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 #include <Misc/Triplet.h>
 
+using namespace PyMesh;
+
 void VertexValanceAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_voxels = mesh.get_num_voxels();
     const size_t num_vertex_per_voxel = mesh.get_vertex_per_voxel();

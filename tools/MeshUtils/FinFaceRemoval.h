@@ -2,6 +2,8 @@
 #pragma once
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 /**
  * This class removes duplicated triangle faces.
  * Two faces are duplicates of each other if they consist of the same 3
@@ -45,3 +47,5 @@ class FinFaceRemoval {
         MatrixIr m_faces;
         VectorI  m_face_indices;
 };
+
+}

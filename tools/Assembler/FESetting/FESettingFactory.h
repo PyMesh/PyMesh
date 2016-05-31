@@ -5,6 +5,8 @@
 
 #include "FESetting.h"
 
+namespace PyMesh {
+
 class FESettingFactory {
     public:
         typedef FESetting::Ptr FESettingPtr;
@@ -23,3 +25,5 @@ class FESettingFactory {
         FEBasisPtr m_basis;
         MaterialPtr m_material;
 };
+
+}

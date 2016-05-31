@@ -4,6 +4,8 @@
 
 #include <Core/EigenTypedef.h>
 
+namespace PyMesh {
+
 class Mesh;
 
 class Boundary {
@@ -23,3 +25,5 @@ class Boundary {
         virtual size_t get_num_boundary_nodes() const=0;
         virtual VectorI get_boundary_nodes() const=0;
 };
+
+}

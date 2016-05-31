@@ -9,6 +9,8 @@
 #include <Mesh.h>
 #include <Core/Exception.h>
 
+using namespace PyMesh;
+
 typedef std::set<int> IndexSet;
 typedef std::vector<IndexSet> SetArray;
 

@@ -16,6 +16,8 @@
 #include "InflatorEngine.h"
 #include "SimpleInflator.h"
 
+using namespace PyMesh;
+
 namespace PhantomMeshGeneratorHelper {
     template <typename Derived>
     void batch_assign(Eigen::MatrixBase<Derived>& data,

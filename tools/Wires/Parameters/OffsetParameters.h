@@ -9,6 +9,8 @@
 #include "PatternParameter.h"
 #include "ParameterList.h"
 
+namespace PyMesh {
+
 class OffsetParameters : public ParameterList {
     public:
         OffsetParameters(WireNetwork::Ptr wire_network,
@@ -40,3 +42,5 @@ class OffsetParameters : public ParameterList {
         TargetType m_type;
         Float m_default_offset;
 };
+
+}

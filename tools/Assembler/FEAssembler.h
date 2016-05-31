@@ -5,7 +5,10 @@
 #include <Mesh.h>
 
 #include <Math/ZSparseMatrix.h>
+#include <Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
+
+namespace PyMesh {
 
 class FEAssembler {
     public:
@@ -25,3 +28,5 @@ class FEAssembler {
     private:
         FESetting::Ptr m_setting;
 };
+
+}

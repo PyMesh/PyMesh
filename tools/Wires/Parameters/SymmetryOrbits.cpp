@@ -6,6 +6,8 @@
 
 typedef boost::property_tree::ptree PTree;
 
+using namespace PyMesh;
+
 SymmetryOrbits::SymmetryOrbits(const std::string& orbit_file) {
     PTree orbit_config;
     read_json(orbit_file, orbit_config);
