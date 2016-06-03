@@ -12,7 +12,7 @@ matrix:
         - brew update
         - brew upgrade cmake
         - brew upgrade cgal
-        - brew install pyenv
+        - brew upgrade pyenv
         - brew install swig
         - pyenv install 2.7.11
         - pyenv global 2.7.11
