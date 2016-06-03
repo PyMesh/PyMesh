@@ -1,7 +1,5 @@
 language: cpp
 sudo: false
-python:
-    - "2.7
 matrix:
   include:
     - os: osx
@@ -23,4 +21,5 @@ matrix:
         - cmake ..
         - make
         - make tools
+        - python --version
 
