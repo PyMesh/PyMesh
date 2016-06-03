@@ -6,7 +6,7 @@ processing.  **PyMesh** is written using both C++ and python, where
 computational intensive functionalities are realized in C++, and Python is used
 for create minimalistic and easy to use interfaces.
 
-### Docuementation ###
+### Documentation ###
 
 [Latest documentation](http://pymesh.readthedocs.org/en/latest/)
 
@@ -14,7 +14,7 @@ for create minimalistic and easy to use interfaces.
 
 To retrieve the code:
 
-    git clone --recursive https://github.com/qnzhou/PyMesh.git
+    git clone --recursive https://github.com/panchagil/PyMesh
 
 Be sure to save the root directory of PyMesh in the environment variable
 PYMESH_PATH:
@@ -68,7 +68,7 @@ varaibles:
 
 ### Build ###
 
-The first step is to compile the optional third party dependencies:
+The first step is to compile the  third party dependencies:
 
     cd $PYMESH_PATH/third_party
     mkdir build
@@ -87,22 +87,10 @@ Now we can build the main project.  It is recommended to build out of source:
     cd build
     cmake ..
 
-To only build the C++ libraries without the swig python modules, change the last
-command to
-
-    cmake -DWITHOUT_SWIG=ON ..
 
 To build the main PyMesh library:
 
     make
-    make src_tests
-
-To build all available tools:
-
-    make tools
-    make tools_tests
-
-Make sure all unit tests are passed before using the library.
 
 ### Install ###
 
@@ -110,6 +98,5 @@ The output of building PyMesh consists a set of C++ libraries and a python
 module. Installing the C++ library is currently not available.  However,
 installing the python package can be done:
 
-    ./setup.py build # This an alternative way of calling cmake/make
     ./setup.py install
 
