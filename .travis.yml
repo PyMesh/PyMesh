@@ -9,26 +9,36 @@ matrix:
     - os: osx
       compiler: clang
       before_install:
-        - which python
-        - python --version
         - brew update
         - brew upgrade cmake
         - brew upgrade cgal
+        - brew install pyenv
+        - brew install swig
+        - pyenv install 2.7.11
+        - pyenv global 2.7.11
+        - which python
+        - python --version
+        - which pip
       install:
+        - pip install -r python/requirements.txt
         - git submodule update --init --recursive
         - mkdir third_party/build
         - cd third_party/build
         - cmake ..
         - make
         - make install
-      script:
-        - echo $PWD
         - cd ../..
+      script:
         - mkdir build
         - cd build
         - cmake ..
         - make
         - make tools
-
-
+        - cd ..
+        - ./setup.py install
+      after_success:
+        - cd build
+        - make all_tests
+        - cd ..
+        - python -c "import pymesh; pymesh.test()"
 
