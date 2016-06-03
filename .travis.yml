@@ -7,15 +7,16 @@ python:
 matrix:
   include:
     - os: osx
+      osx_image: xcode7.3 # OS X 10.11
       compiler: clang
       before_install:
+        - sw_vers -productVersion
         - brew update
         - brew upgrade cmake
         - brew upgrade cgal
         - brew upgrade pyenv
         - brew install swig
-        - pyenv install 2.7.11
-        - pyenv global 2.7.11
+        - brew install python
         - which python
         - python --version
         - which pip
