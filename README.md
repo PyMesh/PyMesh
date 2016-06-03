@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/panchagil/PyMesh.svg?branch=travis_ci)](https://travis-ci.org/panchagil/PyMesh)
+
 ### About PyMesh ###
 
 **PyMesh** is a code base developed by Qingnan Zhou for his PhD research at New
