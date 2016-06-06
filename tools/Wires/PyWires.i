@@ -7,6 +7,6 @@
 %include Parameters/ParameterCommon.i
 %include Parameters/ParameterManager.i
 %include Tiler/WireTiler.i
-%include Inflator/InflatorEngine.i
 %include Inflator/WireProfile.i
+%include Inflator/InflatorEngine.i
 %include Misc/SymmetryChecker.i
