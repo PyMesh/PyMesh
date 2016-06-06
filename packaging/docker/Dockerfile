@@ -28,4 +28,4 @@ RUN cmake .. && make && make install && make clean
 WORKDIR $PYMESH_PATH/build
 RUN cmake .. && make && make tools && make all_tests
 WORKDIR $PYMESH_PATH
-RUN ./setup.py build && ./setup.py install && rm -rf build
+RUN ./setup.py build && ./setup.py install && rm -rf build && python -c "import pymesh; pymesh.test()"
