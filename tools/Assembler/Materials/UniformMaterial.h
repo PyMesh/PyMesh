@@ -25,6 +25,8 @@ class UniformMaterial : public Material {
             return m_density;
         }
 
+        virtual size_t get_dim() const { return m_dim; }
+
     protected:
         UniformMaterial() {}
 

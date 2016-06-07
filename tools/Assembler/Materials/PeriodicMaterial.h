@@ -27,6 +27,8 @@ class PeriodicMaterial : public Material {
 
         virtual Float get_density() const;
 
+        virtual size_t get_dim() const { return m_axis.size(); }
+
     protected:
         PeriodicMaterial() {}
 

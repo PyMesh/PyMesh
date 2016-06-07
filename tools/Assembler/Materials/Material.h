@@ -36,6 +36,7 @@ class Material {
         virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const=0;
         virtual Float get_density(VectorF coord) const=0;
         virtual Float get_density() const=0;
+        virtual size_t get_dim() const=0;
 
         virtual void update() {throw NotImplementedError("updata() is not implemented by subclasses."); }
 };
