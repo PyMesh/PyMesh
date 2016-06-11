@@ -9,7 +9,7 @@
 FIND_PATH(LIBIGL_INCLUDE_DIRS igl/igl_inline.h
     $ENV{LIBIGL_PATH}
     $ENV{LIBIGL_PATH}/include/
-    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include/
+    ${PROJECT_SOURCE_DIR}/third_party/libigl/include
     /opt/local/include/
     /usr/local/include/
     /usr/include/)
