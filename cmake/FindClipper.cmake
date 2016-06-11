@@ -12,8 +12,8 @@ FIND_PATH(CLIPPER_INCLUDE_DIRS clipper.hpp
     $ENV{CLIPPER_PATH}/cpp/
     $ENV{CLIPPER_PATH}/include/
     $ENV{CLIPPER_PATH}/include/polyclipping/
-    ${PROJECT_SOURCE_DIR}/third_party/local/include/
-    ${PROJECT_SOURCE_DIR}/third_party/local/include/polyclipping/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/include/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/include/polyclipping/
     /opt/local/include/
     /opt/local/include/polyclipping/
     /usr/local/include/
@@ -27,8 +27,8 @@ FIND_LIBRARY(CLIPPER_LIBRARIES polyclipping
     $ENV{CLIPPER_PATH}/cpp/build/
     $ENV{CLIPPER_PATH}/lib/
     $ENV{CLIPPER_PATH}/lib/polyclipping/
-    ${PROJECT_SOURCE_DIR}/third_party/local/lib/
-    ${PROJECT_SOURCE_DIR}/third_party/local/lib/polyclipping/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/lib/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/lib/polyclipping/
     /opt/local/lib/
     /opt/local/lib/polyclipping/
     /usr/local/lib/

@@ -13,7 +13,7 @@ FIND_PATH(CARVE_INCLUDE_DIRS
     PATHS
     $ENV{CARVE_PATH}
     $ENV{CARVE_PATH}/include/
-    ${PROJECT_SOURCE_DIR}/third_party/local/include/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/include/
     /opt/local/include/
     /usr/local/include/
     /usr/include/)
@@ -21,7 +21,7 @@ FIND_PATH(CARVE_INCLUDE_DIRS
 FIND_LIBRARY(CARVE_LIBRARIES carve
     $ENV{CARVE_PATH}
     $ENV{CARVE_PATH}/lib/
-    ${PROJECT_SOURCE_DIR}/third_party/local/lib/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/lib/
     /opt/local/lib/
     /usr/local/lib/
     /usr/lib/)

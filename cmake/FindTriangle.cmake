@@ -10,7 +10,7 @@
 find_path (Triangle_INCLUDE_DIRS triangle.h
     $ENV{TRIANGLE_PATH}
     $ENV{TRIANGLE_PATH}/include
-    ${PROJECT_SOURCE_DIR}/third_party/local/include/
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/include/
     /opt/local/include
     /usr/local/include
     /usr/includes
@@ -19,7 +19,7 @@ find_path (Triangle_INCLUDE_DIRS triangle.h
 FIND_LIBRARY(Triangle_LIBRARIES NAMES libtriangle.a triangle
      PATHS $ENV{TRIANGLE_PATH}
            $ENV{TRIANGLE_PATH}/lib
-           ${PROJECT_SOURCE_DIR}/third_party/local/lib/
+           ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/lib/
            /opt/local/lib
            /usr/local/lib
            /usr/lib)
