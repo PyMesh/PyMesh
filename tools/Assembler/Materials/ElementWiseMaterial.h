@@ -25,6 +25,7 @@ class ElementWiseMaterial : public Material {
         virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const;
         virtual Float get_density(VectorF coord) const { return m_density; }
         virtual Float get_density() const { return m_density; }
+        virtual size_t get_dim() const { return m_material_mesh->get_dim(); }
 
     protected:
         Float compute_cell_size();
