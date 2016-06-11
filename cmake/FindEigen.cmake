@@ -20,7 +20,7 @@ find_path(EIGEN_INCLUDE_DIRS
     PATHS
     $ENV{EIGEN_INC}
     $ENV{EIGEN_PATH}
-    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/local/include
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include
     /opt/local/include
     /usr/local/include
     /usr/include
