@@ -6,7 +6,7 @@ processing.  **PyMesh** is written using both C++ and python, where
 computational intensive functionalities are realized in C++, and Python is used
 for create minimalistic and easy to use interfaces.
 
-### Docuementation ###
+### Documentation ###
 
 [Latest documentation](http://pymesh.readthedocs.org/en/latest/)
 
@@ -52,7 +52,7 @@ Libraries marked with `*` are included in `$PYMESH_PATH/third_party` directory.
 If any of the dependent library is not installed in standard locations
 (``/usr/local/``, ``/opt/local``), one needs to set environment variables that
 point to the correct directories.  PyMesh check the following environment
-varaibles:
+variables:
 
 * ``EIGEN_INC``: directory containing the Eigen library.
 * ``GOOGLEHASH_INCLUDES``: directory containing sparse hash.

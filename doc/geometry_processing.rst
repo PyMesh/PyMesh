@@ -7,4 +7,5 @@ Geometry Processing Functions
     outer_hull
     distance_to_mesh
     triangulation
+    cell_partitions
 

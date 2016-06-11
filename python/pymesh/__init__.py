@@ -22,6 +22,7 @@ from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
 from .boolean import boolean
 from .cell_partition import partition_into_cells
 from .CSGTree import CSGTree
+from .material import Material
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
 from .outerhull import compute_outer_hull
@@ -45,6 +46,7 @@ __all__ = [
         "do_intersect",
         "boolean",
         "partition_into_cells",
+        "Material",
         "minkowski_sum",
         "CSGTree",
         "resolve_self_intersection",
