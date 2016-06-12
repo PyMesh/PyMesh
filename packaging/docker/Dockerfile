@@ -29,3 +29,5 @@ WORKDIR $PYMESH_PATH/build
 RUN cmake .. && make && make tools && make all_tests
 WORKDIR $PYMESH_PATH
 RUN ./setup.py build && ./setup.py install && rm -rf build third_party/build && python -c "import pymesh; pymesh.test()"
+WORKDIR /root/
+RUN rm -rf PyMesh
