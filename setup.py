@@ -38,7 +38,7 @@ setup(
         package_dir = {"": "python"},
         packages = ["pymesh", "pymesh.misc", "pymesh.meshutils", "pymesh.wires",
             "pymesh.tests", "pymesh.meshutils.tests", "pymesh.wires.tests"],
-        package_data = {"pymesh": ["swig/*.py", "lib/*.so", "lib/*.dylib", "lib/*.dll"]},
+        package_data = {"pymesh": ["swig/*.py", "lib/*.so", "lib/*.dylib", "lib/*.dll", "third_party/lib/*"]},
         include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
