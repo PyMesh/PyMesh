@@ -7,11 +7,14 @@ exec(open(os.path.join(package_dir, 'version.py')).read())
 py_version = sys.version_info;
 install_path = "pymesh-{}-py{}.{}.egg/pymesh/lib".format(
         __version__, py_version[0], py_version[1]);
+third_party_path = "pymesh-{}-py{}.{}.egg/pymesh/third_party/lib".format(
+        __version__, py_version[0], py_version[1]);
 
 site_location = site.getsitepackages();
 site_location.append(site.getusersitepackages());
 site_location.append("${CMAKE_INSTALL_PREFIX}");
-site_location = [os.path.join(loc, install_path) for loc in site_location];
+site_location = [os.path.join(loc, install_path) for loc in site_location] +\
+        [os.path.join(loc, third_party_path) for loc in site_location];
 site_location.append(os.path.join(package_dir, "lib"));
 
 with open(os.path.join(root_dir, "cmake/SetInstallRpath.cmake"), 'w') as fout:
