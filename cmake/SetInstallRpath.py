@@ -16,6 +16,7 @@ site_location.append("${CMAKE_INSTALL_PREFIX}");
 site_location = [os.path.join(loc, install_path) for loc in site_location] +\
         [os.path.join(loc, third_party_path) for loc in site_location];
 site_location.append(os.path.join(package_dir, "lib"));
+site_location.append(os.path.join(package_dir, "third_party/lib"));
 
 with open(os.path.join(root_dir, "cmake/SetInstallRpath.cmake"), 'w') as fout:
     fout.write("SET(CMAKE_INSTALL_RPATH \"{}\")\n".format(";".join(site_location)));
