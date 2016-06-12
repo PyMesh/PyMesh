@@ -17,6 +17,7 @@ build/
 dist/
 python/pymesh/lib
 python/pymesh/swig
+python/pymesh/third_party/
 python/pymesh.egg-info/
 doc/_build/
 third_party/build/
