@@ -44,6 +44,8 @@ class _EdgeCollapser(object):
 
     @timethis
     def keep_features(self):
+        """ Preserve sharp edges and boundaries.
+        """
         if not self.input_mesh.has_attribute("vertex_dihedral_angle"):
             self.input_mesh.add_attribute("vertex_dihedral_angle");
         dihedral_angle = self.input_mesh.get_attribute("vertex_dihedral_angle");
@@ -167,14 +169,19 @@ def collapse_short_edges(mesh,
             * ``output_Mesh`` (:class:`Mesh`): Output mesh.
             * ``information`` (:class:`dict`): A ``dict`` of additional informations.
 
+        The following attribute are defined:
+
+            * ``face_sources``: The index of input source face of each output face.
+
         The following fields are defined in ``information``:
 
             * ``num_edge_collapsed``: Number of edge collapsed.
-            * ``source_face_index``: An array tracks the source of each output face.
-              That is face ``i`` of the ``output_faces`` comes from face
-              ``source_face_index[i]`` of the input faces.
     """
     vertices, faces, info = collapse_short_edges_raw(mesh.vertices, mesh.faces,
             abs_threshold, rel_threshold, preserve_feature);
-    return form_mesh(vertices, faces), info;
+    result = form_mesh(vertices, faces);
+    result.add_attribute("face_sources")
+    result.set_attribute("face_sources", info["source_face_index"]);
+    del info["source_face_index"]
+    return result, info;
 
