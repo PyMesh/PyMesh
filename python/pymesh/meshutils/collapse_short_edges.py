@@ -49,6 +49,10 @@ class _EdgeCollapser(object):
         dihedral_angle = self.input_mesh.get_attribute("vertex_dihedral_angle");
         self.importance = np.round(dihedral_angle * 4 / math.pi).astype(int);
 
+        # keep boundary.
+        bd_vertices = self.input_mesh.boundary_vertices;
+        self.importance[bd_vertices] = 10;
+
     @timethis
     def collapse(self, abs_threshold, rel_threshold):
         """ Note this method remove all edges with length less than threshold.
