@@ -338,6 +338,10 @@ class Mesh(object):
         return self._extra_info.get_boundary_edges();
 
     @property
+    def boundary_vertices(self):
+        return np.unique(self.boundary_edges.ravel());
+
+    @property
     def num_boundary_loops(self):
         if self._extra_info.has_complex_boundary():
             return -1;

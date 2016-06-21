@@ -39,19 +39,45 @@ class CSGTree:
             self.tree = PyBoolean.CSGTree.create_leaf("igl",
                     mesh.vertices, mesh.faces);
         elif "union" in tree:
-            children = [ CSGTree(subtree) for subtree in tree["union"] ];
-            assert(len(children) == 2);
-            self.tree = PyBoolean.CSGTree.create("igl");
-            self.tree.set_operand_1(children[0].tree);
-            self.tree.set_operand_2(children[1].tree);
-            self.tree.compute_union();
+            num_operands = len(tree["union"]);
+            if num_operands == 1:
+                self.tree = CSGTree(tree["union"][0]).tree;
+            elif num_operands == 2:
+                children = [ CSGTree(subtree) for subtree in tree["union"] ];
+                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree.set_operand_1(children[0].tree);
+                self.tree.set_operand_2(children[1].tree);
+                self.tree.compute_union();
+            elif num_operands > 2:
+                mid = num_operands // 2;
+                child1 = CSGTree({"union": tree["union"][:mid]});
+                child2 = CSGTree({"union": tree["union"][mid:]});
+                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree.set_operand_1(child1.tree);
+                self.tree.set_operand_2(child2.tree);
+                self.tree.compute_union();
+            else:
+                raise RuntimeError("No operand provided for union operation");
         elif "intersection" in tree:
-            children = [ CSGTree(subtree) for subtree in tree["intersection"] ];
-            assert(len(children) == 2);
-            self.tree = PyBoolean.CSGTree.create("igl");
-            self.tree.set_operand_1(children[0].tree);
-            self.tree.set_operand_2(children[1].tree);
-            self.tree.compute_intersection();
+            num_operand = len(tree["intersection"]);
+            if num_operand == 1:
+                self.tree = CSGTree(tree["intersection"][0]).tree;
+            elif num_operand == 2:
+                children = [ CSGTree(subtree) for subtree in tree["intersection"] ];
+                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree.set_operand_1(children[0].tree);
+                self.tree.set_operand_2(children[1].tree);
+                self.tree.compute_intersection();
+            elif num_operand > 2:
+                mid = num_operands // 2;
+                child1 = CSGTree({"intersection": tree["intersection"][:mid]});
+                child2 = CSGTree({"intersection": tree["intersection"][mid:]});
+                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree.set_operand_1(child1.tree);
+                self.tree.set_operand_2(child2.tree);
+                self.tree.compute_intersection();
+            else:
+                raise RuntimeError("No operand provided for intersection operation");
         elif "difference" in tree:
             children = [ CSGTree(subtree) for subtree in tree["difference"] ];
             assert(len(children) == 2);
