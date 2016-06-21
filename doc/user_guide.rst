@@ -5,5 +5,6 @@ User Guide
     installation
     basic
     mesh_processing
+    mesh_boolean
     wire_mesh
 
