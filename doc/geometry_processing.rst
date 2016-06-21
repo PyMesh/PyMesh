@@ -2,10 +2,10 @@ Geometry Processing Functions
 =============================
 
 .. toctree::
-    boolean
-    self_intersection
-    outer_hull
-    distance_to_mesh
-    triangulation
-    cell_partitions
+    boolean_api
+    self_intersection_api
+    outer_hull_api
+    distance_to_mesh_api
+    triangulation_api
+    cell_partitions_api
 
