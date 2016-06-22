@@ -137,17 +137,17 @@ where ``Mesh`` is a ``pymesh.Mesh`` object and ``CSGTree`` is a
 
     >>> left_tree = pymesh.CSGTree({
             "intersection": [{"mesh": box}, {"mesh": ball}]
-        });
+        })
     >>> right_tree = pymesh.CSGTree({
             "union": [{"mesh": x}, {"mesh": y}, {"mesh": z}]
-        });
+        })
     >>> csg = pymesh.CSGTree({
             "difference": [left_tree, right_tree]
-        });
+        })
 
-    >>> left_mesh = left_tree.mesh;
-    >>> right_mesh = right_tree.mesh;
-    >>> output = csg.mesh;
+    >>> left_mesh = left_tree.mesh
+    >>> right_mesh = right_tree.mesh
+    >>> output = csg.mesh
 
 
 
