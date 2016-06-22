@@ -76,17 +76,17 @@ The operation is illustrated in the following figure:
     :align: center
 
 The attribute ``source`` tracks the *source* of each output face.  0 means the
-output face comes from the first operand, ``pymesh.ply``, and 1 means it is from
-the second operand ``plate.ply``.
-The ``source`` attribute is useful for assigning the corresponding color
+output face comes from the first operand, i.e. ``pymesh.ply``, and 1 means it is from
+the second operand, i.e. ``plate.ply``.
+The ``source`` attribute is useful for assigning the corresponding colors
 in the output mesh.
 
 CSG Tree:
 ---------
 
 While binary boolean operations are useful, it is often necessary to perform a
-number of operations in certain order to create more complex results.  A
-Constructive Solid Geometry tree, or CSG tree, is designed for this purpose.
+number of operations in order to create more complex results.  A
+Constructive Solid Geometry tree, aka.CSG tree, is designed for this purpose.
 
 .. image:: _static/csg_tree.png
     :width: 90%
@@ -133,7 +133,7 @@ grammar for this dictionary is::
 
 where ``Mesh`` is a ``pymesh.Mesh`` object and ``CSGTree`` is a
 ``pymesh.CSGTree`` object.  One can construct the entire tree all together
-(shown above) or build up the tree incrementally::
+as shown above or build up the tree incrementally::
 
     >>> left_tree = pymesh.CSGTree({
             "intersection": [{"mesh": box}, {"mesh": ball}]
