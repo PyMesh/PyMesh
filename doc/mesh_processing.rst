@@ -15,15 +15,18 @@ The function returns two things: a new mesh with all short edges removed, and
 some extra information::
 
     >>> info.keys()
-    ['num_edge_collapsed', 'source_face_index']
+    ['num_edge_collapsed']
 
     >>> info["num_edge_collapse"]
     124
 
-    >>> info["source_face_index"]
+    >>> mesh.attribute_names
+    ['face_sources']
+
+    >>> mesh.get_attribute("face_sources")
     array([    0,     1,     2, ..., 20109, 20110, 20111])
 
-The ``source_face_index`` maps each output face to the index of the source face
+The ``face_sources`` attribute maps each output face to the index of the source face
 from the input mesh.
 
 One can even perform this function on a raw mesh::
@@ -44,6 +47,16 @@ avoid destroying sharp features, turn on the ``preserve_feature`` flag::
 
     >>> mesh, __ = pymesh.collapse_short_edges(mesh, tol,
     ...     preserve_feature=True)
+
+One of the main applications of this method is to simplify overly triangulated
+meshes.  As shown in the following figure, the input mesh (top) is of very high
+resolution near curvy regions.  With ``pymesh.collapse_short_edges``, we can
+create a coarse mesh (bottom) to approximate the input shape.  The quality of the
+approximation depends heavily on the value of ``tol``.
+
+.. image:: _static/edge_collapse.png
+    :width: 90%
+    :align: center
 
 Split Long Edges:
 -----------------
@@ -67,6 +80,27 @@ alone.
 It is also possible to operate on a raw mesh::
 
     >>> vertices, faces, info = pymesh.split_long_edges(mesh, tol)
+
+This method is often used to elimiate long edges appearing in sliver
+triangles.  The following figure shows its effect.
+
+.. image:: _static/split_long_edges.png
+    :width: 90%
+    :align: center
+
+Remeshing:
+----------
+
+It is possible to completely remesh the input shape by calling
+``pymesh.collapse_short_edges`` and ``pymesh.split_long_edges`` iteratively in
+an alternating fashion.  The script
+`fix_mesh.py <https://github.com/qnzhou/PyMesh/blob/master/scripts/fix_mesh.py>`_ is based on this idea.
+Its effects can be seen in a remesh of the `Ducky The Lop Eared Bunny
+<http://www.thingiverse.com/thing:752379>`_ example:
+
+.. image:: _static/ducky_bunny.png
+    :width: 90%
+    :align: center
 
 Remove Isolated Vertices:
 -------------------------

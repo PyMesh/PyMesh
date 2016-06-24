@@ -77,8 +77,8 @@ The first step is to compile the optional third party dependencies:
     make
     make install
 
-Third party dependencies will be installed in `$PYMESH_PATH/third_party/local`
-directory.
+Third party dependencies will be installed in
+`$PYMESH_PATH/python/pymesh/third_party` directory.
 
 Now we can build the main project.  It is recommended to build out of source:
 
@@ -113,3 +113,9 @@ installing the python package can be done:
     ./setup.py build # This an alternative way of calling cmake/make
     ./setup.py install
 
+To check PyMesh is installed correctly, run the following python unit tests::
+
+    python -c "import pymesh; pymesh.test()"
+
+Once again, make sure all unit tests are passed, and report any unit test
+failures.

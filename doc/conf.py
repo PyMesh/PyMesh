@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyMesh'
-copyright = u'2015, Qingnan Zhou'
+copyright = u'2016, Qingnan Zhou'
 author = u'Qingnan Zhou'
 
 # The version info for the project you're documenting, acts as replacement for

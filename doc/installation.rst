@@ -6,7 +6,7 @@ Download the Source:
 
 The source code can be checked out from GitHub::
 
-    git clone git@github.com:qnzhou/PyMesh.git
+    git clone --recursive git@github.com:qnzhou/PyMesh.git
 
 The environment variable ``PYMESH_PATH`` is used by the unit tests to locate the
 testing data, so be sure to set it up::
@@ -81,6 +81,18 @@ variables:
 
 Building PyMesh:
 ----------------
+
+To compile the optional third party libraries::
+
+    cd $PYMESH_PATH/third_party
+    mkdir build
+    cd build
+    cmake ..
+    make
+    make install
+
+Third party dependencies will be installed in
+``$PYMESH_PATH/python/pymesh/third_party`` directory.
 
 It is recommended to build out of source, use the following commands setup building
 environment::
