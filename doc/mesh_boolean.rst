@@ -14,6 +14,13 @@ binary boolean operations are:
 
 * Symmetric difference: :math:`A \textrm{ XOR }  B := (A \setminus B) \cup (B \setminus A)`
 
+The following figure illustrates the output of boolean operations on a sphere
+and a cube:
+
+.. image:: _static/boolean.png
+    :width: 90%
+    :align: center
+
 Boolean Interface:
 ------------------
 
