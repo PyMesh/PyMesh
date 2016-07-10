@@ -2,6 +2,8 @@
 #include "MinkowskiSum.h"
 #include <Math/MatrixUtils.h>
 #include <igl/copyleft/cgal/minkowski_sum.h>
+#include <igl/copyleft/cgal/mesh_boolean.h>
+#include <igl/MeshBooleanType.h>
 
 #include <vector>
 
@@ -51,6 +53,17 @@ void MinkowskiSum::run(const MatrixFr& path) {
         v_count += vertices[i].rows();
     }
 
-    m_out_vertices = MatrixUtils::vstack(vertices);
-    m_out_faces = MatrixUtils::vstack(faces);
+    MatrixFr combined_vertices = MatrixUtils::vstack(vertices);
+    MatrixIr combined_faces = MatrixUtils::vstack(faces);
+
+    // Self union to remove self-intersections.
+    MatrixFr empty_vertices;
+    MatrixIr empty_faces;
+    VectorI J;
+
+    igl::copyleft::cgal::mesh_boolean(
+            combined_vertices, combined_faces,
+            empty_vertices, empty_faces,
+            igl::MESH_BOOLEAN_TYPE_UNION,
+            m_out_vertices, m_out_faces, J);
 }
