@@ -8,4 +8,5 @@ Geometry Processing Functions
     distance_to_mesh_api
     triangulation_api
     cell_partitions_api
+    minkowski_sum_api
 
