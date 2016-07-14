@@ -19,7 +19,7 @@ Dependencies:
 PyMesh is based on the design philosophy that one should not reinvent the wheel.
 It depends a number of state-of-the-art open source libraries:
 
-* Python_: v2.7 or higher, note that Python 3.x is not tested.
+* Python_: v2.7 or higher
 * NumPy_: v1.8 or higher
 * SciPy_: v0.13 or higher
 * SWIG_: v3.0.5 or higher
