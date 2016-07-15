@@ -1,0 +1,34 @@
+machine:
+    python:
+        version: 3.5.0
+
+checkout:
+    post:
+        - export PYMESH_PATH=`pwd`
+        - git submodule sync
+        - git submodule update --init
+
+dependencies:
+    pre:
+        - pip install -r python/requirements.txt
+        - sudo apt-get update; sudo apt-get install -y \
+            cmake \
+            git \
+            libeigen3-dev \
+            libcgal10 \
+            libgmp-dev \
+            libgmpxx4ldbl \
+            libumfpack5.6.2 \
+            libcgal-dev \
+            swig \
+            && sudo apt-get clean
+        - mkdir -p third_party/build; cd third_party/build; cmake ..; make; make install; make clean;
+        - mkdir build; cd build; cmake ..; make; make tools
+        - sudo ./setup.py install
+
+test:
+    override:
+        - cd build; make all_tests
+        - python -c "import pymesh; pymesh.test()"
+
+
