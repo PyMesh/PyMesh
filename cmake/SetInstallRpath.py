@@ -1,7 +1,7 @@
 import os 
 import site
 import sys
-root_dir = os.environ["PYMESH_PATH"];
+root_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)));
 package_dir = os.path.join(root_dir, "python/pymesh");
 exec(open(os.path.join(package_dir, 'version.py')).read())
 py_version = sys.version_info;
