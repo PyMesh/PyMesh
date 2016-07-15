@@ -1,7 +1,3 @@
-machine:
-    python:
-        version: 3.5.0
-
 checkout:
     post:
         - export PYMESH_PATH=`pwd`
@@ -10,9 +6,11 @@ checkout:
 
 dependencies:
     pre:
+        - sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
         - sudo apt-get update; sudo apt-get install -y cmake libeigen3-dev libcgal10  libgmp-dev libgmpxx4ldbl libumfpack5.6.2 libcgal-dev python3-nose python3-numpy python3-scipy python3-setuptools swig; sudo apt-get clean
         - mkdir -p third_party/build; cd third_party/build; cmake ..; make; make install; make clean;
         - mkdir build; cd build; cmake ..; make; make tools
+        #- mkdir build; cd build; cmake -DPYTHON_LIBRARY=/opt/circleci/python/3.5.0/lib/libpython3.5m.a -DPYTHON_INCLUDE_DIR=/opt/circleci/python/3.5.0/include/python3.5m/ ..; make; make tools
         - sudo ./setup.py install
 
 test:
