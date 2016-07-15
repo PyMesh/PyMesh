@@ -33,6 +33,7 @@ from .misc import *
 from .triangulate import triangulate, retriangulate, retriangulate_raw
 from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from .slice_mesh import slice_mesh
+from .VoxelGrid import VoxelGrid
 from . import wires
 
 __all__ = [
@@ -61,7 +62,8 @@ __all__ = [
         "in_circle",
         "in_sphere",
         "slice_mesh",
-        "wires"
+        "wires",
+        "VoxelGrid"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;

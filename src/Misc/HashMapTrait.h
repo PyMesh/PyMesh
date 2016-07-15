@@ -38,11 +38,15 @@ struct HashMapTrait {
     static HashItem get_default_item() { return HashItem(); }
 };
 
+}
+
 #ifdef USE_SPARSEHASH
 #include <sparsehash/sparse_hash_map>
 #include <sparsehash/sparse_hash_set>
 #include <sparsehash/dense_hash_map>
 #include <sparsehash/dense_hash_set>
+
+namespace PyMesh {
 
 /**
  * Typedefs for google sparse hash.
@@ -121,6 +125,6 @@ struct HashMapTrait<DIM, 2> {
     }
 };
 
-#endif //USE_SPARSEHASH
-
 }
+
+#endif //USE_SPARSEHASH

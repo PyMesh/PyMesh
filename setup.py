@@ -78,5 +78,8 @@ setup(
             "scripts/subdivide.py",
             "scripts/submesh.py",
             "scripts/tet_to_hex.py",
+            "scripts/voxelize.py",
             ],
+        url = "https://github.com/qnzhou/PyMesh",
+        download_url="https://github.com/qnzhou/PyMesh/tarball/v0.1",
         );

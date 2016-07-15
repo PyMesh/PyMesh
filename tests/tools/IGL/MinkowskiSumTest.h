@@ -3,6 +3,7 @@
 
 #include <TestBase.h>
 #include <MinkowskiSum.h>
+#include <MeshUtils/MeshChecker.h>
 
 class MinkowskiSumTest : public TestBase {
 };
@@ -78,4 +79,28 @@ TEST_F(MinkowskiSumTest, Identity) {
 
     ASSERT_MATRIX_EQ(old_bbox_min, new_bbox_min);
     ASSERT_MATRIX_EQ(old_bbox_max, new_bbox_max);
+}
+
+TEST_F(MinkowskiSumTest, Chain) {
+    MeshPtr mesh = load_mesh("tet.obj");
+    MatrixFr vertices = extract_vertices(mesh);
+    MatrixIr faces = extract_faces(mesh);
+
+    MatrixFr path(4, 3);
+    path << 0, 0, 0,
+            1, 0, 0,
+            1, 1, 0,
+            0, 1, 0;
+
+    MinkowskiSum ms(vertices, faces);
+    ms.run(path);
+
+    MatrixFr out_vertices = ms.get_vertices();
+    MatrixIr out_faces = ms.get_faces();
+    MatrixIr out_voxels;
+    MeshChecker checker(out_vertices, out_faces, out_voxels);
+
+    ASSERT_TRUE(checker.is_closed());
+    ASSERT_TRUE(checker.is_oriented());
+    ASSERT_EQ(1, checker.get_num_connected_components());
 }

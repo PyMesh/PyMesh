@@ -51,6 +51,13 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
             serialized exact output.
 
     Returns: The output mesh.
+
+    The following attributes are defined in the output mesh:
+
+        * "source": An array of 0s and 1s indicating which input mesh an output
+          face comes from.
+        * "source_face": An array of indices, one per output face, into the
+          concatenated faces of the input meshes.
     """
     assert(mesh_1.dim == mesh_2.dim);
     assert(mesh_1.vertex_per_face == 3);
