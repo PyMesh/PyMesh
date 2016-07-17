@@ -123,11 +123,15 @@ def print_quantile_info(mesh, info):
             title = "Dihedral Angle", with_total=False);
 
 def print_voxel_info(mesh, info):
-    if (mesh.num_voxels == 0): return;
-
-    mesh.add_attribute("voxel_volume");
-    voxel_volume = mesh.get_attribute("voxel_volume");
-    quantile_breakdown(voxel_volume, "volume", info);
+    if (mesh.num_voxels == 0):
+        print_section_header("Volume Estimation");
+        volume = mesh.volume;
+        print("volume estimation: {:.6g}".format(volume));
+        info["volume_estimation"] = volume;
+    else:
+        mesh.add_attribute("voxel_volume");
+        voxel_volume = mesh.get_attribute("voxel_volume");
+        quantile_breakdown(voxel_volume, "volume", info);
 
 def print_extended_info(mesh, info):
     print_section_header("Extended info");

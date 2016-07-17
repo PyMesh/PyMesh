@@ -87,6 +87,8 @@ class MeshChecker {
 
         size_t get_num_duplicated_faces() const;
 
+        Float compute_signed_volume_from_surface() const;
+
     private:
         void init_boundary();
         void init_boundary_loops();

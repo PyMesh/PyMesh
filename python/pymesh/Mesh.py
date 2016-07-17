@@ -363,3 +363,7 @@ class Mesh(object):
     def genus(self):
         return self._extra_info.get_genus();
 
+    @property
+    def volume(self):
+        return self._extra_info.compute_signed_volume_from_surface();
+
