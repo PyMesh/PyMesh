@@ -227,6 +227,62 @@ size_t MeshChecker::get_num_duplicated_faces() const {
             return p.second != 1; });
 }
 
+Float MeshChecker::compute_signed_volume_from_surface() const {
+    const size_t num_faces = m_faces.rows();
+    const size_t vertex_per_face = m_faces.cols();
+    auto triangle_origin_volume = [](
+            const Vector3F& v0, const Vector3F& v1, const Vector3F& v2) {
+        return (v0.cross(v1)).dot(v2);
+    };
+
+    Float volume = 0.0;
+    if (vertex_per_face == 3) {
+        for (size_t i=0; i<num_faces; i++) {
+            const auto& f = m_faces.row(i);
+            Vector3F v0(
+                    m_vertices.coeff(f.coeff(0), 0), 
+                    m_vertices.coeff(f.coeff(0), 1), 
+                    m_vertices.coeff(f.coeff(0), 2) );
+            Vector3F v1(
+                    m_vertices.coeff(f.coeff(1), 0), 
+                    m_vertices.coeff(f.coeff(1), 1), 
+                    m_vertices.coeff(f.coeff(1), 2) );
+            Vector3F v2(
+                    m_vertices.coeff(f.coeff(2), 0), 
+                    m_vertices.coeff(f.coeff(2), 1), 
+                    m_vertices.coeff(f.coeff(2), 2) );
+            volume += triangle_origin_volume(v0, v1, v2);
+        }
+    } else if (vertex_per_face == 4) {
+        for (size_t i=0; i<num_faces; i++) {
+            const auto& f = m_faces.row(i);
+            Vector3F v0(
+                    m_vertices.coeff(f.coeff(0), 0), 
+                    m_vertices.coeff(f.coeff(0), 1), 
+                    m_vertices.coeff(f.coeff(0), 2) );
+            Vector3F v1(
+                    m_vertices.coeff(f.coeff(1), 0), 
+                    m_vertices.coeff(f.coeff(1), 1), 
+                    m_vertices.coeff(f.coeff(1), 2) );
+            Vector3F v2(
+                    m_vertices.coeff(f.coeff(2), 0), 
+                    m_vertices.coeff(f.coeff(2), 1), 
+                    m_vertices.coeff(f.coeff(2), 2) );
+            Vector3F v3(
+                    m_vertices.coeff(f.coeff(3), 0), 
+                    m_vertices.coeff(f.coeff(3), 1), 
+                    m_vertices.coeff(f.coeff(3), 2) );
+            Vector3F center = (v0 + v1 + v2 + v3)/4.0;
+
+            volume += triangle_origin_volume(v0, v1, center);
+            volume += triangle_origin_volume(v1, v2, center);
+            volume += triangle_origin_volume(v2, v3, center);
+            volume += triangle_origin_volume(v3, v0, center);
+        }
+    }
+    return volume / 6.0;
+}
+
 void MeshChecker::init_boundary() {
     Boundary::Ptr bd = Boundary::extract_surface_boundary_raw(
             m_vertices, m_faces);
