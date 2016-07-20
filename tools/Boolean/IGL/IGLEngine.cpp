@@ -19,40 +19,6 @@ using namespace IGLEngineHelper;
 #include <tinyxml2.h>
 #include <igl/serialize.h>
 #include <igl/xml/serialize_xml.h>
-
-// The following is based on http://www.alecjacobson.com/weblog/?p=4477
-namespace igl {
-namespace xml {
-namespace serialization_xml {
-    template <> inline void serialize(
-            const IGLEngine::MatrixEr & obj,
-            tinyxml2::XMLDocument* doc,
-            tinyxml2::XMLElement* element,
-            const std::string& name) {
-        const std::function<std::string(
-                const IGLEngine::MatrixEr::Scalar &) > to_string = 
-            [](const IGLEngine::MatrixEr::Scalar & v)->std::string {
-                return STR(CGAL::exact(v));
-            };
-        serialize(obj,name,to_string,doc,element);
-    }
-
-    template <> inline void deserialize(
-            IGLEngine::MatrixEr & obj,
-            const tinyxml2::XMLDocument* doc,
-            const tinyxml2::XMLElement* element,
-            const std::string& name) {
-        const std::function<void(const std::string &,
-                IGLEngine::MatrixEr::Scalar &)> & 
-            from_string = [](
-                    const std::string & s, IGLEngine::MatrixEr::Scalar & v) {
-                std::stringstream(s)>>v;
-            };
-        deserialize(doc,element,name,from_string,obj);
-    }
-}
-}
-}
 #endif
 
 void IGLEngine::compute_union() {
