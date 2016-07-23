@@ -48,6 +48,7 @@ setup(
             "scripts/box_gen.py",
             "scripts/boolean.py",
             "scripts/curvature.py",
+            "scripts/dodecahedron_gen.py",
             "scripts/extract_self_intersecting_faces.py",
             "scripts/find_file.py",
             "scripts/fix_mesh.py",
