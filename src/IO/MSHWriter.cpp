@@ -154,7 +154,8 @@ void MSHWriter::write_attribute(MshSaver& saver, const std::string& name,
         saver.save_scalar_field(name, value);
     } else if (attr_size == num_vertices * dim) {
         saver.save_vector_field(name, value);
-    } else if (attr_size == num_vertices * (dim * (dim+1)) / 2) {
+    } else if (attr_size == num_vertices * (dim * (dim+1)) / 2 &&
+            attr_size % num_elements != 0) {
         throw NotImplementedError("Per-vertex tensor field is not supported.");
     } else if (attr_size == num_elements) {
         saver.save_elem_scalar_field(name, value);
