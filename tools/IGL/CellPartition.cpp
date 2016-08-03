@@ -5,8 +5,9 @@
 #include <igl/copyleft/cgal/propagate_winding_numbers.h>
 #include <igl/copyleft/cgal/RemeshSelfIntersectionsParam.h>
 #include <igl/copyleft/cgal/SelfIntersectMesh.h>
-#include <igl/unique_edge_map.h>
 #include <igl/extract_manifold_patches.h>
+#include <igl/remove_unreferenced.h>
+#include <igl/unique_edge_map.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 
@@ -34,21 +35,35 @@ void CellPartition::run() {
 
     // Resolve self intersection
     igl::copyleft::cgal::RemeshSelfIntersectionsParam params;
+
     MatrixEr resolved_vertices;
     MatrixIr resolved_faces;
-    MatrixIr intersecting_faces;
-    VectorI source_vertices;
+    {
+        MatrixEr V;
+        MatrixIr F;
+        MatrixIr intersecting_faces;
+        VectorI source_vertices;
+        igl::copyleft::cgal::SelfIntersectMesh<
+            Kernel,
+            MatrixFr, MatrixIr,
+            MatrixEr, MatrixIr,
+            MatrixIr, VectorI, VectorI> resolver(
+                    m_vertices, m_faces,
+                    params,
+                    V, F,
+                    intersecting_faces,
+                    m_source_faces, source_vertices);
 
-    igl::copyleft::cgal::SelfIntersectMesh<
-        Kernel,
-        MatrixFr, MatrixIr,
-        MatrixEr, MatrixIr,
-        MatrixIr, VectorI, VectorI> resolver(
-                m_vertices, m_faces,
-                params,
-                resolved_vertices, resolved_faces,
-                intersecting_faces,
-                m_source_faces, source_vertices);
+        // Merge coinciding vertices into non-manifold vertices.
+        std::for_each(F.data(), F.data()+F.size(),
+                [&source_vertices](typename MatrixIr::Scalar& a) {
+                a=source_vertices[a];
+                });
+
+        // Remove unreferenced vertices.
+        Eigen::VectorXi UIM;
+        igl::remove_unreferenced(V, F, resolved_vertices, resolved_faces, UIM);
+    }
 
     // Build edge map
     Eigen::MatrixXi E, uE;
