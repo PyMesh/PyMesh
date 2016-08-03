@@ -15,6 +15,9 @@ class VoxelGrid:
         assert(self.dim == mesh.dim);
         self.raw_grid.insert_mesh(mesh.raw_mesh);
 
+    def create_grid(self):
+        self.raw_grid.create_grid();
+
     def erode(self, itrs):
         self.raw_grid.erode(itrs);
 
@@ -23,5 +26,4 @@ class VoxelGrid:
 
     @property
     def mesh(self):
-        self.raw_grid.create_grid();
         return Mesh(self.raw_grid.get_voxel_mesh());
