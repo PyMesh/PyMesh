@@ -10,7 +10,8 @@ import pymesh.wires
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
-    parser.add_argument("--thickness", "-t", type=float, help="wire thickness");
+    parser.add_argument("--thickness", "-t", type=float, help="wire thickness",
+            required=True);
     parser.add_argument("--refinement-order", "-r", type=int, default=1,
             help="refinement order");
     parser.add_argument("--refinement-method", "-m", choices=("simple", "loop"),
