@@ -87,6 +87,11 @@ class Mesh(object):
     def get_attribute(self, name):
         """ Return attribute values in a flattened array.
         """
+        return np.copy(self.__mesh.get_attribute(name).ravel());
+
+    def get_attribute_ref(self, name):
+        """ Return attribute values in a flattened array.
+        """
         return self.__mesh.get_attribute(name).ravel();
 
     def get_vertex_attribute(self, name):
