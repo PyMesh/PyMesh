@@ -40,10 +40,10 @@ def partition_into_cells(mesh):
     resolved_mesh.add_attribute("patches");
     resolved_mesh.set_attribute("patches", patch_ids);
     resolved_mesh.add_attribute("cells");
-    resolved_mesh.set_attribute("cells", cell_ids[:,1].ravel());
+    resolved_mesh.set_attribute("cells", cell_ids[:,0].ravel());
     resolved_mesh.add_attribute("winding_number");
     resolved_mesh.set_attribute("winding_number",
-            partition.get_winding_number()[:,1].ravel());
+            partition.get_winding_number()[:,0].ravel());
 
     num_cells = partition.get_num_cells();
     cell_faces = [partition.get_cell_faces(i) for i in range(num_cells)];
