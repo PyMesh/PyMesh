@@ -37,6 +37,7 @@ matrix:
         - cd ..
         - ./setup.py install
       after_success:
+        - export PYMESH_PATH=`pwd`
         - cd build
         - make all_tests
         - cd ..
