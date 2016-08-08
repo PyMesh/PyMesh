@@ -52,6 +52,7 @@ setup(
             "scripts/extract_self_intersecting_faces.py",
             "scripts/find_file.py",
             "scripts/fix_mesh.py",
+            "scripts/geodesic.py",
             "scripts/highlight_boundary_edges.py",
             "scripts/highlight_degenerated_faces.py",
             "scripts/highlight_non_oriented_edges.py",
