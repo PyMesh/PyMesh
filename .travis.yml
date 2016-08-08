@@ -3,7 +3,7 @@ sudo: false
 virtualenv:
   system_site_packages: true
 python:
-    - "2.7"
+    - "3.5"
 matrix:
   include:
     - os: osx
