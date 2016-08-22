@@ -15,7 +15,8 @@ FIND_PATH(TETGEN_INCLUDE_DIRS tetgen.h
     /usr/local/include/
     /usr/include/)
 
-FIND_LIBRARY(TETGEN_LIBRARIES tetgen
+FIND_LIBRARY(TETGEN_LIBRARIES NAMES tetgen tet
+    PATHS
     $ENV{TETGEN_PATH}
     $ENV{TETGEN_PATH}/lib/
     ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/
