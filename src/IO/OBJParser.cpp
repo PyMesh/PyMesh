@@ -273,6 +273,11 @@ bool OBJParser::parse_face_line(char* line) {
         if (n < 1) {
             return false;
         }
+        if (v_idx < 0) {
+            // Negative index means relative index from the vertices read so
+            // far.  -1 refers to the last vertex read in.
+            v_idx = m_vertices.size() + v_idx + 1;
+        }
         assert(v_idx > 0);
         idx.push_back(v_idx-1); // OBJ has index starting from 1
 
