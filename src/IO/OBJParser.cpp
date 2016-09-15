@@ -324,7 +324,8 @@ void OBJParser::unify_faces() {
 void OBJParser::finalize_textures() {
     if (m_textures.empty()) return;
     if (m_textures.size() != m_vertices.size()) {
-        std::cerr << "Mismatch between vertex and vertex texture."
+        std::cerr << "Mismatch between vertex(" << m_vertices.size() <<
+            ") and vertex texture(" << m_textures.size() << ")."
             << std::endl;
         m_textures.clear();
     }
@@ -344,7 +345,8 @@ void OBJParser::finalize_textures() {
 void OBJParser::finalize_normals() {
     if (m_vertex_normals.empty()) return;
     if (m_vertex_normals.size() != m_vertices.size()) {
-        std::cerr << "Mismatch between vertex and vertex normal."
+        std::cerr << "Mismatch between vertex(" << m_vertices.size() <<
+            ") and vertex normal(" << m_vertex_normals.size() << ")."
             << std::endl;
         m_vertex_normals.clear();
     }
