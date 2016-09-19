@@ -24,6 +24,18 @@ namespace PLYWriterHelper {
             }
         }
     }
+
+    /**
+     * Return the string name with prefix stripped.
+     */
+    std::string strip_prefix(const std::string& name,
+            const std::string& prefix) {
+        if (name.substr(0, prefix.size()) ==  prefix) {
+            return name.substr(prefix.size());
+        } else {
+            return name;
+        }
+    }
 }
 
 using namespace PLYWriterHelper;
@@ -95,14 +107,23 @@ void PLYWriter::regroup_attribute_names(Mesh& mesh) {
 
         const VectorF& attr = mesh.get_attribute(name);
         const size_t attr_size = attr.size();
-        if (attr_size % num_vertices == 0) {
+        if (name.substr(0, 6) == "vertex" && attr_size % num_vertices == 0) {
             m_vertex_attr_names.push_back(name);
-        } else if (attr_size % num_faces == 0) {
+        } else if (name.substr(0, 4) == "face" && attr_size % num_faces== 0) {
             m_face_attr_names.push_back(name);
-        } else if (attr_size % num_voxels == 0) {
+        } else if (name.substr(0, 5) == "voxel" && attr_size % num_voxels== 0) {
             m_voxel_attr_names.push_back(name);
         } else {
-            throw NotImplementedError("Unknown attribute type");
+            // Use cardinality to determine attribute type.
+            if (attr_size % num_vertices == 0) {
+                m_vertex_attr_names.push_back(name);
+            } else if (attr_size % num_faces == 0) {
+                m_face_attr_names.push_back(name);
+            } else if (attr_size % num_voxels == 0) {
+                m_voxel_attr_names.push_back(name);
+            } else {
+                throw NotImplementedError("Unknown attribute type");
+            }
         }
     }
 }
@@ -123,8 +144,8 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
 
     for (NameArray::const_iterator itr = m_vertex_attr_names.begin();
             itr != m_vertex_attr_names.end(); itr++) {
-        const std::string& name = *itr;
-        const VectorF& attr = mesh.get_attribute(name);
+        const std::string name = strip_prefix(*itr, "vertex_");
+        const VectorF attr = mesh.get_attribute(*itr);
         const size_t per_vertex_size = attr.size() / num_vertices;
         e_ply_type ply_type = m_scalar;
         if (name == "red" || name == "green" || name == "blue") {
@@ -149,8 +170,8 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
 
     for (NameArray::const_iterator itr = m_face_attr_names.begin();
             itr != m_face_attr_names.end(); itr++) {
-        const std::string& name = *itr;
-        const VectorF& attr = mesh.get_attribute(name);
+        const std::string name = strip_prefix(*itr, "face_");
+        const VectorF& attr = mesh.get_attribute(*itr);
         const size_t per_face_size = attr.size() / num_faces;
         e_ply_type ply_type = m_scalar;
         if (name == "red" || name == "green" || name == "blue") {
@@ -176,8 +197,8 @@ void PLYWriter::add_voxel_elements_header(Mesh& mesh, p_ply& ply) {
 
     for (NameArray::const_iterator itr = m_voxel_attr_names.begin();
             itr != m_voxel_attr_names.end(); itr++) {
-        const std::string& name = *itr;
-        const VectorF& attr = mesh.get_attribute(name);
+        const std::string name = strip_prefix(*itr, "voxel_");
+        const VectorF& attr = mesh.get_attribute(*itr);
         const size_t per_voxel_size = attr.size() / num_voxels;
         e_ply_type ply_type = m_scalar;
         if (name == "red" || name == "green" || name == "blue") {
