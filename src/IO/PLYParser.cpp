@@ -28,13 +28,7 @@ namespace PLYParserHelper {
 
     std::string form_attribute_name(const std::string& elem_name,
             const std::string& prop_name) {
-        std::string attr_name;
-        if (prop_name == "vertex_indices") {
-            attr_name = elem_name + "_" + prop_name;
-        } else {
-            attr_name = prop_name;
-        }
-        return attr_name;
+        return elem_name + "_" + prop_name;
     }
 
     int ply_parser_call_back(p_ply_argument argument) {
@@ -162,9 +156,6 @@ void PLYParser::add_property(const std::string& elem_name,
         m_num_voxels = size;
     }
 
-    // Property name "vertex_indices" is the only property name that could
-    // appear multiple times in a ply file under different elements.  PyMesh
-    // requires all other property names to be unique.
     std::string attr_name = form_attribute_name(elem_name, prop_name);
     AttributeMap::const_iterator itr = m_attributes.find(attr_name);
     if (itr == m_attributes.end()) {
@@ -190,9 +181,9 @@ void PLYParser::add_property_value(const std::string& elem_name,
 
 void PLYParser::init_vertices() {
     std::string field_names[] = {
-        std::string("x"),
-        std::string("y"),
-        std::string("z") };
+        std::string("vertex_x"),
+        std::string("vertex_y"),
+        std::string("vertex_z") };
 
     AttributeMap::const_iterator iterators[3];
     m_dim = 0;
@@ -219,7 +210,12 @@ void PLYParser::init_vertices() {
 void PLYParser::init_faces() {
     AttributeMap::const_iterator face_attr_itr = m_attributes.find("face_vertex_indices");
     if (face_attr_itr == m_attributes.end()) {
-        throw IOError("Cannot parse face.");
+        face_attr_itr = m_attributes.find("face_vertex_index");
+        if (face_attr_itr == m_attributes.end()) {
+            throw IOError(
+                    "Cannot find required property\"vertex_indices\" "
+                    "in face element section.");
+        }
     }
     const std::vector<Float>& faces = face_attr_itr->second;
     assert(faces.size() == 0 || faces.size() % m_num_faces == 0);
@@ -231,8 +227,11 @@ void PLYParser::init_faces() {
 void PLYParser::init_voxels() {
     AttributeMap::const_iterator voxel_attr_itr = m_attributes.find("voxel_vertex_indices");
     if (voxel_attr_itr == m_attributes.end()) {
-        m_vertex_per_voxel = 0;
-        return;
+        voxel_attr_itr = m_attributes.find("voxel_vertex_index");
+        if (voxel_attr_itr == m_attributes.end()) {
+            m_vertex_per_voxel = 0;
+            return;
+        }
     }
     const std::vector<Float>& voxels = voxel_attr_itr->second;
     assert(voxels.size() % m_num_voxels == 0);
