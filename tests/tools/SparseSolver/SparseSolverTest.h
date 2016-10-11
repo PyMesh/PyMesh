@@ -107,32 +107,37 @@ class SparseSolverTest : public TestBase {
  * Eigen::SimplicialLLT gives a segmentation fault which I haven't got a chance
  * to track it down.  This test is disabled for now.
  */
-TEST_F(SparseSolverTest, DISABLED_LLT) {
+TEST_F(SparseSolverTest, LLT) {
     solve_diagonal_system("LLT");
     solve_dense_system("LLT");
 }
 
-TEST_F(SparseSolverTest, DISABLED_LDLT) {
+TEST_F(SparseSolverTest, LDLT) {
     solve_diagonal_system("LDLT");
     solve_dense_system("LDLT");
 }
 
-TEST_F(SparseSolverTest, DISABLED_CG) {
+TEST_F(SparseSolverTest, CG) {
     solve_diagonal_system("CG");
     solve_dense_system("CG");
 }
 
-TEST_F(SparseSolverTest, DISABLED_SparseLU) {
+TEST_F(SparseSolverTest, SparseLU) {
     solve_diagonal_system("SparseLU");
     solve_dense_system("SparseLU");
 }
 
-TEST_F(SparseSolverTest, DISABLED_UmfPackLU) {
+TEST_F(SparseSolverTest, UmfPackLU) {
     solve_diagonal_system("UmfPackLU");
     solve_dense_system("UmfPackLU");
 }
 
-TEST_F(SparseSolverTest, UmfPack) {
+TEST_F(SparseSolverTest, DISABLED_UmfPack) {
     solve_diagonal_system("UmfPack");
     solve_dense_system("UmfPack");
+}
+
+TEST_F(SparseSolverTest, Cholmod) {
+    solve_diagonal_system("Cholmod");
+    solve_dense_system("Cholmod");
 }
