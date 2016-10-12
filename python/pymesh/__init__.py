@@ -35,7 +35,6 @@ from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from .slice_mesh import slice_mesh
 from .VoxelGrid import VoxelGrid
 from . import wires
-from .Solver import SparseSolver
 
 __all__ = [
         "Mesh",
@@ -58,7 +57,6 @@ __all__ = [
         "triangulate",
         "retriangulate",
         "retriangulate_raw",
-        "SparseSolver",
         "oriented_3D",
         "oriented_2D",
         "in_circle",
@@ -69,3 +67,11 @@ __all__ = [
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
+
+try:
+    from .Solver import SparseSolver
+    __all__.append("SparseSolver");
+except ImportError:
+    pass;
+
+
