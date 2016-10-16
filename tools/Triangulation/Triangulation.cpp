@@ -14,19 +14,19 @@
 using namespace PyMesh;
 
 Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
-#if WITH_IGL
+#ifdef WITH_IGL
     if (engine_name == "igl_lexicographic") {
         return Ptr(new LexicographicTriangulation());
     }
 #endif
 
-#if WITH_IGL
+#ifdef WITH_IGL
     if (engine_name == "igl_delaunay") {
         return Ptr(new DelaunayTriangulation());
     }
 #endif
 
-#if WITH_TRIANGLE
+#ifdef WITH_TRIANGLE
     if (engine_name == "shewchuk_triangle") {
         return Ptr(new ShewchukTriangle());
     }
