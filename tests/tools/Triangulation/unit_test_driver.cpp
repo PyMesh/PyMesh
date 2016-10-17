@@ -4,6 +4,7 @@
 #include "IGL/LexicographicTriangulationTest.h"
 #ifdef WITH_CGAL
 #include "IGL/DelaunayTriangulationTest.h"
+#include "CGAL/CGALDelaunayTriangulationTest.h"
 #endif
 #endif
 #ifdef WITH_TRIANGLE

@@ -1,13 +1,20 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 
 #include "Triangulation.h"
-#if WITH_IGL
+
+#ifdef WITH_IGL
 #include "IGL/LexicographicTriangulation.h"
 #include "IGL/DelaunayTriangulation.h"
 #endif
-#if WITH_TRIANGLE
+
+#ifdef WITH_CGAL
+#include "CGAL/CGALDelaunayTriangulation.h"
+#endif
+
+#ifdef WITH_TRIANGLE
 #include "ShewchukTriangle/ShewchukTriangle.h"
 #endif
+
 #include <Core/Exception.h>
 #include <sstream>
 
@@ -29,6 +36,12 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 #ifdef WITH_TRIANGLE
     if (engine_name == "shewchuk_triangle") {
         return Ptr(new ShewchukTriangle());
+    }
+#endif
+
+#ifdef WITH_CGAL
+    if (engine_name == "cgal_delaunay") {
+        return Ptr(new CGALDelaunayTriangulation());
     }
 #endif
 
