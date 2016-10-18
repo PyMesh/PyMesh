@@ -111,3 +111,24 @@ TEST_F(PLYWriterTest, VoxelAttributes) {
     assert_eq_voxel_tensor_attribute(mesh, mesh2, "voxel_tensor");
 }
 
+TEST_F(PLYWriterTest, DuplicatedAttributes) {
+    MeshPtr mesh = load_mesh("cube.msh");
+    VectorF vertex_field = VectorF::Zero(mesh->get_num_vertices());
+    VectorF face_field = VectorF::Zero(mesh->get_num_faces());
+    mesh->add_attribute("vertex_red");
+    mesh->set_attribute("vertex_red", vertex_field);
+    mesh->add_attribute("face_red");
+    mesh->set_attribute("face_red", face_field);
+
+    std::string tmp_name = "tmp_cube_voxel_attr.ply";
+    PLYWriter writer;
+    writer.set_output_filename(m_tmp_dir + tmp_name);
+    writer.with_attribute("vertex_red");
+    writer.with_attribute("face_red");
+    writer.write_mesh(*mesh);
+
+    MeshPtr mesh2 = load_tmp_mesh(tmp_name);
+    assert_eq_attribute(mesh, mesh2, "vertex_red");
+    assert_eq_attribute(mesh, mesh2, "face_red");
+}
+

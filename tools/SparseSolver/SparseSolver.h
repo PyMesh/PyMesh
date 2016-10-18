@@ -16,7 +16,7 @@ class SparseSolver {
 
         virtual void factorize(const ZSparseMatrix& matrix) =0;
 
-        virtual VectorF solve(const VectorF& rhs) =0;
+        virtual MatrixF solve(const MatrixF& rhs) =0;
 };
 
 }

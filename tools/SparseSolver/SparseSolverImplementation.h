@@ -26,7 +26,7 @@ class SparseSolverImplementation : public SparseSolver {
             check_info();
         }
 
-        virtual VectorF solve(const VectorF& rhs) {
+        virtual MatrixF solve(const MatrixF& rhs) {
             auto x = m_engine.solve(rhs);
             return x;
         }
@@ -54,54 +54,54 @@ class SparseSolverImplementation : public SparseSolver {
         Engine m_engine;
 };
 
-template<>
-class SparseSolverImplementation<UmfpackFactorizer> : public SparseSolver {
-    public:
-        typedef std::shared_ptr<UmfpackFactorizer> FactorizerPtr;
-
-        virtual void analyze_pattern(const ZSparseMatrix& matrix) {}
-
-        virtual void factorize(const ZSparseMatrix& matrix) {
-            m_matrix = ZSparseMatrix2SuiteSparseMatrix(matrix);
-            m_factorizer = FactorizerPtr(new UmfpackFactorizer(m_matrix));
-        }
-
-        virtual VectorF solve(const VectorF& rhs) {
-            VectorF sol;
-            m_factorizer->solve(rhs, sol);
-            return sol;
-        }
-
-    protected:
-        SuiteSparseMatrix ZSparseMatrix2SuiteSparseMatrix(
-                const ZSparseMatrix& matrix) const {
-            SuiteSparseMatrix ss_matrix;
-            const size_t outer_size = matrix.get_outer_size();
-            const size_t inner_size = matrix.get_inner_size();
-            const size_t value_size = matrix.get_value_size();
-
-            ss_matrix.Ap.resize(outer_size);
-            ss_matrix.Ai.resize(inner_size);
-            ss_matrix.Ax.resize(value_size);
-
-            std::copy(matrix.outerIndexPtr(), matrix.outerIndexPtr() + outer_size,
-                    ss_matrix.Ap.begin());
-            std::copy(matrix.innerIndexPtr(), matrix.innerIndexPtr() + inner_size,
-                    ss_matrix.Ai.begin());
-            std::copy(matrix.valuePtr(), matrix.valuePtr() + value_size,
-                    ss_matrix.Ax.begin());
-
-            ss_matrix.m = matrix.rows();
-            ss_matrix.n = matrix.cols();
-            ss_matrix.nz = value_size;
-
-            return ss_matrix;
-        }
-
-    protected:
-        SuiteSparseMatrix m_matrix;
-        FactorizerPtr m_factorizer;
-};
+//template<>
+//class SparseSolverImplementation<UmfpackFactorizer> : public SparseSolver {
+//    public:
+//        typedef std::shared_ptr<UmfpackFactorizer> FactorizerPtr;
+//
+//        virtual void analyze_pattern(const ZSparseMatrix& matrix) {}
+//
+//        virtual void factorize(const ZSparseMatrix& matrix) {
+//            m_matrix = ZSparseMatrix2SuiteSparseMatrix(matrix);
+//            m_factorizer = FactorizerPtr(new UmfpackFactorizer(m_matrix));
+//        }
+//
+//        virtual MatrixF solve(const MatrixF& rhs) {
+//            VectorF sol;
+//            m_factorizer->solve(rhs, sol);
+//            return sol;
+//        }
+//
+//    protected:
+//        SuiteSparseMatrix ZSparseMatrix2SuiteSparseMatrix(
+//                const ZSparseMatrix& matrix) const {
+//            SuiteSparseMatrix ss_matrix;
+//            const size_t outer_size = matrix.get_outer_size();
+//            const size_t inner_size = matrix.get_inner_size();
+//            const size_t value_size = matrix.get_value_size();
+//
+//            ss_matrix.Ap.resize(outer_size);
+//            ss_matrix.Ai.resize(inner_size);
+//            ss_matrix.Ax.resize(value_size);
+//
+//            std::copy(matrix.outerIndexPtr(), matrix.outerIndexPtr() + outer_size,
+//                    ss_matrix.Ap.begin());
+//            std::copy(matrix.innerIndexPtr(), matrix.innerIndexPtr() + inner_size,
+//                    ss_matrix.Ai.begin());
+//            std::copy(matrix.valuePtr(), matrix.valuePtr() + value_size,
+//                    ss_matrix.Ax.begin());
+//
+//            ss_matrix.m = matrix.rows();
+//            ss_matrix.n = matrix.cols();
+//            ss_matrix.nz = value_size;
+//
+//            return ss_matrix;
+//        }
+//
+//    protected:
+//        SuiteSparseMatrix m_matrix;
+//        FactorizerPtr m_factorizer;
+//};
 
 
 }

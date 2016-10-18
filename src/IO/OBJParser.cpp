@@ -273,6 +273,11 @@ bool OBJParser::parse_face_line(char* line) {
         if (n < 1) {
             return false;
         }
+        if (v_idx < 0) {
+            // Negative index means relative index from the vertices read so
+            // far.  -1 refers to the last vertex read in.
+            v_idx = m_vertices.size() + v_idx + 1;
+        }
         assert(v_idx > 0);
         idx.push_back(v_idx-1); // OBJ has index starting from 1
 
@@ -319,7 +324,8 @@ void OBJParser::unify_faces() {
 void OBJParser::finalize_textures() {
     if (m_textures.empty()) return;
     if (m_textures.size() != m_vertices.size()) {
-        std::cerr << "Mismatch between vertex and vertex texture."
+        std::cerr << "Mismatch between vertex(" << m_vertices.size() <<
+            ") and vertex texture(" << m_textures.size() << ")."
             << std::endl;
         m_textures.clear();
     }
@@ -339,7 +345,8 @@ void OBJParser::finalize_textures() {
 void OBJParser::finalize_normals() {
     if (m_vertex_normals.empty()) return;
     if (m_vertex_normals.size() != m_vertices.size()) {
-        std::cerr << "Mismatch between vertex and vertex normal."
+        std::cerr << "Mismatch between vertex(" << m_vertices.size() <<
+            ") and vertex normal(" << m_vertex_normals.size() << ")."
             << std::endl;
         m_vertex_normals.clear();
     }

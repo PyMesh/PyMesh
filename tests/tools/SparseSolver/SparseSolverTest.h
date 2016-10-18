@@ -132,7 +132,12 @@ TEST_F(SparseSolverTest, DISABLED_UmfPackLU) {
     solve_dense_system("UmfPackLU");
 }
 
-TEST_F(SparseSolverTest, UmfPack) {
+TEST_F(SparseSolverTest, DISABLED_UmfPack) {
     solve_diagonal_system("UmfPack");
     solve_dense_system("UmfPack");
+}
+
+TEST_F(SparseSolverTest, DISABLED_Cholmod) {
+    solve_diagonal_system("Cholmod");
+    solve_dense_system("Cholmod");
 }

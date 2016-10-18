@@ -64,4 +64,9 @@ IF (TARGET lib_igl)
     LIST(APPEND TARGET_MODULE_TESTS igl_tests)
 ENDIF (TARGET lib_igl)
 
+IF (TARGET lib_triangulation)
+    ADD_SUBDIRECTORY(Triangulation)
+    LIST(APPEND TARGET_MODULE_TESTS triangulation_tests)
+ENDIF (TARGET lib_triangulation)
+
 ADD_CUSTOM_TARGET(tools_tests DEPENDS ${TARGET_MODULE_TESTS})
