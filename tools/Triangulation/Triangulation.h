@@ -1,6 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
 
+#include <memory>
 #include <Core/EigenTypedef.h>
 
 namespace PyMesh {
