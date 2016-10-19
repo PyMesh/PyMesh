@@ -10,6 +10,9 @@
 #ifdef WITH_TRIANGLE
 #include "ShewchukTriangle/ShewchukTriangleTest.h"
 #endif
+#ifdef WITH_GEOGRAM
+#include "GeoGram/GeoGramDelaunayTriangulationTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

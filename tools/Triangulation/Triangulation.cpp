@@ -15,6 +15,10 @@
 #include "ShewchukTriangle/ShewchukTriangle.h"
 #endif
 
+#ifdef WITH_GEOGRAM
+#include "GeoGram/GeoGramDelaunayTriangulation.h"
+#endif
+
 #include <Core/Exception.h>
 #include <sstream>
 
@@ -42,6 +46,12 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 #ifdef WITH_CGAL
     if (engine_name == "cgal_delaunay") {
         return Ptr(new CGALDelaunayTriangulation());
+    }
+#endif
+
+#ifdef WITH_GEOGRAM
+    if (engine_name == "geogram_delaunay") {
+        return Ptr(new GeoGramDelaunayTriangulation());
     }
 #endif
 
