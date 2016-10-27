@@ -6,11 +6,14 @@
 import argparse
 import pymesh
 import logging
+import numpy as np
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--max-iterations", type=int, default=1,
             help="Max number of times of calling resolve function.");
+    parser.add_argument("--with-rounding", action="store_true",
+            help="Agressive rounding to avoid self-intersection");
     parser.add_argument("in_mesh", help="input mesh");
     parser.add_argument("out_mesh", help="output mesh");
     return parser.parse_args();
@@ -22,6 +25,10 @@ def main():
 
     counter = 0;
     while len(intersecting_faces) > 0 and counter < args.max_iterations:
+        if (args.with_rounding):
+            involved_vertices = np.unique(mesh.faces[intersecting_faces].ravel());
+            mesh.vertices_ref[involved_vertices, :] =\
+                    np.round(mesh.vertices[involved_vertices, :], 12);
         mesh = pymesh.resolve_self_intersection(mesh, "igl");
         mesh, __ = pymesh.remove_duplicated_faces(mesh, fins_only=True);
         intersecting_faces = pymesh.detect_self_intersection(mesh);
