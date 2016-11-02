@@ -10,7 +10,7 @@ import pymesh
 
 def extract_intersecting_faces(mesh, selection):
     face_pairs = pymesh.detect_self_intersection(mesh);
-    selected_faces = np.zeros(mesh.num_vertices, dtype=bool);
+    selected_faces = np.zeros(mesh.num_faces, dtype=bool);
 
     if selection is not None:
         selected_pairs = np.any(face_pairs == selection, axis=1);
