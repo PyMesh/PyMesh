@@ -30,6 +30,7 @@ from .winding_number import compute_winding_number
 from .meshutils import *
 from .minkowski_sum import minkowski_sum
 from .misc import *
+from .tetrahedralize import tetrahedralize
 from .triangulate import triangulate, retriangulate, retriangulate_raw, triangulate_beta
 from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from .slice_mesh import slice_mesh
@@ -53,6 +54,7 @@ __all__ = [
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull",
+        "tetrahedralize",
         "timethis",
         "triangulate",
         "retriangulate",

@@ -15,6 +15,10 @@
 #include "TetGen/TetGenEngine.h"
 #endif
 
+#if WITH_GEOGRAM
+#include "GeoGram/GeoGramEngine.h"
+#endif
+
 using namespace PyMesh;
 
 TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
@@ -24,6 +28,9 @@ TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
 #endif
 #if WITH_TETGEN
     if (engine_name == "tetgen") { return Ptr(new TetGenEngine); }
+#endif
+#if WITH_GEOGRAM
+    if (engine_name == "geogram") { return Ptr(new GeoGramEngine); }
 #endif
 
     std::stringstream err_msg;
