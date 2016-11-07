@@ -10,7 +10,6 @@
 using namespace PyMesh;
 
 void GeoGramEngine::run() {
-    GEO::initialize();
     GEO::Delaunay_var delaunay = GEO::Delaunay::create(3, "tetgen");
     delaunay->initialize();
     GEO::Mesh mesh;

@@ -2,10 +2,12 @@
 #pragma once
 
 #include <TetrahedronizationEngine.h>
+#include <GeoGram/GeoGramBase.h>
 
 namespace PyMesh {
 
-class GeoGramEngine : public TetrahedronizationEngine {
+class GeoGramEngine : public TetrahedronizationEngine,
+                      public GeoGramBase {
     public:
         virtual ~GeoGramEngine() = default;
 
