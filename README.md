@@ -44,6 +44,7 @@ Optional library:
 * [qhull](http://www.qhull.org/) *
 * [Clipper](http://www.angusj.com/delphi/clipper.php) *
 * [Carve](https://github.com/qnzhou/carve) *
+* [GeoGram](http://alice.loria.fr/software/geogram/doc/html/index.html) *
 
 Libraries marked with `*` are included in `$PYMESH_PATH/third_party` directory.
 
