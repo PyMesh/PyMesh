@@ -10,6 +10,7 @@
 #include "IOUtils.h"
 #include "MEDITWriter.h"
 #include "MSHWriter.h"
+#include "NodeWriter.h"
 #include "OBJWriter.h"
 #include "OFFWriter.h"
 #include "PLYWriter.h"
@@ -28,6 +29,8 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
         writer = new MEDITWriter();
     } else if (ext == ".msh") {
         writer = new MSHWriter();
+    } else if (ext == ".node") {
+        writer = new NodeWriter();
     } else if (ext == ".ply") {
         writer = new PLYWriter();
     } else if (ext == ".stl") {
