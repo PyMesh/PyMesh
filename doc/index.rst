@@ -48,8 +48,10 @@ Features:
 =========
 
 * Read/write 2D and 3D mesh in ``.obj``, ``.off``, ``.ply``, ``.stl``,
-  ``.mesh`` (`MEDIT <http://www.ann.jussieu.fr/frey/publications/RT-0253.pdf>`_)
-  and ``.msh`` (`Gmsh <http://geuz.org/gmsh/doc/texinfo/gmsh.html#File-formats>`_)
+  ``.mesh`` (`MEDIT <http://www.ann.jussieu.fr/frey/publications/RT-0253.pdf>`_),
+  ``.msh`` (`Gmsh <http://geuz.org/gmsh/doc/texinfo/gmsh.html#File-formats>`_)
+  and ``.node/.face/.ele``
+  (`Tetgen <http://wias-berlin.de/software/tetgen/1.5/doc/manual/manual006.html>`_)
   formats.
 * Support load and save per vertex/face/voxel scalar and vector fields.
 * Local mesh processing such edge collapse/split, duplicated vertex/face removal
