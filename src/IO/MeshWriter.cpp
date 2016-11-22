@@ -14,6 +14,7 @@
 #include "OBJWriter.h"
 #include "OFFWriter.h"
 #include "PLYWriter.h"
+#include "POLYWriter.h"
 #include "STLWriter.h"
 
 using namespace PyMesh;
@@ -33,6 +34,8 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
         writer = new NodeWriter();
     } else if (ext == ".ply") {
         writer = new PLYWriter();
+    } else if (ext == ".poly") {
+        writer = new POLYWriter();
     } else if (ext == ".stl") {
         writer = new STLWriter();
     } else {
