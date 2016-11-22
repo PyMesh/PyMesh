@@ -71,4 +71,10 @@ void POLYWriter::write(
         fout << std::endl;
     }
     fout.close();
+
+    // Hole list
+    fout << 0 << std::endl;
+
+    // Attribute list
+    fout << 0 << std::endl;
 }
