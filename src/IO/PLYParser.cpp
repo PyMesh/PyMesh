@@ -212,7 +212,7 @@ void PLYParser::init_faces() {
     if (face_attr_itr == m_attributes.end()) {
         face_attr_itr = m_attributes.find("face_vertex_index");
         if (face_attr_itr == m_attributes.end()) {
-            m_vertex_per_face = 0;
+            m_vertex_per_face = 3; // default to triangle.
             m_num_faces = 0;
             return;
         }
