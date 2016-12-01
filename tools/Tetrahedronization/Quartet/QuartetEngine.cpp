@@ -55,7 +55,7 @@ void QuartetEngine::run() {
     // Feature extraction.
     FeatureSet features;
     features.autoDetectFeatures(trimesh,
-            45.0 // Angle threshold in degrees.
+            135.0 // Angle threshold in degrees.
             );
 
     // Tet meshing!
