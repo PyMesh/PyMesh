@@ -19,6 +19,10 @@
 #include "GeoGram/GeoGramEngine.h"
 #endif
 
+#if WITH_QUARTET
+#include "Quartet/QuartetEngine.h"
+#endif
+
 using namespace PyMesh;
 
 TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
@@ -31,6 +35,9 @@ TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
 #endif
 #if WITH_GEOGRAM
     if (engine_name == "geogram") { return Ptr(new GeoGramEngine); }
+#endif
+#if WITH_QUARTET
+    if (engine_name == "quartet") { return Ptr(new QuartetEngine); }
 #endif
 
     std::stringstream err_msg;

@@ -9,7 +9,8 @@ import sys
 def parse_args():
     parser = argparse.ArgumentParser(description="Tet mesh generation");
     parser.add_argument("--engine", help="tet mesh engine",
-            choices = ("cgal", "tetgen", "geogram"), default="tetgen");
+            choices = ("cgal", "tetgen", "geogram", "quartet"),
+            default="tetgen");
     parser.add_argument("--face-size",
             help="max circumradius of surface triangles",
             type=float, default=-1.0);
