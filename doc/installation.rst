@@ -48,6 +48,8 @@ installed using package management softwares for your OS.
 * Clipper_: is used for 2D boolean operations.
 * Carve_: is used for 3D boolean operations.  Minor modification is added by me
   for linux/mac compilation.
+* GeoGram_: is used as a 2D triangle and 3D tetrahedron generation engine.
+* Quartet_: is used as a 3D tetrahedralization engine.
 
 .. _SparseHash: https://code.google.com/p/sparsehash/
 .. _CGAL: https://www.cgal.org
@@ -58,6 +60,8 @@ installed using package management softwares for your OS.
 .. _qhull: http://www.qhull.org/
 .. _Clipper: http://www.angusj.com/delphi/clipper.php
 .. _Carve: https://github.com/qnzhou/carve
+.. _GeoGram: http://alice.loria.fr/software/geogram/doc/html/index.html
+.. _Quartet: https://github.com/crawforddoran/quartet
 
 Environment Variables:
 ----------------------
@@ -69,15 +73,17 @@ variables:
 
 * ``EIGEN_INC``: directory containing the Eigen library.
 * ``GOOGLEHASH_INCLUDES``: directory containing sparse hash.
-* ``CGAL_PATH``: path to CGAL library
+* ``CGAL_PATH``: path to CGAL library.
 * ``BOOST_INC``: directory containing boost.
 * ``LIBIGL_PATH``: path to libigl.
 * ``CORK_PATH``: path to cork.
-* ``TETGEN_PATH``: path to tetgen
-* ``TRIANGLE_PATH``: path to triangle
-* ``QHULL_PATH``: path to qhull
-* ``CLIPPER_PATH``: path to clipper
-* ``CARVE_PATH``: path to carve
+* ``TETGEN_PATH``: path to tetgen.
+* ``TRIANGLE_PATH``: path to triangle.
+* ``QHULL_PATH``: path to qhull.
+* ``CLIPPER_PATH``: path to clipper.
+* ``CARVE_PATH``: path to carve.
+* ``GEOGRAM_PATH``: path to GeoGram.
+* ``QUARTET_PATH``: path to Quartet.
 
 Building PyMesh:
 ----------------
