@@ -74,6 +74,7 @@ void QuartetEngine::run() {
     const size_t out_num_tets = tets.size();
     m_vertices.resize(out_num_vertices, 3);
     m_voxels.resize(out_num_tets, 4);
+    m_faces.resize(0, 3);
 
     for (size_t i=0; i<out_num_vertices; i++) {
         m_vertices(i, 0) = verts[i][0];
@@ -86,4 +87,7 @@ void QuartetEngine::run() {
         m_voxels(i, 2) = tets[i][2];
         m_voxels(i, 3) = tets[i][3];
     }
+
+    // Some sanity check.
+    assert(out_num_tets == 0 || m_voxels.maxCoeff() < out_num_vertices);
 }
