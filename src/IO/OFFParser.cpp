@@ -156,7 +156,9 @@ void OFFParser::export_attribute(const std::string& name, Float* buffer) {
 
 void OFFParser::check_header(char* line) {
     if (std::string(line).substr(0, 3) != "OFF" &&
-            std::string(line).substr(0, 4) != "NOFF") {
+            std::string(line).substr(0, 4) != "COFF" &&
+            std::string(line).substr(0, 4) != "NOFF" &&
+            std::string(line).substr(0, 5) != "STOFF") {
         std::stringstream err_msg;
         err_msg << "Incorrect OFF header: " << line;
         throw IOError(err_msg.str());
