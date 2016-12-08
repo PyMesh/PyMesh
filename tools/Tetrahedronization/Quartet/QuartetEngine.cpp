@@ -40,7 +40,7 @@ void QuartetEngine::run() {
     TriMesh trimesh(vertices, faces);
 
     // Convert TriMesh into signed distance field.
-    float dx = m_cell_size * 0.5;
+    float dx = m_cell_size;
     VectorF bbox_min = m_vertices.colwise().minCoeff();
     VectorF bbox_max = m_vertices.colwise().maxCoeff();
     Vec3f origin(bbox_min[0], bbox_min[1], bbox_min[2]);
