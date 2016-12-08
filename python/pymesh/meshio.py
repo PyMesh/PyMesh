@@ -21,7 +21,7 @@ def load_mesh(filename, drop_zero_dim=False):
     factory.load_file(filename);
     if drop_zero_dim:
         factory.drop_zero_dim();
-    return Mesh(factory.create());
+    return Mesh(factory.create_shared());
 
 def deduce_face_type(faces, voxels):
     if faces is None or faces.ndim == 1 or len(faces) == 0:
@@ -73,7 +73,7 @@ def form_mesh(vertices, faces, voxels=None):
             vertices.shape[1],
             faces.shape[1],
             voxels.shape[1]);
-    return Mesh(factory.create());
+    return Mesh(factory.create_shared());
 
 def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
     """ Save raw mesh to file.
