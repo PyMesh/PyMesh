@@ -1,3 +1,4 @@
+import numpy as np
 import PySelfIntersection
 from .meshio import form_mesh
 
@@ -25,19 +26,28 @@ def resolve_self_intersection(mesh, engine="auto"):
     if engine == "auto":
         engine = "igl";
 
-    if mesh.dim != 3:
+    vertices = mesh.vertices;
+    faces = mesh.faces;
+    if mesh.dim == 2:
+        vertices = np.hstack((vertices,
+            np.zeros((mesh.num_vertices, 1), dtype=float)));
+    elif mesh.dim != 3:
         raise NotImplementedError(
-                "Resolving self-intersection only support 3D meshes");
+                "Resolving self-intersection only support 2D and 3D meshes");
     if mesh.vertex_per_face != 3:
         raise NotImplementedError(
                 "Resolving self-intersection only support triangle meshes");
 
     resolver = PySelfIntersection.SelfIntersectionResolver.create(engine);
-    resolver.set_mesh(mesh.vertices, mesh.faces);
+    resolver.set_mesh(vertices, faces);
     resolver.run();
 
     vertices = resolver.get_vertices();
     faces = resolver.get_faces();
+
+    if mesh.dim == 2:
+        vertices = vertices[:,[0,1]];
+
     output_mesh = form_mesh(vertices, faces);
     face_sources = resolver.get_face_sources();
     output_mesh.add_attribute("face_sources");
