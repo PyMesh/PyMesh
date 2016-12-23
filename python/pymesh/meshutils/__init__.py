@@ -1,3 +1,9 @@
+from .attribute_utils import convert_to_vertex_attribute
+from .attribute_utils import convert_to_vertex_attribute_from_name
+from .attribute_utils import convert_to_face_attribute
+from .attribute_utils import convert_to_face_attribute_from_name
+from .attribute_utils import convert_to_voxel_attribute
+from .attribute_utils import convert_to_voxel_attribute_from_name
 from .collapse_short_edges import collapse_short_edges
 from .collapse_short_edges import collapse_short_edges_raw
 from .generate_box_mesh import generate_box_mesh
@@ -25,6 +31,12 @@ from .face_utils import get_degenerated_faces_raw
 from .subdivide import subdivide
 
 __all__ = [
+        "convert_to_vertex_attribute",
+        "convert_to_vertex_attribute_from_name",
+        "convert_to_face_attribute",
+        "convert_to_face_attribute_from_name",
+        "convert_to_voxel_attribute",
+        "convert_to_voxel_attribute_from_name",
         "collapse_short_edges",
         "collapse_short_edges_raw",
         "generate_box_mesh",

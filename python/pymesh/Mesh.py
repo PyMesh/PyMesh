@@ -99,7 +99,7 @@ class Mesh(object):
         :py:attr:`num_vertices` rows.
         """
         return self.__mesh.get_attribute(name).reshape(
-                (self.num_vertices, -1), order="");
+                (self.num_vertices, -1), order="C");
 
     def get_face_attribute(self, name):
         """ Same as :py:meth:`.get_attribute` but reshaped to have
