@@ -9,28 +9,28 @@ namespace PyMesh {
 template<typename T>
 class IndexHeap {
     public:
-        class IndexComp {
-            public:
-                IndexComp(const IndexHeap<T>* host, bool max_heap) : m_host(host), m_max_heap(max_heap) {}
-                bool operator()(size_t i, size_t j) const {
-                    if (m_max_heap)
-                        return m_host->m_data[i] < m_host->m_data[j];
-                    else
-                        return m_host->m_data[i] > m_host->m_data[j];
-                }
-            private:
-                const IndexHeap<T>* m_host;
-                bool m_max_heap;
-        };
+        IndexHeap(bool max_heap = true) {
+            init_comp(max_heap);
+        }
 
-    public:
-        IndexHeap(bool max_heap = true) : m_comp(this, max_heap) { }
-
-        IndexHeap(const std::vector<T>& data, bool max_heap = true) : m_comp(this, max_heap) {
+        IndexHeap(const std::vector<T>& data, bool max_heap = true) {
+            init_comp(max_heap);
             init(data);
         }
 
     public:
+        void init_comp(bool max_heap) {
+            if (max_heap) {
+                m_comp = [this](size_t i, size_t j) {
+                    return this->m_data[i] < this->m_data[j];
+                };
+            } else {
+                m_comp = [this](size_t i, size_t j) {
+                    return this->m_data[i] > this->m_data[j];
+                };
+            }
+        }
+
         void init(const std::vector<T>& data) {
             m_data = data;
             size_t data_size = m_data.size();
@@ -77,6 +77,6 @@ class IndexHeap {
     private:
         std::vector<T> m_data;
         std::vector<size_t> m_indices;
-        IndexComp m_comp;
+        std::function<bool(size_t, size_t)> m_comp;
 };
 }
