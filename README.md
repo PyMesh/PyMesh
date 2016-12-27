@@ -70,9 +70,14 @@ variables:
 * ``GEOGRAM_PATH``: path to GeoGram
 * ``QUARTET_PATH``: path to quartet
 
-### Build ###
 
-The first step is to compile the optional third party dependencies:
+### Requirements
+The requirements of pymesh can either be compiled within pymesh's repository or installed
+via the package manager of your distribution.
+
+#### Option 1: build third party libraries from linked repositories
+Most third-party dependencies are linked to the pymesh repository as git submodules. They
+can be built at once:
 
     cd $PYMESH_PATH/third_party
     mkdir build
@@ -84,6 +89,28 @@ The first step is to compile the optional third party dependencies:
 Third party dependencies will be installed in
 `$PYMESH_PATH/python/pymesh/third_party` directory.
 
+#### Option 2: install distribution packages (Debian "stretch")
+All required dependencies of pymesh are available as packages in Debian. Thus you may
+install them with your package manager:
+
+    # build tools for pymesh
+    apt install build-essential cmake qt4-qmake
+    # third party libraries
+    apt install libpolyclipping-dev libeigen3-dev libqhull-dev libtet1.5-dev libtriangle-dev
+    # dependencies of pymesh
+    apt install libgegl-dev libsparsehash-dev libblas-dev libsuitesparse-dev libmetis-dev \
+                libtinyxml2-dev libcgal-dev ocl-icd-opencl-dev
+
+Please note that "libtriangle" is part of the
+["non-free" section](https://www.debian.org/doc/manuals/debian-reference/ch02#_debian_archive_basics)
+of the Debian repository.
+
+The following optional third-party libraries are (as of December 2016) not packaged for Debian:
+* carve
+* cork
+* libigl
+
+### Build
 Now we can build the main project.  It is recommended to build out of source:
 
     cd $PYMESH_PATH
