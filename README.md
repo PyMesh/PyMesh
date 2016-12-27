@@ -14,7 +14,7 @@ for create minimalistic and easy to use interfaces.
 
 To retrieve the code:
 
-    git clone --recursive https://github.com/qnzhou/PyMesh.git
+    git clone https://github.com/qnzhou/PyMesh.git
 
 Be sure to save the root directory of PyMesh in the environment variable
 PYMESH_PATH:
@@ -80,6 +80,7 @@ Most third-party dependencies are linked to the pymesh repository as git submodu
 can be built at once:
 
     cd $PYMESH_PATH/third_party
+    git submodule update --init
     mkdir build
     cd build
     cmake ..
