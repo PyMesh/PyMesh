@@ -51,6 +51,8 @@ if ( NOT CGAL_DIR )
     # Look in standard UNIX install locations.
     /usr/local/lib/CGAL
     /usr/lib/CGAL
+    # multiarch path for CGAL in Debian
+    /usr/lib/${CMAKE_LIBRARY_ARCHITECTURE}/cmake/CGAL
 
     # Read from the CMakeSetup registry entries.  It is likely that
     # CGAL will have been recently built.
