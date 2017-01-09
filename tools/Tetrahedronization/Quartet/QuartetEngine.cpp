@@ -3,11 +3,11 @@
 #include <vector>
 #include <Core/Exception.h>
 
-#include <quartet/make_signed_distance.h>
-#include <quartet/make_tet_mesh.h>
-#include <quartet/sdf.h>
-#include <quartet/trimesh.h>
-#include <quartet/vec.h>
+#include <make_signed_distance.h>
+#include <make_tet_mesh.h>
+#include <sdf.h>
+#include <trimesh.h>
+#include <vec.h>
 
 using namespace PyMesh;
 
