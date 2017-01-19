@@ -98,22 +98,31 @@ class Mesh(object):
         """ Same as :py:meth:`.get_attribute` but reshaped to have
         :py:attr:`num_vertices` rows.
         """
-        return self.__mesh.get_attribute(name).reshape(
-                (self.num_vertices, -1), order="C");
+        if self.num_vertices == 0:
+            return self.__mesh.get_attribute(name);
+        else:
+            return self.__mesh.get_attribute(name).reshape(
+                    (self.num_vertices, -1), order="C");
 
     def get_face_attribute(self, name):
         """ Same as :py:meth:`.get_attribute` but reshaped to have
         :py:attr:`num_faces` rows.
         """
-        return self.__mesh.get_attribute(name).reshape(
-                (self.num_faces, -1), order="C");
+        if self.num_faces == 0:
+            return self.__mesh.get_attribute(name);
+        else:
+            return self.__mesh.get_attribute(name).reshape(
+                    (self.num_faces, -1), order="C");
 
     def get_voxel_attribute(self, name):
         """ Same as :py:meth:`.get_attribute` but reshaped to have
         :py:attr:`num_voxels` rows.
         """
-        return self.__mesh.get_attribute(name).reshape(
-                (self.num_voxels, -1), order="C");
+        if self.num_voxels == 0:
+            return self.__mesh.get_attribute(name);
+        else:
+            return self.__mesh.get_attribute(name).reshape(
+                    (self.num_voxels, -1), order="C");
 
     def set_attribute(self, name, val):
         """ Set attribute to the given value.
