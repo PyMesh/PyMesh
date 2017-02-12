@@ -10,8 +10,15 @@ install_path = "pymesh-{}-py{}.{}.egg/pymesh/lib".format(
 third_party_path = "pymesh-{}-py{}.{}.egg/pymesh/third_party/lib".format(
         __version__, py_version[0], py_version[1]);
 
-site_location = site.getsitepackages();
-site_location.append(site.getusersitepackages());
+site_location = [];
+if hasattr(sys, 'real_prefix'):
+    # Within virtualenv.
+    pass
+else:
+    # System wide python.
+    site_location.append(site.getsitepackages());
+    site_location.append(site.getusersitepackages());
+
 site_location.append("${CMAKE_INSTALL_PREFIX}");
 site_location = [os.path.join(loc, install_path) for loc in site_location] +\
         [os.path.join(loc, third_party_path) for loc in site_location];
