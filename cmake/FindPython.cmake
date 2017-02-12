@@ -12,7 +12,6 @@ EXECUTE_PROCESS(
     COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.prefix)"
     OUTPUT_VARIABLE PYTHON_PREFIX
     OUTPUT_STRIP_TRAILING_WHITESPACE)
-INCLUDE(PythonPrefix)
 SET(LIBNAME python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
 
 # System wide python framework often are not the correct python.
