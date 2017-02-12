@@ -1,3 +1,7 @@
+machine:
+  python:
+      version: 3.5.2
+
 checkout:
     post:
         - export PYMESH_PATH=`pwd`
