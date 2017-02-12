@@ -156,7 +156,9 @@ void OFFParser::export_attribute(const std::string& name, Float* buffer) {
 
 void OFFParser::check_header(char* line) {
     if (std::string(line).substr(0, 3) != "OFF" &&
-            std::string(line).substr(0, 4) != "NOFF") {
+            std::string(line).substr(0, 4) != "COFF" &&
+            std::string(line).substr(0, 4) != "NOFF" &&
+            std::string(line).substr(0, 5) != "STOFF") {
         std::stringstream err_msg;
         err_msg << "Incorrect OFF header: " << line;
         throw IOError(err_msg.str());
@@ -197,14 +199,6 @@ void OFFParser::parse_face_line(char* line) {
     assert(field != NULL);
 
     const size_t n = atoi(field);
-    if (n != 3 && n != 4) {
-        std::stringstream err_msg;
-        err_msg << "Only triangle and quad are supported in OFF parsing." <<
-            std::endl;
-        err_msg << "Error line: " << line << std::endl;
-        throw IOError(err_msg.str());
-    }
-
     VectorI face(n);
     for (size_t i=0; i<n; i++) {
         field = strtok(NULL, WHITE_SPACE);
@@ -215,8 +209,17 @@ void OFFParser::parse_face_line(char* line) {
     }
     if (n == 3) m_tris.push_back(face);
     else if (n == 4) m_quads.push_back(face);
-    else {
-        throw IOError("Non-triangle, non-quad face detected!");
+    else if (n > 4){
+        std::cerr << "Converting " << n << "-gon to triangles" << std::endl;
+        for (size_t i=0; i<n-1; i++) {
+            VectorI f(3);
+            f << face[0], face[i], face[i+1];
+            m_tris.push_back(f);
+        }
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Invalid polygon with " << n << "sides.";
+        throw IOError(err_msg.str());
     }
 
     //bool with_color = true;

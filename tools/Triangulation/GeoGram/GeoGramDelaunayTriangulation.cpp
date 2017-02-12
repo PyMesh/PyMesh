@@ -3,14 +3,7 @@
 
 using namespace PyMesh;
 
-bool GeoGramDelaunayTriangulation::GEOGRAM_INITIALIZED = false;
 void GeoGramDelaunayTriangulation::run() {
-    if (!GEOGRAM_INITIALIZED) {
-        // Repeated call to GEO::initialize() would cause segfault.
-        GEO::initialize();
-        GEOGRAM_INITIALIZED = true;
-    }
-
     GEO::Delaunay_var delaunay = GEO::Delaunay::create(2,"triangle");
     delaunay->set_vertices(m_vertices.rows(), m_vertices.data());
     const size_t num_faces = delaunay->nb_cells();

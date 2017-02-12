@@ -20,8 +20,12 @@ class TestBase : public ::testing::Test {
         typedef Mesh::Ptr MeshPtr;
 
         virtual void SetUp() {
+#ifdef PYMESH_TEST_DATA_DIR
+            m_data_dir = PYMESH_TEST_DATA_DIR;
+#else
             std::string project_dir = Environment::get("PYMESH_PATH");
             m_data_dir = project_dir + "/tests/data/";
+#endif
         }
 
         virtual MeshPtr load_mesh(const std::string& filename) {

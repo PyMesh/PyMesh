@@ -2,17 +2,16 @@
 #pragma once
 
 #include "Triangulation.h"
+#include <GeoGram/GeoGramBase.h>
 
 namespace PyMesh {
-    class GeoGramDelaunayTriangulation : public Triangulation {
+    class GeoGramDelaunayTriangulation : public Triangulation,
+                                         public GeoGramBase {
         public:
             GeoGramDelaunayTriangulation() = default;
             virtual ~GeoGramDelaunayTriangulation() = default;
 
         public:
             virtual void run();
-
-        private:
-            static bool GEOGRAM_INITIALIZED;
     };
 }

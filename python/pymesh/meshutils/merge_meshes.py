@@ -54,7 +54,7 @@ def merge_meshes(input_meshes):
         faces = np.zeros((0, 3), dtype=int)
         face_sources = np.array([]);
 
-    if len(voxels) == len(input_meshes):
+    if len(voxels) > 0 and len(voxels) == len(input_meshes):
         voxels = np.vstack(voxels);
         voxel_sources = np.concatenate(voxel_sources);
     else:

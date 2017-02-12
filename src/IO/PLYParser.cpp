@@ -212,9 +212,9 @@ void PLYParser::init_faces() {
     if (face_attr_itr == m_attributes.end()) {
         face_attr_itr = m_attributes.find("face_vertex_index");
         if (face_attr_itr == m_attributes.end()) {
-            throw IOError(
-                    "Cannot find required property\"vertex_indices\" "
-                    "in face element section.");
+            m_vertex_per_face = 3; // default to triangle.
+            m_num_faces = 0;
+            return;
         }
     }
     const std::vector<Float>& faces = face_attr_itr->second;

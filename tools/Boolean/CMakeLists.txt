@@ -21,15 +21,16 @@ ELSEIF (NOT GMP_FOUND)
     MESSAGE(WARNING "GMP is missing.  Cork boolean support is skipped")
 ENDIF (CORK_FOUND AND GMP_FOUND)
 
-# Clipper
-IF (CLIPPER_FOUND)
+# Clipper which requires triangle.
+IF (CLIPPER_FOUND AND TRIANGLE_FOUND)
     INCLUDE_DIRECTORIES(${CLIPPER_INCLUDE_DIRS})
-    LIST(APPEND DEPENDENT_LIBS ${CLIPPER_LIBRARIES})
+    LIST(APPEND DEPENDENT_LIBS ${CLIPPER_LIBRARIES} lib_triangle_wrapper)
     ADD_DEFINITIONS(-DWITH_CLIPPER)
     ADD_SUBDIRECTORY(Clipper)
-ELSE(CLIPPER_FOUND)
-    MESSAGE(WARNING "Clipper is missing. Clipper boolean support is skipped")
-ENDIF(CLIPPER_FOUND)
+ELSE (CLIPPER_FOUND AND TRIANGLE_FOUND)
+    MESSAGE(WARNING
+        "Clipper or triangle is missing. Clipper boolean support is skipped")
+ENDIF (CLIPPER_FOUND AND TRIANGLE_FOUND)
 
 # IGL and CGAL
 IF (LIBIGL_FOUND AND CGAL_FOUND)
@@ -84,7 +85,7 @@ ENDIF (TINYXML2_FOUND)
 
 ADD_LIBRARY(lib_boolean SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_boolean PROPERTIES OUTPUT_NAME "boolean")
-TARGET_LINK_LIBRARIES(lib_boolean Mesh lib_MeshUtils lib_triangle_wrapper ${DEPENDENT_LIBS})
+TARGET_LINK_LIBRARIES(lib_boolean Mesh lib_MeshUtils ${DEPENDENT_LIBS})
 
 IF(NOT WITHOUT_SWIG)
     set(SWG_FILES PyBoolean.i)

@@ -10,8 +10,10 @@
 #include "OFFParser.h"
 #include "MEDITParser.h"
 #include "MSHParser.h"
+#include "NodeParser.h"
 #include "STLParser.h"
 #include "PLYParser.h"
+#include "POLYParser.h"
 #include "IOUtils.h"
 
 using namespace PyMesh;
@@ -29,10 +31,14 @@ MeshParser* MeshParser::create_parser(const std::string& filename) {
         parser = new MEDITParser();
     } else if (ext == ".msh") {
         parser = new MSHParser();
+    } else if (ext == ".node") {
+        parser = new NodeParser();
     } else if (ext == ".stl") {
         parser = new STLParser();
     } else if (ext == ".ply") {
         parser = new PLYParser();
+    } else if (ext == ".poly") {
+        parser = new POLYParser();
     } else {
         std::stringstream err_msg;
         err_msg << "Error: extention (" << ext << ") is not supported"

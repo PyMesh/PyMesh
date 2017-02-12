@@ -66,6 +66,9 @@ namespace AttributeUtilsHelper {
         const size_t stride = attr_size / num_faces;
 
         const VectorI& faces = mesh.get_faces();
+        if (!mesh.has_attribute("face_area")) {
+            mesh.add_attribute("face_area");
+        }
         const VectorF& weights = mesh.get_attribute("face_area");
 
         VectorF result = VectorF::Zero(num_vertices * stride);
@@ -171,8 +174,6 @@ VectorF AttributeUtils::convert_to_vertex_attribute(Mesh& mesh, const VectorF& a
     size_t attr_size = attribute.size();
 
     if (attr_size == num_vertices || attr_size == dim*num_vertices) {
-        std::cerr << "Warning: attribute is already face attribute!  "
-            << "This copy is unnecessary!" << std::endl;
         return attribute;
     } else if (attr_size == num_faces || attr_size == dim*num_faces) {
         return convert_face_attribute_to_vertex_attribute(mesh, attribute);
@@ -200,8 +201,6 @@ VectorF AttributeUtils::convert_to_face_attribute(Mesh& mesh, const VectorF& att
     if (attr_size == num_vertices || attr_size == dim*num_vertices) {
         return convert_vertex_attribute_to_face_attribute(mesh, attribute);
     } else if (attr_size == num_faces || attr_size == dim*num_faces) {
-        std::cerr << "Warning: attribute is already face attribute!  "
-            << "This copy is unnecessary!" << std::endl;
         return attribute;
     } else if (attr_size == num_voxels || attr_size == dim*num_voxels) {
         return convert_voxel_attribute_to_face_attribute(mesh, attribute);
@@ -231,8 +230,6 @@ VectorF AttributeUtils::convert_to_voxel_attribute(Mesh& mesh,
         throw NotImplementedError(
                 "Converting face attribute to voxel attribute is not supported yet.");
     } else if (attr_size == num_voxels || attr_size == dim*num_voxels) {
-        std::cerr << "Warning: attribute is already voxel attribute!  "
-            << "This copy is unnecessary!" << std::endl;
         return attribute;
     } else {
         throw RuntimeError("Unknow attribute type.");

@@ -80,6 +80,7 @@ setup(
             "scripts/slice_mesh.py",
             "scripts/subdivide.py",
             "scripts/submesh.py",
+            "scripts/tet.py",
             "scripts/tet_to_hex.py",
             "scripts/voxelize.py",
             ],

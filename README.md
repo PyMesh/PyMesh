@@ -44,6 +44,8 @@ Optional library:
 * [qhull](http://www.qhull.org/) *
 * [Clipper](http://www.angusj.com/delphi/clipper.php) *
 * [Carve](https://github.com/qnzhou/carve) *
+* [GeoGram](http://alice.loria.fr/software/geogram/doc/html/index.html)
+* [Quartet](https://github.com/crawforddoran/quartet) *
 
 Libraries marked with `*` are included in `$PYMESH_PATH/third_party` directory.
 
@@ -65,6 +67,8 @@ variables:
 * ``QHULL_PATH``: path to qhull
 * ``CLIPPER_PATH``: path to clipper
 * ``CARVE_PATH``: path to carve
+* ``GEOGRAM_PATH``: path to GeoGram
+* ``QUARTET_PATH``: path to quartet
 
 ### Build ###
 
