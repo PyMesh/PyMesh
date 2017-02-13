@@ -16,7 +16,7 @@ if hasattr(sys, 'real_prefix'):
     pass
 else:
     # System wide python.
-    site_location.append(site.getsitepackages());
+    site_location += site.getsitepackages();
     site_location.append(site.getusersitepackages());
 
 site_location.append("${CMAKE_INSTALL_PREFIX}");
