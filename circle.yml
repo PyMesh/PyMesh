@@ -13,7 +13,7 @@ dependencies:
         - pyenv uninstall -f 3.5.2
         - env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.5.2
         - sudo add-apt-repository -y ppa:george-edison55/cmake-3.x
-        - sudo apt-get update; sudo apt-get install -y cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5.6.2 libcgal-dev python3-nose python3-numpy python3-scipy python3-setuptools swig; sudo apt-get clean
+        - sudo apt-get update; sudo apt-get install -y cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5.6.2 python3-nose python3-numpy python3-scipy python3-setuptools swig; sudo apt-get clean
         - mkdir -p third_party/build; cd third_party/build; cmake ..; make; make install; make clean;
         - pip install -r python/requirements.txt;
         - mkdir build; cd build; cmake ..; make; make tools
