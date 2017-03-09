@@ -4,11 +4,12 @@
 
 #include <iostream>
 #include <fstream>
+#include <map>
 #include <sstream>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-
+#include <Misc/Triplet.h>
 
 using namespace PyMesh;
 
@@ -53,6 +54,9 @@ bool NodeParser::parse(const std::string& filename) {
     if (!face_success && !elem_success) {
         std::cerr << "Warning: failed to parse .face or .ele files." 
             << std::endl;
+    }
+    if (!face_success && elem_success) {
+        extract_faces_from_voxels();
     }
     return true;
 }
@@ -277,4 +281,42 @@ void NodeParser::export_attribute(const std::string& name, Float* buffer) {
     }
 }
 
+void NodeParser::extract_faces_from_voxels() {
+    if (m_vertex_per_voxel != 4) {
+        throw NotImplementedError("Only tet element is supported");
+    }
+    m_faces.clear();
 
+    typedef std::map<Triplet, int> FaceCounter;
+    FaceCounter face_counter;
+    const size_t num_voxels = m_voxels.size();
+    for (const auto& voxel : m_voxels) {
+        assert(voxel.size() == 4);
+        Triplet voxel_faces[4] = {
+            Triplet(voxel[0], voxel[2], voxel[1]),
+            Triplet(voxel[0], voxel[1], voxel[3]),
+            Triplet(voxel[0], voxel[3], voxel[2]),
+            Triplet(voxel[1], voxel[2], voxel[3])
+        };
+
+        for (size_t j=0; j<4; j++) {
+            if (face_counter.find(voxel_faces[j]) == face_counter.end()) {
+                face_counter[voxel_faces[j]] = 1;
+            } else {
+                face_counter[voxel_faces[j]] += 1;
+            }
+        }
+    }
+
+    std::vector<int> vertex_buffer;
+    for (FaceCounter::const_iterator itr = face_counter.begin();
+            itr!=face_counter.end(); itr++) {
+        assert(itr->second == 1 or itr->second == 2);
+        if (itr->second == 1) {
+            const VectorI& f = itr->first.get_ori_data();
+            m_faces.push_back(f);
+        }
+    }
+    m_num_faces = m_faces.size();
+    m_vertex_per_face = 3;
+}

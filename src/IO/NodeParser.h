@@ -45,6 +45,7 @@ class NodeParser : public MeshParser {
         bool parse_nodes(const std::string& filename);
         bool parse_faces(const std::string& filename);
         bool parse_elements(const std::string& filename);
+        void extract_faces_from_voxels();
 
     protected:
         VertexList    m_vertices;
