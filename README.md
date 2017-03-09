@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/qnzhou/PyMesh/tree/master.svg?style=svg)](https://circleci.com/gh/qnzhou/PyMesh/tree/master)
+
 ### About PyMesh ###
 
 **PyMesh** is a code base developed by Qingnan Zhou for his PhD research at New
