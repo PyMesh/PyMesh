@@ -16,8 +16,8 @@ dependencies:
         - sudo apt-get update; sudo apt-get install -y cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5.6.2 python3-nose python3-numpy python3-scipy python3-setuptools swig; sudo apt-get clean
         - mkdir -p third_party/build; cd third_party/build; cmake ..; make; make install; make clean;
         - pip install -r python/requirements.txt;
-        - mkdir build; cd build; cmake ..; make; make tools
-        - sudo ./setup.py install
+        - mkdir build; cd build; cmake ..; make; make tools; make all_tests;
+        - ./setup.py install --user
 
 test:
     override:
