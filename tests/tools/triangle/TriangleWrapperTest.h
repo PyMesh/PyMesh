@@ -10,9 +10,6 @@
 class TriangleWrapperTest : public TestBase {
     protected:
         virtual void SetUp() {
-            std::string proj_root =
-                Environment::get_required("PYMESH_PATH");
-            m_data_dir = proj_root + "/tests/tools/triangle/data/";
             m_vertices.resize(8, 2);
             m_vertices << 0.0, 0.0,
                           1.0, 0.0,
@@ -34,6 +31,7 @@ class TriangleWrapperTest : public TestBase {
                           4, 7;
             m_holes.resize(1, 2);
             m_holes << 0.45, 0.5;
+            TestBase::SetUp();
         }
 
         void save_mesh(const std::string& file_name,
@@ -221,9 +219,9 @@ TEST_F(TriangleWrapperTest, 3DWithHoles) {
 
 TEST_F(TriangleWrapperTest, debug) {
     MatrixFr input_vertices = MatrixIO::load_matrix<MatrixFr>(
-            m_data_dir + "v1.npy");
+            TestBase::m_data_dir + "/v1.npy");
     MatrixIr input_loops = MatrixIO::load_matrix<MatrixIr>(
-            m_data_dir + "e1.npy");
+            TestBase::m_data_dir + "/e1.npy");
     //std::cout << input_vertices.rows() << std::endl;
     //std::cout << input_loops.rows() << std::endl;
 
@@ -241,9 +239,9 @@ TEST_F(TriangleWrapperTest, debug) {
 
 TEST_F(TriangleWrapperTest, debug2) {
     MatrixFr input_vertices = MatrixIO::load_matrix<MatrixFr>(
-            m_data_dir + "v2.npy");
+            TestBase::m_data_dir + "/v2.npy");
     MatrixIr input_loops = MatrixIO::load_matrix<MatrixIr>(
-            m_data_dir + "e2.npy");
+            TestBase::m_data_dir + "/e2.npy");
     //std::cout << input_vertices.rows() << std::endl;
     //std::cout << input_loops.rows() << std::endl;
 
