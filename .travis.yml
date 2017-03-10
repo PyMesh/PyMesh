@@ -15,6 +15,7 @@ matrix:
         - brew outdated cmake || brew upgrade cmake
         - brew outdated cgal || brew upgrade cgal
         - brew install swig
+        - brew unlink python
         - brew install python
         - which python
         - python --version
