@@ -18,7 +18,8 @@ swig \
 && apt-get clean
 
 WORKDIR /root/
-RUN git clone --recursive https://github.com/qnzhou/PyMesh.git
+RUN git clone https://github.com/qnzhou/PyMesh.git
+RUN cd PyMesh && git submodule init && git submodule update
 
 ENV PYMESH_PATH /root/PyMesh
 

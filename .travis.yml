@@ -15,13 +15,14 @@ matrix:
         - brew outdated cmake || brew upgrade cmake
         - brew outdated cgal || brew upgrade cgal
         - brew install swig
+        - brew unlink python
         - brew install python
         - which python
         - python --version
         - which pip
       install:
         - pip install -r python/requirements.txt
-        - git submodule update --init --recursive
+        - git submodule update --init
         - mkdir third_party/build
         - cd third_party/build
         - cmake ..
