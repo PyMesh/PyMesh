@@ -55,17 +55,23 @@ class OBJParser : public MeshParser {
         typedef std::list<VectorF> VertexList;
         typedef std::list<VectorI> FaceList;
         typedef std::list<VectorI>  VoxelList;
-        typedef std::list<VectorF> NormalList;
-        typedef std::list<VectorF> TextureList;
+        typedef std::vector<VectorF> NormalVector;
+        typedef std::vector<VectorF> TextureVector;
         typedef std::list<VectorF> ParameterList;
 
         VertexList m_vertices;
         FaceList   m_faces;
+        FaceList   m_textures;
+        FaceList   m_normals;
         FaceList   m_tris;
         FaceList   m_quads;
+        FaceList   m_tri_textures;
+        FaceList   m_tri_normals;
+        FaceList   m_quad_textures;
+        FaceList   m_quad_normals;
         VoxelList  m_voxels;
-        NormalList m_vertex_normals;
-        TextureList   m_textures;
+        NormalVector  m_corner_normals;
+        TextureVector m_corner_textures;
         ParameterList m_parameters;
         size_t     m_dim;
         size_t     m_vertex_per_face;
