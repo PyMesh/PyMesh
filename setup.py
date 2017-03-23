@@ -11,8 +11,31 @@ package_dir = os.path.join(root_dir, "python/pymesh");
 exec(open(os.path.join(package_dir, 'version.py')).read())
 
 class cmake_build(build):
-    def run(self):
-        print("Overriding default build process");
+    """
+    Python packaging system is messed up.  This class redirect python to use
+    cmake for configuration and compilation of pymesh.
+    """
+
+    def build_third_party(self):
+        """
+        Config and build third party dependencies.
+        """
+        build_dir = os.path.join(root_dir, "third_party/build");
+        if not os.path.isdir(build_dir):
+            os.mkdir(build_dir);
+
+        os.chdir(build_dir);
+        command = "cmake ..";
+        check_call(command.split());
+        command = "make";
+        check_call(command.split());
+        command = "make install";
+        check_call(command.split());
+
+    def build_pymesh(self):
+        """
+        Config and build pymesh.
+        """
         build_dir = os.path.join(root_dir, "build");
         if not os.path.isdir(build_dir):
             os.mkdir(build_dir);
@@ -26,10 +49,13 @@ class cmake_build(build):
         check_call(command.split());
         os.chdir(root_dir);
 
+    def run(self):
+        self.build_third_party();
+        self.build_pymesh();
         build.run(self);
 
 setup(
-        name = "pymesh",
+        name = "pymesh2",
         description = "Mesh Processing for Python",
         version = __version__,
         author = "Qingnan Zhou",
@@ -38,7 +64,12 @@ setup(
         package_dir = {"": "python"},
         packages = ["pymesh", "pymesh.misc", "pymesh.meshutils", "pymesh.wires",
             "pymesh.tests", "pymesh.meshutils.tests", "pymesh.wires.tests"],
-        package_data = {"pymesh": ["swig/*.py", "lib/*.so", "lib/*.dylib", "lib/*.dll", "third_party/lib/*"]},
+        package_data = {"pymesh": [
+            "python/pymesh/swig/*.py",
+            "python/pymesh/lib/*.so",
+            "python/pymesh/lib/*.dylib",
+            "python/pymesh/lib/*.dll",
+            "python/pymesh/third_party/lib/*"]},
         include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
@@ -86,4 +117,9 @@ setup(
             ],
         url = "https://github.com/qnzhou/PyMesh",
         download_url="https://github.com/qnzhou/PyMesh/tarball/v0.1",
+        install_requires=[
+                'numpy',
+                'scipy',
+                'nose'
+                ],
         );
