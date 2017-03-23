@@ -19,7 +19,7 @@ def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
     pymesh.save_mesh(args.output_mesh, mesh,
-            ascii=args.ascii);
+            ascii=args.ascii, *mesh.attribute_names);
 
 if __name__ == "__main__":
     main();

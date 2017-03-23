@@ -386,11 +386,12 @@ void OBJParser::finalize_textures() {
             bad_texture = true;
             break;
         }
-        if (t.size() != m_texture_dim) {
-            std::cerr << "Texture has the wrong dimension." << std::endl;
-            bad_texture = true;
-            break;
-        }
+        //if (t.size() != m_texture_dim) {
+        //    std::cerr << t << std::endl;
+        //    std::cerr << "Texture has the wrong dimension." << std::endl;
+        //    bad_texture = true;
+        //    break;
+        //}
     }
 
     if (bad_texture) {
