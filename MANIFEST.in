@@ -7,3 +7,5 @@ recursive-include cmake *.cmake
 recursive-include eigen_wrapper *.i
 recursive-include scripts *.py
 recursive-include third_party *
+prune build
+prune third_party/build
