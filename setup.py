@@ -22,7 +22,7 @@ class cmake_build(build):
         """
         build_dir = os.path.join(root_dir, "third_party/build");
         if not os.path.isdir(build_dir):
-            os.mkdir(build_dir);
+            os.makedirs(build_dir);
 
         os.chdir(build_dir);
         command = "cmake ..";
@@ -38,7 +38,7 @@ class cmake_build(build):
         """
         build_dir = os.path.join(root_dir, "build");
         if not os.path.isdir(build_dir):
-            os.mkdir(build_dir);
+            os.makedirs(build_dir);
 
         os.chdir(build_dir);
         command = "cmake ..";
