@@ -9,3 +9,6 @@ recursive-include scripts *.py
 recursive-include third_party *
 prune build
 prune third_party/build
+prune third_party/libigl/tutorial
+prune third_party/libigl/libigl-teaser.*
+prune third_party/libigl/external
