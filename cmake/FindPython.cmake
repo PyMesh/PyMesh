@@ -9,9 +9,10 @@
 
 FIND_PACKAGE(PythonInterp REQUIRED)
 EXECUTE_PROCESS(
-    COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.base_prefix)"
+    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_LIST_DIR}/prefix.py
     OUTPUT_VARIABLE PYTHON_PREFIX
     OUTPUT_STRIP_TRAILING_WHITESPACE)
+
 SET(LIBNAME python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR})
 
 # System wide python framework often are not the correct python.
@@ -44,6 +45,7 @@ FIND_LIBRARY(PYTHON_LIBRARIES
     ${LIBNAME}/config
     ${LIBNAME}/config-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}
     ${LIBNAME}/config-${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}m
+    NO_DEFAULT_PATH # Avoid finding incorrect python libraires.
     )
 
 INCLUDE(FindPackageHandleStandardArgs)

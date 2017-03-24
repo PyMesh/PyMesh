@@ -1,20 +1,39 @@
 #!/usr/bin/env python
 
-from setuptools import setup
 from distutils.command.build import build
-from subprocess import check_call;
+import multiprocessing
 import os
 import os.path
+from setuptools import setup
+from subprocess import check_call;
+import shutil
 
 root_dir = os.path.abspath(os.path.dirname(__file__));
 package_dir = os.path.join(root_dir, "python/pymesh");
 exec(open(os.path.join(package_dir, 'version.py')).read())
+
+num_cores = multiprocessing.cpu_count();
+num_cores = max(1, num_cores-1);
 
 class cmake_build(build):
     """
     Python packaging system is messed up.  This class redirect python to use
     cmake for configuration and compilation of pymesh.
     """
+
+    def cleanup(self):
+        install_dir = os.path.join(root_dir, "python/pymesh/third_party/lib");
+        if os.path.exists(install_dir) and os.path.isdir(install_dir):
+            shutil.rmtree(os.path.join(install_dir));
+
+        lib_dir = os.path.join(root_dir, "python/pymesh/lib");
+        if os.path.exists(lib_dir) and os.path.isdir(lib_dir):
+            shutil.rmtree(os.path.join(lib_dir));
+
+        swig_dir = os.path.join(root_dir, "python/pymesh/swig");
+        if os.path.exists(swig_dir) and os.path.isdir(swig_dir):
+            shutil.rmtree(os.path.join(swig_dir));
+
 
     def build_third_party(self):
         """
@@ -27,7 +46,7 @@ class cmake_build(build):
         os.chdir(build_dir);
         command = "cmake ..";
         check_call(command.split());
-        command = "make";
+        command = "make -j {}".format(num_cores);
         check_call(command.split());
         command = "make install";
         check_call(command.split());
@@ -43,13 +62,14 @@ class cmake_build(build):
         os.chdir(build_dir);
         command = "cmake ..";
         check_call(command.split());
-        command = "make";
+        command = "make -j {}".format(num_cores);
         check_call(command.split());
-        command = "make tools";
+        command = "make tools -j {}".format(num_cores);
         check_call(command.split());
         os.chdir(root_dir);
 
     def run(self):
+        self.cleanup();
         self.build_third_party();
         self.build_pymesh();
         build.run(self);
@@ -70,7 +90,7 @@ setup(
             "lib/*.dylib",
             "lib/*.dll",
             "third_party/lib/*"]},
-        include_package_data = True,
+        #include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
             "scripts/add_element_attribute.py",
