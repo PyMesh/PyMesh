@@ -4,14 +4,15 @@ recursive-include tools *
 recursive-include tests *
 recursive-include examples *
 recursive-include cmake *.cmake
+recursive-include cmake *.py
 recursive-include eigen_wrapper *.i
 recursive-include scripts *.py
 recursive-include third_party *
+recursive-exclude third_party *.png
+recursive-exclude third_party *.pdf
 prune build
 prune third_party/build
 prune third_party/libigl/tutorial
-prune third_party/libigl/libigl-teaser.pdf
-prune third_party/libigl/libigl-teaser.png
 prune third_party/libigl/external
 prune third_party/carve/data
 prune third_party/carve/doc
