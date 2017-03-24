@@ -65,11 +65,11 @@ setup(
         packages = ["pymesh", "pymesh.misc", "pymesh.meshutils", "pymesh.wires",
             "pymesh.tests", "pymesh.meshutils.tests", "pymesh.wires.tests"],
         package_data = {"pymesh": [
-            "python/pymesh/swig/*.py",
-            "python/pymesh/lib/*.so",
-            "python/pymesh/lib/*.dylib",
-            "python/pymesh/lib/*.dll",
-            "python/pymesh/third_party/lib/*"]},
+            "swig/*.py",
+            "lib/*.so",
+            "lib/*.dylib",
+            "lib/*.dll",
+            "third_party/lib/*"]},
         include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
@@ -117,9 +117,4 @@ setup(
             ],
         url = "https://github.com/qnzhou/PyMesh",
         download_url="https://github.com/qnzhou/PyMesh/tarball/v0.1",
-        install_requires=[
-                'numpy',
-                'scipy',
-                'nose'
-                ],
         );
