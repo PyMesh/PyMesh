@@ -16,8 +16,8 @@
 class WireTest : public TestBase {
     protected:
         virtual void SetUp() {
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_data_dir = project_dir + "/tests/tools/Wires/data/";
+            TestBase::SetUp();
+            m_data_dir = TestBase::m_data_dir + "/../tools/Wires/data/";
         }
 
         WireNetwork load_wire(const std::string& filename) {

@@ -16,8 +16,7 @@ class MeshTilerTest : public WireTest {
 
         virtual void SetUp() {
             WireTest::SetUp();
-            std::string project_dir = Environment::get("PYMESH_PATH");
-            m_mesh_data_dir = project_dir + "/tests/data/";
+            m_mesh_data_dir = WireTest::m_data_dir + "/../../../data/";
         }
 
         MeshPtr load_mesh(const std::string& mesh_file) {
