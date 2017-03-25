@@ -141,4 +141,5 @@ setup(
             ],
         url = "https://github.com/qnzhou/PyMesh",
         download_url="https://github.com/qnzhou/PyMesh/tarball/v0.1",
+        distclass=BinaryDistribution,
         );
