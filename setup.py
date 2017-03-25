@@ -4,8 +4,8 @@ from distutils.command.build import build
 import multiprocessing
 import os
 import os.path
-from setuptools import setup
-from subprocess import check_call;
+from setuptools import setup, Distribution
+from subprocess import check_call
 import shutil
 
 root_dir = os.path.abspath(os.path.dirname(__file__));
@@ -14,6 +14,10 @@ exec(open(os.path.join(package_dir, 'version.py')).read())
 
 num_cores = multiprocessing.cpu_count();
 num_cores = max(1, num_cores-1);
+
+class BinaryDistribution(Distribution):
+    def is_pure(self):
+        return False
 
 class cmake_build(build):
     """
