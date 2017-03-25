@@ -17,7 +17,10 @@ num_cores = max(1, num_cores-1);
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
-        return False
+        return False;
+
+    def has_ext_modules(self):
+        return True;
 
 class cmake_build(build):
     """
