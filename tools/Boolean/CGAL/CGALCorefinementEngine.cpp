@@ -4,6 +4,8 @@
 
 #include <vector>
 
+#include <CGAL/Union_find.h>
+#include <CGAL/internal/corefinement/connected_components.h>
 #include <CGAL/corefinement_operations.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Polyhedron_3.h>
