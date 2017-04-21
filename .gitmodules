@@ -27,4 +27,4 @@
 	url = https://github.com/qnzhou/quartet.git
 [submodule "third_party/cgal"]
 	path = third_party/cgal
-	url = git@github.com:qnzhou/cgal.git
+	url = https://github.com/qnzhou/cgal.git
