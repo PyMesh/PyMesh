@@ -10,7 +10,6 @@ libgmpxx4ldbl \
 libumfpack5.6.2 \
 libboost-dev \
 libboost-thread-dev \
-libboost-system-dev \
 python-nose \
 python-numpy \
 python-scipy \
