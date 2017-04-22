@@ -74,11 +74,13 @@ else:
 
 try:
     import PyTetrahedronization
+    import PyTetgen
 except ImportError:
     pass;
 else:
-    from .tetrahedralize import tetrahedralize
+    from .tetrahedralize import tetrahedralize, tetgen
     __all__.append("tetrahedralize");
+    __all__.append("tetgen");
 
 try:
     import PyTriangle, PyTriangulation
