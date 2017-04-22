@@ -98,7 +98,10 @@ setup(
             "lib/*.dll",
             "third_party/lib/*.so",
             "third_party/lib/*.dylib",
-            "third_party/lib/*.dll" ]},
+            "third_party/lib/*.dll",
+            "third_party/lib64/*.so",
+            "third_party/lib64/*.dylib",
+            "third_party/lib64/*.dll" ]},
         #include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
