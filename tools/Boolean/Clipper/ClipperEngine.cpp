@@ -69,8 +69,9 @@ namespace ClipperEngineHelper {
                 return Vector2F(p.X, p.Y) / FACTOR;
             }
 
-            static const int FACTOR = 1<<23;
+            static const int FACTOR;
     };
+    const int PointConvert::FACTOR = 1<<23;
 
     ClipperLib::Path loop_to_path(const MatrixFr& vertices, const Loop& loop) {
         ClipperLib::Path path;

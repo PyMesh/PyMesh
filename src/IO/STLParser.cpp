@@ -338,7 +338,9 @@ void STLParser::merge_identical_vertices() {
 
     size_t num_vertices = m_vertices.size();
     VectorI indices(num_vertices);
-    indices.setLinSpaced(num_vertices, 0, num_vertices-1);
+    if (num_vertices > 0) {
+        indices.setLinSpaced(num_vertices, 0, num_vertices-1);
+    }
     std::sort(indices.data(), indices.data()+num_vertices,
             index_comp);
 
