@@ -1,4 +1,4 @@
-/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+/* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
@@ -41,6 +41,7 @@
 #include "Attributes/VoxelEdgeRatioAttributeTest.h"
 #include "Attributes/VoxelIncenterAttributeTest.h"
 #include "Attributes/VoxelIndexAttributeTest.h"
+#include "Attributes/VoxelInradiusAttributeTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
 #include "Attributes/VertexIndexAttributeTest.h"
 #include "Attributes/VertexGaussianCurvatureAttributeTest.h"

@@ -1,4 +1,4 @@
-/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+/* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #include "MeshAttributeFactory.h"
 
 #include "EdgeLengthAttribute.h"
@@ -29,6 +29,7 @@
 #include "VoxelDihedralAngleAttribute.h"
 #include "VoxelEdgeRatioAttribute.h"
 #include "VoxelIncenterAttribute.h"
+#include "VoxelInradiusAttribute.h"
 #include "VoxelIndexAttribute.h"
 #include "VoxelVolumeAttribute.h"
 
@@ -113,6 +114,9 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return attr;
     } else if (name == "voxel_incenter") {
         MeshAttribute::Ptr attr(new VoxelIncenterAttribute(name));
+        return attr;
+    } else if (name == "voxel_inradius") {
+        MeshAttribute::Ptr attr(new VoxelInradiusAttribute(name));
         return attr;
     } else if (name == "voxel_index") {
         MeshAttribute::Ptr attr(new VoxelIndexAttribute(name));
