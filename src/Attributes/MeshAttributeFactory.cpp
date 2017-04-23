@@ -28,6 +28,7 @@
 #include "VoxelCentroidAttribute.h"
 #include "VoxelDihedralAngleAttribute.h"
 #include "VoxelEdgeRatioAttribute.h"
+#include "VoxelIncenterAttribute.h"
 #include "VoxelIndexAttribute.h"
 #include "VoxelVolumeAttribute.h"
 
@@ -109,6 +110,9 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return attr;
     } else if (name == "voxel_edge_ratio") {
         MeshAttribute::Ptr attr(new VoxelEdgeRatioAttribute(name));
+        return attr;
+    } else if (name == "voxel_incenter") {
+        MeshAttribute::Ptr attr(new VoxelIncenterAttribute(name));
         return attr;
     } else if (name == "voxel_index") {
         MeshAttribute::Ptr attr(new VoxelIndexAttribute(name));

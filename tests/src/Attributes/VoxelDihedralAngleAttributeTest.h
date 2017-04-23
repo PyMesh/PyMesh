@@ -1,4 +1,4 @@
-/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+/* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
 
 #include <TestBase.h>
