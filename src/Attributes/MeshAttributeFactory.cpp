@@ -27,6 +27,7 @@
 #include "VertexVolumeAttribute.h"
 #include "VoxelCentroidAttribute.h"
 #include "VoxelCircumCenterAttribute.h"
+#include "VoxelCircumRadiusAttribute.h"
 #include "VoxelDihedralAngleAttribute.h"
 #include "VoxelEdgeRatioAttribute.h"
 #include "VoxelIncenterAttribute.h"
@@ -115,6 +116,9 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return attr;
     } else if (name == "voxel_circum_center") {
         MeshAttribute::Ptr attr(new VoxelCircumCenterAttribute(name));
+        return attr;
+    } else if (name == "voxel_circum_radius") {
+        MeshAttribute::Ptr attr(new VoxelCircumRadiusAttribute(name));
         return attr;
     } else if (name == "voxel_incenter") {
         MeshAttribute::Ptr attr(new VoxelIncenterAttribute(name));
