@@ -114,10 +114,10 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
     } else if (name == "voxel_edge_ratio") {
         MeshAttribute::Ptr attr(new VoxelEdgeRatioAttribute(name));
         return attr;
-    } else if (name == "voxel_circum_center") {
+    } else if (name == "voxel_circumcenter") {
         MeshAttribute::Ptr attr(new VoxelCircumCenterAttribute(name));
         return attr;
-    } else if (name == "voxel_circum_radius") {
+    } else if (name == "voxel_circumradius") {
         MeshAttribute::Ptr attr(new VoxelCircumRadiusAttribute(name));
         return attr;
     } else if (name == "voxel_incenter") {

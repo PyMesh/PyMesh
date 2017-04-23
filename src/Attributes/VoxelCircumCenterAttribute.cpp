@@ -37,10 +37,10 @@ void VoxelCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         Float v3_norm = v3.norm();
 
         Matrix4F alpha;
-        alpha.row(0) << v0, 1;
-        alpha.row(1) << v1, 1;
-        alpha.row(2) << v2, 1;
-        alpha.row(3) << v3, 1;
+        alpha.row(0) << v0.transpose(), 1;
+        alpha.row(1) << v1.transpose(), 1;
+        alpha.row(2) << v2.transpose(), 1;
+        alpha.row(3) << v3.transpose(), 1;
         Float alpha_det = alpha.determinant();
 
         Matrix4F Dx;

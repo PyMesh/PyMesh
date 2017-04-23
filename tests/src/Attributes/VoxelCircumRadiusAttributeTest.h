@@ -8,11 +8,11 @@ class VoxelCircumRadiusAttributeTest : public TestBase {
 
 TEST_F(VoxelCircumRadiusAttributeTest, tet) {
     MeshPtr mesh = load_mesh("tet.msh");
-    mesh->add_attribute("voxel_circum_center");
-    ASSERT_TRUE(mesh->has_attribute("voxel_circum_center"));
-    mesh->add_attribute("voxel_circum_radius");
-    VectorF circumradius = mesh->get_attribute("voxel_circum_radius");
-    VectorF circumcenter = mesh->get_attribute("voxel_circum_center");
+    mesh->add_attribute("voxel_circumcenter");
+    ASSERT_TRUE(mesh->has_attribute("voxel_circumcenter"));
+    mesh->add_attribute("voxel_circumradius");
+    VectorF circumradius = mesh->get_attribute("voxel_circumradius");
+    VectorF circumcenter = mesh->get_attribute("voxel_circumcenter");
     ASSERT_EQ(3, circumcenter.size());
     ASSERT_EQ(1, circumradius.size());
 

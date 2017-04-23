@@ -141,6 +141,14 @@ def print_quantile_info(mesh, info):
         quantile_breakdown(edge_ratio, "voxel_edge_ratio", info,
                 title="Voxel edge ratio", with_total=False);
 
+        mesh.add_attribute("voxel_inradius");
+        mesh.add_attribute("voxel_circumradius");
+        inradius = mesh.get_attribute("voxel_inradius").ravel();
+        circumradius = mesh.get_attribute("voxel_circumradius").ravel();
+        radius_ratio = np.divide(inradius, circumradius);
+        quantile_breakdown(radius_ratio, "voxel_radius_ratio", info,
+                title="Voxel radius ratio", with_total=False);
+
 def print_voxel_info(mesh, info):
     if (mesh.num_voxels == 0):
         print_section_header("Volume Estimation");

@@ -19,10 +19,10 @@ void VoxelCircumRadiusAttribute::compute_from_mesh(Mesh& mesh) {
         throw RuntimeError("Voxel incenter is defined for 3D tet mesh only.");
     }
 
-    if (!mesh.has_attribute("voxel_circum_center")) {
-        mesh.add_attribute("voxel_circum_center");
+    if (!mesh.has_attribute("voxel_circumcenter")) {
+        mesh.add_attribute("voxel_circumcenter");
     }
-    const auto& circumcenter = mesh.get_attribute("voxel_circum_center");
+    const auto& circumcenter = mesh.get_attribute("voxel_circumcenter");
 
     VectorF& circumradius = m_values;
     circumradius.resize(num_voxels);
