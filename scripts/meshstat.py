@@ -120,7 +120,26 @@ def print_quantile_info(mesh, info):
     mesh.add_attribute("edge_dihedral_angle");
     dihedral_angles = mesh.get_attribute("edge_dihedral_angle");
     quantile_breakdown(dihedral_angles, "dihedral_angle", info,
-            title = "Dihedral Angle", with_total=False);
+            title = "Edge Dihedral Angle", with_total=False);
+
+    if (mesh.num_voxels > 0):
+        mesh.add_attribute("voxel_dihedral_angle");
+        voxel_dihedral_angle = mesh.get_attribute("voxel_dihedral_angle");
+        voxel_dihedral_angle = voxel_dihedral_angle.reshape((-1, 6));
+        min_voxel_dihedral_angle = np.amin(voxel_dihedral_angle, axis=1);
+        max_voxel_dihedral_angle = np.amax(voxel_dihedral_angle, axis=1);
+
+        quantile_breakdown(min_voxel_dihedral_angle,
+                "voxel_min_dihedral_angle", info,
+                title="Per-voxel min dihedral Angle", with_total=False);
+        quantile_breakdown(max_voxel_dihedral_angle,
+                "voxel_max_dihedral_angle", info,
+                title="Per-voxel max dihedral Angle", with_total=False);
+
+        mesh.add_attribute("voxel_edge_ratio");
+        edge_ratio = mesh.get_attribute("voxel_edge_ratio");
+        quantile_breakdown(edge_ratio, "voxel_edge_ratio", info,
+                title="Voxel edge ratio", with_total=False);
 
 def print_voxel_info(mesh, info):
     if (mesh.num_voxels == 0):

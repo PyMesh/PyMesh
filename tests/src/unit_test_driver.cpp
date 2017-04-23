@@ -38,6 +38,7 @@
 #include "Attributes/FaceVoronoiAreaAttributeTest.h"
 #include "Attributes/VoxelCentroidAttributeTest.h"
 #include "Attributes/VoxelDihedralAngleAttributeTest.h"
+#include "Attributes/VoxelEdgeRatioAttributeTest.h"
 #include "Attributes/VoxelIndexAttributeTest.h"
 #include "Attributes/VoxelVolumeAttributeTest.h"
 #include "Attributes/VertexIndexAttributeTest.h"

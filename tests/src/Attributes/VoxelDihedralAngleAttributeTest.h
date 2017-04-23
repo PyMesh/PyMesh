@@ -2,7 +2,6 @@
 #pragma once
 
 #include <TestBase.h>
-#include <iostream>
 
 class VoxelDihedralAngleAttributeTest : public TestBase {
 };
