@@ -31,10 +31,10 @@ void VoxelCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         Vector3F v2 = vertices.segment<3>(voxel[2]*3);
         Vector3F v3 = vertices.segment<3>(voxel[3]*3);
 
-        Float v0_norm = v0.norm();
-        Float v1_norm = v1.norm();
-        Float v2_norm = v2.norm();
-        Float v3_norm = v3.norm();
+        Float v0_norm = v0.squaredNorm();
+        Float v1_norm = v1.squaredNorm();
+        Float v2_norm = v2.squaredNorm();
+        Float v3_norm = v3.squaredNorm();
 
         Matrix4F alpha;
         alpha.row(0) << v0.transpose(), 1;

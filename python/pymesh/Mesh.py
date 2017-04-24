@@ -129,6 +129,11 @@ class Mesh(object):
         """
         self.__mesh.set_attribute(name, val);
 
+    def remove_attribute(self, name):
+        """ Remove attribute from mesh.
+        """
+        self.__mesh.remove_attribute(name);
+
     def get_attribute_names(self):
         """ Get names of all attributes associated with this mesh.
         """
