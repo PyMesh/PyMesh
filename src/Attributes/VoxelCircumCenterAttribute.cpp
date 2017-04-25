@@ -30,6 +30,11 @@ void VoxelCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         Vector3F v1 = vertices.segment<3>(voxel[1]*3);
         Vector3F v2 = vertices.segment<3>(voxel[2]*3);
         Vector3F v3 = vertices.segment<3>(voxel[3]*3);
+        Vector3F c = (v0 + v1 + v2 + v3) / 4;
+        v0 -= c;
+        v1 -= c;
+        v2 -= c;
+        v3 -= c;
 
         Float v0_norm = v0.squaredNorm();
         Float v1_norm = v1.squaredNorm();
@@ -65,9 +70,9 @@ void VoxelCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
         Float Dz_det = Dz.determinant();
 
         circumcenter.segment<3>(i*3) <<
-            Dx_det / (2 * alpha_det),
-            Dy_det / (2 * alpha_det),
-            Dz_det / (2 * alpha_det);
+            Dx_det / (2 * alpha_det) + c[0],
+            Dy_det / (2 * alpha_det) + c[1],
+            Dz_det / (2 * alpha_det) + c[2];
     }
 }
 

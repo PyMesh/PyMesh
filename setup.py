@@ -134,6 +134,7 @@ setup(
             "scripts/print_utils.py",
             "scripts/quad_to_tri.py",
             "scripts/remove_degenerated_triangles.py",
+            "scripts/remove_isolated_vertices.py",
             "scripts/resolve_self_intersection.py",
             "scripts/retriangulate.py",
             "scripts/rigid_transform.py",
