@@ -146,6 +146,7 @@ setup(
             "scripts/submesh.py",
             "scripts/tet.py",
             "scripts/tetgen.py",
+            "scripts/tet_boundary.py",
             "scripts/tet_to_hex.py",
             "scripts/voxelize.py",
             ],
