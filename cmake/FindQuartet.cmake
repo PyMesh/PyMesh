@@ -8,7 +8,7 @@
 # It searches the environment variable $QUARTET_PATH automatically.
 
 FIND_PATH(QUARTET_INCLUDE_DIRS
-    NAMES make_tet_mesh.h
+    NAMES quartet/make_tet_mesh.h
     PATHS
     $ENV{QUARTET_PATH}
     $ENV{QUARTET_PATH}/include/
