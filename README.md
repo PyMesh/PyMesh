@@ -16,8 +16,7 @@ for create minimalistic and easy to use interfaces.
 
 To retrieve the code:
 
-    git clone https://github.com/qnzhou/PyMesh.git
-    git submodule update --init
+    git clone --recursive https://github.com/qnzhou/PyMesh.git
 
 Be sure to save the root directory of PyMesh in the environment variable
 PYMESH_PATH:
