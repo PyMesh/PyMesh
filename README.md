@@ -33,7 +33,7 @@ PyMesh depends on the following tools/libraries:
 * [Python](https://www.python.org/) v3.x.
 * [NumPy](http://www.numpy.org/) v1.8 or higher
 * [SciPy](http://www.scipy.org/) v0.13 or higher
-* [Nose](http://nose.readthedocs.io/en/latest/) v1.3.7 or higher
+* [nose](http://nose.readthedocs.io/en/latest/) v1.3.7 or higher
 * [SWIG](http://www.swig.org/) v3.0.5 or higher
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) v3.2 or higher
 
