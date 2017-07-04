@@ -1,4 +1,6 @@
 [![CircleCI](https://circleci.com/gh/qnzhou/PyMesh/tree/master.svg?style=svg)](https://circleci.com/gh/qnzhou/PyMesh/tree/master)
+[![Documentation Status](https://readthedocs.org/projects/pymesh/badge/?version=latest)](http://pymesh.readthedocs.io/en/latest/?badge=latest)
+
 
 ### About PyMesh ###
 
