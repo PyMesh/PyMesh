@@ -252,9 +252,9 @@ void InflatorEngine::check_thickness() const {
         err_msg << "Very thin thickness detected: " << min_thickness <<
             std::endl;
         err_msg << "PyWires assumes thickness have unit mm" << std::endl;
-        err_msg << "Thickness of such small value is typically not printible."
+        err_msg << "Thickness of such small value is typically not printable."
             << std::endl;
-        throw RuntimeError(err_msg.str());
+        std::cerr << err_msg.str();
     }
 }
 
