@@ -28,7 +28,7 @@ def main():
     inflator.set_refinement(
             order = args.refinement_order,
             method = args.refinement_method);
-    inflator.inflate(args.thickness);
+    inflator.inflate(args.thickness, allow_self_intersection=True);
 
     mesh = inflator.mesh;
     pymesh.save_mesh(args.mesh_file, mesh, *mesh.get_attribute_names());
