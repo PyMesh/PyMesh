@@ -73,7 +73,7 @@ bool ConvexHullEngine::supports(
 void ConvexHullEngine::reorient_faces() {
     const size_t dim = m_vertices.cols();
     const size_t num_faces = m_faces.rows();
-    VectorF center = m_vertices.colwise().minCoeff();
+    VectorF center = m_vertices.colwise().mean();
     if (dim == 2) {
         for (size_t i=0; i<num_faces; i++) {
             Vector2F v0 = m_vertices.row(m_faces(i,0)) - center.transpose();
