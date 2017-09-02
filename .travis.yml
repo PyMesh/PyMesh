@@ -19,9 +19,8 @@ matrix:
         - brew install python
         - which python
         - python --version
-        - which pip
       install:
-        - pip install -r python/requirements.txt
+        - pip2 install -r python/requirements.txt
         - git submodule update --init
         - mkdir third_party/build
         - cd third_party/build
