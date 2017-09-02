@@ -28,6 +28,7 @@ from .meshutils import *
 from .misc import *
 from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from .slice_mesh import slice_mesh
+from .submesh import submesh
 from .VoxelGrid import VoxelGrid
 
 __all__ = [
@@ -42,6 +43,7 @@ __all__ = [
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull",
+        "submesh",
         "timethis",
         "oriented_3D",
         "oriented_2D",
