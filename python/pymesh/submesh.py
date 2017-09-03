@@ -25,12 +25,27 @@ def extract_submesh_surface(mesh, face_indices, n_ring):
     ring_index = (ring_index[selected_faces] - n_ring - 1) * (-1);
 
     vertices, faces, __ = remove_isolated_vertices_raw(vertices, faces);
-    mesh = form_mesh(vertices, faces);
-    mesh.add_attribute("ori_face_index");
-    mesh.set_attribute("ori_face_index", selected_face_indices);
-    mesh.add_attribute("ring");
-    mesh.set_attribute("ring", ring_index);
-    return mesh;
+    out_mesh = form_mesh(vertices, faces);
+    out_mesh.add_attribute("ori_face_index");
+    out_mesh.set_attribute("ori_face_index", selected_face_indices);
+    out_mesh.add_attribute("ring");
+    out_mesh.set_attribute("ring", ring_index);
+
+    # Transport attributes to output mesh.
+    for name in mesh.attribute_names:
+        attr = mesh.get_attribute(name);
+        if len(attr) % mesh.num_vertices == 0:
+            attr = attr.reshape((mesh.num_vertices, -1), order="C");
+            attr = attr[info["ori_vertex_index"]];
+            out_mesh.add_attribute(name);
+            out_mesh.set_attribute(name, attr);
+        elif len(attr) % mesh.num_faces == 0:
+            attr = attr.reshape((mesh.num_faces, -1), order="C");
+            attr = attr[selected_faces]
+            out_mesh.add_attribute(name);
+            out_mesh.set_attribute(name, attr);
+
+    return out_mesh;
 
 def extract_submesh_volume(mesh, tet_indices, n_ring):
     vertices = mesh.vertices;
@@ -47,13 +62,28 @@ def extract_submesh_volume(mesh, tet_indices, n_ring):
     voxels = mesh.voxels[selected_voxels];
     ring_index = (ring_index[selected_voxels] - n_ring - 1) * (-1);
 
-    vertices, voxels, __ = remove_isolated_vertices_raw(vertices, voxels);
-    mesh = form_mesh(vertices, np.array([]), voxels);
-    mesh.add_attribute("ori_voxel_index");
-    mesh.set_attribute("ori_voxel_index", selected_voxel_indices);
-    mesh.add_attribute("ring");
-    mesh.set_attribute("ring", ring_index);
-    return mesh;
+    vertices, voxels, info = remove_isolated_vertices_raw(vertices, voxels);
+    out_mesh = form_mesh(vertices, np.array([]), voxels);
+    out_mesh.add_attribute("ori_voxel_index");
+    out_mesh.set_attribute("ori_voxel_index", selected_voxel_indices);
+    out_mesh.add_attribute("ring");
+    out_mesh.set_attribute("ring", ring_index);
+
+    # Transport attributes to output mesh.
+    for name in mesh.attribute_names:
+        attr = mesh.get_attribute(name);
+        if len(attr) % mesh.num_vertices == 0:
+            attr = attr.reshape((mesh.num_vertices, -1), order="C");
+            attr = attr[info["ori_vertex_index"]];
+            out_mesh.add_attribute(name);
+            out_mesh.set_attribute(name, attr);
+        elif len(attr) % mesh.num_voxels == 0:
+            attr = attr.reshape((mesh.num_voxels, -1), order="C");
+            attr = attr[selected_voxels]
+            out_mesh.add_attribute(name);
+            out_mesh.set_attribute(name, attr);
+
+    return out_mesh;
 
 def submesh(mesh, element_indices, num_rings):
     """ Extract a subset of the mesh elements and forming a new mesh.
