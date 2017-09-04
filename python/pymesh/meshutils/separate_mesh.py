@@ -66,6 +66,26 @@ def separate_mesh(mesh, connectivity_type="auto"):
         comp_mesh.set_attribute("ori_vertex_index", info["ori_vertex_index"]);
         comp_mesh.add_attribute("ori_elem_index");
         comp_mesh.set_attribute("ori_elem_index", elem_sources);
+
+        for name in mesh.attribute_names:
+            attr = mesh.get_attribute(name);
+            if len(attr) % mesh.num_vertices == 0:
+                attr = attr.reshape((mesh.num_vertices, -1), order="C");
+                attr = attr[info["ori_vertex_index"]];
+                comp_mesh.add_attribute(name);
+                comp_mesh.set_attribute(name, attr);
+            elif not is_voxel_mesh and len(attr) % mesh.num_faces == 0:
+                attr = attr.reshape((mesh.num_faces, -1), order="C");
+                attr = attr[elem_sources];
+                comp_mesh.add_attribute(name);
+                comp_mesh.set_attribute(name, attr);
+            elif is_voxel_mesh and len(attr) % mesh.num_voxels == 0:
+                attr = attr.reshape((mesh.num_voxels, -1), order="C");
+                attr = attr[elem_sources];
+                comp_mesh.add_attribute(name);
+                comp_mesh.set_attribute(name, attr);
+
+
         comp_meshes.append(comp_mesh);
 
     return comp_meshes;
