@@ -16,7 +16,7 @@ class WriterTest : public TestBase {
             MeshPtr mesh = MeshFactory()
                 .load_file(m_tmp_dir + mesh_file)
                 .drop_zero_dim()
-                .create_shared();
+                .create();
             return mesh;
         }
 

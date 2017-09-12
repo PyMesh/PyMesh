@@ -24,7 +24,6 @@ class MeshWriter {
     public:
         typedef std::shared_ptr<MeshWriter> Ptr;
 
-        static MeshWriter* create_writer(const std::string& filename);
         static Ptr create(const std::string& filename);
 
     public:
@@ -32,13 +31,13 @@ class MeshWriter {
         virtual ~MeshWriter() {}
 
     public:
-        virtual void with_attribute(const std::string& attr_name)=0;
+        virtual void with_attribute(const std::string& attr_name) {};
         virtual void in_ascii() {}
         virtual void use_float() {}
 
-        virtual void write_mesh(Mesh& mesh)=0;
+        virtual void write_mesh(Mesh& mesh) {}
         virtual void write(const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
-                size_t dim, size_t vertex_per_face, size_t vertex_per_voxel)=0;
+                size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {}
 
     public:
         void set_output_filename(const std::string& filename) {

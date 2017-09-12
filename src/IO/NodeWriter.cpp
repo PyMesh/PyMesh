@@ -42,7 +42,7 @@ void NodeWriter::write(
         size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
     Mesh::Ptr mesh = MeshFactory()
         .load_data(vertices, faces, voxels, dim, vertex_per_face, vertex_per_voxel)
-        .create_shared();
+        .create();
     write_mesh(*mesh);
 }
 

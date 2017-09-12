@@ -50,20 +50,5 @@ TARGET_LINK_LIBRARIES(lib_tetrahedronization
 SET_TARGET_PROPERTIES(lib_tetrahedronization PROPERTIES OUTPUT_NAME
     "tetrahedronization")
 
-IF(NOT WITHOUT_SWIG)
-    SET(SWG_FILES PyTetrahedronization.i)
-
-    # Generate wrapper for python
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-    SWIG_ADD_MODULE(PyTetrahedronization python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyTetrahedronization ${PYTHON_LIBRARIES} lib_tetrahedronization)
-
-    # Boudle exe, lib, swig wrapper into a single target.
-    # To build all: "make tetrahedronization"
-    ADD_CUSTOM_TARGET(tetrahedronization DEPENDS
-        lib_tetrahedronization _PyTetrahedronization)
-ELSE(NOT WITHOUT_SWIG)
-    ADD_CUSTOM_TARGET(tetrahedronization DEPENDS lib_tetrahedronization)
-ENDIF(NOT WITHOUT_SWIG)
+ADD_CUSTOM_TARGET(tetrahedronization DEPENDS lib_tetrahedronization)
 

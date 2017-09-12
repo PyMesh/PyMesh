@@ -87,19 +87,4 @@ ADD_LIBRARY(lib_boolean SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_boolean PROPERTIES OUTPUT_NAME "boolean")
 TARGET_LINK_LIBRARIES(lib_boolean Mesh lib_MeshUtils ${DEPENDENT_LIBS})
 
-IF(NOT WITHOUT_SWIG)
-    set(SWG_FILES PyBoolean.i)
-
-    # Generate wrapper for python
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-    SWIG_ADD_MODULE(PyBoolean python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyBoolean ${PYTHON_LIBRARIES} Mesh lib_MeshUtils
-        lib_boolean ${DEPENDENT_LIBS})
-
-    # Boudle lib, swig wrapper into a single target.
-    # Usage: make boolean
-    ADD_CUSTOM_TARGET(boolean DEPENDS lib_boolean _PyBoolean)
-ELSE(NOT WITHOUT_SWIG)
-    ADD_CUSTOM_TARGET(boolean DEPENDS lib_boolean)
-ENDIF(NOT WITHOUT_SWIG)
+ADD_CUSTOM_TARGET(boolean DEPENDS lib_boolean)

@@ -24,20 +24,4 @@ ADD_LIBRARY(lib_outer_hull SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_outer_hull PROPERTIES OUTPUT_NAME "outer_hull")
 TARGET_LINK_LIBRARIES(lib_outer_hull Mesh lib_MeshUtils lib_self_intersection ${DEPENDENT_LIBS})
 
-IF(NOT WITHOUT_SWIG)
-    set(SWG_FILES PyOuterHull.i)
-
-    # Generate wrapper for python
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-    SWIG_ADD_MODULE(PyOuterHull python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyOuterHull ${PYTHON_LIBRARIES} Mesh lib_MeshUtils
-        lib_outer_hull ${DEPENDENT_LIBS})
-
-    # Boudle lib, swig wrapper into a single target.
-    # Usage: make outer_hull
-    ADD_CUSTOM_TARGET(outer_hull DEPENDS lib_outer_hull
-        _PyOuterHull)
-ELSE(NOT WITHOUT_SWIG)
-    ADD_CUSTOM_TARGET(outer_hull DEPENDS lib_outer_hull)
-ENDIF(NOT WITHOUT_SWIG)
+ADD_CUSTOM_TARGET(outer_hull DEPENDS lib_outer_hull)

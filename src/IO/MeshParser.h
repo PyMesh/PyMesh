@@ -1,7 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
-#include <vector>
+#include <memory>
 #include <string>
+#include <vector>
 
 #include <Core/EigenTypedef.h>
 
@@ -9,7 +10,8 @@ namespace PyMesh {
 
 class MeshParser {
     public:
-        static MeshParser* create_parser(const std::string& filename);
+        using Ptr = std::shared_ptr<MeshParser>;
+        static Ptr create_parser(const std::string& filename);
 
     public:
         typedef std::vector<std::string> AttrNames;

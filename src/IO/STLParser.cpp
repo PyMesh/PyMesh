@@ -323,7 +323,8 @@ bool STLParser::parse_binary(const std::string& filename) {
 }
 
 void STLParser::merge_identical_vertices() {
-    const auto index_comp = [&](size_t i1, size_t i2) -> bool {
+    using Index = VectorI::Scalar;
+    const auto index_comp = [this](Index i1, Index i2) -> bool {
         const auto& v1 = m_vertices[i1];
         const auto& v2 = m_vertices[i2];
         if (v1[0] != v2[0]) {
@@ -336,7 +337,7 @@ void STLParser::merge_identical_vertices() {
         return false;
     };
 
-    size_t num_vertices = m_vertices.size();
+    const size_t num_vertices = m_vertices.size();
     VectorI indices(num_vertices);
     if (num_vertices > 0) {
         indices.setLinSpaced(num_vertices, 0, num_vertices-1);

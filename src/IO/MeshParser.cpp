@@ -19,26 +19,26 @@
 using namespace PyMesh;
 
 // Static factory method
-MeshParser* MeshParser::create_parser(const std::string& filename) {
-    MeshParser* parser = NULL;
+MeshParser::Ptr MeshParser::create_parser(const std::string& filename) {
+    Ptr parser;
     std::string ext = IOUtils::get_extention(filename);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == ".obj") {
-        parser= new OBJParser();
+        parser = Ptr(new OBJParser());
     } else if (ext == ".off") {
-        parser= new OFFParser();
+        parser = Ptr(new OFFParser());
     } else if (ext == ".mesh") {
-        parser = new MEDITParser();
+        parser = Ptr(new MEDITParser());
     } else if (ext == ".msh") {
-        parser = new MSHParser();
+        parser = Ptr(new MSHParser());
     } else if (ext == ".node") {
-        parser = new NodeParser();
+        parser = Ptr(new NodeParser());
     } else if (ext == ".stl") {
-        parser = new STLParser();
+        parser = Ptr(new STLParser());
     } else if (ext == ".ply") {
-        parser = new PLYParser();
+        parser = Ptr(new PLYParser());
     } else if (ext == ".poly") {
-        parser = new POLYParser();
+        parser = Ptr(new POLYParser());
     } else {
         std::stringstream err_msg;
         err_msg << "Error: extention (" << ext << ") is not supported"
