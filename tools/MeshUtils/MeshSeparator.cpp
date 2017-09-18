@@ -12,7 +12,7 @@
 
 using namespace PyMesh;
 
-MeshSeparator::MeshSeparator(const MatrixI& elements)
+MeshSeparator::MeshSeparator(const MatrixIr& elements)
     : m_elements(elements), m_connectivity_type(VERTEX) { }
 
 size_t MeshSeparator::separate() {
@@ -26,8 +26,7 @@ size_t MeshSeparator::separate() {
     for (size_t i=0; i<num_elements; i++) {
         if (m_visited[i]) continue;
         VectorI sources;
-        MatrixI comp_f = flood(i, sources);
-        m_components.push_back(comp_f);
+        m_components.push_back(flood(i, sources));
         m_sources.push_back(sources);
     }
 
@@ -109,7 +108,7 @@ void MeshSeparator::compute_voxel_connectivity() {
     }
 }
 
-MatrixI MeshSeparator::flood(size_t seed, VectorI& sources) {
+MatrixIr MeshSeparator::flood(size_t seed, VectorI& sources) {
     std::queue<size_t> Q;
     Q.push(seed);
     m_visited[seed] = true;
@@ -130,7 +129,7 @@ MatrixI MeshSeparator::flood(size_t seed, VectorI& sources) {
     }
 
     const size_t vertex_per_element = m_elements.cols();
-    MatrixI comp(element_list.size(), vertex_per_element);
+    MatrixIr comp(element_list.size(), vertex_per_element);
     sources.resize(element_list.size());
     size_t count = 0;
     for (std::list<size_t>::const_iterator itr = element_list.begin();

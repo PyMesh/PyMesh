@@ -8,7 +8,7 @@
 namespace PyMesh {
 class ObtuseTriangleRemoval {
     public:
-        ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces);
+        ObtuseTriangleRemoval(const MatrixFr& vertices, const MatrixIr& faces);
 
     public:
         // Angle in radian

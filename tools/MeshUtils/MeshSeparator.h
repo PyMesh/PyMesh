@@ -10,7 +10,7 @@ namespace PyMesh {
 
 class MeshSeparator {
     public:
-        MeshSeparator(const MatrixI& elements);
+        MeshSeparator(const MatrixIr& elements);
 
         enum ConnectivityType {
             VERTEX,
@@ -27,7 +27,7 @@ class MeshSeparator {
 
         size_t separate();
 
-        MatrixI get_component(size_t i) const {
+        MatrixIr get_component(size_t i) const {
             return m_components.at(i);
         }
 
@@ -43,13 +43,13 @@ class MeshSeparator {
         void compute_face_connectivity();
         void compute_voxel_connectivity();
 
-        MatrixI flood(size_t seed, VectorI& sources);
+        MatrixIr flood(size_t seed, VectorI& sources);
         std::vector<size_t> get_adjacent_element(size_t fi);
 
     private:
-        std::vector<MatrixI> m_components;
+        std::vector<MatrixIr> m_components;
         std::vector<VectorI> m_sources;
-        MatrixI m_elements;
+        MatrixIr m_elements;
         std::vector<bool> m_visited;
 
         ConnectivityType m_connectivity_type;
