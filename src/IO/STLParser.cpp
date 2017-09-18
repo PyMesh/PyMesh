@@ -67,15 +67,7 @@ void STLParser::export_vertices(Float* buffer) {
 }
 
 void STLParser::export_faces(int* buffer) {
-    size_t count=0;
-    for (FaceList::const_iterator fi=m_faces.begin();
-            fi != m_faces.end(); fi++) {
-        const Vector3I& f = *fi;
-        buffer[count*3  ] = f[0];
-        buffer[count*3+1] = f[1];
-        buffer[count*3+2] = f[2];
-        count++;
-    }
+    std::copy(m_faces.data(), m_faces.data()+m_faces.size(), buffer);
 }
 
 void STLParser::export_voxels(int* buffer) {
@@ -153,6 +145,7 @@ bool STLParser::parse_ascii(const std::string& filename) {
     }
 
     fin.close();
+    m_faces = VectorI::LinSpaced(m_vertices.size(), 0, m_vertices.size()-1);
     return success;
 }
 
@@ -204,12 +197,12 @@ bool STLParser::parse_ascii_facet(std::ifstream& fin) {
             << num_vts << " vertices" << std::endl;
         return false;
     }
-    VectorI f(num_vts);
-    size_t start_idx = m_vertices.size() - num_vts;
-    for (size_t i=0; i<num_vts; i++) {
-        f[i] = start_idx + i;
-    }
-    m_faces.push_back(f);
+    //VectorI f(num_vts);
+    //size_t start_idx = m_vertices.size() - num_vts;
+    //for (size_t i=0; i<num_vts; i++) {
+    //    f[i] = start_idx + i;
+    //}
+    //m_faces.push_back(f);
     return true;
 }
 
@@ -243,9 +236,9 @@ bool STLParser::parse_binary(const std::string& filename) {
         throw IOError(err_msg.str());
     }
 
-    size_t float_size = sizeof(float);
-    assert(float_size == 4);
-    size_t LINE_SIZE=256;
+    const size_t FLOAT_SIZE = sizeof(float);
+    assert(FLOAT_SIZE == 4);
+    const size_t LINE_SIZE=256;
     char buf[LINE_SIZE];
 
     // 80 bytes header, no data significance.
@@ -255,60 +248,47 @@ bool STLParser::parse_binary(const std::string& filename) {
     }
 
     fin.read(buf, 4);
-    size_t num_faces = *reinterpret_cast<unsigned int*>(buf);
+    const size_t num_faces = *reinterpret_cast<unsigned int*>(buf);
     if (!fin.good()) {
         throw IOError("Unable to parse STL number of faces.");
     }
 
     for (size_t i=0; i<num_faces; i++) {
         // Parse normal
-        fin.read(buf, float_size*3);
-        float nx = *reinterpret_cast<float*>(buf);
-        float ny = *reinterpret_cast<float*>(buf + float_size);
-        float nz = *reinterpret_cast<float*>(buf + float_size * 2);
+        fin.read(buf, FLOAT_SIZE*3);
+        const float nx = *reinterpret_cast<float*>(buf);
+        const float ny = *reinterpret_cast<float*>(buf + FLOAT_SIZE);
+        const float nz = *reinterpret_cast<float*>(buf + FLOAT_SIZE * 2);
         assert(fin.good());
 
         // vertex 1
-        fin.read(buf, float_size*3);
-        float v1x = *reinterpret_cast<float*>(buf);
-        float v1y = *reinterpret_cast<float*>(buf + float_size);
-        float v1z = *reinterpret_cast<float*>(buf + float_size * 2);
+        fin.read(buf, FLOAT_SIZE*3);
+        const float v1x = *reinterpret_cast<float*>(buf);
+        const float v1y = *reinterpret_cast<float*>(buf + FLOAT_SIZE);
+        const float v1z = *reinterpret_cast<float*>(buf + FLOAT_SIZE * 2);
         assert(fin.good());
 
         // vertex 2
-        fin.read(buf, float_size*3);
-        float v2x = *reinterpret_cast<float*>(buf);
-        float v2y = *reinterpret_cast<float*>(buf + float_size);
-        float v2z = *reinterpret_cast<float*>(buf + float_size * 2);
+        fin.read(buf, FLOAT_SIZE*3);
+        const float v2x = *reinterpret_cast<float*>(buf);
+        const float v2y = *reinterpret_cast<float*>(buf + FLOAT_SIZE);
+        const float v2z = *reinterpret_cast<float*>(buf + FLOAT_SIZE * 2);
         assert(fin.good());
 
         // vertex 3
-        fin.read(buf, float_size*3);
-        float v3x = *reinterpret_cast<float*>(buf);
-        float v3y = *reinterpret_cast<float*>(buf + float_size);
-        float v3z = *reinterpret_cast<float*>(buf + float_size * 2);
+        fin.read(buf, FLOAT_SIZE*3);
+        const float v3x = *reinterpret_cast<float*>(buf);
+        const float v3y = *reinterpret_cast<float*>(buf + FLOAT_SIZE);
+        const float v3z = *reinterpret_cast<float*>(buf + FLOAT_SIZE * 2);
         assert(fin.good());
 
         // attribute (2 bytes), not sure what purpose they serve.
         fin.read(buf, 2);
 
-        Vector3F normal(nx, ny, nz);
-        Vector3F v1(v1x, v1y, v1z);
-        Vector3F v2(v2x, v2y, v2z);
-        Vector3F v3(v3x, v3y, v3z);
-
-        if (!v1.allFinite() || !v2.allFinite() || !v3.allFinite()) {
-            throw IOError("NaN or Inf detected in input file.");
-        }
-
-        m_facet_normals.push_back(normal);
-        m_vertices.push_back(v1);
-        m_vertices.push_back(v2);
-        m_vertices.push_back(v3);
-
-        size_t v_idx= i*3;
-        Vector3I face(v_idx, v_idx+1, v_idx+2);
-        m_faces.push_back(face);
+        m_facet_normals.emplace_back(nx, ny, nz);
+        m_vertices.emplace_back(v1x, v1y, v1z);
+        m_vertices.emplace_back(v2x, v2y, v2z);
+        m_vertices.emplace_back(v3x, v3y, v3z);
 
         assert(fin.good());
         if (!fin.good()) {
@@ -317,6 +297,13 @@ bool STLParser::parse_binary(const std::string& filename) {
             throw IOError(err_msg.str());
         }
     }
+    std::for_each(m_vertices.begin(), m_vertices.end(),
+            [](const Vector3F& v) {
+                if (!v.allFinite()) {
+                    throw IOError("NaN or Inf detected in input file.");
+                }
+            });
+    m_faces = VectorI::LinSpaced(m_vertices.size(), 0, m_vertices.size()-1);
 
     fin.close();
     return true;
@@ -366,12 +353,8 @@ void STLParser::merge_identical_vertices() {
     assert((index_map.array() >= 0).all());
 
     std::swap(m_vertices, sorted_vertices);
-    const size_t num_faces = m_faces.size();
-    for (auto& f : m_faces) {
-        f[0] = index_map[f[0]];
-        f[1] = index_map[f[1]];
-        f[2] = index_map[f[2]];
-    }
+    std::transform(m_faces.data(), m_faces.data()+m_faces.size(), m_faces.data(),
+            [&index_map](int vi) { return index_map[vi]; });
 }
 
 void STLParser::validate_normals() {

@@ -21,7 +21,7 @@ class STLParser : public MeshParser {
         virtual size_t vertex_per_voxel() const { return 0; };
 
         virtual size_t num_vertices() const {return m_vertices.size();}
-        virtual size_t num_faces() const {return m_faces.size();}
+        virtual size_t num_faces() const {return m_faces.size() / 3;}
         virtual size_t num_voxels() const {return m_voxels.size();}
         virtual size_t num_attributes() const;
 
@@ -49,7 +49,7 @@ class STLParser : public MeshParser {
         Float compute_bbox_diagonal_length() const;
 
         typedef std::vector<Vector3F> VertexList;
-        typedef std::list<Vector3I> FaceList;
+        typedef VectorI FaceList;
         typedef std::list<VectorI>  VoxelList;
         typedef std::list<Vector3F> NormalList;
 
