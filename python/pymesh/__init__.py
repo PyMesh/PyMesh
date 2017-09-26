@@ -19,11 +19,11 @@ from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
 from .boolean import boolean
 from .convex_hull import convex_hull
-#from .CSGTree import CSGTree
+from .CSGTree import CSGTree
 #from .material import Material
 from .selfintersection import resolve_self_intersection
-#from .selfintersection import detect_self_intersection
-#from .outerhull import compute_outer_hull
+from .selfintersection import detect_self_intersection
+from .outerhull import compute_outer_hull
 #from .winding_number import compute_winding_number
 from .meshutils import *
 #from .misc import *
@@ -44,7 +44,7 @@ __all__ = [
         #"CSGTree",
         #"resolve_self_intersection",
         #"detect_self_intersection",
-        #"compute_outer_hull",
+        "compute_outer_hull",
         #"submesh",
         #"timethis",
         #"oriented_3D",

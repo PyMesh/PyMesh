@@ -9,6 +9,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyMesh.cpp
     PyMeshFactory.cpp
     PyMeshWriter.cpp
+    PyOuterHull.cpp
     PyPredicates.cpp
     PySelfIntersectionResolver.cpp
     PyTetrahedralization.cpp)
@@ -19,4 +20,5 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     lib_convex_hull
     lib_self_intersection
     lib_boolean
+    lib_outer_hull
     lib_tetrahedronization)

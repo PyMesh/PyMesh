@@ -16,10 +16,10 @@ class CSGTree {
                 const MatrixIr& faces);
 
     public:
-        CSGTree() {}
+        CSGTree() = default;
         CSGTree(const MatrixFr& vertices, const MatrixIr& faces) :
             m_vertices(vertices), m_faces(faces) {}
-        virtual ~CSGTree() {}
+        virtual ~CSGTree() = default;
 
     public:
         void set_operand_1(Ptr tree) { m_tree_1 = tree; }

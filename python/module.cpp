@@ -15,6 +15,7 @@ void init_ConvexHull(py::module&);
 void init_Boolean(py::module&);
 void init_SelfIntersectionResolver(py::module&);
 void init_Tetrahedralization(py::module&);
+void init_OuterHull(py::module&);
 
 PYBIND11_MODULE(PyMesh, m) {
     m.doc() = "Geometry Processing for Python.";
@@ -29,4 +30,5 @@ PYBIND11_MODULE(PyMesh, m) {
     init_Boolean(m);
     init_SelfIntersectionResolver(m);
     init_Tetrahedralization(m);
+    init_OuterHull(m);
 }
