@@ -26,10 +26,10 @@ from .selfintersection import detect_self_intersection
 from .outerhull import compute_outer_hull
 #from .winding_number import compute_winding_number
 from .meshutils import *
-#from .misc import *
+from .misc import *
 #from .predicates import orient_3D, orient_2D, in_circle, in_sphere
-#from .slice_mesh import slice_mesh
-#from .submesh import submesh
+from .slice_mesh import slice_mesh
+from .submesh import submesh
 #from .VoxelGrid import VoxelGrid
 from .tetrahedralize import tetrahedralize
 
@@ -39,23 +39,23 @@ __all__ = [
         "form_mesh",
         "save_mesh",
         "save_mesh_raw",
-        #"boolean",
+        "boolean",
         #"Material",
-        #"CSGTree",
-        #"resolve_self_intersection",
-        #"detect_self_intersection",
+        "CSGTree",
+        "resolve_self_intersection",
+        "detect_self_intersection",
         "compute_outer_hull",
-        #"submesh",
-        #"timethis",
-        #"oriented_3D",
-        #"oriented_2D",
-        #"in_circle",
-        #"in_sphere",
-        #"slice_mesh",
+        "submesh",
+        "timethis",
+        "oriented_3D",
+        "oriented_2D",
+        "in_circle",
+        "in_sphere",
+        "slice_mesh",
         #"VoxelGrid"
         ];
 __all__ += meshutils.__all__;
-#__all__ += misc.__all__;
+__all__ += misc.__all__;
 
 #try:
 #    import PyIGL
