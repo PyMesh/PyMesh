@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 namespace PyMesh {
 
@@ -13,7 +14,7 @@ class SelfIntersectionResolver {
         static Ptr create(const std::string& engine_name);
 
     public:
-        virtual ~SelfIntersectionResolver() {}
+        virtual ~SelfIntersectionResolver() = default;
 
     public:
         void set_mesh(const MatrixFr& vertices, const MatrixIr& faces) {
@@ -21,7 +22,10 @@ class SelfIntersectionResolver {
             m_faces = faces;
         }
 
-        virtual void run()=0;
+        virtual void run() {
+            throw NotImplementedError(
+                    "Resolving self-interesection is not implemented");
+        }
 
         const MatrixFr get_vertices() const { return m_vertices; }
         const MatrixIr get_faces() const { return m_faces; }

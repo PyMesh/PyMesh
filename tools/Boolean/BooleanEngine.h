@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 namespace PyMesh {
 
@@ -31,10 +32,18 @@ class BooleanEngine {
         void clean_up();
 
     public:
-        virtual void compute_union() =0;
-        virtual void compute_intersection() =0;
-        virtual void compute_difference() =0;
-        virtual void compute_symmetric_difference() =0;
+        virtual void compute_union() {
+            throw NotImplementedError("Union is not implemented");
+        }
+        virtual void compute_intersection() {
+            throw NotImplementedError("Intersection is not implemented");
+        }
+        virtual void compute_difference() {
+            throw NotImplementedError("Difference is not implemented");
+        }
+        virtual void compute_symmetric_difference() {
+            throw NotImplementedError("Symmetric difference is not implemented");
+        }
         virtual VectorI get_face_sources() const {
             return VectorI::Zero(0);
         };

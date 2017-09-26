@@ -1,5 +1,5 @@
 import numpy as np
-import PySelfIntersection
+import PyMesh
 from .meshio import form_mesh
 
 def resolve_self_intersection(mesh, engine="auto"):
@@ -38,7 +38,7 @@ def resolve_self_intersection(mesh, engine="auto"):
         raise NotImplementedError(
                 "Resolving self-intersection only support triangle meshes");
 
-    resolver = PySelfIntersection.SelfIntersectionResolver.create(engine);
+    resolver = PyMesh.SelfIntersectionResolver.create(engine);
     resolver.set_mesh(vertices, faces);
     resolver.run();
 

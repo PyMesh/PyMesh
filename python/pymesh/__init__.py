@@ -17,19 +17,21 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
-#from .boolean import boolean
+from .boolean import boolean
+from .convex_hull import convex_hull
 #from .CSGTree import CSGTree
 #from .material import Material
-#from .selfintersection import resolve_self_intersection
+from .selfintersection import resolve_self_intersection
 #from .selfintersection import detect_self_intersection
 #from .outerhull import compute_outer_hull
 #from .winding_number import compute_winding_number
-#from .meshutils import *
+from .meshutils import *
 #from .misc import *
 #from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 #from .slice_mesh import slice_mesh
 #from .submesh import submesh
 #from .VoxelGrid import VoxelGrid
+from .tetrahedralize import tetrahedralize
 
 __all__ = [
         "Mesh",
@@ -52,7 +54,7 @@ __all__ = [
         #"slice_mesh",
         #"VoxelGrid"
         ];
-#__all__ += meshutils.__all__;
+__all__ += meshutils.__all__;
 #__all__ += misc.__all__;
 
 #try:

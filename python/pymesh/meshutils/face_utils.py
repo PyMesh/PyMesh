@@ -1,4 +1,4 @@
-import PyMeshUtils
+import PyMesh
 import numpy as np
 
 def is_colinear(v0, v1, v2):
@@ -15,9 +15,9 @@ def is_colinear(v0, v1, v2):
     """
     dim = len(v0);
     if dim == 2:
-        return PyMeshUtils.is_colinear_2D(v0, v1, v2);
+        return PyMesh.is_colinear_2D(v0, v1, v2);
     elif dim == 3:
-        return PyMeshUtils.is_colinear_3D(v0, v1, v2);
+        return PyMesh.is_colinear_3D(v0, v1, v2);
     else:
         raise NotImplementedError("Supported dimention {}".format(dim));
 
@@ -32,7 +32,7 @@ def get_degenerated_faces_raw(vertices, faces):
     Returns:
         ``numpy.ndarray``: List of indices of degenerated faces.
     """
-    return np.array(PyMeshUtils.get_degenerated_faces(vertices, faces));
+    return np.array(PyMesh.get_degenerated_faces(vertices, faces));
 
 def get_degenerated_faces(mesh):
     """ A thin wrapper for :py:func:`get_degenerated_faces_raw`.

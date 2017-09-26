@@ -1,5 +1,5 @@
 import numpy as np
-from PyMeshUtils import FinFaceRemoval
+from PyMesh import FinFaceRemoval
 from ..meshio import form_mesh
 
 def remove_duplicated_faces_raw(vertices, faces, fins_only=False):

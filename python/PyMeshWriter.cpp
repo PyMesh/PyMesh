@@ -1,3 +1,5 @@
+#include <memory>
+
 #include <pybind11/pybind11.h>
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
@@ -9,7 +11,7 @@ namespace py = pybind11;
 using namespace PyMesh;
 
 void init_MeshWriter(py::module &m) {
-    py::class_<MeshWriter>(m, "MeshWriter")
+    py::class_<MeshWriter, std::shared_ptr<MeshWriter> >(m, "MeshWriter")
         .def(py::init<>())
         .def("create", &MeshWriter::create)
         .def("with_attribute", &MeshWriter::with_attribute)

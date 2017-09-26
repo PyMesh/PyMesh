@@ -4,7 +4,10 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 
+extern "C"
+{
 #include <Predicates/predicates.h>
+}
 
 namespace py = pybind11;
 

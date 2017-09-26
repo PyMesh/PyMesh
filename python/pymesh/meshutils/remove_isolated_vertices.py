@@ -1,5 +1,5 @@
 import numpy as np
-from PyMeshUtils import IsolatedVertexRemoval
+from PyMesh import IsolatedVertexRemoval
 from ..meshio import form_mesh
 
 def remove_isolated_vertices_raw(vertices, elements):

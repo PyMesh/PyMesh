@@ -3,7 +3,7 @@ import os.path
 import logging
 import numpy as np
 
-from PyMeshUtils import MeshSeparator
+from PyMesh import MeshSeparator
 
 from ..meshio import form_mesh
 from .remove_isolated_vertices import remove_isolated_vertices_raw
