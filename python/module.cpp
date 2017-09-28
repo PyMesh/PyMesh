@@ -16,6 +16,11 @@ void init_Boolean(py::module&);
 void init_SelfIntersectionResolver(py::module&);
 void init_Tetrahedralization(py::module&);
 void init_OuterHull(py::module&);
+void init_WindingNumber(py::module&);
+void init_DMAT(py::module&);
+void init_MinkowskiSum(py::module&);
+void init_CellPartition(py::module&);
+void init_Triangulation(py::module&);
 
 PYBIND11_MODULE(PyMesh, m) {
     m.doc() = "Geometry Processing for Python.";
@@ -31,4 +36,9 @@ PYBIND11_MODULE(PyMesh, m) {
     init_SelfIntersectionResolver(m);
     init_Tetrahedralization(m);
     init_OuterHull(m);
+    init_WindingNumber(m);
+    init_DMAT(m);
+    init_MinkowskiSum(m);
+    init_CellPartition(m);
+    init_Triangulation(m);
 }

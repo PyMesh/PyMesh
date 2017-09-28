@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 namespace PyMesh {
 
@@ -13,10 +14,13 @@ class WindingNumberEngine {
         static Ptr create(const std::string& engine_name);
 
     public:
-        virtual ~WindingNumberEngine() {}
+        virtual ~WindingNumberEngine() = default;
 
     public:
-        virtual VectorF run(const MatrixFr& queries)=0;
+        virtual VectorF run(const MatrixFr& queries) {
+            throw NotImplementedError(
+                    "Winding number algorithm is not implemented");
+        }
 
         void set_mesh(const MatrixFr& vertices, const MatrixIr& faces) {
             m_vertices = vertices;

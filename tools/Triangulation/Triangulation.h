@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 namespace PyMesh {
     class Triangulation {
@@ -19,7 +20,10 @@ namespace PyMesh {
                 m_vertices = vertices;
             }
 
-            virtual void run() = 0;
+            virtual void run() {
+                throw NotImplementedError(
+                        "Triangulation algorithm is not implemented");
+            }
 
             const MatrixIr& get_faces() const {
                 return m_faces;

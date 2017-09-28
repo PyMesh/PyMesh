@@ -24,14 +24,19 @@ from .CSGTree import CSGTree
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
 from .outerhull import compute_outer_hull
-#from .winding_number import compute_winding_number
+from .winding_number import compute_winding_number
 from .meshutils import *
 from .misc import *
-#from .predicates import orient_3D, orient_2D, in_circle, in_sphere
+from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from .slice_mesh import slice_mesh
 from .submesh import submesh
 #from .VoxelGrid import VoxelGrid
 from .tetrahedralize import tetrahedralize
+from .matrixio import load_matrix, save_matrix
+from .minkowski_sum import minkowski_sum
+from .cell_partition import partition_into_cells
+from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
+from .triangulate import triangulate_beta
 
 __all__ = [
         "Mesh",
@@ -57,35 +62,6 @@ __all__ = [
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
 
-#try:
-#    import PyIGL
-#except ImportError:
-#    # PyIGL is missing.
-#    pass;
-#else:
-#    from .matrixio import load_matrix, save_matrix
-#    from .minkowski_sum import minkowski_sum
-#    from .cell_partition import partition_into_cells
-#    __all__ += ["minkowski_sum", "load_matrix", "save_matrix", "partition_into_cells"];
-#
-#try:
-#    import PyCGAL
-#except ImportError:
-#    pass;
-#else:
-#    from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
-#    __all__ += ["AABBTree", "distance_to_mesh", "do_intersect"];
-#
-#try:
-#    import PyTetrahedronization
-#    import PyTetgen
-#except ImportError:
-#    pass;
-#else:
-#    from .tetrahedralize import tetrahedralize, tetgen
-#    __all__.append("tetrahedralize");
-#    __all__.append("tetgen");
-#
 #try:
 #    import PyTriangle, PyTriangulation
 #except ImportError:

@@ -1,4 +1,4 @@
-import PyWindingNumber
+import PyMesh
 
 def compute_winding_number(mesh, queries, engine="auto"):
     assert(mesh.dim == 3);
@@ -7,7 +7,7 @@ def compute_winding_number(mesh, queries, engine="auto"):
     if engine == "auto":
         engine = "igl";
 
-    engine = PyWindingNumber.WindingNumberEngine.create(engine);
+    engine = PyMesh.WindingNumberEngine.create(engine);
     engine.set_mesh(mesh.vertices, mesh.faces);
     winding_numbers = engine.run(queries).ravel();
 

@@ -71,8 +71,6 @@ class cmake_build(build):
         check_call(command.split());
         command = "make -j {}".format(num_cores);
         check_call(command.split());
-        command = "make tools -j {}".format(num_cores);
-        check_call(command.split());
         os.chdir(root_dir);
 
     def run(self):
