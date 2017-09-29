@@ -30,7 +30,7 @@ from .misc import *
 from .predicates import orient_3D, orient_2D, in_circle, in_sphere
 from .slice_mesh import slice_mesh
 from .submesh import submesh
-#from .VoxelGrid import VoxelGrid
+from .VoxelGrid import VoxelGrid
 from .tetrahedralize import tetrahedralize
 from .matrixio import load_matrix, save_matrix
 from .minkowski_sum import minkowski_sum

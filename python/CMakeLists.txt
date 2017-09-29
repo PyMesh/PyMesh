@@ -24,6 +24,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyTetrahedralization.cpp
     PyTriangulation.cpp
     PyMinkowskiSum.cpp
+    PyVoxelGrid.cpp
     PyWindingNumber.cpp
     PyWires.cpp)
 TARGET_LINK_LIBRARIES(PyMesh PRIVATE
