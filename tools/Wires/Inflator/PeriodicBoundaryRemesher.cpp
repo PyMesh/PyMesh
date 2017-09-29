@@ -69,7 +69,7 @@ namespace PeriodicBoundaryRemesherHelper {
 
         Mesh::Ptr mesh = MeshFactory().load_data(
                 flattened_vertices, flattened_faces, voxels,
-                vertices.cols(), faces.cols(), 0).create_shared();
+                vertices.cols(), faces.cols(), 0).create();
         mesh->add_attribute("debug");
         mesh->set_attribute("debug", debug);
 
