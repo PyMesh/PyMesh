@@ -21,6 +21,8 @@ void init_DMAT(py::module&);
 void init_MinkowskiSum(py::module&);
 void init_CellPartition(py::module&);
 void init_Triangulation(py::module&);
+void init_CGAL(py::module&);
+void init_AABB(py::module&);
 
 PYBIND11_MODULE(PyMesh, m) {
     m.doc() = "Geometry Processing for Python.";
@@ -41,4 +43,6 @@ PYBIND11_MODULE(PyMesh, m) {
     init_MinkowskiSum(m);
     init_CellPartition(m);
     init_Triangulation(m);
+    init_CGAL(m);
+    init_AABB(m);
 }

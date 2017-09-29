@@ -12,7 +12,7 @@ using namespace PyMesh;
 void init_ConvexHull(py::module& m) {
     py::class_<ConvexHullEngine, std::shared_ptr<ConvexHullEngine> >(
             m, "ConvexHullEngine")
-        .def("create", &ConvexHullEngine::create)
+        .def_static("create", &ConvexHullEngine::create)
         .def("supports", &ConvexHullEngine::supports)
         .def("run", &ConvexHullEngine::run)
         .def("get_vertices", &ConvexHullEngine::get_vertices)

@@ -13,7 +13,7 @@ void init_SelfIntersectionResolver(py::module& m) {
     py::class_<SelfIntersectionResolver,
         std::shared_ptr<SelfIntersectionResolver> >(
                 m, "SelfIntersectionResolver")
-    .def("create", &SelfIntersectionResolver::create)
+    .def_static("create", &SelfIntersectionResolver::create)
     .def("set_mesh", &SelfIntersectionResolver::set_mesh)
     .def("run", &SelfIntersectionResolver::run)
     .def("get_vertices", &SelfIntersectionResolver::get_vertices)

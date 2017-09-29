@@ -13,7 +13,7 @@ void init_Tetrahedralization(py::module& m) {
     py::class_<TetrahedronizationEngine,
         std::shared_ptr<TetrahedronizationEngine> >(
                 m, "TetrahedralizationEngine")
-    .def("create", &TetrahedronizationEngine::create)
+    .def_static("create", &TetrahedronizationEngine::create)
     .def("run", &TetrahedronizationEngine::run)
     .def("set_vertices", &TetrahedronizationEngine::set_vertices)
     .def("set_faces", &TetrahedronizationEngine::set_faces)

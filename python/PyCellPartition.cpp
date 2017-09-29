@@ -11,8 +11,8 @@ using namespace PyMesh;
 
 void init_CellPartition(py::module& m) {
     py::class_<CellPartition, std::shared_ptr<CellPartition> >(m, "CellPartition")
-        .def("create", &CellPartition::create)
-        .def("create_raw", &CellPartition::create_raw)
+        .def_static("create", &CellPartition::create)
+        .def_static("create_raw", &CellPartition::create_raw)
         .def("run", &CellPartition::run)
         .def("get_vertices", &CellPartition::get_vertices)
         .def("get_faces", &CellPartition::get_faces)

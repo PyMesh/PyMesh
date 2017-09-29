@@ -12,7 +12,7 @@ using namespace PyMesh;
 void init_OuterHull(py::module& m) {
     py::class_<OuterHullEngine, std::shared_ptr<OuterHullEngine> >(
             m, "OuterHullEngine")
-        .def("create", &OuterHullEngine::create)
+        .def_static("create", &OuterHullEngine::create)
         .def("run", &OuterHullEngine::run)
         .def("set_mesh", &OuterHullEngine::set_mesh)
         .def("get_vertices", &OuterHullEngine::get_vertices)

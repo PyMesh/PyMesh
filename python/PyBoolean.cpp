@@ -12,7 +12,7 @@ using namespace PyMesh;
 
 void init_Boolean(py::module& m) {
     py::class_<BooleanEngine, std::shared_ptr<BooleanEngine> >(m, "BooleanEngine")
-        .def("create", &BooleanEngine::create)
+        .def_static("create", &BooleanEngine::create)
         .def("set_mesh_1", &BooleanEngine::set_mesh_1)
         .def("set_mesh_2", &BooleanEngine::set_mesh_2)
         .def("get_vertices", &BooleanEngine::get_vertices)
@@ -27,8 +27,8 @@ void init_Boolean(py::module& m) {
         .def("serialize_xml", &BooleanEngine::serialize_xml);
 
     py::class_<CSGTree, std::shared_ptr<CSGTree> >(m, "CSGTree")
-        .def("create", &CSGTree::create)
-        .def("create_leaf", &CSGTree::create_leaf)
+        .def_static("create", &CSGTree::create)
+        .def_static("create_leaf", &CSGTree::create_leaf)
         .def("set_operand_1", &CSGTree::set_operand_1)
         .def("set_operand_2", &CSGTree::set_operand_2)
         .def("compute_union", &CSGTree::compute_union)

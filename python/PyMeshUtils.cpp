@@ -23,6 +23,7 @@
 
 namespace py = pybind11;
 using namespace PyMesh;
+using namespace pybind11::literals;
 
 void init_MeshUtils(py::module& m) {
     m.def("convert_to_vertex_attribute",
@@ -57,13 +58,18 @@ void init_MeshUtils(py::module& m) {
         .def("get_faces", &ShortEdgeRemoval::get_faces)
         .def("get_face_indices", &ShortEdgeRemoval::get_face_indices);
 
-    py::class_<MeshSeparator>(m, "MeshSeparator")
-        .def(py::init<const MatrixI&>())
+    py::class_<MeshSeparator> separator(m, "MeshSeparator");
+    separator.def(py::init<const MatrixI&>())
         .def("set_connectivity_type", &MeshSeparator::set_connectivity_type)
         .def("separate", &MeshSeparator::separate)
         .def("get_component", &MeshSeparator::get_component)
         .def("get_sources", &MeshSeparator::get_sources)
         .def("clear", &MeshSeparator::clear);
+
+    py::enum_<MeshSeparator::ConnectivityType>(separator, "ConnectivityType")
+        .value("VERTEX", MeshSeparator::ConnectivityType::VERTEX)
+        .value("FACE", MeshSeparator::ConnectivityType::FACE)
+        .value("VOXEL", MeshSeparator::ConnectivityType::VOXEL);
 
     py::class_<MeshChecker>(m, "MeshChecker")
         .def(py::init<const MatrixFr&, const MatrixIr&, const MatrixIr&>())
@@ -102,7 +108,7 @@ void init_MeshUtils(py::module& m) {
         .def("clear", &PointLocator::clear);
 
     py::class_<Subdivision, std::shared_ptr<Subdivision> >(m, "Subdivision")
-        .def("create", &Subdivision::create)
+        .def_static("create", &Subdivision::create)
         .def("subdivide", &Subdivision::subdivide)
         .def("get_subdivision_matrices()",
                 &Subdivision::get_subdivision_matrices)
@@ -131,7 +137,7 @@ void init_MeshUtils(py::module& m) {
 
     py::class_<LongEdgeRemoval>(m, "LongEdgeRemoval")
         .def(py::init<const MatrixFr&, const MatrixIr&>())
-        .def("run", &LongEdgeRemoval::run)
+        .def("run", &LongEdgeRemoval::run, "max_length"_a, "recursive"_a=true)
         .def("get_vertices", &LongEdgeRemoval::get_vertices)
         .def("get_faces", &LongEdgeRemoval::get_faces);
 

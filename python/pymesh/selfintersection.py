@@ -66,13 +66,8 @@ def detect_self_intersection(mesh):
             row contains the indices of two intersecting faces. :math:`n` is
             the number of intersecting face pairs.
     """
-    try:
-        import PyCGAL
-    except ImportError:
-        raise NotImplementedError(
-                "Self intersection detection is not supported");
 
-    detector = PyCGAL.SelfIntersection(mesh.vertices, mesh.faces);
+    detector = PyMesh.SelfIntersection(mesh.vertices, mesh.faces);
     detector.detect_self_intersection();
     intersecting_faces = detector.get_self_intersecting_pairs();
     return intersecting_faces;

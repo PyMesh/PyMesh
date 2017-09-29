@@ -11,8 +11,8 @@ using namespace PyMesh;
 
 void init_MinkowskiSum(py::module& m) {
     py::class_<MinkowskiSum, std::shared_ptr<MinkowskiSum> >(m, "MinkowskiSum")
-        .def("create", &MinkowskiSum::create)
-        .def("create_raw", &MinkowskiSum::create_raw)
+        .def_static("create", &MinkowskiSum::create)
+        .def_static("create_raw", &MinkowskiSum::create_raw)
         .def("run", &MinkowskiSum::run)
         .def("get_vertices", &MinkowskiSum::get_vertices)
         .def("get_faces", &MinkowskiSum::get_faces);

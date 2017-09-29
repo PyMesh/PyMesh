@@ -39,13 +39,13 @@ def separate_mesh(mesh, connectivity_type="auto"):
             separator = MeshSeparator(mesh.voxels);
         else:
             separator = MeshSeparator(mesh.faces);
-        separator.set_connectivity_type(MeshSeparator.VERTEX);
+        separator.set_connectivity_type(MeshSeparator.ConnectivityType.VERTEX);
     elif connectivity_type == "face":
         separator = MeshSeparator(mesh.faces);
-        separator.set_connectivity_type(MeshSeparator.FACE);
+        separator.set_connectivity_type(MeshSeparator.ConnectivityType.FACE);
     elif connectivity_type == "voxel":
         separator = MeshSeparator(mesh.voxels);
-        separator.set_connectivity_type(MeshSeparator.VOXEL);
+        separator.set_connectivity_type(MeshSeparator.ConnectivityType.VOXEL);
     else:
         raise RuntimeError("Unsupported connectivity type: {}".format(
             connectivity_type));

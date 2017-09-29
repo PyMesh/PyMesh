@@ -11,6 +11,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyAABB.cpp
     PyBoolean.cpp
     PyCellPartition.cpp
+    PyCGAL.cpp
     PyConvexHull.cpp
     PyDMAT.cpp
     PyMeshUtils.cpp
