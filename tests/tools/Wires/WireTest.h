@@ -53,7 +53,7 @@ class WireTest : public TestBase {
             MeshFactory factory;
             factory.load_data(flattened_vertices, flattened_faces, voxels,
                     dim, vertex_per_face, 0);
-            return factory.create_shared();
+            return factory.create();
         }
 
         void save_mesh(const std::string& file_name,
@@ -65,9 +65,9 @@ class WireTest : public TestBase {
 
             MeshFactory factory;
             Mesh::Ptr mesh = factory.load_data(flat_vertices, flat_faces, flat_voxels,
-                    vertices.cols(), faces.cols(), 4).create_shared();
+                    vertices.cols(), faces.cols(), 4).create();
 
-            MeshWriter* writer = MeshWriter::create_writer(file_name);
+            MeshWriter::Ptr writer = MeshWriter::create(file_name);
 
             if (debug.size() > 0) {
                 mesh->add_attribute("debug");
@@ -76,7 +76,6 @@ class WireTest : public TestBase {
             }
 
             writer->write_mesh(*mesh);
-            delete writer;
         }
 
         void save_mesh(const std::string& filename,
@@ -91,12 +90,11 @@ class WireTest : public TestBase {
                 Mesh::Ptr mesh,
                 const std::vector<std::string>& attr_names) {
             MeshFactory factory;
-            MeshWriter* writer = MeshWriter::create_writer(file_name);
+            MeshWriter::Ptr writer = MeshWriter::create(file_name);
 
             for (const auto& attr_name : attr_names) {
                 writer->with_attribute(attr_name);
             }
             writer->write_mesh(*mesh);
-            delete writer;
         }
 };

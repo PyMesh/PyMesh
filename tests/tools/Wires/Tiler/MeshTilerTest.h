@@ -22,7 +22,7 @@ class MeshTilerTest : public WireTest {
         MeshPtr load_mesh(const std::string& mesh_file) {
             MeshFactory factory;
             factory.load_file(m_mesh_data_dir + mesh_file);
-            return factory.create_shared();
+            return factory.create();
         }
 
         void ASSERT_BBOX_MATCHES(const MatrixFr& vts1, const VectorF& vts2_flattened) {
@@ -46,7 +46,7 @@ class MeshTilerTest : public WireTest {
                     mesh->get_dim(),
                     mesh->get_vertex_per_face(),
                     mesh->get_vertex_per_voxel());
-            return factory.create_shared();
+            return factory.create();
         }
 
     protected:
