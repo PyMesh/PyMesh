@@ -4,30 +4,30 @@ import re
 import os.path
 
 from .WireNetwork import WireNetwork
-import PyWires
+import PyMesh
 
 class Parameters(object):
     """
-    This class is a thin wrapper around PyWires.ParameterManager class.
+    This class is a thin wrapper around PyMesh.ParameterManager class.
     """
 
     def __init__(self, wire_network, default_thickness=0.5):
         self.wire_network = wire_network;
         if wire_network.dim == 2:
-            self.raw_parameters = PyWires.ParameterManager.create(
+            self.raw_parameters = PyMesh.ParameterManager.create(
                     self.wire_network.raw_wires, default_thickness,
-                    PyWires.VERTEX);
+                    PyMesh.VERTEX);
         else:
-            self.raw_parameters = PyWires.ParameterManager.create_empty_manager(
+            self.raw_parameters = PyMesh.ParameterManager.create_empty_manager(
                     self.wire_network.raw_wires, default_thickness);
 
-    def load_default_isotropic_parameters(self, thickness_type=PyWires.VERTEX):
-        self.raw_parameters = PyWires.ParameterManager.create_isotropic(
+    def load_default_isotropic_parameters(self, thickness_type=PyMesh.VERTEX):
+        self.raw_parameters = PyMesh.ParameterManager.create_isotropic(
                 self.wire_network.raw_wires, self.default_thickness,
                 thickness_type);
 
-    def load_default_orthotropic_parameters(self, thickness_type=PyWires.VERTEX):
-        self.raw_parameters = PyWires.ParameterManager.create(
+    def load_default_orthotropic_parameters(self, thickness_type=PyMesh.VERTEX):
+        self.raw_parameters = PyMesh.ParameterManager.create(
                 self.wire_network.raw_wires, self.default_thickness,
                 thickness_type);
 
@@ -38,7 +38,7 @@ class Parameters(object):
     def load_modifier(self, setting):
         self.__initialize_orbits(setting.get("orbit_type", "orthotropic"));
 
-        self.raw_parameters = PyWires.ParameterManager.create_empty_manager(
+        self.raw_parameters = PyMesh.ParameterManager.create_empty_manager(
                 self.wire_network.raw_wires, self.default_thickness);
         if "thickness" in setting:
             self.__load_thickness_modifier(setting["thickness"]);
@@ -47,7 +47,7 @@ class Parameters(object):
 
     def load_dof_file(self, dof_file):
         assert(os.path.exists(dof_file));
-        self.raw_parameters = PyWires.ParameterManager.create_from_dof_file(
+        self.raw_parameters = PyMesh.ParameterManager.create_from_dof_file(
                 self.wire_network.raw_wires, self.default_thickness, dof_file);
 
     def save_dof_file(self, dof_file):
@@ -129,9 +129,9 @@ class Parameters(object):
 
     def __set_thickness_type(self, thickness_type):
         if thickness_type == "vertex_orbit":
-            thickness_type = PyWires.VERTEX;
+            thickness_type = PyMesh.VERTEX;
         elif thickness_type == "edge_orbit":
-            thickness_type = PyWires.EDGE;
+            thickness_type = PyMesh.EDGE;
         else:
             raise RuntimeError(
                     "Unsupported thickness type: {}".format(thickness_type));
@@ -196,5 +196,5 @@ class Parameters(object):
 
     @property
     def per_vertex_thickness(self):
-        return self.raw_parameters.get_thickness_type() == PyWires.VERTEX;
+        return self.raw_parameters.get_thickness_type() == PyMesh.VERTEX;
 

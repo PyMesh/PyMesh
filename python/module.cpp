@@ -23,6 +23,7 @@ void init_CellPartition(py::module&);
 void init_Triangulation(py::module&);
 void init_CGAL(py::module&);
 void init_AABB(py::module&);
+void init_Wires(py::module&);
 
 PYBIND11_MODULE(PyMesh, m) {
     m.doc() = "Geometry Processing for Python.";
@@ -45,4 +46,5 @@ PYBIND11_MODULE(PyMesh, m) {
     init_Triangulation(m);
     init_CGAL(m);
     init_AABB(m);
+    init_Wires(m);
 }

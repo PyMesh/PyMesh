@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 
+#include <Core/Exception.h>
 #include <MeshUtils/Subdivision.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 #include "WireProfile.h"
@@ -34,8 +35,14 @@ class InflatorEngine {
 
     public:
         virtual void with_shape_velocities();
-        virtual void inflate()=0;
-        virtual const std::vector<MatrixFr>& get_shape_velocities() const=0;
+        virtual void inflate() {
+            throw NotImplementedError(
+                    "Wire inflation algorithm is not implemented");
+        }
+        virtual const std::vector<MatrixFr>& get_shape_velocities() const {
+            throw NotImplementedError(
+                    "Wire inflation shape velocities is not implemented");
+        }
         virtual void set_uniform_thickness(Float thickness);
         virtual void set_thickness(const VectorF& thickness);
         virtual void set_thickness_type(ThicknessType type) { m_thickness_type = type; }

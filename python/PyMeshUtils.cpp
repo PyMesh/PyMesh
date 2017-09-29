@@ -69,7 +69,8 @@ void init_MeshUtils(py::module& m) {
     py::enum_<MeshSeparator::ConnectivityType>(separator, "ConnectivityType")
         .value("VERTEX", MeshSeparator::ConnectivityType::VERTEX)
         .value("FACE", MeshSeparator::ConnectivityType::FACE)
-        .value("VOXEL", MeshSeparator::ConnectivityType::VOXEL);
+        .value("VOXEL", MeshSeparator::ConnectivityType::VOXEL)
+        .export_values();
 
     py::class_<MeshChecker>(m, "MeshChecker")
         .def(py::init<const MatrixFr&, const MatrixIr&, const MatrixIr&>())

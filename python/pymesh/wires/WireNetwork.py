@@ -2,7 +2,7 @@ import numbers
 import numpy as np
 from numpy.linalg import norm
 
-import PyWires
+import PyMesh
 
 class WireNetwork(object):
     """ Data structure for wire network.
@@ -31,7 +31,7 @@ class WireNetwork(object):
     def __init__(self):
         """ Create empty a wire network.
         """
-        self.raw_wires = PyWires.WireNetwork();
+        self.raw_wires = PyMesh.WireNetwork.create_empty();
         self.__initialize_wires();
 
     def load(self, vertices, edges):
@@ -43,7 +43,7 @@ class WireNetwork(object):
             faces (:py:class:`numpy.ndarray`): :py:attr:`num_edges` by 2 array
                 of vertex indices.
         """
-        self.raw_wires = PyWires.WireNetwork.create_raw(vertices, edges);
+        self.raw_wires = PyMesh.WireNetwork.create_raw(vertices, edges);
         self.__initialize_wires();
 
     def load_from_file(self, wire_file):
@@ -63,7 +63,7 @@ class WireNetwork(object):
             ...
 
         """
-        self.raw_wires = PyWires.WireNetwork.create(wire_file);
+        self.raw_wires = PyMesh.WireNetwork.create(wire_file);
         self.__initialize_wires();
 
     def load_from_raw(self, raw_wires):
