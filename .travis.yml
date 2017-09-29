@@ -32,8 +32,7 @@ matrix:
         - mkdir build
         - cd build
         - cmake ..
-        - make
-        - make tools
+        - make -j 4
         - cd ..
         - ./setup.py install --user
       after_success:
