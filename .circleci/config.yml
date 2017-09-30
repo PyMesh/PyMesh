@@ -11,10 +11,10 @@ jobs:
             - run: git submodule sync
             - run: git submodule update --init
             - run: python3 -m venv py_env
-            - run: source py_env/bin/activate
             - run:
                 workding_directory: $CIRCLE_WORKING_DIRECTORY
                 command: |
+                    source py_env/bin/activate
                     mkdir -p third_party/build
                     mkdir -p build
                     pip install -r python/requirements.txt
