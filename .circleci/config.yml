@@ -4,9 +4,13 @@ jobs:
         docker:
             - image: debian:sid-slim
         steps:
+            - checkout
             - run: |
                 apt-get update
                 apt-get install -y git gcc cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5 libmpfr-dev libboost-dev libboost-thread-dev python3-nose python3-numpy python3-scipy python3-setuptools swig && apt-get clean
+            - run: git submodule sync
+            - run: git submodule update --init
+            - run: |
                 mkdir -p $CIRCLE_WORKING_DIRECTORY/third_party/build
                 mkdir -p $CIRCLE_WORKING_DIRECTORY/build
                 cd $CIRCLE_WORKING_DIRECTORY/third_party/build
