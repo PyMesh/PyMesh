@@ -4,15 +4,16 @@ jobs:
         docker:
             - image: debian:sid-slim
         steps:
-            - run: apt-get update
-            - run: apt-get install -y git gcc cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5 libmpfr-dev libboost-dev libboost-thread-dev python3-nose python3-numpy python3-scipy python3-setuptools swig && apt-get clean
-            - run: mkdir -p third_party/build
-            - run: mkdir -p build
-            - run: cd third_party/build
-            - run: cmake .. && make -j 4 && make install
-            - run: cd ../../build/
-            - run: cmake .. && make -j 4
-            - run: make all_tests
+            - run: |
+                apt-get update
+                apt-get install -y git gcc cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5 libmpfr-dev libboost-dev libboost-thread-dev python3-nose python3-numpy python3-scipy python3-setuptools swig && apt-get clean
+                mkdir -p third_party/build
+                mkdir -p build
+                cd third_party/build
+                cmake .. && make -j 4 && make install
+                cd ../../build/
+                cmake .. && make -j 4
+                make all_tests
 
 workflows:
     version: 2
