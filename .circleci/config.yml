@@ -1,0 +1,53 @@
+version: 2
+jobs:
+    dependencies:
+        docker:
+            - image: debian:sid-slim
+        steps:
+            - run: sudo apt-get update
+            - run: sudo apt-get install -y cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5.6.2 libmpfr-dev libboost-dev libboost-thread-dev python3-nose python3-numpy python3-scipy python3-setuptools swig && sudo apt-get clean
+    build-third-party:
+        docker:
+            - image: debian:sid-slim
+        steps:
+            - checkout
+            - run: git submodule sync
+            - run: git submodule update --init
+            - run: mkdir -p third_party/build
+            - run: cd third_party/build
+            - run: cmake .. && make -j 4 && make install
+    build:
+        docker:
+            - image: debian:sid-slim
+        steps:
+            - checkout
+            - run: git submodule sync
+            - run: git submodule update --init
+            - run: mkdir -p build
+            - run: cd build
+            - run: cmake .. && make -j 4
+    test:
+        docker:
+            - image: debian:sid-slim
+        steps:
+            - checkout
+            - run: git submodule sync
+            - run: git submodule update --init
+            - run: mkdir -p build
+            - run: cd build
+            - run: make all_tests
+
+workflows:
+    version: 2
+    build_and_test:
+        jobs:
+            - dependencies
+            - build-third-party:
+                requires:
+                    - dependencies
+            - build:
+                requires:
+                    - build-third-party
+            - test:
+                requires:
+                    - build
