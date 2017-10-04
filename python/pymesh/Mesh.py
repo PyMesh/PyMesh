@@ -126,7 +126,7 @@ class Mesh(object):
     def set_attribute(self, name, val):
         """ Set attribute to the given value.
         """
-        self.__mesh.set_attribute(name, val);
+        self.__mesh.set_attribute(name, val.ravel(order="C"));
 
     def remove_attribute(self, name):
         """ Remove attribute from mesh.

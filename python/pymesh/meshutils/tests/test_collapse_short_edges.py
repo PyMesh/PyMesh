@@ -80,7 +80,7 @@ class CollapseShortEdgesTest(TestCase):
 
         self.assertEqual(3, len(out_vertices));
         self.assertEqual(1, len(out_faces));
-        self.assertEqual(1, info["num_edge_collapsed"]);
+        self.assertEqual(3, info["num_edge_collapsed"]);
         self.assert_array_equal([0], info["source_face_index"]);
 
     def test_simple_2D(self):

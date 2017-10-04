@@ -328,3 +328,25 @@ TEST_F(ShortEdgeRemovalTest, ChainOfImportance) {
     check_face_indices(remover, vertices, faces, threshold);
 }
 
+TEST_F(ShortEdgeRemovalTest, MultipleDegeneratedFaces) {
+    MatrixFr vertices(4, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+               -0.1,-0.1,-0.1;
+    MatrixIr faces(5, 3);
+    faces << 0, 1, 2,
+             0, 3, 1,
+             0, 2, 3,
+             0, 0, 1,
+             2, 3, 3;
+
+    ShortEdgeRemoval remover(vertices, faces);
+    remover.run(0.5);
+
+    check_num_faces_left(remover, 1);
+    check_face_validity(remover);
+    check_face_indices(remover, vertices, faces, 0.5);
+    check_preserved_vertex(remover, vertices.row(2), 1e-12);
+}
+
