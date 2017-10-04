@@ -1,4 +1,4 @@
-import PyOuterHull
+import PyMesh
 import numpy as np
 from .meshio import form_mesh
 from .meshutils import remove_isolated_vertices_raw
@@ -37,7 +37,7 @@ def compute_outer_hull(mesh, engine="auto", all_layers=False):
     if engine == "auto":
         engine = "igl";
 
-    engine = PyOuterHull.OuterHullEngine.create(engine);
+    engine = PyMesh.OuterHullEngine.create(engine);
     engine.set_mesh(mesh.vertices, mesh.faces);
     engine.run();
 

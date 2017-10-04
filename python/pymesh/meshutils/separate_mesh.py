@@ -3,7 +3,7 @@ import os.path
 import logging
 import numpy as np
 
-from PyMeshUtils import MeshSeparator
+from PyMesh import MeshSeparator
 
 from ..meshio import form_mesh
 from .remove_isolated_vertices import remove_isolated_vertices_raw
@@ -39,13 +39,13 @@ def separate_mesh(mesh, connectivity_type="auto"):
             separator = MeshSeparator(mesh.voxels);
         else:
             separator = MeshSeparator(mesh.faces);
-        separator.set_connectivity_type(MeshSeparator.VERTEX);
+        separator.set_connectivity_type(MeshSeparator.ConnectivityType.VERTEX);
     elif connectivity_type == "face":
         separator = MeshSeparator(mesh.faces);
-        separator.set_connectivity_type(MeshSeparator.FACE);
+        separator.set_connectivity_type(MeshSeparator.ConnectivityType.FACE);
     elif connectivity_type == "voxel":
         separator = MeshSeparator(mesh.voxels);
-        separator.set_connectivity_type(MeshSeparator.VOXEL);
+        separator.set_connectivity_type(MeshSeparator.ConnectivityType.VOXEL);
     else:
         raise RuntimeError("Unsupported connectivity type: {}".format(
             connectivity_type));

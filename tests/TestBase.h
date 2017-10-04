@@ -30,7 +30,7 @@ class TestBase : public ::testing::Test {
 
         virtual MeshPtr load_mesh(const std::string& filename) {
             std::string mesh_file = m_data_dir + filename;
-            return MeshFactory().load_file(mesh_file).create_shared();
+            return MeshFactory().load_file(mesh_file).create();
         }
 
         virtual MeshPtr load_data(
@@ -39,7 +39,7 @@ class TestBase : public ::testing::Test {
                 const Eigen::Ref<const VectorI>& voxels,
                 size_t dim, size_t vertex_per_face, size_t vertex_per_voxel) {
             return MeshFactory().load_data(vertices, faces, voxels,
-                        dim, vertex_per_face, vertex_per_voxel).create_shared();
+                        dim, vertex_per_face, vertex_per_voxel).create();
         }
 
         virtual MeshPtr load_data(

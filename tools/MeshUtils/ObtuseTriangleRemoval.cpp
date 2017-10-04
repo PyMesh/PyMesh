@@ -20,7 +20,8 @@ namespace ObtuseTriangleRemovalHelper {
 
 using namespace ObtuseTriangleRemovalHelper;
 
-ObtuseTriangleRemoval::ObtuseTriangleRemoval(MatrixFr& vertices, MatrixIr& faces)
+ObtuseTriangleRemoval::ObtuseTriangleRemoval(
+        const MatrixFr& vertices, const MatrixIr& faces)
     : m_vertices(vertices), m_faces(faces) { }
 
 size_t ObtuseTriangleRemoval::run(Float max_angle_allowed, size_t max_iterations) {

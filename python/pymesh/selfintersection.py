@@ -1,5 +1,5 @@
 import numpy as np
-import PySelfIntersection
+import PyMesh
 from .meshio import form_mesh
 
 def resolve_self_intersection(mesh, engine="auto"):
@@ -38,7 +38,7 @@ def resolve_self_intersection(mesh, engine="auto"):
         raise NotImplementedError(
                 "Resolving self-intersection only support triangle meshes");
 
-    resolver = PySelfIntersection.SelfIntersectionResolver.create(engine);
+    resolver = PyMesh.SelfIntersectionResolver.create(engine);
     resolver.set_mesh(vertices, faces);
     resolver.run();
 
@@ -66,13 +66,8 @@ def detect_self_intersection(mesh):
             row contains the indices of two intersecting faces. :math:`n` is
             the number of intersecting face pairs.
     """
-    try:
-        import PyCGAL
-    except ImportError:
-        raise NotImplementedError(
-                "Self intersection detection is not supported");
 
-    detector = PyCGAL.SelfIntersection(mesh.vertices, mesh.faces);
+    detector = PyMesh.SelfIntersection(mesh.vertices, mesh.faces);
     detector.detect_self_intersection();
     intersecting_faces = detector.get_self_intersecting_pairs();
     return intersecting_faces;

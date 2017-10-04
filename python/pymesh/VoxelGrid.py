@@ -1,13 +1,13 @@
-import PyEnvelope
+import PyMesh
 from .Mesh import Mesh
 
 class VoxelGrid:
     def __init__(self, cell_size, dim=3):
         self.dim = dim;
         if dim == 3:
-            self.raw_grid = PyEnvelope.VoxelGrid3D(cell_size);
+            self.raw_grid = PyMesh.VoxelGrid3D(cell_size);
         elif dim == 2:
-            self.raw_grid = PyEnvelope.VoxelGrid2D(cell_size);
+            self.raw_grid = PyMesh.VoxelGrid2D(cell_size);
         else:
             raise NotImplementedError("Unsupported dim: {}".format(dim));
 

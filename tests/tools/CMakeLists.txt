@@ -44,6 +44,11 @@ ENDIF (TARGET boolean)
 #    LIST(APPEND TARGET_MODULE_TESTS EigenUtils_tests)
 #ENDIF (TARGET EigenUtils)
 
+IF (TARGET lib_predicates)
+    ADD_SUBDIRECTORY(Predicates)
+    LIST(APPEND TARGET_MODULE_TESTS predicates_tests)
+ENDIF (TARGET lib_predicates)
+
 IF (TARGET SparseSolver)
     ADD_SUBDIRECTORY(SparseSolver)
     LIST(APPEND TARGET_MODULE_TESTS SparseSolver_tests)

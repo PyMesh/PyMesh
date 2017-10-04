@@ -16,7 +16,7 @@ namespace DMAT {
 
     template<typename Derived>
     void save_matrix(const std::string& filename,
-            const Eigen::MatrixBase<Derived>& M,
+            const Derived& M,
             bool in_ascii=false) {
         igl::writeDMAT(filename, M, in_ascii);
     }

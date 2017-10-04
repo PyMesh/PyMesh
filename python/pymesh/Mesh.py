@@ -3,7 +3,6 @@ import sys
 import numpy as np
 
 import PyMesh
-import PyMeshUtils
 
 class Mesh(object):
     """ A generic representation of a surface or volume mesh.
@@ -324,7 +323,7 @@ class Mesh(object):
         try:
             return self.__extra_info;
         except AttributeError:
-            self.__extra_info = PyMeshUtils.MeshChecker(
+            self.__extra_info = PyMesh.MeshChecker(
                     self.vertices_ref, self.faces_ref, self.voxels_ref);
             return self.__extra_info;
 

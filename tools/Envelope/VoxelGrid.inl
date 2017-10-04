@@ -71,7 +71,7 @@ namespace VoxelGridHelper {
             VectorI faces;
             factory.load_data(nodes, faces, elements, 3, 4, 8);
         }
-        return factory.create_shared();
+        return factory.create();
     }
 
     void remove_duplicated_vertices(MatrixFr& vertices, MatrixIr& elements) {

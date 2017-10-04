@@ -1,5 +1,5 @@
 import numpy as np
-from PyMeshUtils import DuplicatedVertexRemoval
+from PyMesh import DuplicatedVertexRemoval
 from ..meshio import form_mesh
 
 def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=None):

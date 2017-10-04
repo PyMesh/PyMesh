@@ -5,6 +5,7 @@
 #include <memory>
 
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 namespace PyMesh {
 
@@ -25,7 +26,9 @@ class ConvexHullEngine {
     public:
         virtual ~ConvexHullEngine() {}
 
-        virtual void run(const MatrixFr& points)=0;
+        virtual void run(const MatrixFr& points) {
+            throw NotImplementedError("This function is not implemented");
+        }
 
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }

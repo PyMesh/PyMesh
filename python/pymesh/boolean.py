@@ -1,4 +1,4 @@
-import PyBoolean
+import PyMesh
 import numpy as np
 from time import time
 from .meshio import form_mesh
@@ -70,7 +70,7 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
         return boolean_unsupported.quick_csg(mesh_1, mesh_2, operation,
                 with_timing);
 
-    engine = PyBoolean.BooleanEngine.create(engine);
+    engine = PyMesh.BooleanEngine.create(engine);
     engine.set_mesh_1(mesh_1.vertices, mesh_1.faces);
     engine.set_mesh_2(mesh_2.vertices, mesh_2.faces);
 

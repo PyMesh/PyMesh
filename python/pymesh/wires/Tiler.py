@@ -1,6 +1,6 @@
 import numpy as np
 
-import PyWires
+import PyMesh
 from .WireNetwork import WireNetwork
 from .Parameters import Parameters
 
@@ -23,7 +23,7 @@ class Tiler(object):
 
     def tile_with_guide_bbox(self, bbox_min, bbox_max, reps, parameters=None):
         self.__check_base_pattern();
-        tiler = PyWires.WireTiler(self.raw_pattern);
+        tiler = PyMesh.WireTiler(self.raw_pattern);
         if parameters is None:
             parameters = Parameters(self.pattern);
         tiler.with_parameters(parameters.raw_parameters);
@@ -35,7 +35,7 @@ class Tiler(object):
 
     def tile_with_guide_mesh(self, mesh, parameters=None):
         self.__check_base_pattern();
-        tiler = PyWires.WireTiler(self.raw_pattern);
+        tiler = PyMesh.WireTiler(self.raw_pattern);
         if parameters is None:
             parameters = Parameters(self.pattern);
         tiler.with_parameters(parameters.raw_parameters);
@@ -45,7 +45,7 @@ class Tiler(object):
     def tile_with_mixed_patterns(self, mesh,
             per_vertex_thickness=False, isotropic_dofs=True):
         self.__check_base_patterns();
-        tiler = PyWires.WireTiler(self.raw_patterns[0]);
+        tiler = PyMesh.WireTiler(self.raw_patterns[0]);
         self.raw_wire_network = tiler.tile_with_mixed_patterns(
                 self.raw_patterns, mesh.raw_mesh,
                 per_vertex_thickness, isotropic_dofs);

@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 
 namespace PyMesh {
 
@@ -23,7 +24,10 @@ class TetrahedronizationEngine {
         virtual ~TetrahedronizationEngine() {}
 
     public:
-        virtual void run()=0;
+        virtual void run() {
+            throw NotImplementedError(
+                    "Tetrahedralization algorithm not implemented");
+        }
 
         void set_vertices(const MatrixFr& vertices) { m_vertices = vertices; }
         void set_faces(const MatrixIr& faces) { m_faces = faces; }

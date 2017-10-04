@@ -21,7 +21,7 @@ def load_mesh(filename, drop_zero_dim=False):
     factory.load_file(filename);
     if drop_zero_dim:
         factory.drop_zero_dim();
-    return Mesh(factory.create_shared());
+    return Mesh(factory.create());
 
 def deduce_face_type(faces, voxels):
     if faces is None or faces.ndim == 1 or len(faces) == 0:
@@ -73,7 +73,7 @@ def form_mesh(vertices, faces, voxels=None):
             vertices.shape[1],
             faces.shape[1],
             voxels.shape[1]);
-    return Mesh(factory.create_shared());
+    return Mesh(factory.create());
 
 def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
     """ Save raw mesh to file.
@@ -105,7 +105,7 @@ def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):
     num_vertex_per_face = faces.shape[1];
     num_vertex_per_voxel = voxels.shape[1];
 
-    writer = PyMesh.MeshWriter.create_writer(filename);
+    writer = PyMesh.MeshWriter.create(filename);
     if setting.get("ascii", False):
         writer.in_ascii();
     if setting.get("use_float", False):
@@ -137,7 +137,7 @@ def save_mesh(filename, mesh, *attributes, **setting):
     Raises:
         KeyError: Attributes cannot be found in mesh.
     """
-    writer = PyMesh.MeshWriter.create_writer(filename);
+    writer = PyMesh.MeshWriter.create(filename);
     for attr in attributes:
         if not mesh.has_attribute(attr):
             raise KeyError("Attribute {} is not found in mesh".format(attr));

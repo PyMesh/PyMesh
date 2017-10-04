@@ -1,4 +1,4 @@
-import PyIGL
+import PyMesh
 import numpy as np
 from .meshio import form_mesh
 from .meshutils import remove_isolated_vertices
@@ -25,7 +25,7 @@ def partition_into_cells(mesh):
         * ``winding_number``: the scalar field indicating the piece-wise
           constant winding number of the cell on the positive side of each face.
     """
-    partition = PyIGL.CellPartition.create_raw(mesh.vertices, mesh.faces);
+    partition = PyMesh.CellPartition.create_raw(mesh.vertices, mesh.faces);
     partition.run();
 
     vertices = partition.get_vertices();

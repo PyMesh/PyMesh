@@ -2,7 +2,8 @@
 #include <string>
 #include <Core/EigenTypedef.h>
 
-#include "Mesh.h"
+#include <Mesh.h>
+#include <IO/MeshParser.h>
 
 namespace PyMesh {
 class MeshParser;
@@ -25,22 +26,19 @@ class MeshFactory {
         MeshFactory& with_connectivity(const std::string& conn_type);
         MeshFactory& with_attribute(const std::string& attr_name);
         MeshFactory& drop_zero_dim();
-        Mesh* create() { return m_mesh; }
-        Mesh::Ptr create_shared() { return Mesh::Ptr(m_mesh); }
+        Mesh::Ptr create() { return m_mesh; }
 
     private:
-        // Disable evil copy constructors.
-        // No implementation provided on purpose.
-        MeshFactory(const MeshFactory& other);
-        MeshFactory& operator=(const MeshFactory& other);
+        MeshFactory(const MeshFactory& other) = delete;
+        MeshFactory& operator=(const MeshFactory& other) = delete;
 
-        void initialize_vertices(MeshParser* parser);
-        void initialize_faces(MeshParser* parser);
-        void initialize_voxels(MeshParser* parser);
-        void initialize_attributes(MeshParser* parser);
+        void initialize_vertices(MeshParser::Ptr parser);
+        void initialize_faces(MeshParser::Ptr parser);
+        void initialize_voxels(MeshParser::Ptr parser);
+        void initialize_attributes(MeshParser::Ptr parser);
         void compute_and_drop_zero_dim();
 
     private:
-        Mesh* m_mesh;
+        std::shared_ptr<Mesh> m_mesh;
 };
 }

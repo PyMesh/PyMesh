@@ -20,7 +20,7 @@ class AABBTreeTest : public TestBase {
     //    MeshPtr load_mesh(const std::string& mesh_file) {
     //        MeshFactory factory;
     //        factory.load_file(m_mesh_data_dir + mesh_file);
-    //        return factory.create_shared();
+    //        return factory.create();
     //    }
 
     //protected:

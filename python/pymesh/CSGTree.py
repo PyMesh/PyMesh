@@ -1,4 +1,4 @@
-import PyBoolean
+import PyMesh
 import numpy as np
 from .meshio import form_mesh
 
@@ -36,7 +36,7 @@ class CSGTree:
         elif "mesh" in tree:
             # leaf case
             mesh = tree["mesh"];
-            self.tree = PyBoolean.CSGTree.create_leaf("igl",
+            self.tree = PyMesh.CSGTree.create_leaf("igl",
                     mesh.vertices, mesh.faces);
         elif "union" in tree:
             num_operands = len(tree["union"]);
@@ -44,7 +44,7 @@ class CSGTree:
                 self.tree = CSGTree(tree["union"][0]).tree;
             elif num_operands == 2:
                 children = [ CSGTree(subtree) for subtree in tree["union"] ];
-                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree = PyMesh.CSGTree.create("igl");
                 self.tree.set_operand_1(children[0].tree);
                 self.tree.set_operand_2(children[1].tree);
                 self.tree.compute_union();
@@ -52,7 +52,7 @@ class CSGTree:
                 mid = num_operands // 2;
                 child1 = CSGTree({"union": tree["union"][:mid]});
                 child2 = CSGTree({"union": tree["union"][mid:]});
-                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree = PyMesh.CSGTree.create("igl");
                 self.tree.set_operand_1(child1.tree);
                 self.tree.set_operand_2(child2.tree);
                 self.tree.compute_union();
@@ -64,7 +64,7 @@ class CSGTree:
                 self.tree = CSGTree(tree["intersection"][0]).tree;
             elif num_operand == 2:
                 children = [ CSGTree(subtree) for subtree in tree["intersection"] ];
-                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree = PyMesh.CSGTree.create("igl");
                 self.tree.set_operand_1(children[0].tree);
                 self.tree.set_operand_2(children[1].tree);
                 self.tree.compute_intersection();
@@ -72,7 +72,7 @@ class CSGTree:
                 mid = num_operands // 2;
                 child1 = CSGTree({"intersection": tree["intersection"][:mid]});
                 child2 = CSGTree({"intersection": tree["intersection"][mid:]});
-                self.tree = PyBoolean.CSGTree.create("igl");
+                self.tree = PyMesh.CSGTree.create("igl");
                 self.tree.set_operand_1(child1.tree);
                 self.tree.set_operand_2(child2.tree);
                 self.tree.compute_intersection();
@@ -81,7 +81,7 @@ class CSGTree:
         elif "difference" in tree:
             children = [ CSGTree(subtree) for subtree in tree["difference"] ];
             assert(len(children) == 2);
-            self.tree = PyBoolean.CSGTree.create("igl");
+            self.tree = PyMesh.CSGTree.create("igl");
             self.tree.set_operand_1(children[0].tree);
             self.tree.set_operand_2(children[1].tree);
             self.tree.compute_difference();
@@ -89,7 +89,7 @@ class CSGTree:
             children = [ CSGTree(subtree) for subtree in
                     tree["symmetric_difference"] ];
             assert(len(children) == 2);
-            self.tree = PyBoolean.CSGTree.create("igl");
+            self.tree = PyMesh.CSGTree.create("igl");
             self.tree.set_operand_1(children[0].tree);
             self.tree.set_operand_2(children[1].tree);
             self.tree.compute_symmetric_difference();

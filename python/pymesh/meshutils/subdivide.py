@@ -1,4 +1,4 @@
-import PyMeshUtils
+import PyMesh
 from ..meshio import form_mesh
 
 def subdivide(mesh, order=1, method="simple"):
@@ -14,7 +14,7 @@ def subdivide(mesh, order=1, method="simple"):
         tracks the original face index from the input mesh.
 
     """
-    subdiv = PyMeshUtils.Subdivision.create(method);
+    subdiv = PyMesh.Subdivision.create(method);
     subdiv.subdivide(mesh.vertices, mesh.faces, order);
 
     vertices = subdiv.get_vertices();

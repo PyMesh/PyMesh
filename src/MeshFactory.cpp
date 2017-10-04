@@ -13,11 +13,11 @@
 using namespace PyMesh;
 
 MeshFactory::MeshFactory() {
-    m_mesh = new Mesh();
+    m_mesh = std::shared_ptr<Mesh>(new Mesh);
 }
 
 MeshFactory& MeshFactory::load_file(const std::string& filename) {
-    MeshParser* parser = MeshParser::create_parser(filename);
+    MeshParser::Ptr parser = MeshParser::create_parser(filename);
     assert(parser != NULL);
     bool success = parser->parse(filename);
     if (!success) {
@@ -32,7 +32,6 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
     initialize_voxels(parser);
     initialize_attributes(parser);
 
-    delete parser;
     return *this;
 }
 
@@ -90,7 +89,7 @@ MeshFactory& MeshFactory::drop_zero_dim() {
     return *this;
 }
 
-void MeshFactory::initialize_vertices(MeshParser* parser) {
+void MeshFactory::initialize_vertices(MeshParser::Ptr parser) {
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();
 
     VectorF& vertices = geometry->get_vertices();
@@ -100,7 +99,7 @@ void MeshFactory::initialize_vertices(MeshParser* parser) {
     geometry->set_dim(parser->dim());
 }
 
-void MeshFactory::initialize_faces(MeshParser* parser) {
+void MeshFactory::initialize_faces(MeshParser::Ptr parser) {
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();
 
     VectorI& faces = geometry->get_faces();
@@ -110,7 +109,7 @@ void MeshFactory::initialize_faces(MeshParser* parser) {
     geometry->set_vertex_per_face(parser->vertex_per_face());
 }
 
-void MeshFactory::initialize_voxels(MeshParser* parser) {
+void MeshFactory::initialize_voxels(MeshParser::Ptr parser) {
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();
 
     VectorI& voxels = geometry->get_voxels();
@@ -120,7 +119,7 @@ void MeshFactory::initialize_voxels(MeshParser* parser) {
     geometry->set_vertex_per_voxel(parser->vertex_per_voxel());
 }
 
-void MeshFactory::initialize_attributes(MeshParser* parser) {
+void MeshFactory::initialize_attributes(MeshParser::Ptr parser) {
     Mesh::AttributesPtr attributes = m_mesh->get_attributes();
 
     MeshParser::AttrNames attr_names = parser->get_attribute_names();

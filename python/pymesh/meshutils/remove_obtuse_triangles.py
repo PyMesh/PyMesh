@@ -2,7 +2,7 @@ from math import radians
 
 from .. import timethis
 from ..meshio import form_mesh
-from PyMeshUtils import ObtuseTriangleRemoval
+from PyMesh import ObtuseTriangleRemoval
 
 class ObtuseTriangleRemover:
     def __init__(self, vertices, faces):

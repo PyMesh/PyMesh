@@ -35,19 +35,9 @@ class Mesh {
         typedef std::shared_ptr<Mesh> Ptr;
 
     protected:
-        /**
-         * Constructor to create an empty mesh.
-         * This constructor is only accessible by friends.
-         */
         Mesh();
-
-        // Disable evil copy constructors.
-        // No implementation provided on purpose.
-        Mesh(Mesh& other);
-        Mesh& operator=(Mesh& other);
-
-    public:
-        virtual ~Mesh() {}
+        Mesh(Mesh& other) = delete;
+        Mesh& operator=(Mesh& other) = delete;
 
     public:
         // Geometry access

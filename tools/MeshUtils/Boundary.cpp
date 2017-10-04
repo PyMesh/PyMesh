@@ -24,7 +24,7 @@ Boundary::Ptr Boundary::extract_surface_boundary_raw(
 
     MeshFactory factory;
     Mesh::Ptr mesh = factory.load_data(flattened_vertices, flattened_faces,
-            voxels, vertices.cols(), faces.cols(), 0).create_shared();
+            voxels, vertices.cols(), faces.cols(), 0).create();
 
     return extract_surface_boundary(*mesh);
 }
@@ -58,7 +58,7 @@ Boundary::Ptr Boundary::extract_volume_boundary_raw(
     MeshFactory factory;
     Mesh::Ptr mesh = factory.load_data(flattened_vertices, faces,
             flattened_voxels, vertices.cols(), vertex_per_face,
-            vertex_per_voxel).create_shared();
+            vertex_per_voxel).create();
 
     return extract_volume_boundary(*mesh);
 }

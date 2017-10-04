@@ -5,7 +5,7 @@ import numpy as np
 from .. import timethis
 from ..meshio import form_mesh
 
-from PyMeshUtils import ShortEdgeRemoval, IsolatedVertexRemoval, FinFaceRemoval
+from PyMesh import ShortEdgeRemoval, IsolatedVertexRemoval, FinFaceRemoval
 
 class _EdgeCollapser(object):
     """ Wrapper class for C++ ShortEdgeRemoval class.

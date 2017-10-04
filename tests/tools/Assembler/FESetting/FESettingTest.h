@@ -25,7 +25,7 @@ class FESettingTest : public TestBase {
                 .with_attribute("vertex_normal")
                 .with_attribute("face_area")
                 .with_attribute("voxel_volume")
-                .create_shared();
+                .create();
         }
 };
 

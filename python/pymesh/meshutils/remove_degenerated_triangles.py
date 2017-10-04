@@ -1,4 +1,4 @@
-from PyMeshUtils import DegeneratedTriangleRemoval
+from PyMesh import DegeneratedTriangleRemoval
 from ..meshio import form_mesh
 
 def remove_degenerated_triangles_raw(vertices, faces, num_iterations=5):

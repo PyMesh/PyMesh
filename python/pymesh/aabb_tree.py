@@ -1,4 +1,4 @@
-import PyCGAL
+import PyMesh
 import numpy as np
 
 class AABBTree:
@@ -6,10 +6,10 @@ class AABBTree:
         self.__raw_tree = None;
 
     def load_data(self, vertices, faces):
-        self.__raw_tree = PyCGAL.AABBTree(vertices, faces);
+        self.__raw_tree = PyMesh.AABBTree(vertices, faces);
 
     def load_mesh(self, mesh):
-        self.__raw_tree = PyCGAL.AABBTree(mesh.vertices, mesh.faces);
+        self.__raw_tree = PyMesh.AABBTree(mesh.vertices, mesh.faces);
 
     def look_up(self, pts):
         sq_dists, face_indices = \

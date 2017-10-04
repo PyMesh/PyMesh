@@ -2,7 +2,7 @@ import numbers
 import numpy as np
 import logging
 
-import PyWires
+import PyMesh
 from ..meshio import form_mesh
 
 class Inflator(object):
@@ -41,7 +41,7 @@ class Inflator(object):
         """
         if self.wire_network.dim != 3:
             raise NotImplementedError("Wire profile only works in 3D.");
-        self.profile = PyWires.WireProfile.create_isotropic(N);
+        self.profile = PyMesh.WireProfile.create_isotropic(N);
 
     def set_refinement(self, order=1, method="loop"):
         """ Refine the output mesh using subdivision.
@@ -63,7 +63,7 @@ class Inflator(object):
     def inflate(self, thickness, per_vertex_thickness=True,
             allow_self_intersection=False):
         wires = self.wire_network.raw_wires;
-        inflator = PyWires.InflatorEngine.create("simple", wires);
+        inflator = PyMesh.InflatorEngine.create("simple", wires);
         if not allow_self_intersection:
             inflator.self_intersection_is_fatal();
 
@@ -71,12 +71,12 @@ class Inflator(object):
             if isinstance(thickness, numbers.Number):
                 thickness = np.ones(self.wire_network.num_vertices) * thickness;
             assert(len(thickness) == self.wire_network.num_vertices);
-            inflator.set_thickness_type(PyWires.VERTEX);
+            inflator.set_thickness_type(PyMesh.InflatorEngine.PER_VERTEX);
         else:
             if isinstance(thickness, numbers.Number):
                 thickness = np.ones(self.wire_network.num_edges) * thickness;
             assert(len(thickness) == self.wire_network.num_edges);
-            inflator.set_thickness_type(PyWires.EDGE);
+            inflator.set_thickness_type(PyMesh.InflatorEngine.PER_EDGE);
         inflator.set_thickness(thickness);
 
         self.__setup_geometry_correction(inflator);
@@ -93,14 +93,14 @@ class Inflator(object):
         wires = self.wire_network.raw_wires;
         assert(parameters.wire_network == self.wire_network);
 
-        symm_checker = PyWires.SymmetryChecker(wires);
+        symm_checker = PyMesh.SymmetryChecker(wires);
         if (symm_checker.has_cubic_symmetry()):
             self.logger.info("Using reflective inflator");
-            inflator = PyWires.InflatorEngine.create_isotropic_parametric(
+            inflator = PyMesh.InflatorEngine.create_isotropic_parametric(
                     wires, parameters.raw_parameters);
         else:
             self.logger.info("Using periodic inflator");
-            inflator = PyWires.InflatorEngine.create_parametric(
+            inflator = PyMesh.InflatorEngine.create_parametric(
                     wires, parameters.raw_parameters);
 
         self.__setup_geometry_correction(inflator);

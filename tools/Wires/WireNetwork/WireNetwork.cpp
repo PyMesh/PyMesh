@@ -46,6 +46,10 @@ WireNetwork::Ptr WireNetwork::create_raw(
     return Ptr(new WireNetwork(vertices, edges));
 }
 
+WireNetwork::Ptr WireNetwork::create_empty() {
+    return Ptr(new WireNetwork());
+}
+
 WireNetwork::WireNetwork() : m_dim(0) {
     initialize();
 }

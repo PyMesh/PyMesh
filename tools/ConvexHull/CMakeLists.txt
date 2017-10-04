@@ -33,19 +33,5 @@ TARGET_LINK_LIBRARIES(lib_convex_hull
     ${DEPENDENT_LIBS} Mesh lib_MeshUtils)
 SET_TARGET_PROPERTIES(lib_convex_hull PROPERTIES OUTPUT_NAME "convex_hull")
 
-IF(NOT WITHOUT_SWIG)
-    SET(SWG_FILES PyConvexHull.i)
-
-    # Generate wrapper for python
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-    SWIG_ADD_MODULE(PyConvexHull python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PyConvexHull ${PYTHON_LIBRARIES} lib_convex_hull)
-
-    # Boudle exe, lib, swig wrapper into a single target.
-    # To build all: "make convex_hull"
-    ADD_CUSTOM_TARGET(convex_hull DEPENDS lib_convex_hull _PyConvexHull)
-ELSE(NOT WITHOUT_SWIG)
-    ADD_CUSTOM_TARGET(convex_hull DEPENDS lib_convex_hull)
-ENDIF(NOT WITHOUT_SWIG)
+ADD_CUSTOM_TARGET(convex_hull DEPENDS lib_convex_hull)
 

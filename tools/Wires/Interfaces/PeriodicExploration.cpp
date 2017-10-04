@@ -175,7 +175,7 @@ void PeriodicExploration::update_mesh() {
     factory.load_data(
             flattened_vertices, flattened_faces, flattened_voxels,
             dim, vertex_per_face, vertex_per_voxel);
-    m_mesh = factory.create_shared();
+    m_mesh = factory.create();
 
     m_mesh->add_attribute("face_source");
     m_mesh->set_attribute("face_source", face_sources);

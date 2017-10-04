@@ -1,8 +1,8 @@
-import PyIGL
+import PyMesh
 import os.path
 
 def load_matrix(filename):
-    return PyIGL.load_MatrixF_DMAT(filename);
+    return PyMesh.load_matrix(filename);
 
-def save_matrix(filename, matrix):
-    return PyIGL.save_MatrixF_DMAT(filename, matrix);
+def save_matrix(filename, matrix, in_ascii=False):
+    return PyMesh.save_matrix(filename, matrix, in_ascii);

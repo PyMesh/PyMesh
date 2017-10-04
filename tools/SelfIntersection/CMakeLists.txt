@@ -24,20 +24,4 @@ ADD_LIBRARY(lib_self_intersection SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_self_intersection PROPERTIES OUTPUT_NAME "self_intersection")
 TARGET_LINK_LIBRARIES(lib_self_intersection Mesh ${DEPENDENT_LIBS})
 
-IF(NOT WITHOUT_SWIG)
-    set(SWG_FILES PySelfIntersection.i)
-
-    # Generate wrapper for python
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CPLUSPLUS ON)
-    SET_SOURCE_FILES_PROPERTIES(${SWG_FILES} PROPERTIES CMAKE_SWIG_FLAGS "-includeall")
-    SWIG_ADD_MODULE(PySelfIntersection python ${SWG_FILES} ${INC_FILES})
-    SWIG_LINK_LIBRARIES(PySelfIntersection ${PYTHON_LIBRARIES} Mesh
-        lib_self_intersection ${DEPENDENT_LIBS})
-
-    # Boudle lib, swig wrapper into a single target.
-    # Usage: make self_intersection
-    ADD_CUSTOM_TARGET(self_intersection DEPENDS lib_self_intersection
-        _PySelfIntersection)
-ELSE(NOT WITHOUT_SWIG)
-    ADD_CUSTOM_TARGET(self_intersection DEPENDS lib_self_intersection)
-ENDIF(NOT WITHOUT_SWIG)
+ADD_CUSTOM_TARGET(self_intersection DEPENDS lib_self_intersection)

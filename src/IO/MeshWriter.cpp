@@ -19,25 +19,25 @@
 
 using namespace PyMesh;
 
-MeshWriter* MeshWriter::create_writer(const std::string& filename) {
-    MeshWriter* writer = NULL;
+MeshWriter::Ptr MeshWriter::create(const std::string& filename) {
+    Ptr writer;
     std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
-        writer = new OBJWriter();
+        writer = Ptr(new OBJWriter());
     } else if (ext == ".off") {
-        writer = new OFFWriter();
+        writer = Ptr(new OFFWriter());
     } else if (ext == ".mesh") {
-        writer = new MEDITWriter();
+        writer = Ptr(new MEDITWriter());
     } else if (ext == ".msh") {
-        writer = new MSHWriter();
+        writer = Ptr(new MSHWriter());
     } else if (ext == ".node") {
-        writer = new NodeWriter();
+        writer = Ptr(new NodeWriter());
     } else if (ext == ".ply") {
-        writer = new PLYWriter();
+        writer = Ptr(new PLYWriter());
     } else if (ext == ".poly") {
-        writer = new POLYWriter();
+        writer = Ptr(new POLYWriter());
     } else if (ext == ".stl") {
-        writer = new STLWriter();
+        writer = Ptr(new STLWriter());
     } else {
         std::cerr << "Error: extention (" << ext << ") is not supported"
             << std::endl;
@@ -46,8 +46,4 @@ MeshWriter* MeshWriter::create_writer(const std::string& filename) {
 
     writer->set_output_filename(filename);
     return writer;
-}
-
-MeshWriter::Ptr MeshWriter::create(const std::string& filename) {
-    return Ptr(create_writer(filename));
 }
