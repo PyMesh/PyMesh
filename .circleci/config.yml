@@ -21,7 +21,7 @@ jobs:
                     cd third_party/build
                     cmake .. && make -j 4 && make install
                     cd ../../build
-                    cmake .. && make -j 2
+                    cmake .. && make
                     make all_tests
 
 workflows:
