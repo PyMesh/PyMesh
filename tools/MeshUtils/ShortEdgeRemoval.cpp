@@ -109,8 +109,7 @@ void ShortEdgeRemoval::init_edges() {
         for (size_t j=0; j<vertex_per_face; j++) {
             size_t v1_idx = m_faces(i, j);
             size_t v2_idx = m_faces(i, (j+1) % vertex_per_face);
-            if (v1_idx != v2_idx)
-                edges.insert(Edge(v1_idx, v2_idx));
+            edges.insert(Edge(v1_idx, v2_idx));
         }
     }
 
