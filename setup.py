@@ -69,7 +69,7 @@ class cmake_build(build):
         os.chdir(build_dir);
         command = "cmake ..";
         check_call(command.split());
-        command = "make -j {}".format(num_cores);
+        command = "make";
         check_call(command.split());
         os.chdir(root_dir);
 
