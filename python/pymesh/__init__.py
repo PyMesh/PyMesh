@@ -20,6 +20,7 @@ from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
 from .boolean import boolean
 from .convex_hull import convex_hull
 from .CSGTree import CSGTree
+from .exact_arithmetic import Gmpz, Gmpq
 #from .material import Material
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
@@ -57,6 +58,7 @@ __all__ = [
         "in_circle",
         "in_sphere",
         "slice_mesh",
+        "triangulate_beta",
         #"VoxelGrid"
         ];
 __all__ += meshutils.__all__;
