@@ -38,6 +38,7 @@ from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
 from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
 from .triangulate import triangulate_beta
+from .wires import *
 
 __all__ = [
         "Mesh",
@@ -48,21 +49,34 @@ __all__ = [
         "boolean",
         #"Material",
         "CSGTree",
+        "Gmpq",
+        "Gmpz",
+        "load_matrix",
+        "save_matrix",
         "resolve_self_intersection",
         "detect_self_intersection",
         "compute_outer_hull",
+        "compute_winding_number",
+        "slice_mesh",
         "submesh",
         "timethis",
-        "oriented_3D",
-        "oriented_2D",
+        "orient_3D",
+        "orient_2D",
         "in_circle",
         "in_sphere",
         "slice_mesh",
         "triangulate_beta",
-        #"VoxelGrid"
+        "tetrahedralize",
+        "minkowski_sum",
+        "partition_into_cells",
+        "AABBTree",
+        "distance_to_mesh",
+        "do_intersect",
+        "VoxelGrid"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
+__all__.append("wires");
 
 #try:
 #    import PyTriangle, PyTriangulation
