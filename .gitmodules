@@ -1,33 +1,44 @@
 [submodule "third_party/libigl"]
 	path = third_party/libigl
 	url = https://github.com/qnzhou/libigl.git
+	shallow = true
 [submodule "third_party/carve"]
 	path = third_party/carve
 	url = https://github.com/qnzhou/carve.git
+	shallow = true
 [submodule "third_party/cork"]
 	path = third_party/cork
 	url = https://github.com/qnzhou/cork.git
+	shallow = true
 [submodule "third_party/tetgen"]
 	path = third_party/tetgen
 	url = https://github.com/qnzhou/tetgen.git
+	shallow = true
 [submodule "third_party/triangle"]
 	path = third_party/triangle
 	url = https://github.com/qnzhou/triangle.git
+	shallow = true
 [submodule "third_party/qhull"]
 	path = third_party/qhull
 	url = https://github.com/qnzhou/qhull.git
+	shallow = true
 [submodule "third_party/Clipper"]
 	path = third_party/Clipper
 	url = https://github.com/qnzhou/Clipper.git
+	shallow = true
 [submodule "third_party/eigen"]
 	path = third_party/eigen
 	url = https://github.com/qnzhou/eigen.git
+	shallow = true
 [submodule "third_party/quartet"]
 	path = third_party/quartet
 	url = https://github.com/qnzhou/quartet.git
+	shallow = true
 [submodule "third_party/cgal"]
 	path = third_party/cgal
 	url = https://github.com/qnzhou/cgal.git
+	shallow = true
 [submodule "third_party/pybind11"]
 	path = third_party/pybind11
 	url = https://github.com/pybind/pybind11.git
+	shallow = true
