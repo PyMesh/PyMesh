@@ -157,15 +157,12 @@ void CGALMeshGen::run() {
     domain.detect_features();
     auto_compute_meshing_params();
     Mesh_criteria criteria(
-            edge_size             =m_edge_size,
-            facet_size            =m_face_size,
             cell_radius_edge_ratio=m_cell_radius_edge_ratio,
             cell_size             =m_cell_size);
 
-    C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(
-            domain, criteria, no_perturb(), no_exude());
+    C3t3 c3t3 = CGAL::make_mesh_3<C3t3>(domain, criteria);
     extract_mesh(c3t3, m_vertices, m_faces, m_voxels);
-    std::ofstream medit_file("debug.yams2");
-    c3t3.output_to_medit(medit_file);
+    //std::ofstream medit_file("debug.yams2");
+    //c3t3.output_to_medit(medit_file);
 }
 

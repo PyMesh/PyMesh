@@ -48,7 +48,6 @@ TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
 
 void TetrahedronizationEngine::preprocess() {
     assert_mesh_is_valid();
-    compute_ave_edge_length();
     auto_compute_meshing_params();
 }
 
@@ -66,44 +65,16 @@ void TetrahedronizationEngine::assert_mesh_is_valid() const {
         throw NotImplementedError(
                 "Tetrahedronization only supports triangular mesh");
     }
-    if (num_vertices == 0 || num_faces == 0) {
+    if (num_vertices == 0) {
         throw RuntimeError("Input mesh is empty!");
     }
 }
 
-void TetrahedronizationEngine::compute_ave_edge_length() {
-    Float total_edge_len = 0;
-
-    const size_t num_faces = m_faces.rows();
-    for (size_t i=0; i<num_faces; i++) {
-        const auto& face = m_faces.row(i);
-        const auto& v0 = m_vertices.row(face[0]);
-        const auto& v1 = m_vertices.row(face[1]);
-        const auto& v2 = m_vertices.row(face[2]);
-        total_edge_len += (v1 - v0).norm();
-        total_edge_len += (v2 - v1).norm();
-        total_edge_len += (v0 - v2).norm();
-    }
-
-    const size_t num_edges = num_faces * 3;
-    m_ave_edge_length = total_edge_len / num_edges;
-}
-
 void TetrahedronizationEngine::auto_compute_meshing_params() {
-    if (m_edge_size < 0.0) {
-       m_edge_size = m_ave_edge_length * 2;
-#ifndef NDEBUG
-       std::cout << "using default edge size: " << m_edge_size << std::endl;
-#endif
-    }
-    if (m_face_size < 0.0) {
-        m_face_size = m_ave_edge_length;
-#ifndef NDEBUG
-        std::cout << "using default face size: " << m_face_size << std::endl;
-#endif
-    }
     if (m_cell_size < 0.0) {
-        m_cell_size = m_ave_edge_length;
+        const Vector3F bbox_min = m_vertices.colwise().minCoeff();
+        const Vector3F bbox_max = m_vertices.colwise().maxCoeff();
+        m_cell_size = (bbox_max - bbox_min).norm() / 20;
 #ifndef NDEBUG
         std::cout << "using default cell size: " << m_cell_size << std::endl;
 #endif

@@ -7,7 +7,7 @@ namespace PyMesh {
 
 class CGALMeshGen : public TetrahedronizationEngine {
     public:
-        virtual ~CGALMeshGen() {}
+        virtual ~CGALMeshGen() = default;
 
     public:
         virtual void run();

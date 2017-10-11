@@ -40,7 +40,11 @@ void QuartetEngine::run() {
     TriMesh trimesh(vertices, faces);
 
     // Convert TriMesh into signed distance field.
-    float dx = m_cell_size;
+    // Quartet stuffs 46 tets into a 4x4x4 grid.  Assuming each tet is near
+    // regular, the circumradius of each tet is
+    // ((4^3/46)*6*sqrt(2))^(1/3)*sqrt(6)/4 = 1.3943712855 times dx;
+    // Thus, dx should be 1/1.3943712855 ~=  0.71716910007
+    float dx = m_cell_size * 0.71716910007;
     VectorF bbox_min = m_vertices.colwise().minCoeff();
     VectorF bbox_max = m_vertices.colwise().maxCoeff();
     Vec3f origin(bbox_min[0], bbox_min[1], bbox_min[2]);

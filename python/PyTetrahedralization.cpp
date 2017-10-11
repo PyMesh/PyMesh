@@ -17,8 +17,6 @@ void init_Tetrahedralization(py::module& m) {
     .def("run", &TetrahedronizationEngine::run)
     .def("set_vertices", &TetrahedronizationEngine::set_vertices)
     .def("set_faces", &TetrahedronizationEngine::set_faces)
-    .def("set_edge_size", &TetrahedronizationEngine::set_edge_size)
-    .def("set_face_size", &TetrahedronizationEngine::set_face_size)
     .def("set_cell_radius_edge_ratio", &TetrahedronizationEngine::set_cell_radius_edge_ratio)
     .def("set_cell_size", &TetrahedronizationEngine::set_cell_size)
     .def("get_vertices", &TetrahedronizationEngine::get_vertices)
