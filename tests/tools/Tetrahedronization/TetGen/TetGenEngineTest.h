@@ -73,3 +73,27 @@ TEST_F(TetGenEngineTest, cube) {
     ASSERT_EQ(out_faces_2.cols(), 3);
     ASSERT_GT(out_voxels_2.rows(), out_voxels.rows());
 }
+
+TEST_F(TetGenEngineTest, ball) {
+    auto mesh = load_mesh("ball.msh");
+    MatrixFr vertices = extract_vertices(mesh);
+    MatrixIr faces = extract_faces(mesh);
+
+    auto engine = TetrahedronizationEngine::create("tetgen");
+    ASSERT_TRUE(bool(engine));
+
+    engine->set_vertices(vertices);
+    engine->set_faces(faces);
+    engine->set_cell_size(0.173205);
+    engine->run();
+
+    const auto out_vertices = engine->get_vertices();
+    const auto out_faces = engine->get_faces();
+    const auto out_voxels = engine->get_voxels();
+
+    ASSERT_GE(out_vertices.rows(), vertices.rows());
+    ASSERT_EQ(out_vertices.cols(), 3);
+    ASSERT_GE(out_faces.rows(), faces.rows());
+    ASSERT_EQ(out_faces.cols(), 3);
+    ASSERT_GT(out_voxels.rows(), 0);
+}
