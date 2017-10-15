@@ -10,7 +10,7 @@ class QuartetEngine : public TetrahedronizationEngine {
         virtual ~QuartetEngine() = default;
 
     public:
-        virtual void run();
+        virtual void run() override;
 };
 
 }

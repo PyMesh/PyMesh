@@ -12,7 +12,7 @@ class GeoGramEngine : public TetrahedronizationEngine,
         virtual ~GeoGramEngine() = default;
 
     public:
-        virtual void run();
+        virtual void run() override;
 };
 
 }

@@ -7,10 +7,10 @@ namespace PyMesh {
 
 class TetGenEngine : public TetrahedronizationEngine {
     public:
-        virtual ~TetGenEngine() {}
+        virtual ~TetGenEngine() =default;
 
     public:
-        virtual void run();
+        virtual void run() override;
 };
 
 }
