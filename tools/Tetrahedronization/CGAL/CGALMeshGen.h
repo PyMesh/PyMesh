@@ -10,7 +10,7 @@ class CGALMeshGen : public TetrahedronizationEngine {
         virtual ~CGALMeshGen() = default;
 
     public:
-        virtual void run();
+        virtual void run() override;
 };
 
 }
