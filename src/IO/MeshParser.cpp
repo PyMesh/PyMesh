@@ -14,6 +14,7 @@
 #include "STLParser.h"
 #include "PLYParser.h"
 #include "POLYParser.h"
+#include "VEGAParser.h"
 #include "IOUtils.h"
 
 using namespace PyMesh;
@@ -39,6 +40,8 @@ MeshParser::Ptr MeshParser::create_parser(const std::string& filename) {
         parser = Ptr(new PLYParser());
     } else if (ext == ".poly") {
         parser = Ptr(new POLYParser());
+    } else if (ext == ".vega") {
+        parser = Ptr(new VEGAParser());
     } else {
         std::stringstream err_msg;
         err_msg << "Error: extention (" << ext << ") is not supported"

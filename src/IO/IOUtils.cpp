@@ -20,11 +20,11 @@ bool IOUtils::is_prefix(const char* prefix, const char* str) {
 }
 
 std::string IOUtils::next_line(std::ifstream& fin) {
-    const size_t LINE_SIZE = 256;
+    constexpr size_t LINE_SIZE = 256;
     char line[LINE_SIZE];
     do {
         if (fin.eof()) {
-            throw IOError("Error parsing OFF file");
+            throw IOError("Error: EOF reached while parsing.");
         }
         fin.getline(line, LINE_SIZE);
     } while(strlen(line) == 0 || line[0] == '#' ||
