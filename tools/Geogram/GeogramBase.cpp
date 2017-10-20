@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 
-#include "GeoGramBase.h"
+#include "GeogramBase.h"
 
 #ifdef WITH_GEOGRAM
-bool PyMesh::GeoGramBase::m_initialized = false;
+bool PyMesh::GeogramBase::m_initialized = false;
 #endif

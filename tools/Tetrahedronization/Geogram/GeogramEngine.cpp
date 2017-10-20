@@ -1,4 +1,4 @@
-#include "GeoGramEngine.h"
+#include "GeogramEngine.h"
 #include <Core/Exception.h>
 
 #include <geogram/basic/common.h>
@@ -9,7 +9,7 @@
 
 using namespace PyMesh;
 
-void GeoGramEngine::run() {
+void GeogramEngine::run() {
     GEO::Delaunay_var delaunay = GEO::Delaunay::create(3, "tetgen");
     delaunay->initialize();
     GEO::Mesh mesh;
@@ -29,7 +29,7 @@ void GeoGramEngine::run() {
         delaunay->set_constraints(&mesh);
     } else {
         throw NotImplementedError("");
-        std::cerr << "GeoGram Delaunay does not support constraints." <<
+        std::cerr << "Geogram Delaunay does not support constraints." <<
             std::endl;
         delaunay->set_vertices(m_vertices.rows(), m_vertices.data());
     }
@@ -40,7 +40,7 @@ void GeoGramEngine::run() {
     } catch (const GEO::Delaunay::InvalidInput& error_report) {
         size_t num_bad_faces = error_report.invalid_facets.size();
         std::stringstream err_msg;
-        err_msg << "GeoGram delaunay falied: Encountered "
+        err_msg << "Geogram delaunay falied: Encountered "
             << num_bad_faces << " bad faces.";
         throw RuntimeError(err_msg.str());
     }

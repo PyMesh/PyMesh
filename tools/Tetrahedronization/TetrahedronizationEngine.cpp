@@ -16,7 +16,7 @@
 #endif
 
 #if WITH_GEOGRAM
-#include "GeoGram/GeoGramEngine.h"
+#include "Geogram/GeogramEngine.h"
 #endif
 
 #if WITH_QUARTET
@@ -34,7 +34,7 @@ TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
     if (engine_name == "tetgen") { return Ptr(new TetGenEngine); }
 #endif
 #if WITH_GEOGRAM
-    if (engine_name == "geogram") { return Ptr(new GeoGramEngine); }
+    if (engine_name == "geogram") { return Ptr(new GeogramEngine); }
 #endif
 #if WITH_QUARTET
     if (engine_name == "quartet") { return Ptr(new QuartetEngine); }

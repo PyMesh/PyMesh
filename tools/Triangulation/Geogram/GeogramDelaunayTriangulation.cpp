@@ -1,9 +1,9 @@
-#include "GeoGramDelaunayTriangulation.h"
+#include "GeogramDelaunayTriangulation.h"
 #include <geogram/delaunay/delaunay.h>
 
 using namespace PyMesh;
 
-void GeoGramDelaunayTriangulation::run() {
+void GeogramDelaunayTriangulation::run() {
     GEO::Delaunay_var delaunay = GEO::Delaunay::create(2,"triangle");
     delaunay->set_vertices(m_vertices.rows(), m_vertices.data());
     const size_t num_faces = delaunay->nb_cells();

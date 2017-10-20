@@ -11,7 +11,7 @@
 #include "ShewchukTriangle/ShewchukTriangleTest.h"
 #endif
 #ifdef WITH_GEOGRAM
-#include "GeoGram/GeoGramDelaunayTriangulationTest.h"
+#include "Geogram/GeogramDelaunayTriangulationTest.h"
 #endif
 
 int main(int argc, char** argv) {

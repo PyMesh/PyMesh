@@ -11,16 +11,16 @@ namespace PyMesh {
  * Base class for all GeoGram wrappers.
  * It takes care of initializing GeoGram environment.
  */
-class GeoGramBase {
+class GeogramBase {
     public:
-        GeoGramBase() {
+        GeogramBase() {
             if (!m_initialized) {
                 GEO::initialize();
                 m_initialized = true;
             }
         }
 
-        virtual ~GeoGramBase() = default;
+        virtual ~GeogramBase() = default;
     private:
         static bool m_initialized;
 };

@@ -3,10 +3,10 @@
 
 #include "../TriangulationTest.h"
 
-class GeoGramDelaunayTriangulationTest : public TriangulationTest {
+class GeogramDelaunayTriangulationTest : public TriangulationTest {
 };
 
-TEST_F(GeoGramDelaunayTriangulationTest, simple) {
+TEST_F(GeogramDelaunayTriangulationTest, simple) {
     MatrixFr points(3, 2);
     points << 0.0, 0.0,
               1.0, 0.0,
@@ -24,7 +24,7 @@ TEST_F(GeoGramDelaunayTriangulationTest, simple) {
     assert_valid_triangulation(points, faces);
 }
 
-TEST_F(GeoGramDelaunayTriangulationTest, simple2) {
+TEST_F(GeogramDelaunayTriangulationTest, simple2) {
     MatrixFr points(4, 2);
     points << 0.0, 0.0,
               0.5, 0.0,
@@ -39,7 +39,7 @@ TEST_F(GeoGramDelaunayTriangulationTest, simple2) {
     assert_valid_triangulation(points, faces);
 }
 
-TEST_F(GeoGramDelaunayTriangulationTest, simple3) {
+TEST_F(GeogramDelaunayTriangulationTest, simple3) {
     MatrixFr points(4, 2);
     points << 0.0, 0.0,
               1.0, 0.0,
@@ -54,7 +54,7 @@ TEST_F(GeoGramDelaunayTriangulationTest, simple3) {
     assert_valid_triangulation(points, faces);
 }
 
-TEST_F(GeoGramDelaunayTriangulationTest, degenerate) {
+TEST_F(GeogramDelaunayTriangulationTest, degenerate) {
     MatrixFr points(3, 2);
     points << 0.0, 0.0,
               0.5, 0.0,

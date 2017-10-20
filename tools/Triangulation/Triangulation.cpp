@@ -16,7 +16,7 @@
 #endif
 
 #ifdef WITH_GEOGRAM
-#include "GeoGram/GeoGramDelaunayTriangulation.h"
+#include "Geogram/GeogramDelaunayTriangulation.h"
 #endif
 
 #include <Core/Exception.h>
@@ -51,7 +51,7 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 
 #ifdef WITH_GEOGRAM
     if (engine_name == "geogram_delaunay") {
-        return Ptr(new GeoGramDelaunayTriangulation());
+        return Ptr(new GeogramDelaunayTriangulation());
     }
 #endif
 
