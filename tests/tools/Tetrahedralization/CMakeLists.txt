@@ -1,6 +1,6 @@
 # Include headers
 INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/Tetrahedronization/)
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/Tetrahedralization/)
 
 # Inlclude CGAL
 IF(CGAL_FOUND)
@@ -8,7 +8,7 @@ IF(CGAL_FOUND)
     ADD_DEFINITIONS(-DWITH_CGAL)
     ADD_DEFINITIONS(-DCGAL_CONCURRENT_MESH_3)
 ELSE(CGAL_FOUND)
-    MESSAGE(WARNING "CGAL missing.  Skipping CGAL tetrahedronization support")
+    MESSAGE(WARNING "CGAL missing.  Skipping CGAL tetrahedralization support")
 ENDIF(CGAL_FOUND)
 
 # Include TetGen
@@ -16,7 +16,7 @@ IF(TETGEN_FOUND)
     INCLUDE_DIRECTORIES(${TETGEN_INCLUDE_DIRS})
     ADD_DEFINITIONS(-DWITH_TETGEN)
 ELSE(TETGEN_FOUND)
-    MESSAGE(WARNING "Tetgen missing.  Skipping TetGen tetrahedronization support")
+    MESSAGE(WARNING "Tetgen missing.  Skipping TetGen tetrahedralization support")
 ENDIF(TETGEN_FOUND)
 
 # Include GeoGram
@@ -35,8 +35,8 @@ ENDIF (QUARTET_FOUND)
 FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
 FILE(GLOB TEST_INC_FILES *_test.h)
 
-ADD_EXECUTABLE(tetrahedronization_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(tetrahedronization_tests Mesh lib_MeshUtils
-    lib_tetrahedronization ${GTEST_BOTH_LIBRARIES})
-ADD_CUSTOM_COMMAND(TARGET tetrahedronization_tests POST_BUILD
-    COMMAND tetrahedronization_tests)
+ADD_EXECUTABLE(tetrahedralization_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(tetrahedralization_tests Mesh lib_MeshUtils
+    lib_tetrahedralization ${GTEST_BOTH_LIBRARIES})
+ADD_CUSTOM_COMMAND(TARGET tetrahedralization_tests POST_BUILD
+    COMMAND tetrahedralization_tests)

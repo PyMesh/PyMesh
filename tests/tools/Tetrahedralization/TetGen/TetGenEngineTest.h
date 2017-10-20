@@ -2,7 +2,7 @@
 #pragma once
 
 #include <TestBase.h>
-#include <Tetrahedronization/TetrahedronizationEngine.h>
+#include <Tetrahedralization/TetrahedralizationEngine.h>
 
 class TetGenEngineTest : public TestBase {
 };
@@ -20,7 +20,7 @@ TEST_F(TetGenEngineTest, simple) {
              0, 3, 2,
              1, 2, 3;
 
-    auto engine = TetrahedronizationEngine::create("tetgen");
+    auto engine = TetrahedralizationEngine::create("tetgen");
     ASSERT_TRUE(bool(engine));
 
     engine->set_vertices(vertices);
@@ -43,7 +43,7 @@ TEST_F(TetGenEngineTest, cube) {
     MatrixFr vertices = extract_vertices(mesh);
     MatrixIr faces = extract_faces(mesh);
 
-    auto engine = TetrahedronizationEngine::create("tetgen");
+    auto engine = TetrahedralizationEngine::create("tetgen");
     ASSERT_TRUE(bool(engine));
 
     engine->set_vertices(vertices);
@@ -79,7 +79,7 @@ TEST_F(TetGenEngineTest, ball) {
     MatrixFr vertices = extract_vertices(mesh);
     MatrixIr faces = extract_faces(mesh);
 
-    auto engine = TetrahedronizationEngine::create("tetgen");
+    auto engine = TetrahedralizationEngine::create("tetgen");
     ASSERT_TRUE(bool(engine));
 
     engine->set_vertices(vertices);

@@ -74,9 +74,9 @@ IF (TARGET lib_triangulation)
     LIST(APPEND TARGET_MODULE_TESTS triangulation_tests)
 ENDIF (TARGET lib_triangulation)
 
-IF (TARGET lib_tetrahedronization)
-    ADD_SUBDIRECTORY(Tetrahedronization)
-    LIST(APPEND TARGET_MODULE_TESTS tetrahedronization_tests)
-ENDIF (TARGET lib_tetrahedronization)
+IF (TARGET lib_tetrahedralization)
+    ADD_SUBDIRECTORY(Tetrahedralization)
+    LIST(APPEND TARGET_MODULE_TESTS tetrahedralization_tests)
+ENDIF (TARGET lib_tetrahedralization)
 
 ADD_CUSTOM_TARGET(tools_tests DEPENDS ${TARGET_MODULE_TESTS})
