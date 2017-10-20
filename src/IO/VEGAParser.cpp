@@ -37,7 +37,7 @@ bool VEGAParser::parse(const std::string& filename) {
         assert(line.size() > 0);
 
         if (line[0] == '*') {
-            if (line == "*VERTICES") {
+            if (IOUtils::is_prefix("*VERTICES", line.c_str())) {
                 parse_vertices(fin);
             } else if (IOUtils::is_prefix("*ELEMENTS", line.c_str())) {
                 parse_elements(fin);
@@ -74,7 +74,7 @@ void VEGAParser::parse_vertices(std::ifstream& fin) {
         std::stringstream v_line(line);
         v_line >> index >> v[0] >> v[1] >> v[2];
         m_vertices.push_back(v);
-        if (i == 0 && index == 0) {
+        if (i == 0 && index == 0 && m_vertices.size() == 1) {
             m_index_start_from_zero = true;
         }
     }

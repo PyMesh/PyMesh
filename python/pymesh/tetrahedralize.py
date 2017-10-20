@@ -30,6 +30,8 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
                 <https://github.com/crawforddoran/quartet>`_
             * ``delpsc``: `DelPSC from Tamal K Dey , Joshua A. Levine, Andrew
                 Slatton <http://web.cse.ohio-state.edu/~dey.8/delpsc.html>`_
+            * ``vegafem``: `Tet mesher provided by VegaFEM library
+                <http://run.usc.edu/vega/>`_
 
     Returns:
         Tetrahedral mesh.
@@ -42,6 +44,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
     if engine == 'auto':
         engine = 'tetgen';
     elif engine == 'delpsc':
+        exec_name = "DelPSC";
         temp_dir = tempfile.gettempdir();
         md5 = hashlib.md5();
         md5.update(mesh.vertices);
@@ -49,7 +52,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         name = md5.hexdigest();
         temp_file = os.path.join(temp_dir, "{}.off".format(name));
         save_mesh(temp_file, mesh);
-        cmd = "DelPSC";
+        cmd = exec_name;
         if cell_size <= 0.0:
             cell_size = numpy.linalg.norm(mesh.bbox[0] - mesh.bbox[1]) / 20.0;
         cmd += " -mtr {}".format(cell_size * 0.5);
@@ -58,7 +61,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
             cmd += " -ar {}".format(radius_edge_ratio);
         cmd += " {} {}".format(temp_file, os.path.join(temp_dir, name));
         subprocess.check_call(cmd.split());
-        print("DelPSC done.");
+        logger.info("DelPSC done.");
 
         outfile_tet = os.path.join(temp_dir, "{}_vol.tets".format(name));
         outfile_off = os.path.join(temp_dir, "{}_vol.off".format(name));
@@ -70,6 +73,22 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         vertices = delpsc_mesh.vertices;
         voxels = delpsc_mesh.faces;
         return form_mesh(vertices, np.zeros((0, 3)), voxels);
+    elif engine == "vegafem":
+        exec_name = "tetMesher";
+        temp_dir = tempfile.gettempdir();
+        md5 = hashlib.md5();
+        md5.update(mesh.vertices);
+        md5.update(mesh.faces);
+        name = md5.hexdigest();
+        temp_file = os.path.join(temp_dir, "{}.obj".format(name));
+        output_file = os.path.join(temp_dir, "{}.vega".format(name));
+        save_mesh(temp_file, mesh);
+        logger.warning("VEGA tet mesher ignores cell_size and radius_edge_ratio");
+        cmd = "{} {} {}".format(exec_name, temp_file, output_file);
+        subprocess.check_call(cmd.split());
+        logger.info("VegaFEM tetMesher done.");
+        vega_mesh = load_mesh(output_file);
+        return vega_mesh;
     else:
         vertices = mesh.vertices.reshape((-1, 3), order="C");
         faces = mesh.faces.reshape((-1, 3), order="C").astype(int);

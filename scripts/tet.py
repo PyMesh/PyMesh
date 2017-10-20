@@ -9,7 +9,7 @@ import sys
 def parse_args():
     parser = argparse.ArgumentParser(description="Tet mesh generation");
     parser.add_argument("--engine", help="tet mesh engine",
-            choices = ("cgal", "tetgen", "geogram", "quartet", "delpsc"),
+            choices = ("cgal", "tetgen", "geogram", "quartet", "delpsc", "vegafem"),
             default="tetgen");
     parser.add_argument("--radius-edge-ratio",
             help="Max radius to edge ratio",
