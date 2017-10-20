@@ -15,7 +15,7 @@ IF(CGAL_FOUND)
     LIST(APPEND DEPENDENT_LIBS ${CGAL_LIBRARIES})
     ADD_SUBDIRECTORY(CGAL)
 ELSE(CGAL_FOUND)
-    MESSAGE(WARNING "CGAL missing.  Skipping CGAL tetrahedronization support")
+    MESSAGE(WARNING "CGAL missing.  Skipping CGAL tetrahedralization support")
 ENDIF(CGAL_FOUND)
 
 # Include TetGen
@@ -25,7 +25,7 @@ IF(TETGEN_FOUND)
     ADD_DEFINITIONS(-DWITH_TETGEN)
     ADD_SUBDIRECTORY(TetGen)
 ELSE(TETGEN_FOUND)
-    MESSAGE(WARNING "Tetgen missing.  Skipping TetGen tetrahedronization support")
+    MESSAGE(WARNING "Tetgen missing.  Skipping TetGen tetrahedralization support")
 ENDIF(TETGEN_FOUND)
 
 # Include Geogram
@@ -44,11 +44,11 @@ IF (QUARTET_FOUND)
     ADD_SUBDIRECTORY(Quartet)
 ENDIF (QUARTET_FOUND)
 
-ADD_LIBRARY(lib_tetrahedronization SHARED ${SRC_FILES} ${INC_FILES})
-TARGET_LINK_LIBRARIES(lib_tetrahedronization
+ADD_LIBRARY(lib_tetrahedralization SHARED ${SRC_FILES} ${INC_FILES})
+TARGET_LINK_LIBRARIES(lib_tetrahedralization
     ${DEPENDENT_LIBS} Mesh lib_MeshUtils)
-SET_TARGET_PROPERTIES(lib_tetrahedronization PROPERTIES OUTPUT_NAME
+SET_TARGET_PROPERTIES(lib_tetrahedralization PROPERTIES OUTPUT_NAME
     "tetrahedronization")
 
-ADD_CUSTOM_TARGET(tetrahedronization DEPENDS lib_tetrahedronization)
+ADD_CUSTOM_TARGET(tetrahedralization DEPENDS lib_tetrahedralization)
 

@@ -1,13 +1,13 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 
-#include <TetrahedronizationEngine.h>
+#include <TetrahedralizationEngine.h>
 
 namespace PyMesh {
 
-class TetGenEngine : public TetrahedronizationEngine {
+class CGALMeshGen : public TetrahedralizationEngine {
     public:
-        virtual ~TetGenEngine() =default;
+        virtual ~CGALMeshGen() = default;
 
     public:
         virtual void run() override;

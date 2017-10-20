@@ -1,5 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
-#include "TetrahedronizationEngine.h"
+#include "TetrahedralizationEngine.h"
 
 #include <cmath>
 #include <sstream>
@@ -25,7 +25,7 @@
 
 using namespace PyMesh;
 
-TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
+TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
         const std::string& engine_name) {
 #if WITH_CGAL
     if (engine_name == "cgal") { return Ptr(new CGALMeshGen); }
@@ -41,17 +41,17 @@ TetrahedronizationEngine::Ptr TetrahedronizationEngine::create(
 #endif
 
     std::stringstream err_msg;
-    err_msg << "Tetrahedronization engine " << engine_name
+    err_msg << "Tetrahedralization engine " << engine_name
         << " is not supported.";
     throw NotImplementedError(err_msg.str());
 }
 
-void TetrahedronizationEngine::preprocess() {
+void TetrahedralizationEngine::preprocess() {
     assert_mesh_is_valid();
     auto_compute_meshing_params();
 }
 
-void TetrahedronizationEngine::assert_mesh_is_valid() const {
+void TetrahedralizationEngine::assert_mesh_is_valid() const {
     const size_t num_vertices = m_vertices.rows();
     const size_t num_faces = m_faces.rows();
     const size_t dim = m_vertices.cols();
@@ -59,18 +59,18 @@ void TetrahedronizationEngine::assert_mesh_is_valid() const {
 
     if (dim != 3) {
         throw NotImplementedError(
-                "Tetrahedronization Only support 3D mesh");
+                "Tetrahedralization Only support 3D mesh");
     }
     if (vertex_per_face != 3) {
         throw NotImplementedError(
-                "Tetrahedronization only supports triangular mesh");
+                "Tetrahedralization only supports triangular mesh");
     }
     if (num_vertices == 0) {
         throw RuntimeError("Input mesh is empty!");
     }
 }
 
-void TetrahedronizationEngine::auto_compute_meshing_params() {
+void TetrahedralizationEngine::auto_compute_meshing_params() {
     if (m_cell_size < 0.0) {
         const Vector3F bbox_min = m_vertices.colwise().minCoeff();
         const Vector3F bbox_max = m_vertices.colwise().maxCoeff();

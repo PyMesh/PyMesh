@@ -37,7 +37,7 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     lib_self_intersection
     lib_boolean
     lib_outer_hull
-    lib_tetrahedronization
+    lib_tetrahedralization
     lib_triangulation
     lib_winding_number
     lib_wires)

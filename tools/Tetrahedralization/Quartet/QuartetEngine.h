@@ -1,11 +1,11 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
 
-#include <TetrahedronizationEngine.h>
+#include <TetrahedralizationEngine.h>
 
 namespace PyMesh {
 
-class QuartetEngine : public TetrahedronizationEngine {
+class QuartetEngine : public TetrahedralizationEngine {
     public:
         virtual ~QuartetEngine() = default;
 

@@ -9,18 +9,18 @@
 
 namespace PyMesh {
 
-class TetrahedronizationEngine {
+class TetrahedralizationEngine {
     public:
-        typedef std::shared_ptr<TetrahedronizationEngine> Ptr;
+        typedef std::shared_ptr<TetrahedralizationEngine> Ptr;
         static Ptr create(const std::string& engine_name);
 
     public:
-        TetrahedronizationEngine() :
+        TetrahedralizationEngine() :
             m_cell_radius_edge_ratio(2),
             m_cell_size(-1.0),
             m_ave_edge_length(1.0) { }
 
-        virtual ~TetrahedronizationEngine() {}
+        virtual ~TetrahedralizationEngine() {}
 
     public:
         virtual void run() {
