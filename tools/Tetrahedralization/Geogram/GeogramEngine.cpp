@@ -12,6 +12,8 @@ using namespace PyMesh;
 void GeogramEngine::run() {
     GEO::Delaunay_var delaunay = GEO::Delaunay::create(3, "tetgen");
     delaunay->initialize();
+    delaunay->set_refine(true);
+    delaunay->set_quality(1.0);
     GEO::Mesh mesh;
 
     // Import mesh
@@ -28,10 +30,7 @@ void GeogramEngine::run() {
         mesh.assert_is_valid();
         delaunay->set_constraints(&mesh);
     } else {
-        throw NotImplementedError("");
-        std::cerr << "Geogram Delaunay does not support constraints." <<
-            std::endl;
-        delaunay->set_vertices(m_vertices.rows(), m_vertices.data());
+        throw NotImplementedError("Geogram Delaunay does not support constraints");
     }
 
     // Run!
