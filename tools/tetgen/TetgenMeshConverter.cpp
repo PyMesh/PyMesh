@@ -41,29 +41,29 @@ void TetgenMeshConverter::get_tetgen_mesh(tetgenio& mesh) const {
     mesh.firstnumber=0;
     mesh.mesh_dim=3;
 
-    size_t num_vertices = m_vertices.rows();
+    const size_t num_vertices = m_vertices.rows();
     mesh.numberofpoints = num_vertices;
     mesh.pointlist = new double[num_vertices * 3];
     std::copy(m_vertices.data(), m_vertices.data() + num_vertices * 3, mesh.pointlist);
 
-    size_t num_faces = m_faces.rows();
+    const size_t num_faces = m_faces.rows();
     mesh.numberoffacets = num_faces;
     mesh.facetlist = new tetgenio::facet[mesh.numberoffacets];
-    mesh.facetmarkerlist = new int[num_faces];
 
     for (size_t i=0; i<num_faces; i++) {
         tetgenio::facet* f = &mesh.facetlist[i];
+        tetgenio::init(f);
         f->numberofpolygons = 1;
         f->polygonlist = new tetgenio::polygon[f->numberofpolygons];
         f->numberofholes = 0;
         f->holelist = NULL;
 
         tetgenio::polygon* p = &f->polygonlist[0];
+        tetgenio::init(p);
         p->numberofvertices=num_vertex_per_face;
         p->vertexlist = new int[p->numberofvertices];
         std::copy(m_faces.data() + i*num_vertex_per_face,
                 m_faces.data() + i*num_vertex_per_face + num_vertex_per_face,
                 p->vertexlist);
-        mesh.facetmarkerlist[i] = 0; // Not sure what it does.
     }
 }
