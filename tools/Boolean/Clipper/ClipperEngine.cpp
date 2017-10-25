@@ -10,6 +10,8 @@
 #include <list>
 #include <limits>
 #include <vector>
+#include <unordered_map>
+#include <unordered_set>
 
 using namespace PyMesh;
 
@@ -24,31 +26,36 @@ namespace ClipperEngineHelper {
     Loops extract_loops(const MatrixIr& boundaries) {
         assert(boundaries.cols() == 2);
         const size_t num_boundaries = boundaries.rows();
-        const size_t max_index = boundaries.maxCoeff() + 1;
-        std::vector<std::list<size_t> > adjacencies(max_index);
+        std::unordered_map<size_t, std::list<MatrixIr::Scalar> > adjacencies;
 
         for (size_t i=0; i<num_boundaries; i++) {
             const VectorI& edge = boundaries.row(i);
-            adjacencies[edge[0]].push_back(edge[1]);
+            auto itr = adjacencies.find(edge[0]);
+            if (itr != adjacencies.end()) {
+                itr->second.push_back(edge[0]);
+            } else {
+                adjacencies.insert({edge[0], {edge[1]}});
+            }
         }
 
         Loops loops;
-        std::vector<bool> visited(max_index, false);
-        for (size_t i=0; i<max_index; i++) {
-            if (visited[i]) continue;
+        std::unordered_set<size_t> visited;
+        for (const auto& itr : adjacencies) {
+            auto i = itr.first;
+            if (itr.second.empty()) continue; // Vertex not part of loop.
 
             Loop loop;
             loop.push_back(i);
-            visited[i] = true;
+            visited.insert(i);
             do {
-                std::list<size_t>& neighbors = adjacencies[loop.back()];
+                auto& neighbors = adjacencies[loop.back()];
                 if (neighbors.empty()) {
                     throw RuntimeError("Open loop detected.");
                 }
                 int next = neighbors.front();
                 neighbors.pop_front();
                 loop.push_back(next);
-                visited[next] = true;
+                visited.insert(next);
             } while (loop.back() != loop.front());
             loop.pop_back();
             if (loop.size() > 0) loops.push_back(loop);
