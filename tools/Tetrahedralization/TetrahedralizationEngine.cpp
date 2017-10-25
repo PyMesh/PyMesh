@@ -53,7 +53,6 @@ void TetrahedralizationEngine::preprocess() {
 
 void TetrahedralizationEngine::assert_mesh_is_valid() const {
     const size_t num_vertices = m_vertices.rows();
-    const size_t num_faces = m_faces.rows();
     const size_t dim = m_vertices.cols();
     const size_t vertex_per_face = m_faces.cols();
 

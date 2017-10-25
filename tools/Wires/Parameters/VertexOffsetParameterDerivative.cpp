@@ -77,7 +77,6 @@ void VertexOffsetParameterDerivative::compute_derivative_on_edge(
     const VectorF& v1 = wire_vertices.row(edge[1]);
 
     const VectorI  face = m_mesh->get_face(face_index);
-    const VectorF& face_normal = m_face_normals.row(face_index);
     const VectorF& c0 = m_mesh->get_vertex(face[0]);
     const VectorF& c1 = m_mesh->get_vertex(face[1]);
     const VectorF& c2 = m_mesh->get_vertex(face[2]);

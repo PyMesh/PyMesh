@@ -16,9 +16,9 @@ class TetrahedralizationEngine {
 
     public:
         TetrahedralizationEngine() :
+            m_ave_edge_length(1.0),
             m_cell_radius_edge_ratio(2),
-            m_cell_size(-1.0),
-            m_ave_edge_length(1.0) { }
+            m_cell_size(-1.0) { }
 
         virtual ~TetrahedralizationEngine() {}
 

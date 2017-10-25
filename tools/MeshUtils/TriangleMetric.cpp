@@ -1196,7 +1196,7 @@ void TriangleMetric::test() {
 	tm.m_ft_idx[1] = 2;
 
 	Point p1, p2;
-	Real d = tm.getClosestPts(p1, p2);
+	//Real d = tm.getClosestPts(p1, p2);
 	std::cout << "p1: " << p1[0] << ", " << p1[1] << ", " << p1[2] << std::endl;
 	std::cout << "p2: " << p2[0] << ", " << p2[1] << ", " << p2[2] << std::endl;
 	std::cout << "dist is " << (p1 - p2).squaredNorm() << std::endl;

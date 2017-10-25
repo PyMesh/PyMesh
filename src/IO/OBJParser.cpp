@@ -265,8 +265,6 @@ bool OBJParser::parse_face_line(char* line) {
     std::vector<size_t> t_idx;
     std::vector<size_t> n_idx;
     int v_idx, vt_idx, vn_idx;
-    size_t n;
-    size_t i=0;
     while (field != NULL) {
         // Note each vertex field could be in any of the following formats:
         // v_idx  or  v_idx/vt_idx  or  v_idx/vt_idx/vn_idx or v_idx//vn_idx

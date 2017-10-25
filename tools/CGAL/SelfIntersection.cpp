@@ -84,7 +84,6 @@ SelfIntersection::SelfIntersection(
 : m_faces(faces) {
     const size_t num_vertices = vertices.rows();
     const size_t dim = vertices.cols();
-    const size_t num_faces = faces.rows();
     const size_t vertex_per_face = faces.cols();
 
     if (dim != 3) {

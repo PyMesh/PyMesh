@@ -72,8 +72,6 @@ namespace EdgeUtilsHelper {
                 if (next.find(item.first) == next.end()) continue;
                 if (item.second == target_valance) {
                     chains.push_back(trace(next, item.first));
-                    const auto& chain = chains.back();
-                    const size_t chain_length = chain.size();
                 }
             }
         }

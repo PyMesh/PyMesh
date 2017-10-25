@@ -196,7 +196,6 @@ ParameterManager::Ptr ParameterManager::create_isotropic(
         WireNetwork::Ptr wire_network,
         Float default_thickness,
         ParameterManager::TargetType thickness_type) {
-    const size_t dim = wire_network->get_dim();
     Ptr manager = create_empty_manager(wire_network, default_thickness);
     if (!wire_network->has_attribute("vertex_cubic_symmetry_orbit")) {
         wire_network->add_attribute("vertex_cubic_symmetry_orbit");
@@ -532,8 +531,6 @@ void ParameterManager::load_dofs(const std::string& dof_file) {
 }
 
 std::vector<std::string> ParameterManager::get_formulas() const {
-    const size_t num_thickness_dofs = get_num_thickness_dofs();
-    const size_t num_offset_dofs = get_num_offset_dofs();
     std::vector<std::string> formulas;
     for (const auto& param : m_thickness_params) {
         formulas.emplace_back(param->get_formula());

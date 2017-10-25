@@ -179,8 +179,6 @@ void TilerEngine::remove_duplicated_vertices(WireNetwork& wire_network, Float to
 }
 
 void TilerEngine::remove_duplicated_edges(WireNetwork& wire_network) {
-    const size_t num_edges = wire_network.get_num_edges();
-
     const MatrixIr& edges = wire_network.get_edges();
     std::vector<bool> mask = create_duplication_mask(edges);
 

@@ -52,7 +52,6 @@ void MeshSeparator::compute_vertex_connectivity() {
     const size_t num_elements = m_elements.rows();
     const size_t vertex_per_element = m_elements.cols();
     for (size_t i=0; i<num_elements; i++) {
-        const auto& elment = m_elements.row(i);
         for (size_t j=0; j<vertex_per_element; j++) {
             m_connectivity.insert(Connector(m_elements(i, j)), i);
         }

@@ -37,9 +37,6 @@ NodeParser::NodeParser() :
     m_num_node_attributes(0) {}
 
 bool NodeParser::parse(const std::string& filename) {
-    const size_t LINE_SIZE = 256;
-    char line[LINE_SIZE];
-
     const std::string& node_file = filename;
     const std::string name = IOUtils::get_name(filename);
     const std::string face_file = name + ".face";
@@ -75,6 +72,7 @@ bool NodeParser::parse_nodes(const std::string& filename) {
     size_t n = sscanf(line,
             "%zd %zd %zd %zd", &m_num_vertices, &m_dim,
             &m_num_node_attributes, &boundary_marker);
+    assert(n == 4);
     assert(boundary_marker == 0 || boundary_marker == 1);
 
     for (size_t i=0; i<m_num_vertices; i++) {
@@ -289,7 +287,6 @@ void NodeParser::extract_faces_from_voxels() {
 
     typedef std::map<Triplet, int> FaceCounter;
     FaceCounter face_counter;
-    const size_t num_voxels = m_voxels.size();
     for (const auto& voxel : m_voxels) {
         assert(voxel.size() == 4);
         Triplet voxel_faces[4] = {

@@ -45,7 +45,6 @@ void PLYWriter::with_attribute(const std::string& attr_name) {
 }
 
 void PLYWriter::write_mesh(Mesh& mesh) {
-    const size_t dim = mesh.get_dim();
     p_ply ply = ply_create(m_filename.c_str(),
             m_in_ascii ? PLY_ASCII : PLY_LITTLE_ENDIAN,
             NULL, 0, NULL);
@@ -162,7 +161,6 @@ void PLYWriter::add_vertex_elements_header(Mesh& mesh, p_ply& ply) {
 }
 
 void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
-    const size_t dim = mesh.get_dim();
     const size_t num_faces = mesh.get_num_faces();
     assert_success(ply_add_element(ply, "face", num_faces), "Add face failed");
     assert_success(ply_add_list_property(ply, "vertex_indices", PLY_UCHAR,
@@ -188,7 +186,6 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
 }
 
 void PLYWriter::add_voxel_elements_header(Mesh& mesh, p_ply& ply) {
-    const size_t dim = mesh.get_dim();
     const size_t num_voxels = mesh.get_num_voxels();
     if (num_voxels == 0) return;
     assert_success(ply_add_element(ply, "voxel", num_voxels), "Add voxel failed");

@@ -112,7 +112,6 @@ void PeriodicInflator2D::clip_phantom_mesh(
         std::list<int>& face_sources) {
     VectorF bbox_min, bbox_max;
     get_center_cell_bbox(bbox_min, bbox_max);
-    const size_t dim = 2;
     const size_t num_phantom_faces = m_phantom_faces.rows();
     size_t base_index = m_phantom_vertices.rows();
     for (size_t i=0; i<num_phantom_faces; i++) {

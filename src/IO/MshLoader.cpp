@@ -180,7 +180,6 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     };
 
     size_t nodes_per_element;
-    int glob_elem_type = -1;
 
     if (m_binary) {
         eat_white_space(fin);
@@ -245,7 +244,6 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     auto copy_to_array = [&](
             const std::vector<int>& elements,
             const int nodes_per_element) {
-        const size_t num_elements = elements.size() / nodes_per_element;
         if (elements.size() % nodes_per_element != 0) {
             throw IOError("Parsing elements failed!");
         }

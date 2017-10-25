@@ -99,7 +99,6 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
         if (!is_degenerated(fi)) continue;
         const auto& face = m_faces.row(fi);
         const size_t fi_opp_v = find_longest_edge(fi);
-        const size_t vi_opp = face[fi_opp_v];
         const size_t vi_0 = face[(fi_opp_v+1)%3];
         const size_t vi_1 = face[(fi_opp_v+2)%3];
         Triplet edge(vi_0, vi_1);

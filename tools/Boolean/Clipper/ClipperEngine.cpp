@@ -101,7 +101,8 @@ namespace ClipperEngineHelper {
 
     void remove_duplicated_vertices(MatrixFr& vertices, MatrixIr& segments) {
         DuplicatedVertexRemoval remover(vertices, segments);
-        size_t num_removed = remover.run(std::numeric_limits<Float>::min());
+        const size_t num_removed = remover.run(std::numeric_limits<Float>::min());
+        assert(num_removed < vertices.rows());
         vertices = remover.get_vertices();
         segments = remover.get_faces();
     }

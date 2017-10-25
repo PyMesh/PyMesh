@@ -58,7 +58,6 @@ namespace PLYParserHelper {
         assert_success(ply != NULL);
         assert_success(ply_read_header(ply));
 
-        int r;
         const char* elem_name;
         const char* prop_name;
         long num_elements;

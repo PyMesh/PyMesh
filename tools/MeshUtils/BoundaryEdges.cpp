@@ -48,7 +48,6 @@ void BoundaryEdges::extract_boundary(const Mesh& mesh) {
     EdgeFaceMap edge_face_map;
 
     const size_t num_vertex_per_face = mesh.get_vertex_per_face();
-    const size_t num_vertices = mesh.get_num_vertices();
     const size_t num_faces = mesh.get_num_faces();
 
     for (size_t i=0; i<num_faces; i++) {

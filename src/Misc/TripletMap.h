@@ -28,7 +28,7 @@ class TripletMap {
 
     public:
         TripletMap() {
-            int infinity = std::numeric_limits<int>::max();
+            //int infinity = std::numeric_limits<int>::max();
             //m_map.set_empty_key(Triplet(infinity, infinity, infinity));
         }
 

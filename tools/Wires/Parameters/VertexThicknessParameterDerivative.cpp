@@ -28,8 +28,6 @@ MatrixFr VertexThicknessParameterDerivative::compute() {
     const size_t num_mesh_vertices = m_mesh->get_num_vertices();
     const size_t num_mesh_faces = m_mesh->get_num_faces();
     const size_t num_wire_vertices = wire_network->get_num_vertices();
-    const size_t num_wire_edges = wire_network->get_num_edges();
-    const MatrixIr& wire_edges = wire_network->get_edges();
 
     assert(dim == wire_network->get_dim());
 

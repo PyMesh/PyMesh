@@ -35,7 +35,7 @@ namespace OFFParserHelper {
 using namespace OFFParserHelper;
 
 OFFParser::OFFParser() :
-    m_dim(3), m_vertex_per_face(0), m_num_vertices(0), m_num_faces(0) {
+    m_num_vertices(0), m_num_faces(0), m_dim(3), m_vertex_per_face(0) {
 }
 
 bool OFFParser::parse(const std::string& filename) {

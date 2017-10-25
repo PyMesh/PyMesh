@@ -16,8 +16,8 @@ class PhantomMeshGenerator {
                 ParameterManager::Ptr manager,
                 WireProfile::Ptr profile) :
             m_wire_network(wire_network),
-            m_parameter_manager(manager),
             m_profile(profile),
+            m_parameter_manager(manager),
             m_with_shape_velocities(false) {
                 const size_t dim = m_wire_network->get_dim();
                 m_rel_geometry_correction = VectorF::Zero(dim);

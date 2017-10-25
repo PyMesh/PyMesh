@@ -9,7 +9,6 @@
 using namespace PyMesh;
 
 void FaceCircumRadiusAttribute::compute_from_mesh(Mesh& mesh) {
-    const size_t dim = mesh.get_dim();
     const size_t num_faces = mesh.get_num_faces();
     const size_t vertex_per_face = mesh.get_vertex_per_face();
 

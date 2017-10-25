@@ -78,7 +78,6 @@ void MeshTiler::evaluate_parameters(WireNetwork& wire_network,
 
 void MeshTiler::evaluate_thickness_parameters(WireNetwork& wire_network,
         const MeshTiler::FuncList& funcs) {
-    const size_t dim = wire_network.get_dim();
     const size_t num_vertices = wire_network.get_num_vertices();
     const size_t num_edges = wire_network.get_num_edges();
     const size_t num_unit_vertices = m_unit_wire_network->get_num_vertices();

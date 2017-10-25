@@ -68,6 +68,7 @@ void BooleanEngine::clean_up() {
 void BooleanEngine::remove_duplicated_vertices() {
     DuplicatedVertexRemoval remover(m_vertices, m_faces);
     size_t num_removed = remover.run(1e-6);
+    assert(num_removed <= m_vertices.rows());
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 }
@@ -75,6 +76,7 @@ void BooleanEngine::remove_duplicated_vertices() {
 void BooleanEngine::remove_short_edges() {
     ShortEdgeRemoval remover(m_vertices, m_faces);
     size_t num_removed = remover.run(1e-6);
+    assert(num_removed <= m_faces.rows() * m_faces.cols());
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 }
@@ -82,6 +84,7 @@ void BooleanEngine::remove_short_edges() {
 void BooleanEngine::remove_isolated_vertices() {
     IsolatedVertexRemoval remover(m_vertices, m_faces);
     size_t num_removed = remover.run();
+    assert(num_removed < m_vertices.rows());
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 }

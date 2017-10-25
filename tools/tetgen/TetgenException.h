@@ -9,7 +9,7 @@ namespace PyMesh {
 class TetgenException : public PyMeshException {
     public:
         TetgenException(int error_code) :
-            m_error_code(error_code), PyMeshException("") {
+            PyMeshException(""), m_error_code(error_code) {
                 generate_err_msg();
             }
 

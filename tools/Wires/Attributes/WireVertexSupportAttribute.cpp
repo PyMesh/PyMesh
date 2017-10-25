@@ -22,10 +22,9 @@ void WireVertexSupportAttribute::compute(const WireNetwork& network) {
         throw RuntimeError("Vertex support attribute requires wire connectivity");
     }
 
-    const size_t dim = network.get_dim();
     const size_t num_vertices = network.get_num_vertices();
 
-    m_values = MatrixFr::Zero(num_vertices, 1);
+    m_values = MatrixFr::Constant(num_vertices, 1, NOT_SUPPORTED);
     mark_directly_supported_vertices(network, m_values);
     propagate_supports(network, m_values);
 }

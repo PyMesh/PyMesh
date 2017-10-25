@@ -132,8 +132,6 @@ using namespace TriangleWrapperHelper;
 
 void TriangleWrapper::run() {
     const size_t dim = m_points.cols();
-    const size_t vertex_per_segment = m_segments.cols();
-    bool do_refine = (vertex_per_segment == 3);
     std::string flags = generate_command_line_options();
 
     if (dim == 2) {
@@ -403,7 +401,6 @@ void TriangleWrapper::run_triangle(const std::string& flags) {
 }
 
 void TriangleWrapper::poke_holes() {
-    const size_t num_faces = m_faces.rows();
     const size_t num_edges = m_edge_marks.size();
     assert(m_edges.size() == num_edges * 2);
     BoundaryMarker boundary_markers;

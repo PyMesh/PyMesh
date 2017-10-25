@@ -16,10 +16,10 @@ const size_t ShortEdgeRemoval::UNMAPPED = std::numeric_limits<size_t>::max();
 const Float  ShortEdgeRemoval::INFINITE = std::numeric_limits<Float>::max();
 
 ShortEdgeRemoval::ShortEdgeRemoval(const MatrixFr& vertices, const MatrixIr& faces) :
+    m_heap(false),
     m_vertices(vertices),
     m_faces(faces),
-    m_num_collapsed(0),
-    m_heap(false) {
+    m_num_collapsed(0) {
         const size_t vertex_per_face = m_faces.cols();
         if (vertex_per_face != 3) {
             throw NotImplementedError("Only triangle faces are supported!");
@@ -139,7 +139,6 @@ void ShortEdgeRemoval::update_vertices() {
 void ShortEdgeRemoval::update_faces() {
     const size_t num_faces = m_faces.rows();
     const size_t vertex_per_face = m_faces.cols();
-    const size_t num_entries = num_faces * vertex_per_face;
 
     std::vector<size_t> faces;
     std::vector<size_t> face_indices;
@@ -288,7 +287,6 @@ bool ShortEdgeRemoval::face_would_flip(
 
 void ShortEdgeRemoval::collapse_edge(size_t edge_idx) {
     const Edge& e = m_edges[edge_idx];
-    const size_t dim = m_vertices.cols();
     const size_t num_ori_vertices = m_vertices.rows();
     const size_t num_new_vertices = m_new_vertices.size();
     const size_t i1 = e.get_ori_data()[0];

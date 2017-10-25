@@ -26,10 +26,7 @@ class MultipletMap {
         typedef typename MultipletHashMap::const_iterator const_iterator;
 
     public:
-        MultipletMap() {
-            int infinity = std::numeric_limits<int>::max();
-            //m_map.set_empty_key(Multiplet(infinity, infinity, infinity));
-        }
+        MultipletMap() = default;
 
         void insert(const Multiplet& t, T val) {
             iterator itr = m_map.find(t);

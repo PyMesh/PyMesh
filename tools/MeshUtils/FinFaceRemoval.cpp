@@ -65,7 +65,7 @@ namespace FinFaceRemovalHelper {
 using namespace FinFaceRemovalHelper;
 
 FinFaceRemoval::FinFaceRemoval(const MatrixFr& vertices, const MatrixIr& faces)
-    : m_vertices(vertices), m_faces(faces), m_fins_only(false) {}
+    : m_fins_only(false), m_vertices(vertices), m_faces(faces) {}
 
 size_t FinFaceRemoval::run() {
     const size_t num_vertex_per_face = m_faces.cols();

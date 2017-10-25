@@ -174,7 +174,6 @@ void PhantomMeshGenerator::trim_irrelavent_edges() {
     const VectorF bbox_max = m_wire_network->get_bbox_max() + VectorF::Ones(dim)*eps;
 
     const size_t num_phantom_vertices = m_phantom_wires->get_num_vertices();
-    const size_t num_phantom_edges = m_phantom_wires->get_num_edges();
     const MatrixFr& phantom_vertices = m_phantom_wires->get_vertices();
     const MatrixIr& phantom_edges = m_phantom_wires->get_edges();
 
@@ -216,6 +215,7 @@ void PhantomMeshGenerator::convert_attributes_to_parameters() {
 
     count=0;
     for (const auto& param : offset_params) {
+        assert(param);
         const std::string& roi_attr_name = m_offset_roi_attr_names[count];
         const MatrixFr& roi_attr = m_phantom_wires->get_attribute(roi_attr_name);
         VectorI roi = get_non_zero_index(roi_attr);

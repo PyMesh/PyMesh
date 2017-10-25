@@ -77,6 +77,7 @@ namespace VoxelGridHelper {
     void remove_duplicated_vertices(MatrixFr& vertices, MatrixIr& elements) {
         DuplicatedVertexRemoval remover(vertices, elements);
         size_t num_duplicates = remover.run(1e-3);
+        assert(num_duplicates < vertices.rows());
         vertices = remover.get_vertices();
         elements = remover.get_faces();
     }
@@ -171,7 +172,6 @@ void VoxelGrid<DIM>::erode(size_t iterations) {
 
 template<int DIM>
 Mesh::Ptr VoxelGrid<DIM>::get_voxel_mesh() {
-    size_t index = 0;
     const Vector_f half_cell_size = this->m_cell_size * 0.5;
 
     std::vector<Vector_f> vertices;

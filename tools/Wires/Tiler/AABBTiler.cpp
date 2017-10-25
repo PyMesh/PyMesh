@@ -84,8 +84,6 @@ AABBTiler::AABBTiler(
 }
 
 WireNetwork::Ptr AABBTiler::tile() {
-    const size_t dim = m_unit_wire_network->get_dim();
-
     VectorF cell_size = (m_bbox_max - m_bbox_min).cwiseQuotient(
             m_repetitions.cast<Float>());
     normalize_unit_wire(cell_size);
@@ -114,7 +112,6 @@ void AABBTiler::evaluate_parameters(WireNetwork& wire_network,
 void AABBTiler::evaluate_thickness_parameters(WireNetwork& wire_network,
         const AABBTiler::FuncList& funcs) {
     assert(m_params);
-    const size_t dim = wire_network.get_dim();
     const size_t num_vertices = wire_network.get_num_vertices();
     const size_t num_edges = wire_network.get_num_edges();
     const size_t num_unit_vertices = m_unit_wire_network->get_num_vertices();

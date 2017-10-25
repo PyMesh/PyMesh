@@ -323,7 +323,6 @@ void IsotropicPeriodicInflator::update_face_sources() {
 
     m_face_sources = VectorI::Zero(num_faces);
     for (size_t i=0; i<num_faces; i++) {
-        const VectorI& f = m_faces.row(i);
         const VectorF& centroid = face_centroids.row(i);
         if (box_checker.is_on_boundary(centroid)) {
             continue;

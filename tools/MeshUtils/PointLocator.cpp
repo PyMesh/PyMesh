@@ -131,7 +131,6 @@ void PointLocator::init_hash_grid() {
 }
 
 Float PointLocator::compute_cell_size() const {
-    const size_t dim = m_mesh->get_dim();
     const size_t num_elements = m_elements.size() / m_vertex_per_element;
 
     Float total_edge_len = 0.0;

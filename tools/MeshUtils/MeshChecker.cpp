@@ -210,7 +210,6 @@ size_t MeshChecker::get_num_duplicated_faces() const {
     typedef std::unordered_map<VectorI, size_t, decltype(hash_fn)> FaceMap;
     FaceMap face_counts( num_faces, hash_fn);
 
-    const size_t vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {
         const auto& f = m_faces.row(i);
         Vector3I key(f.minCoeff(), f.maxCoeff(), f.sum());

@@ -42,6 +42,7 @@ GeometryCorrectionTable::GeometryCorrectionTable(const std::string& table_file) 
         Float data[4];
         size_t n = sscanf(line, "%lf, %lf, %lf, %lf",
                 &data[0], &data[1], &data[2], &data[3]);
+        assert(n == 4);
 
         Vector2F design_size(data[0], data[1]);
         Vector2F measured_size(data[2], data[3]);

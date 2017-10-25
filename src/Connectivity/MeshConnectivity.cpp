@@ -258,9 +258,7 @@ void MeshConnectivity::init_face_adjacencies(Mesh* mesh) {
     if (!vertex_adjacencies_computed())
         init_vertex_adjacencies(mesh);
 
-    const size_t num_vertices = mesh->get_num_vertices();
     const size_t num_faces = mesh->get_num_faces();
-    const size_t num_voxels = mesh->get_num_voxels();
     const size_t vertex_per_face = mesh->get_vertex_per_face();
 
     std::vector<IndexSet> neighbor_faces(num_faces);
@@ -330,8 +328,6 @@ void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
     if (!vertex_adjacencies_computed())
         init_vertex_adjacencies(mesh);
 
-    size_t num_vertices = mesh->get_num_vertices();
-    size_t num_faces = mesh->get_num_faces();
     size_t num_voxels = mesh->get_num_voxels();
     size_t vertex_per_voxel = mesh->get_vertex_per_voxel();
 

@@ -226,7 +226,6 @@ void VEGAParser::extract_faces_from_voxels() {
 
     typedef std::map<Triplet, int> FaceCounter;
     FaceCounter face_counter;
-    const size_t num_voxels = m_voxels.size();
     for (const auto& voxel : m_voxels) {
         assert(voxel.size() == 4);
         Triplet voxel_faces[4] = {
