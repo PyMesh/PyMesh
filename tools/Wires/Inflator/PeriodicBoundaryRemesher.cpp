@@ -34,8 +34,14 @@ namespace PeriodicBoundaryRemesherHelper {
         cleaner.remove_duplicated_vertices(vertices, edges, 1e-12);
         assert(vertices.rows() >= 3);
 
-        TriangleWrapper triangle(vertices, edges);
-        triangle.run(max_area, false, true, true);
+        TriangleWrapper triangle;
+        triangle.set_points(vertices);
+        triangle.set_segments(edges);
+        triangle.set_max_area(max_area);
+        triangle.set_split_boundary(false);
+        triangle.set_auto_hole_detection(true);
+        triangle.set_verbosity(0);
+        triangle.run();
 
         output_vertices = triangle.get_vertices();
         output_faces = triangle.get_faces();

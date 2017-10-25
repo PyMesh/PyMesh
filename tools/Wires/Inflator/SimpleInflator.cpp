@@ -350,8 +350,13 @@ void SimpleInflator::generate_joint(
     if (dim == 2) {
         // Need to triangulate the loop.
         const size_t num_vertices = vertices.rows();
-        TriangleWrapper tri(vertices, faces);
-        tri.run(std::numeric_limits<Float>::max(), false, false, false);
+        TriangleWrapper tri;
+        tri.set_points(vertices);
+        tri.set_segments(faces);
+        tri.set_split_boundary(false);
+        tri.set_max_num_steiner_points(0);
+        tri.set_verbosity(0);
+        tri.run();
         vertices = tri.get_vertices();
         faces = tri.get_faces();
         assert(vertices.rows() == num_vertices);

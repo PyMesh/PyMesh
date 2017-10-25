@@ -37,6 +37,7 @@ from .matrixio import load_matrix, save_matrix
 from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
 from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
+from .triangle import triangle
 from .triangulate import triangulate_beta
 from .wires import *
 
@@ -65,6 +66,7 @@ __all__ = [
         "in_circle",
         "in_sphere",
         "slice_mesh",
+        "triangle",
         "triangulate_beta",
         "tetrahedralize",
         "minkowski_sum",

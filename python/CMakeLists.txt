@@ -22,6 +22,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyPredicates.cpp
     PySelfIntersectionResolver.cpp
     PyTetrahedralization.cpp
+    PyTriangle.cpp
     PyTriangulation.cpp
     PyMinkowskiSum.cpp
     PyVoxelGrid.cpp
@@ -38,6 +39,7 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     lib_boolean
     lib_outer_hull
     lib_tetrahedralization
+    lib_triangle_wrapper
     lib_triangulation
     lib_winding_number
     lib_wires)

@@ -84,8 +84,12 @@ class TriangleWrapperTest : public TestBase {
 };
 
 TEST_F(TriangleWrapperTest, Creation) {
-    TriangleWrapper tri(m_vertices, m_segments);
-    tri.run(0.1, true);
+    TriangleWrapper tri;
+    tri.set_points(m_vertices);
+    tri.set_segments(m_segments);
+    tri.set_max_area(0.1);
+    tri.set_verbosity(0);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -104,9 +108,13 @@ TEST_F(TriangleWrapperTest, Creation) {
 }
 
 TEST_F(TriangleWrapperTest, Holes) {
-    TriangleWrapper tri(m_vertices, m_segments);
+    TriangleWrapper tri;
+    tri.set_points(m_vertices);
+    tri.set_segments(m_segments);
     tri.set_holes(m_holes);
-    tri.run(0.1, true);
+    tri.set_max_area(0.1);
+    tri.set_verbosity(0);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -125,8 +133,13 @@ TEST_F(TriangleWrapperTest, Holes) {
 }
 
 TEST_F(TriangleWrapperTest, AutoHoleDetection) {
-    TriangleWrapper tri(m_vertices, m_segments);
-    tri.run(0.01, true, true);
+    TriangleWrapper tri;
+    tri.set_points(m_vertices);
+    tri.set_segments(m_segments);
+    tri.set_max_area(0.1);
+    tri.set_verbosity(0);
+    tri.set_auto_hole_detection(true);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -150,8 +163,12 @@ TEST_F(TriangleWrapperTest, 3D) {
     vertices_3d.block(0,0,num_pts,2) = m_vertices;
     vertices_3d.block(0,2,num_pts,1) = VectorF::Ones(num_pts);
 
-    TriangleWrapper tri(vertices_3d, m_segments);
-    tri.run(0.1, true);
+    TriangleWrapper tri;
+    tri.set_points(vertices_3d);
+    tri.set_segments(m_segments);
+    tri.set_max_area(0.1);
+    tri.set_verbosity(0);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -170,16 +187,24 @@ TEST_F(TriangleWrapperTest, 3D) {
 }
 
 TEST_F(TriangleWrapperTest, Refine) {
-    TriangleWrapper tri(m_vertices, m_segments);
+    TriangleWrapper tri;
+    tri.set_points(m_vertices);
+    tri.set_segments(m_segments);
     tri.set_holes(m_holes);
-    tri.run(0.1, true);
+    tri.set_max_area(0.1);
+    tri.set_verbosity(0);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
     const size_t num_faces_before = faces.rows();
 
-    TriangleWrapper refiner(vertices, faces);
-    refiner.run(0.01, true, false);
+    TriangleWrapper refiner;
+    refiner.set_points(vertices);
+    refiner.set_triangles(faces);
+    refiner.set_max_area(0.01);
+    refiner.set_verbosity(0);
+    refiner.run();
 
     vertices = refiner.get_vertices();
     faces = refiner.get_faces();
@@ -205,8 +230,13 @@ TEST_F(TriangleWrapperTest, 3DWithHoles) {
     MatrixFr holes(1, 3);
     holes << m_holes(0,0), m_holes(0,1), 1.0;
 
-    TriangleWrapper tri(vertices_3d, m_segments);
-    tri.run(0.01, true, true);
+    TriangleWrapper tri;
+    tri.set_points(vertices_3d);
+    tri.set_segments(m_segments);
+    tri.set_max_area(0.01);
+    tri.set_verbosity(0);
+    tri.set_auto_hole_detection(true);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -224,15 +254,26 @@ TEST_F(TriangleWrapperTest, debug) {
             TestBase::m_data_dir + "/e1.npy");
     //std::cout << input_vertices.rows() << std::endl;
     //std::cout << input_loops.rows() << std::endl;
+    //std::cout << input_vertices << std::endl;
 
-    TriangleWrapper tri(input_vertices, input_loops);
-    tri.run(0.25, false, true, true);
+    TriangleWrapper tri;
+    tri.set_points(input_vertices);
+    tri.set_segments(input_loops);
+    tri.set_max_area(0.25);
+    tri.set_verbosity(0);
+    tri.set_split_boundary(false);
+    tri.set_auto_hole_detection(true);
+    tri.set_max_num_steiner_points(0);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
-
     //std::cout << vertices.rows() << std::endl;
     //std::cout << faces.rows() << std::endl;
+    //std::cout << vertices << std::endl;
+
+
+    ASSERT_EQ(input_vertices.rows(), vertices.rows());
 
     //save_mesh("triangle_debug_1.obj", vertices, faces);
 }
@@ -245,8 +286,14 @@ TEST_F(TriangleWrapperTest, debug2) {
     //std::cout << input_vertices.rows() << std::endl;
     //std::cout << input_loops.rows() << std::endl;
 
-    TriangleWrapper tri(input_vertices, input_loops);
-    tri.run(0.25, false, true, true);
+    TriangleWrapper tri;
+    tri.set_points(input_vertices);
+    tri.set_segments(input_loops);
+    tri.set_max_area(0.25);
+    tri.set_verbosity(0);
+    tri.set_split_boundary(false);
+    tri.set_auto_hole_detection(true);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -269,8 +316,12 @@ TEST_F(TriangleWrapperTest, refinement) {
         2, 3, 0,
         1, 0, 3;
 
-    TriangleWrapper tri(input_vertices, input_faces);
-    tri.run(0.25, true, false, true);
+    TriangleWrapper tri;
+    tri.set_points(input_vertices);
+    tri.set_triangles(input_faces);
+    tri.set_max_area(0.25);
+    tri.set_verbosity(0);
+    tri.run();
 
     MatrixFr vertices = tri.get_vertices();
     MatrixIr faces = tri.get_faces();
@@ -278,3 +329,100 @@ TEST_F(TriangleWrapperTest, refinement) {
     ASSERT_LT(0, faces.rows());
 }
 
+TEST_F(TriangleWrapperTest, point_cloud) {
+    MatrixFr points(4, 3);
+    points << 0.0, 0.0, 0.0,
+              1.0, 0.0, 0.0,
+              1.0, 1.0, 0.0,
+              0.0, 1.0, 0.0;
+    TriangleWrapper tri;
+    tri.set_points(points);
+    tri.set_verbosity(0);
+    tri.run();
+
+    auto vertices = tri.get_vertices();
+    auto faces = tri.get_faces();
+
+    ASSERT_EQ(4, vertices.rows());
+    ASSERT_EQ(2, faces.rows());
+
+    auto voro_vertices = tri.get_voronoi_vertices();
+    auto voro_edges = tri.get_voronoi_edges();
+    ASSERT_GE(voro_edges.minCoeff(), -1);
+    ASSERT_LT(voro_edges.maxCoeff(), voro_vertices.rows());
+}
+
+TEST_F(TriangleWrapperTest, convex_hull) {
+    MatrixFr points(4, 2);
+    points << 0.0, 0.0,
+              1.0, 0.0,
+              0.0, 1.0,
+              0.1, 0.1;
+    MatrixIr segments(4, 2);
+    segments << 0,1,
+                0,2,
+                1,3,
+                2,3;
+    TriangleWrapper tri;
+    tri.set_points(points);
+    tri.set_segments(segments);
+    tri.set_verbosity(0);
+    tri.set_split_boundary(false);
+    tri.set_max_num_steiner_points(0);
+    tri.keep_convex_hull(true);
+    tri.run();
+
+    auto vertices = tri.get_vertices();
+    auto faces = tri.get_faces();
+
+    ASSERT_EQ(4, vertices.rows());
+    ASSERT_EQ(3, faces.rows());
+}
+
+TEST_F(TriangleWrapperTest, conforming) {
+    MatrixFr points(4, 2);
+    points << 0.0, 0.0,
+              1.0, 0.0,
+              0.0, 1.0,
+              0.001, 0.001;
+    MatrixIr segments(4, 2);
+    segments << 0,1,
+                0,2,
+                1,3,
+                2,3;
+    TriangleWrapper tri;
+    tri.set_points(points);
+    tri.set_segments(segments);
+    tri.set_verbosity(0);
+    tri.set_conforming_delaunay(true);
+    tri.run();
+
+    auto vertices = tri.get_vertices();
+    auto faces = tri.get_faces();
+
+    ASSERT_LT(4, vertices.rows());
+    ASSERT_LT(2, faces.rows());
+}
+
+TEST_F(TriangleWrapperTest, self_intersecting_segments) {
+    MatrixFr points(4, 2);
+    points << 0.0, 0.0,
+              1.0, 0.0,
+              0.0, 1.0,
+              1.0, 1.0;
+    MatrixIr segments(2, 2);
+    segments << 0,3,
+                1,2;
+    TriangleWrapper tri;
+    tri.set_points(points);
+    tri.set_segments(segments);
+    tri.set_verbosity(0);
+    tri.keep_convex_hull(true);
+    tri.run();
+
+    auto vertices = tri.get_vertices();
+    auto faces = tri.get_faces();
+
+    ASSERT_EQ(5, vertices.rows());
+    ASSERT_EQ(4, faces.rows());
+}

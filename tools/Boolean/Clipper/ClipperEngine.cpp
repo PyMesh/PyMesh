@@ -202,8 +202,14 @@ void ClipperEngine::extract_result(const ClipperLib::Paths& paths) {
     if (num_segments > 0) {
         // Known issue: duplicated vertices from different loops cause triangle to crash.
         ::remove_duplicated_vertices(loop_vertices, segments);
-        TriangleWrapper tri_wrapper(loop_vertices, segments);
-        tri_wrapper.run(std::numeric_limits<Float>::max(), false, true, false);
+        TriangleWrapper tri_wrapper;
+        tri_wrapper.set_points(loop_vertices);
+        tri_wrapper.set_segments(segments);
+        tri_wrapper.set_split_boundary(false);
+        tri_wrapper.set_auto_hole_detection(true);
+        tri_wrapper.set_max_num_steiner_points(0);
+        tri_wrapper.set_verbosity(0);
+        tri_wrapper.run();
 
         m_vertices = tri_wrapper.get_vertices();
         m_faces = tri_wrapper.get_faces();
