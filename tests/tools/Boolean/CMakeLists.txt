@@ -38,4 +38,4 @@ FILE(GLOB_RECURSE TEST_INC_FILES *.h *.inl)
 ADD_EXECUTABLE(boolean_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(boolean_tests ${GTEST_BOTH_LIBRARIES} Mesh lib_boolean
     lib_MeshUtils)
-ADD_CUSTOM_COMMAND(TARGET boolean_tests POST_BUILD COMMAND boolean_tests)
+#ADD_CUSTOM_COMMAND(TARGET boolean_tests POST_BUILD COMMAND boolean_tests)

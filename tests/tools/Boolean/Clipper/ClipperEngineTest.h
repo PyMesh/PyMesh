@@ -8,7 +8,6 @@ class ClipperEngineTest : public BooleanEngineTest {
     protected:
         BooleanPtr get_disjoint_setting(MeshPtr mesh) {
             BooleanPtr clipper_engine = BooleanEngine::create("clipper");
-            const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
             MatrixIr faces_1    = extract_faces(mesh);
@@ -27,7 +26,6 @@ class ClipperEngineTest : public BooleanEngineTest {
 
         BooleanPtr get_overlap_setting(MeshPtr mesh) {
             BooleanPtr clipper_engine = BooleanEngine::create("clipper");
-            const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
             MatrixIr faces_1    = extract_faces(mesh);
@@ -183,9 +181,6 @@ TEST_F(ClipperEngineTest, overlap_union) {
     const MatrixFr& vertices = clipper_engine->get_vertices();
     const MatrixIr& faces = clipper_engine->get_faces();
 
-    const size_t num_vertices = mesh->get_num_vertices();
-    const size_t num_faces = mesh->get_num_faces();
-
     VectorF origin = VectorF::Zero(2);
     VectorF corner = VectorF::Ones(2);
     assert_interior(vertices, faces, origin);
@@ -201,9 +196,6 @@ TEST_F(ClipperEngineTest, overlap_intersection) {
 
     const MatrixFr& vertices = clipper_engine->get_vertices();
     const MatrixIr& faces = clipper_engine->get_faces();
-
-    const size_t num_vertices = mesh->get_num_vertices();
-    const size_t num_faces = mesh->get_num_faces();
 
     VectorF origin = VectorF::Zero(2);
     VectorF corner = VectorF::Ones(2);
@@ -242,5 +234,28 @@ TEST_F(ClipperEngineTest, overlap_symmetric_difference) {
     assert_on_boundary(vertices, faces, origin);
     assert_on_boundary(vertices, faces, corner);
     assert_on_boundary(vertices, faces, -corner);
+}
+
+TEST_F(ClipperEngineTest, Jeremies_test_data) {
+    MeshPtr mesh_1 = load_mesh("clipper_input_1.ply");
+    MeshPtr mesh_2 = load_mesh("clipper_input_2.ply");
+
+    BooleanPtr clipper_engine = BooleanEngine::create("clipper");
+
+    MatrixFr vertices_1 = extract_vertices(mesh_1);
+    MatrixIr faces_1    = extract_faces(mesh_1);
+    MatrixFr vertices_2 = extract_vertices(mesh_2);
+    MatrixIr faces_2    = extract_faces(mesh_2);
+
+    clipper_engine->set_mesh_1(vertices_1, faces_1);
+    clipper_engine->set_mesh_2(vertices_2, faces_2);
+
+    clipper_engine->compute_intersection();
+
+    const MatrixFr& vertices = clipper_engine->get_vertices();
+    const MatrixIr& faces = clipper_engine->get_faces();
+
+    ASSERT_LT(0, vertices.rows());
+    ASSERT_LT(0, faces.rows());
 }
 

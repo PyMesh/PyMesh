@@ -14,7 +14,6 @@ class CGALCorefinementEngineTest : public BooleanEngineTest {
     protected:
         BooleanPtr get_disjoint_setting(MeshPtr mesh) {
             BooleanPtr cgal_engine = BooleanEngine::create("corefinement");
-            const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
             MatrixIr faces_1    = extract_faces(mesh);
@@ -33,7 +32,6 @@ class CGALCorefinementEngineTest : public BooleanEngineTest {
 
         BooleanPtr get_overlap_setting(MeshPtr mesh) {
             BooleanPtr cgal_engine = BooleanEngine::create("corefinement");
-            const size_t num_vertices = mesh->get_num_vertices();
 
             MatrixFr vertices_1 = extract_vertices(mesh);
             MatrixIr faces_1    = extract_faces(mesh);
@@ -190,9 +188,6 @@ TEST_F(CGALCorefinementEngineTest, DISABLED_overlap_union) {
     const MatrixFr& vertices = cgal_engine->get_vertices();
     const MatrixIr& faces = cgal_engine->get_faces();
 
-    const size_t num_vertices = mesh->get_num_vertices();
-    const size_t num_faces = mesh->get_num_faces();
-
     VectorF origin = VectorF::Zero(3);
     VectorF corner = VectorF::Ones(3);
     assert_interior(vertices, faces, origin);
@@ -208,9 +203,6 @@ TEST_F(CGALCorefinementEngineTest, overlap_intersection) {
 
     const MatrixFr& vertices = cgal_engine->get_vertices();
     const MatrixIr& faces = cgal_engine->get_faces();
-
-    const size_t num_vertices = mesh->get_num_vertices();
-    const size_t num_faces = mesh->get_num_faces();
 
     VectorF origin = VectorF::Zero(3);
     VectorF corner = VectorF::Ones(3);

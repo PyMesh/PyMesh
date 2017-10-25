@@ -84,7 +84,7 @@ void BooleanEngine::remove_short_edges() {
 void BooleanEngine::remove_isolated_vertices() {
     IsolatedVertexRemoval remover(m_vertices, m_faces);
     size_t num_removed = remover.run();
-    assert(num_removed < m_vertices.rows());
+    assert(num_removed <= m_vertices.rows());
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 }

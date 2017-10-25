@@ -32,7 +32,7 @@ namespace ClipperEngineHelper {
             const VectorI& edge = boundaries.row(i);
             auto itr = adjacencies.find(edge[0]);
             if (itr != adjacencies.end()) {
-                itr->second.push_back(edge[0]);
+                itr->second.push_back(edge[1]);
             } else {
                 adjacencies.insert({edge[0], {edge[1]}});
             }
