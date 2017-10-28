@@ -1,8 +1,6 @@
 #include "FaceUtils.h"
 
-extern "C" {
 #include <Predicates/predicates.h>
-}
 
 using namespace PyMesh;
 

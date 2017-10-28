@@ -10,9 +10,7 @@
 #include <MeshUtils/FaceUtils.h>
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
-extern "C" {
 #include <Predicates/predicates.h>
-}
 
 using namespace PyMesh;
 

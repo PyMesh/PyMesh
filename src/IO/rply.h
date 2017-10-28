@@ -13,6 +13,8 @@
 extern "C" {
 #endif
 
+#pragma GCC visibility push(hidden)
+
 #define RPLY_VERSION   "RPly 1.1.3"
 #define RPLY_COPYRIGHT "Copyright (C) 2003-2013 Diego Nehab"
 #define RPLY_AUTHORS   "Diego Nehab"
@@ -345,6 +347,8 @@ int ply_write(p_ply ply, double value);
  * Returns 1 if successfull, 0 otherwise
  * ---------------------------------------------------------------------- */
 int ply_close(p_ply ply);
+
+#pragma GCC visibility pop
 
 #ifdef __cplusplus
 }
