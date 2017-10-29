@@ -20,7 +20,6 @@ class PeriodicInflator3DTest : public WireTest {
             WireNetwork::Ptr network = load_wire_shared(wire_file);
             network->compute_connectivity();
             network->scale_fit(-half_size, half_size); // 5mm cell
-            const size_t num_edges = network->get_num_edges();
 
             PeriodicInflator3D inflator(network);
             inflator.set_uniform_thickness(thickness);
@@ -42,7 +41,6 @@ class PeriodicInflator3DTest : public WireTest {
             WireNetwork::Ptr network = load_wire_shared(wire_file);
             network->compute_connectivity();
             network->scale_fit(-half_size, half_size); // 5mm cell
-            const size_t num_edges = network->get_num_edges();
 
             WireProfile::Ptr profile = WireProfile::create_isotropic(num_profile_samples);
 

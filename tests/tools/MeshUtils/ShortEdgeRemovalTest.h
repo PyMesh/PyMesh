@@ -18,8 +18,6 @@ class ShortEdgeRemovalTest : public TestBase {
             MatrixFr vertices_left = remover.get_vertices();
             MatrixIr faces_left = remover.get_faces();
             const size_t num_vertices = vertices_left.rows();
-            const size_t num_faces = faces_left.rows();
-            const size_t vertex_per_face = faces_left.cols();
             for (size_t i=0; i<faces_left.size(); i++) {
                 ASSERT_LT(faces_left.data()[i], num_vertices);
             }
@@ -33,7 +31,6 @@ class ShortEdgeRemovalTest : public TestBase {
                 const VectorF& target, Float threshold) {
             MatrixFr vertices_left = remover.get_vertices();
             MatrixIr faces_left = remover.get_faces();
-            const size_t num_vertices = vertices_left.rows();
             const size_t num_faces = faces_left.rows();
             const size_t vertex_per_face = faces_left.cols();
 

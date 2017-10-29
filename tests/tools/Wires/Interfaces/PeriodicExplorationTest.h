@@ -192,6 +192,7 @@ TEST_F(PeriodicExplorationTest, pattern0050) {
         explorer.periodic_inflate(true);
         write_mesh("debug.msh", explorer.get_mesh());
         bool tetgen_success = explorer.run_tetgen();
+        ASSERT_TRUE(tetgen_success);
 
         Mesh::Ptr mesh = explorer.get_mesh();
         std::vector<MatrixFr> velocities = explorer.get_shape_velocities();

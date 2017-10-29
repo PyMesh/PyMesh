@@ -159,8 +159,6 @@ TEST_F(PeriodicInflator2DTest, star) {
     WireNetwork::Ptr network = load_wire_shared("star_2D.wire");
     network->compute_connectivity();
     network->scale(Vector2F::Ones() * 5); // 5mm cell
-    const size_t num_vertices = network->get_num_vertices();
-    const size_t num_edges = network->get_num_edges();
 
     PeriodicInflator2D inflator(network);
     inflator.set_uniform_thickness(0.5);

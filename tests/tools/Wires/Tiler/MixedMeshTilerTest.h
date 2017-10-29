@@ -41,7 +41,6 @@ class MixedMeshTilerTest : public WireTest {
 
         void add_dofs_as_attributes(Mesh::Ptr mesh, const MatrixF& dofs) {
             const size_t num_dofs = dofs.cols();
-            const size_t num_cells = dofs.rows();
             for (size_t i=0; i<num_dofs; i++) {
                 VectorF dof = dofs.col(i);
                 std::stringstream dof_name;

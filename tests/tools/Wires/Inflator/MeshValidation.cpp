@@ -118,7 +118,6 @@ bool MeshValidation::face_source_is_valid(
         const MatrixIr& faces,
         const VectorI& face_sources) {
     const Float EPS = 1e-6;
-    const size_t num_vertices = vertices.rows();
     const size_t num_faces = faces.rows();
 
     Vector3F bbox_min = vertices.colwise().minCoeff();

@@ -16,8 +16,6 @@ class VertexOffsetParameterDerivativeTest : public ParameterDerivativeTest {
 
 TEST_F(VertexOffsetParameterDerivativeTest, brick5) {
     WireNetwork::Ptr wire_network = load_wire_shared("brick5.wire");
-    const size_t dim = 3;
-    const size_t num_wire_vertices = wire_network->get_num_vertices();
     wire_network->scale(Vector3F::Ones() * 2.5);
     VectorI roi(8);
     roi << 0, 1, 2, 3, 4, 5, 6, 7;

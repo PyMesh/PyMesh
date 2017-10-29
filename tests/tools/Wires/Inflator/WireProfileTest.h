@@ -53,7 +53,6 @@ class WireProfileTest : public WireTest {
 };
 
 TEST_F(WireProfileTest, 3D) {
-    const Float EPS = 1e-6;
     WireProfile::Ptr profile = WireProfile::create("square");
     Vector3F p0(0,0,0);
     Vector3F p1(1,0,0);

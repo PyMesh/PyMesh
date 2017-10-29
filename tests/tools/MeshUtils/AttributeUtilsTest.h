@@ -38,7 +38,6 @@ class AttributeUtilsTest : public TestBase {
             using namespace AttributeUtils;
             size_t num_vertices = mesh->get_num_vertices();
             size_t num_faces = mesh->get_num_faces();
-            size_t num_voxels = mesh->get_num_voxels();
 
             VectorF face_field = VectorF::Ones(num_faces);
 

@@ -102,7 +102,6 @@ TEST_F(PointLocatorTest, Outside) {
     MeshPtr mesh = load_mesh("tet.msh");
     PointLocator locator(mesh);
     MatrixF pts = uniform_samples(5, -1*VectorF::Ones(3), VectorF::Ones(3));
-    size_t num_pts = pts.rows();
 
     ASSERT_THROW(locator.locate(pts), RuntimeError);
 }
