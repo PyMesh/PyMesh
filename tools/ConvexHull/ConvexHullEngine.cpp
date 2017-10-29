@@ -15,6 +15,10 @@
 #include "Qhull/QhullEngine.h"
 #endif
 
+#ifdef WITH_TRIANGLE
+#include "Triangle/TriangleConvexHullEngine.h"
+#endif
+
 using namespace PyMesh;
 
 namespace ConvexHullEngineHelper {
@@ -48,6 +52,18 @@ ConvexHullEngine::Ptr ConvexHullEngine::create(
         } else {
             std::stringstream err_msg;
             err_msg << "CGAL convex hull does not support dim=" << dim;
+            throw NotImplementedError(err_msg.str());
+        }
+    }
+#endif
+
+#ifdef WITH_TRIANGLE
+    if (library_name == "triangle") {
+        if (dim == 2) {
+            return Ptr(new TriangleConvexHullEngine);
+        } else {
+            std::stringstream err_msg;
+            err_msg << "Triangle convex hull does not support dim=" << dim;
             throw NotImplementedError(err_msg.str());
         }
     }

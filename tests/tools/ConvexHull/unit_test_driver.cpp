@@ -8,6 +8,9 @@
 #ifdef WITH_QHULL
 #include "Qhull/QhullEngineTest.h"
 #endif
+#ifdef WITH_TRIANGLE
+#include "Triangle/TriangleConvexHullTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

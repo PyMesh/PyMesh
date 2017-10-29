@@ -27,6 +27,15 @@ ELSE (QHULL_FOUND)
     MESSAGE(WARNING "Qhull missing.  Skipping qhull convex hull support")
 ENDIF (QHULL_FOUND)
 
+#Include Triangle
+IF (TRIANGLE_FOUND)
+    ADD_DEFINITIONS(-DWITH_TRIANGLE)
+    LIST(APPEND DEPENDENT_LIBS lib_triangle_wrapper)
+    ADD_SUBDIRECTORY(Triangle)
+ELSE (TRIANGLE_FOUND)
+    MESSAGE(WARNING "Triangle is missing.  Skipping triangle convex hull support")
+ENDIF (TRIANGLE_FOUND)
+
 
 ADD_LIBRARY(lib_convex_hull SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(lib_convex_hull
