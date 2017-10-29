@@ -25,6 +25,7 @@
 #include "VertexNormalAttribute.h"
 #include "VertexValanceAttribute.h"
 #include "VertexVolumeAttribute.h"
+#include "VertexVoronoiAreaAttribute.h"
 #include "VoxelCentroidAttribute.h"
 #include "VoxelCircumCenterAttribute.h"
 #include "VoxelCircumRadiusAttribute.h"
@@ -65,6 +66,9 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return attr;
     } else if (name == "vertex_dihedral_angle") {
         MeshAttribute::Ptr attr(new VertexDihedralAngleAttribute(name));
+        return attr;
+    } else if (name == "vertex_voronoi_area") {
+        MeshAttribute::Ptr attr(new VertexVoronoiAreaAttribute(name));
         return attr;
     } else if (name == "edge_length") {
         MeshAttribute::Ptr attr(new EdgeLengthAttribute(name));

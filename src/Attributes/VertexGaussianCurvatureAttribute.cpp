@@ -4,10 +4,16 @@
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 #include <Mesh.h>
+#include <iostream>
 
 using namespace PyMesh;
 
 void VertexGaussianCurvatureAttribute::compute_from_mesh(Mesh& mesh) {
+    if (!mesh.has_attribute("vertex_voronoi_area")) {
+        mesh.add_attribute("vertex_voronoi_area");
+    }
+
+    const auto& area = mesh.get_attribute("vertex_voronoi_area");
     const size_t num_vertices = mesh.get_num_vertices();
     const size_t num_faces = mesh.get_num_faces();
     const size_t vertex_per_face = mesh.get_vertex_per_face();
@@ -23,6 +29,7 @@ void VertexGaussianCurvatureAttribute::compute_from_mesh(Mesh& mesh) {
         }
     }
     gaussian_curvature = VectorF::Ones(num_vertices)*2*M_PI - gaussian_curvature;
+    gaussian_curvature = gaussian_curvature.array() / area.array();
 }
 
 VectorF VertexGaussianCurvatureAttribute::compute_face_angles(
@@ -39,7 +46,7 @@ VectorF VertexGaussianCurvatureAttribute::compute_face_angles(
     for (size_t i=0; i<vertex_per_face; i++) {
         size_t curr_idx = i;
         size_t next_idx = (i+1) % vertex_per_face;
-        size_t prev_idx = (i-1+vertex_per_face) % vertex_per_face;
+        size_t prev_idx = (i+vertex_per_face-1) % vertex_per_face;
         Vector3F e1 = vertices.row(next_idx) - vertices.row(curr_idx);
         Vector3F e2 = vertices.row(prev_idx) - vertices.row(curr_idx);
         angles[i] = atan2(e1.cross(e2).norm(), e1.dot(e2));
