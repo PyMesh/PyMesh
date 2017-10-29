@@ -177,7 +177,6 @@ TEST_F(HashGridTest, GetItems) {
 
 TEST_F(HashGridTest, CloseByPoints) {
     const Float eps = 1e-6;
-    Vector3F origin = Vector3F::Zero();
     Vector3F one = Vector3F::Ones();
     Vector3F p1 = one - one * eps;
     Vector3F p2 = one + one * eps;

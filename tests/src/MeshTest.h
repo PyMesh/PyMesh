@@ -100,9 +100,9 @@ TEST_F(MeshTest, FistVertex) {
     ASSERT_DOUBLE_EQ(-1.0, cube_tri_first[1]);
     ASSERT_DOUBLE_EQ( 1.0, cube_tri_first[2]);
     const VectorF& cube_tet_first = m_cube_tet->get_vertex(0);
-    ASSERT_DOUBLE_EQ(-1.0, cube_tri_first[0]);
-    ASSERT_DOUBLE_EQ(-1.0, cube_tri_first[1]);
-    ASSERT_DOUBLE_EQ( 1.0, cube_tri_first[2]);
+    ASSERT_DOUBLE_EQ(-1.0, cube_tet_first[0]);
+    ASSERT_DOUBLE_EQ(-1.0, cube_tet_first[1]);
+    ASSERT_DOUBLE_EQ( 1.0, cube_tet_first[2]);
     const VectorF& square_tri_first = m_square_tri->get_vertex(0);
     ASSERT_DOUBLE_EQ( 1.0, square_tri_first[0]);
     ASSERT_DOUBLE_EQ( 1.0, square_tri_first[1]);
@@ -120,9 +120,9 @@ TEST_F(MeshTest, LastVertex) {
     ASSERT_DOUBLE_EQ( 1.0, cube_tri_last[2]);
     const VectorF& cube_tet_last = m_cube_tet->get_vertex(
             m_cube_tet->get_num_vertices() - 1);
-    ASSERT_DOUBLE_EQ( 1.0, cube_tri_last[0]);
-    ASSERT_DOUBLE_EQ( 1.0, cube_tri_last[1]);
-    ASSERT_DOUBLE_EQ( 1.0, cube_tri_last[2]);
+    ASSERT_DOUBLE_EQ( 1.0, cube_tet_last[0]);
+    ASSERT_DOUBLE_EQ( 1.0, cube_tet_last[1]);
+    ASSERT_DOUBLE_EQ( 1.0, cube_tet_last[2]);
     const VectorF& square_tri_last = m_square_tri->get_vertex(
             m_square_tri->get_num_vertices() - 1);
     ASSERT_DOUBLE_EQ(-1.0, square_tri_last[0]);

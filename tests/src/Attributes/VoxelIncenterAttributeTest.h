@@ -21,7 +21,6 @@ TEST_F(VoxelIncenterAttributeTest, tet) {
     Vector3F n2 = face_normals.segment<3>(2*3);
     Vector3F n3 = face_normals.segment<3>(3*3);
 
-    const auto& vertices = mesh->get_vertices();
     const auto& faces = mesh->get_faces();
 
     Float dist_0 = (incenters - mesh->get_vertex(faces[0  ])).dot(n0);
@@ -59,7 +58,6 @@ TEST_F(VoxelIncenterAttributeTest, irregular_tet) {
     Vector3F n2 = face_normals.segment<3>(2*3);
     Vector3F n3 = face_normals.segment<3>(3*3);
 
-    const auto& vertices = mesh->get_vertices();
     const auto& faces = mesh->get_faces();
 
     Float dist_0 = (incenters - mesh->get_vertex(faces[0  ])).dot(n0);

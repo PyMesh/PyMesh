@@ -113,6 +113,7 @@ TEST_F(OBJParserTest, Empty) {
     parse(mesh_file);
     const size_t num_vertices = m_parser->num_vertices();
 
+    ASSERT_EQ(0, num_vertices);
     ASSERT_EQ(0, m_parser->num_vertices());
     ASSERT_EQ(0, m_parser->num_faces());
 }
