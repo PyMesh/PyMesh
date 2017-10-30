@@ -42,3 +42,5 @@
 	path = third_party/pybind11
 	url = https://github.com/qnzhou/pybind11.git
 	shallow = true
+[submodule "pybind11"]
+	branch = master
