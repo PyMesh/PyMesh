@@ -50,8 +50,8 @@ namespace TriangleWrapperHelper {
         return flags.str();
     }
 
-    typedef TriangleWrapper::Region Region;
-    typedef std::list<Region> Regions;
+    using Region = TriangleWrapper::Region;
+    using Regions = TriangleWrapper::Regions;
 
     struct HashFunc {
         int operator()(const Triplet& key) const {
@@ -62,7 +62,18 @@ namespace TriangleWrapperHelper {
 
     Regions extract_regions(const MatrixIr& faces,
             const MatrixIr& face_neighbors,
-            BoundaryMarker& boundary_marker) {
+            const VectorI& edges,
+            const VectorI& edge_marks) {
+        const size_t num_edges = edge_marks.size();
+        assert(edges.size() == num_edges * 2);
+        BoundaryMarker boundary_markers;
+
+        for (size_t i=0; i<num_edges; i++) {
+            Triplet edge(edges[i*2], edges[i*2+1]);
+            boundary_markers.insert(
+                    std::make_pair(edge, edge_marks[i] == REGION_BOUNDARY));
+        }
+
         const size_t num_faces = faces.rows();
 
         Regions regions;
@@ -88,7 +99,8 @@ namespace TriangleWrapperHelper {
                 };
 
                 for (size_t j=0; j<3; j++) {
-                    if (boundary_marker[edges[j]]) continue;
+                    if (boundary_markers[edges[j]]) continue;
+                    if (adj_faces[j] < 0) continue; // adj to boundary.
                     if (visited[adj_faces[j]]) continue;
                     Q.push_back(adj_faces[j]);
                     visited[adj_faces[j]] = true;
@@ -241,8 +253,23 @@ void TriangleWrapper::process_2D_input(const std::string& flags) {
 
     run_triangle(flags);
 
-    if (m_auto_hole_detection && m_segments.rows() > 0) {
-        poke_holes();
+    if (m_segments.rows() > 0) {
+        auto regions = extract_regions(
+                m_faces, m_face_neighbors, m_edges, m_edge_marks);
+        m_regions = VectorI::Zero(m_faces.rows());
+        size_t count = 1;
+        for (const auto& r : regions) {
+            for (const auto& i : r) {
+                m_regions[i] = count;
+            }
+            count++;
+        }
+
+        if (m_auto_hole_detection) {
+            poke_holes(regions);
+        }
+    } else {
+        m_regions = VectorI::Zero(m_faces.rows());
     }
 
     correct_orientation();
@@ -400,20 +427,7 @@ void TriangleWrapper::run_triangle(const std::string& flags) {
     if (out_voro.numberofedges > 0) delete [] out_voro.edgemarkerlist;
 }
 
-void TriangleWrapper::poke_holes() {
-    const size_t num_edges = m_edge_marks.size();
-    assert(m_edges.size() == num_edges * 2);
-    BoundaryMarker boundary_markers;
-
-    for (size_t i=0; i<num_edges; i++) {
-        Triplet edge(m_edges[i*2], m_edges[i*2+1]);
-        boundary_markers.insert(
-                std::make_pair(edge, m_edge_marks[i] == REGION_BOUNDARY));
-    }
-
-    Regions regions = extract_regions(
-            m_faces, m_face_neighbors, boundary_markers);
-
+void TriangleWrapper::poke_holes(Regions& regions) {
     std::list<size_t> interior_faces;
     for (auto& region : regions) {
         VectorF seed_p;

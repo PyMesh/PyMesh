@@ -39,6 +39,8 @@ void init_TriangleWrapper(py::module& m) {
         .def_property_readonly("voronoi_vertices", &TriangleWrapper::get_voronoi_vertices,
                 py::return_value_policy::reference_internal)
         .def_property_readonly("voronoi_edges", &TriangleWrapper::get_voronoi_edges,
+                py::return_value_policy::reference_internal)
+        .def_property_readonly("regions", &TriangleWrapper::get_regions,
                 py::return_value_policy::reference_internal);
     py::enum_<TriangleWrapper::Algorithm>(triangle, "Algorithm")
         .value("DIVIDE_AND_CONQUER", TriangleWrapper::Algorithm::DIVIDE_AND_CONQUER)
