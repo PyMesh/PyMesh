@@ -12,6 +12,7 @@ class TriangleWrapper {
 
     public:
         using Region = std::list<size_t>;
+        using Regions = std::list<Region>;
         enum class Algorithm {
             DIVIDE_AND_CONQUER, // Default algorithm.
             SWEEPLINE, // Steven Fortune's sweepline algorithm (-F option)
@@ -137,10 +138,11 @@ class TriangleWrapper {
          */
         void run();
 
-        MatrixFr get_vertices() const { return m_vertices; }
-        MatrixIr get_faces() const { return m_faces; }
-        MatrixFr get_voronoi_vertices() const { return m_voronoi_vertices; }
-        MatrixIr get_voronoi_edges() const { return m_voronoi_edges; }
+        const MatrixFr& get_vertices() const { return m_vertices; }
+        const MatrixIr& get_faces() const { return m_faces; }
+        const MatrixFr& get_voronoi_vertices() const { return m_voronoi_vertices; }
+        const MatrixIr& get_voronoi_edges() const { return m_voronoi_edges; }
+        const VectorI& get_regions() const { return m_regions; }
 
     protected:
         std::string generate_command_line_options() const;
@@ -148,7 +150,7 @@ class TriangleWrapper {
         void process_2D_input(const std::string& flags);
 
         void run_triangle(const std::string& flags);
-        void poke_holes();
+        void poke_holes(Regions& regions);
         bool select_seed_point(const Region& region, VectorF& seed_p);
         void correct_orientation();
 
@@ -177,6 +179,7 @@ class TriangleWrapper {
         MatrixIr m_face_neighbors;
         VectorI  m_edges;
         VectorI  m_edge_marks;
+        VectorI  m_regions;
 
         // Output Voronoi data
         MatrixFr m_voronoi_vertices;
