@@ -21,7 +21,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyWires.cpp)
 TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     Mesh
-    MeshUtils
+    lib_MeshUtils
     cgal_wrapper
     lib_igl
     lib_predicates
