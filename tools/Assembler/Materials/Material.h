@@ -32,13 +32,24 @@ class Material {
                 const std::string& matrix_field_nmae);
 
     public:
-        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const=0;
-        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const=0;
-        virtual Float get_density(VectorF coord) const=0;
-        virtual Float get_density() const=0;
-        virtual size_t get_dim() const=0;
-
-        virtual void update() {throw NotImplementedError("updata() is not implemented by subclasses."); }
+        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const {
+            throw NotImplementedError("get_material_tensor() is not implemented by subclasses.");
+        }
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const {
+            throw NotImplementedError("strain_to_stress() is not implemented by subclasses.");
+        }
+        virtual Float get_density(VectorF coord) const {
+            throw NotImplementedError("get_density() is not implemented by subclasses.");
+        }
+        virtual Float get_density() const {
+            throw NotImplementedError("get_density() is not implemented by subclasses.");
+        }
+        virtual size_t get_dim() const {
+            throw NotImplementedError("get_dim() is not implemented by subclasses.");
+        }
+        virtual void update() {
+            throw NotImplementedError("updata() is not implemented by subclasses.");
+        }
 };
 
 }

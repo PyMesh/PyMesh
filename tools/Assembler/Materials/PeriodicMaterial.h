@@ -19,19 +19,17 @@ class PeriodicMaterial : public Material {
                 VectorF axis, Float period, Float ratio, Float phase);
 
         virtual Float get_material_tensor(
-                size_t i, size_t j, size_t k, size_t l, VectorF coord) const;
+                size_t i, size_t j, size_t k, size_t l, VectorF coord) const override;
 
-        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const;
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const override;
 
-        virtual Float get_density(VectorF coord) const;
+        virtual Float get_density(VectorF coord) const override;
 
-        virtual Float get_density() const;
+        virtual Float get_density() const override;
 
-        virtual size_t get_dim() const { return m_axis.size(); }
+        virtual size_t get_dim() const override { return m_axis.size(); }
 
     protected:
-        PeriodicMaterial() {}
-
         size_t choose_material(VectorF coord) const;
 
         void check_validity() const;

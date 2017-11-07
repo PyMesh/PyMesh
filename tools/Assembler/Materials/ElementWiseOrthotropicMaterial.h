@@ -19,10 +19,8 @@ class ElementWiseOrthotropicMaterial : public ElementWiseMaterial {
                 const FieldNames& poisson_field_names,
                 const FieldNames& shear_field_names);
 
-        virtual ~ElementWiseOrthotropicMaterial() {};
-
     public:
-        virtual void update();
+        virtual void update() override;
 
     private:
         void update_2D();

@@ -21,11 +21,11 @@ class ElementWiseMaterial : public Material {
         virtual ~ElementWiseMaterial() {}
 
     public:
-        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const;
-        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const;
-        virtual Float get_density(VectorF coord) const { return m_density; }
-        virtual Float get_density() const { return m_density; }
-        virtual size_t get_dim() const { return m_material_mesh->get_dim(); }
+        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const override;
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const override;
+        virtual Float get_density(VectorF coord) const override{ return m_density; }
+        virtual Float get_density() const override { return m_density; }
+        virtual size_t get_dim() const override { return m_material_mesh->get_dim(); }
 
     protected:
         Float compute_cell_size();

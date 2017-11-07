@@ -13,19 +13,19 @@ class UniformMaterial : public Material {
         UniformMaterial(Float density, const MatrixF& material_tensor);
 
         virtual Float get_material_tensor(
-                size_t i, size_t j, size_t k, size_t l, VectorF coord) const;
+                size_t i, size_t j, size_t k, size_t l, VectorF coord) const override;
 
-        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const;
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const override;
 
-        virtual Float get_density(VectorF coord) const {
+        virtual Float get_density(VectorF coord) const override {
             return m_density;
         }
 
-        virtual Float get_density() const {
+        virtual Float get_density() const override{
             return m_density;
         }
 
-        virtual size_t get_dim() const { return m_dim; }
+        virtual size_t get_dim() const override { return m_dim; }
 
     protected:
         UniformMaterial() {}
