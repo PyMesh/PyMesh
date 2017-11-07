@@ -35,7 +35,7 @@ SparseSolverFactory::SparseSolverFactory(const std::string& solver_type) {
     } else if (solver_type == "SparseQR") {
         m_solver = SparseSolverPtr(
                 new SparseSolverImplementation<Eigen::SparseQR<ZSparseMatrix::ParentType,
-                Eigen::COLAMDOrdering<ZSparseMatrix::ParentType::Index> > >);
+                Eigen::COLAMDOrdering<ZSparseMatrix::ParentType::StorageIndex> > >);
     } else if (solver_type == "UmfPackLU") {
         m_solver = SparseSolverPtr(
                 new SparseSolverImplementation<Eigen::UmfPackLU<ZSparseMatrix::ParentType> >);
