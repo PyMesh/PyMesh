@@ -1,6 +1,7 @@
 import math
 import numpy as np
 from numpy.linalg import norm
+from numbers import Number
 
 from ..meshio import form_mesh
 from .subdivide import subdivide
@@ -16,6 +17,8 @@ def generate_icosphere(radius, center, refinement_order=0):
     Returns:
         The icosphere mesh.
     """
+    assert(isinstance(radius, Number));
+    assert(len(center) == 3);
     r = (1.0 + math.sqrt(5.0)) / 2.0;
     vertices = np.array([
         [-1.0,   r, 0.0],
