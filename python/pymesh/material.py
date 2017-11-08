@@ -1,4 +1,4 @@
-import PyAssembler
+import PyMesh
 
 import numpy as np
 
@@ -14,7 +14,7 @@ class Material:
             poisson: Poisson's ratio
                      (must be in (-1, 0.5) in 3D and (-1, 1) in 2D).
         """
-        return Material(PyAssembler.Material.create_isotropic(
+        return Material(PyMesh.Material.create_isotropic(
             dim, density, young, poisson));
 
     @classmethod
@@ -29,7 +29,7 @@ class Material:
                                                 poisson_xy, poisson_yx]
             shear: Array of Shear modulus, [shear_yz, shear_zx, shear_xy]
         """
-        return Material(PyAssembler.Material.create_orthotropic(
+        return Material(PyMesh.Material.create_orthotropic(
             density, young, poisson, shear));
 
     def __init__(self, raw_material=None):
@@ -40,20 +40,10 @@ class Material:
             coord = np.zeros(self.dim);
         return self.raw_material.strain_to_stress(strain, coord);
 
-    @property
-    def density(self):
+    def get_material_tensor(self, coord):
+        """ Return 4th order material tensor of size d x d x d x d evaluated at
+        coord.
         """
-        Density at the origin.
-        """
-        return self.raw_material.get_density();
-
-    @property
-    def material_tensor(self):
-        """
-        Return 4th order material tensor of size d x d x d x d evaluated at the
-        origin.
-        """
-        coord = np.zeros(self.dim);
         tensor = np.empty([self.dim, self.dim, self.dim, self.dim]);
         indices = np.arange(self.dim);
         I,J,K,L = np.meshgrid(indices, indices, indices, indices);
@@ -61,6 +51,26 @@ class Material:
             tensor[i,j,k,l] = self.raw_material.get_material_tensor(
                     int(i),int(j),int(k),int(l),coord);
         return tensor;
+
+    def get_density(self, coord):
+        return self.raw_material.get_density(coord);
+
+    def update(self):
+        self.raw_material.update();
+
+    @property
+    def density(self):
+        """ Density at the origin.
+        """
+        return self.raw_material.get_density();
+
+    @property
+    def material_tensor(self):
+        """ Return 4th order material tensor of size d x d x d x d evaluated at
+        the origin.
+        """
+        coord = np.zeros(self.dim);
+        return self.get_material_tensor(coord);
 
     @property
     def dim(self):

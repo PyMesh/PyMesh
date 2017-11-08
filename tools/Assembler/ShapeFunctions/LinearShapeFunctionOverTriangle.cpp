@@ -2,6 +2,7 @@
 #include "LinearShapeFunctionOverTriangle.h"
 
 #include <cassert>
+#include <limits>
 #include <sstream>
 
 #include <Core/Exception.h>
@@ -38,30 +39,51 @@ void LinearShapeFunctionOverTriangle::compute_shape_gradient() {
         err_msg << "Expect nodes_per_element=3 instead we get " << nodes_per_element << std::endl;
         throw RuntimeError(err_msg.str());
     }
-    if (dim != 2) {
-        throw NotImplementedError(
-                "Linear shape function for 3D triangles are not supported yet.");
-    }
 
-    MatrixF selector(nodes_per_element, dim);
-    selector << 0.0, 0.0,
-                1.0, 0.0,
-                0.0, 1.0;
+    if (dim == 2) {
+        MatrixF selector(nodes_per_element, dim);
+        selector << 0.0, 0.0,
+                 1.0, 0.0,
+                 0.0, 1.0;
 
-    m_shape_grad.resize(num_elements * nodes_per_element, dim);
-    for (size_t i=0; i<num_elements; i++) {
-        VectorI element = m_mesh->getElement(i);
-        VectorF p[3] = {
-            m_mesh->getNode(element[0]),
-            m_mesh->getNode(element[1]),
-            m_mesh->getNode(element[2])
-        };
+        m_shape_grad.resize(num_elements * nodes_per_element, dim);
+        for (size_t i=0; i<num_elements; i++) {
+            VectorI element = m_mesh->getElement(i);
+            VectorF p[3] = {
+                m_mesh->getNode(element[0]),
+                m_mesh->getNode(element[1]),
+                m_mesh->getNode(element[2])
+            };
 
-        MatrixF P(3,3);
-        P <<     1.0,     1.0,     1.0,
-             p[0][0], p[1][0], p[2][0],
-             p[0][1], p[1][1], p[2][1];
-        m_shape_grad.block<3,2>(i*3, 0) = P.inverse() * selector;
+            MatrixF P(3,3);
+            P <<     1.0,     1.0,     1.0,
+              p[0][0], p[1][0], p[2][0],
+              p[0][1], p[1][1], p[2][1];
+              m_shape_grad.block<3,2>(i*3, 0) = P.inverse() * selector;
+        }
+    } else if (dim == 3) {
+        m_shape_grad.resize(num_elements * nodes_per_element, dim);
+        for (size_t i=0; i<num_elements; i++) {
+            VectorI element = m_mesh->getElement(i);
+            const Vector3F p0 = m_mesh->getNode(element[0]);
+            const Vector3F p1 = m_mesh->getNode(element[1]);
+            const Vector3F p2 = m_mesh->getNode(element[2]);
+            Vector3F n = (p1-p0).cross(p2-p0);
+            const Float sq_area = n.squaredNorm();
+            if (sq_area > 0.0) {
+                m_shape_grad.block<1, 3>(i*3  , 0) = n.cross(p2 - p1) / sq_area;
+                m_shape_grad.block<1, 3>(i*3+1, 0) = n.cross(p0 - p2) / sq_area;
+                m_shape_grad.block<1, 3>(i*3+2, 0) = n.cross(p1 - p0) / sq_area;
+            } else {
+                m_shape_grad.block<3, 3>(i*3, 0).setConstant(
+                        std::numeric_limits<Float>::infinity());
+            }
+
+        }
+    } else {
+        std::stringstream err_msg;
+        err_msg << "Invalid dimension " << dim;
+        throw RuntimeError(err_msg.str());
     }
 }
 

@@ -16,10 +16,8 @@ class ElementWiseIsotropicMaterial : public ElementWiseMaterial {
                 const std::string& young_field_name,
                 const std::string& poisson_field_name);
 
-        virtual ~ElementWiseIsotropicMaterial() {};
-
     public:
-        virtual void update();
+        virtual void update() override;
 
     private:
         void update_2D();

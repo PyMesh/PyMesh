@@ -5,7 +5,7 @@
 #include <Mesh.h>
 
 #include <Math/ZSparseMatrix.h>
-#include <Materials/Material.h>
+#include <Assembler/Materials/Material.h>
 #include <Assembler/FESetting/FESetting.h>
 
 namespace PyMesh {

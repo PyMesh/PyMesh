@@ -17,8 +17,10 @@ def parse_args():
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
+    mesh.add_attribute("vertex_index");
     mesh.add_attribute("face_index");
-    pymesh.save_mesh(args.output_mesh, mesh, "face_index");
+    mesh.add_attribute("voxel_index");
+    pymesh.save_mesh(args.output_mesh, mesh, *mesh.attribute_names);
 
 if __name__ == "__main__":
     main();

@@ -17,6 +17,8 @@ ShapeFunction::Ptr ShapeFunction::create(
     if (func_type == "linear") {
         if (dim == 2 && nodes_per_element == 3) {
             return Ptr(new LinearShapeFunctionOverTriangle(mesh));
+        } else if (dim == 3 && nodes_per_element == 3) {
+            return Ptr(new LinearShapeFunctionOverTriangle(mesh));
         } else if (dim == 3 && nodes_per_element == 4) {
             return Ptr(new LinearShapeFunctionOverTetrahedron(mesh));
         } else {

@@ -46,13 +46,13 @@ class SymmetricMaterial : public UniformMaterial {
             }
         }
 
-        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const {
+        virtual Float get_material_tensor(size_t i, size_t j, size_t k, size_t l, VectorF coord) const override{
             const size_t row = m_index_map(i,j);
             const size_t col = m_index_map(k,l);
             return m_material_tensor.coeff(row, col);
         }
 
-        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const {
+        virtual MatrixF strain_to_stress(const MatrixF& strain, VectorF coord) const override{
             if (m_dim == 2) {
                 return strain_to_stress_2D(strain);
             } else if (m_dim == 3) {
@@ -65,7 +65,7 @@ class SymmetricMaterial : public UniformMaterial {
         }
 
     protected:
-        SymmetricMaterial() {}
+        SymmetricMaterial() = default;
 
         void initialize(size_t dim) {
             m_dim = dim;

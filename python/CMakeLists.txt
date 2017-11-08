@@ -5,6 +5,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyCGAL.cpp
     PyConvexHull.cpp
     PyDMAT.cpp
+    PyFEM.cpp
     PyMeshUtils.cpp
     PyMesh.cpp
     PyMeshFactory.cpp
@@ -21,7 +22,8 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyWires.cpp)
 TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     Mesh
-    MeshUtils
+    lib_assembler
+    lib_MeshUtils
     cgal_wrapper
     lib_igl
     lib_predicates
