@@ -40,3 +40,19 @@ TEST_F(LaplacianAssemblerTest, SquarePositiveDiagonal) {
         ASSERT_GT(L.coeff(i, i), 0.0);
     }
 }
+
+TEST_F(LaplacianAssemblerTest, LaplacianBeltrami) {
+    FESettingPtr setting = load_setting("ball.msh");
+    auto mesh = setting->get_mesh();
+    ZSparseMatrix L = m_assembler->assemble(setting);
+    ASSERT_EQ(mesh->getNbrNodes(), L.rows());
+    for (size_t i=0; i<L.rows(); i++) {
+        ASSERT_GT(L.coeff(i, i), 0.0);
+    }
+
+    VectorF v(mesh->getNbrNodes());
+    v.setConstant(1.1);
+    VectorF r = L * v;
+    ASSERT_NEAR(0.0, r.minCoeff(), 1e-12);
+    ASSERT_NEAR(0.0, r.maxCoeff(), 1e-12);
+}

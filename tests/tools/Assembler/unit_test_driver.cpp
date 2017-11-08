@@ -15,6 +15,7 @@
 #include "Assemblers/ElasticityTensorAssemblerTest.h"
 #include "Assemblers/EngineerStrainStressAssemblerTest.h"
 #include "Assemblers/RigidMotionAssemblerTest.h"
+#include "Assemblers/GradientAssemblerTest.h"
 #include "Elements/ElementsTest.h"
 #include "Elements/TetrahedronElementsTest.h"
 #include "Elements/TriangleElementsTest.h"
