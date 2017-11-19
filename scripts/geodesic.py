@@ -132,8 +132,10 @@ def main():
     assert(mesh.has_attribute("vertex_area"));
     assert(mesh.has_attribute("face_normal"));
 
-    L = assemble_laplacian_matrix(mesh);
-    A = assemble_mass_matrix(mesh);
+    assembler = pymesh.Assembler(mesh);
+    L = assembler.assemble("laplacian") * -1;
+    A = assembler.assemble("mass");
+    G = assembler.assemble("gradient");
 
     t = np.mean(mesh.get_attribute("face_area").ravel());
     rhs = np.zeros(mesh.num_vertices);
@@ -143,7 +145,8 @@ def main():
     mesh.add_attribute("u");
     mesh.set_attribute("u", u);
 
-    grad_u = compute_gradient(mesh, u);
+    grad_u = (G * u).reshape((-1, 3), order="C");
+    grad_u_2 = compute_gradient(mesh, u);
     mesh.add_attribute("grad_u");
     mesh.set_attribute("grad_u", grad_u.ravel());
 

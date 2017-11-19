@@ -83,7 +83,7 @@ TEST_F(EdgeSplitterTest, cube) {
             mesh->get_num_faces(),
             mesh->get_vertex_per_face());
 
-    auto bbox_min = vertices.colwise().minCoeff();
+    Vector3F bbox_min = vertices.colwise().minCoeff();
     EdgeSplitter splitter(vertices, faces);
     EdgeSplitter::IndicatorFunc f =
         [=](const VectorF& v0, const VectorF& v1) {
