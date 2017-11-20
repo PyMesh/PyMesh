@@ -11,9 +11,9 @@
 using namespace PyMesh;
 
 Mesh::Mesh() {
-    m_geometry     = GeometryPtr    (new MeshGeometry());
-    m_connectivity = ConnectivityPtr(new MeshConnectivity());
-    m_attributes   = AttributesPtr  (new MeshAttributes());
+    m_geometry     = std::make_shared<MeshGeometry>();
+    m_connectivity = std::make_shared<MeshConnectivity>();
+    m_attributes   = std::make_shared<MeshAttributes>();
 }
 
 size_t Mesh::get_dim() const {

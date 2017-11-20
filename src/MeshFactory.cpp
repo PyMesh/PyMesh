@@ -13,7 +13,7 @@
 using namespace PyMesh;
 
 MeshFactory::MeshFactory() {
-    m_mesh = std::shared_ptr<Mesh>(new Mesh);
+    m_mesh = Mesh::Ptr(new Mesh());
 }
 
 MeshFactory& MeshFactory::load_file(const std::string& filename) {
@@ -26,7 +26,7 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
         throw RuntimeError(err_msg.str());
     }
 
-    m_mesh->set_geometry(Mesh::GeometryPtr(new MeshGeometry()));
+    m_mesh->set_geometry(std::make_shared<MeshGeometry>());
     initialize_vertices(parser);
     initialize_faces(parser);
     initialize_voxels(parser);
@@ -38,7 +38,7 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
 MeshFactory& MeshFactory::load_data(
         const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
         size_t dim, size_t num_vertex_per_face, size_t num_vertex_per_voxel) {
-    m_mesh->set_geometry(Mesh::GeometryPtr(new MeshGeometry()));
+    m_mesh->set_geometry(std::make_shared<MeshGeometry>());
     Mesh::GeometryPtr geometry = m_mesh->get_geometry();
     geometry->set_vertices(vertices);
     geometry->set_faces(faces);

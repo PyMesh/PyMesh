@@ -34,7 +34,7 @@ struct HashMapTrait {
     typedef std::unordered_map<HashKey, HashItem, HashMapFunc> HashMap;
     typedef std::shared_ptr<HashMap> Ptr;
 
-    static Ptr create_map() { return Ptr(new HashMap()); }
+    static Ptr create_map() { return std::make_shared<HashMap>(); }
     static HashItem get_default_item() { return HashItem(); }
 };
 
@@ -69,7 +69,7 @@ struct HashMapTrait<DIM, 1> {
 
 
     static Ptr create_map() {
-        Ptr hash_map = Ptr(new HashMap());
+        Ptr hash_map = std::make_shared<HashMap>();
         hash_map->set_deleted_key(HashKey(get_deleted_val()));
         return hash_map;
     }
@@ -106,7 +106,7 @@ struct HashMapTrait<DIM, 2> {
     static const int EMPTY_VAL = DELETED_VAL-1;
 
     static Ptr create_map() {
-        Ptr hash_map = Ptr(new HashMap());
+        Ptr hash_map = std::make_shared<HashMap>();
         hash_map->set_empty_key(HashKey(get_empty_val()));
         hash_map->set_deleted_key(HashKey(get_deleted_val()));
         return hash_map;

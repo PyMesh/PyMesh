@@ -23,21 +23,21 @@ MeshWriter::Ptr MeshWriter::create(const std::string& filename) {
     Ptr writer;
     std::string ext = IOUtils::get_extention(filename);
     if (ext == ".obj") {
-        writer = Ptr(new OBJWriter());
+        writer = std::make_shared<OBJWriter>();
     } else if (ext == ".off") {
-        writer = Ptr(new OFFWriter());
+        writer = std::make_shared<OFFWriter>();
     } else if (ext == ".mesh") {
-        writer = Ptr(new MEDITWriter());
+        writer = std::make_shared<MEDITWriter>();
     } else if (ext == ".msh") {
-        writer = Ptr(new MSHWriter());
+        writer = std::make_shared<MSHWriter>();
     } else if (ext == ".node") {
-        writer = Ptr(new NodeWriter());
+        writer = std::make_shared<NodeWriter>();
     } else if (ext == ".ply") {
-        writer = Ptr(new PLYWriter());
+        writer = std::make_shared<PLYWriter>();
     } else if (ext == ".poly") {
-        writer = Ptr(new POLYWriter());
+        writer = std::make_shared<POLYWriter>();
     } else if (ext == ".stl") {
-        writer = Ptr(new STLWriter());
+        writer = std::make_shared<STLWriter>();
     } else {
         std::cerr << "Error: extention (" << ext << ") is not supported"
             << std::endl;

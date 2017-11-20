@@ -25,23 +25,23 @@ MeshParser::Ptr MeshParser::create_parser(const std::string& filename) {
     std::string ext = IOUtils::get_extention(filename);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == ".obj") {
-        parser = Ptr(new OBJParser());
+        parser = std::make_shared<OBJParser>();
     } else if (ext == ".off") {
-        parser = Ptr(new OFFParser());
+        parser = std::make_shared<OFFParser>();
     } else if (ext == ".mesh") {
-        parser = Ptr(new MEDITParser());
+        parser = std::make_shared<MEDITParser>();
     } else if (ext == ".msh") {
-        parser = Ptr(new MSHParser());
+        parser = std::make_shared<MSHParser>();
     } else if (ext == ".node") {
-        parser = Ptr(new NodeParser());
+        parser = std::make_shared<NodeParser>();
     } else if (ext == ".stl") {
-        parser = Ptr(new STLParser());
+        parser = std::make_shared<STLParser>();
     } else if (ext == ".ply") {
-        parser = Ptr(new PLYParser());
+        parser = std::make_shared<PLYParser>();
     } else if (ext == ".poly") {
-        parser = Ptr(new POLYParser());
+        parser = std::make_shared<POLYParser>();
     } else if (ext == ".vega") {
-        parser = Ptr(new VEGAParser());
+        parser = std::make_shared<VEGAParser>();
     } else {
         std::stringstream err_msg;
         err_msg << "Error: extention (" << ext << ") is not supported"
