@@ -10,6 +10,7 @@ import os
 import os.path
 import site
 import sys
+import platform
 root_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)));
 package_dir = os.path.join(root_dir, "python/pymesh");
 exec(open(os.path.join(package_dir, 'version.py')).read())
@@ -42,6 +43,10 @@ site_location = \
                 for loc in site_location];
 site_location.append(os.path.join(package_dir, "lib"));
 site_location.append(os.path.join(package_dir, "third_party/lib"));
+
+if platform.system() == "Linux":
+    site_location.append("$ORIGIN");
+    site_location.append("$ORIGIN/../third_party/lib");
 
 with open(os.path.join(root_dir, "cmake/SetInstallRpath.cmake"), 'w') as fout:
     fout.write("SET(CMAKE_INSTALL_RPATH \"{}\")\n".format(";".join(site_location)));

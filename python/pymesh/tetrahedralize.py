@@ -37,6 +37,9 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         Tetrahedral mesh.
     """
     logger = logging.getLogger(__name__);
+    if cell_size <= 0.0:
+        cell_size = numpy.linalg.norm(mesh.bbox[0] - mesh.bbox[1]) / 20.0;
+
     if mesh.dim != 3:
         raise NotImplementedError("Tetrahedralization only works with 3D mesh");
     if mesh.vertex_per_face != 3:
@@ -53,8 +56,6 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         temp_file = os.path.join(temp_dir, "{}.off".format(name));
         save_mesh(temp_file, mesh);
         cmd = exec_name;
-        if cell_size <= 0.0:
-            cell_size = numpy.linalg.norm(mesh.bbox[0] - mesh.bbox[1]) / 20.0;
         cmd += " -mtr {}".format(cell_size * 0.5);
         cmd += " -max {}".format(cell_size * 0.5 / (0.75 * math.sqrt(2)));
         if radius_edge_ratio >= 2.0:
@@ -101,11 +102,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         else:
             logger.warning("Using default radius edge ratio.");
 
-        if cell_size > 0:
-            engine.set_cell_size(cell_size);
-        else:
-            logger.warning("Using default cell size.");
-
+        engine.set_cell_size(cell_size);
         engine.run();
 
         vertices = engine.get_vertices();
