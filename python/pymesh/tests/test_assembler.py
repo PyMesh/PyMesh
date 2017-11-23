@@ -27,8 +27,9 @@ class AssemblerTest(TestCase):
         self.assertLess(0.0, eig_values[0]);
 
     def assert_PSD(self, A):
-        eig_values, eig_vectors = scipy.sparse.linalg.eigsh(A, 1, which="SM");
-        self.assertLessEqual(0.0, eig_values[0]);
+        eig_values, eig_vectors = scipy.sparse.linalg.eigsh(A, 1, which="SA");
+        eps = np.spacing((A.max() - A.min()) ** 2 * A.shape[0]);
+        self.assertLessEqual(0.0, eps + eig_values[0]);
 
     def test_mass_matrix(self):
         assembler = self.single_triangle_2D_setup();
