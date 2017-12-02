@@ -20,7 +20,7 @@ class TetrahedralizationEngine {
             m_cell_radius_edge_ratio(2),
             m_cell_size(-1.0) { }
 
-        virtual ~TetrahedralizationEngine() {}
+        virtual ~TetrahedralizationEngine() = default;
 
     public:
         virtual void run() {

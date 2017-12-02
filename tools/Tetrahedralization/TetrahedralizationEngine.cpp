@@ -8,6 +8,8 @@
 #include <Core/Exception.h>
 
 #if WITH_CGAL
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include "CGAL/CGALMeshGen.h"
 #endif
 
@@ -28,7 +30,22 @@ using namespace PyMesh;
 TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
         const std::string& engine_name) {
 #if WITH_CGAL
-    if (engine_name == "cgal") { return Ptr(new CGALMeshGen); }
+    using InexactKernel = CGAL::Exact_predicates_inexact_constructions_kernel;
+    using ExactKernel = CGAL::Exact_predicates_exact_constructions_kernel;
+    if (engine_name == "cgal_inexact_explicit") {
+        using CGALEngine = CGALMeshGen<
+            InexactKernel,
+            CGALDomainType::EXPLICIT_WITH_FEATURES>;
+        return std::make_shared<CGALEngine>();
+    }
+#if WITH_IGL
+    if (engine_name == "cgal_inexact_implicit") {
+        using CGALEngine = CGALMeshGen<
+            InexactKernel,
+            CGALDomainType::IMPLICIT_WITH_FEATURES>;
+        return std::make_shared<CGALEngine>();
+    }
+#endif
 #endif
 #if WITH_TETGEN
     if (engine_name == "tetgen") { return Ptr(new TetGenEngine); }
