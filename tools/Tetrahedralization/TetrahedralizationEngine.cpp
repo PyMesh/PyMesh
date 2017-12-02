@@ -32,14 +32,14 @@ TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
 #if WITH_CGAL
     using InexactKernel = CGAL::Exact_predicates_inexact_constructions_kernel;
     using ExactKernel = CGAL::Exact_predicates_exact_constructions_kernel;
-    if (engine_name == "cgal_inexact_explicit") {
+    if (engine_name == "cgal") {
         using CGALEngine = CGALMeshGen<
             InexactKernel,
             CGALDomainType::EXPLICIT_WITH_FEATURES>;
         return std::make_shared<CGALEngine>();
     }
 #if WITH_IGL
-    if (engine_name == "cgal_inexact_implicit") {
+    if (engine_name == "cgal_implicit") {
         using CGALEngine = CGALMeshGen<
             InexactKernel,
             CGALDomainType::IMPLICIT_WITH_FEATURES>;

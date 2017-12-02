@@ -10,8 +10,8 @@ def parse_args():
     parser = argparse.ArgumentParser(description="Tet mesh generation");
     parser.add_argument("--engine", help="tet mesh engine",
             choices = (
-                "cgal_inexact_implicit",
-                "cgal_inexact_explicit",
+                "cgal",
+                "cgal_implicit",
                 "tetgen",
                 "geogram",
                 "quartet",
