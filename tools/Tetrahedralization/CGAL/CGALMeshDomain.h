@@ -14,7 +14,7 @@
 namespace PyMesh {
 
 template<typename Domain>
-class CGALMeshTraits {
+class CGALMeshTraitsWithFeature {
     public:
 #ifdef CGAL_CONCURRENT_MESH_3
         using Triangulation = typename CGAL::Mesh_triangulation_3<
@@ -28,6 +28,21 @@ class CGALMeshTraits {
             Triangulation,
             typename Domain::Corner_index,
             typename Domain::Curve_segment_index>;
+        using Criteria = CGAL::Mesh_criteria_3<Triangulation>;
+};
+
+template<typename Domain>
+class CGALMeshTraits {
+    public:
+#ifdef CGAL_CONCURRENT_MESH_3
+        using Triangulation = typename CGAL::Mesh_triangulation_3<
+            Domain,
+            typename CGAL::Kernel_traits<Domain>::Kernel,
+            typename CGAL::Parallel_tag>::type;
+#else
+        using Triangulation = typename CGAL::Mesh_triangulation_3<domain>::type;
+#endif
+        using C3t3 = CGAL::Mesh_complex_3_in_triangulation_3<Triangulation>;
         using Criteria = CGAL::Mesh_criteria_3<Triangulation>;
 };
 
