@@ -22,7 +22,10 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
             shortest edge length of each tet.
         engine (``string``): The tetrahedralization engine to use.  Valid options are:
             * ``auto``: default to tetgen
-            * ``cgal``: `CGAL 3D mesh generation, using Polyhedron domain.
+            * ``cgal``: `CGAL 3D mesh generation, using Polyhedron domain with
+                auto feature extraction.
+                <https://doc.cgal.org/latest/Mesh_3/index.html>`_
+            * ``cgal_no_features``: `CGAL 3D mesh generation, using Polyhedron domain.
                 <https://doc.cgal.org/latest/Mesh_3/index.html>`_
             * ``cgal_implicit``: `CGAL 3D mesh generation, using implicit domain.
                 <https://doc.cgal.org/latest/Mesh_3/index.html>`_

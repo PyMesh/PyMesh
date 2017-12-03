@@ -11,6 +11,7 @@ def parse_args():
     parser.add_argument("--engine", help="tet mesh engine",
             choices = (
                 "cgal",
+                "cgal_no_features",
                 "cgal_implicit",
                 "tetgen",
                 "geogram",

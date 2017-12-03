@@ -61,6 +61,36 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT_WITH_FEATURES>
         }
 };
 
+template<>
+class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT>
+: public TetrahedralizationEngine {
+    public:
+        virtual void run() override {
+            using namespace CGAL::parameters;
+            using Kernel = InexactKernel;
+            preprocess();
+
+            auto domain = create_polyhedral_domain<Kernel>(
+                    m_vertices, m_faces);
+            using Domain = typename decltype(domain)::element_type;
+            using Traits = CGALMeshTraits<Domain>;
+
+            std::vector<std::pair<Domain::Point_3, Domain::Index>> init_pts;
+            auto init_points_constructor =
+                domain->construct_initial_points_object();
+            init_points_constructor(init_pts.end());
+            std::cout << init_pts.size() << " points generated." << std::endl;
+
+            auto_compute_meshing_params();
+            typename Traits::Criteria criteria(
+                    cell_radius_edge_ratio=m_cell_radius_edge_ratio,
+                    cell_size             =m_cell_size);
+
+            auto c3t3 = CGAL::make_mesh_3<typename Traits::C3t3>(*domain, criteria);
+            extract_mesh<Traits>(c3t3, m_vertices, m_faces, m_voxels);
+        }
+};
+
 #if WITH_IGL
 template<>
 class CGALMeshGen<InexactKernel, CGALDomainType::IMPLICIT_WITH_FEATURES>

@@ -38,6 +38,12 @@ TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
             CGALDomainType::EXPLICIT_WITH_FEATURES>;
         return std::make_shared<CGALEngine>();
     }
+    if (engine_name == "cgal_no_features") {
+        using CGALEngine = CGALMeshGen<
+            InexactKernel,
+            CGALDomainType::EXPLICIT>;
+        return std::make_shared<CGALEngine>();
+    }
 #if WITH_IGL
     if (engine_name == "cgal_implicit") {
         using CGALEngine = CGALMeshGen<
