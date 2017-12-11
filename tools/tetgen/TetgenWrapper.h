@@ -177,7 +177,6 @@ class TetgenWrapper {
         const MatrixIr& get_voxels() const { return m_tet_voxels; }
         const VectorI& get_regions() const { return m_regions; }
 
-    protected:
         std::string generate_command_line_options() const;
 
     private:
@@ -199,7 +198,7 @@ class TetgenWrapper {
         int m_max_num_steiner = -1;
         Float m_coplanar_tol = 1e-8;
         bool m_exact = true;
-        bool m_merge_coplanar = false;
+        bool m_merge_coplanar = true;
         bool m_weighted_delaunay = false;
         bool m_keep_convex_hull = false;
         short m_verbosity = 1;

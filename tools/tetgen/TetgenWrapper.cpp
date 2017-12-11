@@ -87,8 +87,8 @@ void TetgenWrapper::run() {
             throw IOError("Input tet must has 4 corners");
         }
         in.numberoftetrahedra = num_tets;
-        in.tetrahedronlist = new int[num_tets];
-        std::copy(m_tets.data(), m_tets.data() + num_tets, in.tetrahedronlist);
+        in.tetrahedronlist = new int[num_tets * 4];
+        std::copy(m_tets.data(), m_tets.data() + num_tets * 4, in.tetrahedronlist);
     }
 
     std::string flags = generate_command_line_options();
