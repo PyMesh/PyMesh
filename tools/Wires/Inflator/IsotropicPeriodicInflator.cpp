@@ -271,11 +271,15 @@ void IsotropicPeriodicInflator::ensure_periodicity() {
 }
 
 void IsotropicPeriodicInflator::reflect_old() {
-    TetgenWrapper tetrahedronizer(m_vertices, m_faces);
-    tetrahedronizer.run("qpa0.01Q");
+    TetgenWrapper tetgen;
+    tetgen.set_points(m_vertices);
+    tetgen.set_triangles(m_faces);
+    tetgen.set_max_tet_volume(0.01);
+    tetgen.set_verbosity(0);
+    tetgen.run();
 
-    auto vertices = tetrahedronizer.get_vertices();
-    auto voxels = tetrahedronizer.get_voxels();
+    auto vertices = tetgen.get_vertices();
+    auto voxels = tetgen.get_voxels();
 
     size_t num_vertices = vertices.rows();
 

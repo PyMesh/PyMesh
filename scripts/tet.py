@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import argparse
+import logging
 import numpy as np
 import os
 import os.path
@@ -24,6 +25,9 @@ def parse_args():
             type=float, default=2.0);
     parser.add_argument("--cell-size", help="max circumradius of tets",
             type=float, default=-1.0);
+    parser.add_argument("--log", type=str, help="Logging level",
+            choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+            default="WARNING");
     parser.add_argument("in_mesh", help="input mesh");
     parser.add_argument("out_mesh", help="output mesh");
     args = parser.parse_args();
@@ -31,6 +35,12 @@ def parse_args():
 
 def main():
     args = parse_args();
+
+    numeric_level = getattr(logging, args.log, None);
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: %s' % loglevel);
+    logging.basicConfig(level=numeric_level);
+
     mesh = pymesh.load_mesh(args.in_mesh);
 
     tet_mesh = pymesh.tetrahedralize(mesh,

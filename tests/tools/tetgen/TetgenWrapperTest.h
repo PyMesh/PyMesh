@@ -32,8 +32,12 @@ TEST_F(TetgenWrapperTest, Cube) {
     MatrixFr vertices = extract_vertices(mesh);
     MatrixIr faces = extract_faces(mesh);
 
-    TetgenWrapper wrapper(vertices, faces);
-    wrapper.run("qpYQ");
+    TetgenWrapper wrapper;
+    wrapper.set_points(vertices);
+    wrapper.set_triangles(faces);
+    wrapper.set_split_boundary(false);
+    wrapper.set_verbosity(0);
+    wrapper.run();
 
     MatrixFr tet_vertices = wrapper.get_vertices();
     MatrixIr tet_faces = wrapper.get_faces();

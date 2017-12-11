@@ -105,18 +105,20 @@ void PeriodicExploration::periodic_inflate(bool use_reflective_inflator) {
 bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
     const size_t dim = m_vertices.cols();
     const size_t num_vertices = m_vertices.rows();
-    TetgenWrapper tetgen(m_vertices, m_faces);
-    std::stringstream flags;
+    TetgenWrapper tetgen;
+    tetgen.set_points(m_vertices);
+    tetgen.set_triangles(m_faces);
     if (max_tet_vol == 0.0) {
         max_tet_vol =
             pow(m_default_thickness * pow(0.5, m_refine_order), dim);
     }
-    flags << "pqYQa" << max_tet_vol;
+    tetgen.set_split_boundary(false);
+    tetgen.set_max_tet_volume(max_tet_vol);
+    tetgen.set_verbosity(0);
     try {
-        tetgen.run(flags.str());
+        tetgen.run();
     } catch (TetgenException& e) {
         save_mesh("tetgen_debug.msh");
-        std::cerr << "Tetgen failed!  Flags: " << flags.str() << std::endl;
         std::cerr << e.what() << std::endl;
         std::cerr << "Data saved in tetgen_debug.msh" << std::endl;
         return false;

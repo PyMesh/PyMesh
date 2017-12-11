@@ -44,6 +44,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
     logger = logging.getLogger(__name__);
     if cell_size <= 0.0:
         cell_size = numpy.linalg.norm(mesh.bbox[0] - mesh.bbox[1]) / 20.0;
+    logger.info("Cell size: {}".format(cell_size));
 
     if mesh.dim != 3:
         raise NotImplementedError("Tetrahedralization only works with 3D mesh");
