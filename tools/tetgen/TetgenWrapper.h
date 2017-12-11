@@ -130,7 +130,7 @@ class TetgenWrapper {
          * length.  (-T option, default is 1e-8).
          */
         void set_coplanar_tolerance(Float tol) { m_coplanar_tol = tol; }
-        Float get_colpanar_tolerance() const { return m_coplanar_tol; }
+        Float get_coplanar_tolerance() const { return m_coplanar_tol; }
 
         /**
          * Use exact arithmetics. (-X option, default is true.)
@@ -156,7 +156,7 @@ class TetgenWrapper {
          * Whether to keep all tets in the convex hull.  (-c option, default is
          * false.)
          */
-        void keep_convext_hull(bool keep) { m_keep_convex_hull = keep; }
+        void set_keep_convex_hull(bool keep) { m_keep_convex_hull = keep; }
         bool get_keep_convex_hull() const { return m_keep_convex_hull; }
 
         /**

@@ -13,6 +13,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyOuterHull.cpp
     PyPredicates.cpp
     PySelfIntersectionResolver.cpp
+    PyTetgen.cpp
     PyTetrahedralization.cpp
     PyTriangle.cpp
     PyTriangulation.cpp
