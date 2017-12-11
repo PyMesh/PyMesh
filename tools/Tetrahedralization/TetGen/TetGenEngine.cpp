@@ -17,7 +17,7 @@ void TetGenEngine::run() {
     TetgenWrapper tetgen;
     tetgen.set_points(m_vertices);
     tetgen.set_triangles(m_faces);
-    tetgen.set_verbosity(0);
+    tetgen.set_verbosity(1);
     tetgen.set_max_tet_volume(max_tet_volume);
     tetgen.run();
 
