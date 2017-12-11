@@ -85,5 +85,7 @@ void init_TetgenWrapper(py::module& m) {
                 py::return_value_policy::reference_internal)
         .def_property_readonly("regions", &TetgenWrapper::get_regions,
                 py::return_value_policy::reference_internal)
+        .def_property_readonly("flags",
+                &TetgenWrapper::generate_command_line_options)
         ;
 }

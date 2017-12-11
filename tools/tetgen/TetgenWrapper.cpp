@@ -113,18 +113,24 @@ std::string TetgenWrapper::generate_command_line_options() const {
     std::stringstream opt;
     opt.precision(16);
     opt << 'z';
-    opt << "q" << m_max_radius_edge_ratio
-        << "/" << m_min_dihedral;
-    opt << "O" << m_optimization_level;
     opt << "T" << m_coplanar_tol;
+    bool is_PLC = false;
     if (m_coarsening) {
         opt << "R";
+        is_PLC = true;
     } else if (m_tets.rows() > 0) {
         opt << "r";
+        is_PLC = true;
     } else if (m_triangles.rows() > 0) {
         opt << "p";
+        is_PLC = true;
     }
-    if (!m_split) {
+    if (is_PLC) {
+        opt << "q" << m_max_radius_edge_ratio
+            << "/" << m_min_dihedral;
+        opt << "O" << m_optimization_level;
+    }
+    if (is_PLC && !m_split) {
         opt << "Y";
     }
     if (m_max_tet_volume > 0.0) {
