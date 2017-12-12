@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
+#include <ffstream>
 #include <memory>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Mesh_triangulation_3.h>
@@ -120,7 +121,39 @@ auto create_polyhedral_domain_with_feature(
     auto domain = std::make_unique<Domain>(P);
     domain->detect_features();
     domain->detect_borders();
+
     return domain;
+}
+
+/**
+ * Extract precomputed features in domain and write it to filename.
+ */
+template<typename Domain>
+void dump_features(const std::string& filename,
+        std::unique_ptr<Domain>& domain) {
+    std::ofstream fout(filename.c_str());
+
+    std::vector<std::pair<typename Domain::Corner_index,typename Domain::Point_3>> corners;
+    domain->get_corners(std::back_inserter(corners));
+    std::sort(corners.begin(), corners.end());
+    for (const auto& itr : corners) {
+        fout << "v "
+            << itr.second.x() << " "
+            << itr.second.y() << " "
+            << itr.second.z() << std::endl;
+    }
+    std::vector<CGAL::cpp11::tuple<
+        typename Domain::Curve_segment_index,
+        std::pair<typename Domain::Point_3,int>,
+        std::pair<typename Domain::Point_3,int> > > curves;
+    domain->get_curve_segments(std::back_inserter(curves));
+    for (const auto& itr : curves) {
+        fout << "l "
+            << CGAL::cpp11::get<1>(itr).second << " "
+            << CGAL::cpp11::get<2>(itr).second << std::endl;
+    }
+
+    fout.close();
 }
 
 template<typename K, typename Oracle>

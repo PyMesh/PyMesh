@@ -50,6 +50,7 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT_WITH_FEATURES>
                     m_vertices, m_faces);
             using Domain = typename decltype(domain)::element_type;
             using Traits = CGALMeshTraitsWithFeature<Domain>;
+            dump_features("features.obj", domain);
 
             auto_compute_meshing_params();
             typename Traits::Criteria criteria(
