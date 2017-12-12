@@ -1,6 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
-#include <ffstream>
+#include <fstream>
 #include <memory>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Mesh_triangulation_3.h>
