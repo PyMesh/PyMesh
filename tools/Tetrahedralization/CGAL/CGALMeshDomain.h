@@ -132,26 +132,42 @@ template<typename Domain>
 void dump_features(const std::string& filename,
         std::unique_ptr<Domain>& domain) {
     std::ofstream fout(filename.c_str());
+    std::stringstream v_out, f_out;
 
-    std::vector<std::pair<typename Domain::Corner_index,typename Domain::Point_3>> corners;
-    domain->get_corners(std::back_inserter(corners));
-    std::sort(corners.begin(), corners.end());
-    for (const auto& itr : corners) {
-        fout << "v "
-            << itr.second.x() << " "
-            << itr.second.y() << " "
-            << itr.second.z() << std::endl;
-    }
+    //std::vector<std::pair<typename Domain::Corner_index,typename Domain::Point_3>> corners;
+    //domain->get_corners(std::back_inserter(corners));
+    //std::sort(corners.begin(), corners.end());
+    //for (const auto& itr : corners) {
+    //    fout << "v "
+    //        << itr.second.x() << " "
+    //        << itr.second.y() << " "
+    //        << itr.second.z() << std::endl;
+    //}
     std::vector<CGAL::cpp11::tuple<
         typename Domain::Curve_segment_index,
         std::pair<typename Domain::Point_3,int>,
         std::pair<typename Domain::Point_3,int> > > curves;
     domain->get_curve_segments(std::back_inserter(curves));
+    size_t count = 0;
     for (const auto& itr : curves) {
-        fout << "l "
-            << CGAL::cpp11::get<1>(itr).second << " "
-            << CGAL::cpp11::get<2>(itr).second << std::endl;
+        const auto& curve_id = CGAL::cpp11::get<0>(itr);
+        const auto& v1 = CGAL::cpp11::get<1>(itr);
+        const auto& v2 = CGAL::cpp11::get<2>(itr);
+
+        v_out << "v "
+            << v1.first.x() << " "
+            << v1.first.y() << " "
+            << v1.first.z() << std::endl;
+        v_out << "v "
+            << v2.first.x() << " "
+            << v2.first.y() << " "
+            << v2.first.z() << std::endl;
+        f_out << "l " << count+1 << " " << count+2 << std::endl;
+        count+=2;
     }
+
+    fout << v_out.str();
+    fout << f_out.str();
 
     fout.close();
 }

@@ -52,7 +52,6 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT_WITH_FEATURES>
             using Traits = CGALMeshTraitsWithFeature<Domain>;
             dump_features("features.obj", domain);
 
-            auto_compute_meshing_params();
             typename Traits::Criteria criteria(
                     cell_radius_edge_ratio=m_cell_radius_edge_ratio,
                     cell_size             =m_cell_size);
@@ -76,13 +75,12 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT>
             using Domain = typename decltype(domain)::element_type;
             using Traits = CGALMeshTraits<Domain>;
 
-            std::vector<std::pair<Domain::Point_3, Domain::Index>> init_pts;
-            auto init_points_constructor =
-                domain->construct_initial_points_object();
-            init_points_constructor(init_pts.end());
-            std::cout << init_pts.size() << " points generated." << std::endl;
+            //std::vector<std::pair<Domain::Point_3, Domain::Index>> init_pts;
+            //auto init_points_constructor =
+            //    domain->construct_initial_points_object();
+            //init_points_constructor(init_pts.end());
+            //std::cout << init_pts.size() << " points generated." << std::endl;
 
-            auto_compute_meshing_params();
             typename Traits::Criteria criteria(
                     cell_radius_edge_ratio=m_cell_radius_edge_ratio,
                     cell_size             =m_cell_size);
