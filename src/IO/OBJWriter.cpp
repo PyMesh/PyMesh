@@ -96,7 +96,7 @@ void OBJWriter::write_mesh(Mesh& mesh) {
             texture.resize(0);
         } else {
             write_texture(fout, texture);
-            texture_indices.resize(num_faces, vertex_per_face);
+            texture_indices.resize(num_faces * vertex_per_face);
             for (size_t i=0; i<num_faces; i++) {
                 for (size_t j=0; j<vertex_per_face; j++) {
                     texture_indices[i*vertex_per_face+j] = i*vertex_per_face+j;
