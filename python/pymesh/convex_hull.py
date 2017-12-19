@@ -2,13 +2,14 @@ import PyMesh
 
 import numpy as np
 from .meshio import form_mesh
+from .triangle import triangle
 
 def convex_hull(mesh, engine="auto", with_timing=False):
     """
     Compute the convex hull of an input mesh.
 
     Args:
-        mesh (:class:`Mesh`): The inptu mesh.
+        mesh (:class:`Mesh`): The input mesh.
         engine (``string``): (optional) Convex hull engine name.  Valid names are:
 
             * `auto`: Using the default engine.
@@ -16,7 +17,9 @@ def convex_hull(mesh, engine="auto", with_timing=False):
             * `cgal`: CGAL convex hull module (
                 `2D <https://doc.cgal.org/latest/Convex_hull_2/index.html>`_,
                 `3D <https://doc.cgal.org/latest/Convex_hull_3/index.html>`_)
-            * with_timing (``boolean``): (optional) Whether to time the code
+            * `triangle`: Triangle convex hull engine.
+            * `tetgen`: Tetgen convex hull engine.
+        with_timing (``boolean``): (optional) Whether to time the code
 
     Returns: The output mesh representing the convex hull.
     (and running time if `with_timing` is true.)
@@ -44,9 +47,23 @@ def convex_hull(mesh, engine="auto", with_timing=False):
     faces = engine.get_faces();
     index_map = engine.get_index_map();
 
-    convex_hull = form_mesh(vertices, faces);
-    convex_hull.add_attribute("source_vertex");
-    convex_hull.set_attribute("source_vertex", index_map);
+    if mesh.dim == 3:
+        convex_hull = form_mesh(vertices, faces);
+        convex_hull.add_attribute("source_vertex");
+        convex_hull.set_attribute("source_vertex", index_map);
+    elif mesh.dim == 2:
+        tri = triangle();
+        tri.verbosity = 0;
+        tri.points = vertices;
+        tri.segments = faces;
+        tri.split_boundary = True;
+        tri.max_num_steiner_points = 0;
+        tri.run();
+        convex_hull = tri.mesh;
+        convex_hull.add_attribute("source_vertex");
+        convex_hull.set_attribute("source_vertex", index_map);
+    else:
+        raise NotImplementedError("Unsupported dimension: {}".format(mesh.dim));
 
     if with_timing:
         return convex_hull, running_time;

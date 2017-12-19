@@ -35,6 +35,14 @@ ELSE (TRIANGLE_FOUND)
     MESSAGE(WARNING "Triangle is missing.  Skipping triangle convex hull support")
 ENDIF (TRIANGLE_FOUND)
 
+#Include Tetgen
+IF (TETGEN_FOUND)
+    ADD_DEFINITIONS(-DWITH_TETGEN)
+    LIST(APPEND DEPENDENT_LIBS lib_tetgen_wrapper)
+    ADD_SUBDIRECTORY(TetGen)
+ELSE (TETGEN_FOUND)
+    MESSAGE(WARNING "Tetgen is missing.  Skipping tetgen convex hull support")
+ENDIF (TETGEN_FOUND)
 
 ADD_LIBRARY(lib_convex_hull SHARED ${SRC_FILES} ${INC_FILES})
 TARGET_LINK_LIBRARIES(lib_convex_hull

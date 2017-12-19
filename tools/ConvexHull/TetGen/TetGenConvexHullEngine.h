@@ -7,9 +7,9 @@
 
 namespace PyMesh {
 
-class TriangleConvexHullEngine : public ConvexHullEngine {
+class TetGenConvexHullEngine : public ConvexHullEngine {
     public:
-        TriangleConvexHullEngine(): ConvexHullEngine() { }
+        TetGenConvexHullEngine(): ConvexHullEngine() {}
 
     public:
         virtual void run(const MatrixFr& points);

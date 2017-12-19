@@ -19,6 +19,10 @@
 #include "Triangle/TriangleConvexHullEngine.h"
 #endif
 
+#ifdef WITH_TETGEN
+#include "TetGen/TetGenConvexHullEngine.h"
+#endif
+
 using namespace PyMesh;
 
 namespace ConvexHullEngineHelper {
@@ -69,6 +73,18 @@ ConvexHullEngine::Ptr ConvexHullEngine::create(
     }
 #endif
 
+#ifdef WITH_TETGEN
+    if (library_name == "tetgen") {
+        if (dim == 3) {
+            return std::make_shared<TetGenConvexHullEngine>();
+        } else {
+            std::stringstream err_msg;
+            err_msg << "Tetgen convex hull does not support dim=" << dim;
+            throw NotImplementedError(err_msg.str());
+        }
+    }
+#endif
+
     std::stringstream err_msg;
     err_msg << "Convex hull library " << library_name
         << " is not supported.";
@@ -82,6 +98,12 @@ bool ConvexHullEngine::supports(
 #endif
 #ifdef WITH_CGAL
     if ((library_name) == "cgal") return true;
+#endif
+#ifdef WITH_TRIANGLE
+    if ((library_name) == "triangle") return true;
+#endif
+#ifdef WITH_TETGEN
+    if ((library_name) == "tetgen") return true;
 #endif
     return false;
 }

@@ -108,6 +108,7 @@ setup(
             "scripts/bbox.py",
             "scripts/box_gen.py",
             "scripts/boolean.py",
+            "scripts/convex_hull.py",
             "scripts/curvature.py",
             "scripts/dodecahedron_gen.py",
             "scripts/extract_self_intersecting_faces.py",
