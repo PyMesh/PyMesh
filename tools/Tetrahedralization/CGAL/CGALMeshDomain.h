@@ -93,7 +93,8 @@ class PolyhedronBuilder : public CGAL::Modifier_base<HDS> {
 template<typename K>
 auto create_polyhedral_domain(const MatrixFr& vertices, const MatrixIr& faces) {
     using Polyhedron = CGAL::Polyhedron_3<K, CGAL::Mesh_3::Mesh_polyhedron_items<int> >;
-    using Domain = CGAL::Polyhedral_mesh_domain_3<Polyhedron, K>;
+    //using Domain = CGAL::Polyhedral_mesh_domain_3<Polyhedron, K>;
+    using Domain = CGAL::Polyhedral_mesh_domain_with_features_3<K>;
     using HalfedgeDS = typename Polyhedron::HalfedgeDS;
 
     Polyhedron P;
