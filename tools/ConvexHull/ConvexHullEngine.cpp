@@ -43,16 +43,16 @@ ConvexHullEngine::Ptr ConvexHullEngine::create(
         size_t dim, const std::string& library_name) {
 #ifdef WITH_QHULL
     if (library_name == "qhull") {
-        return Ptr(new QhullEngine);
+        return std::make_shared<QhullEngine>();
     }
 #endif
 
 #ifdef WITH_CGAL
     if (library_name == "cgal") {
         if (dim == 2) {
-            return Ptr(new CGALConvexHull2D);
+            return std::make_shared<CGALConvexHull2D>();
         } else if (dim == 3) {
-            return Ptr(new CGALConvexHull3D);
+            return std::make_shared<CGALConvexHull3D>();
         } else {
             std::stringstream err_msg;
             err_msg << "CGAL convex hull does not support dim=" << dim;
@@ -64,7 +64,7 @@ ConvexHullEngine::Ptr ConvexHullEngine::create(
 #ifdef WITH_TRIANGLE
     if (library_name == "triangle") {
         if (dim == 2) {
-            return Ptr(new TriangleConvexHullEngine);
+            return std::make_shared<TriangleConvexHullEngine>();
         } else {
             std::stringstream err_msg;
             err_msg << "Triangle convex hull does not support dim=" << dim;
