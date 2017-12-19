@@ -150,5 +150,8 @@ sed  -i '/convex_hull/d' ./setup.py
 RUN python setup.py build && \
 	python setup.py install 
 #RUN ./setup.py build && ./setup.py install && rm -rf build third_party/build
+
 USER pymesh
+RUN cd /home/pymesh &&
+    cp -r PyMesh/scripts /home/pymesh/demos
 
