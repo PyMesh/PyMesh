@@ -18,7 +18,8 @@ class TetrahedralizationEngine {
         TetrahedralizationEngine() :
             m_ave_edge_length(1.0),
             m_cell_radius_edge_ratio(2),
-            m_cell_size(-1.0) { }
+            m_cell_size(-1.0),
+            m_facet_distance(-1.0) { }
 
         virtual ~TetrahedralizationEngine() = default;
 
@@ -56,6 +57,13 @@ class TetrahedralizationEngine {
             m_cell_size = val;
         }
 
+        void set_facet_distance(Float val) {
+            if (val < 0.0) {
+                throw RuntimeError("Facet distance must be positive!");
+            }
+            m_facet_distance = val;
+        }
+
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
         MatrixIr get_voxels() const { return m_voxels; }
@@ -73,6 +81,7 @@ class TetrahedralizationEngine {
         Float m_ave_edge_length;
         Float m_cell_radius_edge_ratio;
         Float m_cell_size;
+        Float m_facet_distance;
 };
 
 }

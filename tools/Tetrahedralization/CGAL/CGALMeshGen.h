@@ -54,6 +54,7 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT_WITH_FEATURES>
 
             typename Traits::Criteria criteria(
                     cell_radius_edge_ratio=m_cell_radius_edge_ratio,
+                    facet_distance        =m_facet_distance,
                     cell_size             =m_cell_size);
 
             auto c3t3 = CGAL::make_mesh_3<typename Traits::C3t3>(*domain, criteria);
@@ -83,6 +84,7 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT>
 
             typename Traits::Criteria criteria(
                     cell_radius_edge_ratio=m_cell_radius_edge_ratio,
+                    facet_distance        =m_facet_distance,
                     cell_size             =m_cell_size);
 
             auto c3t3 = CGAL::make_mesh_3<typename Traits::C3t3>(*domain, criteria);
@@ -111,6 +113,7 @@ class CGALMeshGen<InexactKernel, CGALDomainType::IMPLICIT_WITH_FEATURES>
             auto_compute_meshing_params();
             typename Traits::Criteria criteria(
                     cell_radius_edge_ratio=m_cell_radius_edge_ratio,
+                    facet_distance        =m_facet_distance,
                     cell_size             =m_cell_size);
 
             auto c3t3 = CGAL::make_mesh_3<typename Traits::C3t3>(*domain, criteria);

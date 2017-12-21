@@ -25,6 +25,9 @@ def parse_args():
             type=float, default=2.0);
     parser.add_argument("--cell-size", help="max circumradius of tets",
             type=float, default=-1.0);
+    parser.add_argument("--facet-distance",
+            help="max distance between facet's circumcenter to the center of its Delaunay ball",
+            type=float, default=-1.0);
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="WARNING");
@@ -46,6 +49,7 @@ def main():
     tet_mesh = pymesh.tetrahedralize(mesh,
             args.cell_size,
             args.radius_edge_ratio,
+            args.facet_distance,
             args.engine);
     pymesh.save_mesh(args.out_mesh, tet_mesh);
 

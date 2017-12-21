@@ -11,7 +11,7 @@ import os.path
 import tempfile
 import subprocess
 
-def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
+def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="auto"):
     """
     Create a tetrahedral mesh from input triangle mesh.
 
@@ -20,6 +20,10 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         cell_size (``float``): Max radius of the circumscribed sphere of the output tet.
         radius_edge_ratio (``float``): Max radius of the circumscribed sphere to the
             shortest edge length of each tet.
+        facet_distance (``float``): Upper bound on the distance from the
+            circumcenter of a facet to the center of its "Delaunay ball", where
+            a Delaunay ball is defined as the smallest circumscribed sphere
+            with center on the surface of the domain.
         engine (``string``): The tetrahedralization engine to use.  Valid options are:
             * ``auto``: default to tetgen
             * ``cgal``: `CGAL 3D mesh generation, using Polyhedron domain with
@@ -42,9 +46,14 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
         Tetrahedral mesh.
     """
     logger = logging.getLogger(__name__);
+    bbox_min, bbox_max = mesh.bbox;
+    bbox_diagonal = numpy.linalg.norm(bbox_max - bbox_min);
     if cell_size <= 0.0:
-        cell_size = numpy.linalg.norm(mesh.bbox[0] - mesh.bbox[1]) / 20.0;
+        cell_size = bbox_diagonal / 20.0;
     logger.info("Cell size: {}".format(cell_size));
+    if facet_distance <= 0.0:
+        facet_distance = bbox_diagonal / 3000.0;
+    logger.info("Facet distance: {}".format(facet_distance));
 
     if mesh.dim != 3:
         raise NotImplementedError("Tetrahedralization only works with 3D mesh");
@@ -109,6 +118,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, engine="auto"):
             logger.warning("Using default radius edge ratio.");
 
         engine.set_cell_size(cell_size);
+        engine.set_facet_distance(facet_distance);
         engine.run();
 
         vertices = engine.get_vertices();
