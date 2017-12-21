@@ -19,6 +19,7 @@ void TetGenEngine::run() {
     tetgen.set_triangles(m_faces);
     tetgen.set_verbosity(1);
     tetgen.set_max_tet_volume(max_tet_volume);
+    tetgen.set_max_radius_edge_ratio(m_cell_radius_edge_ratio);
     tetgen.run();
 
     m_vertices = tetgen.get_vertices();
