@@ -61,7 +61,8 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="a
         raise NotImplementedError("Only triangle mesh is supported for now");
     if engine == 'auto':
         engine = 'tetgen';
-    elif engine == 'delpsc':
+
+    if engine == 'delpsc':
         exec_name = "DelPSC";
         temp_dir = tempfile.gettempdir();
         md5 = hashlib.md5();
