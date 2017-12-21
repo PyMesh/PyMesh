@@ -57,6 +57,10 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
     if facet_distance <= 0.0:
         facet_distance = bbox_diagonal / 3000.0;
     logger.info("Facet distance: {}".format(facet_distance));
+    if radius_edge_ratio <= 0.0:
+        logger.warning("Using default radius edge ratio.");
+        radius_edge_ratio = 2.0;
+    logger.info("Max radius/edge ratio: {}".format(radius_edge_ratio));
 
     if mesh.dim != 3:
         raise NotImplementedError("Tetrahedralization only works with 3D mesh");
@@ -77,7 +81,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
         cmd = exec_name;
         cmd += " -mtr {}".format(cell_size * 0.5);
         cmd += " -max {}".format(cell_size * 0.5 / (0.75 * math.sqrt(2)));
-        if radius_edge_ratio >= 2.0:
+        if radius_edge_ratio > 0.0:
             cmd += " -ar {}".format(radius_edge_ratio);
         cmd += " {} {}".format(temp_file, os.path.join(temp_dir, name));
         if with_timing:
@@ -133,10 +137,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
         engine = PyMesh.TetrahedralizationEngine.create(engine);
         engine.set_vertices(vertices);
         engine.set_faces(faces);
-        if radius_edge_ratio < 2.0:
-            engine.set_cell_radius_edge_ratio(radius_edge_ratio);
-        else:
-            logger.warning("Using default radius edge ratio.");
+        engine.set_cell_radius_edge_ratio(radius_edge_ratio);
 
         engine.set_cell_size(cell_size);
         engine.set_facet_distance(facet_distance);
