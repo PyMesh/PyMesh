@@ -43,8 +43,12 @@ def main():
     if not isinstance(numeric_level, int):
         raise ValueError('Invalid log level: %s' % loglevel);
     logging.basicConfig(level=numeric_level);
+    logger = logging.getLogger("tet.py");
 
     mesh = pymesh.load_mesh(args.in_mesh);
+    if mesh.vertex_per_face == 4:
+        logger.info("Spliting quad mesh into triangle mesh");
+        mesh = pymesh.quad_to_tri(mesh);
 
     tet_mesh = pymesh.tetrahedralize(mesh,
             args.cell_size,
