@@ -10,8 +10,10 @@ import os
 import os.path
 import tempfile
 import subprocess
+from time import time
 
-def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="auto"):
+def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
+        engine="auto", with_timing=False):
     """
     Create a tetrahedral mesh from input triangle mesh.
 
@@ -41,9 +43,10 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="a
                 Slatton <http://web.cse.ohio-state.edu/~dey.8/delpsc.html>`_
             * ``vegafem``: `Tet mesher provided by VegaFEM library
                 <http://run.usc.edu/vega/>`_
+        with_timing (``boolean``): whether to output timing info.
 
     Returns:
-        Tetrahedral mesh.
+        Tetrahedral mesh (and running time if `with_timing` is True).
     """
     logger = logging.getLogger(__name__);
     bbox_min, bbox_max = mesh.bbox;
@@ -77,7 +80,12 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="a
         if radius_edge_ratio >= 2.0:
             cmd += " -ar {}".format(radius_edge_ratio);
         cmd += " {} {}".format(temp_file, os.path.join(temp_dir, name));
+        if with_timing:
+            start_time = time();
         subprocess.check_call(cmd.split());
+        if with_timing:
+            finish_time = time();
+            running_time = finish_time - start_time;
         logger.info("DelPSC done.");
 
         outfile_tet = os.path.join(temp_dir, "{}_vol.tets".format(name));
@@ -89,7 +97,11 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="a
         delpsc_mesh = load_mesh(outfile_off);
         vertices = delpsc_mesh.vertices;
         voxels = delpsc_mesh.faces;
-        return form_mesh(vertices, np.zeros((0, 3)), voxels);
+        output_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels);
+        if with_timing:
+            return output_mesh, running_time;
+        else:
+            return output_mesh;
     elif engine == "vegafem":
         exec_name = "tetMesher";
         temp_dir = tempfile.gettempdir();
@@ -102,10 +114,18 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="a
         save_mesh(temp_file, mesh);
         logger.warning("VEGA tet mesher ignores cell_size and radius_edge_ratio");
         cmd = "{} {} {}".format(exec_name, temp_file, output_file);
+        if with_timing:
+            start_time = time();
         subprocess.check_call(cmd.split());
+        if with_timing:
+            finish_time = time();
+            running_time = finish_time - start_time;
         logger.info("VegaFEM tetMesher done.");
         vega_mesh = load_mesh(output_file);
-        return vega_mesh;
+        if with_time:
+            return vega_mesh, running_time;
+        else:
+            return vega_mesh;
     else:
         vertices = mesh.vertices.reshape((-1, 3), order="C");
         faces = mesh.faces.reshape((-1, 3), order="C").astype(int);
@@ -120,11 +140,23 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance, engine="a
 
         engine.set_cell_size(cell_size);
         engine.set_facet_distance(facet_distance);
+
+        if with_timing:
+            start_time = time();
+
         engine.run();
+
+        if with_timing:
+            finish_time = time();
+            running_time = finish_time - start_time;
 
         vertices = engine.get_vertices();
         faces = engine.get_faces();
         voxels = engine.get_voxels();
 
-        return form_mesh(vertices, faces, voxels);
+        output_mesh = form_mesh(vertices, faces, voxels);
+        if with_timing:
+            return output_mesh, running_time;
+        else:
+            return output_mesh;
 

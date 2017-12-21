@@ -23,16 +23,16 @@ def parse_args():
     parser.add_argument("--radius-edge-ratio",
             help="Max radius to edge ratio",
             type=float, default=2.0);
-    parser.add_argument("--cell-size", help="max circumradius of tets",
+    parser.add_argument("--cell-size", help="Max circumradius of tets",
             type=float, default=-1.0);
     parser.add_argument("--facet-distance",
-            help="max distance between facet's circumcenter to the center of its Delaunay ball",
+            help="Max distance between facet's circumcenter to the center of its Delaunay ball",
             type=float, default=-1.0);
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="WARNING");
-    parser.add_argument("in_mesh", help="input mesh");
-    parser.add_argument("out_mesh", help="output mesh");
+    parser.add_argument("in_mesh", help="Input mesh");
+    parser.add_argument("out_mesh", help="Output mesh");
     args = parser.parse_args();
     return args;
 
@@ -50,12 +50,14 @@ def main():
         logger.info("Spliting quad mesh into triangle mesh");
         mesh = pymesh.quad_to_tri(mesh);
 
-    tet_mesh = pymesh.tetrahedralize(mesh,
+    tet_mesh, t = pymesh.tetrahedralize(mesh,
             args.cell_size,
             args.radius_edge_ratio,
             args.facet_distance,
-            args.engine);
+            args.engine,
+            with_timing=True);
     pymesh.save_mesh(args.out_mesh, tet_mesh);
+    logger.info("Running time: {}".format(t));
 
 if __name__ == "__main__":
     main();
