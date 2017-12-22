@@ -108,7 +108,7 @@ auto create_polyhedral_domain(const MatrixFr& vertices, const MatrixIr& faces) {
 
 template<typename K>
 auto create_polyhedral_domain_with_feature(
-        const MatrixFr& vertices, const MatrixIr& faces) {
+        const MatrixFr& vertices, const MatrixIr& faces, const Float feature_angle) {
     using Domain = CGAL::Polyhedral_mesh_domain_with_features_3<K>;
     using Polyhedron = CGAL::Polyhedron_3<K, CGAL::Mesh_3::Mesh_polyhedron_items<int> >;
     using HalfedgeDS = typename Polyhedron::HalfedgeDS;
@@ -120,7 +120,7 @@ auto create_polyhedral_domain_with_feature(
     assert(faces.rows() == P.size_of_facets());
 
     auto domain = std::make_unique<Domain>(P);
-    domain->detect_features();
+    domain->detect_features(feature_angle);
     domain->detect_borders();
 
     return domain;

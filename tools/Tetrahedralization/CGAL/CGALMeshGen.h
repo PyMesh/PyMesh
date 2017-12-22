@@ -47,7 +47,7 @@ class CGALMeshGen<InexactKernel, CGALDomainType::EXPLICIT_WITH_FEATURES>
             preprocess();
 
             auto domain = create_polyhedral_domain_with_feature<Kernel>(
-                    m_vertices, m_faces);
+                    m_vertices, m_faces, m_feature_angle);
             using Domain = typename decltype(domain)::element_type;
             using Traits = CGALMeshTraitsWithFeature<Domain>;
             dump_features("features.obj", domain);

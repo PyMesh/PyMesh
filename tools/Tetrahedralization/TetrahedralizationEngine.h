@@ -15,12 +15,7 @@ class TetrahedralizationEngine {
         static Ptr create(const std::string& engine_name);
 
     public:
-        TetrahedralizationEngine() :
-            m_ave_edge_length(1.0),
-            m_cell_radius_edge_ratio(2),
-            m_cell_size(-1.0),
-            m_facet_distance(-1.0) { }
-
+        TetrahedralizationEngine() = default;
         virtual ~TetrahedralizationEngine() = default;
 
     public:
@@ -57,11 +52,24 @@ class TetrahedralizationEngine {
             m_cell_size = val;
         }
 
+        /**
+         * Distance between surface facet and actual domain.
+         */
         void set_facet_distance(Float val) {
             if (val < 0.0) {
                 throw RuntimeError("Facet distance must be positive!");
             }
             m_facet_distance = val;
+        }
+
+        /**
+         * Set angle threshold (in degrees) for feature extraction.
+         */
+        void set_feature_angle(Float val) {
+            if (val < 0.0) {
+                throw RuntimeError("Feature angle must be positive!");
+            }
+            m_feature_angle = val;
         }
 
         MatrixFr get_vertices() const { return m_vertices; }
@@ -78,10 +86,11 @@ class TetrahedralizationEngine {
         MatrixIr m_faces;
         MatrixIr m_voxels;
 
-        Float m_ave_edge_length;
-        Float m_cell_radius_edge_ratio;
-        Float m_cell_size;
-        Float m_facet_distance;
+        Float m_ave_edge_length = 1.0;
+        Float m_cell_radius_edge_ratio = 2.0;
+        Float m_cell_size = -1.0;
+        Float m_facet_distance = -1.0;
+        Float m_feature_angle = 120.0; // degrees
 };
 
 }

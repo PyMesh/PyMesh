@@ -12,7 +12,11 @@ import tempfile
 import subprocess
 from time import time
 
-def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
+def tetrahedralize(mesh,
+        cell_size,
+        radius_edge_ratio,
+        facet_distance,
+        feature_angle,
         engine="auto", with_timing=False):
     """
     Create a tetrahedral mesh from input triangle mesh.
@@ -26,6 +30,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
             circumcenter of a facet to the center of its "Delaunay ball", where
             a Delaunay ball is defined as the smallest circumscribed sphere
             with center on the surface of the domain.
+        feature_angle (``float``): Angle threshold (in degrees) for feature extraction.
         engine (``string``): The tetrahedralization engine to use.  Valid options are:
             * ``auto``: default to tetgen
             * ``cgal``: `CGAL 3D mesh generation, using Polyhedron domain with
@@ -61,6 +66,10 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
         logger.warning("Using default radius edge ratio.");
         radius_edge_ratio = 2.0;
     logger.info("Max radius/edge ratio: {}".format(radius_edge_ratio));
+    if feature_angle < 0.0:
+        logger.warning("Using default feature angle.");
+        feature_angle = 120.0;
+    logger.info("Feature angle: {}".format(feature_angle));
 
     if mesh.dim != 3:
         raise NotImplementedError("Tetrahedralization only works with 3D mesh");
@@ -83,6 +92,8 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
         cmd += " -max {}".format(cell_size * 0.5 / (0.75 * math.sqrt(2)));
         if radius_edge_ratio > 0.0:
             cmd += " -ar {}".format(radius_edge_ratio);
+        if feature_angle > 0.0:
+            cmd += " -at {}".format(feature_angle);
         cmd += " {} {}".format(temp_file, os.path.join(temp_dir, name));
         if with_timing:
             start_time = time();
@@ -141,6 +152,7 @@ def tetrahedralize(mesh, cell_size, radius_edge_ratio, facet_distance,
 
         engine.set_cell_size(cell_size);
         engine.set_facet_distance(facet_distance);
+        engine.set_feature_angle(feature_angle);
 
         if with_timing:
             start_time = time();

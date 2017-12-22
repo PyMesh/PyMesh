@@ -20,6 +20,7 @@ void init_Tetrahedralization(py::module& m) {
     .def("set_cell_radius_edge_ratio", &TetrahedralizationEngine::set_cell_radius_edge_ratio)
     .def("set_cell_size", &TetrahedralizationEngine::set_cell_size)
     .def("set_facet_distance", &TetrahedralizationEngine::set_facet_distance)
+    .def("set_feature_angle", &TetrahedralizationEngine::set_feature_angle)
     .def("get_vertices", &TetrahedralizationEngine::get_vertices)
     .def("get_faces", &TetrahedralizationEngine::get_faces)
     .def("get_voxels", &TetrahedralizationEngine::get_voxels);

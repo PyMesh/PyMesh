@@ -28,6 +28,9 @@ def parse_args():
     parser.add_argument("--facet-distance",
             help="Max distance between facet's circumcenter to the center of its Delaunay ball",
             type=float, default=-1.0);
+    parser.add_argument("--feature-angle",
+            help="Angle threshold (in degrees) for feature extraction.",
+            type=float, default=120);
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="WARNING");
@@ -54,6 +57,7 @@ def main():
             args.cell_size,
             args.radius_edge_ratio,
             args.facet_distance,
+            args.feature_angle,
             args.engine,
             with_timing=True);
     pymesh.save_mesh(args.out_mesh, tet_mesh);
