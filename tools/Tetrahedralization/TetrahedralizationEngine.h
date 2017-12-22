@@ -66,8 +66,8 @@ class TetrahedralizationEngine {
          * Set angle threshold (in degrees) for feature extraction.
          */
         void set_feature_angle(Float val) {
-            if (val < 0.0) {
-                throw RuntimeError("Feature angle must be positive!");
+            if (val < 0.0 || val > 180.0) {
+                throw RuntimeError("Feature angle must be in the range [0, 180]!");
             }
             m_feature_angle = val;
         }

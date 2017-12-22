@@ -120,7 +120,7 @@ auto create_polyhedral_domain_with_feature(
     assert(faces.rows() == P.size_of_facets());
 
     auto domain = std::make_unique<Domain>(P);
-    domain->detect_features(feature_angle);
+    domain->detect_features(180.0 - feature_angle);
     domain->detect_borders();
 
     return domain;
