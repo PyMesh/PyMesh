@@ -122,7 +122,7 @@ def print_quantile_info(mesh, info):
     quantile_breakdown(dihedral_angles, "dihedral_angle", info,
             title = "Edge Dihedral Angle", with_total=False);
 
-    if (mesh.num_voxels > 0):
+    if (mesh.num_voxels > 0 and mesh.vertex_per_voxel == 4):
         mesh.add_attribute("voxel_dihedral_angle");
         voxel_dihedral_angle = mesh.get_attribute("voxel_dihedral_angle");
         voxel_dihedral_angle = voxel_dihedral_angle.reshape((-1, 6));

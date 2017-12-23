@@ -1,8 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "Mesh.h"
 
-#include <iostream>
-
 #include <Attributes/MeshAttributes.h>
 #include <Connectivity/MeshConnectivity.h>
 #include <Core/EigenTypedef.h>

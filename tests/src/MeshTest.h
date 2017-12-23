@@ -249,6 +249,7 @@ TEST_F(MeshTest, HexAdj) {
     ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(5).size());
     ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(6).size());
     ASSERT_EQ(3, m_cube_hex->get_vertex_adjacent_vertices(7).size());
+    ASSERT_EQ(6, m_cube_hex->get_voxel_adjacent_faces(0).size());
 
     check_face_face_adjacency_is_symmetric(m_cube_hex);
     check_vertex_vertex_adjacency_is_symmetric(m_cube_hex);
