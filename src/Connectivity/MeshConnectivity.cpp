@@ -375,10 +375,9 @@ void MeshConnectivity::init_voxel_adjacencies(Mesh* mesh) {
                 }
             }
         }
-        for (std::map<int, int>::const_iterator itr = voxel_counter.begin();
-                itr != voxel_counter.end(); itr++) {
-            if (itr->second == 4) {
-                voxel_neighbors.insert(itr->first);
+        for (const auto& entry : voxel_counter) {
+            if (entry.second == vertex_per_face) {
+                voxel_neighbors.insert(entry.first);
             }
         }
     }
