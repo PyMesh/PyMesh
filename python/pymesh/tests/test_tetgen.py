@@ -2,6 +2,7 @@ import pymesh
 from pymesh.TestCase import TestCase
 
 import numpy as np
+import unittest
 
 class TetgenTest(TestCase):
     def test_point_cloud(self):
@@ -110,6 +111,7 @@ class TetgenTest(TestCase):
         self.assertLess(6, len(tetgen.voxels));
         self.assertAlmostEqual(1.0, np.sum(volumes));
 
+    @unittest.skip("debug")
     def test_weighted(self):
         tetgen = pymesh.tetgen();
         tetgen.points = np.array([
