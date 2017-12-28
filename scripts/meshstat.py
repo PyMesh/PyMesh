@@ -217,8 +217,8 @@ def print_extended_info(mesh, info):
         num_inverted_tets = np.sum(tet_orientations < 0);
         print_property("num degenerated tets:", num_degenerate_tets, 0);
         print_property("num inverted tets:", num_inverted_tets, 0);
-        info["num_degenerated_tets"] = num_degenerate_tets;
-        info["num_inverted_tets"] = num_inverted_tets;
+        info["num_degenerated_tets"] = int(num_degenerate_tets);
+        info["num_inverted_tets"] = int(num_inverted_tets);
 
     is_closed = mesh.is_closed();
     is_edge_manifold = mesh.is_edge_manifold();
