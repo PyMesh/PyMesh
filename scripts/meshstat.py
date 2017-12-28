@@ -211,6 +211,15 @@ def print_extended_info(mesh, info):
     info["num_geometrical_degenerated_faces"] =\
             num_degenerated - num_combinatorial_degenerated_faces;
 
+    if mesh.num_voxels > 0 and mesh.vertex_per_voxel == 4:
+        tet_orientations = pymesh.get_tet_orientations(mesh);
+        num_degenerate_tets = np.sum(tet_orientations == 0);
+        num_inverted_tets = np.sum(tet_orientations < 0);
+        print_property("num degenerated tets:", num_degenerate_tets, 0);
+        print_property("num inverted tets:", num_inverted_tets, 0);
+        info["num_degenerated_tets"] = num_degenerate_tets;
+        info["num_inverted_tets"] = num_inverted_tets;
+
     is_closed = mesh.is_closed();
     is_edge_manifold = mesh.is_edge_manifold();
     is_vertex_manifold = mesh.is_vertex_manifold();

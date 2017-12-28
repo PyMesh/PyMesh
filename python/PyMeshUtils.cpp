@@ -20,6 +20,7 @@
 #include <MeshUtils/FinFaceRemoval.h>
 #include <MeshUtils/DegeneratedTriangleRemoval.h>
 #include <MeshUtils/FaceUtils.h>
+#include <MeshUtils/VoxelUtils.h>
 
 namespace py = pybind11;
 using namespace PyMesh;
@@ -43,6 +44,7 @@ void init_MeshUtils(py::module& m) {
     m.def("is_colinear_2D", &FaceUtils::is_colinear_2D);
     m.def("is_colinear_3D", &FaceUtils::is_colinear_3D);
     m.def("get_degenerated_faces", &FaceUtils::get_degenerated_faces);
+    m.def("get_tet_orientations", &VoxelUtils::get_tet_orientations);
 
     py::class_<ObtuseTriangleRemoval>(m, "ObtuseTriangleRemoval")
         .def(py::init<MatrixFr&, MatrixIr&>())

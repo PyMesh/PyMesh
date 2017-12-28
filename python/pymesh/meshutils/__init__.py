@@ -29,6 +29,8 @@ from .face_utils import is_colinear
 from .face_utils import get_degenerated_faces
 from .face_utils import get_degenerated_faces_raw
 from .subdivide import subdivide
+from .voxel_utils import get_tet_orientations
+from .voxel_utils import get_tet_orientations_raw
 
 __all__ = [
         "convert_to_vertex_attribute",
@@ -44,6 +46,8 @@ __all__ = [
         "generate_icosphere",
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
+        "get_tet_orientations",
+        "get_tet_orientations_raw",
         "hex_to_tet",
         "quad_to_tri",
         "is_colinear",
