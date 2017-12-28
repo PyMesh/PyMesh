@@ -112,6 +112,7 @@ setup(
             "scripts/curvature.py",
             "scripts/dodecahedron_gen.py",
             "scripts/extract_self_intersecting_faces.py",
+            "scripts/fem_check.py",
             "scripts/find_file.py",
             "scripts/fix_mesh.py",
             "scripts/geodesic.py",
