@@ -2,6 +2,12 @@ import PyMesh
 from .meshio import form_mesh
 
 class HarmonicSolver(PyMesh.HarmonicSolver):
+    @classmethod
+    def create(cls, mesh):
+        """ Create a harmonic solver using the input mesh as domain.
+        """
+        return PyMesh.HarmonicSolver.create(mesh.raw_mesh);
+
     @property
     def mesh(self):
         nodes = self.nodes;

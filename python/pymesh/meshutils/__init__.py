@@ -9,6 +9,7 @@ from .collapse_short_edges import collapse_short_edges_raw
 from .generate_box_mesh import generate_box_mesh
 from .generate_dodecahedron import generate_dodecahedron
 from .generate_icosphere import generate_icosphere
+from .generate_regular_tetrahedron import generate_regular_tetrahedron
 from .hex_to_tet import hex_to_tet
 from .quad_to_tri import quad_to_tri
 from .merge_meshes import merge_meshes
@@ -44,6 +45,7 @@ __all__ = [
         "generate_box_mesh",
         "generate_dodecahedron",
         "generate_icosphere",
+        "generate_regular_tetrahedron",
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
         "get_tet_orientations",

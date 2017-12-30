@@ -35,7 +35,7 @@ def main():
     bd_indices = np.unique(mesh.faces.ravel());
     bd_values = target_solution[bd_indices];
 
-    solver = pymesh.HarmonicSolver.create(mesh.raw_mesh);
+    solver = pymesh.HarmonicSolver.create(mesh);
     solver.order = 1;
     solver.boundary_indices = bd_indices;
     solver.boundary_values = bd_values;
