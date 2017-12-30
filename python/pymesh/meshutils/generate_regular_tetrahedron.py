@@ -15,8 +15,8 @@ def generate_regular_tetrahedron(edge_length=1.0, center=np.zeros(3)):
     s = 1.0 / math.sqrt(2.0);
 
     vertices = np.array([
-        [ 1.0, 0.0, -s],
         [-1.0, 0.0, -s],
+        [ 1.0, 0.0, -s],
         [ 0.0, 1.0,  s],
         [ 0.0, -1.0,  s] ]);
     voxels = np.array([
