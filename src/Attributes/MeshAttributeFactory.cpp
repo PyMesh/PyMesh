@@ -34,6 +34,7 @@
 #include "VoxelIncenterAttribute.h"
 #include "VoxelInradiusAttribute.h"
 #include "VoxelIndexAttribute.h"
+#include "VoxelRadiusEdgeRatioAttribute.h"
 #include "VoxelVolumeAttribute.h"
 
 using namespace PyMesh;
@@ -92,6 +93,8 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return std::make_shared<VoxelDihedralAngleAttribute>(name);
     } else if (name == "voxel_edge_ratio") {
         return std::make_shared<VoxelEdgeRatioAttribute>(name);
+    } else if (name == "voxel_centroid") {
+        return std::make_shared<VoxelCentroidAttribute>(name);
     } else if (name == "voxel_circumcenter") {
         return std::make_shared<VoxelCircumCenterAttribute>(name);
     } else if (name == "voxel_circumradius") {
@@ -102,10 +105,10 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return std::make_shared<VoxelInradiusAttribute>(name);
     } else if (name == "voxel_index") {
         return std::make_shared<VoxelIndexAttribute>(name);
+    } else if (name == "voxel_radius_edge_ratio") {
+        return std::make_shared<VoxelRadiusEdgeRatioAttribute>(name);
     } else if (name == "voxel_volume") {
         return std::make_shared<VoxelVolumeAttribute>(name);
-    } else if (name == "voxel_centroid") {
-        return std::make_shared<VoxelCentroidAttribute>(name);
     } else {
         // Generic attribute.
         return std::make_shared<MeshAttribute>(name);

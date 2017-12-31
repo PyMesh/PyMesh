@@ -110,6 +110,7 @@ setup(
             "scripts/boolean.py",
             "scripts/convex_hull.py",
             "scripts/curvature.py",
+            "scripts/distortion.py",
             "scripts/dodecahedron_gen.py",
             "scripts/extract_self_intersecting_faces.py",
             "scripts/fem_check.py",
