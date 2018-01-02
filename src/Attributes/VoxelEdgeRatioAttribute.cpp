@@ -14,7 +14,7 @@ void VoxelEdgeRatioAttribute::compute_from_mesh(Mesh& mesh) {
     if (dim != 3) {
         throw RuntimeError("Voxel edge ratio computation is for 3D only.");
     }
-    if (vertex_per_voxel != 4) {
+    if (num_voxels > 0 && vertex_per_voxel != 4) {
         throw NotImplementedError(
                 "Voxel edge ratio computation only support tet for now.");
     }

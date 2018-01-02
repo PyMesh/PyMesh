@@ -11,12 +11,12 @@ void VoxelCircumRadiusAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_voxels = mesh.get_num_voxels();
     const size_t vertex_per_voxel = mesh.get_vertex_per_voxel();
 
-    if (vertex_per_voxel != 4) {
+    if (num_voxels > 0 && vertex_per_voxel != 4) {
         throw NotImplementedError(
-                "Voxel incenter is defined for 3D tet mesh only.");
+                "Voxel circumradius is defined for 3D tet mesh only.");
     }
     if (dim != 3) {
-        throw RuntimeError("Voxel incenter is defined for 3D tet mesh only.");
+        throw RuntimeError("Voxel circumradius is defined for 3D tet mesh only.");
     }
 
     if (!mesh.has_attribute("voxel_circumcenter")) {

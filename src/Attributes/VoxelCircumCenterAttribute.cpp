@@ -11,7 +11,7 @@ void VoxelCircumCenterAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_voxels = mesh.get_num_voxels();
     const size_t vertex_per_voxel = mesh.get_vertex_per_voxel();
 
-    if (vertex_per_voxel != 4) {
+    if (num_voxels > 0 && vertex_per_voxel != 4) {
         throw NotImplementedError(
                 "Voxel circumcenter is defined for 3D tet mesh only.");
     }

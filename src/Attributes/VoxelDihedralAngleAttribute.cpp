@@ -32,7 +32,7 @@ void VoxelDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
     if (dim != 3) {
         throw RuntimeError("Voxel dihedral anlge computation is for 3D only.");
     }
-    if (vertex_per_voxel != 4) {
+    if (num_voxels > 0 && vertex_per_voxel != 4) {
         throw NotImplementedError(
                 "Voxel dihedral angle computation only support tet for now.");
     }

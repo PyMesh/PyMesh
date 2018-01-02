@@ -84,8 +84,12 @@ def compute_tet_quality_measures(mesh):
     mesh.set_attribute("radius_ratio", radius_ratio);
     mesh.add_attribute("voxel_dihedral_angle");
     dihedral_angle = mesh.get_voxel_attribute("voxel_dihedral_angle");
-    min_dihedral_angle = np.amin(dihedral_angle, axis=1);
-    max_dihedral_angle = np.amax(dihedral_angle, axis=1);
+    if mesh.num_voxels == 0:
+        min_dihedral_angle = np.zeros(0);
+        max_dihedral_angle = np.zeros(0);
+    else:
+        min_dihedral_angle = np.amin(dihedral_angle, axis=1);
+        max_dihedral_angle = np.amax(dihedral_angle, axis=1);
     mesh.add_attribute("voxel_min_dihedral_angle");
     mesh.set_attribute("voxel_min_dihedral_angle", min_dihedral_angle);
     mesh.add_attribute("voxel_max_dihedral_angle");

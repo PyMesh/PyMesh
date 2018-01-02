@@ -13,11 +13,11 @@ void VoxelRadiusEdgeRatioAttribute::compute_from_mesh(Mesh& mesh) {
     const size_t num_voxels = mesh.get_num_voxels();
     const size_t vertex_per_voxel = mesh.get_vertex_per_voxel();
     if (dim != 3) {
-        throw RuntimeError("Voxel edge ratio computation is for 3D only.");
+        throw RuntimeError("Voxel radius/edge ratio computation is for 3D only.");
     }
-    if (vertex_per_voxel != 4) {
+    if (num_voxels > 0 && vertex_per_voxel != 4) {
         throw NotImplementedError(
-                "Voxel edge ratio computation only support tet for now.");
+                "Voxel radius/edge ratio computation only support tet for now.");
     }
 
     if (!mesh.has_attribute("voxel_circumradius")) {

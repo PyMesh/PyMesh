@@ -18,4 +18,8 @@ def get_tet_orientations_raw(vertices, tets):
 def get_tet_orientations(mesh):
     """ A thin wrapper of ``get_tet_orientations_raw``.
     """
+    if mesh.num_voxels == 0:
+        return np.zeros(0);
+    if mesh.vertex_per_voxel != 4:
+        raise NotImplementedError("Distortion computation expect a tet mesh.");
     return PyMesh.get_tet_orientations(mesh.vertices, mesh.voxels);
