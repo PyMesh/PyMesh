@@ -20,6 +20,7 @@
 #include "SimpleSubdivisionTest.h"
 #include "SubMeshTest.h"
 #include "TriangleMetricTest.h"
+#include "VoxelUtilsTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
