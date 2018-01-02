@@ -33,11 +33,11 @@ def compute_distortion_energies(mesh):
     tets = mesh.voxels;
     Js = [ G * vertices[tet] for tet in tets ];
 
-    J_F = np.array([np.trace(J.T * J) for J in Js]);
+    J_F = np.array([np.trace(np.dot(J.T, J)) for J in Js]);
     J_det = np.array([numpy.linalg.det(J) for J in Js]);
     invert_J = lambda args: np.full((3,3), np.inf) if args[1] == 0 else numpy.linalg.inv(args[0])
     J_inv = map(invert_J, zip(Js, J_det));
-    J_inv_F = np.array([np.trace(Ji.T * Ji) for Ji in J_inv]);
+    J_inv_F = np.array([np.trace(np.dot(Ji.T, Ji)) for Ji in J_inv]);
 
     conformal_amips = np.divide(J_F, np.cbrt(np.square(J_det)));
     finite_conformal_amips = np.isfinite(conformal_amips);
