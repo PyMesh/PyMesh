@@ -35,7 +35,8 @@ def compute_distortion_energies(mesh):
 
     J_F = np.array([np.trace(J.T * J) for J in Js]);
     J_det = np.array([numpy.linalg.det(J) for J in Js]);
-    J_inv = np.array([numpy.linalg.inv(J) for J in Js]);
+    invert_J = lambda args: np.full((3,3), np.inf) if args[1] == 0 else numpy.linalg.inv(args[0])
+    J_inv = map(invert_J, zip(Js, J_det));
     J_inv_F = np.array([np.trace(Ji.T * Ji) for Ji in J_inv]);
 
     conformal_amips = np.divide(J_F, np.cbrt(np.square(J_det)));
