@@ -106,22 +106,23 @@ void PLYWriter::regroup_attribute_names(Mesh& mesh) {
 
         const VectorF& attr = mesh.get_attribute(name);
         const size_t attr_size = attr.size();
-        if (name.substr(0, 6) == "vertex" && attr_size % num_vertices == 0) {
+        if (name.substr(0, 6) == "vertex" && num_vertices > 0 && attr_size % num_vertices == 0) {
             m_vertex_attr_names.push_back(name);
-        } else if (name.substr(0, 4) == "face" && attr_size % num_faces== 0) {
+        } else if (name.substr(0, 4) == "face" && num_faces > 0 && attr_size % num_faces== 0) {
             m_face_attr_names.push_back(name);
-        } else if (name.substr(0, 5) == "voxel" && attr_size % num_voxels== 0) {
+        } else if (name.substr(0, 5) == "voxel" && num_voxels > 0 && attr_size % num_voxels== 0) {
             m_voxel_attr_names.push_back(name);
         } else {
             // Use cardinality to determine attribute type.
-            if (attr_size % num_vertices == 0) {
+            if (num_vertices > 0 && attr_size % num_vertices == 0) {
                 m_vertex_attr_names.push_back(name);
-            } else if (attr_size % num_faces == 0) {
+            } else if (num_faces > 0 && attr_size % num_faces == 0) {
                 m_face_attr_names.push_back(name);
-            } else if (attr_size % num_voxels == 0) {
+            } else if (num_voxels > 0 && attr_size % num_voxels == 0) {
                 m_voxel_attr_names.push_back(name);
             } else {
-                throw NotImplementedError("Unknown attribute type");
+                std::cerr << "Unkown attribute type (" << name << ") ignored."
+                    << std::endl;
             }
         }
     }
