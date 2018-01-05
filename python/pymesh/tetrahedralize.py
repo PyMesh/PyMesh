@@ -57,7 +57,7 @@ def tetrahedralize(mesh,
     bbox_min, bbox_max = mesh.bbox;
     bbox_diagonal = numpy.linalg.norm(bbox_max - bbox_min);
     if cell_size <= 0.0:
-        cell_size = bbox_diagonal / 20.0;
+        cell_size = bbox_diagonal / 20.0 * math.sqrt(6) / 4.0;
     logger.info("Cell size: {}".format(cell_size));
     if facet_distance <= 0.0:
         facet_distance = bbox_diagonal / 3000.0;
@@ -88,8 +88,12 @@ def tetrahedralize(mesh,
         temp_file = os.path.join(temp_dir, "{}.off".format(name));
         save_mesh(temp_file, mesh);
         cmd = exec_name;
-        cmd += " -mtr {}".format(cell_size * 0.5);
-        cmd += " -max {}".format(cell_size * 0.5 / (0.75 * math.sqrt(2)));
+        # DelPSC parameters are specified as percentages of the smallest
+        # dimension of the bbox.
+        reference_len = np.amin(bbox_diagonal);
+        cmd += " -mtr {}".format(cell_size / reference_len);
+        cmd += " -max {}".format(cell_size /
+                (0.75 * math.sqrt(2) * reference_len));
         if radius_edge_ratio > 0.0:
             cmd += " -ar {}".format(radius_edge_ratio);
         if feature_angle > 0.0:
@@ -97,6 +101,7 @@ def tetrahedralize(mesh,
         cmd += " {} {}".format(temp_file, os.path.join(temp_dir, name));
         if with_timing:
             start_time = time();
+        logger.info(cmd);
         subprocess.check_call(cmd.split());
         if with_timing:
             finish_time = time();
