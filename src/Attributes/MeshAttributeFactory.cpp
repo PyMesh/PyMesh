@@ -31,6 +31,7 @@
 #include "VoxelCircumRadiusAttribute.h"
 #include "VoxelDihedralAngleAttribute.h"
 #include "VoxelEdgeRatioAttribute.h"
+#include "VoxelFaceIndexAttribute.h"
 #include "VoxelIncenterAttribute.h"
 #include "VoxelInradiusAttribute.h"
 #include "VoxelIndexAttribute.h"
@@ -93,6 +94,8 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return std::make_shared<VoxelDihedralAngleAttribute>(name);
     } else if (name == "voxel_edge_ratio") {
         return std::make_shared<VoxelEdgeRatioAttribute>(name);
+    } else if (name == "voxel_face_index") {
+        return std::make_shared<VoxelFaceIndexAttribute>(name);
     } else if (name == "voxel_centroid") {
         return std::make_shared<VoxelCentroidAttribute>(name);
     } else if (name == "voxel_circumcenter") {

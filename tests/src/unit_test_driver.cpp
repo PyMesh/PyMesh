@@ -41,6 +41,7 @@
 #include "Attributes/VoxelCircumRadiusAttributeTest.h"
 #include "Attributes/VoxelDihedralAngleAttributeTest.h"
 #include "Attributes/VoxelEdgeRatioAttributeTest.h"
+#include "Attributes/VoxelFaceIndexAttributeTest.h"
 #include "Attributes/VoxelIncenterAttributeTest.h"
 #include "Attributes/VoxelIndexAttributeTest.h"
 #include "Attributes/VoxelInradiusAttributeTest.h"
