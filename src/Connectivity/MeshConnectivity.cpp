@@ -49,49 +49,49 @@ void MeshConnectivity::initialize(Mesh* mesh) {
 
 
 VectorI MeshConnectivity::get_vertex_adjacent_vertices(size_t vi) const {
-    assert(vi <= m_vertex_adjacency_idx.size());
+    assert(vi+1 < m_vertex_adjacency_idx.size());
     int pos = m_vertex_adjacency_idx[vi];
     int size = m_vertex_adjacency_idx[vi+1] - pos;
     return m_vertex_adjacency.segment(pos, size);
 }
 
 VectorI MeshConnectivity::get_vertex_adjacent_faces(size_t vi) const {
-    assert(vi <= m_vertex_face_adjacency_idx.size());
+    assert(vi+1 < m_vertex_face_adjacency_idx.size());
     int pos = m_vertex_face_adjacency_idx[vi];
     int size = m_vertex_face_adjacency_idx[vi+1] - pos;
     return m_vertex_face_adjacency.segment(pos, size);
 }
 
 VectorI MeshConnectivity::get_vertex_adjacent_voxels(size_t vi) const {
-    assert(vi <= m_vertex_voxel_adjacency_idx.size());
+    assert(vi+1 < m_vertex_voxel_adjacency_idx.size());
     int pos = m_vertex_voxel_adjacency_idx[vi];
     int size = m_vertex_voxel_adjacency_idx[vi+1] - pos;
     return m_vertex_voxel_adjacency.segment(pos, size);
 }
 
 VectorI MeshConnectivity::get_face_adjacent_faces(size_t fi) const {
-    assert(fi <= m_face_adjacency_idx.size());
+    assert(fi+1 < m_face_adjacency_idx.size());
     int pos = m_face_adjacency_idx[fi];
     int size = m_face_adjacency_idx[fi+1] - pos;
     return m_face_adjacency.segment(pos, size);
 }
 
 VectorI MeshConnectivity::get_face_adjacent_voxels(size_t fi) const {
-    assert(fi <= m_face_voxel_adjacency_idx.size());
+    assert(fi+1 < m_face_voxel_adjacency_idx.size());
     int pos = m_face_voxel_adjacency_idx[fi];
     int size = m_face_voxel_adjacency_idx[fi+1] - pos;
     return m_face_voxel_adjacency.segment(pos, size);
 }
 
 VectorI MeshConnectivity::get_voxel_adjacent_faces(size_t Vi) const {
-    assert(Vi <= m_voxel_face_adjacency.size());
+    assert(Vi+1 < m_voxel_face_adjacency_idx.size());
     int pos = m_voxel_face_adjacency_idx[Vi];
     int size = m_voxel_face_adjacency_idx[Vi+1] - pos;
     return m_voxel_face_adjacency.segment(pos, size);
 }
 
 VectorI MeshConnectivity::get_voxel_adjacent_voxels(size_t Vi) const {
-    assert(Vi <= m_voxel_adjacency.size());
+    assert(Vi+1 < m_voxel_adjacency_idx.size());
     int pos = m_voxel_adjacency_idx[Vi];
     int size = m_voxel_adjacency_idx[Vi+1] - pos;
     return m_voxel_adjacency.segment(pos, size);
