@@ -1,4 +1,4 @@
-/* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+/* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
 #include <string>
 #include <Mesh.h>
@@ -253,5 +253,46 @@ TEST_F(MeshTest, HexAdj) {
 
     check_face_face_adjacency_is_symmetric(m_cube_hex);
     check_vertex_vertex_adjacency_is_symmetric(m_cube_hex);
+}
+
+TEST_F(MeshTest, ConnectivityWithIsolatedVertices) {
+    constexpr size_t N = 100;
+    MatrixFr vertices(N, 3);
+    vertices.setZero();
+    MatrixIr faces(4, 3);
+    faces << 0, 2, 1,
+             0, 3, 2,
+             1, 2, 3,
+             0, 1, 3;
+    MatrixIr voxels(1, 4);
+    voxels << 0, 1, 2, 3;
+    auto mesh = load_data(vertices, faces, voxels);
+    mesh->enable_connectivity();
+
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_vertices(0).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_vertices(1).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_vertices(2).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_vertices(3).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_faces(0).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_faces(1).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_faces(2).size());
+    ASSERT_EQ(3, mesh->get_vertex_adjacent_faces(3).size());
+    ASSERT_EQ(1, mesh->get_vertex_adjacent_voxels(0).size());
+    ASSERT_EQ(1, mesh->get_vertex_adjacent_voxels(1).size());
+    ASSERT_EQ(1, mesh->get_vertex_adjacent_voxels(2).size());
+    ASSERT_EQ(1, mesh->get_vertex_adjacent_voxels(3).size());
+    for (size_t i=4; i<N; i++) {
+        ASSERT_EQ(0, mesh->get_vertex_adjacent_vertices(i).size());
+        ASSERT_EQ(0, mesh->get_vertex_adjacent_faces(i).size());
+        ASSERT_EQ(0, mesh->get_vertex_adjacent_voxels(i).size());
+    }
+    ASSERT_EQ(3, mesh->get_face_adjacent_faces(0).size());
+    ASSERT_EQ(3, mesh->get_face_adjacent_faces(1).size());
+    ASSERT_EQ(3, mesh->get_face_adjacent_faces(2).size());
+    ASSERT_EQ(3, mesh->get_face_adjacent_faces(3).size());
+    ASSERT_EQ(1, mesh->get_face_adjacent_voxels(0).size());
+    ASSERT_EQ(1, mesh->get_face_adjacent_voxels(1).size());
+    ASSERT_EQ(1, mesh->get_face_adjacent_voxels(2).size());
+    ASSERT_EQ(1, mesh->get_face_adjacent_voxels(3).size());
 }
 
