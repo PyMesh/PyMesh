@@ -53,6 +53,7 @@ TARGET_LINK_LIBRARIES(lib_tetrahedralization
     ${DEPENDENT_LIBS} Mesh lib_MeshUtils)
 TARGET_INCLUDE_DIRECTORIES(lib_tetrahedralization SYSTEM PRIVATE
     ${DEPENDENT_INCLUDES})
+#TARGET_COMPILE_DEFINITIONS(lib_tetrahedralization PRIVATE CGAL_MESH_3_PROTECTION_DEBUG)
 SET_TARGET_PROPERTIES(lib_tetrahedralization PROPERTIES OUTPUT_NAME
     "tetrahedronization")
 
