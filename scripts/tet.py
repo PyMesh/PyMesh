@@ -18,7 +18,8 @@ def parse_args():
                 "geogram",
                 "quartet",
                 "delpsc",
-                "vegafem"),
+                "vegafem",
+                "mmg"),
             default="tetgen");
     parser.add_argument("--radius-edge-ratio",
             help="Max radius to edge ratio",

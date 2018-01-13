@@ -44,3 +44,6 @@
 	shallow = true
 [submodule "pybind11"]
 	branch = master
+[submodule "third_party/mmg"]
+	path = third_party/mmg
+	url = https://github.com/qnzhou/mmg.git

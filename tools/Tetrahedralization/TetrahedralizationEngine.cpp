@@ -25,6 +25,10 @@
 #include "Quartet/QuartetEngine.h"
 #endif
 
+#if WITH_MMG
+#include "MMG/MMGEngine.h"
+#endif
+
 using namespace PyMesh;
 
 TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
@@ -61,6 +65,9 @@ TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
 #endif
 #if WITH_QUARTET
     if (engine_name == "quartet") { return Ptr(new QuartetEngine); }
+#endif
+#if WITH_MMG
+    if (engine_name == "mmg") { return Ptr(new MMGEngine); }
 #endif
 
     std::stringstream err_msg;

@@ -48,6 +48,8 @@ def tetrahedralize(mesh,
                 Slatton <http://web.cse.ohio-state.edu/~dey.8/delpsc.html>`_
             * ``vegafem``: `Tet mesher provided by VegaFEM library
                 <http://run.usc.edu/vega/>`_
+            * ``mmg``: `Implicit domain meshing from MMG tools
+                <https://www.mmgtools.org/>`_
         with_timing (``boolean``): whether to output timing info.
 
     Returns:
