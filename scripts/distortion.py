@@ -75,6 +75,42 @@ def compute_distortion_energies(mesh):
     mesh.add_attribute("orientations");
     mesh.set_attribute("orientations", orientations);
 
+def compute_grad_upper_bound(mesh):
+    """ The measure introduced in the following paper:
+
+    Shewchuk, Jonathan. "What is a good linear finite element? interpolation,
+    conditioning, anisotropy, and quality measures (preprint)." University of
+    California at Berkeley 73 (2002).
+    """
+    area = lambda p0, p1, p2: 0.5 * numpy.linalg.norm(np.cross(p1-p0, p2-p0));
+    measure = np.zeros(mesh.num_voxels);
+    mesh.add_attribute("voxel_volume");
+    vols = mesh.get_attribute("voxel_volume").ravel();
+    vertices = mesh.vertices;
+    tets = mesh.voxels;
+    for i in range(mesh.num_voxels):
+        tet = tets[i];
+        p = vertices[tet];
+        A0 = area(p[1], p[2], p[3]);
+        A1 = area(p[0], p[2], p[3]);
+        A2 = area(p[0], p[1], p[3]);
+        A3 = area(p[0], p[1], p[2]);
+        l01 = numpy.linalg.norm(p[0] - p[1]);
+        l02 = numpy.linalg.norm(p[0] - p[2]);
+        l03 = numpy.linalg.norm(p[0] - p[3]);
+        l12 = numpy.linalg.norm(p[1] - p[2]);
+        l13 = numpy.linalg.norm(p[1] - p[3]);
+        l23 = numpy.linalg.norm(p[2] - p[3]);
+        V = vols[i];
+        measure[i] = ((A0*A1*l01*l01 + A0*A2*l02*l02 + A0*A3*l03*l03
+                + A1*A2*l12*l12 + A1*A3*l13*l13 + A2*A3*l23*l23) / (6.0 * V)
+                + np.amax([A0*l01, A0*l02, A0*l03,
+                    A1*l01, A1*l12, A1*l13,
+                    A2*l02, A2*l12, A2*l23,
+                    A3*l03, A3*l13, A3*l23])) / (A0+A1+A2+A3);
+    mesh.add_attribute("grad_bound");
+    mesh.set_attribute("grad_bound", measure);
+
 def compute_tet_quality_measures(mesh):
     mesh.add_attribute("voxel_inradius");
     mesh.add_attribute("voxel_circumradius");
@@ -97,13 +133,14 @@ def compute_tet_quality_measures(mesh):
     mesh.set_attribute("voxel_max_dihedral_angle", max_dihedral_angle);
     mesh.add_attribute("voxel_radius_edge_ratio");
     mesh.add_attribute("voxel_edge_ratio");
+    compute_grad_upper_bound(mesh);
 
 def output_to_csv(mesh, csv_file):
     with open(csv_file, 'w') as fout:
         writer = csv.writer(fout);
         writer.writerow(["index", "edge_ratio", "radius_ratio",
             "min_dihedral_angle", "max_dihedral_angle", "radius_edge_ratio",
-            "conformal_amips", "symmetric_dirichlet", "orientation"]);
+            "conformal_amips", "symmetric_dirichlet", "orientation", "grad_bound"]);
 
         index = np.arange(mesh.num_voxels);
         edge_ratio = mesh.get_attribute("voxel_edge_ratio");
@@ -114,6 +151,7 @@ def output_to_csv(mesh, csv_file):
         amips = mesh.get_attribute("conformal_AMIPS");
         dirichlet = mesh.get_attribute("symmetric_Dirichlet");
         orientation = mesh.get_attribute("orientations");
+        grad_bound = mesh.get_attribute("grad_bound");
 
         for i in range(mesh.num_voxels):
             writer.writerow([i,
@@ -124,7 +162,8 @@ def output_to_csv(mesh, csv_file):
                 re_ratio[i],
                 amips[i],
                 dirichlet[i],
-                orientation[i] ]);
+                orientation[i],
+                grad_bound[i]]);
 
 def main():
     args = parse_args();
