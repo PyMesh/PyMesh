@@ -107,7 +107,8 @@ def compute_grad_upper_bound(mesh):
                 + np.amax([A0*l01, A0*l02, A0*l03,
                     A1*l01, A1*l12, A1*l13,
                     A2*l02, A2*l12, A2*l23,
-                    A3*l03, A3*l13, A3*l23])) / (A0+A1+A2+A3);
+                    A3*l03, A3*l13, A3*l23])) / (A0+A1+A2+A3) /\
+                            np.amax([l01, l02, l03, l12, l13, l23]);
     mesh.add_attribute("grad_bound");
     mesh.set_attribute("grad_bound", measure);
 
