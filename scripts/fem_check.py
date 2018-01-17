@@ -12,6 +12,8 @@ import pymesh
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
+    parser.add_argument("--charge-distribution", "-c", choices=["sphere", "center"],
+            default="sphere");
     parser.add_argument("input_mesh");
     parser.add_argument("output_mesh");
     return parser.parse_args();
@@ -124,8 +126,14 @@ def main():
 
     bbox_min, bbox_max = mesh.bbox;
     bbox_radius = numpy.linalg.norm(bbox_max - bbox_min) * 0.5;
-    ball = pymesh.generate_icosphere(bbox_radius + 1e-3, 0.5 * (bbox_min + bbox_max), 0);
-    charges = ball.vertices;
+    if args.charge_distribution == "sphere":
+        ball = pymesh.generate_icosphere(bbox_radius + 1e-3, 0.5 * (bbox_min + bbox_max), 0);
+        charges = ball.vertices;
+    elif args.charge_distribution == "center":
+        charges = np.array([0.5 * (bbox_min + bbox_max)]);
+    else:
+        raise NotImplementedError("Unsupported charge distribution ({})."\
+                .format(args.charge_distribution));
 
     f = test_function(charges);
     g = test_function_grad(charges);

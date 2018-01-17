@@ -62,7 +62,7 @@ def tetrahedralize(mesh,
         cell_size = bbox_diagonal / 20.0 * math.sqrt(6) / 4.0;
     logger.info("Cell size: {}".format(cell_size));
     if facet_distance <= 0.0:
-        facet_distance = bbox_diagonal / 2000.0;
+        facet_distance = bbox_diagonal / 1000.0;
     logger.info("Facet distance: {}".format(facet_distance));
     if radius_edge_ratio <= 0.0:
         logger.warning("Using default radius edge ratio.");
