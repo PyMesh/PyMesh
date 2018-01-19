@@ -22,7 +22,7 @@ def test_function(charges):
     """
     f(x,y,z) = 1.0 / sqrt(x*x + y*y + z*z);
     """
-    return lambda(pts): np.sum([1.0 / numpy.linalg.norm(pts - c, axis=1)
+    return lambda pts: np.sum([1.0 / numpy.linalg.norm(pts - c, axis=1)
         for c in charges], axis=0);
 
 def test_function_grad(charges):
@@ -31,7 +31,7 @@ def test_function_grad(charges):
     grad(x,y,z) = [ -1.0*y/(x**2 + y**2 + z**2)**(3/2) ]
                   [ -1.0*z/(x**2 + y**2 + z**2)**(3/2) ]
     """
-    return lambda(pts): np.sum([-(pts-c) / np.power(numpy.linalg.norm(pts-c, axis=1), 3)[:,np.newaxis]
+    return lambda pts: np.sum([-(pts-c) / np.power(numpy.linalg.norm(pts-c, axis=1), 3)[:,np.newaxis]
         for c in charges], axis=0);
 
 def get_quadrature_pts(mesh):
