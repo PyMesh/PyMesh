@@ -25,7 +25,10 @@ def main():
 
     mesh.add_attribute("intersecting_faces");
     mesh.set_attribute("intersecting_faces", intersection_marker);
-    pymesh.save_mesh(args.output_mesh, mesh, "intersecting_faces");
+    mesh.add_attribute("is_self_intersecting");
+    mesh.set_attribute("is_self_intersecting", intersection_marker > 0);
+    pymesh.save_mesh(args.output_mesh, mesh, "intersecting_faces",
+            "is_self_intersecting");
 
 if __name__ == "__main__":
     main();
