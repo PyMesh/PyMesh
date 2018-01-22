@@ -9,6 +9,7 @@ import logging
 import numpy as np
 import numpy.linalg
 import pymesh
+import math
 
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
@@ -209,6 +210,12 @@ def main():
     print("L2 solution at quadrature pts: {}".format(numpy.linalg.norm(q_values)));
     print("L2 grad solution at centroids: {}".format(numpy.linalg.norm(c_grad_norm)));
     print("L2 grad solution at quadrature pts: {}".format(numpy.linalg.norm(q_grad_norm)));
+
+    print("sqrt ave at nodes: {}".format(math.sqrt(np.mean(np.square(v_values)))));
+    print("sqrt ave at centroids: {}".format(math.sqrt(np.mean(np.square(c_values)))));
+    print("sqrt ave at quadrature pts: {}".format(math.sqrt(np.mean(np.square(q_values)))));
+    print("sqrt ave grad solution at centroids: {}".format(math.sqrt(np.mean(np.square(c_grad_norm)))));
+    print("sqrt ave grad solution at quadrature pts: {}".format(math.sqrt(np.mean(np.square(q_grad_norm)))));
 
     print("==Absolute errors==");
     print("max error at nodes: {}".format(np.amax(np.absolute(v_err))));
