@@ -195,6 +195,21 @@ def main():
     c_grad_rel_err_norm = np.divide(c_grad_err_norm, c_grad_norm);
     q_grad_rel_err_norm = np.divide(q_grad_err_norm, q_grad_norm);
 
+    print("num_tets: {}".format(num_tets));
+
+    print("==Ground Truth==");
+    print("max solution at nodes: {}".format(np.amax(np.absolute(v_values))));
+    print("max solution at centroids: {}".format(np.amax(np.absolute(c_values))));
+    print("max solution at quadrature pts: {}".format(np.amax(np.absolute(q_values))));
+    print("max grad solution at centroids: {}".format(np.amax(c_grad_norm)));
+    print("max grad solution at quadrature pts: {}".format(np.amax(q_grad_norm)));
+
+    print("L2 solution at nodes: {}".format(numpy.linalg.norm(v_values)));
+    print("L2 solution at centroids: {}".format(numpy.linalg.norm(c_values)));
+    print("L2 solution at quadrature pts: {}".format(numpy.linalg.norm(q_values)));
+    print("L2 grad solution at centroids: {}".format(numpy.linalg.norm(c_grad_norm)));
+    print("L2 grad solution at quadrature pts: {}".format(numpy.linalg.norm(q_grad_norm)));
+
     print("==Absolute errors==");
     print("max error at nodes: {}".format(np.amax(np.absolute(v_err))));
     print("max error at centroids: {}".format(np.amax(np.absolute(c_err))));
@@ -208,11 +223,11 @@ def main():
     print("average grad error at centroids: {}".format(np.mean(c_grad_err_norm)));
     print("average grad error at quadrature pts: {}".format(np.mean(q_grad_err_norm)));
 
-    print("L2 error at nodes: {}".format(numpy.linalg.norm(v_err) / num_tets));
-    print("L2 error at centroids: {}".format(numpy.linalg.norm(c_err) / num_tets));
-    print("L2 error at quadrature pts: {}".format(numpy.linalg.norm(q_err) / num_tets));
-    print("L2 grad error at centroids: {}".format(numpy.linalg.norm(c_grad_err_norm) / num_tets));
-    print("L2 grad error at quadrature pts: {}".format(numpy.linalg.norm(q_grad_err_norm) / num_tets));
+    print("L2 error at nodes: {}".format(numpy.linalg.norm(v_err)));
+    print("L2 error at centroids: {}".format(numpy.linalg.norm(c_err)));
+    print("L2 error at quadrature pts: {}".format(numpy.linalg.norm(q_err)));
+    print("L2 grad error at centroids: {}".format(numpy.linalg.norm(c_grad_err_norm)));
+    print("L2 grad error at quadrature pts: {}".format(numpy.linalg.norm(q_grad_err_norm)));
 
     print("==Relative errors==");
     print("max rel error at nodes: {}".format(np.amax(np.absolute(v_rel_err))));
