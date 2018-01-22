@@ -107,30 +107,35 @@ def interpolate_at_centroids(mesh, sol_values, sol_grads):
     values /= 4.0;
     return values, sol_grads;
 
-def evaluate_one_over_r(mesh):
-    eps = 0.1;
+def fit_into_unit_sphere(mesh):
     bbox_min, bbox_max = mesh.bbox;
-    charge_loc = bbox_max + np.ones(mesh.dim) * eps;
+    bbox_radius = numpy.linalg.norm(bbox_max - bbox_min) * 0.5;
+    bbox_center = 0.5 * (bbox_min + bbox_max);
+    if bbox_radius == 0.0:
+        raise IOError("Input mesh is degenerate to a single point.");
 
-    r = numpy.linalg.norm(mesh.vertices - charge_loc, axis=1);
-    return 1.0 / r;
+    vertices = mesh.vertices;
+    tris = mesh.faces;
+    tets = mesh.voxels;
+    vertices = (vertices - bbox_center) / bbox_radius;
+    return pymesh.form_mesh(vertices, tris, tets);
 
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
+    num_tets = mesh.num_voxels;
     assert(mesh.dim == 3);
     assert(mesh.vertex_per_voxel == 4);
-    assert(mesh.num_voxels > 0);
+    assert(num_tets > 0);
+    mesh = fit_into_unit_sphere(mesh);
     mesh.add_attribute("voxel_centroid");
     assembler = pymesh.Assembler(mesh);
 
-    bbox_min, bbox_max = mesh.bbox;
-    bbox_radius = numpy.linalg.norm(bbox_max - bbox_min) * 0.5;
     if args.charge_distribution == "sphere":
-        ball = pymesh.generate_icosphere(bbox_radius + 1e-3, 0.5 * (bbox_min + bbox_max), 0);
+        ball = pymesh.generate_icosphere(1.0 + 1e-3, np.zeros(3), 0);
         charges = ball.vertices;
     elif args.charge_distribution == "center":
-        charges = np.array([0.5 * (bbox_min + bbox_max)]);
+        charges = np.zeros(3);
     else:
         raise NotImplementedError("Unsupported charge distribution ({})."\
                 .format(args.charge_distribution));
@@ -196,6 +201,18 @@ def main():
     print("max error at quadrature pts: {}".format(np.amax(np.absolute(q_err))));
     print("max grad error at centroids: {}".format(np.amax(c_grad_err_norm)));
     print("max grad error at quadrature pts: {}".format(np.amax(q_grad_err_norm)));
+
+    print("average error at nodes: {}".format(np.mean(np.absolute(v_err))));
+    print("average error at centroids: {}".format(np.mean(np.absolute(c_err))));
+    print("average error at quadrature pts: {}".format(np.mean(np.absolute(q_err))));
+    print("average grad error at centroids: {}".format(np.mean(c_grad_err_norm)));
+    print("average grad error at quadrature pts: {}".format(np.mean(q_grad_err_norm)));
+
+    print("L2 error at nodes: {}".format(numpy.linalg.norm(v_err) / num_tets));
+    print("L2 error at centroids: {}".format(numpy.linalg.norm(c_err) / num_tets));
+    print("L2 error at quadrature pts: {}".format(numpy.linalg.norm(q_err) / num_tets));
+    print("L2 grad error at centroids: {}".format(numpy.linalg.norm(c_grad_err_norm) / num_tets));
+    print("L2 grad error at quadrature pts: {}".format(numpy.linalg.norm(q_grad_err_norm) / num_tets));
 
     print("==Relative errors==");
     print("max rel error at nodes: {}".format(np.amax(np.absolute(v_rel_err))));
