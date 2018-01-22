@@ -15,6 +15,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--charge-distribution", "-c", choices=["sphere", "center"],
             default="sphere");
+    parser.add_argument("--output-kernels", action="store_true");
     parser.add_argument("input_mesh");
     parser.add_argument("output_mesh");
     return parser.parse_args();
@@ -133,7 +134,7 @@ def main():
     assembler = pymesh.Assembler(mesh);
 
     if args.charge_distribution == "sphere":
-        ball = pymesh.generate_icosphere(1.0 + 1e-3, np.zeros(3), 0);
+        ball = pymesh.generate_icosphere(1.25 + 1e-3, np.zeros(3), 0);
         charges = ball.vertices;
     elif args.charge_distribution == "center":
         charges = np.zeros(3);
@@ -141,6 +142,10 @@ def main():
         raise NotImplementedError("Unsupported charge distribution ({})."\
                 .format(args.charge_distribution));
 
+    if args.output_kernels:
+        kernels = pymesh.merge_meshes([
+            pymesh.generate_icosphere(0.05, v, 2) for v in charges ]);
+        pymesh.save_mesh("kernel.msh", kernels);
     f = test_function(charges);
     g = test_function_grad(charges);
 
