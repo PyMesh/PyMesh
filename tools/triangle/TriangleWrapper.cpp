@@ -29,27 +29,6 @@ using namespace PyMesh;
 
 namespace TriangleWrapperHelper {
     const int REGION_BOUNDARY = 2;
-    std::string form_flags(Float max_area, bool split_boundary, bool refine,
-            bool use_steiner_points) {
-        std::stringstream flags;
-        flags << "zQpa" << max_area;
-        if (!split_boundary) {
-            flags << "YY";
-        }
-        if (refine) {
-            flags << "r";
-        } else {
-            flags << "en";
-        }
-        if (use_steiner_points) {
-            flags << "q";
-        } else {
-            // By default, -S set the max number of steiner points to 0.
-            flags << "S";
-        }
-        return flags.str();
-    }
-
     using Region = TriangleWrapper::Region;
     using Regions = TriangleWrapper::Regions;
 
@@ -198,6 +177,9 @@ std::string TriangleWrapper::generate_command_line_options() const {
 
     if (m_max_area > 0) {
         opt += "a" + std::to_string(m_max_area);
+    } else if (m_max_areas.size() > 0) {
+        assert(m_max_areas.size() == m_triangles.rows());
+        opt += "a";
     }
     if (m_convex_hull) {
         opt += "c";
@@ -283,6 +265,7 @@ void TriangleWrapper::run_triangle(const std::string& flags) {
     const size_t num_holes = m_holes.rows();
     const size_t num_triangles = m_triangles.rows();
     const size_t pt_per_triangle = m_triangles.cols();
+    const size_t num_areas = m_max_areas.size();
 
     if (num_segments > 0 && pt_per_segment != 2) {
         throw RuntimeError("Segments must consist of 2 points!");
@@ -359,6 +342,13 @@ void TriangleWrapper::run_triangle(const std::string& flags) {
                 in.holelist);
     }
 
+    if (num_areas > 0) {
+        assert(num_areas == num_triangles);
+        in.trianglearealist = new REAL[num_areas];
+        std::copy(m_max_areas.data(), m_max_areas.data() + num_areas,
+                in.trianglearealist);
+    }
+
     triangulate(const_cast<char*>(flags.c_str()), &in, &out, &out_voro);
 
     if (out.numberofpoints > 0 && out.pointlist) {
@@ -407,6 +397,7 @@ void TriangleWrapper::run_triangle(const std::string& flags) {
     }
     if (num_triangles > 0) delete [] in.trianglelist;
     if (num_holes > 0) delete [] in.holelist;
+    if (num_areas > 0) delete [] in.trianglearealist;
 
     if (out.numberofpoints > 0) delete [] out.pointlist;
     if (out.numberofpointattributes > 0) delete [] out.pointattributelist;

@@ -23,6 +23,7 @@ void init_TriangleWrapper(py::module& m) {
                 py::return_value_policy::reference_internal)
         .def_property("min_angle", &TriangleWrapper::get_min_angle, &TriangleWrapper::set_min_angle)
         .def_property("max_area", &TriangleWrapper::get_max_area, &TriangleWrapper::set_max_area)
+        .def_property("max_areas", &TriangleWrapper::get_max_area_list, &TriangleWrapper::set_max_area_list)
         .def_property("keep_convex_hull", &TriangleWrapper::get_keep_convex_hull, &TriangleWrapper::keep_convex_hull)
         .def_property("conforming_delaunay", &TriangleWrapper::get_conforming_delaunay, &TriangleWrapper::set_conforming_delaunay)
         .def_property("exact_arithmetic", &TriangleWrapper::get_exact_arithmetic, &TriangleWrapper::set_exact_arithmetic)

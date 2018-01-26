@@ -66,6 +66,9 @@ class TriangleWrapper {
         void set_max_area(const Float max_area) { m_max_area = max_area; }
         const Float get_max_area() const { return m_max_area; }
 
+        void set_max_area_list(const VectorF& areas) { m_max_areas = areas; }
+        const VectorF& get_max_area_list() const { return m_max_areas; }
+
         /**
          * Keep the entire covnex hull instead of eliminating triangles outside
          * of the PSLG (-c option, default is off).
@@ -166,6 +169,7 @@ class TriangleWrapper {
         short m_verbose_level = 1; // Normal
         Algorithm m_algorithm = Algorithm::DIVIDE_AND_CONQUER;
         bool m_auto_hole_detection = false;
+        VectorF m_max_areas;
 
         // Input data
         MatrixFr m_points;
