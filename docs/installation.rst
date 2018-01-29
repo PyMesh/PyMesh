@@ -1,6 +1,21 @@
 Installation
 ============
 
+Docker
+------
+
+The easiest way of using PyMesh is through
+`docker <https://www.docker.com/>`_, where one can simply ``pull`` a
+`prebuild image of PyMesh <https://hub.docker.com/r/qnzhou/pymesh/>`_ from
+dockerhub::
+
+    $ docker run -it qnzhou/pymesh
+    Python 3.6.4 (default, Dec 21 2017, 01:35:12)
+    [GCC 4.9.2] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import pymesh
+    >>>
+
 Download the Source
 -------------------
 
