@@ -55,7 +55,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'PyMesh'
-copyright = u'2016, Qingnan Zhou'
+copyright = u'2018, Qingnan Zhou'
 author = u'Qingnan Zhou'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -291,17 +291,13 @@ texinfo_documents = [
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
 
-# Mock out C/C++ modules
-from mock import Mock as MagicMock
-
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-            return Mock()
-
-MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh',
-'PyMeshUtils', 'PyBoolean', 'PyAssembler', 'PyCGAL', 'PyConvexHull',
-'PyEigenUtils', 'PyEnvelope', 'PyOuterHull', 'PyPredicates',
-'PySelfIntersection', 'PySparseSolver', 'PyTetgen', 'PyTetrahedronization',
-'PyTriangle', 'PyWires', 'PyWindingNumber', 'PyIGL', "PyTriangulation"];
-sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+## Mock out C/C++ modules
+#from mock import Mock as MagicMock
+#
+#class Mock(MagicMock):
+#    @classmethod
+#    def __getattr__(cls, name):
+#            return Mock()
+#
+#MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh'];
+#sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)

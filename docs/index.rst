@@ -57,7 +57,7 @@ Features:
 * Local mesh processing such edge collapse/split, duplicated vertex/face removal
   etc.
 * Mesh boolean support from CGAL, Cork, Carve, Clipper (2D only) and libigl.
-* Mesh generation support from CGAL, Triangle and Tetgen.
+* Mesh generation support from CGAL, Triangle, TetGen and Quartet.
 * Wire network and inflation of wire networks.
 * Finite element matrix assembly. (supports Laplacian, stiffness, mass, etc.)
 
@@ -66,7 +66,7 @@ Contents:
 =========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    user_guide
    api

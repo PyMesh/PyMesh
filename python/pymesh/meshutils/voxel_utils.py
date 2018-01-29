@@ -3,15 +3,16 @@ import numpy as np
 
 def get_tet_orientations_raw(vertices, tets):
     """ Compute orientation of each tet.
-    Arguments:
+
+    Args:
         vertice (``numpy.ndarray``): n by 3 matrix representing vertices.
         tets (``numpy.ndarray``): m by 4 matrix of vertex indices representing tets.
 
     Returns:
-        orientations (``numpy.ndarray``): m list of ``float``s, where
-            Positive number => tet is positively oriented.
-                          0 => tet is degenerate.
-            Negative number => tet is inverted.
+        A list of m floats, where
+            * Positive number => tet is positively oriented.
+            *               0 => tet is degenerate.
+            * Negative number => tet is inverted.
     """
     return PyMesh.get_tet_orientations(vertices, tets);
 

@@ -11,7 +11,7 @@ def is_colinear(v0, v1, v2):
         v2 (``numpy.ndarray``): vector of size 2 or 3.
 
     Return:
-        bool: whether ``v0``, ``v1`` and ``v2`` are colinear.
+        A boolean indicating whether ``v0``, ``v1`` and ``v2`` are colinear.
     """
     dim = len(v0);
     if dim == 2:
@@ -30,7 +30,7 @@ def get_degenerated_faces_raw(vertices, faces):
         faces (``numpy.ndarray``): Face matrix.
 
     Returns:
-        ``numpy.ndarray``: List of indices of degenerated faces.
+        A ``numpy.ndarray`` of indices of degenerated faces.
     """
     return np.array(PyMesh.get_degenerated_faces(vertices, faces));
 

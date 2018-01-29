@@ -5,7 +5,7 @@ class triangle(PyMesh.triangle):
     """ Wrapper around `Shewchuk's triangle
     <https://www.cs.cmu.edu/~quake/triangle.html>`_.
 
-    Input attributes:
+    Attributes:
         points (:class:`numpy.ndarray`): 3D or 2D points to be triangulated.
             If points are embedded in 3D, they must be coplanar.
 
@@ -28,6 +28,9 @@ class triangle(PyMesh.triangle):
             terminate in practice.
 
         max_area (``float``): Max triangle area.  Default is unbounded.
+
+        max_areas (:class:`numpy.ndarray`): Max area scalar field.  It should
+            have the same length as triangles.  Not used by default.
 
         keep_convex_hull (``boolean``): Whether to keep all triangles inside of
             the convex hull.  Default is false.
@@ -53,14 +56,14 @@ class triangle(PyMesh.triangle):
             4: you must be debugging the triangle code
 
         algorithm: The Delaunay triangulation algorithm to use.  Choices are:
-            * DIVIDE_AND_CONQUER: Default.  Implementation of [1].
-            * SWEEPLINE: Fortune's sweep line algorithm [2].
-            * INCREMENTAL: Also from [1].
+
+            * DIVIDE_AND_CONQUER: Default.  Implementation of [1]_.
+            * SWEEPLINE: Fortune's sweep line algorithm [2]_.
+            * INCREMENTAL: Also from [1]_.
 
         auto_hole_detection (``boolean``): Whether to detect holes based on the
             orientation of PSLG using winding number.  Default is False.
 
-    Output attributes:
         vertices (:class:`numpy.ndarray`): Vertices of the output triangulation.
 
         faces (:class:`numpy.ndarray`): Faces of the output triangulation.
@@ -86,16 +89,18 @@ class triangle(PyMesh.triangle):
         >>> tri.points = vertices;
         >>> tri.max_area = 0.05;
         >>> tri.split_boundary = False;
+        >>> tri.verbosity = 0;
         >>> tri.run(); # Execute triangle.
         >>> mesh = tri.mesh; # output triangulation.
 
-    Reference:
-        [1] Leonidas J. Guibas and Jorge Stolfi, Primitives for the Manipulation
+    References:
+
+    .. [1] Leonidas J. Guibas and Jorge Stolfi, Primitives for the Manipulation
         of General Subdivisions and the Computation of Voronoi Diagrams, ACM
         Transactions on Graphics 4(2):74-123, April 1985.
 
-        [2] Steven Fortune, A Sweepline Algorithm for Voronoi Diagrams,
-        Algorithmica 2(2):153-174, 1987. 
+    .. [2] Steven Fortune, A Sweepline Algorithm for Voronoi Diagrams,
+        Algorithmica 2(2):153-174, 1987.
 
     """
     @property
