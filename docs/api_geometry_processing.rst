@@ -7,6 +7,13 @@ Boolean opertions
 
 .. autofunction:: pymesh.boolean
 
+While all solid geometry operations can be done as a sequence of binary boolean
+operations. It is beneficial sometimes to use :py:class:`pymesh.CSGTree` for
+carrying out more complex operations.
+
+.. autoclass:: pymesh.CSGTree
+    :members:
+
 Convex hull
 -----------
 

@@ -3,32 +3,60 @@ import numpy as np
 from .meshio import form_mesh
 
 class CSGTree:
+    """ Contructive Solid Geometry Tree.
+
+    Perhaps the best way of describing supported operations is using context
+    free grammar:
+
+    * ``mesh`` operation: This operation is always a leaf node of the tree.
+
+        >>> tree = pymesh.CSGTree({"mesh": mesh});
+
+    * ``union`` operation:
+
+        >>> tree = pymesh.CSGTree({"union":
+        ...         [TREE_1, TREE_2, ..., TREE_N]
+        ...     });
+
+    * ``intersection`` operations:
+
+        >>> tree = pymesh.CSGTree({"intersection":
+        ...         [TREE_1, TREE_2, ..., TREE_N]
+        ...     });
+
+    * ``difference`` operations:
+
+        >>> tree = pymesh.CSGTree({"difference":
+        ...         [TREE_1, TREE_2]
+        ...     });
+
+    * ``symmetric_difference`` operations:
+
+        >>> tree = pymesh.CSGTree({"symmetric_difference":
+        ...         [TREE_1, TREE_2]
+        ...     });
+
+    Where ``TREE_X`` could be any of the nodes defined above.
+
+    A tree can be build up incrementally:
+
+        >>> left_tree = pymesh.CSGTree({"mesh": mesh_1});
+        >>> right_tree = pymesh.CSGTree({"mesh": mesh_2});
+        >>> tree = pymesh.CSGTree({"union": [left_tree, right_tree]});
+        >>> mesh = tree.mesh;
+
+    Or constructed from a dict:
+
+        >>> tree = pymesh.CSGTree({"union":
+        ...         [{"mesh": mesh_1}, {"mesh": mesh_2}]
+        ...     });
+        >>> mesh = tree.mesh
+    """
     def __init__(self, tree):
         """
         Args:
             tree: dictionary describing the csg tree
 
-        Example:
-
-        A simple binary union:
-            
-            {
-                "union": [ { "mesh": mesh_1}, { "mesh": mesh_2} ]
-            }
-
-
-        Difference of two unions:
-
-            {
-                "difference" [
-                {
-                    "union": [ { "mesh": mesh_1}, { "mesh": mesh_2} ]
-                },
-                {
-                    "union": [ { "mesh": mesh_3}, { "mesh": mesh_4} ]
-                }
-                ]
-            }
         """
 
         if isinstance(tree, CSGTree):
