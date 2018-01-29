@@ -101,3 +101,11 @@ Merge multiple meshes
 
 .. autofunction:: pymesh.merge_meshes
 
+Submesh extraction
+------------------
+
+Sometimes, it is useful to extract a local region from a more complex mesh for
+futher examination.  :py:func:`pymesh.submesh` is designed for this task.
+
+.. autofunction:: pymesh.submesh
+

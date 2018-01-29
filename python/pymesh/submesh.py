@@ -96,9 +96,9 @@ def submesh(mesh, element_indices, num_rings):
             extract.
 
     Returns:
-       A mesh only containing the selected elements and their local neighborhood
-       up to `num_rings` rings.  The output mesh contains the following
-       attributes:
+       A :class:`Mesh` object only containing the selected elements and their
+       local neighborhood up to `num_rings` rings.  The output mesh contains the
+       following attributes:
 
        * ori_face_index/ori_voxel_index: The original index of each element.
        * ring: Index indicating which ring does each element belongs.  The
