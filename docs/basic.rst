@@ -5,8 +5,8 @@ PyMesh is rapid prototyping library focused on processing and generating 3D
 meshes.  The `Mesh` class is the core data structure and is used by all
 modules.
 
-Mesh Data Structure:
---------------------
+Mesh Data Structure
+-------------------
 
 In PyMesh, a `Mesh` consists of 3 parts: geometry, connectivity and
 attributes.
@@ -23,8 +23,8 @@ attributes.
   or vector for each vertex/face/voxel.  There are a number predefined attributes.
 
 
-Loading Mesh:
--------------
+Loading Mesh
+------------
 
 From file::
 
@@ -44,8 +44,8 @@ From raw data::
 where ``vertices``, ``faces`` and ``voxels`` are of type
 :py:class:`numpy.ndarray`.  One vertex/face/voxel per row.
 
-Accessing Mesh Data:
---------------------
+Accessing Mesh Data
+-------------------
 
 Geometry data can be directly accessed::
 
@@ -87,8 +87,8 @@ The connectivity information can be queried using the following methods::
     >>> mesh.get_voxel_adjacent_faces(Vi);
     >>> mesh.get_voxel_adjacent_voxels(Vi);
 
-Using Attributes:
------------------
+Using Attributes
+----------------
 
 Attributes allow one to attach a scalar or vector fields to the mesh.  For
 example, vertex normal could be stored as a mesh attribute where a normal vector
@@ -191,8 +191,8 @@ To retrieve the names of all defined attributes for a given mesh::
     >>> mesh.get_attribute_names()
     ("attribute_name", "vertex_area", "vertex_normal")
 
-Saving Mesh:
-------------
+Saving Mesh
+-----------
 The following formats are supported for saving meshes: .obj, .off, .ply, .mesh,
 .node, .poly, .stl and .msh.
 However, saving in .stl format is strongly discouraged because
