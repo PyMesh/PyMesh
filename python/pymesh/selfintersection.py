@@ -16,7 +16,7 @@ def resolve_self_intersection(mesh, engine="auto"):
               <https://github.com/libigl/libigl>`_
 
     Returns:
-        ``Mesh``: A triangular mesh with all self-intersection meshed.  The
+        A triangular :py:class:`Mesh` with all self-intersection resolved.  The
         following per-face scalar field is defined:
 
         * ``face_sources``: For each output face, this field specifies the index

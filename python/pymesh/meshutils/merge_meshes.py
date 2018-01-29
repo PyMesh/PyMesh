@@ -10,7 +10,7 @@ def merge_meshes(input_meshes):
 
     Returns:
 
-        ``Mesh``: An mesh consists of all vertices, faces and voxels
+        A :py:class:`Mesh` consists of all vertices, faces and voxels
         from ``input_meshes``.  The following mesh attributes are defined:
 
         * ``vertex_sources``: Indices of source vertices from the input mesh.

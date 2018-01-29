@@ -4,9 +4,9 @@ from ..meshio import form_mesh
 def remove_degenerated_triangles_raw(vertices, faces, num_iterations=5):
     """ Remove degenerated triangles.
 
-    Degenerated faces are faces with zero area.  It is impossible to compute
-    face normal for them.  This method get rid of all degenerated faces.  No new
-    vertices will be introduced.  Only connectivity is changed.
+    Degenerated faces are faces with collinear vertices.  It is impossible to
+    compute face normal for them.  This method get rid of all degenerated faces.
+    No new vertices will be introduced.  Only connectivity is changed.
 
     Args:
         vertices (``numpy.ndarray``): Vertex array with one vertex per row.
@@ -17,8 +17,9 @@ def remove_degenerated_triangles_raw(vertices, faces, num_iterations=5):
 
             * ``output_vertices``: Output vertex array, one vertex per row.
             * ``output_faces``: Output face array, one face per row.
-            * ``info``: Additional information dict.  The following fields are
-              defined:
+            * ``info``: Additional information dict.
+
+        The following fields are defined in the ``info`` dict:
             * ``ori_face_indices``: index array that maps each output face
               to an input face that contains it.
     """
@@ -38,8 +39,10 @@ def remove_degenerated_triangles(mesh, num_iterations=5):
         mesh (:class:`Mesh`): Input mesh.
 
     Returns:
-        ``Mesh``: Output mesh without degenerated triangles.
-        ``info``: Additional information dictionary.
+        2 values are returned.
+
+            * ``mesh``: A :py:class:`Mesh` object without degenerated triangles.
+            * ``info``: Additional information dictionary.
     """
     vertices, faces, info = remove_degenerated_triangles_raw(
             mesh.vertices, mesh.faces, num_iterations);
