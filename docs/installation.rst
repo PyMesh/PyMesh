@@ -60,8 +60,8 @@ libraries are also included in the `third_party` direcgtory.
 .. _Quartet: https://github.com/crawforddoran/quartet
 .. _MMG3D: https://www.mmgtools.org/
 
-Environment Variables:
-----------------------
+Environment Variables
+---------------------
 
 If any dependent libraries are not installed in the default locations, e.g.
 ``/usr/local`` and ``opt/local``, one needs to set certain environment variables
@@ -82,8 +82,8 @@ variables:
 * ``GEOGRAM_PATH``: path to GeoGram.
 * ``QUARTET_PATH``: path to Quartet.
 
-Building PyMesh:
-----------------
+Building PyMesh
+---------------
 
 To compile the optional third party libraries::
 
@@ -172,8 +172,8 @@ Another way is to build each tool separately::
 Make sure all unit tests are passed before using the library.  Please report
 unit tests failures on github.
 
-Install PyMesh:
----------------
+Install PyMesh
+--------------
 
 The output of building PyMesh consists a set of C++ libraries and a python
 module. Installing the C++ library is currently not available.  However,

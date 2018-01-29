@@ -21,8 +21,8 @@ and a cube:
     :width: 90%
     :align: center
 
-Boolean Interface:
-------------------
+Boolean Interface
+-----------------
 
 PyMesh provides support for all four operations through third party boolean
 *engines*.  For example, computing the union of ``mesh_A`` and ``mesh_B`` can be
@@ -55,8 +55,8 @@ The following attributes are defined in the ``output_mesh``:
   face index of an output face, where combined input faces are simply the
   concatenation of faces from ``mesh_A`` and ``mesh_B``.
 
-A Simple Example:
------------------
+A Simple Example
+----------------
 
 As a simple example, we are going to operate on the following objects:
 
@@ -88,8 +88,8 @@ the second operand, i.e. ``plate.ply``.
 The ``source`` attribute is useful for assigning the corresponding colors
 in the output mesh.
 
-CSG Tree:
----------
+CSG Tree
+--------
 
 While binary boolean operations are useful, it is often necessary to perform a
 number of operations in order to create more complex results.  A

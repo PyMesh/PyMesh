@@ -4,8 +4,8 @@ Mesh Processing
 It is often necessary to change the mesh.  PyMesh has built-in capabilities
 of commonly used operations.
 
-Collapse Short Edges:
----------------------
+Collapse Short Edges
+--------------------
 
 To collapse all edges shorter than or equal to ``tol``::
 
@@ -58,8 +58,8 @@ approximation depends heavily on the value of ``tol``.
     :width: 90%
     :align: center
 
-Split Long Edges:
------------------
+Split Long Edges
+----------------
 
 Another very useful but rarely implemented mesh processing operation is to
 split long edges.  To split all edges longer than ``tol``::
@@ -88,8 +88,8 @@ triangles.  The following figure shows its effect.
     :width: 90%
     :align: center
 
-Remeshing:
-----------
+Remeshing
+---------
 
 It is possible to completely remesh the input shape by calling
 ``pymesh.collapse_short_edges`` and ``pymesh.split_long_edges`` iteratively in
@@ -102,8 +102,8 @@ Its effects can be seen in a remesh of the `Ducky The Lop Eared Bunny
     :width: 90%
     :align: center
 
-Remove Isolated Vertices:
--------------------------
+Remove Isolated Vertices
+------------------------
 
 To remove vertices that is not part of any face or voxel::
 
@@ -125,8 +125,8 @@ As usual, there is a version that operates directly on the raw mesh::
     >>> vertices, face, __ = pymesh.remove_isolated_vertices_raw(
     ...     vertices, faces)
 
-Remove Duplicated Vertices:
----------------------------
+Remove Duplicated Vertices
+--------------------------
 
 Sometimes, one may need to merge vertices that are coinciding or close-by
 measured in Euclidean distance.  For example, one may need to zip the triangles
@@ -165,8 +165,8 @@ As usual, one can operate directly on raw meshes::
     >>> vertices, faces, info = pymesh.remove_duplicated_vertices_raw(
     ...     vertices, faces, tol)
 
-Remove Duplicated Faces:
-------------------------
+Remove Duplicated Faces
+-----------------------
 
 It is also useful to remove duplicated faces::
 

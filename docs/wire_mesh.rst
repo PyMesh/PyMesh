@@ -1,8 +1,8 @@
 Wire Inflation
 ==============
 
-Overview:
----------
+Overview
+--------
 
 The goal of ``wires`` package is to provide an easy way of modeling frame
 structures. A frame structure can be uniquely define by 3 parts:
@@ -24,8 +24,8 @@ triangular mesh. The `Tiler` class takes a `WireNetwork` object as a unit
 pattern and tile it according to certain rules, and its output is the tiled
 `WireNetwork` object.
 
-WireNetwork:
-------------
+WireNetwork
+-----------
 
 ``WireNetwork`` class represents the vertex positions and topology of a frame
 structure.  It can be easily modeled by hand or using tools such as
@@ -239,8 +239,8 @@ the origin)::
     >>> wire_network.center_at_origin()
 
 
-Wire Inflation:
----------------
+Wire Inflation
+--------------
 
 Uniform thickness:
 ^^^^^^^^^^^^^^^^^^
@@ -371,8 +371,8 @@ setting the wire profile::
 
     Inflation with triangle profile (left) and hexagon profile (right).
 
-Tiling:
--------
+Tiling
+------
 
 The `Inflator` class is capable of inflating arbitrary wire networks.  One
 particular important use case is to inflate a tiled network.  The `Tiler` class
