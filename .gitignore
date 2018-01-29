@@ -19,7 +19,7 @@ python/pymesh/lib
 python/pymesh/swig
 python/pymesh/third_party/
 python/pymesh.egg-info/
-doc/_build/
+docs/_build/
 third_party/build/
 third_party/local/
 cmake/SetInstallRpath.cmake

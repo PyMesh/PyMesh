@@ -2,11 +2,11 @@ PyMesh API Reference
 ====================
 
 .. toctree::
-    package_mesh
-    package_meshio
-    local_mesh_cleanup
-    procedural_mesh_generation
-    mesh_generation
-    geometry_processing
-    matrix_assembly
-    package_misc
+    api_mesh
+    api_meshio
+    api_local_mesh_cleanup
+    api_procedural_mesh_generation
+    api_mesh_generation
+    api_geometry_processing
+    api_matrix_assembly
+    api_misc
