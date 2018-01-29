@@ -292,12 +292,13 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # Mock out C/C++ modules
-from mock import Mock as MagicMock
+from unittest.mock import MagicMock
 
 class Mock(MagicMock):
     @classmethod
     def __getattr__(cls, name):
             return Mock()
 
-MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh'];
+MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh',
+        'PyMesh.triangle', 'PyMesh.tetgen'];
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
