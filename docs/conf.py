@@ -292,7 +292,7 @@ texinfo_documents = [
 #texinfo_no_detailmenu = False
 
 # Mock out C/C++ modules
-from unittest.mock import MagicMock
+from mock import Mock as MagicMock
 
 class Mock(MagicMock):
     @classmethod
