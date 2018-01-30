@@ -102,7 +102,7 @@ def submesh(mesh, element_indices, num_rings):
 
        * ori_face_index/ori_voxel_index: The original index of each element.
        * ring: Index indicating which ring does each element belongs.  The
-           selected elements belongs to the 0-ring.
+         selected elements belongs to the 0-ring.
     """
 
     if mesh.num_voxels == 0:

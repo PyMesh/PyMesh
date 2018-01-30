@@ -56,11 +56,12 @@ class triangle(PyMesh.triangle):
             3. vertex-by-vertex details
             4. you must be debugging the triangle code
 
-        algorithm: The Delaunay triangulation algorithm to use.  Choices are:
+        algorithm (``str``): The Delaunay triangulation algorithm to use.
+            Choices are:
 
-            * DIVIDE_AND_CONQUER: Default.  Implementation of [1]_.
-            * SWEEPLINE: Fortune's sweep line algorithm [2]_.
-            * INCREMENTAL: Also from [1]_.
+            * ``DIVIDE_AND_CONQUER``: Default.  Implementation of [1]_.
+            * ``SWEEPLINE``: Fortune's sweep line algorithm [2]_.
+            * ``INCREMENTAL``: Also from [1]_.
 
         auto_hole_detection (``boolean``): Whether to detect holes based on the
             orientation of PSLG using winding number.  Default is False.
