@@ -2,16 +2,19 @@ import math
 import numpy as np
 from ..meshio import form_mesh
 
-def generate_regular_tetrahedron(edge_length=1.0, center=np.zeros(3)):
-    """ Generate a regular tetraedron with the specified edge length and center.
+def generate_regular_tetrahedron(edge_length=1.0, center=[0.0, 0.0, 0.0]):
+    """ Generate a regular `tetrahedron`_ with the specified edge length and center.
 
     Args:
         edge_length (``float``): edge length of the regular tet.
         center (``numpy.ndarray``): center of the tet.
 
     Returns:
-        A mesh containing a single regular tet.
+        A :py:class:`Mesh` object containing a regular tetrahedron.
+
+    .. _tetrahedron: http://mathworld.wolfram.com/Tetrahedron.html
     """
+    center = np.array(center);
     s = 1.0 / math.sqrt(2.0);
 
     vertices = np.array([

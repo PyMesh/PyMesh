@@ -26,8 +26,7 @@ def generate_box_mesh(box_min, box_max,
             (i.e. triangle or tets), otherwise, use quad or hex element.
 
     Returns:
-        :py:class:`Mesh`: The output box mesh.  The following attributes are
-        defined:
+        A box :py:class:`Mesh`.  The following attributes are defined.
 
             * ``cell_index``: An :py:class:`numpy.ndarray` of size :math:`N_e`
               that maps each element to the index of the cell it belongs to.

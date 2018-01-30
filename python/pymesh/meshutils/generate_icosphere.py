@@ -7,7 +7,7 @@ from ..meshio import form_mesh
 from .subdivide import subdivide
 
 def generate_icosphere(radius, center, refinement_order=0):
-    """ Generate icosphere.
+    """ Generate icosphere (subdivision surface of a regular `icosahedron`_).
 
     Args:
         radius (``float``): Radius of icosphere.
@@ -15,7 +15,9 @@ def generate_icosphere(radius, center, refinement_order=0):
         refinement_order (``int``): (optional) Number of refinement.
 
     Returns:
-        The icosphere mesh.
+        The (possibly refined) icosphere :py:class:`Mesh`.
+
+    .. _icosahedron: http://mathworld.wolfram.com/Icosahedron.html
     """
     assert(isinstance(radius, Number));
     assert(len(center) == 3);

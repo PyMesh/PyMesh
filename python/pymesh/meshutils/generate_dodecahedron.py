@@ -5,14 +5,16 @@ from numpy.linalg import norm
 from ..meshio import form_mesh
 
 def generate_dodecahedron(radius, center):
-    """ Generate dodecahedron.
+    """ Generate a regular `dodecahedron`_.
 
     Args:
         radius (``float``): Radius of the shape.
         center (``numpy.ndarray``): shape center.
 
     Returns:
-        The dodecahedron mesh.
+        The dodecahedron :py:class:`Mesh` object.
+
+    .. _dodecahedron: http://mathworld.wolfram.com/Dodecahedron.html
     """
 
     #r = (1.0 + math.sqrt(5.0)) / 2.0;
