@@ -17,9 +17,9 @@ def tetrahedralize(mesh,
         radius_edge_ratio,
         facet_distance,
         feature_angle,
-        engine="auto", with_timing=False):
-    """
-    Create a tetrahedral mesh from input triangle mesh.
+        engine="auto",
+        with_timing=False):
+    """ Create a tetrahedral mesh from input triangle mesh.
 
     Arguments:
         mesh (:class:`Mesh`): Input triangular mesh.
@@ -32,28 +32,31 @@ def tetrahedralize(mesh,
             with center on the surface of the domain.
         feature_angle (``float``): Angle threshold (in degrees) for feature extraction.
         engine (``string``): The tetrahedralization engine to use.  Valid options are:
+
             * ``auto``: default to tetgen
-            * ``cgal``: `CGAL 3D mesh generation, using Polyhedron domain with
-                auto feature extraction.
-                <https://doc.cgal.org/latest/Mesh_3/index.html>`_
-            * ``cgal_no_features``: `CGAL 3D mesh generation, using Polyhedron domain.
-                <https://doc.cgal.org/latest/Mesh_3/index.html>`_
-            * ``cgal_implicit``: `CGAL 3D mesh generation, using implicit domain.
-                <https://doc.cgal.org/latest/Mesh_3/index.html>`_
-            * ``tetgen``: `TetGen from Hang Si
-                <http://wias-berlin.de/software/index.jsp?id=TetGen&lang=1>`_
-            * ``quartet``: `Quartet from Robert Bridson and Crawford Doran
-                <https://github.com/crawforddoran/quartet>`_
-            * ``delpsc``: `DelPSC from Tamal K Dey , Joshua A. Levine, Andrew
-                Slatton <http://web.cse.ohio-state.edu/~dey.8/delpsc.html>`_
-            * ``vegafem``: `Tet mesher provided by VegaFEM library
-                <http://run.usc.edu/vega/>`_
-            * ``mmg``: `Implicit domain meshing from MMG tools
-                <https://www.mmgtools.org/>`_
+            * ``cgal``: `CGAL 3D mesh generation`_, using Polyhedron domain with
+              auto feature extraction.
+            * ``cgal_no_features``: `CGAL 3D mesh generation`_,
+              using Polyhedron domain without feature extraction.
+            * ``cgal_implicit``: `CGAL 3D mesh generation`_,
+              using implicit domain with winding number as oracle.
+            * ``tetgen``: `TetGen`_ from Hang Si.
+            * ``quartet``: `Quartet`_ from Robert Bridson and Crawford Doran
+            * ``delpsc``: `DelPSC`_ from Tamal K Dey , Joshua A. Levine, Andrew
+              Slatton
+            * ``vegafem``: Tet mesher provided by `VegaFEM`_ library.
+            * ``mmg``: Implicit domain meshing from `MMG3D`_.
         with_timing (``boolean``): whether to output timing info.
 
     Returns:
         Tetrahedral mesh (and running time if `with_timing` is True).
+
+    .. _`CGAL 3D mesh generation`: https://doc.cgal.org/latest/Mesh_3/index.html
+    .. _`TetGen`: http://wias-berlin.de/software/tetgen/
+    .. _`Quartet`: https://github.com/crawforddoran/quartet
+    .. _`DelPSC`: http://web.cse.ohio-state.edu/~dey.8/delpsc.html
+    .. _`VegaFEM`: http://run.usc.edu/vega/
+    .. _`MMG3D`: https://www.mmgtools.org/
     """
     logger = logging.getLogger(__name__);
     bbox_min, bbox_max = mesh.bbox;

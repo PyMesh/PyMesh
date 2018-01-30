@@ -2,9 +2,9 @@ import PyMesh
 from .meshio import form_mesh
 
 class tetgen(PyMesh.tetgen):
-    """ Wrapper around `tetgen <http://wias-berlin.de/software/tetgen/>`_.
+    """ Wrapper around `TetGen <http://wias-berlin.de/software/tetgen/>`_.
 
-    Input attributes:
+    Attributes:
         points (:class:`numpy.ndarray`): n by 3 list of points to be
             tetrahedralized.
         triangles (:class:`numpy.ndarray`): m by 3 matrix of indices into
@@ -43,7 +43,6 @@ class tetgen(PyMesh.tetgen):
             3: more details
             4: you must be debugging the tetgen code
 
-    Output attributes:
         vertices (:class:`numpy.ndarray`): Vertices of the output tet mesh.
 
         faces (:class:`numpy.ndarray`): Faces of the output tet mesh.
