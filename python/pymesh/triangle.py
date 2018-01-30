@@ -49,11 +49,12 @@ class triangle(PyMesh.triangle):
             Default is -1 (i.e. unbounded).
 
         verbosity (``int``): How much info should triangle output?
-            0: no output
-            1: normal level of output
-            2: verbose output
-            3: vertex-by-vertex details
-            4: you must be debugging the triangle code
+
+            0. no output
+            1. normal level of output
+            2. verbose output
+            3. vertex-by-vertex details
+            4. you must be debugging the triangle code
 
         algorithm: The Delaunay triangulation algorithm to use.  Choices are:
 
