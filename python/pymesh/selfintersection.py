@@ -20,7 +20,7 @@ def resolve_self_intersection(mesh, engine="auto"):
         following per-face scalar field is defined:
 
         * ``face_sources``: For each output face, this field specifies the index
-            of the corresponding "source face" in the input mesh.
+          of the corresponding "source face" in the input mesh.
 
     """
     if engine == "auto":
@@ -63,8 +63,8 @@ def detect_self_intersection(mesh):
 
     Returns:
         :py:class:`numpy.ndarray`: A n by 2 array of face indices.  Each
-            row contains the indices of two intersecting faces. :math:`n` is
-            the number of intersecting face pairs.
+        row contains the indices of two intersecting faces. :math:`n` is
+        the number of intersecting face pairs.
     """
 
     detector = PyMesh.SelfIntersection(mesh.vertices, mesh.faces);
