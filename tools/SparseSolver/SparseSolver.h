@@ -9,7 +9,7 @@ namespace PyMesh {
 class SparseSolver {
     public:
         typedef std::shared_ptr<SparseSolver> Ptr;
-        virtual ~SparseSolver() {}
+        static Ptr create(const std::string& solve_type);
 
     public:
         virtual void analyze_pattern(const ZSparseMatrix& matrix) =0;

@@ -7,7 +7,6 @@
 #include <Eigen/Sparse>
 
 #include <SparseSolver/SparseSolver.h>
-#include <SparseSolver/SparseSolverFactory.h>
 
 #include <TestBase.h>
 
@@ -65,10 +64,6 @@ class SparseSolverTest : public TestBase {
             }
         }
 
-        SolverPtr create(const std::string& type) {
-            return SparseSolverFactory(type).create();
-        }
-
         void ASSERT_VECTOR_EQ(const VectorF& v1, const VectorF& v2) {
             ASSERT_EQ(v1.size(), v2.size());
             ASSERT_NEAR(0.0, (v1-v2).norm(), 1e-6);
@@ -76,7 +71,7 @@ class SparseSolverTest : public TestBase {
 
         void solve_diagonal_system(const std::string& type) {
             init_diagonal_matrix();
-            SolverPtr solver = create(type);
+            SolverPtr solver = SparseSolver::create(type);
             VectorF rhs = VectorF::Ones(m_matrix.rows());
 
             solver->analyze_pattern(m_matrix);
@@ -88,7 +83,7 @@ class SparseSolverTest : public TestBase {
 
         void solve_dense_system(const std::string& type) {
             init_dense_matrix();
-            SolverPtr solver = create(type);
+            SolverPtr solver = SparseSolver::create(type);
             VectorF rhs = VectorF::Ones(m_matrix.rows());
 
             solver->analyze_pattern(m_matrix);
@@ -102,42 +97,41 @@ class SparseSolverTest : public TestBase {
         SMat m_matrix;
 };
 
-/**
- * TODO:
- * Eigen::SimplicialLLT gives a segmentation fault which I haven't got a chance
- * to track it down.  This test is disabled for now.
- */
-TEST_F(SparseSolverTest, DISABLED_LLT) {
+TEST_F(SparseSolverTest, LLT) {
     solve_diagonal_system("LLT");
     solve_dense_system("LLT");
 }
 
-TEST_F(SparseSolverTest, DISABLED_LDLT) {
+TEST_F(SparseSolverTest, LDLT) {
     solve_diagonal_system("LDLT");
     solve_dense_system("LDLT");
 }
 
-TEST_F(SparseSolverTest, DISABLED_CG) {
+TEST_F(SparseSolverTest, CG) {
     solve_diagonal_system("CG");
     solve_dense_system("CG");
 }
 
-TEST_F(SparseSolverTest, DISABLED_SparseLU) {
+TEST_F(SparseSolverTest, SparseLU) {
     solve_diagonal_system("SparseLU");
     solve_dense_system("SparseLU");
 }
 
-TEST_F(SparseSolverTest, DISABLED_UmfPackLU) {
+#ifdef WITH_UMFPACK
+TEST_F(SparseSolverTest, UmfPackLU) {
     solve_diagonal_system("UmfPackLU");
     solve_dense_system("UmfPackLU");
 }
 
-TEST_F(SparseSolverTest, DISABLED_UmfPack) {
+TEST_F(SparseSolverTest, UmfPack) {
     solve_diagonal_system("UmfPack");
     solve_dense_system("UmfPack");
 }
+#endif
 
-TEST_F(SparseSolverTest, DISABLED_Cholmod) {
+#ifdef WITH_CHOLMOD
+TEST_F(SparseSolverTest, Cholmod) {
     solve_diagonal_system("Cholmod");
     solve_dense_system("Cholmod");
 }
+#endif
