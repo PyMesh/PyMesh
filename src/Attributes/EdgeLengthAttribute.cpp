@@ -11,5 +11,7 @@ void EdgeLengthAttribute::compute_from_mesh(Mesh& mesh) {
     }
 
     VectorF& edge_len = m_values;
-    edge_len = mesh.get_attribute("edge_squared_length").array().sqrt();
+    const auto& sq_len = mesh.get_attribute("edge_squared_length");
+    edge_len.resize(sq_len.rows(), sq_len.cols());
+    edge_len = sq_len.array().sqrt();
 }

@@ -247,7 +247,7 @@ TEST_F(TriangleWrapperTest, 3DWithHoles) {
     ASSERT_OUTSIDE(holes.row(0), vertices, faces);
 }
 
-TEST_F(TriangleWrapperTest, debug) {
+TEST_F(TriangleWrapperTest, DISABLED_debug) {
     MatrixFr input_vertices = MatrixIO::load_matrix<MatrixFr>(
             TestBase::m_data_dir + "/v1.npy");
     MatrixIr input_loops = MatrixIO::load_matrix<MatrixIr>(
@@ -273,9 +273,8 @@ TEST_F(TriangleWrapperTest, debug) {
     //std::cout << vertices << std::endl;
 
 
-    ASSERT_EQ(input_vertices.rows(), vertices.rows());
-
     //save_mesh("triangle_debug_1.obj", vertices, faces);
+    ASSERT_EQ(input_vertices.rows(), vertices.rows());
 }
 
 TEST_F(TriangleWrapperTest, debug2) {

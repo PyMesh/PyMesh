@@ -17,8 +17,8 @@ class BoundaryRemesherTest : public TestBase {
             VectorF bbox_min_2 = v2.colwise().minCoeff();
             VectorF bbox_max_2 = v2.colwise().maxCoeff();
 
-            ASSERT_MATRIX_EQ(bbox_min_1, bbox_min_2);
-            ASSERT_MATRIX_EQ(bbox_max_1, bbox_max_2);
+            ASSERT_NEAR(0.0, (bbox_min_1 - bbox_min_2).squaredNorm(), 1e-6);
+            ASSERT_NEAR(0.0, (bbox_max_1 - bbox_max_2).squaredNorm(), 1e-6);
         }
 };
 
@@ -40,7 +40,7 @@ TEST_F(BoundaryRemesherTest, Creation) {
 
     const auto& remeshed_vertices = remesher.get_vertices();
     const auto& remeshed_faces = remesher.get_faces();
-    write_mesh_raw("remeshed_box.obj", remeshed_vertices, remeshed_faces);
+    //write_mesh_raw("remeshed_box.obj", remeshed_vertices, remeshed_faces);
     ASSERT_BBOX_EQ(vertices, remeshed_vertices);
     ASSERT_LT(0, remeshed_faces.rows());
 }

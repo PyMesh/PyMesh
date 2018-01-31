@@ -11,7 +11,7 @@ ENDIF (TARGET MeshUtils)
 
 IF (TARGET assembler)
     ADD_SUBDIRECTORY(Assembler)
-    LIST(APPEND TARGET_MODULE_TESTS assembler_tests)
+    LIST(APPEND TARGET_MODULE_TESTS assembler_tests run_assembler_tests)
 ENDIF (TARGET assembler)
 
 IF (TARGET tetgen)
