@@ -2,6 +2,7 @@
 #pragma once
 #include <memory>
 #include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 #include <Math/ZSparseMatrix.h>
 
 namespace PyMesh {
@@ -12,11 +13,20 @@ class SparseSolver {
         static Ptr create(const std::string& solve_type);
 
     public:
-        virtual void analyze_pattern(const ZSparseMatrix& matrix) =0;
+        virtual void analyze_pattern(const ZSparseMatrix& matrix) {
+            throw NotImplementedError(
+                    "SparseSolver::analyze_pattern is not implemented");
+        }
 
-        virtual void factorize(const ZSparseMatrix& matrix) =0;
+        virtual void factorize(const ZSparseMatrix& matrix) {
+            throw NotImplementedError(
+                    "SparseSolver::facetorize is not implemented");
+        }
 
-        virtual MatrixF solve(const MatrixF& rhs) =0;
+        virtual MatrixF solve(const MatrixF& rhs) {
+            throw NotImplementedError(
+                    "SparseSolver::facetorize is not implemented");
+        }
 };
 
 }

@@ -43,6 +43,7 @@ from .triangle import triangle
 from .tetgen import tetgen
 from .triangulate import triangulate_beta
 from .wires import *
+from .SparseSolver import SparseSolver
 
 __all__ = [
         "Mesh",
@@ -80,7 +81,8 @@ __all__ = [
         "distance_to_mesh",
         "do_intersect",
         "VoxelGrid",
-        "HarmonicSolver"
+        "HarmonicSolver",
+        "SparseSolver"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;

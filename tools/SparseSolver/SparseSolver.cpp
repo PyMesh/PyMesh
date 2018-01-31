@@ -12,8 +12,9 @@
 #ifdef WITH_CHOLMOD
 #include <Eigen/CholmodSupport>
 #endif
-//#include <Eigen/PardisoSupport>
-//#include <third_party/SparseMatrices.hh>
+#ifdef WITH_MKL
+#include <Eigen/PardisoSupport>
+#endif
 
 #include <Core/Exception.h>
 
@@ -25,29 +26,23 @@ SparseSolver::Ptr SparseSolver::create(const std::string& solver_type) {
     if (solver_type == "LDLT") {
         using LDLT = Eigen::SimplicialLDLT<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(new SparseSolverImplementation<LDLT>);
-    }
-    if (solver_type == "LLT") {
+    } else if (solver_type == "LLT") {
         using LLT = Eigen::SimplicialLLT<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(new SparseSolverImplementation<LLT>);
-    }
-    if (solver_type == "CG") {
+    } else if (solver_type == "CG") {
         using CG = Eigen::ConjugateGradient<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(new SparseSolverImplementation<CG>);
-    }
-    if (solver_type == "LSCG") {
+    } else if (solver_type == "LSCG") {
         using LSCG = Eigen::LeastSquaresConjugateGradient<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(new SparseSolverImplementation<LSCG>);
-    }
-    if (solver_type == "BiCG") {
+    } else if (solver_type == "BiCG") {
         using BiCGSTAB = Eigen::BiCGSTAB<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(new SparseSolverImplementation<BiCGSTAB>);
-    }
-    if (solver_type == "SparseLU") {
+    } else if (solver_type == "SparseLU") {
         using SparseLU = Eigen::SparseLU<ZSparseMatrix::ParentType,
               Eigen::COLAMDOrdering<ZSparseMatrix::ParentType::StorageIndex> >;
         return SparseSolver::Ptr(new SparseSolverImplementation<SparseLU>);
-    }
-    if (solver_type == "SparseQR") {
+    } else if (solver_type == "SparseQR") {
         using SparseQR = Eigen::SparseQR<ZSparseMatrix::ParentType,
               Eigen::COLAMDOrdering<ZSparseMatrix::ParentType::StorageIndex> >;
         return SparseSolver::Ptr(new SparseSolverImplementation<SparseQR>);
@@ -64,6 +59,21 @@ SparseSolver::Ptr SparseSolver::create(const std::string& solver_type) {
             Eigen::CholmodSupernodalLLT<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(
                 new SparseSolverImplementation<CholmodSupernodalLLT>);
+    }
+#endif
+#ifdef WITH_MKL
+    if (solver_type == "PardisoLLT") {
+        using PardisoLLT = Eigen::PardisoLLT<ZSparseMatrix::ParentType>;
+        return SparseSolver::Ptr(
+                new SparseSolverImplementation<PardisoLLT>);
+    } else if (solver_type == "PardisoLDLT") {
+        using PardisoLDLT = Eigen::PardisoLDLT<ZSparseMatrix::ParentType>;
+        return SparseSolver::Ptr(
+                new SparseSolverImplementation<PardisoLDLT>);
+    } else if (solver_type == "PardisoLU") {
+        using PardisoLU = Eigen::PardisoLU<ZSparseMatrix::ParentType>;
+        return SparseSolver::Ptr(
+                new SparseSolverImplementation<PardisoLU>);
     }
 #endif
 
