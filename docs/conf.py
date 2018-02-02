@@ -303,4 +303,5 @@ MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh'];
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 sys.modules['PyMesh'].triangle = object;
 sys.modules['PyMesh'].tetgen = object;
+sys.modules['PyMesh'].SparseSolver = object;
 autodoc_member_order = 'bysource'

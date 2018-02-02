@@ -1,6 +1,9 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 #include <memory>
+#include <string>
+#include <vector>
+
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 #include <Math/ZSparseMatrix.h>
@@ -11,6 +14,7 @@ class SparseSolver {
     public:
         typedef std::shared_ptr<SparseSolver> Ptr;
         static Ptr create(const std::string& solve_type);
+        static std::vector<std::string> get_supported_solvers();
 
     public:
         virtual void analyze_pattern(const ZSparseMatrix& matrix) {

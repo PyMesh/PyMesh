@@ -9,4 +9,5 @@ PyMesh API Reference
     api_mesh_generation
     api_geometry_processing
     api_matrix_assembly
+    api_sparse_solver
     api_misc

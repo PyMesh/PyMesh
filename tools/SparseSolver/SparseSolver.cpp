@@ -81,3 +81,27 @@ SparseSolver::Ptr SparseSolver::create(const std::string& solver_type) {
     err_msg << "Unsupported solver type " << solver_type;
     throw NotImplementedError(err_msg.str());
 }
+
+std::vector<std::string> SparseSolver::get_supported_solvers() {
+    std::vector<std::string> solver_names{
+        "LDLT",
+        "LLT",
+        "CG",
+        "LSCG",
+        "BiCG",
+        "SparseLU",
+        "SparseQR"
+    };
+#ifdef WITH_UMFPACK
+    solver_names.push_back("UmfPackLU");
+#endif
+#ifdef WITH_CHOLMOD
+    solver_names.push_back("Cholmod");
+#endif
+#ifdef WITH_MKL
+    solver_names.push_back("PardisoLLT");
+    solver_names.push_back("PardisoLDLT");
+    solver_names.push_back("PardisoLU");
+#endif
+    return solver_names;
+}
