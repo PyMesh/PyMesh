@@ -17,6 +17,11 @@ class SparseSolver {
         static std::vector<std::string> get_supported_solvers();
 
     public:
+        virtual void compute(const ZSparseMatrix& matrix) {
+            throw NotImplementedError(
+                    "SparseSolver::compute is not implemented");
+        }
+
         virtual void analyze_pattern(const ZSparseMatrix& matrix) {
             throw NotImplementedError(
                     "SparseSolver::analyze_pattern is not implemented");
@@ -30,6 +35,10 @@ class SparseSolver {
         virtual MatrixF solve(const MatrixF& rhs) {
             throw NotImplementedError(
                     "SparseSolver::facetorize is not implemented");
+        }
+
+        ZSparseMatrix test(const ZSparseMatrix& matrix) {
+            return matrix;
         }
 };
 

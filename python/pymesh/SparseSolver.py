@@ -34,8 +34,7 @@ class SparseSolver(PyMesh.SparseSolver):
         >>> M = scipy.sparse.eye(100); # Build matrix.
         >>> rhs = numpy.ones(100); # build right hand side.
         >>> solver = pymesh.SparseSolver.create("LDLT");
-        >>> solver.analyze_pattern(M);
-        >>> solver.factorize(M);
+        >>> solver.compute(M);
         >>> x = solver.solve(rhs);
 
     .. _`Eigen::SimplicialLLT`: https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLLT.html

@@ -30,14 +30,18 @@ SparseSolver::Ptr SparseSolver::create(const std::string& solver_type) {
         using LLT = Eigen::SimplicialLLT<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(new SparseSolverImplementation<LLT>);
     } else if (solver_type == "CG") {
-        using CG = Eigen::ConjugateGradient<ZSparseMatrix::ParentType>;
-        return SparseSolver::Ptr(new SparseSolverImplementation<CG>);
+        using CG = Eigen::ConjugateGradient<ZSparseMatrix::ParentType,
+              Eigen::Lower|Eigen::Upper>;
+        return SparseSolver::Ptr(
+                new SparseSolverImplementationWithLocalCopy<CG>);
     } else if (solver_type == "LSCG") {
         using LSCG = Eigen::LeastSquaresConjugateGradient<ZSparseMatrix::ParentType>;
-        return SparseSolver::Ptr(new SparseSolverImplementation<LSCG>);
+        return SparseSolver::Ptr(
+                new SparseSolverImplementationWithLocalCopy<LSCG>);
     } else if (solver_type == "BiCG") {
         using BiCGSTAB = Eigen::BiCGSTAB<ZSparseMatrix::ParentType>;
-        return SparseSolver::Ptr(new SparseSolverImplementation<BiCGSTAB>);
+        return SparseSolver::Ptr(
+                new SparseSolverImplementationWithLocalCopy<BiCGSTAB>);
     } else if (solver_type == "SparseLU") {
         using SparseLU = Eigen::SparseLU<ZSparseMatrix::ParentType,
               Eigen::COLAMDOrdering<ZSparseMatrix::ParentType::StorageIndex> >;
@@ -50,7 +54,8 @@ SparseSolver::Ptr SparseSolver::create(const std::string& solver_type) {
 #ifdef WITH_UMFPACK
     if (solver_type == "UmfPackLU") {
         using UmfPackLU = Eigen::UmfPackLU<ZSparseMatrix::ParentType>;
-        return SparseSolver::Ptr(new SparseSolverImplementation<UmfPackLU>);
+        return SparseSolver::Ptr(
+                new SparseSolverImplementationWithLocalCopy<UmfPackLU>);
     }
 #endif
 #ifdef WITH_CHOLMOD
