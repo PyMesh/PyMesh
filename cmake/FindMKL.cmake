@@ -61,7 +61,10 @@ find_path(MKL_ROOT_DIR
     "Program Files (x86)/Intel/ComposerXE-2011/mkl"
 )
 
+SET(INTEL_ROOT_DIR "/opt/intel" CACHE PATH "Folder contains intel libs")
+
 MESSAGE("MKL_ROOT_DIR : ${MKL_ROOT_DIR}") # for debug
+MESSAGE("INTEL_ROOT_DIR: ${INTEL_ROOT_DIR}")
 
 find_path(MKL_INCLUDE_DIR
   mkl_cblas.h
@@ -183,15 +186,20 @@ foreach (MODEVAR ${MKL_MODE_VARIANTS})
     foreach (THREADVAR ${MKL_THREAD_VARIANTS})
         if (MKL_CORE_LIBRARY AND MKL_${MODEVAR}_LIBRARY AND MKL_${THREADVAR}_LIBRARY)
             set(MKL_${MODEVAR}_${THREADVAR}_LIBRARIES
-                ${MKL_${MODEVAR}_LIBRARY} ${MKL_${THREADVAR}_LIBRARY} ${MKL_CORE_LIBRARY}
-                ${MKL_LAPACK_LIBRARY} ${MKL_IOMP5_LIBRARY})
+                ${MKL_CORE_LIBRARY}
+                ${MKL_${THREADVAR}_LIBRARY}
+                ${MKL_${MODEVAR}_LIBRARY}
+                ${MKL_LAPACK_LIBRARY}
+                ${MKL_IOMP5_LIBRARY})
             message("${MODEVAR} ${THREADVAR} ${MKL_${MODEVAR}_${THREADVAR}_LIBRARIES}") # for debug
         endif()
     endforeach()
 endforeach()
 
-set(MKL_LIBRARIES ${MKL_LP_SEQUENTIAL_LIBRARIES})
-LINK_DIRECTORIES(${MKL_ROOT_DIR}/lib/${MKL_ARCH_DIR}) # hack
+set(MKL_LIBRARIES ${MKL_LP_INTELTHREAD_LIBRARIES})
+#LINK_DIRECTORIES(${MKL_ROOT_DIR}/lib/${MKL_ARCH_DIR}) # hack
+LINK_DIRECTORIES(${MKL_ROOT_DIR}/lib)
+LINK_DIRECTORIES(${INTEL_ROOT_DIR}/lib)
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(MKL DEFAULT_MSG MKL_INCLUDE_DIR MKL_LIBRARIES)
