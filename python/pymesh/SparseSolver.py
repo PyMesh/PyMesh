@@ -29,11 +29,29 @@ class SparseSolver(PyMesh.SparseSolver):
 
         supported_solvers (``list`` of ``str``): The list of supported solvers.
 
+        tolerance (``float``): The residual error threshold for stopping
+            iterative solvers.  Default is ``Eigen::NumTraits<Float>::epsilon()``.
+
+        max_iterations (``int``):  The max iterations allowed for iterative
+            solvers.  Default is twice the number of columns of the matrix.
+
     Example:
+
+        For direct solvers:
 
         >>> M = scipy.sparse.eye(100); # Build matrix.
         >>> rhs = numpy.ones(100); # build right hand side.
         >>> solver = pymesh.SparseSolver.create("LDLT");
+        >>> solver.compute(M);
+        >>> x = solver.solve(rhs);
+
+        For iterative solvers:
+
+        >>> M = scipy.sparse.eye(100); # Build matrix.
+        >>> rhs = numpy.ones(100); # build right hand side.
+        >>> solver = pymesh.SparseSolver.create("CG");
+        >>> solver.tolerance = 1e-10;
+        >>> solver.max_iterations = 50;
         >>> solver.compute(M);
         >>> x = solver.solve(rhs);
 

@@ -88,28 +88,3 @@ __all__ += meshutils.__all__;
 __all__ += misc.__all__;
 __all__.append("wires");
 
-#try:
-#    import PyTriangle, PyTriangulation
-#except ImportError:
-#    pass;
-#else:
-#    from .triangulate import triangulate, retriangulate, retriangulate_raw
-#    from .triangulate import triangulate_beta
-#    __all__ += ["triangulate", "retriangulate", "retriangulate_raw",
-#            "triangulate_beta"];
-#
-#try:
-#    import PyWires
-#except ImportError:
-#    pass;
-#else:
-#    from . import wires
-#    __all__.append("wires");
-#
-#try:
-#    from .Solver import SparseSolver
-#    __all__.append("SparseSolver");
-#except ImportError:
-#    pass;
-#
-#

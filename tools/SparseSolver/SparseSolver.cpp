@@ -33,15 +33,15 @@ SparseSolver::Ptr SparseSolver::create(const std::string& solver_type) {
         using CG = Eigen::ConjugateGradient<ZSparseMatrix::ParentType,
               Eigen::Lower|Eigen::Upper>;
         return SparseSolver::Ptr(
-                new SparseSolverImplementationWithLocalCopy<CG>);
+                new IterativeSparseSolverImplementation<CG>);
     } else if (solver_type == "LSCG") {
         using LSCG = Eigen::LeastSquaresConjugateGradient<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(
-                new SparseSolverImplementationWithLocalCopy<LSCG>);
+                new IterativeSparseSolverImplementation<LSCG>);
     } else if (solver_type == "BiCG") {
         using BiCGSTAB = Eigen::BiCGSTAB<ZSparseMatrix::ParentType>;
         return SparseSolver::Ptr(
-                new SparseSolverImplementationWithLocalCopy<BiCGSTAB>);
+                new IterativeSparseSolverImplementation<BiCGSTAB>);
     } else if (solver_type == "SparseLU") {
         using SparseLU = Eigen::SparseLU<ZSparseMatrix::ParentType,
               Eigen::COLAMDOrdering<ZSparseMatrix::ParentType::StorageIndex> >;

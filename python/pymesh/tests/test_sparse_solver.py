@@ -12,6 +12,7 @@ class SparseSolverTest(TestCase):
         rhs = np.ones(N);
         for solver_type in pymesh.SparseSolver.get_supported_solvers():
             solver = pymesh.SparseSolver.create(solver_type);
+            solver.max_iterations = 10;
             solver.analyze_pattern(M);
             solver.factorize(M);
             x = solver.solve(rhs);
