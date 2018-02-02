@@ -122,16 +122,26 @@ TEST_F(SparseSolverTest, UmfPackLU) {
     solve_diagonal_system("UmfPackLU");
     solve_dense_system("UmfPackLU");
 }
-
-TEST_F(SparseSolverTest, UmfPack) {
-    solve_diagonal_system("UmfPack");
-    solve_dense_system("UmfPack");
-}
 #endif
 
 #ifdef WITH_CHOLMOD
 TEST_F(SparseSolverTest, Cholmod) {
     solve_diagonal_system("Cholmod");
     solve_dense_system("Cholmod");
+}
+#endif
+
+#ifdef WITH_MKL
+TEST_F(SparseSolverTest, PardisoLLT) {
+    solve_diagonal_system("PardisoLLT");
+    solve_dense_system("PardisoLLT");
+}
+TEST_F(SparseSolverTest, PardisoLDLT) {
+    solve_diagonal_system("PardisoLDLT");
+    solve_dense_system("PardisoLDLT");
+}
+TEST_F(SparseSolverTest, PardisoLU) {
+    solve_diagonal_system("PardisoLU");
+    solve_dense_system("PardisoLU");
 }
 #endif
