@@ -25,7 +25,7 @@ class SparseSolver(PyMesh.SparseSolver):
     * ``LSCG``: Wrapper of `Eigen::LeastSquaresConjugateGradient`_.
     * ``BiCG``: Wrapper of `Eigen::BiCGSTAB`_.
 
-    Attribute:
+    Attributes:
 
         supported_solvers (``list`` of ``str``): The list of supported solvers.
 
