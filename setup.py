@@ -92,8 +92,12 @@ setup(
         package_data = {"pymesh": [
             "swig/*.py",
             "lib/*",
-            "third_party/lib/*",
-            "third_party/lib64/*"]},
+            "third_party/lib/lib*",
+            "third_party/lib/*.lib",
+            "third_party/lib/*.dll",
+            "third_party/lib64/lib*",
+            "third_party/lib64/lib*.lib",
+            "third_party/lib64/lib*.dll", ]},
         #include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
