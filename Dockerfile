@@ -25,7 +25,7 @@ mkdir -p $PYMESH_PATH/third_party/build && \
 mkdir -p $PYMESH_PATH/build && \
 pip install -r $PYMESH_PATH/python/requirements.txt
 
-RUN ./setup.py build && ./setup.py install && rm -rf build third_party/build
+RUN ./setup.py bdist_wheel && rm -rf build third_party/build && pip install bdist_wheel
 WORKDIR /root/
 #RUN rm -rf PyMesh
 RUN python -c "import pymesh; pymesh.test()"
