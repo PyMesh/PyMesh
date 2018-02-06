@@ -91,15 +91,9 @@ setup(
             "pymesh.tests", "pymesh.meshutils.tests", "pymesh.wires.tests"],
         package_data = {"pymesh": [
             "swig/*.py",
-            "lib/*.so",
-            "lib/*.dylib",
-            "lib/*.dll",
-            "third_party/lib/*.so",
-            "third_party/lib/*.dylib",
-            "third_party/lib/*.dll",
-            "third_party/lib64/*.so",
-            "third_party/lib64/*.dylib",
-            "third_party/lib64/*.dll" ]},
+            "lib/*",
+            "third_party/lib/*",
+            "third_party/lib64/*"]},
         #include_package_data = True,
         cmdclass={'build': cmake_build},
         scripts=[
