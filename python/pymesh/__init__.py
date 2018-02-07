@@ -23,6 +23,7 @@ from .convex_hull import convex_hull
 from .CSGTree import CSGTree
 from .exact_arithmetic import Gmpz, Gmpq
 from .HarmonicSolver import HarmonicSolver
+from .HashGrid import HashGrid
 from .material import Material
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
@@ -82,7 +83,8 @@ __all__ = [
         "do_intersect",
         "VoxelGrid",
         "HarmonicSolver",
-        "SparseSolver"
+        "SparseSolver",
+        "HashGrid",
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;

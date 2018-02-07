@@ -6,6 +6,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyConvexHull.cpp
     PyDMAT.cpp
     PyFEM.cpp
+    PyHashGrid.cpp
     PyIGL.cpp
     PyMeshUtils.cpp
     PyMesh.cpp

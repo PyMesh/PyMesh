@@ -8,8 +8,6 @@ import argparse
 import numpy as np
 import pymesh
 
-from submesh import extract_submesh
-
 def parse_args():
     parser = argparse.ArgumentParser(description=__doc__);
     parser.add_argument("--extract-region", help="exact problematic_region",
@@ -47,7 +45,7 @@ def main():
     pymesh.save_mesh(args.output_mesh, mesh, "degenerated", "degenerated_faces");
 
     if args.extract_region is not None:
-        region = extract_submesh(mesh, f_indices, 0);
+        region = pymesh.submesh(mesh, f_indices, 0);
         pymesh.save_mesh(args.extract_region, region,
                 *region.get_attribute_names());
 
