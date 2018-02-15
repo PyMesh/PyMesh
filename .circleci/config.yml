@@ -43,8 +43,19 @@ jobs:
 
 workflows:
     version: 2
-    build_and_test:
+    build_and_test_and_deploy:
         jobs:
             - build
-            - "py3.6"
-            - "py2.7"
+            - "py3.6":
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only: master
+            - "py2.7":
+                requires:
+                    - build
+                filters:
+                    branches:
+                        only: master
+
