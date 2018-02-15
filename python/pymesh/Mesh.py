@@ -51,19 +51,6 @@ class Mesh(object):
         num_surface_components: Number of edge-connected components.
         num_volume_components:  Number of face-connected components.
 
-
-        vertices_ref: Same as :py:attr:`vertices` but the return value is a
-            reference.
-        faces_ref:    Same as :py:attr:`faces` but the return value is a
-            reference.
-        voxels_ref:   Same as :py:attr:`voxels` but the return value is a
-            reference.
-        nodes_ref:    Same as :py:attr:`nodes` but the return value is a
-            reference.
-        elements_ref: Same as :py:attr:`elements` but the return value is a
-            reference.
-
-
     """
 
     def __init__(self, raw_mesh):
@@ -84,11 +71,6 @@ class Mesh(object):
         return self.__mesh.has_attribute(name);
 
     def get_attribute(self, name):
-        """ Return attribute values in a flattened array.
-        """
-        return np.copy(self.__mesh.get_attribute(name).ravel());
-
-    def get_attribute_ref(self, name):
         """ Return attribute values in a flattened array.
         """
         return self.__mesh.get_attribute(name).ravel();
@@ -201,34 +183,22 @@ class Mesh(object):
         return self._extra_info.is_oriented();
 
     @property
-    def vertices_ref(self):
+    def vertices(self):
         return self.__mesh.get_vertices().reshape(
                 (-1,self.dim), order="C");
 
     @property
-    def vertices(self):
-        return np.copy(self.vertices_ref);
-
-    @property
-    def faces_ref(self):
+    def faces(self):
         return self.__mesh.get_faces().reshape(
                 (-1, self.vertex_per_face), order="C");
 
     @property
-    def faces(self):
-        return np.copy(self.faces_ref);
-
-    @property
-    def voxels_ref(self):
+    def voxels(self):
         if self.num_voxels == 0:
             return self.__mesh.get_voxels();
         else:
             return self.__mesh.get_voxels().reshape(
                     (-1, self.vertex_per_voxel), order="C");
-
-    @property
-    def voxels(self):
-        return np.copy(self.voxels_ref);
 
     @property
     def num_vertices(self):
@@ -258,7 +228,7 @@ class Mesh(object):
     def bbox(self):
         if self.num_vertices == 0:
             raise RuntimeError("Cannot compute bbox with 0 vertices!");
-        vts = self.vertices_ref.reshape((-1,self.dim), order='C');
+        vts = self.vertices.reshape((-1,self.dim), order='C');
         bmin = np.amin(vts, axis=0);
         bmax = np.amax(vts, axis=0);
         return bmin, bmax;
@@ -268,19 +238,8 @@ class Mesh(object):
         return self.__mesh;
 
     @property
-    def nodes_ref(self):
-        return self.vertices_ref;
-
-    @property
     def nodes(self):
         return self.vertices;
-
-    @property
-    def elements_ref(self):
-        if self.num_voxels == 0:
-            return self.faces_ref;
-        else:
-            return self.voxels_ref;
 
     @property
     def elements(self):
@@ -324,7 +283,7 @@ class Mesh(object):
             return self.__extra_info;
         except AttributeError:
             self.__extra_info = PyMesh.MeshChecker(
-                    self.vertices_ref, self.faces_ref, self.voxels_ref);
+                    self.vertices, self.faces, self.voxels);
             return self.__extra_info;
 
     @property
