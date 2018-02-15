@@ -26,9 +26,6 @@ jobs:
                     make all_tests
     "py3.6":
         machine: true
-        branches:
-            only:
-                - master
         steps:
             - checkout
             - run: |
@@ -37,9 +34,6 @@ jobs:
                 docker push qnzhou/pymesh:py3.6
     "py2.7":
         machine: true
-        branches:
-            only:
-                - master
         steps:
             - checkout
             - run: |
@@ -53,4 +47,10 @@ workflows:
         jobs:
             - build
             - "py3.6"
+                filters:
+                    branches:
+                        only: master
             - "py2.7"
+                filters:
+                    branches:
+                        only: master
