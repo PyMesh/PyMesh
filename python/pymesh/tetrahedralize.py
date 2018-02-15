@@ -14,9 +14,9 @@ from time import time
 
 def tetrahedralize(mesh,
         cell_size,
-        radius_edge_ratio,
-        facet_distance,
-        feature_angle,
+        radius_edge_ratio=2.0,
+        facet_distance=-1.0,
+        feature_angle=120,
         engine="auto",
         with_timing=False):
     """ Create a tetrahedral mesh from input triangle mesh.
