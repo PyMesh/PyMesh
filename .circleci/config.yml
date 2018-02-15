@@ -47,10 +47,4 @@ workflows:
         jobs:
             - build
             - "py3.6"
-                filters:
-                    branches:
-                        only: master
             - "py2.7"
-                filters:
-                    branches:
-                        only: master
