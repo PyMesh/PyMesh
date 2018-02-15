@@ -24,9 +24,18 @@ jobs:
                     cd ../../build
                     cmake .. && make
                     make all_tests
+    "py3.6":
+        machine: true
+        steps:
+            - checkout
+            - run: |
+                docker login -u $DOCKER_USER -p $DOCKER_PASS
+                docker build -t qnzhou/pymesh:py3.6 docker/py3.6
+                docker push qnzhou/pymesh:py3.6
 
 workflows:
     version: 2
     build_and_test:
         jobs:
             - build
+            - "py3.6"
