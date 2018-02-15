@@ -26,12 +26,26 @@ jobs:
                     make all_tests
     "py3.6":
         machine: true
+        branches:
+            only:
+                - master
         steps:
             - checkout
             - run: |
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 docker build -t qnzhou/pymesh:py3.6 docker/py3.6
                 docker push qnzhou/pymesh:py3.6
+    "py2.7":
+        machine: true
+        branches:
+            only:
+                - master
+        steps:
+            - checkout
+            - run: |
+                docker login -u $DOCKER_USER -p $DOCKER_PASS
+                docker build -t qnzhou/pymesh:py2.7 docker/py2.7
+                docker push qnzhou/pymesh:py2.7
 
 workflows:
     version: 2
@@ -39,3 +53,4 @@ workflows:
         jobs:
             - build
             - "py3.6"
+            - "py2.7"
