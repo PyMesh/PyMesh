@@ -56,7 +56,7 @@ void DegeneratedTriangleRemoval::init_ori_face_indices() {
 
 size_t DegeneratedTriangleRemoval::remove_zero_edges() {
     ShortEdgeRemoval remover(m_vertices, m_faces);
-    size_t num_removed = remover.run(0.0);
+    const size_t num_removed = remover.run(std::numeric_limits<Float>::epsilon());
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
 
@@ -208,11 +208,11 @@ size_t DegeneratedTriangleRemoval::find_longest_edge(size_t fi) const {
     const auto& v1 = m_vertices.row(f[1]);
     const auto& v2 = m_vertices.row(f[2]);
     size_t i = 0;
-    if (!(v0[0] == v1[0] || v0[0] == v2[0] || v1[0] == v2[0])) {
+    if (v0[0] != v1[0] || v0[0] != v2[0] || v1[0] != v2[0]) {
         i = 0;
-    } else if (!(v0[1] == v1[1] || v0[1] == v2[1] || v1[1] == v2[1])) {
+    } else if (v0[1] != v1[1] || v0[1] != v2[1] || v1[1] != v2[1]) {
         i = 1;
-    } else if (!(v0[2] == v1[2] || v0[2] == v2[2] || v1[2] == v2[2])) {
+    } else if (v0[2] != v1[2] || v0[2] != v2[2] || v1[2] != v2[2]) {
         i = 2;
     } else {
         // The triangle degenerates to a point, which should be removed prior to
@@ -235,6 +235,9 @@ size_t DegeneratedTriangleRemoval::find_longest_edge(size_t fi) const {
     std::cerr << f[0] << ": " << v0 << std::endl;
     std::cerr << f[1] << ": " << v1 << std::endl;
     std::cerr << f[2] << ": " << v2 << std::endl;
+    std::cerr << "|v0 - v1| = " << (v0-v1).norm() << std::endl;
+    std::cerr << "|v1 - v2| = " << (v1-v2).norm() << std::endl;
+    std::cerr << "|v2 - v0| = " << (v2-v0).norm() << std::endl;
     throw RuntimeError("Triangle contains an zero edge, report this bug");
 }
 
