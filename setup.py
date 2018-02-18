@@ -106,6 +106,7 @@ setup(
             "scripts/bbox.py",
             "scripts/box_gen.py",
             "scripts/boolean.py",
+            "scripts/carve.py",
             "scripts/convex_hull.py",
             "scripts/curvature.py",
             "scripts/distortion.py",
