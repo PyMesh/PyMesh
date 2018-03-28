@@ -2,6 +2,7 @@
 [![Build Status](https://travis-ci.org/qnzhou/PyMesh.svg?branch=master)](https://travis-ci.org/qnzhou/PyMesh)
 [![Documentation Status](https://readthedocs.org/projects/pymesh/badge/?version=latest)](http://pymesh.readthedocs.io/en/latest/?badge=latest)
 
+![PyMesh][teaser]
 
 ### About PyMesh ###
 
@@ -131,3 +132,5 @@ To check PyMesh is installed correctly, run the following python unit tests::
 
 Once again, make sure all unit tests are passed, and report any unit test
 failures.
+
+[teaser]: pymesh_teaser.png
