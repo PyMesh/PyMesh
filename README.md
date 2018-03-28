@@ -17,6 +17,25 @@ for create minimalistic and easy to use interfaces.
 
 [Latest documentation](http://pymesh.readthedocs.org/en/latest/)
 
+### Quick try ###
+
+Perhaps the easiest way of trying out PyMesh is through
+[docker](https://www.docker.com/):
+
+    docker run -it qnzhou/pymesh
+    Python 3.6.4 (default, Feb 17 2018, 09:32:33)
+    [GCC 4.9.2] on linux
+    Type "help", "copyright", "credits" or "license" for more information.
+    >>> import pymesh
+
+For example, to run [meshstat.py](scripts/meshstat.py):
+
+    docker run -it --rm -v `pwd`:/models qnzhou/pymesh meshstat.py -x /models/model.obj
+
+This command mounts your currect working directory to the `/models` directory
+in a docker container and executes the `meshstat.py` script on the mesh file
+`model.obj` in the currect directory.
+
 ### Download Source ###
 
 To retrieve the code:
@@ -24,13 +43,6 @@ To retrieve the code:
     git clone https://github.com/qnzhou/PyMesh.git
     cd PyMesh
     git submodule update --init
-
-Be sure to save the root directory of PyMesh in the environment variable
-PYMESH_PATH:
-
-    export PYMESH_PATH=/path/to/PyMesh/
-
-Unit tests relies on this environment variable to load relevant libraries.
 
 ### Dependencies ###
 
@@ -40,13 +52,12 @@ PyMesh depends on the following tools/libraries:
 * [NumPy](http://www.numpy.org/) v1.8 or higher
 * [SciPy](http://www.scipy.org/) v0.13 or higher
 * [nose](http://nose.readthedocs.io/en/latest/) v1.3.7 or higher
-* [SWIG](http://www.swig.org/) v3.0.5 or higher
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) v3.2 or higher
 
 Optional library:
 
 * [SparseHash](https://code.google.com/p/sparsehash/)
-* [CGAL](https://www.cgal.org/)
+* [CGAL](https://www.cgal.org/) *
 * [tetgen](http://wias-berlin.de/software/tetgen/) *
 * [libigl](http://igl.ethz.ch/projects/libigl/) *
 * [cork](https://github.com/gilbo/cork) *
@@ -82,6 +93,7 @@ variables:
 
 ### Build ###
 
+Let `$PYMESH_PATH` be the root directory of the repository.
 The first step is to compile the optional third party dependencies:
 
     cd $PYMESH_PATH/third_party
@@ -101,20 +113,10 @@ Now we can build the main project.  It is recommended to build out of source:
     cd build
     cmake ..
 
-To only build the C++ libraries without the swig python modules, change the last
-command to
-
-    cmake -DWITHOUT_SWIG=ON ..
-
-To build the main PyMesh library:
+To build the PyMesh library:
 
     make
-    make src_tests
-
-To build all available tools:
-
-    make tools
-    make tools_tests
+    make all_tests
 
 Make sure all unit tests are passed before using the library.
 
