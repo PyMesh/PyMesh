@@ -2,8 +2,6 @@
 [![Build Status](https://travis-ci.org/qnzhou/PyMesh.svg?branch=master)](https://travis-ci.org/qnzhou/PyMesh)
 [![Documentation Status](https://readthedocs.org/projects/pymesh/badge/?version=latest)](http://pymesh.readthedocs.io/en/latest/?badge=latest)
 
-![PyMesh][teaser]
-
 ### About PyMesh ###
 
 **PyMesh** is a code base developed by Qingnan Zhou for his PhD research at New
@@ -11,6 +9,9 @@ York University.  It is a rapid prototyping platform focused on geometry
 processing.  **PyMesh** is written using both C++ and python, where
 computational intensive functionalities are realized in C++, and Python is used
 for create minimalistic and easy to use interfaces.
+
+![PyMesh][teaser]
+(Model source: [Bust of Sappho](https://www.thingiverse.com/thing:14565))
 
 ### Documentation ###
 
