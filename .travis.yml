@@ -19,7 +19,7 @@ matrix:
         - brew unlink python
         - brew install python
       install:
-        - pip install -r python/requirements.txt
+        - pip3 install -r python/requirements.txt
         - git submodule update --init
         - mkdir third_party/build
         - cd third_party/build
