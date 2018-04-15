@@ -24,7 +24,7 @@ def extract_submesh_surface(mesh, face_indices, n_ring):
     faces = mesh.faces[selected_faces];
     ring_index = (ring_index[selected_faces] - n_ring - 1) * (-1);
 
-    vertices, faces, __ = remove_isolated_vertices_raw(vertices, faces);
+    vertices, faces, info = remove_isolated_vertices_raw(vertices, faces);
     out_mesh = form_mesh(vertices, faces);
     out_mesh.add_attribute("ori_face_index");
     out_mesh.set_attribute("ori_face_index", selected_face_indices);
