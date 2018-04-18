@@ -21,7 +21,7 @@ Download the Source
 
 The source code can be checked out from GitHub::
 
-    git clone git@github.com:qnzhou/PyMesh.git
+    git clone https://github.com/qnzhou/PyMesh.git
     cd PyMesh
     git submodule update --init
 
