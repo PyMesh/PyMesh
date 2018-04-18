@@ -47,9 +47,6 @@ namespace OBJWriterHelper {
                 << vertex_per_face << " vertices." << std::endl;
             throw RuntimeError(err_msg.str());
         }
-        if (uv_indices.size() % 2 != 0) {
-            throw IOError("Invalid texture coordinates.");
-        }
         const size_t num_faces = faces.size() / vertex_per_face;
         const size_t num_uvs = uv_indices.size() / 2;
         if (num_uvs == 0) {

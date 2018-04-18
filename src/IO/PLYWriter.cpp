@@ -112,6 +112,8 @@ void PLYWriter::regroup_attribute_names(Mesh& mesh) {
             m_face_attr_names.push_back(name);
         } else if (name.substr(0, 5) == "voxel" && num_voxels > 0 && attr_size % num_voxels== 0) {
             m_voxel_attr_names.push_back(name);
+        } else if (name == "corner_texture" && num_faces > 0 && attr_size % num_faces == 0) {
+            m_face_attr_names.push_back(name);
         } else {
             // Use cardinality to determine attribute type.
             if (num_vertices > 0 && attr_size % num_vertices == 0) {
@@ -169,7 +171,7 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
 
     for (NameArray::const_iterator itr = m_face_attr_names.begin();
             itr != m_face_attr_names.end(); itr++) {
-        const std::string name = strip_prefix(*itr, "face_");
+        std::string name = strip_prefix(*itr, "face_");
         const VectorF& attr = mesh.get_attribute(*itr);
         const size_t per_face_size = attr.size() / num_faces;
         e_ply_type ply_type = m_scalar;
@@ -180,6 +182,9 @@ void PLYWriter::add_face_elements_header(Mesh& mesh, p_ply& ply) {
             assert_success(ply_add_scalar_property(ply, name.c_str(), ply_type),
                     "Add per face scalar attribute failed");
         } else {
+            if (name == "corner_texture") {
+                name = "texcoord";
+            }
             assert_success(ply_add_list_property(ply, name.c_str(), PLY_UCHAR,
                         ply_type), "Add per face vector attribute failed");
         }
