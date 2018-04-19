@@ -7,6 +7,7 @@ from .attribute_utils import convert_to_voxel_attribute_from_name
 from .collapse_short_edges import collapse_short_edges
 from .collapse_short_edges import collapse_short_edges_raw
 from .generate_box_mesh import generate_box_mesh
+from .generate_cylinder import generate_cylinder
 from .generate_dodecahedron import generate_dodecahedron
 from .generate_icosphere import generate_icosphere
 from .generate_regular_tetrahedron import generate_regular_tetrahedron
@@ -43,6 +44,7 @@ __all__ = [
         "collapse_short_edges",
         "collapse_short_edges_raw",
         "generate_box_mesh",
+        "generate_cylinder",
         "generate_dodecahedron",
         "generate_icosphere",
         "generate_regular_tetrahedron",
