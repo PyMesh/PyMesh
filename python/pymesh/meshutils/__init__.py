@@ -10,6 +10,7 @@ from .generate_box_mesh import generate_box_mesh
 from .generate_cylinder import generate_cylinder
 from .generate_dodecahedron import generate_dodecahedron
 from .generate_icosphere import generate_icosphere
+from .generate_tube import generate_tube
 from .generate_regular_tetrahedron import generate_regular_tetrahedron
 from .hex_to_tet import hex_to_tet
 from .quad_to_tri import quad_to_tri
@@ -47,6 +48,7 @@ __all__ = [
         "generate_cylinder",
         "generate_dodecahedron",
         "generate_icosphere",
+        "generate_tube",
         "generate_regular_tetrahedron",
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
