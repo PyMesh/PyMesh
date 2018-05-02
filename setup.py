@@ -86,6 +86,7 @@ setup(
         author = "Qingnan Zhou",
         author_email = "qnzhou@gmail.com",
         license = "MPL",
+        zip_safe = False,
         package_dir = {"": "python"},
         packages = ["pymesh", "pymesh.misc", "pymesh.meshutils", "pymesh.wires",
             "pymesh.tests", "pymesh.meshutils.tests", "pymesh.wires.tests"],
