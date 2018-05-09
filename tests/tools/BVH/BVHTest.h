@@ -30,7 +30,9 @@ class BVHTest : public TestBase {
         }
 
         void assert_centroid_has_zero_dist(MeshPtr mesh,
-                typename BVHEngine::Ptr bvh, const Float tol=1.0e-12) {
+                typename BVHEngine::Ptr bvh,
+                bool reordered=false,
+                const Float tol=1.0e-12) {
             const size_t num_faces = mesh->get_num_faces();
 
             mesh->add_attribute("face_centroid");
@@ -50,7 +52,9 @@ class BVHTest : public TestBase {
             ASSERT_EQ(num_faces, closest_points.rows());
 
             for (size_t i=0; i<num_faces; i++) {
-                ASSERT_EQ(i, face_indices[i]);
+                if (!reordered) {
+                    ASSERT_EQ(i, face_indices[i]);
+                }
                 ASSERT_NEAR(0.0,
                         (centroids.row(i) - closest_points.row(i)).squaredNorm(), tol);
                 ASSERT_NEAR(0.0, distances[i], tol);
@@ -58,7 +62,9 @@ class BVHTest : public TestBase {
         }
 
         void assert_vertex_has_zero_dist(MeshPtr mesh,
-                typename BVHEngine::Ptr bvh, const Float tol=1.0e-12) {
+                typename BVHEngine::Ptr bvh,
+                bool reordered=false,
+                const Float tol=1.0e-12) {
             const size_t dim = mesh->get_dim();
             const size_t num_vertices = mesh->get_num_vertices();
 
@@ -79,7 +85,9 @@ class BVHTest : public TestBase {
 
             for (size_t i=0; i<num_vertices; i++) {
                 const auto f = mesh->get_face(face_indices[i]);
-                ASSERT_TRUE(f[0] == i || f[1] == i || f[2] == i);
+                if (!reordered) {
+                    ASSERT_TRUE(f[0] == i || f[1] == i || f[2] == i);
+                }
                 ASSERT_NEAR(0.0,
                         (vertices.row(i) - closest_points.row(i)).squaredNorm(), tol);
                 ASSERT_NEAR(0.0, distances[i], tol);
@@ -128,7 +136,8 @@ class BVHTest : public TestBase {
             ASSERT_FLOAT_EQ(0.0, closest_points(2, 2));
         }
 
-        void hinge_test(typename BVHEngine::Ptr bvh) {
+        void hinge_test(typename BVHEngine::Ptr bvh, bool reordered=false,
+                const Float tol=1e-12) {
             MatrixFr vertices(6, 3);
             vertices << 0.0, 0.0, 0.0,
                      0.0, 0.0, 1.0,
@@ -164,54 +173,68 @@ class BVHTest : public TestBase {
                 const auto& p = queries.row(i);
                 if (p[0] >= 0.0 && p[1] >= 0.0) {
                     // 1st quadrant.
-                    ASSERT_FLOAT_EQ(1.0, distances[i]);
-                    ASSERT_TRUE(face_indices[i] == 0 || face_indices[i] == 1);
-                    ASSERT_FLOAT_EQ(0.0, closest_points(i, 0));
-                    ASSERT_FLOAT_EQ(0.0, closest_points(i, 1));
-                    ASSERT_FLOAT_EQ(0.5, closest_points(i, 2));
+                    ASSERT_NEAR(1.0, distances[i], tol);
+                    if (!reordered) {
+                        ASSERT_TRUE(face_indices[i] == 0 || face_indices[i] == 1);
+                    }
+                    ASSERT_NEAR(0.0, closest_points(i, 0), tol);
+                    ASSERT_NEAR(0.0, closest_points(i, 1), tol);
+                    ASSERT_NEAR(0.5, closest_points(i, 2), tol);
                 } else if (p[1] >= 0.0) {
                     // 2nd quadrant.
-                    ASSERT_FLOAT_EQ(p[1]*p[1], distances[i]);
-                    if (std::abs(p[0]) < 0.5) {
-                        ASSERT_EQ(0, face_indices[i]);
-                    } else if (std::abs(p[0]) > 0.5) {
-                        ASSERT_EQ(2, face_indices[i]);
-                    } else {
-                        ASSERT_TRUE(face_indices[i] == 0 || face_indices[i] == 2);
+                    ASSERT_NEAR(p[1]*p[1], distances[i], tol);
+                    if (!reordered) {
+                        if (std::abs(p[0]) < 0.5) {
+                            ASSERT_EQ(0, face_indices[i]);
+                        } else if (std::abs(p[0]) > 0.5) {
+                            ASSERT_EQ(2, face_indices[i]);
+                        } else {
+                            ASSERT_TRUE(face_indices[i] == 0 ||
+                                    face_indices[i] == 2);
+                        }
                     }
-                    ASSERT_FLOAT_EQ(p[0], closest_points(i, 0));
-                    ASSERT_FLOAT_EQ(0.0, closest_points(i, 1));
-                    ASSERT_FLOAT_EQ(0.5, closest_points(i, 2));
+                    ASSERT_NEAR(p[0], closest_points(i, 0), tol);
+                    ASSERT_NEAR(0.0, closest_points(i, 1), tol);
+                    ASSERT_NEAR(0.5, closest_points(i, 2), tol);
                 } else if (p[0] >= 0.0) {
                     // 4th quadrant.
-                    ASSERT_FLOAT_EQ(p[0]*p[0], distances[i]);
-                    if (std::abs(p[1]) < 0.5) {
-                        ASSERT_EQ(1, face_indices[i]);
-                    } else if (std::abs(p[1]) > 0.5) {
-                        ASSERT_EQ(3, face_indices[i]);
-                    } else {
-                        ASSERT_TRUE(face_indices[i] == 1 || face_indices[i] == 3);
+                    ASSERT_NEAR(p[0]*p[0], distances[i], tol);
+                    if (!reordered) {
+                        if (std::abs(p[1]) < 0.5) {
+                            ASSERT_EQ(1, face_indices[i]);
+                        } else if (std::abs(p[1]) > 0.5) {
+                            ASSERT_EQ(3, face_indices[i]);
+                        } else {
+                            ASSERT_TRUE(face_indices[i] == 1 || face_indices[i] == 3);
+                        }
                     }
-                    ASSERT_FLOAT_EQ(0.0, closest_points(i, 0));
-                    ASSERT_FLOAT_EQ(p[1], closest_points(i, 1));
-                    ASSERT_FLOAT_EQ(0.5, closest_points(i, 2));
+                    ASSERT_NEAR(0.0, closest_points(i, 0), tol);
+                    ASSERT_NEAR(p[1], closest_points(i, 1), tol);
+                    ASSERT_NEAR(0.5, closest_points(i, 2), tol);
                 } else {
                     // 3rd quadrant.
                     if (std::abs(p[0]) > std::abs(p[1])) {
-                        ASSERT_FLOAT_EQ(p[1]*p[1], distances[i]);
-                        ASSERT_EQ(2, face_indices[i]);
-                        ASSERT_FLOAT_EQ(p[0], closest_points(i, 0));
-                        ASSERT_FLOAT_EQ(0.0, closest_points(i, 1));
-                        ASSERT_FLOAT_EQ(0.5, closest_points(i, 2));
+                        ASSERT_NEAR(p[1]*p[1], distances[i], tol);
+                        if (!reordered) {
+                            ASSERT_EQ(2, face_indices[i]);
+                        }
+                        ASSERT_NEAR(p[0], closest_points(i, 0), tol);
+                        ASSERT_NEAR(0.0, closest_points(i, 1), tol);
+                        ASSERT_NEAR(0.5, closest_points(i, 2), tol);
                     } else if (std::abs(p[0]) < std::abs(p[1])) {
-                        ASSERT_FLOAT_EQ(p[0]*p[0], distances[i]);
-                        ASSERT_EQ(3, face_indices[i]);
-                        ASSERT_FLOAT_EQ(0.0, closest_points(i, 0));
-                        ASSERT_FLOAT_EQ(p[1], closest_points(i, 1));
-                        ASSERT_FLOAT_EQ(0.5, closest_points(i, 2));
+                        ASSERT_NEAR(p[0]*p[0], distances[i], tol);
+                        if (!reordered) {
+                            ASSERT_EQ(3, face_indices[i]);
+                        }
+                        ASSERT_NEAR(0.0, closest_points(i, 0), tol);
+                        ASSERT_NEAR(p[1], closest_points(i, 1), tol);
+                        ASSERT_NEAR(0.5, closest_points(i, 2), tol);
                     } else {
-                        ASSERT_TRUE(face_indices[i] == 2 || face_indices[i] == 3);
-                        ASSERT_FLOAT_EQ(p[0]*p[0], distances[i]);
+                        if (!reordered) {
+                            ASSERT_TRUE(face_indices[i] == 2 ||
+                                    face_indices[i] == 3);
+                        }
+                        ASSERT_NEAR(p[0]*p[0], distances[i], tol);
                     }
                 }
             }
@@ -251,14 +274,14 @@ TEST_F(BVHTest, geogram_aabb) {
     auto bvh = BVHEngine::create("geogram");
     ASSERT_TRUE(bool(bvh));
     init_bvh(mesh, bvh);
-    assert_centroid_has_zero_dist(mesh, bvh);
-    assert_vertex_has_zero_dist(mesh, bvh);
+    assert_centroid_has_zero_dist(mesh, bvh, true);
+    assert_vertex_has_zero_dist(mesh, bvh, true);
 
     // Ensure resetting works.
     MeshPtr mesh2 = load_mesh("ball.msh");
     init_bvh(mesh2, bvh);
-    assert_centroid_has_zero_dist(mesh2, bvh);
-    assert_vertex_has_zero_dist(mesh2, bvh);
+    assert_centroid_has_zero_dist(mesh2, bvh, true);
+    assert_vertex_has_zero_dist(mesh2, bvh, true);
 }
 
 TEST_F(BVHTest, geogram_simple) {
@@ -268,7 +291,7 @@ TEST_F(BVHTest, geogram_simple) {
 
 TEST_F(BVHTest, geogram_hinge) {
     auto bvh = BVHEngine::create("geogram");
-    hinge_test(bvh);
+    hinge_test(bvh, true);
 }
 #endif
 

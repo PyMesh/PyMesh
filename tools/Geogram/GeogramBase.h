@@ -6,6 +6,7 @@
 #include <geogram/basic/common.h>
 #include <geogram/basic/command_line.h>
 #include <geogram/basic/command_line_args.h>
+#include <geogram/basic/logger.h>
 
 namespace PyMesh {
 
@@ -18,6 +19,8 @@ class GeogramBase {
         GeogramBase() {
             if (!m_initialized) {
                 GEO::initialize();
+                GEO::Logger::instance()->set_quiet(true);
+                GEO::Logger::instance()->unregister_all_clients();
                 m_initialized = true;
             }
         }
