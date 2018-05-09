@@ -79,4 +79,9 @@ IF (TARGET lib_tetrahedralization)
     LIST(APPEND TARGET_MODULE_TESTS tetrahedralization_tests)
 ENDIF (TARGET lib_tetrahedralization)
 
+IF (TARGET lib_bvh)
+    ADD_SUBDIRECTORY(BVH)
+    LIST(APPEND TARGET_MODULE_TESTS bvh_tests)
+ENDIF (TARGET lib_bvh)
+
 ADD_CUSTOM_TARGET(tools_tests DEPENDS ${TARGET_MODULE_TESTS})
