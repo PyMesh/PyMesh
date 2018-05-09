@@ -4,6 +4,8 @@
 #ifdef WITH_GEOGRAM
 
 #include <geogram/basic/common.h>
+#include <geogram/basic/command_line.h>
+#include <geogram/basic/command_line_args.h>
 
 namespace PyMesh {
 

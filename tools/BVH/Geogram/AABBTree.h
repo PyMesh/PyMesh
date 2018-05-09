@@ -3,6 +3,7 @@
 
 #include <Core/EigenTypedef.h>
 #include <BVH/BVHEngine.h>
+#include <Geogram/GeogramBase.h>
 
 #include <geogram/mesh/mesh.h>
 #include <geogram/mesh/mesh_AABB.h>
@@ -12,7 +13,7 @@
 namespace PyMesh {
 namespace Geogram {
 
-class AABBTree : public BVHEngine {
+class AABBTree : public BVHEngine, GeogramBase {
     public:
         using Ptr = std::shared_ptr<AABBTree>;
         using Tree = GEO::MeshFacetsAABB;

@@ -249,16 +249,16 @@ TEST_F(BVHTest, cgal_hinge) {
 TEST_F(BVHTest, geogram_aabb) {
     MeshPtr mesh = load_mesh("cube.obj");
     auto bvh = BVHEngine::create("geogram");
-    //ASSERT_TRUE(bool(bvh));
-    //init_bvh(mesh, bvh);
-    //assert_centroid_has_zero_dist(mesh, bvh);
-    //assert_vertex_has_zero_dist(mesh, bvh);
+    ASSERT_TRUE(bool(bvh));
+    init_bvh(mesh, bvh);
+    assert_centroid_has_zero_dist(mesh, bvh);
+    assert_vertex_has_zero_dist(mesh, bvh);
 
-    //// Ensure resetting works.
-    //MeshPtr mesh2 = load_mesh("ball.msh");
-    //init_bvh(mesh2, bvh);
-    //assert_centroid_has_zero_dist(mesh2, bvh);
-    //assert_vertex_has_zero_dist(mesh2, bvh);
+    // Ensure resetting works.
+    MeshPtr mesh2 = load_mesh("ball.msh");
+    init_bvh(mesh2, bvh);
+    assert_centroid_has_zero_dist(mesh2, bvh);
+    assert_vertex_has_zero_dist(mesh2, bvh);
 }
 
 TEST_F(BVHTest, geogram_simple) {
