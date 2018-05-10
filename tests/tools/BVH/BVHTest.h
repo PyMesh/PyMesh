@@ -295,4 +295,31 @@ TEST_F(BVHTest, geogram_hinge) {
 }
 #endif
 
+#if WITH_IGL
+TEST_F(BVHTest, igl_aabb) {
+    MeshPtr mesh = load_mesh("cube.obj");
+    auto bvh = BVHEngine::create("igl");
+    ASSERT_TRUE(bool(bvh));
+    init_bvh(mesh, bvh);
+    assert_centroid_has_zero_dist(mesh, bvh, true);
+    assert_vertex_has_zero_dist(mesh, bvh, true);
+
+    // Ensure resetting works.
+    MeshPtr mesh2 = load_mesh("ball.msh");
+    init_bvh(mesh2, bvh);
+    assert_centroid_has_zero_dist(mesh2, bvh, true);
+    assert_vertex_has_zero_dist(mesh2, bvh, true);
+}
+
+TEST_F(BVHTest, igl_simple) {
+    auto bvh = BVHEngine::create("igl");
+    simple_triangle_test(bvh);
+}
+
+TEST_F(BVHTest, igl_hinge) {
+    auto bvh = BVHEngine::create("igl");
+    hinge_test(bvh, true);
+}
+#endif
+
 
