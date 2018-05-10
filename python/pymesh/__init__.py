@@ -39,7 +39,7 @@ from .tetrahedralize import tetrahedralize
 from .matrixio import load_matrix, save_matrix
 from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
-from .aabb_tree import AABBTree, distance_to_mesh, do_intersect
+from .aabb_tree import AABBTree, BVH, distance_to_mesh, do_intersect
 from .triangle import triangle
 from .tetgen import tetgen
 from .triangulate import triangulate_beta

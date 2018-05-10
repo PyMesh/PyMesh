@@ -34,6 +34,7 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     lib_convex_hull
     lib_self_intersection
     lib_boolean
+    lib_bvh
     lib_outer_hull
     lib_SparseSolver
     lib_tetrahedralization
