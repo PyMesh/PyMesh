@@ -10,11 +10,10 @@
 
 namespace PyMesh {
 namespace GeogramMeshUtils {
-    using GeoMesh = GEO::Mesh;
-    using GeoMeshPtr = std::shared_ptr<GeoMesh>;
 
-    GeoMeshPtr form_mesh(const Mesh::Ptr mesh);
-    GeoMeshPtr form_mesh(const MatrixFr& vertices, const MatrixIr& faces);
+GeoMeshPtr mesh_to_geomesh(const Mesh::Ptr mesh);
+GeoMeshPtr raw_to_geomesh(const MatrixFr& vertices, const MatrixIr& faces);
+Mesh::Ptr geomesh_to_mesh(const GeoMeshPtr geo_mesh);
 
 }
 }

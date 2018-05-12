@@ -18,8 +18,6 @@ class AABBTree : public BVHEngine, GeogramBase {
         using Ptr = std::shared_ptr<AABBTree>;
         using Tree = GEO::MeshFacetsAABB;
         using TreePtr = std::shared_ptr<Tree>;
-        using GeoMesh = GEO::Mesh;
-        using GeoMeshPtr = std::shared_ptr<GeoMesh>;
 
     public:
         virtual ~AABBTree() = default;

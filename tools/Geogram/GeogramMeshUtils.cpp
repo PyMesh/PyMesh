@@ -2,11 +2,12 @@
 
 #include "GeogramMeshUtils.h"
 #include <Core/Exception.h>
+#include <MeshFactory.h>
 #include "GeogramBase.h"
 
 using namespace PyMesh;
 
-GeogramMeshUtils::GeoMeshPtr GeogramMeshUtils::form_mesh(const Mesh::Ptr mesh) {
+GeoMeshPtr GeogramMeshUtils::mesh_to_geomesh(const Mesh::Ptr mesh) {
     const size_t dim = mesh->get_dim();
     const size_t vertex_per_face = mesh->get_vertex_per_face();
     const size_t num_vertices = mesh->get_num_vertices();
@@ -41,7 +42,7 @@ GeogramMeshUtils::GeoMeshPtr GeogramMeshUtils::form_mesh(const Mesh::Ptr mesh) {
     return geo_mesh;
 }
 
-GeogramMeshUtils::GeoMeshPtr GeogramMeshUtils::form_mesh(
+GeoMeshPtr GeogramMeshUtils::raw_to_geomesh(
         const MatrixFr& vertices, const MatrixIr& faces) {
     const size_t dim = vertices.cols();
     const size_t vertex_per_face = faces.cols();
@@ -73,5 +74,49 @@ GeogramMeshUtils::GeoMeshPtr GeogramMeshUtils::form_mesh(
     }
 
     return geo_mesh;
+}
+
+Mesh::Ptr GeogramMeshUtils::geomesh_to_mesh(const GeoMeshPtr geo_mesh) {
+    constexpr size_t dim = 3;
+    const size_t num_vertices = geo_mesh->vertices.nb();
+    const size_t num_faces = geo_mesh->facets.nb();
+    const size_t num_voxels = geo_mesh->cells.nb();
+
+    const size_t vertex_per_face =
+        num_faces > 0 ? geo_mesh->facets.nb_vertices(0) : 3;
+    const size_t vertex_per_voxel =
+        num_voxels > 0 ? geo_mesh->cells.nb_vertices(0) : 4;
+
+    VectorF vertices(num_vertices * dim);
+    VectorI faces(num_faces * vertex_per_face);
+    VectorI voxels(num_voxels * vertex_per_voxel);
+
+    for (size_t i=0; i<num_vertices; i++) {
+        const auto& v = geo_mesh->vertices.point(i);
+        vertices[i*3]   = v[0];
+        vertices[i*3+1] = v[1];
+        vertices[i*3+2] = v[2];
+    }
+    for (size_t i=0; i<num_faces; i++) {
+        if (geo_mesh->facets.nb_vertices(i) != vertex_per_face) {
+            throw NotImplementedError("Mixed faces detected in Geogram."
+                    " It is not supported by Pymesh");
+        }
+        for (size_t j=0; j<vertex_per_face; j++) {
+            faces[i*vertex_per_face+j] = geo_mesh->facets.vertex(i, j);
+        }
+    }
+    for (size_t i=0; i<num_voxels; i++) {
+        if (geo_mesh->cells.nb_vertices(i) != vertex_per_voxel) {
+            throw NotImplementedError("Mixed cells detected in Geogram."
+                    " It is not supported by Pymesh");
+        }
+        for (size_t j=0; j<vertex_per_voxel; j++) {
+            voxels[i*vertex_per_voxel+j] = geo_mesh->cells.vertex(i, j);
+        }
+    }
+
+    return MeshFactory().load_data(vertices, faces, voxels,
+                dim, vertex_per_face, vertex_per_voxel).create();
 }
 

@@ -8,7 +8,7 @@ using namespace PyMesh;
 void PyMesh::Geogram::AABBTree::build() {
     constexpr bool REORDER = true; // Reorder seems to influence the results.
 
-    m_geo_mesh = GeogramMeshUtils::form_mesh(m_vertices, m_faces);
+    m_geo_mesh = GeogramMeshUtils::raw_to_geomesh(m_vertices, m_faces);
     m_tree = std::make_shared<Tree>(*m_geo_mesh, REORDER);
 }
 
