@@ -15,6 +15,8 @@ def load_mesh(filename, drop_zero_dim=False):
     Returns:
         A :py:class:`Mesh` object representing the loaded mesh.
     """
+    if os.path.splitext(filename)[1] == ".geogram":
+        return Mesh(PyMesh.load_geogram_mesh(filename));
     if not os.path.exists(filename):
         raise IOError("File not found: {}".format(filename));
     factory = PyMesh.MeshFactory();
@@ -162,6 +164,9 @@ def save_mesh(filename, mesh, *attributes, **setting):
         >>> box = pymesh.generate_box_mesh();
         >>> pymesh.save_mesh("tmp.stl", box, ascii=True);
     """
+    if os.path.splitext(filename)[1] == ".geogram":
+        PyMesh.save_geogram_mesh(filename, mesh.raw_mesh);
+        return;
     writer = PyMesh.MeshWriter.create(filename);
     for attr in attributes:
         if not mesh.has_attribute(attr):

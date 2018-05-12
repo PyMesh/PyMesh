@@ -6,6 +6,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyConvexHull.cpp
     PyDMAT.cpp
     PyFEM.cpp
+    PyGeogram.cpp
     PyHashGrid.cpp
     PyIGL.cpp
     PyMeshUtils.cpp
@@ -29,6 +30,7 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     lib_assembler
     lib_MeshUtils
     cgal_wrapper
+    geogram
     lib_igl
     lib_predicates
     lib_convex_hull
@@ -42,9 +44,6 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     lib_triangulation
     lib_winding_number
     lib_wires)
-TARGET_INCLUDE_DIRECTORIES(PyMesh SYSTEM PUBLIC
-    ${PROJECT_SOURCE_DIR}/src
-    ${PROJECT_SOURCE_DIR}/tools)
 TARGET_INCLUDE_DIRECTORIES(PyMesh SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/tools

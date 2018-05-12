@@ -1,8 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
 
-#ifdef WITH_GEOGRAM
-
 #include <geogram/basic/common.h>
 #include <geogram/basic/command_line.h>
 #include <geogram/basic/command_line_args.h>
@@ -39,5 +37,3 @@ class GeogramBase {
 };
 
 }
-
-#endif
