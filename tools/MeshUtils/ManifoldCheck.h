@@ -8,7 +8,10 @@
 #include "EdgeUtils.h"
 
 namespace PyMesh {
+namespace ManifoldCheck {
 
-VectorI detect_nonmanifold_vertices(const MatrixIr& faces);
+VectorI is_vertex_manifold(const MatrixIr& faces);
+MatrixIr is_edge_manifold(const MatrixIr& faces);
 
+}
 }

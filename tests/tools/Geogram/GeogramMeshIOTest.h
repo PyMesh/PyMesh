@@ -60,7 +60,7 @@ TEST_F(GeogramMeshIOTest, tet) {
 /**
  * Geogram (v1.6.3) crashes when loading zero vertices.
  */
-TEST_F(GeogramMeshIOTest, DISABLED_empty) {
+TEST_F(GeogramMeshIOTest, empty) {
     MeshPtr mesh = load_mesh("empty.msh");
     auto geo_mesh = GeogramMeshUtils::mesh_to_geomesh(mesh);
     auto geo_mesh_2 = write_and_load("empty.geogram", geo_mesh);

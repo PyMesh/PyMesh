@@ -1,9 +1,10 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
-#include "detect_nonmanifold_vertices.h"
+#include "ManifoldCheck.h"
+#include "EdgeUtils.h"
 
 using namespace PyMesh;
 
-VectorI PyMesh::detect_nonmanifold_vertices(
+VectorI ManifoldCheck::is_vertex_manifold(
         const MatrixIr& faces) {
     const size_t num_faces = faces.rows();
     if (num_faces == 0) return VectorI(0);
@@ -49,6 +50,22 @@ VectorI PyMesh::detect_nonmanifold_vertices(
             is_manifold[i] = edge_loops.size() == 1;
         } catch (...) {
             is_manifold[i] = 0;
+        }
+    }
+    return is_manifold;
+}
+
+MatrixIr ManifoldCheck::is_edge_manifold(const MatrixIr& faces) {
+    const size_t num_faces = faces.rows();
+    const size_t vertex_per_face = faces.cols();
+    auto edge_map = EdgeUtils::compute_edge_face_adjacency(faces);
+    MatrixIr is_manifold(num_faces, vertex_per_face);
+    for (size_t i=0; i<num_faces; i++) {
+        for (size_t j=0; j<vertex_per_face; j++) {
+            const auto itr = edge_map.find(
+                    Triplet(faces(i,j), faces(i,(j+1)%vertex_per_face)));
+            assert(itr != edge_map.end());
+            is_manifold(i,j) = itr->second.size() > 2 ? 0 : 1;
         }
     }
     return is_manifold;

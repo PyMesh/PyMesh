@@ -14,7 +14,7 @@
 #include "LongEdgeRemovalTest.h"
 #include "MeshCheckerTest.h"
 #include "MeshSeparatorTest.h"
-#include "NonmanifoldTest.h"
+#include "ManifoldCheckTest.h"
 #include "ObtuseTriangleRemovalTest.h"
 #include "PointLocatorTest.h"
 #include "ShortEdgeRemovalTest.h"
