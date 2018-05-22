@@ -291,7 +291,7 @@ TEST_F(BVHTest, geogram_simple) {
 
 TEST_F(BVHTest, geogram_hinge) {
     auto bvh = BVHEngine::create("geogram");
-    hinge_test(bvh, true);
+    hinge_test(bvh);
 }
 #endif
 
@@ -318,7 +318,7 @@ TEST_F(BVHTest, igl_simple) {
 
 TEST_F(BVHTest, igl_hinge) {
     auto bvh = BVHEngine::create("igl");
-    hinge_test(bvh, true);
+    hinge_test(bvh);
 }
 #endif
 
