@@ -46,29 +46,46 @@ To retrieve the code:
 
 ### Dependencies ###
 
-PyMesh depends on the following tools/libraries:
+PyMesh has the following required dependencies:
 
 * [Python](https://www.python.org/) v3.x.
 * [NumPy](http://www.numpy.org/) v1.8 or higher
 * [SciPy](http://www.scipy.org/) v0.13 or higher
 * [nose](http://nose.readthedocs.io/en/latest/) v1.3.7 or higher
+
+The following C++ libraries are required.  They are included in
+`$PYMESH_PATH/third_party` directory.
+
 * [Eigen](http://eigen.tuxfamily.org/index.php?title=Main_Page) v3.2 or higher
+* [PyBind11](https://github.com/pybind/pybind11)
 
-Optional library:
+PyMesh also has a number of optional dependencies:
 
-* [SparseHash](https://code.google.com/p/sparsehash/)
-* [CGAL](https://www.cgal.org/) *
-* [tetgen](http://wias-berlin.de/software/tetgen/) *
-* [libigl](http://igl.ethz.ch/projects/libigl/) *
-* [cork](https://github.com/gilbo/cork) *
-* [triangle](http://www.cs.cmu.edu/~quake/triangle.html) *
-* [qhull](http://www.qhull.org/) *
-* [Clipper](http://www.angusj.com/delphi/clipper.php) *
-* [Carve](https://github.com/qnzhou/carve) *
-* [GeoGram](http://alice.loria.fr/software/geogram/doc/html/index.html)
-* [Quartet](https://github.com/crawforddoran/quartet) *
+* [CGAL](https://www.cgal.org/) The Computational Geometry Algorithms Library.
+* [tetgen](http://wias-berlin.de/software/tetgen/) Tetrahedral mesh generation
+  engine.
+* [libigl](http://igl.ethz.ch/projects/libigl/) A simple C++ geometry processing
+  library.
+* [cork](https://github.com/gilbo/cork) A 3D boolean/CSG library.
+* [triangle](http://www.cs.cmu.edu/~quake/triangle.html) A Two-Dimensional
+  Quality Mesh Generator and Delaunay Triangulator.
+* [qhull](http://www.qhull.org/) Engine for convex hulls, Delaunay
+  triangulations, Voronoi diagrams computations.
+* [Clipper](http://www.angusj.com/delphi/clipper.php) An open source freeware
+  library for clipping and offsetting lines and polygons.
+* [Carve](https://github.com/qnzhou/carve) A fast, robust constructive solid
+  geometry library.
+* [Geogram](http://alice.loria.fr/software/geogram/doc/html/index.html) A
+  programming library of geometric algorithms
+* [Quartet](https://github.com/crawforddoran/quartet) A tetrahedral mesh
+  generator that does isosurface stuffing with an acute tetrahedral tile.
+* [MMG](https://www.mmgtools.org/) Robust, open source & multidisciplinary
+  software for remeshing.
+* [Draco](https://google.github.io/draco/) An open-source library for
+  compressing and decompressing 3D geometric meshes and point clouds
 
-Libraries marked with `*` are included in `$PYMESH_PATH/third_party` directory.
+All of the optional libraries are included in `$PYMESH_PATH/third_party`
+directory.
 
 ### Environment Variables ###
 
