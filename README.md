@@ -90,7 +90,7 @@ directory.
 ### Specify Dependency Locations ###
 
 All dependencies are included as git submodules in the `third_party` directory.
-It is recommended to build these dependencies directly (see (#Build) section).
+It is recommended to build these dependencies directly (see [Build](#Build) section).
 However, it is possible to use an existing dependency installed on your system.
 If the dependent library is not installed in standard locations
 (``/usr/local/``, ``/opt/local``), one needs to set environment variables that
