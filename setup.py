@@ -7,6 +7,7 @@ import os.path
 from setuptools import setup, Distribution
 from subprocess import check_call
 import shutil
+import platform
 
 root_dir = os.path.abspath(os.path.dirname(__file__));
 package_dir = os.path.join(root_dir, "python/pymesh");
@@ -67,7 +68,8 @@ class cmake_build(build):
             os.makedirs(build_dir);
 
         os.chdir(build_dir);
-        command = "cmake ..";
+        command = "cmake .. -DPythonLibsNew_FIND_VERSION={}".format(
+                platform.python_version());
         check_call(command.split());
         command = "make";
         check_call(command.split());
