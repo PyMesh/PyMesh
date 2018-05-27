@@ -48,3 +48,6 @@
 [submodule "third_party/geogram"]
 	path = third_party/geogram
 	url = https://github.com/qnzhou/geogram.git
+[submodule "third_party/draco"]
+	path = third_party/draco
+	url = https://github.com/qnzhou/draco.git

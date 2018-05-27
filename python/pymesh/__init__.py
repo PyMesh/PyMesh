@@ -19,6 +19,7 @@ from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
 from .Assembler import Assembler
 from .boolean import boolean
+from .compression import compress, decompress
 from .convex_hull import convex_hull
 from .CSGTree import CSGTree
 from .exact_arithmetic import Gmpz, Gmpq
@@ -85,6 +86,8 @@ __all__ = [
         "HarmonicSolver",
         "SparseSolver",
         "HashGrid",
+        "compress",
+        "decompress"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;

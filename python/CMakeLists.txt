@@ -3,6 +3,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyBoolean.cpp
     PyCellPartition.cpp
     PyCGAL.cpp
+    PyCompression.cpp
     PyConvexHull.cpp
     PyDMAT.cpp
     PyFEM.cpp
@@ -33,6 +34,7 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     geogram
     lib_igl
     lib_predicates
+    lib_compression
     lib_convex_hull
     lib_self_intersection
     lib_boolean

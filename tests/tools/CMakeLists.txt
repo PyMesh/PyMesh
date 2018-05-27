@@ -89,4 +89,9 @@ IF (TARGET geogram)
     LIST(APPEND TARGET_MODULE_TESTS geogram_tests)
 ENDIF (TARGET geogram)
 
+IF (TARGET lib_compression)
+    ADD_SUBDIRECTORY(Compression)
+    LIST(APPEND TARGET_MODULE_TESTS compression_tests)
+ENDIF (TARGET lib_compression)
+
 ADD_CUSTOM_TARGET(tools_tests DEPENDS ${TARGET_MODULE_TESTS})
