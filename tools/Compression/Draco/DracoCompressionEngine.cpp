@@ -63,6 +63,36 @@ std::unique_ptr<draco::Mesh> to_draco_mesh(Mesh::Ptr mesh) {
     return draco_mesh;
 }
 
+std::unique_ptr<draco::PointCloud> to_draco_point_cloud(Mesh::Ptr mesh) {
+    std::unique_ptr<draco::PointCloud> draco_mesh(new draco::PointCloud());
+
+    const size_t dim = mesh->get_dim();
+    const size_t num_vertices = mesh->get_num_vertices();
+    const size_t num_faces = mesh->get_num_faces();
+    assert(num_faces == 0);
+
+    draco_mesh->set_num_points(num_vertices);
+    draco::GeometryAttribute positions;
+    positions.Init(draco::GeometryAttribute::POSITION, // Attribute type
+            nullptr,                                   // data buffer
+            dim,                                       // number of components
+            draco::DT_FLOAT64,                         // data type
+            false,                                     // normalized
+            sizeof(Float) * dim,                       // byte stride
+            0);                                        // byte offset
+    auto pos_att_id = draco_mesh->AddAttribute(
+            positions,      // attribute object
+            true,           // identity mapping
+            num_vertices);  // num attribute values
+
+    for (int i = 0; i < num_vertices; ++i) {
+        draco_mesh->attribute(pos_att_id)->SetAttributeValue(
+                draco::AttributeValueIndex(i), mesh->get_vertex(i).data());
+    }
+
+    return draco_mesh;
+}
+
 Mesh::Ptr from_draco_mesh(std::unique_ptr<draco::Mesh> draco_mesh) {
     assert(draco_mesh);
     const auto num_vertices = draco_mesh->num_points();
@@ -116,14 +146,25 @@ Mesh::Ptr from_draco_point_cloud(std::unique_ptr<draco::PointCloud> draco_pc) {
 }
 
 std::string DracoCompressionEngine::compress(Mesh::Ptr mesh) const {
-    auto draco_mesh = DracoCompressionEngineHelper::to_draco_mesh(mesh);
+    const size_t num_faces = mesh->get_num_faces();
+
     draco::EncoderBuffer buffer;
     draco::Encoder encoder;
-    const auto status = encoder.EncodeMeshToBuffer(*draco_mesh, &buffer);
-    if (!status.ok()) {
-        throw RuntimeError("Draco encoding error!");
+    if (num_faces > 0) {
+        auto draco_mesh = DracoCompressionEngineHelper::to_draco_mesh(mesh);
+        const auto status = encoder.EncodeMeshToBuffer(*draco_mesh, &buffer);
+        if (!status.ok()) {
+            throw RuntimeError("Draco encoding error!");
+        }
+        return std::string(buffer.data(), buffer.size());
+    } else {
+        auto draco_mesh = DracoCompressionEngineHelper::to_draco_point_cloud(mesh);
+        const auto status = encoder.EncodePointCloudToBuffer(*draco_mesh, &buffer);
+        if (!status.ok()) {
+            throw RuntimeError("Draco encoding error!");
+        }
+        return std::string(buffer.data(), buffer.size());
     }
-    return std::string(buffer.data(), buffer.size());
 }
 
 Mesh::Ptr DracoCompressionEngine::decompress(const std::string& data) const {
@@ -148,9 +189,9 @@ Mesh::Ptr DracoCompressionEngine::decompress(const std::string& data) const {
         }
         return DracoCompressionEngineHelper::from_draco_mesh(std::move(in_mesh));
     } else if (geom_type == draco::POINT_CLOUD) {
-        auto statusor = decoder.DecodeMeshFromBuffer(&buffer);
+        auto statusor = decoder.DecodePointCloudFromBuffer(&buffer);
         if (!statusor.ok()) {
-            throw RuntimeError("Draco decoding from triangle mesh failed.");
+            throw RuntimeError("Draco decoding from point cloud failed.");
         }
         std::unique_ptr<draco::PointCloud> in_mesh = std::move(statusor).value();
         if (!in_mesh) {
