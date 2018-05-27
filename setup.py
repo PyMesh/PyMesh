@@ -125,6 +125,7 @@ setup(
             "scripts/hilbert_curve_gen.py",
             "scripts/icosphere_gen.py",
             "scripts/inflate.py",
+            "scripts/matrix_gen.py",
             "scripts/mean_curvature_flow.py",
             "scripts/merge.py",
             "scripts/mesh_diff.py",
