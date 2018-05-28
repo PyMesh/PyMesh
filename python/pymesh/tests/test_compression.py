@@ -69,3 +69,15 @@ class TestCompression(TestCase):
         self.assertEqual(mesh.num_vertices, mesh2.num_vertices);
         self.assertEqual(mesh.num_faces, mesh2.num_faces);
 
+    def test_attributes(self):
+        mesh = pymesh.generate_icosphere(1.0, np.zeros(3), 2);
+        mesh.add_attribute("vertex_normal");
+        mesh.add_attribute("face_normal");
+        data = pymesh.compress(mesh);
+        mesh2 = pymesh.decompress(data);
+
+        self.assertEqual(mesh.num_vertices, mesh2.num_vertices);
+        self.assertEqual(mesh.num_faces, mesh2.num_faces);
+        self.assert_array_almost_equal(mesh.bbox, mesh2.bbox);
+        self.assertTrue(mesh2.has_attribute("vertex_normal"));
+        self.assertTrue(mesh2.has_attribute("face_normal"));
