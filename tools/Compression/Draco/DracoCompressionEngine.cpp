@@ -57,30 +57,72 @@ void copy_faces(Mesh::Ptr mesh, std::unique_ptr<DracoMesh>& draco_mesh) {
 }
 
 template <typename DracoMesh>
-void copy_attributes(Mesh::Ptr mesh, std::unique_ptr<DracoMesh>& draco_mesh) {
+void copy_vertex_attributes(Mesh::Ptr mesh,
+        std::unique_ptr<DracoMesh>& draco_mesh) {
+    const auto num_vertices = mesh->get_num_vertices();
     const auto& attribute_names = mesh->get_attribute_names();
     for (const auto& name : attribute_names) {
         const auto& values = mesh->get_attribute(name);
-        const auto num_rows = values.rows();
-        const auto num_cols = values.cols();
+        if (values.size() % num_vertices != 0) continue;
+        const auto num_rows = num_vertices;
+        const auto num_cols = values.size() / num_vertices;
         draco::GeometryAttribute attr;
-        if (name == "vertex_normal" || name == "face_normal") {
+        if (name == "vertex_normal") {
             attr.Init(draco::GeometryAttribute::NORMAL, nullptr,
                     num_cols, draco::DT_FLOAT64, false,
                     sizeof(Float) * num_cols, 0);
-        } else if (name == "vertex_texture" || name == "corner_texture") {
+        } else if (name == "vertex_texture") {
             attr.Init(draco::GeometryAttribute::TEX_COORD, nullptr,
                     num_cols, draco::DT_FLOAT64, false,
                     sizeof(Float) * num_cols, 0);
-        } else {
+        } else if (name.substr(0, 6) == "vertex"){
             attr.Init(draco::GeometryAttribute::GENERIC, nullptr,
                     num_cols, draco::DT_FLOAT64, false,
                     sizeof(Float) * num_cols, 0);
+        } else {
+            // Not a vertex attribute.
+            continue;
         }
         const auto id = draco_mesh->AddAttribute(attr, true, num_rows);
         for (size_t i=0; i<num_rows; i++) {
             draco_mesh->attribute(id)->SetAttributeValue(
-                    draco::AttributeValueIndex(i), values.row(i).data());
+                    draco::AttributeValueIndex(i), values.data() +i*num_cols);
+        }
+
+        std::unique_ptr<draco::AttributeMetadata> metadata =
+            std::make_unique<draco::AttributeMetadata>();
+        metadata->AddEntryString("name", name);
+        draco_mesh->AddAttributeMetadata(id, std::move(metadata));
+    }
+}
+
+void copy_face_attributes(Mesh::Ptr mesh,
+        std::unique_ptr<draco::Mesh>& draco_mesh) {
+    const auto num_faces = mesh->get_num_faces();
+    const auto& attribute_names = mesh->get_attribute_names();
+    for (const auto& name : attribute_names) {
+        const auto& values = mesh->get_attribute(name);
+        if (values.size() % num_faces != 0) continue;
+        const auto num_rows = num_faces;
+        const auto num_cols = values.size() / num_faces;
+        draco::GeometryAttribute attr;
+        if (name == "face_normal") {
+            attr.Init(draco::GeometryAttribute::NORMAL, nullptr,
+                    num_cols, draco::DT_FLOAT64, false,
+                    sizeof(Float) * num_cols, 0);
+        } else if (name.substr(0, 4) == "face"){
+            attr.Init(draco::GeometryAttribute::GENERIC, nullptr,
+                    num_cols, draco::DT_FLOAT64, false,
+                    sizeof(Float) * num_cols, 0);
+        } else {
+            // Not a face attribute.
+            continue;
+        }
+        const auto id = draco_mesh->AddAttribute(attr, true, num_rows);
+        draco_mesh->SetAttributeElementType(id, draco::MESH_FACE_ATTRIBUTE);
+        for (size_t i=0; i<num_rows; i++) {
+            draco_mesh->attribute(id)->SetAttributeValue(
+                    draco::AttributeValueIndex(i), values.data() + i*num_cols);
         }
 
         std::unique_ptr<draco::AttributeMetadata> metadata =
@@ -104,7 +146,8 @@ std::unique_ptr<draco::Mesh> to_draco_mesh(Mesh::Ptr mesh,
     copy_faces(mesh, draco_mesh);
 
     if (with_attributes) {
-        copy_attributes(mesh, draco_mesh);
+        copy_vertex_attributes(mesh, draco_mesh);
+        //copy_face_attributes(mesh, draco_mesh);
     }
 
     return draco_mesh;
@@ -117,7 +160,7 @@ std::unique_ptr<draco::PointCloud> to_draco_point_cloud(Mesh::Ptr mesh,
     copy_vertices(mesh, draco_mesh);
 
     if (with_attributes) {
-        copy_attributes(mesh, draco_mesh);
+        copy_vertex_attributes(mesh, draco_mesh);
     }
 
     return draco_mesh;
