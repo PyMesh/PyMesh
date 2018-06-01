@@ -156,6 +156,7 @@ setup(
             "scripts/tet_boundary.py",
             "scripts/tet_to_hex.py",
             "scripts/triangulate.py",
+            "scripts/uv.py",
             "scripts/voxelize.py",
             ],
         url = "https://github.com/qnzhou/PyMesh",
