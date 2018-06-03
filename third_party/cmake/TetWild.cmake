@@ -67,7 +67,7 @@ set_target_properties(lib_tetwild PROPERTIES OUTPUT_NAME "TetWild")
 #add_executable(TetWild ${MAIN_FILE})
 #target_link_libraries(TetWild lib_tetwild)
 
-INSTALL(TARGETS lib_tetwild TetWild
+INSTALL(TARGETS lib_tetwild
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin)
