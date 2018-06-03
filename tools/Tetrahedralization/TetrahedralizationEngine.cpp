@@ -29,6 +29,10 @@
 #include "MMG/MMGEngine.h"
 #endif
 
+#if WITH_TETWILD
+#include "TetWild/TetWildEngine.h"
+#endif
+
 using namespace PyMesh;
 
 TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
@@ -68,6 +72,9 @@ TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
 #endif
 #if WITH_MMG
     if (engine_name == "mmg") { return Ptr(new MMGEngine); }
+#endif
+#if WITH_TETWILD
+    if (engine_name == "tetwild") { return Ptr(new TetWildEngine); }
 #endif
 
     std::stringstream err_msg;

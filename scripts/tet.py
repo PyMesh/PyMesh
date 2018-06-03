@@ -19,7 +19,8 @@ def parse_args():
                 "quartet",
                 "delpsc",
                 "vegafem",
-                "mmg"),
+                "mmg",
+                "tetwild"),
             default="tetgen");
     parser.add_argument("--radius-edge-ratio",
             help="Max radius to edge ratio",

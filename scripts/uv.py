@@ -28,6 +28,9 @@ def main():
     mesh.add_attribute("face_area");
 
     uv = mesh.get_attribute("corner_texture").reshape((-1, 2));
+    if len(uv) == 0:
+        raise RuntimeError("Invalid uv size.");
+
     faces = np.arange(mesh.num_faces * mesh.vertex_per_face).reshape(
             (-1, mesh.vertex_per_face));
     uv_mesh = pymesh.form_mesh(uv, faces);
