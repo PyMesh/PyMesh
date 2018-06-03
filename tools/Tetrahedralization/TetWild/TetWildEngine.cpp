@@ -25,6 +25,15 @@ void TetWildEngine::run() {
         F_in[i] = {m_faces(i,0), m_faces(i,1), m_faces(i,2)};
     }
 
+    const Vector3F bbox_min = m_vertices.colwise().minCoeff();
+    const Vector3F bbox_max = m_vertices.colwise().maxCoeff();
+    const Float diag = (bbox_max - bbox_min).norm();
+
+    tetwild::parameters.i_ideal_edge_length = diag /
+        (4.0 / sqrt(6.0) * m_cell_size);
+    tetwild::parameters.i_epsilon = diag / m_facet_distance;
+    tetwild::parameters.is_quiet = true;
+
     Points V_out;
     Tets T_out;
     tetwild::tetrahedralization(V_in, F_in, V_out, T_out);

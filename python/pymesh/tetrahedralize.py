@@ -46,6 +46,7 @@ def tetrahedralize(mesh,
               Slatton
             * ``vegafem``: Tet mesher provided by `VegaFEM`_ library.
             * ``mmg``: Implicit domain meshing from `MMG3D`_.
+            * ``tetwild``: `TetWild`_ engine based on our Siggraph paper.
         with_timing (``boolean``): whether to output timing info.
 
     Returns:
@@ -57,6 +58,7 @@ def tetrahedralize(mesh,
     .. _`DelPSC`: http://web.cse.ohio-state.edu/~dey.8/delpsc.html
     .. _`VegaFEM`: http://run.usc.edu/vega/
     .. _`MMG3D`: https://www.mmgtools.org/
+    .. _`TetWild`: https://github.com/Yixin-Hu/TetWild
     """
     logger = logging.getLogger(__name__);
     bbox_min, bbox_max = mesh.bbox;
