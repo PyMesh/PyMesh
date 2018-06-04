@@ -3,6 +3,9 @@
 #ifdef WITH_TETGEN
 #include "TetGen/TetGenEngineTest.h"
 #endif
+#ifdef WITH_TETWILD
+#include "TetWild/TetWildEngineTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

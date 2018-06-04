@@ -2,6 +2,7 @@
 #include "TetWildEngine.h"
 
 #include <array>
+#include <cassert>
 #include <vector>
 
 #include <tetwild.h>
@@ -31,7 +32,11 @@ void TetWildEngine::run() {
 
     tetwild::parameters.i_ideal_edge_length = diag /
         (4.0 / sqrt(6.0) * m_cell_size);
-    tetwild::parameters.i_epsilon = diag / m_facet_distance;
+    assert(tetwild::parameters.i_ideal_edge_length > 0.0);
+    if (m_facet_distance > 0) {
+        tetwild::parameters.i_epsilon = diag / m_facet_distance;
+        assert(tetwild::parameters.i_epsilon >= 0.0);
+    }
     tetwild::parameters.is_quiet = true;
 
     Points V_out;
