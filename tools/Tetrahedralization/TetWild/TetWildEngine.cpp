@@ -55,4 +55,5 @@ void TetWildEngine::run() {
         const auto& t = T_out[i];
         m_voxels.row(i) << t[0], t[1], t[2], t[3];
     }
+    m_faces.resize(0, 3);
 }
