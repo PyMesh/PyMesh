@@ -324,11 +324,83 @@ bool OBJParser::parse_face_line(char* line) {
         // N-gon detected, assuming it is convex and break it into triangles.
         std::cerr << num_idx_parsed << "-gon detected, converting to triangles"
             << std::endl;
-        for (size_t i=1; i<num_idx_parsed-1; i++) {
-            m_tris.push_back(Vector3I(idx[0], idx[i], idx[i+1]));
-        }
+        earclip(idx);
     }
     return true;
+}
+
+void OBJParser::earclip(const std::vector<size_t>& idx) {
+    // This method implements the naive ear clipping algorithm with complexity
+    // O(n^2).  It may be slow for large n.
+    assert(idx.size() > 3);
+    using List = std::list<size_t>;
+    using Iterator = List::iterator;
+    List active_idx;
+    std::copy(idx.begin(), idx.end(), std::back_inserter(active_idx));
+
+    auto cyclic_next = [&active_idx](Iterator itr) {
+        itr++;
+        if (itr == active_idx.end()) itr = active_idx.begin();
+        return itr;
+    };
+    auto cyclic_prev = [&active_idx](Iterator itr) {
+        if (itr == active_idx.begin()) {
+            itr = active_idx.end();
+        }
+        itr--;
+        return itr;
+    };
+    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](Iterator& itr) {
+        const auto curr = itr;
+        const auto next = cyclic_next(itr);
+        const auto prev = cyclic_prev(itr);
+        const size_t i = *prev;
+        const size_t j = *curr;
+        const size_t k = *next;
+        Vector3F vi,vj,vk;
+        vi.segment(0, m_dim) = m_vertices[i];
+        vj.segment(0, m_dim) = m_vertices[j];
+        vk.segment(0, m_dim) = m_vertices[k];
+        const Vector3F nj = (vk-vj).cross(vi-vj);
+        if (nj.norm() <= 0.0) return false; // Degenerate ear.
+        for (Iterator itr = cyclic_next(next); itr != prev; itr=cyclic_next(itr)) {
+            const size_t l=*itr;
+            Vector3F vl;
+            vl.segment(0, m_dim) = m_vertices[l];
+            const Vector3F nl = (vk-vl).cross(vi-vl);
+            if (nj.dot(nl) > 0.0) {
+                return false;
+            }
+        }
+        return true;
+    };
+
+    auto clip = [this, &active_idx, &cyclic_next, &cyclic_prev](const Iterator& itr) {
+        const auto curr = itr;
+        const auto next = cyclic_next(itr);
+        const auto prev = cyclic_prev(itr);
+        m_tris.emplace_back(Vector3I(*prev, *curr, *next));
+        active_idx.erase(curr);
+    };
+
+    while (active_idx.size() > 3) {
+        const size_t n = active_idx.size();
+        for (Iterator itr=active_idx.begin(); itr!=active_idx.end(); itr++) {
+            const auto curr = itr;
+            if (can_clip(curr)) {
+                clip(curr);
+                break;
+            }
+        }
+        if (active_idx.size() == n) {
+            // Cannot find an "ear" to clip.  This means the polygon is either
+            // degenerate or is nonplanar and complex.  Fall back to just
+            // clipping the first ear. :(
+            clip(active_idx.begin());
+        }
+    }
+    assert(active_idx.size() == 3);
+    clip(active_idx.begin());
 }
 
 void OBJParser::unify_faces() {

@@ -118,3 +118,13 @@ TEST_F(OBJParserTest, Empty) {
     ASSERT_EQ(0, m_parser->num_faces());
 }
 
+TEST_F(OBJParserTest, Polygon) {
+    std::string mesh_file = m_data_dir + "polygon.obj";
+    parse(mesh_file);
+    const size_t num_vertices = m_parser->num_vertices();
+
+    ASSERT_EQ(8, num_vertices);
+    ASSERT_EQ(8, m_parser->num_vertices());
+    ASSERT_EQ(6, m_parser->num_faces());
+}
+
