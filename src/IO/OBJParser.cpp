@@ -350,7 +350,7 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         itr--;
         return itr;
     };
-    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](Iterator& itr) {
+    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](const Iterator& itr) {
         const auto curr = itr;
         const auto next = cyclic_next(itr);
         const auto prev = cyclic_prev(itr);
