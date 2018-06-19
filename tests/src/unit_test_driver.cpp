@@ -31,6 +31,7 @@
 #include "Attributes/FaceCentroidAttributeTest.h"
 #include "Attributes/FaceCircumCenterAttributeTest.h"
 #include "Attributes/FaceCircumRadiusAttributeTest.h"
+#include "Attributes/FaceFrameAttributeTest.h"
 #include "Attributes/FaceIncircleCenterAttributeTest.h"
 #include "Attributes/FaceIncircleRadiusAttributeTest.h"
 #include "Attributes/FaceIndexAttributeTest.h"

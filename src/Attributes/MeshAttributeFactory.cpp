@@ -10,6 +10,7 @@
 #include "FaceCircumCenterAttribute.h"
 #include "FaceCircumRadiusAttribute.h"
 #include "FaceEdgeRatioAttribute.h"
+#include "FaceFrameAttribute.h"
 #include "FaceIncircleCenterAttribute.h"
 #include "FaceIncircleRadiusAttribute.h"
 #include "FaceIndexAttribute.h"
@@ -80,6 +81,8 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return std::make_shared<FaceCircumRadiusAttribute>(name);
     } else if (name == "face_edge_ratio") {
         return std::make_shared<FaceEdgeRatioAttribute>(name);
+    } else if (name == "face_frame") {
+        return std::make_shared<FaceFrameAttribute>(name);
     } else if (name == "face_incircle_center") {
         return std::make_shared<FaceIncircleCenterAttribute>(name);
     } else if (name == "face_incircle_radius") {
