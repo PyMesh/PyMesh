@@ -2,10 +2,10 @@
 #include "OBJParser.h"
 #include <cstdio>
 #include <cassert>
-#include <iostream>
 #include <fstream>
-#include <sstream>
+#include <iostream>
 #include <list>
+#include <sstream>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -350,7 +350,22 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         itr--;
         return itr;
     };
-    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](const Iterator& itr) {
+    auto estimate_normal = [this, &idx]() {
+        const size_t num_idx = idx.size();
+        assert(num_idx > 0);
+        Vector3F n(0.0, 0.0, 0.0);
+        Vector3F seed;
+        seed.segment(0, m_dim) = m_vertices[idx[0]];
+        for (size_t i=0; i<num_idx-1; i++) {
+            Vector3F vi,vj;
+            vi.segment(0, m_dim) = m_vertices[idx[i]];
+            vj.segment(0, m_dim) = m_vertices[idx[i+1]];
+            n += (vi - seed).cross(vj - seed);
+        }
+        n.normalize();
+        return n;
+    };
+    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](const Iterator& itr, const Vector3F& normal) {
         const auto curr = itr;
         const auto next = cyclic_next(itr);
         const auto prev = cyclic_prev(itr);
@@ -363,13 +378,36 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         vk.segment(0, m_dim) = m_vertices[k];
         const Vector3F nj = (vk-vj).cross(vi-vj);
         if (nj.norm() <= 0.0) return false; // Degenerate ear.
+        if (nj.dot(normal) <= 0.0) return false; // Concave face.
         for (Iterator itr = cyclic_next(next); itr != prev; itr=cyclic_next(itr)) {
-            const size_t l=*itr;
-            Vector3F vl;
+            const size_t l = *itr;
+            const size_t m = *cyclic_next(itr);
+            Vector3F vl,vm;
             vl.segment(0, m_dim) = m_vertices[l];
-            const Vector3F nl = (vk-vl).cross(vi-vl);
-            if (nj.dot(nl) > 0.0) {
-                return false;
+            vm.segment(0, m_dim) = m_vertices[m];
+            if (l == k) {
+                const Vector3F n_mki = (vk-vm).cross(vi-vm);
+                const Vector3F n_mij = (vi-vm).cross(vj-vm);
+                const Vector3F n_mjk = (vj-vm).cross(vk-vm);
+                if (n_mki.dot(nj) > 0 && n_mij.dot(nj) > 0 && n_mjk.dot(nj) > 0) {
+                    return false;
+                }
+            } else if (m == i) {
+                const Vector3F n_lki = (vk-vl).cross(vi-vl);
+                const Vector3F n_lij = (vi-vl).cross(vj-vl);
+                const Vector3F n_ljk = (vj-vl).cross(vk-vl);
+                if (n_lki.dot(nj) > 0 && n_lij.dot(nj) > 0 && n_ljk.dot(nj) > 0) {
+                    return false;
+                }
+            } else {
+                const Vector3F nl = (vk-vl).cross(vi-vl);
+                const Vector3F nm = (vk-vm).cross(vi-vm);
+                const Vector3F ni = (vl-vi).cross(vm-vi);
+                const Vector3F nk = (vl-vk).cross(vm-vk);
+                const bool cross_ik = nm.dot(nl) < 0.0;
+                const bool cross_lm = ni.dot(nk) < 0.0;
+
+                if (cross_ik && cross_lm) return false;
             }
         }
         return true;
@@ -383,11 +421,12 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         active_idx.erase(curr);
     };
 
+    const Vector3F normal = estimate_normal();
     while (active_idx.size() > 3) {
         const size_t n = active_idx.size();
         for (Iterator itr=active_idx.begin(); itr!=active_idx.end(); itr++) {
             const auto curr = itr;
-            if (can_clip(curr)) {
+            if (can_clip(curr, normal)) {
                 clip(curr);
                 break;
             }
