@@ -1,11 +1,10 @@
 #!/usr/bin/env python
 
 from distutils.command.build import build
-from distutils.command.build_ext import build_ext
 import multiprocessing
 import os
 import os.path
-from setuptools import setup, Extension, Distribution
+from setuptools import setup, Distribution
 from subprocess import check_call
 import shutil
 import platform
@@ -24,12 +23,7 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True;
 
-class CMakeExtension(Extension):
-    def __init__(self, name, sourcedir=''):
-        Extension.__init__(self, name, sources=[])
-        self.sourcedir = os.path.abspath(sourcedir)
-
-class CMakeBuild(build_ext):
+class cmake_build(build):
     """
     Python packaging system is messed up.  This class redirect python to use
     cmake for configuration and compilation of pymesh.
@@ -85,7 +79,7 @@ class CMakeBuild(build_ext):
         self.cleanup();
         self.build_third_party();
         self.build_pymesh();
-        #build.run(self);
+        build.run(self);
 
 setup(
         name = "pymesh2",
@@ -100,9 +94,6 @@ setup(
         package_data = {"pymesh": [
             "swig/*.py",
             "lib/*",
-            "lib/lib*",
-            "lib/*.lib",
-            "lib/*.dll",
             "third_party/lib/lib*",
             "third_party/lib/*.lib",
             "third_party/lib/*.dll",
@@ -110,8 +101,7 @@ setup(
             "third_party/lib64/lib*.lib",
             "third_party/lib64/lib*.dll", ]},
         #include_package_data = True,
-        ext_modules=[CMakeExtension("pymesh2")],
-        cmdclass={'build_ext': CMakeBuild},
+        cmdclass={'build': cmake_build},
         scripts=[
             "scripts/add_element_attribute.py",
             "scripts/add_index.py",
@@ -171,5 +161,5 @@ setup(
             ],
         url = "https://github.com/qnzhou/PyMesh",
         download_url="https://github.com/qnzhou/PyMesh/tarball/v0.1",
-        #distclass=BinaryDistribution,
+        distclass=BinaryDistribution,
         );
