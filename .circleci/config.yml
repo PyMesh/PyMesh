@@ -16,7 +16,7 @@ jobs:
                 workding_directory: $CIRCLE_WORKING_DIRECTORY
                 command: |
                     source py_env/bin/activate
-                    pip install python/requirements.txt
+                    pip install -r python/requirements.txt
                     ./setup.py build
                     ./setup.py develop
                     cd build
