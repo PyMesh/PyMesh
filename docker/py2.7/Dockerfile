@@ -21,6 +21,6 @@ WORKDIR $PYMESH_PATH
 RUN git submodule update --init && \
 pip install -r $PYMESH_PATH/python/requirements.txt
 
-RUN ./setup.py bdist_wheel && rm -rf build third_party/build && pip install dist/pymesh2-0.1.14-cp27-cp27mu-linux_x86_64.whl
+RUN ./setup.py bdist_wheel && rm -rf build third_party/build && pip install dist/pymesh2*.whl
 WORKDIR /root/
 RUN python -c "import pymesh; pymesh.test()"
