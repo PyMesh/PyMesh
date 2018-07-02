@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 from distutils.command.build import build
+from distutils.command.build_ext import build_ext
 import multiprocessing
 import os
 import os.path
-from setuptools import setup, Distribution
+from setuptools import setup, Distribution, Extension
 from subprocess import check_call
 import shutil
 import platform
@@ -24,7 +25,7 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True;
 
-class cmake_build(build):
+class cmake_build(build_ext):
     """
     Python packaging system is messed up.  This class redirect python to use
     cmake for configuration and compilation of pymesh.
@@ -80,7 +81,7 @@ class cmake_build(build):
         self.cleanup();
         self.build_third_party();
         self.build_pymesh();
-        build.run(self);
+        #build_ext.run(self);
 
 setup(
         name = "pymesh2",
@@ -102,7 +103,10 @@ setup(
             "third_party/lib64/lib*.lib",
             "third_party/lib64/lib*.dll", ]},
         #include_package_data = True,
-        cmdclass={'build': cmake_build},
+        cmdclass={
+            'build_ext': cmake_build,
+            },
+        ext_modules=[Extension('foo', ['foo.c'])], # Dummy
         scripts=[
             "scripts/add_element_attribute.py",
             "scripts/add_index.py",
