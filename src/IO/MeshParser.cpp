@@ -24,7 +24,7 @@ MeshParser::Ptr MeshParser::create_parser(const std::string& filename) {
     Ptr parser;
     std::string ext = IOUtils::get_extention(filename);
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-    if (ext == ".obj") {
+    if (ext == ".obj" || ext == ".eobj" || ext == ".pts" || ext == ".epts") {
         parser = std::make_shared<OBJParser>();
     } else if (ext == ".off") {
         parser = std::make_shared<OFFParser>();
