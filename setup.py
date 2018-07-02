@@ -15,7 +15,7 @@ exec(open(os.path.join(package_dir, 'version.py')).read())
 
 num_cores = multiprocessing.cpu_count();
 num_cores = max(1, num_cores-1);
-num_cores = min(num_cores, os.environ.get("NUM_CORES", num_cores));
+num_cores = min(num_cores, int(os.environ.get("NUM_CORES", num_cores)));
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
