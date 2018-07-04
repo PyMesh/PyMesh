@@ -162,18 +162,20 @@ std::string TriangleWrapper::generate_command_line_options() const {
         opt += "v"; // Also compute Voronoi diagram.
     }
 
-    if (m_min_angle < 0.0) {
-        throw RuntimeError("Invalid min angle: " + std::to_string(m_min_angle));
-    } else if (m_min_angle > 34) {
-        std::cerr << "Warning: min angle > 34 degrees may cause algorithm to not terminate" 
-            << std::endl;
-    } else if (m_min_angle > 20.7) {
-        std::cerr << "Warning: Theoretical guarentee of termination is lost "
-            << "for min angle > 20.7 degrees.  "
-            << "But in practice, it often succeed for min angle >= 33 degrees."
-            << std::endl;
+    if (m_min_angle > 0.0) {
+        if (m_min_angle > 34) {
+            std::cerr << "Warning: min angle > 34 degrees may cause algorithm to not terminate" 
+                << std::endl;
+        } else if (m_min_angle > 20.7) {
+            std::cerr << "Warning: Theoretical guarentee of termination is lost "
+                << "for min angle > 20.7 degrees.  "
+                << "But in practice, it often succeed for min angle >= 33 degrees."
+                << std::endl;
+        }
+        opt += "q" + std::to_string(m_min_angle);
+    } else if (m_min_angle < 0.0) {
+        std::cerr << "Warning: min angle < 0 degrees.  Ignored." << std::endl;
     }
-    opt += "q" + std::to_string(m_min_angle);
 
     if (m_max_area > 0) {
         opt += "a" + std::to_string(m_max_area);
