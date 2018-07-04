@@ -7,6 +7,9 @@ MAKE_DIRECTORY(${EXECUTABLE_OUTPUT_PATH})
 # Include customized FindPackage scripts
 SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
+# Set PIC
+SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
 # Include all libraries
 FIND_PACKAGE(AllDependencies)
 
