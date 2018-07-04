@@ -4,7 +4,7 @@
 #include <limits>
 #include <iostream>
 #include <ConvexHull/ConvexHullEngine.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 
 using namespace PyMesh;
 

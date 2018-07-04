@@ -3,7 +3,7 @@
 #include <Core/Exception.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 
 #include <cassert>
 #include <iostream>

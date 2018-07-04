@@ -7,8 +7,8 @@
 #include <IO/MeshWriter.h>
 #include <Math/MatrixUtils.h>
 #include <MeshFactory.h>
-#include <tetgen/TetgenWrapper.h>
-#include <tetgen/TetgenException.h>
+#include <TetGen/TetgenWrapper.h>
+#include <TetGen/TetgenException.h>
 #include <Wires/Inflator/InflatorEngine.h>
 #include <Wires/Inflator/MeshRefiner.h>
 #include <Wires/Parameters/ParameterCommon.h>

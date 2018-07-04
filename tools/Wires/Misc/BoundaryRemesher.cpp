@@ -10,7 +10,7 @@
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/SubMesh.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 #include "MeshCleaner.h"
 
 using namespace PyMesh;

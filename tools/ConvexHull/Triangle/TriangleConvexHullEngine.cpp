@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <Core/Exception.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 #include <MeshUtils/Boundary.h>
 
 using namespace PyMesh;

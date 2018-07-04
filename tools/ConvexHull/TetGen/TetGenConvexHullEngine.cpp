@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <Core/Exception.h>
-#include <tetgen/TetgenWrapper.h>
+#include <TetGen/TetgenWrapper.h>
 #include <MeshUtils/Boundary.h>
 
 using namespace PyMesh;
