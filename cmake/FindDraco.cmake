@@ -65,3 +65,15 @@ if (draco_INCLUDE_DIRS AND draco_LIBRARY_DIRS AND draco_LIBRARIES AND
     draco_VERSION_STRING)
   set(draco_FOUND YES)
 endif ()
+
+IF (draco_FOUND AND NOT TARGET PyMesh::Draco)
+    ADD_LIBRARY(PyMesh::Draco INTERFACE IMPORTED)
+    TARGET_INCLUDE_DIRECTORIES(PyMesh::Draco SYSTEM
+        INTERFACE
+            ${draco_INCLUDE_DIRS}
+    )
+    TARGET_LINK_LIBRARIES(PyMesh::Draco
+        INTERFACE
+            ${draco_LIBRARIES}
+    )
+ENDIF (draco_FOUND AND NOT TARGET PyMesh::Draco)

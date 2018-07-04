@@ -6,7 +6,7 @@
 #include <Mesh.h>
 #include <MeshFactory.h>
 
-#include <SelfIntersection.h>
+#include <CGAL/SelfIntersection.h>
 
 class SelfIntersectionTest : public ::testing::Test {
     protected:

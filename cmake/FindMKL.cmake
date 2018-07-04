@@ -63,8 +63,8 @@ find_path(MKL_ROOT_DIR
 
 SET(INTEL_ROOT_DIR "/opt/intel" CACHE PATH "Folder contains intel libs")
 
-MESSAGE("MKL_ROOT_DIR : ${MKL_ROOT_DIR}") # for debug
-MESSAGE("INTEL_ROOT_DIR: ${INTEL_ROOT_DIR}")
+#MESSAGE("MKL_ROOT_DIR : ${MKL_ROOT_DIR}") # for debug
+#MESSAGE("INTEL_ROOT_DIR: ${INTEL_ROOT_DIR}")
 
 find_path(MKL_INCLUDE_DIR
   mkl_cblas.h
@@ -191,7 +191,7 @@ foreach (MODEVAR ${MKL_MODE_VARIANTS})
                 ${MKL_${MODEVAR}_LIBRARY}
                 ${MKL_LAPACK_LIBRARY}
                 ${MKL_IOMP5_LIBRARY})
-            message("${MODEVAR} ${THREADVAR} ${MKL_${MODEVAR}_${THREADVAR}_LIBRARIES}") # for debug
+            #message("${MODEVAR} ${THREADVAR} ${MKL_${MODEVAR}_${THREADVAR}_LIBRARIES}") # for debug
         endif()
     endforeach()
 endforeach()
@@ -208,3 +208,15 @@ mark_as_advanced(MKL_INCLUDE_DIR MKL_LIBRARIES
     MKL_CORE_LIBRARY MKL_LP_LIBRARY MKL_ILP_LIBRARY
     MKL_SEQUENTIAL_LIBRARY MKL_INTELTHREAD_LIBRARY MKL_GNUTHREAD_LIBRARY
 )
+
+IF (MKL_FOUND AND NOT TARGET PyMesh::MKL)
+    ADD_LIBRARY(PyMesh::MKL INTERFACE IMPORTED)
+    TARGET_INCLUDE_DIRECTORIES(PyMesh::MKL SYSTEM
+        INTERFACE
+            ${MKL_INCLUDE_DIR}
+    )
+    TARGET_LINK_LIBRARIES(PyMesh::MKL
+        INTERFACE
+            ${MKL_LIBRARIES}
+    )
+ENDIF (MKL_FOUND AND NOT TARGET PyMesh::MKL)

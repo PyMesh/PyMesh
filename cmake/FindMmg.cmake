@@ -66,3 +66,15 @@ IF ( NOT MMG_FOUND )
    " variable or the 'MMG_BUILD_DIR' CMake variable to your MMG directory path"
    " to help us to fill the MMG library paths.\n" )
 ENDIF ()
+
+IF (MMG_FOUND AND NOT TARGET PyMesh::MMG)
+    ADD_LIBRARY(PyMesh::MMG INTERFACE IMPORTED)
+    TARGET_INCLUDE_DIRECTORIES(PyMesh::MMG SYSTEM
+        INTERFACE
+            ${MMG_INCLUDE_DIR}
+    )
+    TARGET_LINK_LIBRARIES(PyMesh::MMG
+        INTERFACE
+            ${MMG_LIBRARY}
+    )
+ENDIF (MMG_FOUND AND NOT TARGET PyMesh::MMG)

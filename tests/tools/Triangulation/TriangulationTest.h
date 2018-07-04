@@ -2,7 +2,7 @@
 #pragma once
 
 #include <TestBase.h>
-#include <Triangulation.h>
+#include <Triangulation/Triangulation.h>
 #include <MeshUtils/MeshChecker.h>
 
 class TriangulationTest : public TestBase {

@@ -2,7 +2,7 @@
 #pragma once
 
 #include <TestBase.h>
-#include <DMAT.h>
+#include <IGL/DMAT.h>
 
 class DMATTest : public TestBase {
 };

@@ -3,11 +3,11 @@
 # The following variables are set.
 #
 # TRIANGLE_FOUND
-# Triangle_INCLUDE_DIRS
-# Triangle_LIBRARIES
+# TRIANGLE_INCLUDE_DIRS
+# TRIANGLE_LIBRARIES
 
 # Find include directory.
-find_path (Triangle_INCLUDE_DIRS triangle.h
+find_path (TRIANGLE_INCLUDE_DIRS triangle.h
     $ENV{TRIANGLE_PATH}
     $ENV{TRIANGLE_PATH}/include
     ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include/
@@ -16,7 +16,7 @@ find_path (Triangle_INCLUDE_DIRS triangle.h
     /usr/includes
 )
 
-FIND_LIBRARY(Triangle_LIBRARIES NAMES libtriangle.a triangle
+FIND_LIBRARY(TRIANGLE_LIBRARIES NAMES libtriangle.a triangle
      PATHS $ENV{TRIANGLE_PATH}
            $ENV{TRIANGLE_PATH}/lib
            ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/
@@ -28,9 +28,21 @@ FIND_LIBRARY(Triangle_LIBRARIES NAMES libtriangle.a triangle
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(Triangle
   "Triangle could not be found."
-  Triangle_LIBRARIES Triangle_INCLUDE_DIRS)
+  TRIANGLE_LIBRARIES TRIANGLE_INCLUDE_DIRS)
 
 mark_as_advanced(
-  Triangle_INCLUDE_DIRS
-  Triangle_LIBRARIES
-  )
+  TRIANGLE_INCLUDE_DIRS
+  TRIANGLE_LIBRARIES
+)
+
+IF (TRIANGLE_FOUND AND NOT TARGET PyMesh::Triangle)
+    ADD_LIBRARY(PyMesh::Triangle INTERFACE IMPORTED)
+    TARGET_INCLUDE_DIRECTORIES(PyMesh::Triangle SYSTEM
+        INTERFACE
+            ${TRIANGLE_INCLUDE_DIRS}
+    )
+    TARGET_LINK_LIBRARIES(PyMesh::Triangle
+        INTERFACE
+            ${TRIANGLE_LIBRARIES}
+    )
+ENDIF (TRIANGLE_FOUND AND NOT TARGET PyMesh::Triangle)

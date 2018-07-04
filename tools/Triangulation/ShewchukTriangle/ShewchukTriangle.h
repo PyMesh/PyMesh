@@ -3,7 +3,7 @@
 #include <list>
 #include <string>
 #include <Core/EigenTypedef.h>
-#include "Triangulation.h"
+#include <Triangulation/Triangulation.h>
 
 namespace PyMesh {
 

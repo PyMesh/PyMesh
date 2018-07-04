@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
 
-#include <CompressionEngine.h>
+#include <Compression/CompressionEngine.h>
 
 #include <string>
 

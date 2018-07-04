@@ -2,7 +2,7 @@
 #include "WindingNumberEngine.h"
 #include <Core/Exception.h>
 #ifdef WITH_IGL
-#include <IGL/IGLWindingNumberEngine.h>
+#include <WindingNumber/IGL/IGLWindingNumberEngine.h>
 #endif
 
 #include <sstream>
