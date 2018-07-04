@@ -40,11 +40,6 @@ class cmake_build(build_ext):
         if os.path.exists(lib_dir) and os.path.isdir(lib_dir):
             shutil.rmtree(os.path.join(lib_dir));
 
-        swig_dir = os.path.join(root_dir, "python/pymesh/swig");
-        if os.path.exists(swig_dir) and os.path.isdir(swig_dir):
-            shutil.rmtree(os.path.join(swig_dir));
-
-
     def build_third_party(self):
         """
         Config and build third party dependencies.
@@ -94,7 +89,6 @@ setup(
         packages = ["pymesh", "pymesh.misc", "pymesh.meshutils", "pymesh.wires",
             "pymesh.tests", "pymesh.meshutils.tests", "pymesh.wires.tests"],
         package_data = {"pymesh": [
-            "swig/*.py",
             "lib/*",
             "third_party/lib/lib*",
             "third_party/lib/*.lib",

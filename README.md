@@ -6,9 +6,9 @@
 
 **PyMesh** is a code base developed by Qingnan Zhou for his PhD research at New
 York University.  It is a rapid prototyping platform focused on geometry
-processing.  **PyMesh** is written using both C++ and python, where
+processing.  **PyMesh** is written with both C++ and Python, where
 computational intensive functionalities are realized in C++, and Python is used
-for create minimalistic and easy to use interfaces.
+for creating minimalistic and easy to use interfaces.
 
 ![PyMesh][teaser]
 (Model source: [Bust of Sappho](https://www.thingiverse.com/thing:14565))
@@ -139,7 +139,7 @@ Now we can build the main project.  It is recommended to build out of source:
 To build the PyMesh library:
 
     make
-    make all_tests
+    make tests
 
 Make sure all unit tests are passed before using the library.
 
