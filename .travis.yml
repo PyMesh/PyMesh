@@ -37,7 +37,7 @@ matrix:
       after_success:
         - export PYMESH_PATH=`pwd`
         - cd build
-        - make all_tests
+        - make tests
         - cd ..
         - python -c "import pymesh; pymesh.test()"
 

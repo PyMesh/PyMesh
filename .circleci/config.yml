@@ -22,7 +22,7 @@ jobs:
                     ./setup.py build
                     ./setup.py develop
                     cd build
-                    make all_tests
+                    make tests
     "py3.6":
         machine: true
         steps:
