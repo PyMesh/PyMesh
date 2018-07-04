@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 #include <IO/MeshWriter.h>
 #include <Misc/MatrixIO.h>
 
