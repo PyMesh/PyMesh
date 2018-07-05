@@ -73,8 +73,8 @@ class cmake_build(build_ext):
         os.chdir(root_dir);
 
     def run(self):
-        #self.cleanup();
-        #self.build_third_party();
+        self.cleanup();
+        self.build_third_party();
         self.build_pymesh();
         #build_ext.run(self);
 
