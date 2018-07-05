@@ -4,7 +4,7 @@ jobs:
         docker:
             - image: debian:sid-slim
         environment:
-            NUM_CORES: 4
+            NUM_CORES: 2
         steps:
             - checkout
             - run: |
