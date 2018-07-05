@@ -15,7 +15,7 @@ package_dir = os.path.join(root_dir, "python/pymesh");
 exec(open(os.path.join(package_dir, 'version.py')).read())
 
 num_cores = multiprocessing.cpu_count();
-num_cores = max(1, num_cores-1);
+num_cores = max(1, num_cores);
 num_cores = min(num_cores, int(os.environ.get("NUM_CORES", num_cores)));
 
 class BinaryDistribution(Distribution):
@@ -73,8 +73,8 @@ class cmake_build(build_ext):
         os.chdir(root_dir);
 
     def run(self):
-        self.cleanup();
-        self.build_third_party();
+        #self.cleanup();
+        #self.build_third_party();
         self.build_pymesh();
         #build_ext.run(self);
 
