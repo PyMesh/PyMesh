@@ -33,7 +33,7 @@ class dummy_ext(build_ext):
     def run(self):
         pass;
 
-class cmake(build):
+class cmake_build(build):
     """
     Python packaging system is messed up.  This class redirect python to use
     cmake for configuration and compilation of pymesh.
