@@ -110,7 +110,7 @@ setup(
         #include_package_data = True,
         cmdclass={
             'build': cmake_build,
-            'build_ext': dummy_build,
+            'build_ext': dummy_ext,
             },
         ext_modules=[Extension('foo', ['foo.c'])], # Dummy
         scripts=[
