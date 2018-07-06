@@ -76,7 +76,7 @@ class cmake_build(build):
         command = "cmake .. -DPythonLibsNew_FIND_VERSION={}".format(
                 platform.python_version());
         check_call(command.split());
-        command = "make -j {}".format(num_cores);
+        command = "make";
         check_call(command.split());
         os.chdir(root_dir);
 
