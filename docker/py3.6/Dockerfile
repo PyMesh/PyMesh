@@ -26,4 +26,4 @@ WORKDIR /root/
 RUN python -c "import pymesh; pymesh.test()"
 
 # Patch wheel to bring non-standard dependencies inside.
-RUN $PYMESH_PATH/docker/patches/patch_wheel.py
+RUN python $PYMESH_PATH/docker/patches/patch_wheel.py
