@@ -2,6 +2,7 @@
 
 from distutils.command.build import build
 from distutils.command.build_ext import build_ext
+from distutils.command.clean import clean
 import multiprocessing
 import os
 import os.path
@@ -25,6 +26,16 @@ class BinaryDistribution(Distribution):
     def has_ext_modules(self):
         return True;
 
+class CleanCommand(clean):
+    def run(self):
+        install_dir = os.path.join(root_dir, "python/pymesh/third_party/lib");
+        if os.path.exists(install_dir) and os.path.isdir(install_dir):
+            shutil.rmtree(os.path.join(install_dir));
+
+        lib_dir = os.path.join(root_dir, "python/pymesh/lib");
+        if os.path.exists(lib_dir) and os.path.isdir(lib_dir):
+            shutil.rmtree(os.path.join(lib_dir));
+
 class dummy_ext(build_ext):
     """ This is a dummy class.  Cmake is responsible for building python
     extension.  This class is necessary to inform distutils/setuptools that we
@@ -38,15 +49,6 @@ class cmake_build(build):
     Python packaging system is messed up.  This class redirect python to use
     cmake for configuration and compilation of pymesh.
     """
-
-    def cleanup(self):
-        install_dir = os.path.join(root_dir, "python/pymesh/third_party/lib");
-        if os.path.exists(install_dir) and os.path.isdir(install_dir):
-            shutil.rmtree(os.path.join(install_dir));
-
-        lib_dir = os.path.join(root_dir, "python/pymesh/lib");
-        if os.path.exists(lib_dir) and os.path.isdir(lib_dir):
-            shutil.rmtree(os.path.join(lib_dir));
 
     def build_third_party(self):
         """
@@ -81,7 +83,6 @@ class cmake_build(build):
         os.chdir(root_dir);
 
     def run(self):
-        self.cleanup();
         self.build_third_party();
         self.build_pymesh();
         build.run(self);
@@ -111,6 +112,7 @@ setup(
         cmdclass={
             'build': cmake_build,
             'build_ext': dummy_ext,
+            'clean': CleanCommand,
             },
         ext_modules=[Extension('foo', ['foo.c'])], # Dummy
         scripts=[

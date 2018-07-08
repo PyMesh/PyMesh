@@ -24,3 +24,6 @@ pip install -r $PYMESH_PATH/python/requirements.txt
 RUN ./setup.py bdist_wheel && rm -rf build third_party/build && pip install dist/pymesh2*.whl
 WORKDIR /root/
 RUN python -c "import pymesh; pymesh.test()"
+
+# Patch wheel to bring non-standard dependencies inside.
+RUN $PYMESH_PATH/docker/patches/patch_wheel.py
