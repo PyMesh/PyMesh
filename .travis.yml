@@ -33,7 +33,7 @@ matrix:
         - cmake ..
         - make -j 4
         - cd ..
-        - ./setup.py install --user
+        - ./setup.py install
       after_success:
         - export PYMESH_PATH=`pwd`
         - cd build
