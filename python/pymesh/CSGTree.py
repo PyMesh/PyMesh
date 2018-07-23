@@ -87,16 +87,16 @@ class CSGTree:
             else:
                 raise RuntimeError("No operand provided for union operation");
         elif "intersection" in tree:
-            num_operand = len(tree["intersection"]);
-            if num_operand == 1:
+            num_operands = len(tree["intersection"]);
+            if num_operands == 1:
                 self.tree = CSGTree(tree["intersection"][0]).tree;
-            elif num_operand == 2:
+            elif num_operands == 2:
                 children = [ CSGTree(subtree) for subtree in tree["intersection"] ];
                 self.tree = PyMesh.CSGTree.create("igl");
                 self.tree.set_operand_1(children[0].tree);
                 self.tree.set_operand_2(children[1].tree);
                 self.tree.compute_intersection();
-            elif num_operand > 2:
+            elif num_operands > 2:
                 mid = num_operands // 2;
                 child1 = CSGTree({"intersection": tree["intersection"][:mid]});
                 child2 = CSGTree({"intersection": tree["intersection"][mid:]});
