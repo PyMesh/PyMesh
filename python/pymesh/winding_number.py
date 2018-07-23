@@ -1,6 +1,6 @@
 import PyMesh
 
-from timethis import timethis
+from .timethis import timethis
 
 @timethis
 def compute_winding_number(mesh, queries, engine="auto"):
