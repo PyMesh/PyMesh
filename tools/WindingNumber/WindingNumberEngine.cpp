@@ -4,6 +4,9 @@
 #ifdef WITH_IGL
 #include <WindingNumber/IGL/IGLWindingNumberEngine.h>
 #endif
+#ifdef WITH_FAST_WINDING_NUMBER
+#include <WindingNumber/FastWindingNumber/FastWindingNumberEngine.h>
+#endif
 
 #include <sstream>
 
@@ -14,6 +17,11 @@ WindingNumberEngine::Ptr WindingNumberEngine::create(
 #ifdef WITH_IGL
     if (engine_name == "igl") {
         return std::make_shared<IGLWindingNumberEngine>();
+    }
+#endif
+#ifdef WITH_FAST_WINDING_NUMBER
+    if (engine_name == "fast_winding_number") {
+        return std::make_shared<FastWindingNumberEngine>();
     }
 #endif
 
