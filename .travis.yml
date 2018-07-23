@@ -17,7 +17,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - brew unlink python
-        - brew install python
+        - brew install python tbb
       install:
         - pip3 install -r python/requirements.txt
         - git submodule update --init

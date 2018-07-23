@@ -13,6 +13,8 @@ dependencies = [
         "/usr/lib/x86_64-linux-gnu/libgmp.so.10",
         "/usr/lib/x86_64-linux-gnu/libmpfr.so.6",
         "/usr/lib/x86_64-linux-gnu/libgomp.so.1",
+        "/usr/lib/x86_64-linux-gnu/libtbb.so",
+        "/usr/lib/x86_64-linux-gnu/libtbbmalloc.so",
         ];
 
 dist_dir = "/root/PyMesh/dist"

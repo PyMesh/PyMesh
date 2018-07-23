@@ -12,6 +12,7 @@ libmpfr-dev \
 libgmpxx4ldbl \
 libboost-dev \
 libboost-thread-dev \
+libtbb-dev \
 && apt-get clean
 
 RUN git clone https://github.com/qnzhou/PyMesh.git
