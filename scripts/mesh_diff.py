@@ -33,10 +33,13 @@ def parse_args():
             help="number of samples");
     parser.add_argument("--tol", type=float, default=1e-6,
             help="winding number tolerance");
+    parser.add_argument("--winding-number-engine", default="auto",
+            choices=["igl", "fast_winding_number"]);
     parser.add_argument("--output", "-o", help="Highlighted output",
             default=None);
     parser.add_argument("--export", "-e", help="export information",
             action="store_true");
+    parser.add_argument("--timing", help="Output timing", action="store_true");
     parser.add_argument("input_mesh_1", help="first input mesh");
     parser.add_argument("input_mesh_2", help="secondinput mesh");
     return parser.parse_args();
@@ -57,8 +60,10 @@ def main():
     #queries = grid_sample(bbox_min, bbox_max, args.num_samples);
     queries = random_sample(bbox_min, bbox_max, args.num_samples);
 
-    winding_number_1 = pymesh.compute_winding_number(mesh_1, queries) > 0.5;
-    winding_number_2 = pymesh.compute_winding_number(mesh_2, queries) > 0.5;
+    winding_number_1 = pymesh.compute_winding_number(mesh_1, queries,
+            engine=args.winding_number_engine) > 0.5;
+    winding_number_2 = pymesh.compute_winding_number(mesh_2, queries,
+            engine=args.winding_number_engine) > 0.5;
 
     diff = np.logical_xor(winding_number_1, winding_number_2);
     num_diff = np.count_nonzero(diff);
@@ -85,6 +90,9 @@ def main():
         info = load_info(args.input_mesh_2);
         info["diff"] = num_diff
         dump_info(args.input_mesh_2, info);
+
+    if args.timing:
+        pymesh.timethis.summarize();
 
 if __name__ == "__main__":
     main();

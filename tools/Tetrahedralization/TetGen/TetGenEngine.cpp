@@ -3,7 +3,7 @@
 
 #include <cmath>
 #include <sstream>
-#include <tetgen/TetgenWrapper.h>
+#include <TetGen/TetgenWrapper.h>
 
 using namespace PyMesh;
 

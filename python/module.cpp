@@ -31,6 +31,9 @@ void init_TetgenWrapper(py::module&);
 void init_IGL(py::module&);
 void init_SparseSolver(py::module&);
 void init_HashGrid(py::module&);
+void init_BVH(py::module&);
+void init_Geogram(py::module&);
+void init_Compression(py::module&);
 
 PYBIND11_MODULE(PyMesh, m) {
     m.doc() = "Geometry Processing for Python.";
@@ -61,4 +64,7 @@ PYBIND11_MODULE(PyMesh, m) {
     init_IGL(m);
     init_SparseSolver(m);
     init_HashGrid(m);
+    init_BVH(m);
+    init_Geogram(m);
+    init_Compression(m);
 }

@@ -45,3 +45,15 @@
 [submodule "third_party/mmg"]
 	path = third_party/mmg
 	url = https://github.com/qnzhou/mmg.git
+[submodule "third_party/geogram"]
+	path = third_party/geogram
+	url = https://github.com/qnzhou/geogram.git
+[submodule "third_party/draco"]
+	path = third_party/draco
+	url = https://github.com/qnzhou/draco.git
+[submodule "third_party/TetWild"]
+	path = third_party/TetWild
+	url = https://github.com/qnzhou/TetWild.git
+[submodule "third_party/WindingNumber"]
+	path = third_party/WindingNumber
+	url = https://github.com/qnzhou/WindingNumber.git

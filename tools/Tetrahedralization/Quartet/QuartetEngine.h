@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
 
-#include <TetrahedralizationEngine.h>
+#include <Tetrahedralization/TetrahedralizationEngine.h>
 
 namespace PyMesh {
 

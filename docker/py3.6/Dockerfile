@@ -12,6 +12,7 @@ libmpfr-dev \
 libgmpxx4ldbl \
 libboost-dev \
 libboost-thread-dev \
+libtbb-dev \
 && apt-get clean
 
 RUN git clone https://github.com/qnzhou/PyMesh.git
@@ -19,13 +20,11 @@ ENV PYMESH_PATH /root/PyMesh
 WORKDIR $PYMESH_PATH
 
 RUN git submodule update --init && \
-rm -rf $PYMESH_PATH/third_party/build && \
-rm -rf $PYMESH_PATH/build && \
-mkdir -p $PYMESH_PATH/third_party/build && \
-mkdir -p $PYMESH_PATH/build && \
 pip install -r $PYMESH_PATH/python/requirements.txt
 
-RUN ./setup.py bdist_wheel && rm -rf build third_party/build && pip install dist/pymesh2-0.1.14-cp36-cp36m-linux_x86_64.whl
+RUN ./setup.py bdist_wheel && rm -rf build third_party/build && pip install dist/pymesh2*.whl
 WORKDIR /root/
-#RUN rm -rf PyMesh
 RUN python -c "import pymesh; pymesh.test()"
+
+# Patch wheel to bring non-standard dependencies inside.
+RUN python $PYMESH_PATH/docker/patches/patch_wheel.py

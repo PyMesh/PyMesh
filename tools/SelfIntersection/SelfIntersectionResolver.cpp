@@ -5,7 +5,7 @@
 #include <Core/Exception.h>
 
 #ifdef WITH_IGL
-#include <IGL/IGLSelfIntersectionResolver.h>
+#include "IGL/IGLSelfIntersectionResolver.h"
 #endif
 
 using namespace PyMesh;

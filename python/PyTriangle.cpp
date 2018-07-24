@@ -4,7 +4,7 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 
 namespace py = pybind11;
 using namespace PyMesh;

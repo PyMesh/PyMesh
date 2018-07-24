@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
 
-#include "Triangulation.h"
+#include <Triangulation/Triangulation.h>
 
 namespace PyMesh {
     class LexicographicTriangulation : public Triangulation {

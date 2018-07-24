@@ -11,6 +11,16 @@ Sphere generation
 
 .. autofunction:: pymesh.generate_icosphere
 
+Cylinder generation
+-------------------
+
+.. autofunction:: pymesh.generate_cylinder
+
+Tube generation
+-------------------
+
+.. autofunction:: pymesh.generate_tube
+
 
 Other Platonic solids
 ---------------------

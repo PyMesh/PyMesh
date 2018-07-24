@@ -12,6 +12,9 @@ It provides a set of common mesh processing functionalities and interfaces
 with a number of state-of-the-art open source packages to combine their power
 seamlessly under a single developing environment.
 
+.. image:: _static/pymesh_teaser.jpg
+    :align: center
+
 Mesh process should be simple in python.  PyMesh promotes human readable,
 minimalistic interface and works with native python data structures such as
 `numpy.ndarray

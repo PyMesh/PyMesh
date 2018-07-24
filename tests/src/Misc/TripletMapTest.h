@@ -62,3 +62,11 @@ TEST_F(TripletMapTest, KeyCollision) {
         ASSERT_EQ(i, item_vec[i]);
     }
 }
+
+TEST_F(TripletMapTest, FindKey) {
+    TripletMap<int> t_map;
+    t_map.insert(Triplet(1, 2), 1);
+    ASSERT_NE(t_map.end(), t_map.find(Triplet(2, 1)));
+    t_map.insert(Triplet(3, 2), 1);
+    ASSERT_NE(t_map.end(), t_map.find(Triplet(2, 3)));
+}

@@ -3,9 +3,11 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyBoolean.cpp
     PyCellPartition.cpp
     PyCGAL.cpp
+    PyCompression.cpp
     PyConvexHull.cpp
     PyDMAT.cpp
     PyFEM.cpp
+    PyGeogram.cpp
     PyHashGrid.cpp
     PyIGL.cpp
     PyMeshUtils.cpp
@@ -26,24 +28,24 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyWires.cpp)
 TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     Mesh
-    lib_assembler
+    lib_Assembler
     lib_MeshUtils
-    cgal_wrapper
-    lib_igl
-    lib_predicates
-    lib_convex_hull
-    lib_self_intersection
-    lib_boolean
-    lib_outer_hull
+    lib_CGAL
+    lib_Geogram
+    lib_IGL
+    lib_Predicates
+    lib_Compression
+    lib_ConvexHull
+    lib_SelfIntersection
+    lib_Boolean
+    lib_BVH
+    lib_OuterHull
     lib_SparseSolver
-    lib_tetrahedralization
-    lib_triangle_wrapper
-    lib_triangulation
-    lib_winding_number
-    lib_wires)
-TARGET_INCLUDE_DIRECTORIES(PyMesh SYSTEM PUBLIC
-    ${PROJECT_SOURCE_DIR}/src
-    ${PROJECT_SOURCE_DIR}/tools)
+    lib_Tetrahedralization
+    lib_Triangle
+    lib_Triangulation
+    lib_WindingNumber
+    lib_Wires)
 TARGET_INCLUDE_DIRECTORIES(PyMesh SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/tools

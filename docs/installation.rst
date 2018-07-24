@@ -21,7 +21,7 @@ Download the Source
 
 The source code can be checked out from GitHub::
 
-    git clone git@github.com:qnzhou/PyMesh.git
+    git clone https://github.com/qnzhou/PyMesh.git
     cd PyMesh
     git submodule update --init
 
@@ -100,7 +100,20 @@ variables:
 Building PyMesh
 ---------------
 
-To compile the optional third party libraries::
+Build with Setuptools
+~~~~~~~~~~~~~~~~~~~~~
+
+The output of building PyMesh consists a set of C++ libraries and a python
+module. To build PyMesh::
+
+    ./setup.py build
+
+
+Build with CMake
+~~~~~~~~~~~~~~~~
+
+If you are familar with C++ and CMake, there is an alternative way of building
+PyMesh.  First compile and install all of the third party dependencies::
 
     cd $PYMESH_PATH/third_party
     mkdir build
@@ -124,87 +137,31 @@ PyMesh consists of several modules.  To build all modules and their
 corresponding unit tests::
 
     make
-    make all_tests
+    make tests
 
-Another way is to build each tool separately::
+PyMesh libraries are all located in ``$PYMESH_PATH/python/pymesh/lib``
+directory.
 
-    # MeshUtils tools
-    make MeshUtils
-    make MeshUtils_tests
-
-    # EigenUtils tools
-    make EigenUtils
-    make EigenUtils_tests
-
-    # Assembler tools
-    make assembler
-    make assembler_tests
-
-    # CGAL tools
-    make cgal
-    make cgal_tools
-
-    # Boolean tools
-    make boolean
-    make boolean_tests
-
-    # Convex hull tools
-    make convex_hull
-    make convex_hull_tests
-
-    # Envolope tools
-    make envolope
-    make envolope_tests
-
-    # Outer hull tools
-    make outer_hull
-    make outer_hull_tests
-
-    # SelfIntersection tools
-    make self_intersection
-    make self_intersection_tests
-
-    # SparseSolver tools
-    make SparseSolver
-    make SparseSolver_tests
-
-    # Tetrahedronization tools
-    make tetrahedronization
-    make tetrahedronization_tests
-
-    # Wire inflation tools
-    make wires
-    make wires_tests
-
-    # TetGen tools
-    make tetgen
-    make tetgen_tests
-
-    # Triangle tools
-    make triangle
-    make triangle_tests
-
-Make sure all unit tests are passed before using the library.  Please report
-unit tests failures on github.
 
 Install PyMesh
---------------
+~~~~~~~~~~~~~~
 
-The output of building PyMesh consists a set of C++ libraries and a python
-module. Installing the C++ library is currently not available.  However,
-installing the python package can be done::
+To install PyMesh in your system::
 
-    ./setup.py build # This an alternative way of calling cmake/make
-    ./setup.py install # This may require admin privilage.
+    ./setup.py install  # May require root privilege
 
 Alternatively, one can install PyMesh locally::
 
     ./setup.py intall --user
 
 
+Post-installation check
+~~~~~~~~~~~~~~~~~~~~~~~
+
 To check PyMesh is installed correctly, one can run the unit tests::
 
     python -c "import pymesh; pymesh.test()"
 
-Once again, make sure all unit tests are passed, and report any unit test
+Please make sure all unit tests are passed, and report any unit test
 failures.
+

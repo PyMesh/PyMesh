@@ -4,7 +4,7 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 
-#include <tetgen/TetgenWrapper.h>
+#include <TetGen/TetgenWrapper.h>
 
 namespace py = pybind11;
 using namespace PyMesh;

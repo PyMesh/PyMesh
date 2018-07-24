@@ -166,9 +166,10 @@ class Quaternion:
         Returns:
             The rotated vector.
         """
+        m = norm(v);
         v = Quaternion([0, v[0], v[1], v[2]]);
         r = self * v * self.conjugate();
-        return r[1:4];
+        return r[1:4] * m;
 
     @property
     def w(self):

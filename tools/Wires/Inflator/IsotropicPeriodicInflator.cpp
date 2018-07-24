@@ -13,7 +13,7 @@
 #include <MeshUtils/EdgeSplitter.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/SubMesh.h>
-#include <tetgen/TetgenWrapper.h>
+#include <TetGen/TetgenWrapper.h>
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>

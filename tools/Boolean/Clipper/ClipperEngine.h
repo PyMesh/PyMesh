@@ -2,13 +2,14 @@
 #pragma once
 
 #include <Boolean/BooleanEngine.h>
+
 #include <clipper.hpp>
 
 namespace PyMesh {
 
 class ClipperEngine : public BooleanEngine {
     public:
-        virtual ~ClipperEngine() {}
+        virtual ~ClipperEngine() = default;
 
     public:
         virtual void compute_union();

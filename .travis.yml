@@ -17,7 +17,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - brew unlink python
-        - brew install python
+        - brew install python tbb
       install:
         - pip3 install -r python/requirements.txt
         - git submodule update --init
@@ -33,11 +33,11 @@ matrix:
         - cmake ..
         - make -j 4
         - cd ..
-        - ./setup.py install --user
+        - ./setup.py install
       after_success:
         - export PYMESH_PATH=`pwd`
         - cd build
-        - make all_tests
+        - make tests
         - cd ..
         - python -c "import pymesh; pymesh.test()"
 

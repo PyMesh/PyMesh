@@ -51,8 +51,9 @@ class OBJParser : public MeshParser {
         void finalize_textures();
         void finalize_normals();
         void finalize_parameters();
+        void earclip(const std::vector<size_t>& idx);
 
-        typedef std::list<VectorF> VertexList;
+        typedef std::vector<VectorF> VertexList;
         typedef std::list<VectorI> FaceList;
         typedef std::list<VectorI>  VoxelList;
         typedef std::vector<VectorF> NormalVector;

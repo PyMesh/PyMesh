@@ -1,82 +1,139 @@
-# Include headers
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
+ADD_CUSTOM_TARGET(ToolsTests)
 
-SET(TARGET_MODULE_TESTS "")
-
-IF (TARGET MeshUtils)
+IF (TARGET lib_MeshUtils)
     ADD_SUBDIRECTORY(MeshUtils)
-    LIST(APPEND TARGET_MODULE_TESTS MeshUtils_tests)
-ENDIF (TARGET MeshUtils)
+    ADD_DEPENDENCIES(ToolsTests
+        MeshUtils_tests
+        run_MeshUtils_tests
+    )
+ENDIF (TARGET lib_MeshUtils)
 
-IF (TARGET assembler)
+IF (TARGET lib_Assembler)
     ADD_SUBDIRECTORY(Assembler)
-    LIST(APPEND TARGET_MODULE_TESTS assembler_tests run_assembler_tests)
-ENDIF (TARGET assembler)
+    ADD_DEPENDENCIES(ToolsTests
+        Assembler_tests
+        run_Assembler_tests
+    )
+ENDIF (TARGET lib_Assembler)
 
-IF (TARGET tetgen)
-    ADD_SUBDIRECTORY(tetgen)
-    LIST(APPEND TARGET_MODULE_TESTS tetgen_tests)
-ENDIF (TARGET tetgen)
+IF (TARGET lib_TetGen)
+    ADD_SUBDIRECTORY(TetGen)
+    ADD_DEPENDENCIES(ToolsTests
+        TetGen_tests
+        run_TetGen_tests
+    )
+ENDIF (TARGET lib_TetGen)
 
-IF (TARGET cgal)
+IF (TARGET lib_CGAL)
     ADD_SUBDIRECTORY(CGAL)
-    LIST(APPEND TARGET_MODULE_TESTS cgal_tests)
-ENDIF (TARGET cgal)
+    ADD_DEPENDENCIES(ToolsTests
+        CGAL_tests
+        run_CGAL_tests
+    )
+ENDIF (TARGET lib_CGAL)
 
-IF (TARGET triangle)
-    ADD_SUBDIRECTORY(triangle)
-    LIST(APPEND TARGET_MODULE_TESTS triangle_tests)
-ENDIF (TARGET triangle)
+IF (TARGET lib_Triangle)
+    ADD_SUBDIRECTORY(Triangle)
+    ADD_DEPENDENCIES(ToolsTests
+        Triangle_tests
+        run_Triangle_tests
+    )
+ENDIF (TARGET lib_Triangle)
 
-IF (TARGET convex_hull)
+IF (TARGET lib_ConvexHull)
     ADD_SUBDIRECTORY(ConvexHull)
-    LIST(APPEND TARGET_MODULE_TESTS convex_hull_tests)
-ENDIF (TARGET convex_hull)
+    ADD_DEPENDENCIES(ToolsTests
+        ConvexHull_tests
+        run_ConvexHull_tests
+    )
+ENDIF (TARGET lib_ConvexHull)
 
-IF (TARGET boolean)
+IF (TARGET lib_Boolean)
     ADD_SUBDIRECTORY(Boolean)
-    LIST(APPEND TARGET_MODULE_TESTS boolean_tests)
-ENDIF (TARGET boolean)
+    ADD_DEPENDENCIES(ToolsTests
+        Boolean_tests
+        run_Boolean_tests
+    )
+ENDIF (TARGET lib_Boolean)
 
-#IF (TARGET EigenUtils)
-#    ADD_SUBDIRECTORY(EigenUtils)
-#    LIST(APPEND TARGET_MODULE_TESTS EigenUtils_tests)
-#ENDIF (TARGET EigenUtils)
+IF (TARGET lib_EigenUtils)
+    ADD_SUBDIRECTORY(EigenUtils)
+    ADD_DEPENDENCIES(ToolsTests
+        EigenUtils_tests
+        run_EigenUtils_tests
+    )
+ENDIF (TARGET lib_EigenUtils)
 
-IF (TARGET lib_predicates)
+IF (TARGET lib_Predicates)
     ADD_SUBDIRECTORY(Predicates)
-    LIST(APPEND TARGET_MODULE_TESTS predicates_tests)
-ENDIF (TARGET lib_predicates)
+    ADD_DEPENDENCIES(ToolsTests
+        Predicates_tests
+        run_Predicates_tests
+    )
+ENDIF (TARGET lib_Predicates)
 
-IF (TARGET SparseSolver)
+IF (TARGET lib_SparseSolver)
     ADD_SUBDIRECTORY(SparseSolver)
-    LIST(APPEND TARGET_MODULE_TESTS SparseSolver_tests)
-ENDIF (TARGET SparseSolver)
+    ADD_DEPENDENCIES(ToolsTests
+        SparseSolver_tests
+        run_SparseSolver_tests
+    )
+ENDIF (TARGET lib_SparseSolver)
 
-IF (TARGET envelope)
-    ADD_SUBDIRECTORY(Envelope)
-    LIST(APPEND TARGET_MODULE_TESTS envelope_tests)
-ENDIF (TARGET envelope)
+#IF (TARGET envelope)
+#    ADD_SUBDIRECTORY(Envelope)
+#    LIST(APPEND TARGET_MODULE_TESTS envelope_tests)
+#ENDIF (TARGET envelope)
 
-IF (TARGET wires)
+IF (TARGET lib_Wires)
     ADD_SUBDIRECTORY(Wires)
-    LIST(APPEND TARGET_MODULE_TESTS wires_tests)
-ENDIF (TARGET wires)
+    ADD_DEPENDENCIES(ToolsTests
+        Wires_tests
+        run_Wires_tests
+    )
+ENDIF (TARGET lib_Wires)
 
-IF (TARGET lib_igl)
+IF (TARGET lib_IGL)
     ADD_SUBDIRECTORY(IGL)
-    LIST(APPEND TARGET_MODULE_TESTS igl_tests)
-ENDIF (TARGET lib_igl)
+    ADD_DEPENDENCIES(ToolsTests
+        IGL_tests
+        run_IGL_tests
+    )
+ENDIF (TARGET lib_IGL)
 
-IF (TARGET lib_triangulation)
+IF (TARGET lib_Triangulation)
     ADD_SUBDIRECTORY(Triangulation)
-    LIST(APPEND TARGET_MODULE_TESTS triangulation_tests)
-ENDIF (TARGET lib_triangulation)
+    ADD_DEPENDENCIES(ToolsTests
+        Triangulation_tests
+        run_Triangulation_tests
+    )
+ENDIF (TARGET lib_Triangulation)
 
-IF (TARGET lib_tetrahedralization)
-    ADD_SUBDIRECTORY(Tetrahedralization)
-    LIST(APPEND TARGET_MODULE_TESTS tetrahedralization_tests)
-ENDIF (TARGET lib_tetrahedralization)
+#IF (TARGET lib_tetrahedralization)
+#    ADD_SUBDIRECTORY(Tetrahedralization)
+#    LIST(APPEND TARGET_MODULE_TESTS tetrahedralization_tests)
+#ENDIF (TARGET lib_tetrahedralization)
+#
+IF (TARGET lib_BVH)
+    ADD_SUBDIRECTORY(BVH)
+    ADD_DEPENDENCIES(ToolsTests
+        BVH_tests
+        run_BVH_tests
+    )
+ENDIF (TARGET lib_BVH)
 
-ADD_CUSTOM_TARGET(tools_tests DEPENDS ${TARGET_MODULE_TESTS})
+IF (TARGET lib_Geogram)
+    ADD_SUBDIRECTORY(Geogram)
+    ADD_DEPENDENCIES(ToolsTests
+        Geogram_tests
+        run_Geogram_tests
+    )
+ENDIF (TARGET lib_Geogram)
+
+IF (TARGET lib_Compression)
+    ADD_SUBDIRECTORY(Compression)
+    ADD_DEPENDENCIES(ToolsTests
+        Compression_tests
+        run_Compression_tests
+    )
+ENDIF (TARGET lib_Compression)

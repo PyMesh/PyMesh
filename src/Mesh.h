@@ -84,6 +84,7 @@ class Mesh {
         // Attribute access
         bool has_attribute(const std::string& attr_name) const;
         void add_attribute(const std::string& attr_name);
+        void add_empty_attribute(const std::string& attr_name);
         void remove_attribute(const std::string& attr_name);
         VectorF& get_attribute(const std::string& attr_name);
         const VectorF& get_attribute(const std::string& attr_name) const;

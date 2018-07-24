@@ -57,3 +57,8 @@ The following predicates are built on top of above fundamental predicates.
 .. autofunction:: pymesh.get_tet_orientations
 .. autofunction:: pymesh.get_tet_orientations_raw
 
+Mesh compression
+----------------
+
+.. autofunction:: pymesh.compress
+.. autofunction:: pymesh.decompress

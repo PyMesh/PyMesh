@@ -1,42 +1,57 @@
-# Include headers
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/Tetrahedralization/)
-
-# Inlclude CGAL
-IF(CGAL_FOUND)
-    INCLUDE(${CGAL_USE_FILE})
-    ADD_DEFINITIONS(-DWITH_CGAL)
-    ADD_DEFINITIONS(-DCGAL_CONCURRENT_MESH_3)
-ELSE(CGAL_FOUND)
-    MESSAGE(WARNING "CGAL missing.  Skipping CGAL tetrahedralization support")
-ENDIF(CGAL_FOUND)
-
-# Include TetGen
-IF(TETGEN_FOUND)
-    INCLUDE_DIRECTORIES(${TETGEN_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_TETGEN)
-ELSE(TETGEN_FOUND)
-    MESSAGE(WARNING "Tetgen missing.  Skipping TetGen tetrahedralization support")
-ENDIF(TETGEN_FOUND)
-
-# Include GeoGram
-IF (GEOGRAM_FOUND)
-    INCLUDE_DIRECTORIES(${GEOGRAM_INCLUDE_DIR})
-    ADD_DEFINITIONS(-DWITH_GEOGRAM)
-ENDIF (GEOGRAM_FOUND)
-
-# Include Quartet
-IF (QUARTET_FOUND)
-    INCLUDE_DIRECTORIES(${QUARTET_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_QUARTET)
-ENDIF (QUARTET_FOUND)
-
 # Enumerate source files
 FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
 FILE(GLOB TEST_INC_FILES *_test.h)
 
-ADD_EXECUTABLE(tetrahedralization_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(tetrahedralization_tests Mesh lib_MeshUtils
-    lib_tetrahedralization ${GTEST_BOTH_LIBRARIES})
-ADD_CUSTOM_COMMAND(TARGET tetrahedralization_tests POST_BUILD
-    COMMAND tetrahedralization_tests)
+ADD_EXECUTABLE(Tetrahedralization_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(Tetrahedralization_tests
+    PRIVATE
+        lib_Tetrahedralization
+        PyMesh::UnitTest
+)
+ADD_CUSTOM_TARGET(run_Tetrahedralization_tests
+    DEPENDS
+        Tetrahedralization_tests
+    COMMAND
+        Tetrahedralization_tests
+)
+
+# Inlclude CGAL
+IF(CGAL_FOUND)
+    TARGET_COMPILE_DEFINITIONS(Tetrahedralization_tests
+        PRIVATE
+            -DWITH_CGAL
+            -DCGAL_CONCURRENT_MESH_3
+    )
+ENDIF(CGAL_FOUND)
+
+# Include TetGen
+IF(TETGEN_FOUND)
+    TARGET_COMPILE_DEFINITIONS(Tetrahedralization_tests
+        PRIVATE
+            -DWITH_TETGEN
+    )
+ENDIF(TETGEN_FOUND)
+
+# Include GeoGram
+IF (GEOGRAM_FOUND)
+    TARGET_COMPILE_DEFINITIONS(Tetrahedralization_tests
+        PRIVATE
+            -DWITH_GEOGRAM
+    )
+ENDIF (GEOGRAM_FOUND)
+
+# Include Quartet
+IF (QUARTET_FOUND)
+    TARGET_COMPILE_DEFINITIONS(Tetrahedralization_tests
+        PRIVATE
+            -DWITH_QUARTET
+    )
+ENDIF (QUARTET_FOUND)
+
+# TetWild
+IF (TETWILD_FOUND)
+    TARGET_COMPILE_DEFINITIONS(Tetrahedralization_tests
+        PRIVATE
+            -DWITH_TETWILD
+    )
+ENDIF(TETWILD_FOUND)

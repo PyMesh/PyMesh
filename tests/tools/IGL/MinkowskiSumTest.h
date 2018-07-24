@@ -2,7 +2,7 @@
 #pragma once
 
 #include <TestBase.h>
-#include <MinkowskiSum.h>
+#include <IGL/MinkowskiSum.h>
 #include <MeshUtils/MeshChecker.h>
 
 class MinkowskiSumTest : public TestBase {

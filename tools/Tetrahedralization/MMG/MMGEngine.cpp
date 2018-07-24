@@ -2,7 +2,7 @@
 
 #include "MMGEngine.h"
 #include <Core/Exception.h>
-#include <tetgen/TetgenWrapper.h>
+#include <TetGen/TetgenWrapper.h>
 extern "C" {
 #include <mmg/libmmg.h>
 }

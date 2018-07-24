@@ -146,6 +146,10 @@ void Mesh::add_attribute(const std::string& attr_name) {
     m_attributes->add_attribute(attr_name, *this);
 }
 
+void Mesh::add_empty_attribute(const std::string& attr_name) {
+    m_attributes->add_empty_attribute(attr_name);
+}
+
 void Mesh::remove_attribute(const std::string& attr_name) {
     m_attributes->remove_attribute(attr_name);
 }

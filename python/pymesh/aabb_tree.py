@@ -24,8 +24,23 @@ class AABBTree:
     def do_intersect_segments(self, vertices, edges):
         return self.__raw_tree.do_intersect_segments(vertices, edges).squeeze();
 
+class BVH:
+    def __init__(self, engine_name="cgal"):
+        self.__raw_bvh = PyMesh.BVHEngine.create(engine_name);
 
-def distance_to_mesh(mesh, pts):
+    def load_data(self, vertices, faces):
+        self.__raw_bvh.set_mesh(vertices, faces);
+
+    def load_mesh(self, mesh):
+        self.__raw_bvh.set_mesh(mesh.vertices, mesh.faces);
+        self.__raw_bvh.build();
+
+    def lookup(self, pts):
+        sq_dists, face_indices, closest_pts = self.__raw_bvh.lookup(pts);
+        return sq_dists.squeeze(), face_indices.squeeze(), closest_pts;
+
+
+def distance_to_mesh(mesh, pts, engine="cgal"):
     """ Compute the distance from a set of points to a mesh.
 
     Args:
@@ -42,10 +57,9 @@ def distance_to_mesh(mesh, pts):
                                   query point.
     """
 
-    tree = AABBTree();
-    tree.load_mesh(mesh);
-    squared_distances, face_indices, closest_points =\
-            tree.look_up_with_closest_points(pts);
+    bvh = BVH(engine);
+    bvh.load_mesh(mesh);
+    squared_distances, face_indices, closest_points = bvh.lookup(pts);
     return squared_distances, face_indices, closest_points;
 
 def do_intersect(mesh, nodes, elements):

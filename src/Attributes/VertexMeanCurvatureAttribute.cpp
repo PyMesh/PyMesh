@@ -15,6 +15,11 @@ void VertexMeanCurvatureAttribute::compute_from_mesh(Mesh& mesh) {
     assert(laplacian.size() == dim*num_vertices);
     assert(normals.size() == dim*num_vertices);
 
+    if (!mesh.has_attribute("vertex_voronoi_area")) {
+        mesh.add_attribute("vertex_voronoi_area");
+    }
+
+    const auto& area = mesh.get_attribute("vertex_voronoi_area");
     VectorF& mean_curvature = m_values;
     mean_curvature = VectorF::Zero(num_vertices);
     for (size_t i=0; i<num_vertices; i++) {
@@ -24,6 +29,7 @@ void VertexMeanCurvatureAttribute::compute_from_mesh(Mesh& mesh) {
             mean_curvature[i] *= -1;
         }
     }
+    mean_curvature = mean_curvature.array() / area.array();
 }
 
 VectorF VertexMeanCurvatureAttribute::compute_laplacian_vectors(Mesh& mesh) {

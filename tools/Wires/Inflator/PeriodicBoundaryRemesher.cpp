@@ -13,7 +13,7 @@
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <Misc/HashGrid.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>

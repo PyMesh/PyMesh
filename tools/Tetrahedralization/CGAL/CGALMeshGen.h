@@ -2,7 +2,7 @@
 #pragma once
 
 #include <Core/Exception.h>
-#include <TetrahedralizationEngine.h>
+#include <Tetrahedralization/TetrahedralizationEngine.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/make_mesh_3.h>
