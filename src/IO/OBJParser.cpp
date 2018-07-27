@@ -191,8 +191,11 @@ bool OBJParser::parse_vertex_line(char* line) {
             return parse_vertex_normal(line);
         case 'p':
             return parse_vertex_parameter(line);
+        case 'c':
+            // Unofficial custom line.  Ignore.
+            return true;
         default:
-            throw IOError("Invalid vertex line");
+            throw IOError("Invalid vertex line: " + std::string(line));
     }
 }
 
