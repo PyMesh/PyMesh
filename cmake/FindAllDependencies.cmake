@@ -7,6 +7,11 @@ ENDIF (NOT EIGNE_FOUND)
 
 ############################ OPTIONAL PACKAGES #################################
 
+# TBB
+IF (NOT TBB_FOUND)
+    FIND_PACKAGE(TBB REQUIRED)
+ENDIF (NOT TBB_FOUND)
+
 # OpenCL
 IF (NOT OPENCL_FOUND)
     FIND_PACKAGE(OpenCL)
