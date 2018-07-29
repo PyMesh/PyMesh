@@ -79,6 +79,8 @@ PyMesh also has a number of optional dependencies:
   triangulations, Voronoi diagrams computations.
 * [Quartet](https://github.com/crawforddoran/quartet): A tetrahedral mesh
   generator that does isosurface stuffing with an acute tetrahedral tile.
+* [TBB](https://www.threadingbuildingblocks.org/): Thread building blocks from
+  Intel.
 * [Tetgen](http://wias-berlin.de/software/tetgen/): Tetrahedral mesh generation
   engine.
 * [Triangle](http://www.cs.cmu.edu/~quake/triangle.html): A two-Dimensional
