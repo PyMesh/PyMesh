@@ -5,7 +5,6 @@ recursive-include tests *
 recursive-include examples *
 recursive-include cmake *.cmake
 recursive-include cmake *.py
-recursive-include eigen_wrapper *.i
 recursive-include scripts *.py
 recursive-include third_party *
 recursive-exclude third_party *.png
