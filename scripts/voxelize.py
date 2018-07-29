@@ -25,6 +25,7 @@ def main():
     mesh = pymesh.load_mesh(args.input_mesh);
     grid = pymesh.VoxelGrid(args.cell_size, mesh.dim);
     grid.insert_mesh(mesh);
+    grid.create_grid();
     out_mesh = grid.mesh;
     pymesh.save_mesh(args.output_mesh, out_mesh);
 
