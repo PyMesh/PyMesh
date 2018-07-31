@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
+#ifdef WITH_IGL
 #include "HarmonicSolver.h"
 #include <Core/Exception.h>
 #include <Math/MatrixUtils.h>
@@ -59,3 +60,5 @@ void HarmonicSolver::pre_process() {
 void HarmonicSolver::solve() {
     igl::harmonic(m_nodes, m_elements, m_bd_indices, m_bd_values, m_order, m_solution);
 }
+
+#endif

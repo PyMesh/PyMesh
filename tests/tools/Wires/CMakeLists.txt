@@ -5,8 +5,8 @@ FILE(GLOB_RECURSE TEST_INC_FILES *.h *.inl)
 ADD_EXECUTABLE(Wires_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(Wires_tests
     PRIVATE
-        lib_Wires
         PyMesh::UnitTest
+        PyMesh::Tools::Wires
 )
 TARGET_INCLUDE_DIRECTORIES(Wires_tests
     PRIVATE

@@ -1,3 +1,4 @@
+#ifdef WITH_GEOGRAM
 #include "GeogramDelaunayTriangulation.h"
 #include <geogram/delaunay/delaunay.h>
 
@@ -16,3 +17,5 @@ void GeogramDelaunayTriangulation::run() {
         m_faces(i, 2) = (faces + i*3)[2];
     }
 }
+
+#endif

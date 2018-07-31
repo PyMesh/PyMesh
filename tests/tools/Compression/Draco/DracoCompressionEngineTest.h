@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_DRACO
 
 #include <Core/EigenTypedef.h>
 #include <Compression/CompressionEngine.h>
@@ -26,3 +27,5 @@ TEST_F(DracoCompressionEngineTest, Simple) {
     //const auto& faces2 = mesh2->get_faces();
     //ASSERT_MATRIX_EQ(faces, faces2); 
 }
+
+#endif

@@ -23,24 +23,19 @@ FIND_LIBRARY(CORK_LIBRARIES cork
     /usr/local/lib/
     /usr/lib/)
 
+IF (NOT GMP_FOUND)
+    FIND_PACKAGE(GMP)
+ENDIF (NOT GMP_FOUND)
+
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Cork
     "Cork library cannot be found.  Consider set CORK_PATH environment variable"
     CORK_INCLUDE_DIRS
-    CORK_LIBRARIES)
+    CORK_LIBRARIES
+    GMP_INCLUDE_DIRS
+    GMP_LIBRARIES)
 
 MARK_AS_ADVANCED(
     CORK_INCLUDE_DIRS
     CORK_LIBRARIES)
 
-IF (CORK_FOUND AND NOT TARGET PyMesh::Cork)
-    ADD_LIBRARY(PyMesh::Cork INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Cork SYSTEM
-        INTERFACE
-            ${CORK_INCLUDE_DIRS}
-    )
-    TARGET_LINK_LIBRARIES(PyMesh::Cork
-        INTERFACE
-            ${CORK_LIBRARIES}
-    )
-ENDIF (CORK_FOUND AND NOT TARGET PyMesh::Cork)

@@ -7,8 +7,8 @@ SET_TARGET_PROPERTIES(lib_MeshUtils PROPERTIES OUTPUT_NAME "PyMesh-MeshUtils")
 TARGET_LINK_LIBRARIES(lib_MeshUtils
     PUBLIC
         Mesh
-        lib_Predicates
         PyMesh::Tools
+        PyMesh::Tools::Predicates
 )
 
-ADD_CUSTOM_TARGET(MeshUtils DEPENDS lib_MeshUtils)
+ADD_LIBRARY(PyMesh::Tools::MeshUtils ALIAS lib_MeshUtils)

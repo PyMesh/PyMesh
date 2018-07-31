@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include <OuterHull/OuterHullEngine.h>
 
@@ -20,3 +21,5 @@ class IGLOuterHullEngine : public OuterHullEngine {
 };
 
 }
+
+#endif

@@ -1,3 +1,4 @@
+#ifdef WITH_IGL
 #include "IGLCSGTree.h"
 
 #include <igl/MeshBooleanType.h>
@@ -92,3 +93,4 @@ std::vector<size_t> IGLCSGTree::get_birth_face_sizes() const {
     }
 }
 
+#endif

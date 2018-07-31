@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 #include <ConvexHull/CGAL/CGALConvexHull3D.h>
 #include <Core/EigenTypedef.h>
 #include <ConvexHullEngineTest.h>
@@ -167,3 +168,5 @@ TEST_F(CGALConvexHull3DTest, near_degenerated_pts) {
     ASSERT_INDEX_MAP_IS_VALID(pts, vertices, engine.get_index_map());
     ASSERT_ORIENTATION_IS_VALID(vertices, faces);
 }
+
+#endif

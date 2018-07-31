@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_TETGEN
 #include "TetGenEngine.h"
 
 #include <cmath>
@@ -26,3 +27,5 @@ void TetGenEngine::run() {
     m_faces = tetgen.get_faces();
     m_voxels = tetgen.get_voxels();
 }
+
+#endif

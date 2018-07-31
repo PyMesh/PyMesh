@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CGAL
 #include "CGALConvexHull.h"
 
 #include <cassert>
@@ -38,3 +39,4 @@ void CGALConvexHull::compute_index_map(const MatrixFr& points) {
     }
 }
 
+#endif

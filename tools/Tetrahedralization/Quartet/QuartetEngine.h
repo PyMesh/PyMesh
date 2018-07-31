@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_QUARTET
 
 #include <Tetrahedralization/TetrahedralizationEngine.h>
 
@@ -14,3 +15,5 @@ class QuartetEngine : public TetrahedralizationEngine {
 };
 
 }
+
+#endif

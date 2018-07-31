@@ -2,20 +2,7 @@
 FILE(GLOB SRC_FILES *.cpp *.inl)
 FILE(GLOB INC_FILES *.h)
 
-ADD_LIBRARY(CompressionDependencies INTERFACE IMPORTED)
-
-# Draco
-IF (draco_FOUND AND PYMESH_USE_DRACO)
-    TARGET_LINK_LIBRARIES(CompressionDependencies
-        INTERFACE
-            PyMesh::Draco
-    )
-    TARGET_COMPILE_DEFINITIONS(CompressionDependencies
-        INTERFACE
-            -DWITH_DRACO
-    )
-    ADD_SUBDIRECTORY(Draco)
-ENDIF (draco_FOUND AND PYMESH_USE_DRACO)
+ADD_SUBDIRECTORY(Draco)
 
 ADD_LIBRARY(lib_Compression SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_Compression PROPERTIES OUTPUT_NAME
@@ -25,5 +12,7 @@ TARGET_LINK_LIBRARIES(lib_Compression
         Mesh
         PyMesh::Tools
     PRIVATE
-        CompressionDependencies
+        PyMesh::Draco
 )
+
+ADD_LIBRARY(PyMesh::Tools::Compression ALIAS lib_Compression)

@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CGAL
 #include "CGALConvexHull3D.h"
 
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -72,3 +73,4 @@ void CGALConvexHull3D::run(const MatrixFr& points) {
     reorient_faces();
 }
 
+#endif

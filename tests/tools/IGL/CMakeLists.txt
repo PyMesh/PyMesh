@@ -5,9 +5,9 @@ FILE(GLOB TEST_INC_FILES *_test.h)
 ADD_EXECUTABLE(IGL_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(IGL_tests
     PRIVATE
-        lib_IGL
-        lib_MeshUtils
         PyMesh::UnitTest
+        PyMesh::Tools::IGL
+        PyMesh::Tools::MeshUtils
 )
 ADD_CUSTOM_TARGET(run_IGL_tests
     DEPENDS

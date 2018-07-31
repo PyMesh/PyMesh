@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
+#ifdef WITH_IGL
 #include "MinkowskiSum.h"
 #include <Math/MatrixUtils.h>
 #include <igl/copyleft/cgal/minkowski_sum.h>
@@ -67,3 +68,5 @@ void MinkowskiSum::run(const MatrixFr& path) {
             igl::MESH_BOOLEAN_TYPE_UNION,
             m_out_vertices, m_out_faces, J);
 }
+
+#endif

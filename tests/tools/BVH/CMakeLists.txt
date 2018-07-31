@@ -6,7 +6,10 @@ ADD_EXECUTABLE(BVH_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(BVH_tests
     PRIVATE
         PyMesh::UnitTest
-        lib_BVH
+        PyMesh::Tools::BVH
+        PyMesh::Tools::CGAL
+        PyMesh::Tools::Geogram
+        PyMesh::Tools::IGL
 )
 ADD_CUSTOM_TARGET(run_BVH_tests
     DEPENDS
@@ -14,27 +17,3 @@ ADD_CUSTOM_TARGET(run_BVH_tests
     COMMAND
         BVH_tests
 )
-
-# CGAL
-IF (CGAL_FOUND)
-    TARGET_COMPILE_DEFINITIONS(BVH_tests
-        PRIVATE
-            -DWITH_CGAL
-    )
-ENDIF (CGAL_FOUND)
-
-# Geogram
-IF (GEOGRAM_FOUND)
-    TARGET_COMPILE_DEFINITIONS(BVH_tests
-        PRIVATE
-            -DWITH_GEOGRAM
-    )
-ENDIF (GEOGRAM_FOUND)
-
-# IGL
-IF (LIBIGL_FOUND)
-    TARGET_COMPILE_DEFINITIONS(BVH_tests
-        PRIVATE
-            -DWITH_IGL
-    )
-ENDIF (LIBIGL_FOUND)

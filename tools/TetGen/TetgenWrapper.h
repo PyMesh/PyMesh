@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TETGEN
 #include <string>
 #include <tetgen.h>
 
@@ -211,3 +212,5 @@ class TetgenWrapper {
 };
 
 }
+
+#endif

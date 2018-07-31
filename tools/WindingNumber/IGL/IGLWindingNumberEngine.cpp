@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_IGL
 #include "IGLWindingNumberEngine.h"
 #include <igl/winding_number.h>
 
@@ -9,3 +10,5 @@ VectorF IGLWindingNumberEngine::run(const MatrixFr& queries) {
     igl::winding_number(m_vertices, m_faces, queries, winding_numbers);
     return winding_numbers;
 }
+
+#endif

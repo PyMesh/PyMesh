@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CARVE
 #include "CarveEngine.h"
 
 #include <cassert>
@@ -135,3 +136,5 @@ void CarveEngine::compute_symmetric_difference() {
                 carve::csg::CSG::SYMMETRIC_DIFFERENCE));
     extract_data(r, m_vertices, m_faces);
 }
+
+#endif

@@ -35,14 +35,3 @@ mark_as_advanced(
   TRIANGLE_LIBRARIES
 )
 
-IF (TRIANGLE_FOUND AND NOT TARGET PyMesh::Triangle)
-    ADD_LIBRARY(PyMesh::Triangle INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Triangle SYSTEM
-        INTERFACE
-            ${TRIANGLE_INCLUDE_DIRS}
-    )
-    TARGET_LINK_LIBRARIES(PyMesh::Triangle
-        INTERFACE
-            ${TRIANGLE_LIBRARIES}
-    )
-ENDIF (TRIANGLE_FOUND AND NOT TARGET PyMesh::Triangle)

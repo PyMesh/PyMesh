@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_MMG
 
 #include "MMGEngine.h"
 #include <Core/Exception.h>
@@ -160,3 +161,5 @@ void MMGEngine::run() {
     m_voxels = m_voxels.topRows(count);
     m_voxels.col(0).swap(m_voxels.col(1));
 }
+
+#endif

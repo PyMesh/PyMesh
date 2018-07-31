@@ -79,16 +79,3 @@ find_package_handle_standard_args(UMFPACK DEFAULT_MSG
 
 mark_as_advanced(UMFPACK_INCLUDES UMFPACK_LIBRARIES AMD_LIBRARY COLAMD_LIBRARY)
 
-IF (UMFPACK_FOUND AND NOT TARGET PyMesh::Umfpack)
-    ADD_LIBRARY(PyMesh::Umfpack INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Umfpack SYSTEM
-        INTERFACE
-            ${UMFPACK_INCLUDES}
-    )
-    TARGET_LINK_LIBRARIES(PyMesh::Umfpack
-        INTERFACE
-            ${UMFPACK_LIBRARIES}
-            ${AMD_LIBRARY}
-            ${COLAMD_LIBRARY}
-    )
-ENDIF (UMFPACK_FOUND AND NOT TARGET PyMesh::Umfpack)

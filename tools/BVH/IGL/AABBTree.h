@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include <Core/EigenTypedef.h>
 #include <BVH/BVHEngine.h>
@@ -30,3 +31,5 @@ class AABBTree : public BVHEngine {
 
 }
 }
+
+#endif

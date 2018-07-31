@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TETGEN
 #include <TetGen/TetgenWrapper.h>
 
 #include <string>
@@ -47,3 +48,5 @@ TEST_F(TetgenWrapperTest, Cube) {
     ASSERT_GT(tet_faces.rows(), 0);
     ASSERT_GT(tet_voxels.rows(), 0);
 }
+
+#endif

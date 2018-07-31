@@ -6,7 +6,7 @@ ADD_EXECUTABLE(MeshUtils_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(MeshUtils_tests 
     PRIVATE
         Mesh
-        lib_MeshUtils
+        PyMesh::Tools::MeshUtils
         PyMesh::UnitTest)
 ADD_CUSTOM_TARGET(run_MeshUtils_tests
     COMMAND

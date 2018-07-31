@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
+#ifdef WITH_TETGEN
 #include "TetGenConvexHullEngine.h"
 
 #include <cassert>
@@ -22,3 +23,5 @@ void TetGenConvexHullEngine::run(const MatrixFr& points) {
 
     m_index_map.setLinSpaced(points.rows(), 0, points.rows()-1);
 }
+
+#endif

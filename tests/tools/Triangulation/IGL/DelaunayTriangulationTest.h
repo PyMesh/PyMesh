@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include "../TriangulationTest.h"
 
@@ -74,3 +75,4 @@ TEST_F(DelaunayTriangulationTest, degenerate) {
     ASSERT_EQ(0, faces.rows());
 }
 
+#endif

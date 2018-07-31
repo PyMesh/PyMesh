@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_GEOGRAM
 #include <string>
 #include <memory>
 #include <Geogram/GeogramBase.h>
@@ -70,3 +71,5 @@ TEST_F(GeogramMeshIOTest, empty) {
     ASSERT_EQ(0, mesh2->get_num_vertices());
     ASSERT_EQ(0, mesh2->get_num_faces());
 }
+
+#endif

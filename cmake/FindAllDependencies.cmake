@@ -1,11 +1,12 @@
-############################ REQUIRED PACKAGES #################################
+# MKL
+IF (NOT MKL_FOUND)
+    FIND_PACKAGE(MKL)
+ENDIF (NOT MKL_FOUND)
 
 # Include Eigen
 IF (NOT EIGNE_FOUND)
     FIND_PACKAGE(Eigen REQUIRED)
 ENDIF (NOT EIGNE_FOUND)
-
-############################ OPTIONAL PACKAGES #################################
 
 # TBB
 IF (NOT TBB_FOUND)
@@ -163,11 +164,6 @@ IF (NOT OPENMP_FOUND)
         MESSAGE(STATUS "OpenMP not found")
     ENDIF (OPENMP_FOUND)
 ENDIF (NOT OPENMP_FOUND)
-
-# MKL
-IF (NOT MKL_FOUND)
-    FIND_PACKAGE(MKL)
-ENDIF (NOT MKL_FOUND)
 
 # Fast winding number
 IF (NOT FAST_WINDING_NUMBER_FOUND)

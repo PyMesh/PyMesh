@@ -92,16 +92,3 @@ find_package_handle_standard_args(CHOLMOD DEFAULT_MSG
 
 mark_as_advanced(CHOLMOD_INCLUDES CHOLMOD_LIBRARIES AMD_LIBRARY COLAMD_LIBRARY)
 
-IF (CHOLMOD_FOUND AND NOT TARGET PyMesh::Cholmod)
-    ADD_LIBRARY(PyMesh::Cholmod INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Cholmod
-        INTERFACE
-            ${CHOLMOD_INCLUDES}
-    )
-    TARGET_LINK_LIBRARIES(PyMesh::Cholmod
-        INTERFACE
-            ${CHOLMOD_LIBRARIES}
-            ${AMD_LIBRARY}
-            ${COLAMD_LIBRARY}
-    )
-ENDIF (CHOLMOD_FOUND AND NOT TARGET PyMesh::Cholmod)

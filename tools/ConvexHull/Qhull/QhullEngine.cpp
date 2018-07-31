@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_QHULL
 #include "QhullEngine.h"
 
 #include <iostream>
@@ -77,3 +78,4 @@ void QhullEngine::extract_hull(const MatrixFr& points) {
     }
 }
 
+#endif

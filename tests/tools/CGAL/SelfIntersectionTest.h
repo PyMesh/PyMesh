@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 
 #include <Core/EigenTypedef.h>
 #include <Misc/Environment.h>
@@ -108,3 +109,5 @@ TEST_F(SelfIntersectionTest, PointLikeTriangles) {
     MatrixIr result = check_self_intersection(m_vertices, faces);
     ASSERT_EQ(0, result.rows());
 }
+
+#endif

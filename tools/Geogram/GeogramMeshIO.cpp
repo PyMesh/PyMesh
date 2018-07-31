@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_GEOGRAM
 
 #include <Core/Exception.h>
 #include "GeogramMeshIO.h"
@@ -22,3 +23,5 @@ void GeogramMeshIO::save_mesh(const std::string& filename, GeoMeshPtr geo_mesh) 
         throw IOError("Failed to save geogram mesh to " + filename);
     }
 }
+
+#endif

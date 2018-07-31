@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TRIANGLE
 
 #include <ConvexHull/ConvexHullEngine.h>
 
@@ -16,3 +17,5 @@ class TriangleConvexHullEngine : public ConvexHullEngine {
 };
 
 }
+
+#endif

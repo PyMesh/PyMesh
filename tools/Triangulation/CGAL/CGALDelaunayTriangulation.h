@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 
 #include <Triangulation/Triangulation.h>
 
@@ -13,3 +14,5 @@ namespace PyMesh {
             virtual void run();
     };
 }
+
+#endif

@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include <TestBase.h>
 #include <IGL/MinkowskiSum.h>
@@ -104,3 +105,5 @@ TEST_F(MinkowskiSumTest, Chain) {
     ASSERT_TRUE(checker.is_oriented());
     ASSERT_EQ(1, checker.get_num_connected_components());
 }
+
+#endif

@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_TETGEN
 #include "TetgenWrapper.h"
 #include <iostream>
 #include <tetgen.h>
@@ -173,3 +174,4 @@ std::string TetgenWrapper::generate_command_line_options() const {
     return opt.str();
 }
 
+#endif

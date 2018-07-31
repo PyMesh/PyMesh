@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CARVE
 
 #include <algorithm>
 #include <string>
@@ -279,3 +280,5 @@ TEST_F(CarveEngineTest, open_surface) {
     // carve does not handle intersecting closed surface with open surface.
     //EXPECT_EQ(2, faces.rows());
 }
+
+#endif

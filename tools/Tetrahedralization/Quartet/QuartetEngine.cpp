@@ -1,3 +1,4 @@
+#ifdef WITH_QUARTET
 #include "QuartetEngine.h"
 
 #include <vector>
@@ -93,3 +94,5 @@ void QuartetEngine::run() {
     // Some sanity check.
     assert(out_num_tets == 0 || m_voxels.maxCoeff() < out_num_vertices);
 }
+
+#endif

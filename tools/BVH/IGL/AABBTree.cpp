@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_IGL
 
 #include "AABBTree.h"
 
@@ -15,3 +16,5 @@ void PyMesh::IGL::AABBTree::lookup(const MatrixFr& points,
     m_tree.squared_distance(m_vertices, m_faces, points,
             squared_distances, closest_faces, closest_points);
 }
+
+#endif

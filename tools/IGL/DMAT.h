@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include <string>
 #include <igl/readDMAT.h>
@@ -23,3 +24,5 @@ namespace DMAT {
 }
 
 }
+
+#endif

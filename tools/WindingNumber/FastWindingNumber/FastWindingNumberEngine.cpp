@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_FAST_WINDING_NUMBER
 
 #include "FastWindingNumberEngine.h"
 
@@ -38,3 +39,5 @@ VectorF FastWindingNumberEngine::run(const MatrixFr& queries) {
 
     return winding_numbers;
 }
+
+#endif

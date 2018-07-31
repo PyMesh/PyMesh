@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TRIANGLE
 
 #include <Triangle/DimReduction.h>
 #include <TestBase.h>
@@ -38,3 +39,5 @@ TEST_F(DimReductionTest, 3Dto1D) {
     ASSERT_EQ(pts.rows(), unproj_pts.rows());
     ASSERT_NEAR(0.0, (pts - unproj_pts).norm(), 1e-12);
 }
+
+#endif

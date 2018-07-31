@@ -28,24 +28,25 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyWires.cpp)
 TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     Mesh
-    lib_Assembler
-    lib_MeshUtils
-    lib_CGAL
-    lib_Geogram
-    lib_IGL
-    lib_Predicates
-    lib_Compression
-    lib_ConvexHull
-    lib_SelfIntersection
-    lib_Boolean
-    lib_BVH
-    lib_OuterHull
-    lib_SparseSolver
-    lib_Tetrahedralization
-    lib_Triangle
-    lib_Triangulation
-    lib_WindingNumber
-    lib_Wires)
+    PyMesh::Tools::Assembler
+    PyMesh::Tools::MeshUtils
+    PyMesh::Tools::CGAL
+    PyMesh::Tools::Geogram
+    PyMesh::Tools::IGL
+    PyMesh::Tools::Predicates
+    PyMesh::Tools::Compression
+    PyMesh::Tools::ConvexHull
+    PyMesh::Tools::SelfIntersection
+    PyMesh::Tools::Boolean
+    PyMesh::Tools::BVH
+    PyMesh::Tools::OuterHull
+    PyMesh::Tools::SparseSolver
+    PyMesh::Tools::TetGen
+    PyMesh::Tools::Tetrahedralization
+    PyMesh::Tools::Triangle
+    PyMesh::Tools::Triangulation
+    PyMesh::Tools::WindingNumber
+    PyMesh::Tools::Wires)
 TARGET_INCLUDE_DIRECTORIES(PyMesh SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/tools

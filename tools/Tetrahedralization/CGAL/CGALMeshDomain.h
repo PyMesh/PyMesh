@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 #include <fstream>
 #include <memory>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -304,3 +305,4 @@ void extract_mesh(const typename Traits::C3t3& c3t3,
 
 }
 
+#endif

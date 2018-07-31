@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_GEOGRAM
 
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
@@ -17,3 +18,5 @@ Mesh::Ptr geomesh_to_mesh(const GeoMeshPtr geo_mesh);
 
 }
 }
+
+#endif

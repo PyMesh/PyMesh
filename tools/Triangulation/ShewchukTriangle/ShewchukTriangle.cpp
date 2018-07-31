@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
+#ifdef WITH_TRIANGLE
 
 #include "ShewchukTriangle.h"
 #include <Core/Exception.h>
@@ -22,3 +23,4 @@ void ShewchukTriangle::run() {
     m_faces = triangle.get_faces();
 }
 
+#endif

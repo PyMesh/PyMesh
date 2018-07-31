@@ -1,4 +1,5 @@
 #pragma once
+#ifdef WITH_IGL
 
 #include <Boolean/CSGTree.h>
 #include <igl/copyleft/cgal/CSGTree.h>
@@ -31,3 +32,5 @@ class IGLCSGTree : public CSGTree {
 };
 
 }
+
+#endif

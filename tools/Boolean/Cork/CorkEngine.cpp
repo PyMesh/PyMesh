@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CORK
 #include "CorkEngine.h"
 
 #include <algorithm>
@@ -130,3 +131,4 @@ void CorkEngine::compute_symmetric_difference() {
     clean_up();
 }
 
+#endif

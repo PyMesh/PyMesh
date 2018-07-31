@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CGAL
 #include "SelfIntersection.h"
 
 #include <Core/Exception.h>
@@ -218,3 +219,5 @@ std::vector<size_t> SelfIntersection::topological_overlap(size_t id1, size_t id2
     }
     return duplicated_vertices;
 }
+
+#endif

@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CGAL
 #include "CGALBooleanEngine.h"
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
@@ -103,3 +104,4 @@ void CGALBooleanEngine::compute_symmetric_difference() {
     }
 }
 
+#endif

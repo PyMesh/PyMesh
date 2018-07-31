@@ -1,3 +1,4 @@
+#ifdef WITH_CGAL
 #include "CGALDelaunayTriangulation.h"
 
 #include <vector>
@@ -33,3 +34,5 @@ void CGALDelaunayTriangulation::run() {
         count++;
     }
 }
+
+#endif

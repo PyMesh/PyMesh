@@ -5,8 +5,8 @@ FILE(GLOB TEST_INC_FILES *_test.h)
 ADD_EXECUTABLE(CGAL_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(CGAL_tests
     PRIVATE
-        lib_CGAL
         PyMesh::UnitTest
+        PyMesh::Tools::CGAL
 )
 ADD_CUSTOM_TARGET(run_CGAL_tests
     DEPENDS

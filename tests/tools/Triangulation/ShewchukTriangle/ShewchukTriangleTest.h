@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TRIANGLE
 
 #include "../TriangulationTest.h"
 
@@ -67,3 +68,4 @@ TEST_F(ShewchukTriangulationTest, degenerate) {
     ASSERT_EQ(0, faces.rows());
 }
 
+#endif

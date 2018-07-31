@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_TRIANGLE
 #include "TriangleWrapper.h"
 
 #include <cmath>
@@ -485,3 +486,4 @@ void TriangleWrapper::correct_orientation() {
     }
 }
 
+#endif

@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TETWILD
 
 #include <TestBase.h>
 #include <Tetrahedralization/TetrahedralizationEngine.h>
@@ -87,3 +88,5 @@ TEST_F(TetWildEngineTest, ball) {
     ASSERT_EQ(out_vertices.cols(), 3);
     ASSERT_GT(out_voxels.rows(), 0);
 }
+
+#endif

@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_GEOGRAM
 
 #include "GeogramMeshUtils.h"
 #include <Core/Exception.h>
@@ -120,3 +121,4 @@ Mesh::Ptr GeogramMeshUtils::geomesh_to_mesh(const GeoMeshPtr geo_mesh) {
                 dim, vertex_per_face, vertex_per_voxel).create();
 }
 
+#endif

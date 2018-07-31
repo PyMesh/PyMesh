@@ -1,3 +1,4 @@
+#ifdef WITH_BSP
 #include "BSPEngine.h"
 
 #include <cassert>
@@ -122,3 +123,5 @@ void BSPEngine::compute_symmetric_difference() {
     BSPPtr result = BSPlib::Bsp::Union(left, right);
     bsp_to_raw(result, m_vertices, m_faces);
 }
+
+#endif

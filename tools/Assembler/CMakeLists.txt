@@ -10,12 +10,13 @@ ADD_SUBDIRECTORY(Mesh)
 ADD_SUBDIRECTORY(ShapeFunctions)
 
 ADD_LIBRARY(lib_Assembler SHARED ${SRC_FILES} ${INC_FILES})
-TARGET_LINK_LIBRARIES(lib_Assembler 
+TARGET_LINK_LIBRARIES(lib_Assembler
     PUBLIC
         Mesh
-        lib_MeshUtils
         PyMesh::Tools
+    PRIVATE
+        PyMesh::Tools::MeshUtils
 )
 SET_TARGET_PROPERTIES(lib_Assembler PROPERTIES OUTPUT_NAME "PyMesh-Assembler")
 
-ADD_CUSTOM_TARGET(assembler DEPENDS lib_Assembler)
+ADD_LIBRARY(PyMesh::Tools::Assembler ALIAS lib_Assembler)

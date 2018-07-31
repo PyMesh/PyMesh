@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CLIPPER
 #include "ClipperEngine.h"
 #include <Core/Exception.h>
 #include <MeshUtils/Boundary.h>
@@ -224,3 +225,4 @@ void ClipperEngine::extract_result(const ClipperLib::Paths& paths) {
     }
 }
 
+#endif

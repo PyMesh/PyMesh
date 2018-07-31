@@ -5,8 +5,8 @@ FILE(GLOB TEST_INC_FILES *_test.h)
 ADD_EXECUTABLE(TetGen_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
 TARGET_LINK_LIBRARIES(TetGen_tests
     PRIVATE
-        lib_TetGen
         PyMesh::UnitTest
+        PyMesh::Tools::TetGen
 )
 ADD_CUSTOM_TARGET(run_TetGen_tests
     DEPENDS

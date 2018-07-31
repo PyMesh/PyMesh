@@ -1,4 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_CGAL
+
 #include "AABBTree.h"
 
 using namespace PyMesh;
@@ -43,3 +45,5 @@ void PyMesh::CGAL::AABBTree::lookup(const MatrixFr& points,
         squared_distances[i] = (p-p2).squared_length();
     }
 }
+
+#endif

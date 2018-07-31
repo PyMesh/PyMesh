@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TRIANGLE
 
 #include <Triangle/TriangleWrapper.h>
 #include <IO/MeshWriter.h>
@@ -425,3 +426,5 @@ TEST_F(TriangleWrapperTest, self_intersecting_segments) {
     ASSERT_EQ(5, vertices.rows());
     ASSERT_EQ(4, faces.rows());
 }
+
+#endif

@@ -2,95 +2,12 @@
 FILE(GLOB SRC_FILES *.cpp *.inl)
 FILE(GLOB INC_FILES *.h)
 
-ADD_LIBRARY(BooleanDependencies INTERFACE IMPORTED)
-
-# Cork
-IF (CORK_FOUND AND GMP_FOUND AND PYMESH_USE_CORK)
-    ADD_SUBDIRECTORY(Cork)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            PyMesh::Gmp
-            PyMesh::Cork
-    )
-    TARGET_COMPILE_DEFINITIONS(BooleanDependencies
-        INTERFACE
-            -DWITH_CORK
-    )
-
-ENDIF (CORK_FOUND AND GMP_FOUND AND PYMESH_USE_CORK)
-
-# Clipper which requires triangle.
-IF (CLIPPER_FOUND AND TRIANGLE_FOUND AND PYMESH_USE_CLIPPER AND
-        PYMESH_USE_TRIANGLE)
-    ADD_SUBDIRECTORY(Clipper)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            PyMesh::Clipper
-            lib_Triangle
-    )
-    TARGET_COMPILE_DEFINITIONS(BooleanDependencies
-        INTERFACE
-            -DWITH_CLIPPER
-    )
-ENDIF (CLIPPER_FOUND AND TRIANGLE_FOUND AND PYMESH_USE_CLIPPER AND
-    PYMESH_USE_TRIANGLE)
-
-# IGL and CGAL
-IF (LIBIGL_FOUND AND CGAL_FOUND AND PYMESH_USE_LIBIGL AND PYMESH_USE_CGAL)
-    ADD_SUBDIRECTORY(IGL)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            lib_IGL
-            lib_CGAL
-    )
-ENDIF (LIBIGL_FOUND AND CGAL_FOUND AND PYMESH_USE_LIBIGL AND PYMESH_USE_CGAL)
-
-# CGAL
-IF (CGAL_FOUND AND PYMESH_USE_CGAL)
-    ADD_SUBDIRECTORY(CGAL)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            lib_CGAL
-    )
-ENDIF (CGAL_FOUND AND PYMESH_USE_CGAL)
-
-# Carve
-IF (CARVE_FOUND AND PYMESH_USE_CARVE)
-    ADD_SUBDIRECTORY(Carve)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            PyMesh::Carve
-    )
-    TARGET_COMPILE_DEFINITIONS(BooleanDependencies
-        INTERFACE
-            -DWITH_CARVE
-    )
-ENDIF (CARVE_FOUND AND PYMESH_USE_CARVE)
-
-# BSP
-IF (BSP_FOUND)
-    ADD_SUBDIRECTORY(BSP)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            PyMesh::BSP
-    )
-    TARGET_COMPILE_DEFINITIONS(BooleanDependencies
-        INTERFACE
-            -DWITH_BSP
-    )
-ENDIF (BSP_FOUND)
-
-# tinyxml2
-IF (TINYXML2_FOUND AND PYMESH_USE_TINYXML2)
-    TARGET_LINK_LIBRARIES(BooleanDependencies
-        INTERFACE
-            PyMesh::TinyXML2
-    )
-    TARGET_COMPILE_DEFINITIONS(BooleanDependencies
-        INTERFACE
-            -DWITH_TINYXML2
-    )
-ENDIF (TINYXML2_FOUND AND PYMESH_USE_TINYXML2)
+ADD_SUBDIRECTORY(Cork)
+ADD_SUBDIRECTORY(Clipper)
+ADD_SUBDIRECTORY(IGL)
+ADD_SUBDIRECTORY(CGAL)
+ADD_SUBDIRECTORY(Carve)
+ADD_SUBDIRECTORY(BSP)
 
 ADD_LIBRARY(lib_Boolean SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_Boolean PROPERTIES OUTPUT_NAME "PyMesh-Boolean")
@@ -100,5 +17,14 @@ TARGET_LINK_LIBRARIES(lib_Boolean
         PyMesh::Tools
     PRIVATE
         lib_MeshUtils
-        BooleanDependencies
+        PyMesh::Cork
+        PyMesh::Clipper
+        PyMesh::Carve
+        PyMesh::BSP
+        PyMesh::TinyXML2
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::IGL
+        PyMesh::Tools::CGAL
 )
+
+ADD_LIBRARY(PyMesh::Tools::Boolean ALIAS lib_Boolean)
