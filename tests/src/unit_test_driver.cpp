@@ -26,6 +26,7 @@
 #include "Misc/HashKeyTest.h"
 #include "Misc/MatrixIOTest.h"
 #include "Attributes/EdgeDihedralAngleAttributeTest.h"
+#include "Attributes/EdgeSquaredLengthAttributeTest.h"
 #include "Attributes/FaceAreaAttributeTest.h"
 #include "Attributes/FaceAspectRatioAttributeTest.h"
 #include "Attributes/FaceCentroidAttributeTest.h"

@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <tbb/tbb.h>
 
 #include <Core/Exception.h>
 #include <Mesh.h>
@@ -17,13 +18,21 @@ void FaceAreaAttribute::compute_from_mesh(Mesh& mesh) {
     areas = VectorF::Zero(num_faces);
 
     if (num_vertex_per_face == 3) {
-        for (size_t i=0; i<num_faces; i++) {
-            areas[i] = compute_triangle_area(mesh, i);
-        }
+        tbb::parallel_for(tbb::blocked_range<size_t>(0, num_faces),
+                [this, &mesh, &areas](const tbb::blocked_range<size_t>& r) {
+                    for (size_t i=r.begin(); i<r.end(); i++) {
+                        areas[i] = this->compute_triangle_area(mesh, i);
+                    }
+                }
+        );
     } else if (num_vertex_per_face == 4) {
-        for (size_t i=0; i<num_faces; i++) {
-            areas[i] = compute_quad_area(mesh, i);
-        }
+        tbb::parallel_for(tbb::blocked_range<size_t>(0, num_faces),
+                [this, &mesh, &areas](const tbb::blocked_range<size_t>& r) {
+                    for (size_t i=r.begin(); i<r.end(); i++) {
+                        areas[i] = this->compute_quad_area(mesh, i);
+                    }
+                }
+        );
     } else {
         std::cerr << "Face area attribute with " << num_vertex_per_face
             << " vertices per face is not supported yet." << std::endl;
