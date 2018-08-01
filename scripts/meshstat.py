@@ -100,6 +100,13 @@ def quantile_breakdown(data, name, info, title=None, with_total=True):
     if with_total:
         info["total_{}".format(name)] = total;
 
+def print_edge_info(mesh, info):
+    if (mesh.num_faces == 0): return;
+    mesh.add_attribute("edge_length");
+    edge_length = mesh.get_attribute("edge_length");
+    quantile_breakdown(edge_length, "edge_lengthlli", info,
+            title = "Edge Length", with_total=False);
+
 def print_face_info(mesh, info):
     if (mesh.num_faces == 0): return;
     mesh.add_attribute("face_area");
@@ -315,6 +322,7 @@ def main():
     print_header("{:=^55}".format(header));
     print_basic_info(mesh, info);
     print_bbox(mesh, info);
+    print_edge_info(mesh, info);
     print_face_info(mesh, info);
     print_voxel_info(mesh, info);
     if (args.extended):
