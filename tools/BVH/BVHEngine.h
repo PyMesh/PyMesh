@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <Mesh.h>
 #include <Core/EigenTypedef.h>
@@ -19,6 +20,7 @@ class BVHEngine {
     public:
         typedef std::shared_ptr<BVHEngine> Ptr;
         static Ptr create(const std::string& engine_name);
+        static std::vector<std::string> get_available_engines();
 
     public:
         virtual ~BVHEngine() = default;

@@ -1,6 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 
 #include <Boolean/BooleanEngine.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>

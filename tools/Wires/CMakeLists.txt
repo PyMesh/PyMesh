@@ -15,13 +15,13 @@ TARGET_LINK_LIBRARIES(lib_Wires
     PUBLIC
         Mesh
         PyMesh::Tools
-        PyMesh::Tools::CGAL
     PRIVATE
         PyMesh::Tools::MeshUtils
         PyMesh::Tools::ConvexHull
         PyMesh::Tools::Triangle
         PyMesh::Tools::Boolean
         PyMesh::Tools::TetGen
+        PyMesh::Tools::BVH
 )
 SET_TARGET_PROPERTIES(lib_Wires PROPERTIES OUTPUT_NAME "PyMesh-Wires")
 

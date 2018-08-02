@@ -7,7 +7,7 @@
 #ifdef WITH_CLIPPER
 #include "Clipper/ClipperEngine.h"
 #endif
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 #include "IGL/IGLEngine.h"
 #endif 
 #ifdef WITH_CGAL
@@ -38,7 +38,7 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #ifdef WITH_CLIPPER
     if (engine_name == "clipper") { return Ptr(new ClipperEngine()); }
 #endif
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
     if (engine_name == "igl") { return Ptr(new IGLEngine()); }
 #endif
 #ifdef WITH_CGAL

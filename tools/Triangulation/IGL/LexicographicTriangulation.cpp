@@ -1,5 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 #include "LexicographicTriangulation.h"
 
 #include <igl/copyleft/cgal/lexicographic_triangulation.h>

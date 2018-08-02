@@ -1,5 +1,5 @@
 #pragma once
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 
 #include <Boolean/CSGTree.h>
 #include <igl/copyleft/cgal/CSGTree.h>

@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 
+#include <BVH/BVHEngine.h>
 #include <Boolean/BooleanEngine.h>
 #include <Math/ZSparseMatrix.h>
 #include <MeshFactory.h>
@@ -18,7 +19,6 @@ extern "C" {
 }
 
 #include "PeriodicBoundaryRemesher.h"
-#include <CGAL/AABBTree.h>
 #include <Wires/Misc/DistanceComputation.h>
 #include <Wires/Misc/BoxChecker.h>
 
@@ -92,7 +92,8 @@ void PeriodicInflator3D::update_face_sources() {
 
     VectorF squared_dists;
     VectorI closest_face_indices;
-    m_tree->look_up(face_centroids, squared_dists, closest_face_indices);
+    MatrixFr closest_points;
+    m_tree->lookup(face_centroids, squared_dists, closest_face_indices, closest_points);
 
     m_face_sources = VectorI::Zero(num_faces);
     for (size_t i=0; i<num_faces; i++) {

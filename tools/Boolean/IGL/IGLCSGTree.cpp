@@ -1,4 +1,4 @@
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 #include "IGLCSGTree.h"
 
 #include <igl/MeshBooleanType.h>

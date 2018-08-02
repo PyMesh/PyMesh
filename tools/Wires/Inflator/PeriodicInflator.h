@@ -9,7 +9,7 @@
 
 namespace PyMesh {
 
-class AABBTree;
+class BVHEngine;
 
 class PeriodicInflator : public InflatorEngine {
     public:
@@ -48,7 +48,7 @@ class PeriodicInflator : public InflatorEngine {
         VectorI  m_phantom_face_sources;
         ParameterManager::Ptr m_parameter_manager;
         std::vector<MatrixFr> m_shape_velocities;
-        std::shared_ptr<AABBTree> m_tree;
+        std::shared_ptr<BVHEngine> m_tree;
 };
 
 }

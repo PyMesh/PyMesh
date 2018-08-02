@@ -25,6 +25,8 @@ class AABBTree:
         return self.__raw_tree.do_intersect_segments(vertices, edges).squeeze();
 
 class BVH:
+    available_engines = PyMesh.BVHEngine.available_engines;
+
     def __init__(self, engine_name="cgal"):
         self.__raw_bvh = PyMesh.BVHEngine.create(engine_name);
 

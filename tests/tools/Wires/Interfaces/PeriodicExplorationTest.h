@@ -9,7 +9,7 @@
 #include <Mesh.h>
 #include <WireTest.h>
 #include <Wires/Interfaces/PeriodicExploration.h>
-#include <CGAL/AABBTree.h>
+#include <BVH/BVHEngine.h>
 
 class PeriodicExplorationTest : public WireTest {
     protected:
@@ -22,12 +22,15 @@ class PeriodicExplorationTest : public WireTest {
                 const MatrixFr& vertices_1,
                 const MatrixIr& faces_1,
                 const MatrixFr& vertices_2) {
-            AABBTree tree_1(vertices_1, faces_1);
+            BVHEngine::Ptr tree_1 = BVHEngine::create("cgal");
+            tree_1->set_mesh(vertices_1, faces_1);
+            tree_1->build();
 
             VectorF squared_dist;
             VectorI closest_face_indices;
+            MatrixFr closest_points;
 
-            tree_1.look_up(vertices_2, squared_dist, closest_face_indices);
+            tree_1->lookup(vertices_2, squared_dist, closest_face_indices, closest_points);
             return squared_dist.maxCoeff();
         }
 
@@ -493,13 +496,14 @@ TEST_F(PeriodicExplorationTest, shape_velocity) {
 
     ASSERT_EQ(reflected_shape_velocities.size(), normal_shape_velocities.size());
 
-    AABBTree tree(normal_vertices, non_periodic_normal_faces);
+    BVHEngine::Ptr tree = BVHEngine::create("cgal");
+    tree->set_mesh(normal_vertices, non_periodic_normal_faces);
+    tree->build();
 
     VectorF sq_dist;
     VectorI face_indices;
     MatrixFr closest_points;
-    tree.look_up_with_closest_points(reflected_vertices,
-            sq_dist, face_indices, closest_points);
+    tree->lookup(reflected_vertices, sq_dist, face_indices, closest_points);
 
     const size_t num_velocities = normal_shape_velocities.size();
     const size_t num_reflected_vertices = reflected_vertices.rows();

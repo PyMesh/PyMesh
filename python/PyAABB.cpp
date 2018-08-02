@@ -47,6 +47,8 @@ void init_BVH(py::module &m) {
     py::class_<BVHEngine, std::shared_ptr<BVHEngine> >(m, "BVHEngine")
         .def(py::init<>())
         .def_static("create", &BVHEngine::create)
+        .def_property_readonly_static("available_engines",
+                [](py::object){return BVHEngine::get_available_engines();})
         .def("set_mesh", &BVHEngine::set_mesh)
         .def("build", &BVHEngine::build)
         .def("lookup",

@@ -5,8 +5,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <BVH/BVHEngine.h>
 #include <Boolean/BooleanEngine.h>
-#include <CGAL/AABBTree.h>
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
@@ -323,7 +323,8 @@ void IsotropicPeriodicInflator::update_face_sources() {
 
     VectorF squared_dists;
     VectorI closest_face_indices;
-    m_tree->look_up(face_centroids, squared_dists, closest_face_indices);
+    MatrixFr closest_points;
+    m_tree->lookup(face_centroids, squared_dists, closest_face_indices, closest_points);
 
     m_face_sources = VectorI::Zero(num_faces);
     for (size_t i=0; i<num_faces; i++) {
