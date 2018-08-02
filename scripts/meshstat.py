@@ -124,10 +124,11 @@ def print_quantile_info(mesh, info):
     quantile_breakdown(aspect_ratios, "aspect_ratio", info,
             title = "Face Aspect Ratio", with_total=False);
 
-    mesh.add_attribute("edge_dihedral_angle");
-    dihedral_angles = mesh.get_attribute("edge_dihedral_angle");
-    quantile_breakdown(dihedral_angles, "dihedral_angle", info,
-            title = "Edge Dihedral Angle", with_total=False);
+    if mesh.dim == 3:
+        mesh.add_attribute("edge_dihedral_angle");
+        dihedral_angles = mesh.get_attribute("edge_dihedral_angle");
+        quantile_breakdown(dihedral_angles, "dihedral_angle", info,
+                title = "Edge Dihedral Angle", with_total=False);
 
     if (mesh.num_voxels > 0 and mesh.vertex_per_voxel == 4):
         mesh.add_attribute("voxel_dihedral_angle");
