@@ -22,7 +22,8 @@ class PeriodicExplorationTest : public WireTest {
                 const MatrixFr& vertices_1,
                 const MatrixIr& faces_1,
                 const MatrixFr& vertices_2) {
-            BVHEngine::Ptr tree_1 = BVHEngine::create("cgal");
+            const size_t dim = vertices_1.cols();
+            BVHEngine::Ptr tree_1 = BVHEngine::create("auto", dim);
             tree_1->set_mesh(vertices_1, faces_1);
             tree_1->build();
 
@@ -496,7 +497,7 @@ TEST_F(PeriodicExplorationTest, shape_velocity) {
 
     ASSERT_EQ(reflected_shape_velocities.size(), normal_shape_velocities.size());
 
-    BVHEngine::Ptr tree = BVHEngine::create("cgal");
+    BVHEngine::Ptr tree = BVHEngine::create("auto", dim);
     tree->set_mesh(normal_vertices, non_periodic_normal_faces);
     tree->build();
 

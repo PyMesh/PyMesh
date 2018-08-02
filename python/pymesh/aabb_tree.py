@@ -27,11 +27,12 @@ class AABBTree:
 class BVH:
     available_engines = PyMesh.BVHEngine.available_engines;
 
-    def __init__(self, engine_name="cgal"):
-        self.__raw_bvh = PyMesh.BVHEngine.create(engine_name);
+    def __init__(self, engine_name="cgal", dim=3):
+        self.__raw_bvh = PyMesh.BVHEngine.create(engine_name, dim);
 
     def load_data(self, vertices, faces):
         self.__raw_bvh.set_mesh(vertices, faces);
+        self.__raw_bvh.build();
 
     def load_mesh(self, mesh):
         self.__raw_bvh.set_mesh(mesh.vertices, mesh.faces);
@@ -59,7 +60,7 @@ def distance_to_mesh(mesh, pts, engine="cgal"):
                                   query point.
     """
 
-    bvh = BVH(engine);
+    bvh = BVH(engine, mesh.dim);
     bvh.load_mesh(mesh);
     squared_distances, face_indices, closest_points = bvh.lookup(pts);
     return squared_distances, face_indices, closest_points;

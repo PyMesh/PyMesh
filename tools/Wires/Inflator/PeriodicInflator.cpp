@@ -88,7 +88,8 @@ void PeriodicInflator::generate_phantom_mesh() {
 }
 
 void PeriodicInflator::initialize_AABB_tree() {
-    m_tree = BVHEngine::create("auto");
+    const size_t dim = m_parameter_manager->get_wire_network()->get_dim();
+    m_tree = BVHEngine::create("auto", dim);
     m_tree->set_mesh(m_phantom_vertices, m_phantom_faces);
     m_tree->build();
 }
