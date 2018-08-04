@@ -27,7 +27,7 @@ class AABBTree:
 class BVH:
     available_engines = PyMesh.BVHEngine.available_engines;
 
-    def __init__(self, engine_name="cgal", dim=3):
+    def __init__(self, engine_name="auto", dim=3):
         self.__raw_bvh = PyMesh.BVHEngine.create(engine_name, dim);
 
     def load_data(self, vertices, faces):
@@ -43,13 +43,16 @@ class BVH:
         return sq_dists.squeeze(), face_indices.squeeze(), closest_pts;
 
 
-def distance_to_mesh(mesh, pts, engine="cgal"):
+def distance_to_mesh(mesh, pts, engine="auto"):
     """ Compute the distance from a set of points to a mesh.
 
     Args:
         mesh (:class:`Mesh`): A input mesh.
         pts (:class:`numpy.ndarray`): A :math:`N \\times dim` array of query
             points.
+        engine (``string``): BVH engine name. Valid choices are "cgal",
+            "geogram", "igl" if all dependencies are used. The default is
+            "auto" where an available engine is automatically picked.
 
     Returns:
         Three values are returned.

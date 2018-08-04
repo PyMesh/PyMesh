@@ -3,6 +3,7 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -22,6 +23,7 @@ class ConvexHullEngine {
         typedef std::shared_ptr<ConvexHullEngine> Ptr;
         static Ptr create(size_t dim, const std::string& library_name);
         static bool supports(const std::string& library_name);
+        static std::vector<std::string> get_available_engines();
 
     public:
         virtual ~ConvexHullEngine() {}
