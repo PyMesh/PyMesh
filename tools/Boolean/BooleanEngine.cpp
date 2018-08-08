@@ -9,14 +9,14 @@
 #endif
 #ifdef WITH_IGL_AND_CGAL
 #include "IGL/IGLEngine.h"
-#endif 
+#endif
 #ifdef WITH_CGAL
 #include "CGAL/CGALBooleanEngine.h"
 #include "CGAL/CGALCorefinementEngine.h"
-#endif 
+#endif
 #ifdef WITH_CARVE
 #include "Carve/CarveEngine.h"
-#endif 
+#endif
 #ifdef WITH_BSP
 #include "BSP/BSPEngine.h"
 #endif
@@ -32,6 +32,21 @@
 using namespace PyMesh;
 
 BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
+    if (engine_name == "auto") {
+#if WITH_IGL_AND_CGAL
+        return BooleanEngine::create("igl");
+#elif WITH_CORK
+        return BooleanEngine::create("cork");
+#elif WITH_CLIPPER
+        return BooleanEngine::create("clipper");
+#elif WITH_CGAL
+        return BooleanEngine::create("cgal");
+#elif WITH_CARVE
+        return BooleanEngine::create("carve");
+#elif WITH_BSP
+#endif
+    }
+
 #ifdef WITH_CORK
     if (engine_name == "cork") { return Ptr(new CorkEngine()); }
 #endif

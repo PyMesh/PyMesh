@@ -69,7 +69,7 @@ void PeriodicInflator3D::clip_phantom_mesh() {
     MatrixIr box_faces;
     create_box(bbox_min, bbox_max, box_vertices, box_faces);
 
-    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cork");
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("auto");
     boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
     boolean_engine->set_mesh_2(box_vertices, box_faces);
     boolean_engine->compute_intersection();
