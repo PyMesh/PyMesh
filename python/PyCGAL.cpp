@@ -6,16 +6,19 @@
 #include <pybind11/operators.h>
 
 #include <Core/EigenTypedef.h>
-#include <CGAL/SelfIntersection.h>
 
+#if WITH_CGAL
+#include <CGAL/SelfIntersection.h>
 #include <CGAL/enum.h>
 #include <CGAL/Gmpz.h>
 #include <CGAL/Gmpq.h>
+#endif
 
 namespace py = pybind11;
-using namespace PyMesh;
 
 void init_CGAL(py::module &m) {
+#if WITH_CGAL
+    using namespace PyMesh;
     py::class_<SelfIntersection, std::shared_ptr<SelfIntersection> >(m, "SelfIntersection")
         .def(py::init<const MatrixFr& , const MatrixIr&>())
         .def("detect_self_intersection",
@@ -152,5 +155,5 @@ void init_CGAL(py::module &m) {
                 sout << v;
                 return sout.str();
                 }) ;
-
+#endif
 }

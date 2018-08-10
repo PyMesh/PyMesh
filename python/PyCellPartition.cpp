@@ -4,12 +4,15 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 
+#if WITH_IGL_AND_CGAL
 #include <IGL/CellPartition.h>
+#endif
 
 namespace py = pybind11;
-using namespace PyMesh;
 
 void init_CellPartition(py::module& m) {
+#if WITH_IGL_AND_CGAL
+    using namespace PyMesh;
     py::class_<CellPartition, std::shared_ptr<CellPartition> >(m, "CellPartition")
         .def_static("create", &CellPartition::create)
         .def_static("create_raw", &CellPartition::create_raw)
@@ -23,4 +26,5 @@ void init_CellPartition(py::module& m) {
         .def("get_num_patches", &CellPartition::get_num_patches)
         .def("get_patches", &CellPartition::get_patches)
         .def("get_winding_number", &CellPartition::get_winding_number);
+#endif
 }
