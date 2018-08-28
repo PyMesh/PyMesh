@@ -29,7 +29,7 @@ VectorF EdgeSquaredLengthAttribute::compute_edge_squared_length_on_face(
         Mesh& mesh, size_t face_idx) {
     const auto vertex_per_face = mesh.get_vertex_per_face();
     const auto& faces = mesh.get_faces();
-    const VectorI face = faces.segment(face_idx*vertex_per_face, vertex_per_face);
+    const auto& face = faces.segment(face_idx*vertex_per_face, vertex_per_face);
     VectorF len = VectorF::Zero(vertex_per_face);
     for (size_t i=0; i<vertex_per_face; i++) {
         size_t j = (i+1)%vertex_per_face;
