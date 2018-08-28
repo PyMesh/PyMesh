@@ -24,6 +24,9 @@ The source code can be checked out from GitHub::
     git clone https://github.com/qnzhou/PyMesh.git
     cd PyMesh
     git submodule update --init
+    export PYMESH_PATH=`pwd`
+
+The rest of the document assumes PyMesh is located at ``$PYMESH_PATH``.
 
 Dependencies
 ------------
@@ -31,17 +34,60 @@ Dependencies
 PyMesh is based on the design philosophy that one should not reinvent the wheel.
 It depends a number of state-of-the-art open source libraries:
 
+System dependencies
+^^^^^^^^^^^^^^^^^^^
+
 * Python_: v2.7 or higher
 * NumPy_: v1.8 or higher
 * SciPy_: v0.13 or higher
 * Eigen_: v3.2 or higher
+* TBB_: 2018 Update 1 or later
+* GMP_: v6.1 or higher
+* MPFR_: v4.0 or higher
+* Boost_: 1.6 or higher (thread, system)
 
 .. _Python: https://www.python.org
 .. _NumPy: https://www.numpy.org
 .. _SciPy: https://www.scipy.org
 .. _Eigen: http://eigen.tuxfamily.org
+.. _TBB: https://www.threadingbuildingblocks.org/
+.. _GMP: https://gmplib.org/
+.. _MPFR: https://www.mpfr.org/
+.. _Boost: https://www.boost.org/
 
-The following libraries are not required, but highly recommended.  PyMesh
+On Linux, the system dependencies can be installed with `apt-get`::
+
+    apt-get install \
+        libeigen3-dev \
+        libgmp-dev \
+        libgmpxx4ldbl \
+        libmpfr-dev \
+        libboost-dev \
+        libboost-thread-dev \
+        libtbb-dev \
+        python3-dev
+
+On MacOS, the system dependencies can be installed with MacPorts_::
+
+    port install
+        python36 \
+        eigen3 \
+        gmp \
+        mpfr \
+        tbb \
+        boost
+
+.. _MacPorts: https://www.macports.org/
+
+Python dependencies such as NumPy and SciPy can be installed using `pip`::
+
+    pip install -r $PYMESH_PATH/python/requirements.txt
+
+Third party dependencies
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following third-party libraries are not required, but highly recommended in
+order to use the full power of Pymesh.  PyMesh
 provides a thin wrapper to these libraries, and without them certain
 functionalities would be disabled. Most of these packages can be easily
 installed using package management softwares for your OS.  A copy of these
@@ -75,6 +121,10 @@ libraries are also included in the `third_party` direcgtory.
 .. _Quartet: https://github.com/crawforddoran/quartet
 .. _MMG3D: https://www.mmgtools.org/
 
+All third party libraries are attached to the repo as submodules.  They are
+built as part of PyMesh automatically.  See `Building PyMesh`_ section for more
+instructions.
+
 Environment Variables
 ---------------------
 
@@ -97,14 +147,15 @@ variables:
 * ``GEOGRAM_PATH``: path to GeoGram.
 * ``QUARTET_PATH``: path to Quartet.
 
+.. _Building PyMesh:
 Building PyMesh
 ---------------
 
 Build with Setuptools
 ~~~~~~~~~~~~~~~~~~~~~
 
-The output of building PyMesh consists a set of C++ libraries and a python
-module. To build PyMesh::
+Setuptools builds both the main PyMesh module as well as all third party
+dependencies. To build PyMesh::
 
     ./setup.py build
 
