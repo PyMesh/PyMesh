@@ -4,6 +4,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <tbb/parallel_sort.h>
 #include <vector>
 #include <limits>
 
@@ -329,12 +330,12 @@ void STLParser::merge_identical_vertices() {
     if (num_vertices > 0) {
         indices.setLinSpaced(num_vertices, 0, num_vertices-1);
     }
-    std::sort(indices.data(), indices.data()+num_vertices,
-            index_comp);
+    tbb::parallel_sort(indices.data(), indices.data()+num_vertices, index_comp);
 
     VectorI index_map(num_vertices);
     index_map.setConstant(-1);
     VertexList sorted_vertices;
+    sorted_vertices.reserve(num_vertices);
     size_t count = 0;
     size_t idx = 0;
     while (idx < num_vertices) {
