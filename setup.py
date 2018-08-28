@@ -75,8 +75,8 @@ class cmake_build(build):
             os.makedirs(build_dir);
 
         os.chdir(build_dir);
-        command = "cmake .. -DPythonLibsNew_FIND_VERSION={}".format(
-                platform.python_version());
+        command = "cmake .. -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
+                v=platform.python_version_tuple());
         check_call(command.split());
         command = "make";
         check_call(command.split());
