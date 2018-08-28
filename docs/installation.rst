@@ -35,7 +35,7 @@ PyMesh is based on the design philosophy that one should not reinvent the wheel.
 It depends a number of state-of-the-art open source libraries:
 
 System dependencies
-^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~
 
 * Python_: v2.7 or higher
 * NumPy_: v1.8 or higher
@@ -84,14 +84,14 @@ Python dependencies such as NumPy and SciPy can be installed using `pip`::
     pip install -r $PYMESH_PATH/python/requirements.txt
 
 Third party dependencies
-^^^^^^^^^^^^^^^^^^^^^^^^
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 The following third-party libraries are not required, but highly recommended in
 order to use the full power of Pymesh.  PyMesh
 provides a thin wrapper to these libraries, and without them certain
 functionalities would be disabled. Most of these packages can be easily
 installed using package management softwares for your OS.  A copy of these
-libraries are also included in the `third_party` direcgtory.
+libraries are also included in the ``third_party`` direcgtory.
 
 * SparseHash_: is used to speed up hash grid.
 * CGAL_: is needed for self-intersection, convex hull, outer hull and boolean
@@ -148,6 +148,7 @@ variables:
 * ``QUARTET_PATH``: path to Quartet.
 
 .. _Building PyMesh:
+
 Building PyMesh
 ---------------
 
