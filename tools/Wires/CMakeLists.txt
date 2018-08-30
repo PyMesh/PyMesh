@@ -22,6 +22,7 @@ TARGET_LINK_LIBRARIES(lib_Wires
         PyMesh::Tools::Boolean
         PyMesh::Tools::TetGen
         PyMesh::Tools::BVH
+        Boost::boost
 )
 SET_TARGET_PROPERTIES(lib_Wires PROPERTIES OUTPUT_NAME "PyMesh-Wires")
 
