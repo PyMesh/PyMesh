@@ -109,11 +109,11 @@ IF (TARGET lib_Triangulation)
     )
 ENDIF (TARGET lib_Triangulation)
 
-#IF (TARGET lib_tetrahedralization)
-#    ADD_SUBDIRECTORY(Tetrahedralization)
-#    LIST(APPEND TARGET_MODULE_TESTS tetrahedralization_tests)
-#ENDIF (TARGET lib_tetrahedralization)
-#
+IF (TARGET lib_Tetrahedralization)
+    ADD_SUBDIRECTORY(Tetrahedralization)
+    LIST(APPEND TARGET_MODULE_TESTS tetrahedralization_tests)
+ENDIF (TARGET lib_Tetrahedralization)
+
 IF (TARGET lib_BVH)
     ADD_SUBDIRECTORY(BVH)
     ADD_DEPENDENCIES(ToolsTests

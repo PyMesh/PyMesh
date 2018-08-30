@@ -8,6 +8,10 @@ TARGET_LINK_LIBRARIES(Triangulation_tests
         PyMesh::UnitTest
         PyMesh::Tools::MeshUtils
         PyMesh::Tools::Triangulation
+        PyMesh::Tools::IGL
+        PyMesh::Tools::CGAL
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::Geogram
 )
 ADD_CUSTOM_TARGET(run_Triangulation_tests 
     DEPENDS

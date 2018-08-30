@@ -7,6 +7,12 @@ TARGET_LINK_LIBRARIES(Tetrahedralization_tests
     PRIVATE
         PyMesh::UnitTest
         PyMesh::Tools::Tetrahedralization
+        PyMesh::Tools::CGAL
+        PyMesh::Tools::TetGen
+        PyMesh::Tools::Geogram
+        PyMesh::Quartet
+        PyMesh::MMG
+        PyMesh::TetWild
 )
 ADD_CUSTOM_TARGET(run_Tetrahedralization_tests
     DEPENDS
