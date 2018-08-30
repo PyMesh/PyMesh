@@ -11,50 +11,48 @@
 
 namespace PyMesh {
 
-template <typename T>
+template <typename KeyType, typename T>
 class MultipletMap {
     public:
         struct MultipletHashFunc {
-            int operator() (const Multiplet& trip) const {
-                return trip.hash();
+            inline int operator() (const KeyType& key) const {
+                return key.hash();
             }
         };
 
-        typedef std::vector<T> ValueType;
-        typedef std::unordered_map<Multiplet, ValueType, MultipletHashFunc> MultipletHashMap;
-        typedef typename MultipletHashMap::iterator iterator;
-        typedef typename MultipletHashMap::const_iterator const_iterator;
+        using ValueType = std::vector<T>;
+        using MultipletHashMap = std::unordered_map<KeyType, ValueType, MultipletHashFunc>;
+        using iterator = typename MultipletHashMap::iterator;
+        using const_iterator = typename MultipletHashMap::const_iterator;
 
     public:
         MultipletMap() = default;
 
-        void insert(const Multiplet& t, T val) {
+        void insert(const KeyType& t, T val) {
             iterator itr = m_map.find(t);
             if (itr == m_map.end()) {
-                ValueType item;
-                item.push_back(val);
-                m_map[t] = item;
+                m_map.insert({t, {val}});
             } else {
                 m_map[t].push_back(val);
             }
         }
 
-        ValueType& operator[] (const Multiplet& t) {
+        ValueType& operator[] (const KeyType& t) {
             return m_map[t];
         }
 
-        const ValueType& get(const Multiplet& t) const {
+        const ValueType& get(const KeyType& t) const {
             const_iterator itr = m_map.find(t);
             if (itr == m_map.end())
                 throw RuntimeError("Key not found");
             return itr->second;
         }
 
-        iterator find(const Multiplet& t) {
+        iterator find(const KeyType& t) {
             return m_map.find(t);
         }
 
-        const_iterator find(const Multiplet& t) const {
+        const_iterator find(const KeyType& t) const {
             return m_map.find(t);
         }
 

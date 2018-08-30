@@ -5,31 +5,31 @@
 #include <Misc/Multiplet.h>
 
 TEST(MultipletTest, Equality) {
-    Multiplet t1(1, 2, 3, 4);
-    Multiplet t2(3, 2, 1, 4);
+    Quadruplet t1(1, 2, 3, 4);
+    Quadruplet t2(3, 2, 1, 4);
     ASSERT_EQ(t1, t2);
 }
 
 TEST(MultipletTest, Equality2) {
-    Multiplet t1(1, 1, 1);
-    Multiplet t2(1, 1, 1);
+    Quadruplet t1(1, 1, 1);
+    Quadruplet t2(1, 1, 1);
     ASSERT_EQ(t1, t2);
 }
 
 TEST(MultipletTest, LessThan) {
-    Multiplet t1(1, 2, 3, 1);
-    Multiplet t2(4, 0, 0, 0);
+    Quadruplet t1(1, 2, 3, 1);
+    Quadruplet t2(4, 0, 0, 0);
     ASSERT_LT(t1, t2);
 }
 
 TEST(MultipletTest, LessThan2) {
-    Multiplet t1(1, 2, 3, 0);
-    Multiplet t2(3, 0, 0, 0);
+    Quadruplet t1(1, 2, 3, 0);
+    Quadruplet t2(3, 0, 0, 0);
     ASSERT_LT(t2, t1);
 }
 
 TEST(MultipletTest, DataRecovery) {
-    Multiplet t1(1, 2, 3 ,4);
+    Quadruplet t1(1, 2, 3 ,4);
     VectorI data = t1.get_ori_data();
     ASSERT_EQ(1, data[0]);
     ASSERT_EQ(2, data[1]);
@@ -38,8 +38,8 @@ TEST(MultipletTest, DataRecovery) {
 }
 
 TEST(MultipletTest, DataRecovery2) {
-    Multiplet t1(5, 4, 3);
+    Triplet t1(5, 4, 3);
     VectorI data = t1.get_data();
-    Multiplet t2(data[0], data[1], data[2]);
+    Triplet t2(data[0], data[1], data[2]);
     ASSERT_EQ(t1, t2);
 }

@@ -174,18 +174,18 @@ void MSHParser::extract_surface_from_hexs() {
     const VectorI& voxels = m_voxels;
     const size_t num_vertex_per_voxel = vertex_per_voxel();
     assert(num_vertex_per_voxel == 8);
-    typedef std::map<Multiplet, int> FaceCounter;
+    typedef std::map<Quadruplet, int> FaceCounter;
     FaceCounter face_counter;
 
     for (size_t i=0; i<voxels.size(); i+=num_vertex_per_voxel) {
         const VectorI voxel = voxels.segment(i, num_vertex_per_voxel);
-        Multiplet voxel_faces[6] = {
-            Multiplet(voxel[0], voxel[4], voxel[7], voxel[3]),
-            Multiplet(voxel[1], voxel[2], voxel[6], voxel[5]),
-            Multiplet(voxel[2], voxel[3], voxel[7], voxel[6]),
-            Multiplet(voxel[0], voxel[1], voxel[5], voxel[4]),
-            Multiplet(voxel[0], voxel[3], voxel[2], voxel[1]),
-            Multiplet(voxel[4], voxel[5], voxel[6], voxel[7])
+        Quadruplet voxel_faces[6] = {
+            Quadruplet(voxel[0], voxel[4], voxel[7], voxel[3]),
+            Quadruplet(voxel[1], voxel[2], voxel[6], voxel[5]),
+            Quadruplet(voxel[2], voxel[3], voxel[7], voxel[6]),
+            Quadruplet(voxel[0], voxel[1], voxel[5], voxel[4]),
+            Quadruplet(voxel[0], voxel[3], voxel[2], voxel[1]),
+            Quadruplet(voxel[4], voxel[5], voxel[6], voxel[7])
         };
         for (size_t j=0; j<6; j++) {
             if (face_counter.find(voxel_faces[j]) == face_counter.end()) {
