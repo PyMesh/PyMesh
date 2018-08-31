@@ -7,6 +7,7 @@ TARGET_LINK_LIBRARIES(Compression_tests
     PRIVATE
         PyMesh::UnitTest
         PyMesh::Tools::Compression
+        PyMesh::Draco
 )
 ADD_CUSTOM_TARGET(run_Compression_tests
     DEPENDS

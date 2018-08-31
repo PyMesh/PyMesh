@@ -7,6 +7,10 @@ TARGET_LINK_LIBRARIES(ConvexHull_tests
     PRIVATE
         PyMesh::UnitTest
         PyMesh::Tools::ConvexHull
+        PyMesh::Qhull
+        PyMesh::Tools::CGAL
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::TetGen
 )
 TARGET_INCLUDE_DIRECTORIES(ConvexHull_tests
     PRIVATE

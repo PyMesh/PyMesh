@@ -7,6 +7,14 @@ TARGET_LINK_LIBRARIES(Boolean_tests
     PRIVATE
         PyMesh::UnitTest
         PyMesh::Tools::Boolean
+        PyMesh::Cork
+        PyMesh::Clipper
+        PyMesh::Carve
+        PyMesh::BSP
+        PyMesh::TinyXML2
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::IGL
+        PyMesh::Tools::CGAL
 )
 ADD_CUSTOM_TARGET(run_Boolean_tests
     DEPENDS
