@@ -15,7 +15,7 @@ libboost-thread-dev \
 libtbb-dev \
 && apt-get clean
 
-RUN git clone https://github.com/qnzhou/PyMesh.git
+RUN git clone https://github.com/PyMesh/PyMesh.git
 ENV PYMESH_PATH /root/PyMesh
 WORKDIR $PYMESH_PATH
 
