@@ -7,8 +7,8 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 #include <Mesh.h>
 
 using namespace PyMesh;
@@ -61,10 +61,10 @@ void BoundaryFaces::extract_boundary(const Mesh& mesh) {
     for (size_t i=0; i<num_voxels; i++) {
         VectorI voxel = mesh.get_voxel(i);
         Triplet voxel_faces[4] = {
-            Triplet(voxel[0], voxel[2], voxel[1]),
-            Triplet(voxel[0], voxel[1], voxel[3]),
-            Triplet(voxel[0], voxel[3], voxel[2]),
-            Triplet(voxel[1], voxel[2], voxel[3])
+            {voxel[0], voxel[2], voxel[1]},
+            {voxel[0], voxel[1], voxel[3]},
+            {voxel[0], voxel[3], voxel[2]},
+            {voxel[1], voxel[2], voxel[3]}
         };
         face_voxel_map.insert(voxel_faces[0], i);
         face_voxel_map.insert(voxel_faces[1], i);

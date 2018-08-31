@@ -47,9 +47,9 @@ void LongEdgeRemoval::init_edge_map() {
     assert(m_faces.cols() == 3);
     for (size_t i=0; i<num_faces; i++) {
         const auto& f = m_faces.row(i);
-        m_edge_map.insert(Triplet(f[0], f[1]), i);
-        m_edge_map.insert(Triplet(f[1], f[2]), i);
-        m_edge_map.insert(Triplet(f[2], f[0]), i);
+        m_edge_map.insert({f[0], f[1]}, i);
+        m_edge_map.insert({f[1], f[2]}, i);
+        m_edge_map.insert({f[2], f[0]}, i);
     }
 }
 
@@ -215,9 +215,9 @@ void LongEdgeRemoval::triangulate_chain(
 std::vector<size_t> LongEdgeRemoval::get_vertex_chain_around_triangle(
         size_t fi, size_t& v0_idx, size_t& v1_idx, size_t& v2_idx) {
     const auto& f = m_faces.row(fi);
-    const auto& chain_01 = m_edge_map[Triplet(f[0], f[1])];
-    const auto& chain_12 = m_edge_map[Triplet(f[1], f[2])];
-    const auto& chain_20 = m_edge_map[Triplet(f[2], f[0])];
+    const auto& chain_01 = m_edge_map[{f[0], f[1]}];
+    const auto& chain_12 = m_edge_map[{f[1], f[2]}];
+    const auto& chain_20 = m_edge_map[{f[2], f[0]}];
 
     std::vector<size_t> chain;
     chain.reserve(chain_01.size() + chain_12.size() + chain_20.size() - 3);

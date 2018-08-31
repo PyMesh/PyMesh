@@ -11,7 +11,7 @@
 #include <vector>
 
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 #include <MeshUtils/IsolatedVertexRemoval.h>
 #include "DimReduction.h"
 
@@ -34,11 +34,11 @@ namespace TriangleWrapperHelper {
     using Regions = TriangleWrapper::Regions;
 
     struct HashFunc {
-        int operator()(const Triplet& key) const {
+        int operator()(const Duplet& key) const {
             return key.hash();
         }
     };
-    typedef std::unordered_map<Triplet, bool, HashFunc> BoundaryMarker;
+    typedef std::unordered_map<Duplet, bool, HashFunc> BoundaryMarker;
 
     Regions extract_regions(const MatrixIr& faces,
             const MatrixIr& face_neighbors,
@@ -49,7 +49,7 @@ namespace TriangleWrapperHelper {
         BoundaryMarker boundary_markers;
 
         for (size_t i=0; i<num_edges; i++) {
-            Triplet edge(edges[i*2], edges[i*2+1]);
+            Duplet edge(edges[i*2], edges[i*2+1]);
             boundary_markers.insert(
                     std::make_pair(edge, edge_marks[i] == REGION_BOUNDARY));
         }
@@ -72,10 +72,10 @@ namespace TriangleWrapperHelper {
 
                 const Vector3I& face = faces.row(face_index);
                 const Vector3I& adj_faces = face_neighbors.row(face_index);
-                Triplet edges[3] = {
-                    Triplet(face[1], face[2]),
-                    Triplet(face[2], face[0]),
-                    Triplet(face[0], face[1])
+                Duplet edges[3] = {
+                    {face[1], face[2]},
+                    {face[2], face[0]},
+                    {face[0], face[1]}
                 };
 
                 for (size_t j=0; j<3; j++) {

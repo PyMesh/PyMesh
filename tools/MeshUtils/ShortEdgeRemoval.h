@@ -3,7 +3,7 @@
 #include <vector>
 
 #include <Core/EigenTypedef.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 #include "IndexHeap.h"
 
@@ -35,7 +35,7 @@ class ShortEdgeRemoval {
         VectorI  get_face_indices() const { return m_face_indices; }
 
     private:
-        typedef Triplet Edge;
+        using Edge = Duplet;
 
         void init();
         void update();

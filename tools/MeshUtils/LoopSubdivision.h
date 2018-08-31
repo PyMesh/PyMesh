@@ -6,7 +6,7 @@
 #include <vector>
 
 #include <Math/ZSparseMatrix.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 namespace PyMesh {
 
@@ -36,8 +36,8 @@ class LoopSubdivision : public Subdivision {
         std::vector<bool> compute_boundary_vertices() const;
 
     protected:
-        std::map<Triplet, size_t> m_edge_index_map;
-        std::map<Triplet, size_t> m_boundary_edge;
+        std::map<Duplet, size_t> m_edge_index_map;
+        std::map<Duplet, size_t> m_boundary_edge;
         std::vector<size_t> m_vertex_valance;
         std::vector<ZSparseMatrix> m_subdivision_matrices;
 };

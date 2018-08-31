@@ -1,20 +1,20 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "GeometryChecker.h"
 #include <set>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 using namespace GeometryChecker;
 
 namespace GeometryCheckerHelper {
-    std::set<Triplet> extract_boundary(MeshPtr mesh) {
-        std::set<Triplet> edge_set;
+    std::set<Duplet> extract_boundary(MeshPtr mesh) {
+        std::set<Duplet> edge_set;
         const size_t vertex_per_face = mesh->get_vertex_per_face();
         size_t num_faces = mesh->get_num_faces();
         for (size_t i=0; i<num_faces; i++) {
             VectorI face = mesh->get_face(i);
             for (size_t j=0; j<vertex_per_face; j++) {
-                Triplet edge(face[j], face[(j+1) % vertex_per_face]);
-                std::set<Triplet>::const_iterator itr = edge_set.find(edge);
+                Duplet edge(face[j], face[(j+1) % vertex_per_face]);
+                auto itr = edge_set.find(edge);
                 if (itr == edge_set.end()) {
                     edge_set.insert(edge);
                 } else {
@@ -48,14 +48,14 @@ void GeometryChecker::check_face_elements(ElementsPtr m1,
 void GeometryChecker::check_edge_elements(ElementsPtr m1,
         MeshPtr m2) {
     using namespace GeometryCheckerHelper;
-    std::set<Triplet> edges = extract_boundary(m2);
+    std::set<Duplet> edges = extract_boundary(m2);
     const size_t num_elements = m1->getNbrElements();
     ASSERT_EQ(edges.size(), num_elements);
 
     for (size_t i=0; i<num_elements; i++) {
         VectorI elem = m1->getElement(i);
         ASSERT_EQ(2, elem.size());
-        Triplet edge(elem[0], elem[1]);
+        Duplet edge(elem[0], elem[1]);
         ASSERT_TRUE(edges.find(edge) != edges.end());
     }
 }

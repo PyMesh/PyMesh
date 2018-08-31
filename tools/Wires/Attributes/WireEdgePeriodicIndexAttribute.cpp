@@ -4,8 +4,8 @@
 #include <functional>
 #include <list>
 
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 #include <Misc/HashGrid.h>
 #include <Wires/WireNetwork/WireNetwork.h>
 
@@ -80,11 +80,11 @@ void WireEdgePeriodicIndexAttribute::compute(const WireNetwork& network) {
     }
 
     m_values.resize(num_edges, 1);
-    TripletMap<size_t> edge_map;
+    DupletMap<size_t> edge_map;
     for (size_t i=0; i<num_edges; i++) {
         const VectorI& edge = edges.row(i);
-        Triplet trip(edge[0], edge[1]);
-        edge_map.insert(trip, i);
+        Duplet key(edge[0], edge[1]);
+        edge_map.insert(key, i);
         m_values(i, 0) = i;
     }
 
@@ -102,8 +102,8 @@ void WireEdgePeriodicIndexAttribute::compute(const WireNetwork& network) {
                 if (opposite_v0_index.size() != 1 ||
                         opposite_v1_index.size() != 1) { continue; }
 
-                Triplet trip(opposite_v0_index[0], opposite_v1_index[0]);
-                auto itr = edge_map.find(trip);
+                Duplet key(opposite_v0_index[0], opposite_v1_index[0]);
+                auto itr = edge_map.find(key);
                 if (itr != edge_map.end()) {
                     if (itr->second.size() != 1) {
                         throw RuntimeError("Duplicated edge detected");

@@ -6,8 +6,8 @@
 #include <set>
 
 #include <Mesh.h>
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 
 using namespace PyMesh;
 
@@ -43,8 +43,8 @@ VectorI BoundaryEdges::get_boundary_nodes() const {
 }
 
 void BoundaryEdges::extract_boundary(const Mesh& mesh) {
-    typedef Triplet Edge;
-    typedef TripletMap<size_t> EdgeFaceMap;
+    typedef Duplet Edge;
+    typedef DupletMap<size_t> EdgeFaceMap;
     EdgeFaceMap edge_face_map;
 
     const size_t num_vertex_per_face = mesh.get_vertex_per_face();
@@ -53,10 +53,9 @@ void BoundaryEdges::extract_boundary(const Mesh& mesh) {
     for (size_t i=0; i<num_faces; i++) {
         const VectorI face = mesh.get_face(i);
         for (size_t j=0; j<num_vertex_per_face; j++) {
-            size_t v0 = face[j];
-            size_t v1 = face[(j+1) % num_vertex_per_face];
-            Edge e(v0, v1);
-            edge_face_map.insert(e, i);
+            auto v0 = face[j];
+            auto v1 = face[(j+1) % num_vertex_per_face];
+            edge_face_map.insert({v0, v1}, i);
         }
     }
 

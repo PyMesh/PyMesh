@@ -145,6 +145,7 @@ MatrixIr MeshSeparator::flood(size_t seed, VectorI& sources) {
 
 std::vector<size_t> MeshSeparator::get_adjacent_element(size_t index) {
     std::vector<size_t> neighbors;
+    neighbors.reserve(8);
     const auto& element = m_elements.row(index);
     const size_t vertex_per_element = element.size();
 

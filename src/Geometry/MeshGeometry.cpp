@@ -7,7 +7,6 @@
 #include <iostream>
 
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
 #include <Misc/Multiplet.h>
 
 using namespace PyMesh;
@@ -72,7 +71,7 @@ int MeshGeometry::project_out_zero_dim() {
 
 void MeshGeometry::extract_faces_from_tets() {
     const VectorI& voxels = m_voxels;
-    typedef std::map<Triplet, int> FaceCounter;
+    typedef std::map<Triplet, unsigned short> FaceCounter;
     FaceCounter face_counter;
 
     for (size_t i=0; i<voxels.size(); i+= m_vertex_per_voxel) {
@@ -81,10 +80,10 @@ void MeshGeometry::extract_faces_from_tets() {
         // each face should have normal pointing outward.
         assert(voxel.size() == 4);
         Triplet voxel_faces[4] = {
-            Triplet(voxel[0], voxel[2], voxel[1]),
-            Triplet(voxel[0], voxel[1], voxel[3]),
-            Triplet(voxel[0], voxel[3], voxel[2]),
-            Triplet(voxel[1], voxel[2], voxel[3])
+            {voxel[0], voxel[2], voxel[1]},
+            {voxel[0], voxel[1], voxel[3]},
+            {voxel[0], voxel[3], voxel[2]},
+            {voxel[1], voxel[2], voxel[3]}
         };
         for (size_t j=0; j<4; j++) {
             if (face_counter.find(voxel_faces[j]) == face_counter.end()) {

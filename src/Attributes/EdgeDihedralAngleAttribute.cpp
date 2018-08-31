@@ -8,8 +8,8 @@
 
 #include <Core/Exception.h>
 #include <Math/MatrixUtils.h>
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 
 using namespace PyMesh;
 
@@ -22,7 +22,7 @@ namespace EdgeDihedralAngleAttributeHelper {
 using namespace EdgeDihedralAngleAttributeHelper;
 
 void EdgeDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
-    typedef TripletMap<size_t> EdgeMap;
+    using EdgeMap = DupletMap<size_t>;
     const size_t dim = mesh.get_dim();
     const size_t num_faces = mesh.get_num_faces();
     const size_t vertex_per_face = mesh.get_vertex_per_face();
@@ -48,7 +48,7 @@ void EdgeDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
     for (size_t i=0; i<num_faces; i++) {
         auto f = mesh.get_face(i);
         for (size_t j=0; j<vertex_per_face; j++) {
-            Triplet key(f[j], f[(j+1)%vertex_per_face]);
+            Duplet key(f[j], f[(j+1)%vertex_per_face]);
             edge_map.insert(key, i);
             edge_index.insert(key, i*vertex_per_face + j);
         }

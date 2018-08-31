@@ -79,4 +79,13 @@ class MultipletMap {
         MultipletHashMap m_map;
 };
 
+template<typename T>
+using SingletonMap = MultipletMap<Singleton, T>;
+template<typename T>
+using DupletMap = MultipletMap<Duplet, T>;
+template<typename T>
+using TripletMap = MultipletMap<Triplet, T>;
+template<typename T>
+using QaudrupletMap = MultipletMap<Quadruplet, T>;
+
 }

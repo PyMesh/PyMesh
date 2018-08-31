@@ -63,7 +63,7 @@ MatrixIr ManifoldCheck::is_edge_manifold(const MatrixIr& faces) {
     for (size_t i=0; i<num_faces; i++) {
         for (size_t j=0; j<vertex_per_face; j++) {
             const auto itr = edge_map.find(
-                    Triplet(faces(i,j), faces(i,(j+1)%vertex_per_face)));
+                    {faces(i,j), faces(i,(j+1)%vertex_per_face)});
             assert(itr != edge_map.end());
             is_manifold(i,j) = itr->second.size() > 2 ? 0 : 1;
         }

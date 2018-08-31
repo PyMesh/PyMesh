@@ -5,8 +5,8 @@
 #include <list>
 
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 
 using namespace PyMesh;
 

@@ -6,7 +6,6 @@
 #include <vector>
 
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
 #include <Misc/Multiplet.h>
 
 #include "MshLoader.h"
@@ -128,7 +127,7 @@ void MSHParser::extract_faces_and_voxels() {
 void MSHParser::extract_surface_from_tets() {
     const VectorI& voxels = m_voxels;
     const size_t num_vertex_per_voxel = vertex_per_voxel();
-    typedef std::map<Triplet, int> FaceCounter;
+    typedef std::map<Triplet, unsigned short> FaceCounter;
     FaceCounter face_counter;
 
     for (size_t i=0; i<voxels.size(); i+= num_vertex_per_voxel) {

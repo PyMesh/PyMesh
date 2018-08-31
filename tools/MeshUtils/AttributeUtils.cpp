@@ -6,7 +6,7 @@
 
 #include <Mesh.h>
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 using namespace PyMesh;
 
@@ -146,17 +146,17 @@ namespace AttributeUtilsHelper {
                     i*vertex_per_voxel, vertex_per_voxel);
             const VectorF& value = attribute.segment(
                     i*stride, stride);
-            per_face_values[Triplet(voxel[0], voxel[1], voxel[2])] = value;
-            per_face_values[Triplet(voxel[0], voxel[1], voxel[3])] = value;
-            per_face_values[Triplet(voxel[0], voxel[2], voxel[3])] = value;
-            per_face_values[Triplet(voxel[1], voxel[2], voxel[3])] = value;
+            per_face_values[{voxel[0], voxel[1], voxel[2]}] = value;
+            per_face_values[{voxel[0], voxel[1], voxel[3]}] = value;
+            per_face_values[{voxel[0], voxel[2], voxel[3]}] = value;
+            per_face_values[{voxel[1], voxel[2], voxel[3]}] = value;
         }
 
         VectorF result = VectorF::Zero(num_faces*stride);
         for (size_t i=0; i<num_faces; i++) {
             const VectorI& face = faces.segment(i*vertex_per_face, vertex_per_face);
             result.segment(i*stride, stride) = per_face_values[
-                Triplet(face[0], face[1], face[2])];
+                {face[0], face[1], face[2]}];
         }
 
         return result;

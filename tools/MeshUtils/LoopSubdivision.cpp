@@ -124,7 +124,7 @@ void LoopSubdivision::compute_subdivided_vertices() {
     for (size_t i=0; i<num_faces; i++) {
         const VectorI& face = m_faces.row(i);
         for (size_t j=0; j<3; j++) {
-            Triplet edge(face[j], face[(j+1)%3]);
+            Duplet edge(face[j], face[(j+1)%3]);
             size_t mid_edge_idx = m_edge_index_map[edge];
             if (m_boundary_edge[edge] > 1) {
                 entries.push_back(T(mid_edge_idx, face[(j+2)%3], 1.0/8.0));
@@ -151,7 +151,7 @@ void LoopSubdivision::compute_subdivided_vertices() {
 void LoopSubdivision::register_edges(const VectorI& face, size_t base_index) {
     const size_t vertex_per_face = face.size();
     for (size_t i=0; i<vertex_per_face; i++) {
-        Triplet edge(face[i], face[(i+1)%vertex_per_face]);
+        Duplet edge(face[i], face[(i+1)%vertex_per_face]);
         auto itr = m_edge_index_map.find(edge);
         if (itr == m_edge_index_map.end()) {
             size_t mid_edge_index = base_index + m_edge_index_map.size();
@@ -170,11 +170,11 @@ Float LoopSubdivision::compute_beta(size_t valance) {
 }
 
 Vector3I LoopSubdivision::get_edge_indices(const VectorI& face) {
-    typedef std::map<Triplet, size_t>::const_iterator EdgeMapIterator;
+    typedef std::map<Duplet, size_t>::const_iterator EdgeMapIterator;
     EdgeMapIterator edges[3] = {
-        m_edge_index_map.find(Triplet(face[0], face[1])),
-        m_edge_index_map.find(Triplet(face[1], face[2])),
-        m_edge_index_map.find(Triplet(face[2], face[0]))
+        m_edge_index_map.find({face[0], face[1]}),
+        m_edge_index_map.find({face[1], face[2]}),
+        m_edge_index_map.find({face[2], face[0]})
     };
 
     assert(edges[0] != m_edge_index_map.end());

@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <Core/EigenTypedef.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 namespace PyMesh {
 
@@ -35,7 +35,7 @@ class EdgeSplitter {
         MatrixFr m_vertices;
         MatrixIr m_faces;
 
-        TripletMap<size_t> m_edge_adj_faces;
+        DupletMap<size_t> m_edge_adj_faces;
         std::vector<bool> m_face_is_valid;
         std::vector<VectorF> m_new_vertices;
         std::vector<Vector3I> m_new_faces;
