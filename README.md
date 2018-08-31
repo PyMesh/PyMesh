@@ -22,7 +22,7 @@ for creating minimalistic and easy to use interfaces.
 Perhaps the easiest way of trying out PyMesh is through
 [docker](https://www.docker.com/):
 
-    docker run -it qnzhou/pymesh
+    docker run -it pymesh/pymesh
     Python 3.6.4 (default, Feb 17 2018, 09:32:33)
     [GCC 4.9.2] on linux
     Type "help", "copyright", "credits" or "license" for more information.
@@ -30,7 +30,7 @@ Perhaps the easiest way of trying out PyMesh is through
 
 For example, to run [meshstat.py](scripts/meshstat.py):
 
-    docker run -it --rm -v `pwd`:/models qnzhou/pymesh meshstat.py -x /models/model.obj
+    docker run -it --rm -v `pwd`:/models pymesh/pymesh meshstat.py -x /models/model.obj
 
 This command mounts your current working directory to the `/models` directory
 in a docker container and executes the `meshstat.py` script on the mesh file
