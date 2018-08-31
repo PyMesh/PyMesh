@@ -29,8 +29,8 @@ jobs:
             - checkout
             - run: |
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
-                docker build -t qnzhou/pymesh:py3.6 docker/py3.6
-                docker push qnzhou/pymesh:py3.6
+                docker build -t pymesh/pymesh:py3.6 docker/py3.6
+                docker push pymesh/pymesh:py3.6
     "py3.6-slim":
         machine: true
         steps:
@@ -39,17 +39,17 @@ jobs:
                 cd docker/py3.6-slim
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 ./build.sh
-                docker push qnzhou/pymesh:py3.6-slim
-                docker tag qnzhou/pymesh:py3.6-slim qnzhou/pymesh
-                docker push qnzhou/pymesh
+                docker push pymesh/pymesh:py3.6-slim
+                docker tag pymesh/pymesh:py3.6-slim pymesh/pymesh
+                docker push pymesh/pymesh
     "py2.7":
         machine: true
         steps:
             - checkout
             - run: |
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
-                docker build -t qnzhou/pymesh:py2.7 docker/py2.7
-                docker push qnzhou/pymesh:py2.7
+                docker build -t pymesh/pymesh:py2.7 docker/py2.7
+                docker push pymesh/pymesh:py2.7
     "py2.7-slim":
         machine: true
         steps:
@@ -58,7 +58,7 @@ jobs:
                 cd docker/py2.7-slim
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 ./build.sh
-                docker push qnzhou/pymesh:py2.7-slim
+                docker push pymesh/pymesh:py2.7-slim
 
 workflows:
     version: 2
