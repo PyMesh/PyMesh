@@ -40,7 +40,7 @@ in a docker container and executes the `meshstat.py` script on the mesh file
 
 To retrieve the code:
 
-    git clone https://github.com/qnzhou/PyMesh.git
+    git clone https://github.com/PyMesh/PyMesh.git
     cd PyMesh
     git submodule update --init
 
