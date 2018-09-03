@@ -109,8 +109,9 @@ void EdgeSplitter::set_all_faces_as_valid() {
     m_face_is_valid = std::vector<bool>(num_faces, true);
 }
 
+template<typename AdjacencyVector>
 void EdgeSplitter::split_edge(const VectorI& edge,
-        const std::vector<size_t>& adj_faces, Float max_length) {
+        const AdjacencyVector& adj_faces, Float max_length) {
     const auto v0 = m_vertices.row(edge[0]);
     const auto v1 = m_vertices.row(edge[1]);
     Float length = (v0 - v1).norm();

@@ -2,9 +2,11 @@
 #pragma once
 
 #include <limits>
+#include <mutex>
 #include <vector>
+#include <tbb/concurrent_vector.h>
 
-#include <unordered_map>
+#include <tbb/concurrent_unordered_map.h>
 
 #include <Core/Exception.h>
 #include <Misc/Multiplet.h>
@@ -20,10 +22,14 @@ class MultipletMap {
             }
         };
 
-        using ValueType = std::vector<T>;
-        using MultipletHashMap = std::unordered_map<KeyType, ValueType, MultipletHashFunc>;
+        //using ValueType = std::vector<T>;
+        using ValueType = tbb::concurrent_vector<T>;
+        using MultipletHashMap = tbb::concurrent_unordered_map<
+            KeyType, ValueType, MultipletHashFunc>;
         using iterator = typename MultipletHashMap::iterator;
         using const_iterator = typename MultipletHashMap::const_iterator;
+        using range_type = typename MultipletHashMap::range_type;
+        using const_range_type = typename MultipletHashMap::const_range_type;
 
     public:
         MultipletMap() = default;
@@ -33,7 +39,7 @@ class MultipletMap {
             if (itr == m_map.end()) {
                 m_map.insert({t, {val}});
             } else {
-                m_map[t].push_back(val);
+                itr->second.emplace_back(val);
             }
         }
 
@@ -74,6 +80,9 @@ class MultipletMap {
 
         iterator end() { return m_map.end(); }
         const_iterator end() const { return m_map.end(); }
+
+        range_type range() { return m_map.range(); }
+        const_range_type range() const { return m_map.range(); }
 
     private:
         MultipletHashMap m_map;

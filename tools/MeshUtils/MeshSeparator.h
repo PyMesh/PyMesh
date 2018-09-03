@@ -58,7 +58,7 @@ class MeshSeparator {
         using FaceConnector = Duplet;
         using TetConnector = Triplet;
         using HexConnector = Quadruplet;
-        using AdjElements = std::vector<size_t>;
+        using AdjElements = MultipletMap<Singleton, size_t>::ValueType;
 
         MultipletMap<Singleton, size_t> m_vertex_connectivity;
         MultipletMap<Duplet, size_t> m_face_connectivity;

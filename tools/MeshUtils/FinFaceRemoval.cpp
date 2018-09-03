@@ -37,8 +37,9 @@ namespace FinFaceRemovalHelper {
     /**
      * Return a face that has the correct orientation.
      */
+    template<typename AdjacencyVector>
     int compute_majority_orientation(
-            const MatrixIr& faces, const std::vector<size_t>& face_indices,
+            const MatrixIr& faces, const AdjacencyVector& face_indices,
             size_t& correctly_orientated_face_idx) {
         size_t positive_fid = std::numeric_limits<size_t>::max();
         size_t negative_fid = std::numeric_limits<size_t>::max();

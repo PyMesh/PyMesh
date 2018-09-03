@@ -27,8 +27,9 @@ class EdgeSplitter {
         void clear_intermediate_data();
         void generate_edge_map();
         void set_all_faces_as_valid();
+        template<typename AdjacencyVector>
         void split_edge(const VectorI& edge,
-                const std::vector<size_t>& adj_faces, Float max_length);
+                const AdjacencyVector& adj_faces, Float max_length);
         void finalize_geometry();
 
     private:

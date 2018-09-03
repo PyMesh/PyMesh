@@ -4,6 +4,7 @@
 #include <iostream>
 #include <numeric>
 #include <sstream>
+#include <unordered_map>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>

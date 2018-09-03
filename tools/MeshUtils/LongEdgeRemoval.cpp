@@ -67,7 +67,7 @@ void LongEdgeRemoval::split_long_edges(Float max_length) {
         Float edge_length = (chain.front() - chain.back()).norm();
         split(chain, chain.begin(), edge_length, max_length);
 
-        std::vector<size_t> vertex_indices;
+        DupletMap<size_t>::ValueType vertex_indices;
         vertex_indices.push_back(raw_edge[0]);
         const auto begin = std::next(chain.begin());
         const auto end = std::prev(chain.end());
