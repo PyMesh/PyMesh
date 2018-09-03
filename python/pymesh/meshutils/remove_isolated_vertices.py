@@ -1,7 +1,9 @@
 import numpy as np
 from PyMesh import IsolatedVertexRemoval
+from .. import timethis
 from ..meshio import form_mesh
 
+@timethis
 def remove_isolated_vertices_raw(vertices, elements):
     """ Remove isolated vertices.
 

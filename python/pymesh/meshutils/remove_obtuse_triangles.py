@@ -23,6 +23,7 @@ class ObtuseTriangleRemover:
         self.faces = remover.get_faces();
         return num_triangles_split;
 
+@timethis
 def remove_obtuse_triangles_raw(vertices, faces,
         max_angle=120,
         max_iterations=5):

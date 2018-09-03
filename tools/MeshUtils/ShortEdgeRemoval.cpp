@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <iostream>
 #include <limits>
-#include <set>
+#include <unordered_set>
 
 #include <Core/Exception.h>
 
@@ -102,7 +102,12 @@ void ShortEdgeRemoval::init_vertex_face_neighbors() {
 }
 
 void ShortEdgeRemoval::init_edges() {
-    std::set<Edge> edges;
+    struct EdgeHash {
+        inline int operator() (const Edge& key) const {
+            return key.hash();
+        }
+    };
+    std::unordered_set<Edge, EdgeHash> edges;
     const size_t num_faces = m_faces.rows();
     const size_t vertex_per_face = m_faces.cols();
     for (size_t i=0; i<num_faces; i++) {

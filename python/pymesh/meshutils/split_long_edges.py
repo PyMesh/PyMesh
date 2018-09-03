@@ -1,8 +1,10 @@
 import numpy as np
 
+from .. import timethis
 from ..meshio import form_mesh
 from PyMesh import LongEdgeRemoval
 
+@timethis
 def split_long_edges_raw(vertices, faces, max_edge_length):
     """ Split long edges.
 
