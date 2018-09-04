@@ -69,24 +69,24 @@ workflows:
                 requires:
                     - build
                 filters:
-                    tags:
-                        only: /^v*/
+                    branches:
+                        only: master
             - "py2.7":
                 requires:
                     - build
                 filters:
-                    tags:
-                        only: /^v*/
+                    branches:
+                        only: master
             - "py3.6-slim":
                 requires:
                     - "py3.6"
                 filters:
-                    tags:
-                        only: /^v*/
+                    branches:
+                        only: master
             - "py2.7-slim":
                 requires:
                     - "py2.7"
                 filters:
-                    tags:
-                        only: /^v*/
+                    branches:
+                        only: master
 
