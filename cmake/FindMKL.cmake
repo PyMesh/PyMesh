@@ -24,7 +24,7 @@
 # linux
 if(UNIX AND NOT APPLE)
     if(${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-        set(MKL_ARCH_DIR "em64t")
+        set(MKL_ARCH_DIR "intel64_lin")
     else()
         set(MKL_ARCH_DIR "32")
     endif()
@@ -55,6 +55,7 @@ find_path(MKL_ROOT_DIR
     include/mkl_cblas.h
     PATHS
     $ENV{MKLDIR}
+    /opt/intel/mkl/
     /opt/intel/mkl/*/
     /opt/intel/cmkl/*/
     /Library/Frameworks/Intel_MKL.framework/Versions/Current/lib/universal
@@ -186,11 +187,11 @@ foreach (MODEVAR ${MKL_MODE_VARIANTS})
     foreach (THREADVAR ${MKL_THREAD_VARIANTS})
         if (MKL_CORE_LIBRARY AND MKL_${MODEVAR}_LIBRARY AND MKL_${THREADVAR}_LIBRARY)
             set(MKL_${MODEVAR}_${THREADVAR}_LIBRARIES
-                ${MKL_CORE_LIBRARY}
-                ${MKL_${THREADVAR}_LIBRARY}
                 ${MKL_${MODEVAR}_LIBRARY}
+                ${MKL_${THREADVAR}_LIBRARY}
                 ${MKL_LAPACK_LIBRARY}
-                ${MKL_IOMP5_LIBRARY})
+                ${MKL_IOMP5_LIBRARY}
+                ${MKL_CORE_LIBRARY})
             #message("${MODEVAR} ${THREADVAR} ${MKL_${MODEVAR}_${THREADVAR}_LIBRARIES}") # for debug
         endif()
     endforeach()
