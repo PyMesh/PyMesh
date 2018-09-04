@@ -1,7 +1,8 @@
-find_program(CCACHE_FOUND ccache)
+FIND_PROGRAM(CCACHE_FOUND ccache)
 if(CCACHE_FOUND)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
-    set_property(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_COMPILE ccache)
+    SET_PROPERTY(GLOBAL PROPERTY RULE_LAUNCH_LINK ccache)
+    MESSAGE(STATUS "ccache enabled")
 endif(CCACHE_FOUND)
 
 # Set output directories
