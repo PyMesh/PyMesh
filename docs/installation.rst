@@ -9,7 +9,7 @@ The easiest way of using PyMesh is through
 `prebuild image of PyMesh <https://hub.docker.com/r/pymesh/pymesh/>`_ from
 dockerhub::
 
-    $ docker run -it qnzhou/pymesh
+    $ docker run -it pymesh/pymesh
     Python 3.6.4 (default, Dec 21 2017, 01:35:12)
     [GCC 4.9.2] on linux
     Type "help", "copyright", "credits" or "license" for more information.
@@ -22,7 +22,7 @@ Download the Source
 The source code can be checked out from
 `GitHub <https://github.com/PyMesh/PyMesh>`_::
 
-    git clone https://github.com/qnzhou/PyMesh.git
+    git clone https://github.com/PyMesh/PyMesh.git
     cd PyMesh
     git submodule update --init
     export PYMESH_PATH=`pwd`

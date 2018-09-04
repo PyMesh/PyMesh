@@ -94,7 +94,7 @@ Remeshing
 It is possible to completely remesh the input shape by calling
 ``pymesh.collapse_short_edges`` and ``pymesh.split_long_edges`` iteratively in
 an alternating fashion.  The script
-`fix_mesh.py <https://github.com/qnzhou/PyMesh/blob/master/scripts/fix_mesh.py>`_ is based on this idea.
+`fix_mesh.py <https://github.com/PyMesh/PyMesh/blob/master/scripts/fix_mesh.py>`_ is based on this idea.
 Its effects can be seen in a remesh of the `Ducky The Lop Eared Bunny
 <http://www.thingiverse.com/thing:752379>`_ example:
 
