@@ -3,9 +3,7 @@ import numpy as np
 from .meshio import form_mesh
 from .meshutils import remove_isolated_vertices_raw
 from .meshutils import remove_degenerated_triangles_raw
-from .timethis import timethis
 
-@timethis
 def compute_outer_hull(mesh, engine="auto", all_layers=False):
     """ Compute the outer hull of the input mesh.
 

@@ -6,7 +6,7 @@ Docker
 
 The easiest way of using PyMesh is through
 `docker <https://www.docker.com/>`_, where one can simply ``pull`` a
-`prebuild image of PyMesh <https://hub.docker.com/r/qnzhou/pymesh/>`_ from
+`prebuild image of PyMesh <https://hub.docker.com/r/pymesh/pymesh/>`_ from
 dockerhub::
 
     $ docker run -it qnzhou/pymesh
@@ -19,7 +19,8 @@ dockerhub::
 Download the Source
 -------------------
 
-The source code can be checked out from GitHub::
+The source code can be checked out from
+`GitHub <https://github.com/PyMesh/PyMesh>`_::
 
     git clone https://github.com/qnzhou/PyMesh.git
     cd PyMesh
