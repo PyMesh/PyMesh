@@ -4,7 +4,7 @@ import os.path
 def load_matrix(filename):
     """ Load matrix from file (assuming `.dmat`_ format).
 
-    .. _.dmat: http://libigl.github.io/libigl/file-formats/dmat.html
+    .. _.dmat: http://libigl.github.io/libigl/file-formats/dmat/
     """
     return PyMesh.load_matrix(filename);
 
@@ -17,6 +17,6 @@ def save_matrix(filename, matrix, in_ascii=False):
         in_ascii (`boolean`): Whether to save matrix in ASCII.  Default is
             false, which saves in binary format to save space.
 
-    .. _.dmat: http://libigl.github.io/libigl/file-formats/dmat.html
+    .. _.dmat: http://libigl.github.io/libigl/file-formats/dmat/
     """
     return PyMesh.save_matrix(filename, matrix, in_ascii);
