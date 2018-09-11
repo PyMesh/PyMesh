@@ -23,14 +23,17 @@ jobs:
                     ./setup.py develop
                     cd build
                     make tests
+                no_output_timeout: 1200
     "py3.6":
         machine: true
         steps:
             - checkout
-            - run: |
-                docker login -u $DOCKER_USER -p $DOCKER_PASS
-                docker build -t pymesh/pymesh:py3.6 docker/py3.6
-                docker push pymesh/pymesh:py3.6
+            - run:
+                command: |
+                    docker login -u $DOCKER_USER -p $DOCKER_PASS
+                    docker build -t pymesh/pymesh:py3.6 docker/py3.6
+                    docker push pymesh/pymesh:py3.6
+                no_output_timeout: 1200
     "py3.6-slim":
         machine: true
         steps:
@@ -46,10 +49,12 @@ jobs:
         machine: true
         steps:
             - checkout
-            - run: |
-                docker login -u $DOCKER_USER -p $DOCKER_PASS
-                docker build -t pymesh/pymesh:py2.7 docker/py2.7
-                docker push pymesh/pymesh:py2.7
+            - run:
+                command: |
+                    docker login -u $DOCKER_USER -p $DOCKER_PASS
+                    docker build -t pymesh/pymesh:py2.7 docker/py2.7
+                    docker push pymesh/pymesh:py2.7
+                no_output_timeout: 1200
     "py2.7-slim":
         machine: true
         steps:
