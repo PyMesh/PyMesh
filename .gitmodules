@@ -24,7 +24,7 @@
 	shallow = true
 [submodule "third_party/Clipper"]
 	path = third_party/Clipper
-	url = https://github.com/qnzhou/Clipper.git
+	url = https://github.com/PyMesh/Clipper.git
 	shallow = true
 [submodule "third_party/eigen"]
 	path = third_party/eigen
