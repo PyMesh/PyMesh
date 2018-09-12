@@ -59,7 +59,7 @@ class cmake_build(build):
             os.makedirs(build_dir);
 
         os.chdir(build_dir);
-        command = "cmake ..";
+        command = "cmake .. -DCMAKE_BUILD_TYPE=Release";
         check_call(command.split());
         command = "make -j {}".format(num_cores);
         check_call(command.split());
@@ -75,7 +75,7 @@ class cmake_build(build):
             os.makedirs(build_dir);
 
         os.chdir(build_dir);
-        command = "cmake .. -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
+        command = "cmake .. -DCMAKE_BUILD_TYPE=Release -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
                 v=platform.python_version_tuple());
         check_call(command.split());
         command = "make";
