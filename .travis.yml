@@ -44,6 +44,17 @@ matrix:
     - os: linux
       dist: xenial
       python: "2.7"
+      before_install:
+        - sudo apt-get -qq update
+        - sudo apt-get -qq install \
+                  libeigen3-dev \
+                  libgmp-dev \
+                  libgmpxx4ldbl \
+                  libmpfr-dev \
+                  libboost-dev \
+                  libboost-thread-dev \
+                  libtbb-dev \
+                  python3-dev
       install:
         - sudo apt-get update
         # We do this conditionally because it saves us some downloading if the
@@ -63,17 +74,7 @@ matrix:
         # Create conda enviroment
         - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
         - source activate test-environment
-        - python setup.py install
         - git submodule update --init
-        - sudo apt-get install \
-                  libeigen3-dev \
-                  libgmp-dev \
-                  libgmpxx4ldbl \
-                  libmpfr-dev \
-                  libboost-dev \
-                  libboost-thread-dev \
-                  libtbb-dev \
-                  python3-dev
         - pip install -r python/requirements.txt
         - mkdir third_party/build
         - cd third_party/build
