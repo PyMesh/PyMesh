@@ -1,5 +1,5 @@
 language: cpp
-sudo: false
+sudo: required
 virtualenv:
   system_site_packages: true
 python:
@@ -42,6 +42,7 @@ matrix:
         - cd ..
         - python -c "import pymesh; pymesh.test()"
     - os: linux
+      dist: xenial
       python: "2.7"
       install:
         - sudo apt-get update
@@ -64,7 +65,7 @@ matrix:
         - source activate test-environment
         - python setup.py install
         - git submodule update --init
-        - apt-get install \
+        - sudo apt-get install \
                   libeigen3-dev \
                   libgmp-dev \
                   libgmpxx4ldbl \
