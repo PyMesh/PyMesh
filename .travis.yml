@@ -59,7 +59,6 @@ matrix:
         - conda update -q conda
         # Useful for debugging any issues with conda
         - conda info -a
-
         # Create conda enviroment
         - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
         - source activate test-environment
