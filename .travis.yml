@@ -69,7 +69,7 @@ matrix:
         # Create conda enviroment
         - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
         - source activate test-environment
-        - conda update cmake
+        - conda install cmake
         - git submodule update --init
         - pip install -r python/requirements.txt
         - mkdir third_party/build
