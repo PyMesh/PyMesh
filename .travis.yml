@@ -44,7 +44,10 @@ matrix:
         - python -c "import pymesh; pymesh.test()"
     - os: linux
       dist: xenial
-      python: "2.7"
+      python:
+        - "2.7"
+        - "3.5"
+        - "3.6"
       addons:
         apt:
           update: true
@@ -75,6 +78,7 @@ matrix:
         # info on both executables
         - python --version
         - python3 --version
+        - python3.6 --version
         - git submodule update --init
         - pip install -r python/requirements.txt
         - mkdir third_party/build
