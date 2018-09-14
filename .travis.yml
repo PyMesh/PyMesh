@@ -57,13 +57,8 @@ matrix:
             - libtbb-dev
             - python3-dev
       install:
-        # We do this conditionally because it saves us some downloading if the
-        # version is the same.
-        - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
-            wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
-          else
-            wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-          fi
+        # Conda (Miniconda)
+        - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
         - bash miniconda.sh -b -p $HOME/miniconda
         - export PATH="$HOME/miniconda/bin:$PATH"
         - hash -r
@@ -74,6 +69,7 @@ matrix:
         # Create conda enviroment
         - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
         - source activate test-environment
+        - conda update cmake
         - git submodule update --init
         - pip install -r python/requirements.txt
         - mkdir third_party/build
