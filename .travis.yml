@@ -44,19 +44,19 @@ matrix:
     - os: linux
       dist: xenial
       python: "2.7"
-      before_install:
-        - sudo apt-get -qq update
-        - sudo apt-get -qq install \
-                  libeigen3-dev \
-                  libgmp-dev \
-                  libgmpxx4ldbl \
-                  libmpfr-dev \
-                  libboost-dev \
-                  libboost-thread-dev \
-                  libtbb-dev \
-                  python3-dev
+      addons:
+        apt:
+          update: true
+          packages:
+            - libeigen3-dev
+            - libgmp-dev
+            - libgmpxx4ldbl
+            - libmpfr-dev
+            - libboost-dev
+            - libboost-thread-dev
+            - libtbb-dev
+            - python3-dev
       install:
-        - sudo apt-get update
         # We do this conditionally because it saves us some downloading if the
         # version is the same.
         - if [[ "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
