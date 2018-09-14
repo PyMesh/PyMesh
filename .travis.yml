@@ -67,7 +67,7 @@ matrix:
         # Useful for debugging any issues with conda
         - conda info -a
         # Create conda enviroment
-        - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION
+        - conda create -q -n test-environment python=2.7
         - source activate test-environment
         - conda install cmake
         - git submodule update --init
