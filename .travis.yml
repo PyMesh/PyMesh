@@ -51,6 +51,8 @@ matrix:
       addons:
         apt:
           update: true
+          sources:
+            - deadsnakes
           packages:
             - libeigen3-dev
             - libgmp-dev
