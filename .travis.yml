@@ -70,6 +70,10 @@ matrix:
         - conda create -q -n test-environment python=2.7
         - source activate test-environment
         - conda install cmake
+        - conda install -c anaconda cython
+        # info on both executables
+        - python --version
+        - python3 --version
         - git submodule update --init
         - pip install -r python/requirements.txt
         - mkdir third_party/build
