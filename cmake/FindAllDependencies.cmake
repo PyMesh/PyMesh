@@ -42,7 +42,6 @@ ENDIF (NOT MPFR_FOUND)
 
 # CGAL
 IF (NOT CGAL_FOUND)
-    SET(CMAKE_BUILD_TYPE "Release")
     IF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL/UseCGAL.cmake)
         SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL)
     ELSEIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL/UseCGAL.cmake)
