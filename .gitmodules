@@ -57,3 +57,6 @@
 [submodule "third_party/WindingNumber"]
 	path = third_party/WindingNumber
 	url = https://github.com/PyMesh/WindingNumber.git
+[submodule "third_party/tbb"]
+	path = third_party/tbb
+	url = https://github.com/wjakob/tbb.git
