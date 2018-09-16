@@ -53,6 +53,7 @@ matrix:
           update: true
           sources:
             - deadsnakes
+            - sourceline: ppa:deadsnakes/ppa
           packages:
             - libeigen3-dev
             - libgmp-dev
