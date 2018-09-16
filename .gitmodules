@@ -37,7 +37,7 @@
 [submodule "third_party/cgal"]
 	path = third_party/cgal
 	url = https://github.com/PyMesh/cgal.git
-	shallow = true
+	shallow = false
 [submodule "third_party/pybind11"]
 	path = third_party/pybind11
 	url = https://github.com/PyMesh/pybind11.git
