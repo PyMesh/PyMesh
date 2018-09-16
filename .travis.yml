@@ -53,7 +53,6 @@ matrix:
           update: true
           sources:
             - deadsnakes
-            - python3.6
           packages:
             - libeigen3-dev
             - libgmp-dev
