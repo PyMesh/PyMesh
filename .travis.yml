@@ -62,7 +62,7 @@ matrix:
             - libtbb-dev
             - python3-dev
             - python3.6
-      before_install
+      before_install:
         - git submodule update --init
         # Conda (Miniconda)
         - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
