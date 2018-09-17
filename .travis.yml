@@ -36,7 +36,6 @@ matrix:
         - make -j 4
         - cd ..
         - ./setup.py install
-      after_success:
         - export PYMESH_PATH=`pwd`
         - cd build
         - make tests
@@ -63,7 +62,8 @@ matrix:
             - libtbb-dev
             - python3-dev
             - python3.6
-      install:
+      before_install
+        - git submodule update --init
         # Conda (Miniconda)
         - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
         - bash miniconda.sh -b -p $HOME/miniconda
@@ -73,18 +73,17 @@ matrix:
         - conda update -q conda
         # Useful for debugging any issues with conda
         - conda info -a
+      install:
         # Create conda enviroment
         - conda create -q -n test-environment python=2.7
         - source activate test-environment
         - conda install cmake
-        - conda install -c conda-forge pybind11
-        - conda install -c anaconda cython
         # info on python executables
         - python --version
         - python3 --version
         - python3.6 --version
-        - git submodule update --init
         - pip install -r python/requirements.txt
+        - git submodule update --init
         - mkdir third_party/build
         - cd third_party/build
         - cmake ..
@@ -98,7 +97,6 @@ matrix:
         - make -j 4
         - cd ..
         - ./setup.py install
-      after_success:
         - export PYMESH_PATH=`pwd`
         - cd build
         - make tests
