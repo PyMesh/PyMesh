@@ -77,8 +77,9 @@ matrix:
         - conda create -q -n test-environment python=2.7
         - source activate test-environment
         - conda install cmake
+        - conda install -c conda-forge pybind11
         - conda install -c anaconda cython
-        # info on both executables
+        # info on python executables
         - python --version
         - python3 --version
         - python3.6 --version
