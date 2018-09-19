@@ -22,10 +22,6 @@ matrix:
       script:
         - ./setup.py build
         - ./setup.py install
-        - export PYMESH_PATH=`pwd`
-        - cd build
-        - make tests
-        - cd ..
         - python -c "import pymesh; pymesh.test()"
     - os: linux
       dist: xenial
@@ -69,23 +65,8 @@ matrix:
         - python3 --version
         - python3.6 --version
         - pip install -r python/requirements.txt
-        - git submodule update --init
-        - mkdir third_party/build
-        - cd third_party/build
-        - cmake ..
-        - make -j 4
-        - make install
-        - cd ../..
       script:
-        - mkdir build
-        - cd build
-        - cmake ..
-        - make -j 4
-        - cd ..
+        - ./setup.py build
         - ./setup.py install
-        - export PYMESH_PATH=`pwd`
-        - cd build
-        - make tests
-        - cd ..
         - python -c "import pymesh; pymesh.test()"
 
