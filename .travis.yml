@@ -1,9 +1,11 @@
 language: cpp
-sudo: false
+sudo: required
 virtualenv:
   system_site_packages: true
 python:
+    - "2.7"
     - "3.5"
+    - "3.6"
 git:
     submodules: false
 matrix:
@@ -34,10 +36,69 @@ matrix:
         - make -j 4
         - cd ..
         - ./setup.py install
-      after_success:
         - export PYMESH_PATH=`pwd`
         - cd build
         - make tests
         - cd ..
         - python -c "import pymesh; pymesh.test()"
-
+    - os: linux
+      dist: xenial
+      python:
+        - "2.7"
+        - "3.5"
+        - "3.6"
+      addons:
+        apt:
+          update: true
+          sources:
+            - sourceline: ppa:deadsnakes/ppa
+          packages:
+            - libeigen3-dev
+            - libgmp-dev
+            - libgmpxx4ldbl
+            - libmpfr-dev
+            - libboost-dev
+            - libboost-thread-dev
+            - libtbb-dev
+            - python3-dev
+            - python3.6
+      before_install:
+        - git submodule update --init
+        # Conda (Miniconda)
+        - wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+        - bash miniconda.sh -b -p $HOME/miniconda
+        - export PATH="$HOME/miniconda/bin:$PATH"
+        - hash -r
+        - conda config --set always_yes yes --set changeps1 no
+        - conda update -q conda
+        # Useful for debugging any issues with conda
+        - conda info -a
+      install:
+        # Create conda enviroment
+        - conda create -q -n test-environment python=2.7
+        - source activate test-environment
+        - conda install cmake
+        # info on python executables
+        - python --version
+        - python3 --version
+        - python3.6 --version
+        - pip install -r python/requirements.txt
+        - git submodule update --init
+        - mkdir third_party/build
+        - cd third_party/build
+        - cmake ..
+        - make -j 4
+        - make install
+        - cd ../..
+      script:
+        - mkdir build
+        - cd build
+        - cmake ..
+        - make -j 4
+        - cd ..
+        - ./setup.py install
+        - export PYMESH_PATH=`pwd`
+        - cd build
+        - make tests
+        - cd ..
+        - python -c "import pymesh; pymesh.test()"

@@ -205,7 +205,7 @@ To install PyMesh in your system::
 
 Alternatively, one can install PyMesh locally::
 
-    ./setup.py intall --user
+    ./setup.py install --user
 
 
 Post-installation check
