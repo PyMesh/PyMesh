@@ -18,7 +18,7 @@ matrix:
         - brew unlink python
         - brew install python tbb
       install:
-        - pip3 install -r python/requirements.txt
+        - pip install -r python/requirements.txt
       script:
         - ./setup.py build
         - ./setup.py install
