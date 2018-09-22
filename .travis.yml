@@ -8,7 +8,7 @@ git:
 matrix:
   include:
     - os: osx
-      osx_image: xcode7.3
+      osx_image: xcode10
       compiler: clang
       before_install:
         - git submodule update --init
@@ -18,7 +18,77 @@ matrix:
       install:
         - pip install -r python/requirements.txt
     - os: osx
-      osx_image: xcode10
+      osx_image: xcode9.4
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode9.3
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode9.2
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode9.1
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode9
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode8
+      compiler: clang
+      before_install:
+        - git submodule update --init
+        - sw_vers
+        - brew update
+        - brew outdated cmake || brew upgrade cmake
+      install:
+        - pip install -r python/requirements.txt
+    - os: osx
+      osx_image: xcode7.3
       compiler: clang
       before_install:
         - git submodule update --init

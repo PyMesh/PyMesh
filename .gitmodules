@@ -33,7 +33,7 @@
 [submodule "third_party/quartet"]
 	path = third_party/quartet
 	url = https://github.com/PyMesh/quartet.git
-	shallow = true
+	shallow = false
 [submodule "third_party/cgal"]
 	path = third_party/cgal
 	url = https://github.com/PyMesh/cgal.git
