@@ -8,7 +8,9 @@ git:
 matrix:
   include:
     - os: osx
-      osx_image: xcode7.3 # OS X 10.11.1
+      osx_image:
+          - xcode7.3
+          - xcode10
       compiler: clang
       before_install:
         - git submodule update --init
@@ -19,10 +21,6 @@ matrix:
         - brew install python tbb
       install:
         - pip install -r python/requirements.txt
-      script:
-        - ./setup.py build
-        - ./setup.py install
-        - python -c "import pymesh; pymesh.test()"
     - os: linux
       dist: xenial
       python: "2.7"
@@ -58,8 +56,9 @@ matrix:
         # info on python executables
         - python --version
         - pip install -r python/requirements.txt
-      script:
-        - ./setup.py build
-        - ./setup.py install
-        - python -c "import pymesh; pymesh.test()"
+
+script:
+    - ./setup.py build
+    - ./setup.py install
+    - python -c "import pymesh; pymesh.test()"
 
