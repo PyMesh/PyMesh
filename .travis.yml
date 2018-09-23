@@ -36,9 +36,10 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - sudo pip install --upgrade pip
+        - python --version
+        - pip --version
       install:
-        - pip install -r python/requirements.txt
+        - pip install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode9.2
       compiler: clang
