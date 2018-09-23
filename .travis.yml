@@ -48,9 +48,10 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py & sudo python get-pip.py
+        - python --version
+        - pip --version
       install:
-        - pip install -r python/requirements.txt
+        - pip install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode9.1
       compiler: clang
@@ -59,9 +60,10 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py & sudo python get-pip.py
+        - python --version
+        - pip --version
       install:
-        - pip install -r python/requirements.txt
+        - pip install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode9
       compiler: clang
@@ -70,9 +72,10 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py & sudo python get-pip.py
+        - python --version
+        - pip --version
       install:
-        - pip install -r python/requirements.txt
+        - pip install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode8.3
       compiler: clang
@@ -82,7 +85,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
       install:
-        - pip2 install -r python/requirements.txt
+        - pip2 install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode8
       compiler: clang
@@ -92,7 +95,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
       install:
-        - pip install -r python/requirements.txt
+        - pip install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode7.3
       compiler: clang
@@ -102,7 +105,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
       install:
-        - pip install -r python/requirements.txt
+        - pip install --user -r python/requirements.txt
     - os: linux
       dist: xenial
       python: "2.7"
