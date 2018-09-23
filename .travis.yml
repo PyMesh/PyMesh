@@ -36,7 +36,7 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - pip install --upgrade pip
+        - sudo pip install --upgrade pip
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -47,7 +47,7 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - pip install --upgrade pip
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py & sudo python get-pip.py
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -58,7 +58,7 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - pip install --upgrade pip
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py & sudo python get-pip.py
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -69,7 +69,7 @@ matrix:
         - sw_vers
         - brew update
         - brew outdated cmake || brew upgrade cmake
-        - pip install --upgrade pip
+        - curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py & sudo python get-pip.py
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -81,7 +81,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
       install:
-        - pip install -r python/requirements.txt
+        - pip2 install -r python/requirements.txt
     - os: osx
       osx_image: xcode8
       compiler: clang
