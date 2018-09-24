@@ -144,6 +144,6 @@ matrix:
 
 script:
     - ./setup.py build
-    - ./setup.py install
+    - ./setup.py install --user
     - python -c "import pymesh; pymesh.test()"
 
