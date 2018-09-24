@@ -49,7 +49,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - python --version
-        - curl https://bootstrap.pypa.io/get-pip.py | python
+        - curl https://bootstrap.pypa.io/get-pip.py | sudo python
         - pip --version
       install:
         - pip install --user -r python/requirements.txt
@@ -62,7 +62,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - python --version
-        - curl https://bootstrap.pypa.io/get-pip.py | python
+        - curl https://bootstrap.pypa.io/get-pip.py | sudo python
         - pip --version
       install:
         - pip install --user -r python/requirements.txt
@@ -75,7 +75,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - python --version
-        - curl https://bootstrap.pypa.io/get-pip.py | python
+        - curl https://bootstrap.pypa.io/get-pip.py | sudo python
         - pip --version
       install:
         - pip install --user -r python/requirements.txt
