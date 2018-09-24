@@ -49,6 +49,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - python --version
+        - curl https://bootstrap.pypa.io/get-pip.py | python
         - pip --version
       install:
         - pip install --user -r python/requirements.txt
@@ -61,6 +62,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - python --version
+        - curl https://bootstrap.pypa.io/get-pip.py | python
         - pip --version
       install:
         - pip install --user -r python/requirements.txt
@@ -73,6 +75,7 @@ matrix:
         - brew update
         - brew outdated cmake || brew upgrade cmake
         - python --version
+        - curl https://bootstrap.pypa.io/get-pip.py | python
         - pip --version
       install:
         - pip install --user -r python/requirements.txt
@@ -144,6 +147,6 @@ matrix:
 
 script:
     - ./setup.py build
-    - ./setup.py install --user
+    - ./setup.py install --user --prefix=
     - python -c "import pymesh; pymesh.test()"
 
