@@ -1,5 +1,6 @@
 FROM python:3.6
 WORKDIR /root/
+ARG BRANCH="master"
 
 RUN echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" >> /etc/apt/sources.list.d/unstable.list &&\
     apt-get update && apt-get install -y \
@@ -13,7 +14,7 @@ RUN echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" >>
     libboost-dev \
     libboost-thread-dev && \
     apt-get clean && \
-    git clone --single-branch -b $CIRCLE_BRANCH https://github.com/PyMesh/PyMesh.git
+    git clone --single-branch -b $BRANCH https://github.com/PyMesh/PyMesh.git
 
 ENV PYMESH_PATH /root/PyMesh
 WORKDIR $PYMESH_PATH
