@@ -7,7 +7,7 @@ jobs:
             - run:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
-                    docker build -t pymesh/pymesh:py3.6 docker/py3.6
+                    docker build -m 6g -t pymesh/pymesh:py3.6 docker/py3.6
                     [ "$CIRCLE_BRANCH" = "master" ] && docker push pymesh/pymesh:py3.6
                 no_output_timeout: 1200
     "py3.6-slim":
@@ -28,7 +28,7 @@ jobs:
             - run:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
-                    docker build -t pymesh/pymesh:py2.7 docker/py2.7
+                    docker build -m 6g -t pymesh/pymesh:py2.7 docker/py2.7
                     [ "$CIRCLE_BRANCH" = "master" ] && docker push pymesh/pymesh:py2.7
                 no_output_timeout: 1200
     "py2.7-slim":
