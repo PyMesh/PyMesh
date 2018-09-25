@@ -1,29 +1,5 @@
 version: 2
 jobs:
-    build:
-        docker:
-            - image: debian:sid-slim
-        environment:
-            NUM_CORES: 2
-        steps:
-            - checkout
-            - run: |
-                apt-get update
-                apt-get install -y git gcc cmake libeigen3-dev libgmp-dev libgmpxx4ldbl libumfpack5 libmpfr-dev libboost-dev libboost-thread-dev libtbb-dev python3-dev python3-venv python3-pip && apt-get clean
-            - run: git checkout $CIRCLE_BRANCH
-            - run: git submodule sync
-            - run: git submodule update --init
-            - run: python3 -m venv py_env
-            - run:
-                workding_directory: $CIRCLE_WORKING_DIRECTORY
-                command: |
-                    source py_env/bin/activate
-                    pip install -q -r python/requirements.txt
-                    ./setup.py build
-                    ./setup.py develop
-                    cd build
-                    make tests
-                no_output_timeout: 1200
     "py3.6":
         machine: true
         steps:
@@ -32,7 +8,7 @@ jobs:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
                     docker build -t pymesh/pymesh:py3.6 docker/py3.6
-                    docker push pymesh/pymesh:py3.6
+                    [ "$CIRCLE_BRANCH" = "master" ] && docker push pymesh/pymesh:py3.6
                 no_output_timeout: 1200
     "py3.6-slim":
         machine: true
@@ -53,7 +29,7 @@ jobs:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
                     docker build -t pymesh/pymesh:py2.7 docker/py2.7
-                    docker push pymesh/pymesh:py2.7
+                    [ "$CIRCLE_BRANCH" = "master" ] && docker push pymesh/pymesh:py2.7
                 no_output_timeout: 1200
     "py2.7-slim":
         machine: true
@@ -69,19 +45,12 @@ workflows:
     version: 2
     build_and_test_and_deploy:
         jobs:
-            - build
             - "py3.6":
                 requires:
                     - build
-                filters:
-                    branches:
-                        only: master
             - "py2.7":
                 requires:
                     - build
-                filters:
-                    branches:
-                        only: master
             - "py3.6-slim":
                 requires:
                     - "py3.6"
