@@ -194,7 +194,7 @@ IF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
             Boost::atomic
             Boost::chrono
             Boost::date_time
-            Boost::thead
+            Boost::thread
             Boost::system
     )
     TARGET_COMPILE_DEFINITIONS(PyMesh::CGAL
