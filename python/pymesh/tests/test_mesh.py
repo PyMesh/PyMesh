@@ -42,3 +42,46 @@ class MeshTest(TestCase):
         self.assertEqual(3, len(mesh.get_voxel_adjacent_voxels(5)));
         self.assertEqual(3, len(mesh.get_voxel_adjacent_voxels(6)));
         self.assertEqual(3, len(mesh.get_voxel_adjacent_voxels(7)));
+
+    def test_2D_area_attribute(self):
+        vertices = np.array([
+            [0.0, 0.0],
+            [1.0, 0.0],
+            [0.0, 1.0] ]);
+        faces = np.array([
+            [0, 1, 2],
+            [0, 0, 1],
+            [1, 0, 2]
+            ]);
+
+        mesh = pymesh.form_mesh(vertices, faces);
+        mesh.add_attribute("face_area");
+
+        self.assertTrue(mesh.has_attribute("face_area"));
+        areas = mesh.get_face_attribute("face_area");
+        self.assertEqual(3, len(areas));
+        self.assertAlmostEqual(0.5, areas[0]);
+        self.assertAlmostEqual(0, areas[1]);
+        self.assertAlmostEqual(-0.5, areas[2]);
+
+    def test_3D_area_attribute(self):
+        vertices = np.array([
+            [0.0, 0.0, 0.1],
+            [1.0, 0.0, 0.1],
+            [0.0, 1.0, 0.1] ]);
+        faces = np.array([
+            [0, 1, 2],
+            [0, 0, 1],
+            [1, 0, 2]
+            ]);
+
+        mesh = pymesh.form_mesh(vertices, faces);
+        mesh.add_attribute("face_area");
+
+        self.assertTrue(mesh.has_attribute("face_area"));
+        areas = mesh.get_face_attribute("face_area");
+        self.assertEqual(3, len(areas));
+        self.assertAlmostEqual(0.5, areas[0]);
+        self.assertAlmostEqual(0, areas[1]);
+        self.assertAlmostEqual(0.5, areas[2]);
+
