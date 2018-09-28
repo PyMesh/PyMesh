@@ -79,7 +79,7 @@ class MeshTest(TestCase):
         mesh.add_attribute("face_area");
 
         self.assertTrue(mesh.has_attribute("face_area"));
-        areas = mesh.get_face_attribute("face_area");
+        areas = mesh.get_face_attribute("face_area").ravel();
         self.assertEqual(3, len(areas));
         self.assertAlmostEqual(0.5, areas[0]);
         self.assertAlmostEqual(0, areas[1]);
