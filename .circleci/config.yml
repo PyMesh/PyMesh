@@ -65,11 +65,11 @@ workflows:
     build_and_test_and_deploy:
         jobs:
             - "py3.6"
-            - "py3.5"
+            - "py3.5":
                 filters:
                     branches:
                         only: master
-            - "py2.7"
+            - "py2.7":
                 filters:
                     branches:
                         only: master
