@@ -16,6 +16,7 @@ from .hex_to_tet import hex_to_tet
 from .quad_to_tri import quad_to_tri
 from .manifold_check import is_vertex_manifold, is_edge_manifold
 from .merge_meshes import merge_meshes
+from .mesh_to_graph import mesh_to_graph, mesh_to_dual_graph
 from .remove_degenerated_triangles import remove_degenerated_triangles
 from .remove_degenerated_triangles import remove_degenerated_triangles_raw
 from .remove_duplicated_faces import remove_duplicated_faces
@@ -61,6 +62,8 @@ __all__ = [
         "is_edge_manifold",
         "is_vertex_manifold",
         "merge_meshes",
+        "mesh_to_dual_graph",
+        "mesh_to_graph",
         "remove_degenerated_triangles",
         "remove_degenerated_triangles_raw",
         "remove_duplicated_faces",
