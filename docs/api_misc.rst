@@ -62,3 +62,9 @@ Mesh compression
 
 .. autofunction:: pymesh.compress
 .. autofunction:: pymesh.decompress
+
+Mesh to graph
+-------------
+
+.. autofunction:: pymesh.mesh_to_graph
+.. autofunction:: pymesh.mesh_to_dual_graph
