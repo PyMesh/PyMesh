@@ -42,22 +42,11 @@ ENDIF (NOT MPFR_FOUND)
 
 # CGAL
 IF (NOT CGAL_FOUND)
-    IF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL/UseCGAL.cmake)
-        SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL)
-    ELSEIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL/UseCGAL.cmake)
-        SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL)
-    ELSEIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/cmake/CGAL/UseCGAL.cmake)
-        SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/CGAL)
-    ELSEIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/CGAL/UseCGAL.cmake)
-        SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/cmake/CGAL)
-    ELSE (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL/UseCGAL.cmake)
-        IF (DEFINED ENV{CGAL_PATH} AND NOT DEFINED ENV{CGAL_DIR})
-            SET(CGAL_DIR $ENV{CGAL_PATH})
-        ENDIF (DEFINED ENV{CGAL_PATH} AND NOT DEFINED ENV{CGAL_DIR})
-    ENDIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL/UseCGAL.cmake)
-    SET(CGAL_DONT_OVERRIDE_CMAKE_FLAGS TRUE CACHE BOOL
-        "Disable CGAL from overwriting my cmake flags")
-    FIND_PACKAGE(CGAL QUIET)
+    SET(CGAL_DIRS
+        "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL"
+        "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/cmake/CGAL"
+    )
+    FIND_PACKAGE(CGAL QUIET CONFIG COMPONENTS Core PATHS ${CGAL_DIRS} NO_DEFAULT_PATH)
 ENDIF (NOT CGAL_FOUND)
 
 # MMG
