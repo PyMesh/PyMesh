@@ -4,6 +4,7 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <list>
 #include <sstream>
 
@@ -257,6 +258,7 @@ bool OBJParser::parse_vertex_parameter(char* line) {
 
 bool OBJParser::parse_face_line(char* line) {
     const char WHITE_SPACE[] = " \t\n\r";
+    constexpr int INVALID = std::numeric_limits<int>::max();
     char* field = strtok(line, WHITE_SPACE);
     assert(field != NULL);
 
@@ -271,7 +273,7 @@ bool OBJParser::parse_face_line(char* line) {
     while (field != NULL) {
         // Note each vertex field could be in any of the following formats:
         // v_idx  or  v_idx/vt_idx  or  v_idx/vt_idx/vn_idx or v_idx//vn_idx
-        v_idx = vt_idx = vn_idx = 0;
+        v_idx = vt_idx = vn_idx = INVALID;
         v_idx = atoi(field);
         char* loc = strchr(field, '/');
         if (loc != NULL) {
@@ -284,7 +286,7 @@ bool OBJParser::parse_face_line(char* line) {
             }
         }
 
-        if (v_idx == 0) return false;
+        if (v_idx == INVALID) return false;
 
         // Negative index means relative index from the vertices read so
         // far.  -1 refers to the last vertex read in.
@@ -301,8 +303,10 @@ bool OBJParser::parse_face_line(char* line) {
         assert(vt_idx >= 0);
         assert(vn_idx >= 0);
         idx.push_back(v_idx-1); // OBJ has index starting from 1
-        if (vt_idx != 0) t_idx.push_back(vt_idx-1);
-        if (vn_idx != 0) n_idx.push_back(vn_idx-1);
+        if (vt_idx != INVALID) t_idx.push_back(vt_idx-1);
+        else t_idx.push_back(INVALID);
+        if (vn_idx != INVALID) n_idx.push_back(vn_idx-1);
+        else n_idx.push_back(INVALID);
 
         // Get next token
         field = strtok(NULL, WHITE_SPACE);
@@ -493,17 +497,6 @@ void OBJParser::finalize_textures() {
             bad_texture = true;
             break;
         }
-        if (t.minCoeff() < 0 || t.maxCoeff() >= num_corner_textures) {
-            std::cerr << "Texture index out of bound." << std::endl;
-            bad_texture = true;
-            break;
-        }
-        //if (t.size() != m_texture_dim) {
-        //    std::cerr << t << std::endl;
-        //    std::cerr << "Texture has the wrong dimension." << std::endl;
-        //    bad_texture = true;
-        //    break;
-        //}
     }
 
     if (bad_texture) {
@@ -512,12 +505,20 @@ void OBJParser::finalize_textures() {
     }
 
     TextureVector textures;
+    const Vector2F INVALID_UV {
+        std::numeric_limits<Float>::quiet_NaN(),
+        std::numeric_limits<Float>::quiet_NaN()};
     for (const auto& t : m_textures) {
         for (size_t i=0; i<m_vertex_per_face; i++) {
-            textures.emplace_back(m_corner_textures[t[i]]);
+            if (t[i] >= 0 && t[i] < num_corner_textures) {
+                textures.emplace_back(m_corner_textures[t[i]]);
+            } else {
+                textures.emplace_back(INVALID_UV);
+            }
         }
     }
     std::swap(textures, m_corner_textures);
+    assert(m_corner_textures.size() == num_faces * m_vertex_per_face);
 }
 
 void OBJParser::finalize_normals() {
