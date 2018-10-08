@@ -38,7 +38,7 @@ void FaceAreaAttribute::compute_from_mesh(Mesh& mesh) {
         const auto a = (v1-v0).norm();
         const auto b = (v2-v1).norm();
         const auto c = (v0-v2).norm();
-        return 0.25 * sqrt((a+b+c) * (-a+b+c) * (a-b+c) * (a+b-c));
+        return 0.25 * sqrt(std::max(0.0, (a+b+c) * (-a+b+c) * (a-b+c) * (a+b-c)));
     };
     auto compute_2D_quad_area = [&vertices, &faces](size_t i) {
         const auto& face = faces.segment<4>(i*4);
