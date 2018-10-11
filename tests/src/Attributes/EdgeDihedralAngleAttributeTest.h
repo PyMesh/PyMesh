@@ -14,7 +14,6 @@ TEST_F(EdgeDihedralAngleAttributeTest, tet) {
     mesh->add_attribute("edge_dihedral_angle");
     ASSERT_TRUE(mesh->has_attribute("edge_dihedral_angle"));
     VectorF dihedral_angles = mesh->get_attribute("edge_dihedral_angle");
-    std::cout << dihedral_angles << std::endl;
     ASSERT_FLOAT_EQ(dihedral_angles.sum() / dihedral_angles.size(),
             dihedral_angles[0]);
     ASSERT_FLOAT_EQ(M_PI - atan(2*sqrt(2)), dihedral_angles[0]);
@@ -25,7 +24,6 @@ TEST_F(EdgeDihedralAngleAttributeTest, hex) {
     mesh->add_attribute("edge_dihedral_angle");
     ASSERT_TRUE(mesh->has_attribute("edge_dihedral_angle"));
     VectorF dihedral_angles = mesh->get_attribute("edge_dihedral_angle");
-    std::cout << dihedral_angles << std::endl;
     ASSERT_FLOAT_EQ(dihedral_angles.sum() / dihedral_angles.size(),
             dihedral_angles[0]);
     ASSERT_FLOAT_EQ(M_PI/2.0, dihedral_angles[0]);
