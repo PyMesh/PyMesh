@@ -1,7 +1,3 @@
-[submodule "third_party/libigl"]
-	path = third_party/libigl
-	url = https://github.com/PyMesh/libigl.git
-	shallow = true
 [submodule "third_party/carve"]
 	path = third_party/carve
 	url = https://github.com/PyMesh/carve.git
@@ -45,18 +41,28 @@
 [submodule "third_party/mmg"]
 	path = third_party/mmg
 	url = https://github.com/PyMesh/mmg.git
+	shallow = true
 [submodule "third_party/geogram"]
 	path = third_party/geogram
 	url = https://github.com/PyMesh/geogram.git
+	shallow = true
 [submodule "third_party/draco"]
 	path = third_party/draco
 	url = https://github.com/PyMesh/draco.git
+	shallow = true
 [submodule "third_party/TetWild"]
 	path = third_party/TetWild
 	url = https://github.com/PyMesh/TetWild.git
+	shallow = true
 [submodule "third_party/WindingNumber"]
 	path = third_party/WindingNumber
 	url = https://github.com/PyMesh/WindingNumber.git
+	shallow = true
 [submodule "third_party/tbb"]
 	path = third_party/tbb
 	url = https://github.com/PyMesh/tbb.git
+	shallow = true
+[submodule "libigl"]
+	path = third_party/libigl
+	url = https://github.com/PyMesh/libigl.git
+	shallow = true
