@@ -5,6 +5,7 @@ virtualenv:
 git:
     submodules: false
     depth: 1
+cache: ccache
 matrix:
   include:
     - os: osx
@@ -146,7 +147,12 @@ matrix:
         - pip install -r python/requirements.txt
 
 script:
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install ccache; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export PATH="/usr/local/opt/ccache/libexec:$PATH"; fi
+    - ccache --max-size=5.0G
+    - ccache -V && ccache --show-stats && ccache --zero-stats
     - ./setup.py build
     - ./setup.py install --user --prefix=
     - python -c "import pymesh; pymesh.test()"
+    - ccache --show-stats
 
