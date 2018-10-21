@@ -1,104 +1,115 @@
-# - Try to find the Intel Math Kernel Library
-#   Forked from: https://github.com/openmeeg/openmeeg/blob/master/macros/FindMKL.cmake
-# Once done this will define
+################################################################################
 #
-# MKL_FOUND - system has MKL
-# MKL_ROOT_DIR - path to the MKL base directory
-# MKL_INCLUDE_DIR - the MKL include directory
-# MKL_LIBRARIES - MKL libraries
+# \file      cmake/FindMKL.cmake
+# \author    J. Bakosi
+# \copyright 2012-2015, Jozsef Bakosi, 2016, Los Alamos National Security, LLC.
+# \brief     Find the Math Kernel Library from Intel
+# \date      Thu 26 Jan 2017 02:05:50 PM MST
 #
-# There are few sets of libraries:
-# Array indexes modes:
-# LP - 32 bit indexes of arrays
-# ILP - 64 bit indexes of arrays
-# Threading:
-# SEQUENTIAL - no threading
-# INTEL - Intel threading library
-# GNU - GNU threading library
-# MPI support
-# NOMPI - no MPI support
-# INTEL - Intel MPI library
-# OPEN - Open MPI library
-# SGI - SGI MPT Library
+################################################################################
 
-# linux
-if(UNIX AND NOT APPLE)
-    if(${CMAKE_HOST_SYSTEM_PROCESSOR} STREQUAL "x86_64")
-        set(MKL_ARCH_DIR "intel64_lin")
-    else()
-        set(MKL_ARCH_DIR "32")
+# Find the Math Kernel Library from Intel
+#
+#  MKL_FOUND - System has MKL
+#  MKL_INCLUDE_DIRS - MKL include files directories
+#  MKL_LIBRARIES - The MKL libraries
+#  MKL_INTERFACE_LIBRARY - MKL interface library
+#  MKL_SEQUENTIAL_LAYER_LIBRARY - MKL sequential layer library
+#  MKL_CORE_LIBRARY - MKL core library
+#
+#  The environment variables MKLROOT and INTEL are used to find the library.
+#  Everything else is ignored. If MKL is found "-DMKL_ILP64" is added to
+#  CMAKE_C_FLAGS and CMAKE_CXX_FLAGS.
+#
+#  Example usage:
+#
+#  find_package(MKL)
+#  if(MKL_FOUND)
+#    target_link_libraries(TARGET ${MKL_LIBRARIES})
+#  endif()
+
+# If already in cache, be silent
+if (MKL_INCLUDE_DIRS AND MKL_LIBRARIES AND MKL_INTERFACE_LIBRARY AND
+    MKL_SEQUENTIAL_LAYER_LIBRARY AND MKL_CORE_LIBRARY)
+  set (MKL_FIND_QUIETLY TRUE)
+endif()
+
+if(NOT BUILD_SHARED_LIBS)
+  set(INT_LIB "libmkl_intel_ilp64.a")
+  set(SEQ_LIB "libmkl_sequential.a")
+  set(THR_LIB "libmkl_intel_thread.a")
+  set(COR_LIB "libmkl_core.a")
+else()
+  set(INT_LIB "mkl_intel_ilp64")
+  set(SEQ_LIB "mkl_sequential")
+  set(THR_LIB "mkl_intel_thread")
+  set(COR_LIB "mkl_core")
+endif()
+
+find_path(MKL_INCLUDE_DIR NAMES mkl.h HINTS $ENV{MKLROOT}/include
+    ${MKLROOT}/include)
+
+find_library(MKL_INTERFACE_LIBRARY
+             NAMES ${INT_LIB}
+             PATHS $ENV{MKLROOT}/lib
+                   $ENV{MKLROOT}/lib/intel64
+                   $ENV{INTEL}/mkl/lib/intel64
+                   ${MKLROOT}/lib
+                   ${MKLROOT}/lib/intel64
+                   ${INTEL}/mkl/lib/intel64
+             NO_DEFAULT_PATH)
+
+find_library(MKL_SEQUENTIAL_LAYER_LIBRARY
+             NAMES ${SEQ_LIB}
+             PATHS $ENV{MKLROOT}/lib
+                   $ENV{MKLROOT}/lib/intel64
+                   $ENV{INTEL}/mkl/lib/intel64
+                   ${MKLROOT}/lib
+                   ${MKLROOT}/lib/intel64
+                   ${INTEL}/mkl/lib/intel64
+             NO_DEFAULT_PATH)
+
+find_library(MKL_CORE_LIBRARY
+             NAMES ${COR_LIB}
+             PATHS $ENV{MKLROOT}/lib
+                   $ENV{MKLROOT}/lib/intel64
+                   $ENV{INTEL}/mkl/lib/intel64
+                   ${MKLROOT}/lib
+                   ${MKLROOT}/lib/intel64
+                   ${INTEL}/mkl/lib/intel64
+             NO_DEFAULT_PATH)
+
+set(MKL_INCLUDE_DIRS ${MKL_INCLUDE_DIR})
+set(MKL_LIBRARIES ${MKL_INTERFACE_LIBRARY} ${MKL_SEQUENTIAL_LAYER_LIBRARY} ${MKL_CORE_LIBRARY})
+
+if (MKL_INCLUDE_DIR AND
+    MKL_INTERFACE_LIBRARY AND
+    MKL_SEQUENTIAL_LAYER_LIBRARY AND
+    MKL_CORE_LIBRARY)
+
+    if (NOT DEFINED ENV{CRAY_PRGENVPGI} AND
+        NOT DEFINED ENV{CRAY_PRGENVGNU} AND
+        NOT DEFINED ENV{CRAY_PRGENVCRAY} AND
+        NOT DEFINED ENV{CRAY_PRGENVINTEL})
+      set(ABI "-m64")
     endif()
+
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DMKL_ILP64 ${ABI}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DMKL_ILP64 ${ABI}")
+
+else()
+
+  set(MKL_INCLUDE_DIRS "")
+  set(MKL_LIBRARIES "")
+  set(MKL_INTERFACE_LIBRARY "")
+  set(MKL_SEQUENTIAL_LAYER_LIBRARY "")
+  set(MKL_CORE_LIBRARY "")
+
 endif()
 
-# macos
-if(APPLE)
-    set(MKL_ARCH_DIR "em64t")
-endif()
+# Handle the QUIETLY and REQUIRED arguments and set MKL_FOUND to TRUE if
+# all listed variables are TRUE.
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(MKL DEFAULT_MSG MKL_LIBRARIES MKL_INCLUDE_DIRS MKL_INTERFACE_LIBRARY MKL_SEQUENTIAL_LAYER_LIBRARY MKL_CORE_LIBRARY)
 
-IF(FORCE_BUILD_32BITS)
-    set(MKL_ARCH_DIR "32")
-ENDIF()
-
-if (WIN32)
-    if(${CMAKE_SIZEOF_VOID_P} EQUAL 8)
-        set(MKL_ARCH_DIR "intel64")
-    else()
-        set(MKL_ARCH_DIR "ia32")
-    endif()
-endif()
-
-set (MKL_THREAD_VARIANTS SEQUENTIAL GNUTHREAD INTELTHREAD)
-set (MKL_MODE_VARIANTS ILP LP)
-set (MKL_MPI_VARIANTS NOMPI INTELMPI OPENMPI SGIMPT)
-
-find_path(MKL_ROOT_DIR
-    include/mkl_cblas.h
-    PATHS
-    $ENV{MKLDIR}
-    /opt/intel/mkl/
-    /opt/intel/mkl/*/
-    /opt/intel/cmkl/*/
-    /Library/Frameworks/Intel_MKL.framework/Versions/Current/lib/universal
-    "Program Files (x86)/Intel/ComposerXE-2011/mkl"
-)
-
-SET(INTEL_ROOT_DIR "/opt/intel" CACHE PATH "Folder contains intel libs")
-
-#MESSAGE("MKL_ROOT_DIR : ${MKL_ROOT_DIR}") # for debug
-#MESSAGE("INTEL_ROOT_DIR: ${INTEL_ROOT_DIR}")
-
-find_path(MKL_INCLUDE_DIR
-  mkl_cblas.h
-  PATHS
-    ${MKL_ROOT_DIR}/include
-    ${INCLUDE_INSTALL_DIR}
-)
-
-find_path(MKL_FFTW_INCLUDE_DIR
-  fftw3.h
-  PATH_SUFFIXES fftw
-  PATHS
-    ${MKL_ROOT_DIR}/include
-    ${INCLUDE_INSTALL_DIR}
-  NO_DEFAULT_PATH
-)
-
-find_library(MKL_RT_LIBRARY
-  mkl_rt
-  PATHS
-    ${MKL_ROOT_DIR}/lib/${MKL_ARCH_DIR}
-    ${MKL_ROOT_DIR}/lib/
-)
-
-set(MKL_LIBRARIES ${MKL_RT_LIBRARY})
-#LINK_DIRECTORIES(${MKL_ROOT_DIR}/lib/${MKL_ARCH_DIR}) # hack
-#LINK_DIRECTORIES(${MKL_ROOT_DIR}/lib)
-#LINK_DIRECTORIES(${INTEL_ROOT_DIR}/lib)
-
-include(FindPackageHandleStandardArgs)
-find_package_handle_standard_args(MKL DEFAULT_MSG MKL_INCLUDE_DIR MKL_LIBRARIES)
-
-mark_as_advanced(MKL_INCLUDE_DIR MKL_LIBRARIES
-    MKL_CORE_LIBRARY MKL_LP_LIBRARY MKL_ILP_LIBRARY
-    MKL_SEQUENTIAL_LIBRARY MKL_INTELTHREAD_LIBRARY MKL_GNUTHREAD_LIBRARY
-)
+MARK_AS_ADVANCED(MKL_INCLUDE_DIRS MKL_LIBRARIES MKL_INTERFACE_LIBRARY MKL_SEQUENTIAL_LAYER_LIBRARY MKL_CORE_LIBRARY)

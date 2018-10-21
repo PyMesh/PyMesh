@@ -8,9 +8,9 @@ TARGET_LINK_LIBRARIES(lib_CGAL
     PUBLIC
         Mesh
         PyMesh::Tools
-        PyMesh::CGAL
         PyMesh::GMP
         PyMesh::MPFR
+        PyMesh::CGAL
 )
 
 ADD_LIBRARY(PyMesh::Tools::CGAL ALIAS lib_CGAL)
