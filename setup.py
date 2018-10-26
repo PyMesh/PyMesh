@@ -153,6 +153,7 @@ setup(
             "scripts/point_cloud.py",
             "scripts/print_utils.py",
             "scripts/quad_to_tri.py",
+            "scripts/refine_mesh.py",
             "scripts/remove_degenerated_triangles.py",
             "scripts/remove_duplicated_faces.py",
             "scripts/remove_isolated_vertices.py",

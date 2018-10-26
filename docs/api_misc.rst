@@ -26,6 +26,13 @@ Attribute type conversion
 .. autofunction:: pymesh.convert_to_voxel_attribute
 .. autofunction:: pymesh.convert_to_voxel_attribute_from_name
 
+Attribute mapping
+-----------------
+
+.. autofunction:: pymesh.map_vertex_attribute
+.. autofunction:: pymesh.map_face_attribute
+.. autofunction:: pymesh.map_corner_attribute
+
 Quaternion
 ----------
 

@@ -47,6 +47,10 @@ from .triangulate import triangulate_beta
 from .wires import *
 from .SparseSolver import SparseSolver
 
+from .map_attributes import map_vertex_attribute
+from .map_attributes import map_face_attribute
+from .map_attributes import map_corner_attribute
+
 __all__ = [
         "Mesh",
         "Assembler",
@@ -87,7 +91,10 @@ __all__ = [
         "SparseSolver",
         "HashGrid",
         "compress",
-        "decompress"
+        "decompress",
+        "map_vertex_attribute",
+        "map_face_attribute",
+        "map_corner_attribute"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
