@@ -179,6 +179,8 @@ def print_extended_info(mesh, info):
         num_v_cc = 0;
     isolated_vertices = mesh.num_isolated_vertices;
     duplicated_faces = mesh.num_duplicated_faces;
+    unique_vertices = np.unique(mesh.vertices, axis=0);
+    duplicated_vertices = mesh.num_vertices - len(unique_vertices);
 
     degenerated_indices = pymesh.get_degenerated_faces(mesh);
     num_degenerated = len(degenerated_indices);
@@ -196,6 +198,7 @@ def print_extended_info(mesh, info):
     print_property("num connected surface components", num_f_cc);
     print_property("num connected volume components", num_v_cc);
     print_property("num isolated vertices", isolated_vertices, 0);
+    print_property("num duplicated vertices", duplicated_vertices, 0);
     print_property("num duplicated faces", duplicated_faces, 0);
     print_property("num boundary edges", mesh.num_boundary_edges);
     print_property("num boundary loops", mesh.num_boundary_loops);
@@ -210,6 +213,7 @@ def print_extended_info(mesh, info):
     info["num_connected_surface_components"] = num_f_cc;
     info["num_connected_volume_components"] = num_v_cc;
     info["num_isolated_vertices"] = isolated_vertices;
+    info["num_duplicated_vertices"] = duplicated_vertices;
     info["num_duplicated_faces"] = duplicated_faces;
     info["num_boundary_edges"] = mesh.num_boundary_edges;
     info["num_boundary_loops"] = mesh.num_boundary_loops;
