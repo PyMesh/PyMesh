@@ -166,7 +166,6 @@ bool HashGridImplementation<Trait>::insert_triangle(int obj_id, const MatrixFr& 
                 if (does_overlap == 1) {
                     bool r = insert_key(obj_id, cur_key);
                     success &= r;
-                    counter ++;
                 }
             }
         }
