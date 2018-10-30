@@ -166,10 +166,10 @@ bool HashGridImplementation<Trait>::insert_triangle(int obj_id, const MatrixFr& 
                 if (does_overlap == 1) {
                     bool r = insert_key(obj_id, cur_key);
                     success &= r;
+                    counter ++;
                 }
             }
         }
-        //throw NotImplementedError("2D version of insert_triangle is not supported yet");
     } else {
         throw NotImplementedError("Only 2D and 3D are supported in HashGrid.");
     }

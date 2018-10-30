@@ -177,3 +177,14 @@ TEST_F(TriBox2DTest, degenerate_triangle_2) {
     };
     ASSERT_EQ(1, TriBox2D::triBoxOverlap(center, size, tri));
 }
+
+TEST_F(TriBox2DTest, DebugCase) {
+    const Float center[2]{-0.7, -0.8};
+    const Float size[2]{0.05, 0.05};
+    const Float tri[3][2]{
+        {-0.75, -1},
+        {-0.25, -0.8125},
+        {-0.75, -0.8125}
+    };
+    ASSERT_EQ(1, TriBox2D::triBoxOverlap(center, size, tri));
+}
