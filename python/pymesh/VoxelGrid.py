@@ -24,6 +24,9 @@ class VoxelGrid:
     def dilate(self, itrs):
         self.raw_grid.dilate(itrs);
 
+    def remove_cavities(self):
+        self.raw_grid.remove_cavities();
+
     @property
     def mesh(self):
         return Mesh(self.raw_grid.get_voxel_mesh());

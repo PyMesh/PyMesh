@@ -21,7 +21,7 @@ class VoxelGrid : public Grid<DIM, short>{
 
     public:
         VoxelGrid(Float cell_size);
-        virtual ~VoxelGrid() {}
+        virtual ~VoxelGrid() = default;
 
     public:
         void insert_mesh(Mesh::Ptr mesh);
@@ -29,6 +29,7 @@ class VoxelGrid : public Grid<DIM, short>{
         void erode(size_t iterations);
         void dilate(size_t iterations);
         Mesh::Ptr get_voxel_mesh();
+        void remove_cavities();
 
     protected:
         typedef Grid<DIM, bool> Mask;
@@ -37,7 +38,6 @@ class VoxelGrid : public Grid<DIM, short>{
         void insert_quad_mesh(Mesh::Ptr mesh);
 
         Mask create_mask() const;
-        void flood_exterior_cells();
         void flood_from_base_cell(Mask& mask);
 
     private:
