@@ -166,6 +166,7 @@ setup(
             "scripts/slice_mesh.py",
             "scripts/subdivide.py",
             "scripts/submesh.py",
+            "scripts/svg_to_mesh.py",
             "scripts/tet.py",
             "scripts/tet_boundary.py",
             "scripts/tet_to_hex.py",
