@@ -79,6 +79,9 @@ class triangle(PyMesh.triangle):
         voronoi_edges (:class:`numpy.ndarray`): Voronoi edges.  Negative index
             indicates infinity.
 
+        regions (:class:`numpy.ndarray`): Per-triangle index of connected
+            regions separated by segments.
+
     Example:
 
         >>> vertices = np.array([
