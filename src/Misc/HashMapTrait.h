@@ -20,9 +20,8 @@ namespace PyMesh {
  */
 template<int DIM, int HashType>
 struct HashMapTrait {
-    static const int dim = DIM;
+    static constexpr int dim = DIM;
     typedef VectorHashKey<long, DIM> HashKey;
-    //typedef Vector3IHashKey HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {
@@ -53,9 +52,8 @@ namespace PyMesh {
  */
 template<int DIM>
 struct HashMapTrait<DIM, 1> {
-    static const int dim = DIM;
+    static constexpr int dim = DIM;
     typedef VectorHashKey<long, DIM> HashKey;
-    //typedef Vector3IHashKey HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {
@@ -88,9 +86,8 @@ struct HashMapTrait<DIM, 1> {
  */
 template<int DIM>
 struct HashMapTrait<DIM, 2> {
-    static const int dim = DIM;
+    static constexpr int dim = DIM;
     typedef VectorHashKey<long, DIM> HashKey;
-    //typedef Vector3IHashKey HashKey;
 
     struct HashMapFunc {
         int operator()(const HashKey& key) const {
@@ -102,8 +99,8 @@ struct HashMapTrait<DIM, 2> {
     typedef google::dense_hash_map<HashKey, HashItem, HashMapFunc> HashMap;
     typedef std::shared_ptr<HashMap> Ptr;
 
-    static const int DELETED_VAL = std::numeric_limits<int>::max();
-    static const int EMPTY_VAL = DELETED_VAL-1;
+    static constexpr int DELETED_VAL = std::numeric_limits<int>::max();
+    static constexpr int EMPTY_VAL = DELETED_VAL-1;
 
     static Ptr create_map() {
         Ptr hash_map = std::make_shared<HashMap>();
