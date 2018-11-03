@@ -14,7 +14,7 @@ class SVGParser {
 
         void parse(const std::string& filename);
 
-        constexpr size_t get_dim() const { return 2; }
+        size_t get_dim() const { return 2; }
         size_t get_num_vertices() const { return m_vertices.size(); }
         size_t get_num_edges() const { return m_edges.size(); }
 
