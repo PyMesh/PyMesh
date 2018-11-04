@@ -17,6 +17,7 @@ namespace LongEdgeRemovalHelper {
             std::list<VectorF>::iterator begin_itr,
             Float length, Float threshold) {
         if (length <= threshold) return;
+        if (!std::isfinite(length)) return;
 
         auto end_itr = std::next(begin_itr);
         assert(end_itr != end_points.end());
