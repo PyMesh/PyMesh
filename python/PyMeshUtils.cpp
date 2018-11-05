@@ -6,6 +6,7 @@
 
 #include <Mesh.h>
 #include <MeshUtils/AttributeUtils.h>
+#include <MeshUtils/EdgeUtils.h>
 #include <MeshUtils/ObtuseTriangleRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/ManifoldCheck.h>
@@ -48,6 +49,7 @@ void init_MeshUtils(py::module& m) {
     m.def("get_tet_orientations", &VoxelUtils::get_tet_orientations);
     m.def("is_vertex_manifold", &ManifoldCheck::is_vertex_manifold);
     m.def("is_edge_manifold", &ManifoldCheck::is_edge_manifold);
+    m.def("chain_edges", &EdgeUtils::chain_edges);
 
     py::class_<ObtuseTriangleRemoval>(m, "ObtuseTriangleRemoval")
         .def(py::init<MatrixFr&, MatrixIr&>())

@@ -6,6 +6,7 @@ from .attribute_utils import convert_to_voxel_attribute
 from .attribute_utils import convert_to_voxel_attribute_from_name
 from .collapse_short_edges import collapse_short_edges
 from .collapse_short_edges import collapse_short_edges_raw
+from .edge_utils import chain_edges
 from .generate_box_mesh import generate_box_mesh
 from .generate_cylinder import generate_cylinder
 from .generate_dodecahedron import generate_dodecahedron
@@ -38,6 +39,7 @@ from .voxel_utils import get_tet_orientations
 from .voxel_utils import get_tet_orientations_raw
 
 __all__ = [
+        "chain_edges",
         "convert_to_vertex_attribute",
         "convert_to_vertex_attribute_from_name",
         "convert_to_face_attribute",
