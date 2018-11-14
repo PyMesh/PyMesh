@@ -98,7 +98,7 @@ an alternating fashion.  The script
 Its effects can be seen in a remesh of the `Ducky The Lop Eared Bunny
 <http://www.thingiverse.com/thing:752379>`_ example:
 
-.. image:: _static/ducky_bunny.png
+.. image:: _static/ducky_bunny.jpg
     :width: 90%
     :align: center
 
