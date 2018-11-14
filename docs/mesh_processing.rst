@@ -81,7 +81,7 @@ It is also possible to operate on a raw mesh::
 
     >>> vertices, faces, info = pymesh.split_long_edges(mesh, tol)
 
-This method is often used to elimiate long edges appearing in sliver
+This method is often used to eliminate long edges appearing in sliver
 triangles.  The following figure shows its effect.
 
 .. image:: _static/split_long_edges.png
@@ -157,7 +157,7 @@ output.  To achieve this::
     ...     importance=weights)
 
 In the above example, we use the X coordinates as the importance weight.  When
-closeby vertices are merged, the coordinates of the vertex with the highest X
+close by vertices are merged, the coordinates of the vertex with the highest X
 values are used.
 
 As usual, one can operate directly on raw meshes::
@@ -189,8 +189,8 @@ To operate on raw meshes::
     ...     vertices, faces)
 
 
-Subdiving Mesh
---------------
+Subdividing Mesh
+----------------
 
 PyMesh supports both simple and loop subdivision of a given triangular mesh::
 
