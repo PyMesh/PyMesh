@@ -11,15 +11,15 @@ Mesh Data Structure
 In PyMesh, a `Mesh` consists of 3 parts: geometry, connectivity and
 attributes.
 
-* Geometry consists of vertices, faces and generialized voxels (i.e. a volume
-  element such as tetrahedron or hexahedron).  The dimention of the embedding
+* Geometry consists of vertices, faces and generalized voxels (i.e. a volume
+  element such as tetrahedron or hexahedron).  The dimension of the embedding
   space, face type, voxel type can all be inferred from the geometry data.  It
   is possible for a mesh to consist of 0 vertices or 0 faces or 0 voxels.
 
 * The connectivity contains adjacency information, including vertex-vertex,
   vertex-face, vertex-voxel, face-face, face-voxel and voxel-voxel adjacencies.
 
-* Attributes are arbirary value field assigned to a mesh.  One could assign a scalar
+* Attributes are arbitrary value field assigned to a mesh.  One could assign a scalar
   or vector for each vertex/face/voxel.  There are a number predefined attributes.
 
 
@@ -114,7 +114,7 @@ To access a defined attribute::
     >>> attr_val
     array([ 1.0,  1.0,  1.0, ...,  1.0, 1.0,  1.0])
 
-The following vertex attributes are predifined:
+The following vertex attributes are predefined:
 
 * ``vertex_normal``: A vector field representing surface normals.  Zero vectors
   are assigned to vertices in the interior.
@@ -143,7 +143,7 @@ The following face attributes are predefined:
   (defined for triangle faces only).
 * ``face_index``: A scalar field representing the index of each face.
 * ``face_normal``: A vector field representing the normal vector of each face.
-* ``face_voronoi_area``: A vector field representing the voronoi area of each
+* ``face_voronoi_area``: A vector field representing the Voronoi area of each
   corner of the face.
 
 The following voxel attributes are predefined:
@@ -161,7 +161,7 @@ Predefined attribute does not need to be set::
             2.12105028,  0.37581711])
 
 Notice that attribute values are always stored as a 1D array.  For attributes
-that represent vector/tensor fiels, the attribute values are the flattened
+that represent vector/tensor fields, the attribute values are the flattened
 version of the vector field::
 
     >>> mesh.add_attribute("vertex_normal")

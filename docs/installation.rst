@@ -91,8 +91,8 @@ The following third-party libraries are not required, but highly recommended in
 order to use the full power of Pymesh.  PyMesh
 provides a thin wrapper to these libraries, and without them certain
 functionalities would be disabled. Most of these packages can be easily
-installed using package management softwares for your OS.  A copy of these
-libraries are also included in the ``third_party`` direcgtory.
+installed using package management software for your OS.  A copy of these
+libraries are also included in the ``third_party`` directory.
 
 * SparseHash_: is used to speed up hash grid.
 * CGAL_: is needed for self-intersection, convex hull, outer hull and boolean
@@ -165,7 +165,7 @@ dependencies. To build PyMesh::
 Build with CMake
 ~~~~~~~~~~~~~~~~
 
-If you are familar with C++ and CMake, there is an alternative way of building
+If you are familiar with C++ and CMake, there is an alternative way of building
 PyMesh.  First compile and install all of the third party dependencies::
 
     cd $PYMESH_PATH/third_party
