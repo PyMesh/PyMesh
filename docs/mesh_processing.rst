@@ -189,3 +189,17 @@ To operate on raw meshes::
     ...     vertices, faces)
 
 
+Subdiving Mesh
+--------------
+
+PyMesh supports both simple and loop subdivision of a given triangular mesh::
+
+    >>> mesh = pymesh.subdivide(mesh, order=2, method="loop")
+    >>> mesh.get_attribute("ori_face_index")
+    array([ 0.,  0.,  0., ..., 95., 95., 95.])
+
+Here are some examples of different subdivision methods:
+
+.. image:: _static/subdivide.jpg
+    :width: 90%
+    :align: center
