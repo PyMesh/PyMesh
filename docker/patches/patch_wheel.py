@@ -3,32 +3,32 @@
 import zipfile
 import os
 import os.path
-from subprocess import check_call
+from subprocess import check_output
+import re
 
-#TBB_2018_US_URL = "https://github.com/01org/tbb/releases/download/2018_U5/tbb2018_20180618oss_lin.tgz";
-#cmd = "wget -O tbb.tgz {}".format(TBB_2018_US_URL);
-#check_call(cmd.split());
-#
-#cmd = "tar -zxf tbb.tgz";
-#check_call(cmd.split());
+dependencies = [];
+pymesh_lib_pattern = re.compile("libPyMesh-.*\.so");
+lib_dir = "/root/PyMesh/python/pymesh/lib"
+for f in os.listdir(lib_dir):
+    if pymesh_lib_pattern.match(f) is None:
+        continue;
+    libfile = os.path.join(lib_dir, f);
+    cmd = "ldd {}".format(libfile);
+    dep_libs = check_output(cmd.split()).decode('ASCII');
+    for lib in dep_libs.split("\n"):
+        fields = lib.split();
+        if len(fields) >= 3:
+            libname = fields[2];
+        else:
+            continue;
+        libname = libname.strip();
+        if libname[:4] == "/usr":
+            dependencies.append(libname);
+dependencies = set(dependencies);
 
-#tbb_libs = [
-#        "tbb2018_20180618oss/lib/intel64/gcc4.7/libtbb.so.2",
-#        "tbb2018_20180618oss/lib/intel64/gcc4.7/libtbbmalloc.so.2",
-#        ];
-
-dependencies = [
-        "/usr/lib/x86_64-linux-gnu/libboost_system.so.1.62.0",
-        "/usr/lib/x86_64-linux-gnu/libboost_thread.so.1.62.0",
-        "/usr/lib/x86_64-linux-gnu/libboost_chrono.so.1.62.0",
-        "/usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.62.0",
-        "/usr/lib/x86_64-linux-gnu/libboost_atomic.so.1.62.0",
-        "/usr/lib/x86_64-linux-gnu/libgmp.so.10",
-        "/usr/lib/x86_64-linux-gnu/libmpfr.so.6",
-        "/usr/lib/x86_64-linux-gnu/libgomp.so.1",
-        "/usr/lib/x86_64-linux-gnu/libstdc++.so.6",
-        ];
-#dependencies += tbb_libs;
+print("The following external dependencies are collected:");
+for d in dependencies:
+    print("    {}".format(d));
 
 dist_dir = "/root/PyMesh/dist"
 for f in os.listdir(dist_dir):
@@ -39,5 +39,3 @@ for f in os.listdir(dist_dir):
         basename = os.path.basename(dependency);
         zfout.write(dependency, os.path.join("pymesh/lib/", basename));
 
-#cmd = "rm -rf tbb2018_20180618oss pstl2018_20180618oss tbb.tgz";
-#check_call(cmd.split());
