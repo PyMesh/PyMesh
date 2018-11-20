@@ -61,7 +61,7 @@ if platform.system() == "Linux":
 
 with open(os.path.join(root_dir, "cmake", "SetInstallRpath.cmake"), 'w') as fout:
     fout.write("SET(CMAKE_INSTALL_RPATH \"{}\")\n".format(
-        ";".join(site_locations.replace("\\", "/"))));
+        ";".join(site_locations).replace("\\", "/")));
     #fout.write("MESSAGE(STATUS \"CMAKE_INSTALL_RPATH: ${CMAKE_INSTALL_RPATH}\")\n");
 
 
