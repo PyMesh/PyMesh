@@ -247,7 +247,7 @@ void VEGAParser::extract_faces_from_voxels() {
     std::vector<int> vertex_buffer;
     for (FaceCounter::const_iterator itr = face_counter.begin();
             itr!=face_counter.end(); itr++) {
-        assert(itr->second == 1 or itr->second == 2);
+        assert(itr->second == 1 || itr->second == 2);
         if (itr->second == 1) {
             const VectorI& f = itr->first.get_ori_data();
             m_faces.push_back(f);
