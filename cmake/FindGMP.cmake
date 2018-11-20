@@ -10,7 +10,7 @@ endif (GMP_INCLUDE_DIRS AND GMP_LIBRARIES)
 
 find_path(GMP_INCLUDE_DIRS NAMES gmp.h
     HINTS $ENV{GMP_INC} ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include)
-find_library(GMP_LIBRARIES NAMES gmp libgmp
+find_library(GMP_LIBRARIES NAMES gmp libgmp libgmp-10
     HINTS $ENV{GMP_LIB} ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib)
 
 include(FindPackageHandleStandardArgs)

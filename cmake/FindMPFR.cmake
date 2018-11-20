@@ -5,7 +5,7 @@
 
 find_path(MPFR_INCLUDE_DIRS NAMES mpfr.h
     HINTS $ENV{MPFR_INC} ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include)
-find_library(MPFR_LIBRARIES NAMES mpfr
+find_library(MPFR_LIBRARIES NAMES mpfr libmpfr libmpfr-4
     HINTS $ENV{MPFR_LIB} ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib)
 
 include(FindPackageHandleStandardArgs)
