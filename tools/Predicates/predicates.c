@@ -501,9 +501,9 @@ double doublerand()
   long a, b, c;
   long i;
 
-  a = random();
-  b = random();
-  c = random();
+  a = rand();
+  b = rand();
+  c = rand();
   result = (double) (a - 1073741824) * 8388608.0 + (double) (b >> 8);
   for (i = 512, expo = 2; i <= 131072; i *= 2, expo = expo * expo) {
     if (c & i) {
@@ -527,9 +527,9 @@ double narrowdoublerand()
   long a, b, c;
   long i;
 
-  a = random();
-  b = random();
-  c = random();
+  a = rand();
+  b = rand();
+  c = rand();
   result = (double) (a - 1073741824) * 8388608.0 + (double) (b >> 8);
   for (i = 512, expo = 2; i <= 2048; i *= 2, expo = expo * expo) {
     if (c & i) {
@@ -550,8 +550,8 @@ double uniformdoublerand()
   double result;
   long a, b;
 
-  a = random();
-  b = random();
+  a = rand();
+  b = rand();
   result = (double) (a - 1073741824) * 8388608.0 + (double) (b >> 8);
   return result;
 }
@@ -570,8 +570,8 @@ float floatrand()
   long a, c;
   long i;
 
-  a = random();
-  c = random();
+  a = rand();
+  c = rand();
   result = (float) ((a - 1073741824) >> 6);
   for (i = 512, expo = 2; i <= 16384; i *= 2, expo = expo * expo) {
     if (c & i) {
@@ -595,8 +595,8 @@ float narrowfloatrand()
   long a, c;
   long i;
 
-  a = random();
-  c = random();
+  a = rand();
+  c = rand();
   result = (float) ((a - 1073741824) >> 6);
   for (i = 512, expo = 2; i <= 2048; i *= 2, expo = expo * expo) {
     if (c & i) {
@@ -617,7 +617,7 @@ float uniformfloatrand()
   float result;
   long a;
 
-  a = random();
+  a = rand();
   result = (float) ((a - 1073741824) >> 6);
   return result;
 }
