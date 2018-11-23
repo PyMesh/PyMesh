@@ -47,6 +47,7 @@ IF (NOT TBB_FOUND)
     ADD_LIBRARY(TBB::tbb ALIAS tbb)
     ADD_LIBRARY(TBB::tbbmalloc ALIAS tbbmalloc)
     ADD_LIBRARY(TBB::tbbmalloc_proxy ALIAS tbbmalloc_proxy)
+    SET(TBB_FOUND TRUE)
 ENDIF (NOT TBB_FOUND)
 
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/cork)
