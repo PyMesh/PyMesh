@@ -40,8 +40,11 @@ IF (NOT CGAL_FOUND)
         "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL"
         "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/cmake/CGAL"
     )
-    SET(BOOST_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
-    FIND_PACKAGE(CGAL QUIET PATHS ${CGAL_DIRS} NO_DEFAULT_PATH)
+    IF (NOT Boost_FOUND)
+        SET(BOOST_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
+        FIND_PACKAGE(Boost COMPONENTS atomic chrono date_time system thread)
+    ENDIF (NOT Boost_FOUND)
+    FIND_PACKAGE(CGAL QUIET PATHS ${CGAL_DIRS})
 ENDIF (NOT CGAL_FOUND)
 
 # MMG
