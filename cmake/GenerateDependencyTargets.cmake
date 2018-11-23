@@ -187,8 +187,6 @@ IF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
         INTERFACE ${CGAL_INCLUDE_DIRS} ${CGAL_3RD_PARTY_INCLUDE_DIRS})
     TARGET_LINK_LIBRARIES(PyMesh::CGAL
         INTERFACE
-            ${CGAL_LIBRARIES}
-            ${CGAL_3RD_PARTY_LIBRARIES}
             PyMesh::GMP
             PyMesh::MPFR
             Boost::atomic
@@ -196,6 +194,8 @@ IF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
             Boost::date_time
             Boost::thread
             Boost::system
+            ${CGAL_LIBRARIES}
+            ${CGAL_3RD_PARTY_LIBRARIES}
     )
     TARGET_COMPILE_DEFINITIONS(PyMesh::CGAL
         INTERFACE
