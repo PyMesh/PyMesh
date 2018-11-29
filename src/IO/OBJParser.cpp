@@ -331,19 +331,40 @@ bool OBJParser::parse_face_line(char* line) {
         // N-gon detected, assuming it is convex and break it into triangles.
         std::cerr << num_idx_parsed << "-gon detected, converting to triangles"
             << std::endl;
-        earclip(idx);
+        const auto tris = earclip(idx);
+        for (const auto& t : tris) {
+            m_tris.emplace_back(Vector3I(idx[t[0]], idx[t[1]], idx[t[2]]));
+        }
+        if (!t_idx.empty()) {
+            assert(t_idx.size() == idx.size());
+            for (const auto& t : tris) {
+                m_tri_textures.push_back(
+                        Vector3I(t_idx[t[0]], t_idx[t[1]], t_idx[t[2]]));
+            }
+        }
+        if (!n_idx.empty()) {
+            assert(n_idx.size() == idx.size());
+            for (const auto& t : tris) {
+                m_tri_normals.push_back(
+                        Vector3I(n_idx[t[0]], n_idx[t[1]], n_idx[t[2]]));
+            }
+        }
     }
     return true;
 }
 
-void OBJParser::earclip(const std::vector<size_t>& idx) {
+OBJParser::FaceList OBJParser::earclip(const std::vector<size_t>& idx) {
     // This method implements the naive ear clipping algorithm with complexity
     // O(n^2).  It may be slow for large n.
     assert(idx.size() > 3);
     using List = std::list<size_t>;
     using Iterator = List::iterator;
+    FaceList tris;
     List active_idx;
-    std::copy(idx.begin(), idx.end(), std::back_inserter(active_idx));
+    const size_t num_idx = idx.size();
+    for (size_t i=0; i<num_idx; i++) {
+        active_idx.push_back(i);
+    }
 
     auto cyclic_next = [&active_idx](Iterator itr) {
         itr++;
@@ -372,13 +393,13 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         n.normalize();
         return n;
     };
-    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](const Iterator& itr, const Vector3F& normal) {
+    auto can_clip = [this, &idx, &cyclic_prev, &cyclic_next](const Iterator& itr, const Vector3F& normal) {
         const auto curr = itr;
         const auto next = cyclic_next(itr);
         const auto prev = cyclic_prev(itr);
-        const size_t i = *prev;
-        const size_t j = *curr;
-        const size_t k = *next;
+        const size_t i = idx[*prev];
+        const size_t j = idx[*curr];
+        const size_t k = idx[*next];
         Vector3F vi,vj,vk;
         vi.segment(0, m_dim) = m_vertices[i];
         vj.segment(0, m_dim) = m_vertices[j];
@@ -387,8 +408,8 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         if (nj.norm() <= 0.0) return false; // Degenerate ear.
         if (nj.dot(normal) <= 0.0) return false; // Concave face.
         for (Iterator itr = cyclic_next(next); itr != prev; itr=cyclic_next(itr)) {
-            const size_t l = *itr;
-            const size_t m = *cyclic_next(itr);
+            const size_t l = idx[*itr];
+            const size_t m = idx[*cyclic_next(itr)];
             Vector3F vl,vm;
             vl.segment(0, m_dim) = m_vertices[l];
             vm.segment(0, m_dim) = m_vertices[m];
@@ -420,11 +441,11 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         return true;
     };
 
-    auto clip = [this, &active_idx, &cyclic_next, &cyclic_prev](const Iterator& itr) {
+    auto clip = [&tris, &active_idx, &cyclic_next, &cyclic_prev](const Iterator& itr) {
         const auto curr = itr;
         const auto next = cyclic_next(itr);
         const auto prev = cyclic_prev(itr);
-        m_tris.emplace_back(Vector3I(*prev, *curr, *next));
+        tris.emplace_back(Vector3I(*prev, *curr, *next));
         active_idx.erase(curr);
     };
 
@@ -447,6 +468,7 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
     }
     assert(active_idx.size() == 3);
     clip(active_idx.begin());
+    return tris;
 }
 
 void OBJParser::unify_faces() {
