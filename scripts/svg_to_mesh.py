@@ -18,6 +18,9 @@ def main():
     wires = pymesh.wires.WireNetwork();
     wires.load_from_file(args.input_svg);
 
+    vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(wires.vertices, wires.edges, 0.0);
+    wires.load_from_data(vertices, edges);
+
     tri = pymesh.triangle();
     tri.points = wires.vertices;
     tri.segments = wires.edges;

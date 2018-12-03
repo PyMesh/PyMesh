@@ -48,10 +48,10 @@ def main():
     mesh.set_attribute("u", uv[:,0]);
 
     if (args.separate):
-        uv_mesh, info = pymesh.remove_duplicated_vertices(uv_mesh);
+        uv_mesh, info = pymesh.remove_duplicated_vertices(uv_mesh, tol=0.0);
         comps = pymesh.separate_mesh(uv_mesh);
         segments = [];
-        uv = uv.reshape((-1, 6), order="C");
+        uv = uv.reshape((-1, mesh.vertex_per_face * 2), order="C");
         vertices = mesh.vertices;
         combined_uv = [];
         for comp in comps:
@@ -71,7 +71,7 @@ def main():
         mesh.add_attribute("corner_texture");
         mesh.set_attribute("corner_texture", combined_uv.ravel(order="C"));
     elif args.cut:
-        uv_mesh, info = pymesh.remove_duplicated_vertices(uv_mesh);
+        uv_mesh, info = pymesh.remove_duplicated_vertices(uv_mesh, tol=0.0);
         index_map = info["index_map"];
         vertices = mesh.vertices;
         faces = mesh.faces;
