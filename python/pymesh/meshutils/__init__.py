@@ -6,6 +6,7 @@ from .attribute_utils import convert_to_voxel_attribute
 from .attribute_utils import convert_to_voxel_attribute_from_name
 from .collapse_short_edges import collapse_short_edges
 from .collapse_short_edges import collapse_short_edges_raw
+from .cut_mesh import cut_mesh
 from .edge_utils import chain_edges
 from .generate_box_mesh import generate_box_mesh
 from .generate_cylinder import generate_cylinder
@@ -49,6 +50,7 @@ __all__ = [
         "convert_to_voxel_attribute_from_name",
         "collapse_short_edges",
         "collapse_short_edges_raw",
+        "cut_mesh",
         "generate_box_mesh",
         "generate_cylinder",
         "generate_dodecahedron",

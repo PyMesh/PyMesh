@@ -10,6 +10,7 @@
 #include <MeshUtils/ObtuseTriangleRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/ManifoldCheck.h>
+#include <MeshUtils/MeshCutter.h>
 #include <MeshUtils/MeshUtils.h>
 #include <MeshUtils/MeshSeparator.h>
 #include <MeshUtils/MeshChecker.h>
@@ -165,4 +166,9 @@ void init_MeshUtils(py::module& m) {
         .def("get_ori_face_indices",
                 &DegeneratedTriangleRemoval::get_ori_face_indices);
 
+    py::class_<MeshCutter>(m, "MeshCutter")
+        .def(py::init<Mesh::Ptr>())
+        .def("cut_with_face_labels", &MeshCutter::cut_with_face_labels)
+        .def("cut_at_uv_discontinuity", &MeshCutter::cut_at_uv_discontinuity);
 }
+
