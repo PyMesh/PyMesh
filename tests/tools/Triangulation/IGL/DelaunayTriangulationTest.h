@@ -14,7 +14,7 @@ TEST_F(DelaunayTriangulationTest, simple) {
               0.0, 1.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_delaunay");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(1, faces.rows());
@@ -33,7 +33,7 @@ TEST_F(DelaunayTriangulationTest, simple2) {
               0.0, 1.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_delaunay");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(2, faces.rows());
@@ -41,7 +41,7 @@ TEST_F(DelaunayTriangulationTest, simple2) {
 
     // Delaunay and lexicographic triangulation should be the same in this case.
     Triangulation::Ptr t2 = Triangulation::create("igl_lexicographic");
-    t2->set_vertices(points);
+    t2->set_points(points);
     t2->run();
     MatrixIr faces2 = t2->get_faces();
     ASSERT_MATRIX_EQ(faces, faces2);
@@ -55,7 +55,7 @@ TEST_F(DelaunayTriangulationTest, simple3) {
               0.0, 1.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_delaunay");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(2, faces.rows());
@@ -69,7 +69,7 @@ TEST_F(DelaunayTriangulationTest, degenerate) {
               1.0, 0.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_delaunay");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(0, faces.rows());

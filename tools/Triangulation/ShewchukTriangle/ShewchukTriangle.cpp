@@ -8,19 +8,18 @@
 using namespace PyMesh;
 
 void ShewchukTriangle::run() {
-    const size_t num_points = m_vertices.rows();
-    const size_t dim = m_vertices.cols();
-    if (dim != 2) {
-        throw RuntimeError("Triangle only works in 2D domain.");
-    }
+    const size_t num_points = m_points.rows();
 
     TriangleWrapper triangle;
-    triangle.set_points(m_vertices);
+    triangle.set_points(m_points);
+    triangle.set_segments(m_segments);
     triangle.set_verbosity(0);
-    triangle.set_max_num_steiner_points(0);
-    triangle.set_min_angle(0);
     triangle.run();
-    m_faces = triangle.get_faces();
+    m_vertices = triangle.get_vertices();
+    auto faces = triangle.get_faces();
+    if (faces.rows() > 0) {
+        m_faces = triangle.get_faces();
+    }
 }
 
 #endif

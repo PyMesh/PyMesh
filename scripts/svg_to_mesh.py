@@ -10,6 +10,9 @@ import os.path
 
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
+    parser.add_argument("--engine", help="Triangulation engine",
+            choices=("shewchuk_triangle", "cgal_constrained_delaunay",
+                "cgal_conforming_delaunay"), default="shewchuk_triangle");
     parser.add_argument("input_svg");
     parser.add_argument("output_mesh");
     return parser.parse_args();
@@ -23,16 +26,10 @@ def main():
     wires.load(vertices, edges);
     wires.write_to_file(os.path.splitext(args.output_mesh)[0] + ".wire");
 
-    tri = pymesh.triangle();
-    tri.points = wires.vertices;
-    tri.segments = wires.edges;
-    tri.run();
+    mesh = pymesh.triangulate_beta(wires.vertices, wires.edges,
+            engine=args.engine);
 
-    mesh = tri.mesh;
-    regions = tri.regions;
-    mesh.add_attribute("regions");
-    mesh.set_attribute("regions", regions);
-    pymesh.save_mesh(args.output_mesh, mesh, *mesh.attribute_names);
+    pymesh.save_mesh(args.output_mesh, mesh);
 
 if __name__ == "__main__":
     main();

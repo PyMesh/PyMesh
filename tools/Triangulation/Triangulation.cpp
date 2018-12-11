@@ -8,7 +8,8 @@
 #endif
 
 #ifdef WITH_CGAL
-#include "CGAL/CGALDelaunayTriangulation.h"
+#include "CGAL/ConstrainedDelaunay.h"
+#include "CGAL/ConformingDelaunay.h"
 #endif
 
 #ifdef WITH_TRIANGLE
@@ -44,8 +45,10 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 #endif
 
 #ifdef WITH_CGAL
-    if (engine_name == "cgal_delaunay") {
-        return Ptr(new CGALDelaunayTriangulation());
+    if (engine_name == "cgal_constrained_delaunay") {
+        return Ptr(new PyMesh::CGAL::ConstrainedDelaunay());
+    } else if (engine_name == "cgal_conforming_delaunay") {
+        return Ptr(new PyMesh::CGAL::ConformingDelaunay());
     }
 #endif
 

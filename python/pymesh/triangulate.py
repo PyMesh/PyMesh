@@ -1,15 +1,17 @@
 import PyMesh
 from .meshio import form_mesh
 
-def triangulate_beta(points, engine="auto"):
+def triangulate_beta(points, segments, engine="auto"):
     if engine == "auto":
-        engine = "igl_lexicographic";
+        engine = "shewchuk_triangle";
 
     engine = PyMesh.Triangulation.create(engine);
-    engine.set_vertices(points);
+    engine.set_points(points);
+    engine.set_segments(segments);
     engine.run();
+    vertices = engine.get_vertices();
     faces = engine.get_faces();
-    return form_mesh(points, faces);
+    return form_mesh(vertices, faces);
 
 #def triangulate(points, segments, max_area,
 #        holes=None,

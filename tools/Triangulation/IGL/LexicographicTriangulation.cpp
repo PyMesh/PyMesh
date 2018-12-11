@@ -7,7 +7,7 @@
 using namespace PyMesh;
 
 void LexicographicTriangulation::run() {
-    igl::copyleft::cgal::lexicographic_triangulation(m_vertices, m_faces);
+    igl::copyleft::cgal::lexicographic_triangulation(m_points, m_faces);
 }
 
 #endif

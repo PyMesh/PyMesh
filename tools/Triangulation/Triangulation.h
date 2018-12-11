@@ -16,8 +16,12 @@ namespace PyMesh {
             virtual ~Triangulation() = default;
 
         public:
-            void set_vertices(const MatrixFr& vertices) {
-                m_vertices = vertices;
+            void set_points(const Matrix2Fr& points) {
+                m_points = points;
+            }
+
+            void set_segments(const Matrix2Ir& segments) {
+                m_segments = segments;
             }
 
             virtual void run() {
@@ -25,12 +29,19 @@ namespace PyMesh {
                         "Triangulation algorithm is not implemented");
             }
 
-            const MatrixIr& get_faces() const {
+            const Matrix2Fr& get_vertices() const {
+                return m_vertices;
+            }
+
+            const Matrix3Ir& get_faces() const {
                 return m_faces;
             }
 
         protected:
-            MatrixFr m_vertices;
-            MatrixIr m_faces;
+            Matrix2Fr m_points;
+            Matrix2Ir m_segments;
+
+            Matrix2Fr m_vertices;
+            Matrix3Ir m_faces;
     };
 }
