@@ -42,10 +42,11 @@ void SVGParser::parse(const std::string& filename) {
             const int v_first = m_vertices.size();
             for (size_t i=0; i<path->npts-1; i+=3) {
                 float* p = &path->pts[i*2];
-                const Vector2F p0{p[0], p[1]};
-                const Vector2F p1{p[2], p[3]};
-                const Vector2F p2{p[4], p[5]};
-                const Vector2F p3{p[6], p[7]};
+                // SVG's coordinate system is left handed.
+                const Vector2F p0{p[0], -p[1]};
+                const Vector2F p1{p[2], -p[3]};
+                const Vector2F p2{p[4], -p[5]};
+                const Vector2F p3{p[6], -p[7]};
                 assert(p0.array().isFinite().all());
                 assert(p3.array().isFinite().all());
                 if (!std::isfinite(p1[0]) || !std::isfinite(p1[1]) ||
