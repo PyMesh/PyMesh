@@ -12,7 +12,7 @@ class SVGParser {
     public:
         SVGParser() = default;
 
-        void parse(const std::string& filename);
+        void parse(const std::string& filename, bool keep_bbox=true);
 
         size_t get_dim() const { return 2; }
         size_t get_num_vertices() const { return m_vertices.size(); }
@@ -22,6 +22,7 @@ class SVGParser {
         void export_edges(int* buffer) const;
 
     protected:
+        void add_bbox(Float width, Float height);
         void add_bezier_curve(
                 const Vector2F& p0,
                 const Vector2F& p1,

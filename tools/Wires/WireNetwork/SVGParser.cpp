@@ -2,7 +2,9 @@
 
 #define NANOSVG_IMPLEMENTATION
 #include "nanosvg.h"
+
 #include <iostream>
+#include <Core/Exception.h>
 
 using namespace PyMesh;
 
@@ -31,11 +33,16 @@ Float compute_cubic_bezier_error_bound(
 
 }
 
-void SVGParser::parse(const std::string& filename) {
+void SVGParser::parse(const std::string& filename, bool keep_bbox) {
     NSVGimage* image = nsvgParseFromFile(filename.c_str(), "px", 96);
+    if (!image) {
+        throw IOError("Error: " + filename + " does not exist.");
+    }
     const auto width = image->width;
     const auto height = image->height;
     const auto tol = Float(width + height) * 1.e-3;
+
+    if (keep_bbox) { add_bbox(width, height); }
 
     for (auto shape = image->shapes; shape != NULL; shape=shape->next) {
         for (auto path = shape->paths; path != NULL; path=path->next) {
@@ -65,6 +72,18 @@ void SVGParser::parse(const std::string& filename) {
     nsvgDelete(image);
 }
 
+
+void SVGParser::add_bbox(Float width, Float height) {
+    const int vid = m_vertices.size();
+    m_vertices.emplace_back(0, 0);
+    m_vertices.emplace_back(width, 0);
+    m_vertices.emplace_back(width, -height);
+    m_vertices.emplace_back(0, -height);
+    m_edges.emplace_back(vid+1, vid  );
+    m_edges.emplace_back(vid+2, vid+1);
+    m_edges.emplace_back(vid+3, vid+2);
+    m_edges.emplace_back(vid  , vid+3);
+}
 
 void SVGParser::add_bezier_curve(
         const Vector2F& p0,
