@@ -29,8 +29,6 @@ class SVGParser {
                 const Vector2F& p3,
                 Float tol, int level, bool start_with_previous);
 
-        void remove_duplicate_points();
-
     private:
         using VertexList = std::list<Vector2F>;
         using EdgeList = std::list<Vector2I>;

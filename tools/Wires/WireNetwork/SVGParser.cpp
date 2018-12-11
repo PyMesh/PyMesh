@@ -5,11 +5,36 @@
 
 using namespace PyMesh;
 
+namespace SVGParserHelper {
+
+/**
+ * The function implements Roger Willcocks' error bound on piecewise linear
+ * approximation of cubic Bezier curvers.  See [1] for more detail.
+ *
+ * [1] Fischer, Kaspar. "Piecewise linear approximation of bezier curves."
+ * HTTP://HCKLBRRFNN. WORDPRESS.
+ * COM/2012/08/20/PIECEWISE-LINEAR-APPROXIMATION-OF-BEZIER-CURVES/. 2000.
+ * http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.86.162&rep=rep1&type=pdf
+ */
+Float compute_cubic_bezier_error_bound(
+        const Vector2F& p0,
+        const Vector2F& p1,
+        const Vector2F& p2,
+        const Vector2F& p3) {
+    const Vector2F u = 3*p1 - 2*p0 - p3;
+    const Vector2F v = 3*p2 - p0 - 2*p3;
+    return 1.0/16.0 * (
+            std::max(u[0]*u[0], v[0]*v[0]) +
+            std::max(u[1]*u[1], v[1]*v[1]));
+}
+
+}
+
 void SVGParser::parse(const std::string& filename) {
     NSVGimage* image = nsvgParseFromFile(filename.c_str(), "px", 96);
     const auto width = image->width;
     const auto height = image->height;
-    const auto tol = Float(width + height) * 1.e-4;
+    const auto tol = Float(width + height) * 1.e-3;
 
     for (auto shape = image->shapes; shape != NULL; shape=shape->next) {
         for (auto path = shape->paths; path != NULL; path=path->next) {
@@ -29,8 +54,6 @@ void SVGParser::parse(const std::string& filename) {
         }
     }
     nsvgDelete(image);
-
-    remove_duplicate_points();
 }
 
 
@@ -46,7 +69,8 @@ void SVGParser::add_bezier_curve(
     const Vector2F p123  = 0.5 * (p12 + p23);
     const Vector2F p0123 = 0.5 * (p012 + p123);
 
-    const Float diff = (p0123 - p12).norm();
+    const Float diff =
+        SVGParserHelper::compute_cubic_bezier_error_bound(p0, p1, p2, p3);
     if (diff < tol || level >= 6) {
         const int vid = m_vertices.size();
 
@@ -68,9 +92,6 @@ void SVGParser::add_bezier_curve(
         add_bezier_curve(p0, p01, p012, p0123, tol, level+1, start_with_previous);
         add_bezier_curve(p0123, p123, p23, p3, tol, level+1, true);
     }
-}
-
-void SVGParser::remove_duplicate_points() {
 }
 
 void SVGParser::export_vertices(Float* buffer) const {

@@ -6,6 +6,7 @@
 import argparse
 import pymesh
 import numpy as np
+import os.path
 
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
@@ -19,7 +20,8 @@ def main():
     wires.load_from_file(args.input_svg);
 
     vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(wires.vertices, wires.edges, 0.0);
-    wires.load_from_data(vertices, edges);
+    wires.load(vertices, edges);
+    wires.write_to_file(os.path.splitext(args.output_mesh)[0] + ".wire");
 
     tri = pymesh.triangle();
     tri.points = wires.vertices;
