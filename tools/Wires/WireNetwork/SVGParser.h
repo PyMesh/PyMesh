@@ -28,6 +28,9 @@ class SVGParser {
                 const Vector2F& p2,
                 const Vector2F& p3,
                 Float tol, int level, bool start_with_previous);
+        void add_line_segment(
+                const Vector2F& p0,
+                const Vector2F& v1, bool start_with_previous);
 
     private:
         using VertexList = std::list<Vector2F>;

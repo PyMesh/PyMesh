@@ -2,6 +2,7 @@
 
 #define NANOSVG_IMPLEMENTATION
 #include "nanosvg.h"
+#include <iostream>
 
 using namespace PyMesh;
 
@@ -45,7 +46,14 @@ void SVGParser::parse(const std::string& filename) {
                 const Vector2F p1{p[2], p[3]};
                 const Vector2F p2{p[4], p[5]};
                 const Vector2F p3{p[6], p[7]};
-                add_bezier_curve(p0, p1, p2, p3, tol, 0, i!=0);
+                assert(p0.array().isFinite().all());
+                assert(p3.array().isFinite().all());
+                if (!std::isfinite(p1[0]) || !std::isfinite(p1[1]) ||
+                    !std::isfinite(p2[0]) || !std::isfinite(p2[1])) {
+                    add_line_segment(p0, p3, i!=0);
+                } else {
+                    add_bezier_curve(p0, p1, p2, p3, tol, 0, i!=0);
+                }
             }
             const int v_last = m_vertices.size()-1;
             if (path->closed) {
@@ -62,6 +70,16 @@ void SVGParser::add_bezier_curve(
         const Vector2F& p1,
         const Vector2F& p2,
         const Vector2F& p3, Float tol, int level, bool start_with_previous) {
+    if (!p0.array().isFinite().all() || !p1.array().isFinite().all() ||
+            !p2.array().isFinite().all() || !p3.array().isFinite().all()) {
+        std::cerr << "Nan detected in cubic Bezier control points: " << std::endl;
+        std::cerr << "Level " << level << std::endl;
+        std::cerr << "  p0: " << p0[0] << ", " << p0[1] << std::endl;
+        std::cerr << "  p1: " << p1[0] << ", " << p1[1] << std::endl;
+        std::cerr << "  p2: " << p2[0] << ", " << p2[1] << std::endl;
+        std::cerr << "  p3: " << p3[0] << ", " << p3[1] << std::endl;
+        return;
+    }
     const Vector2F p01   = 0.5 * (p0 + p1);
     const Vector2F p12   = 0.5 * (p1 + p2);
     const Vector2F p23   = 0.5 * (p2 + p3);
@@ -71,6 +89,7 @@ void SVGParser::add_bezier_curve(
 
     const Float diff =
         SVGParserHelper::compute_cubic_bezier_error_bound(p0, p1, p2, p3);
+    assert(std::isfinite(diff));
     if (diff < tol || level >= 6) {
         const int vid = m_vertices.size();
 
@@ -91,6 +110,19 @@ void SVGParser::add_bezier_curve(
     } else {
         add_bezier_curve(p0, p01, p012, p0123, tol, level+1, start_with_previous);
         add_bezier_curve(p0123, p123, p23, p3, tol, level+1, true);
+    }
+}
+
+void SVGParser::add_line_segment(const Vector2F& p0, const Vector2F& p1,
+        bool start_with_previous) {
+    const int vid = m_vertices.size();
+    if (start_with_previous) {
+        m_vertices.push_back(p1);
+        m_edges.emplace_back(vid-1, vid);
+    } else {
+        m_vertices.push_back(p0);
+        m_vertices.push_back(p1);
+        m_edges.emplace_back(vid, vid+1);
     }
 }
 
