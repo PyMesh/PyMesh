@@ -1,6 +1,8 @@
 from PyMesh import MeshCutter
 from ..Mesh import Mesh
 
+import numpy as np
+
 def cut_mesh(mesh, comp_ids=None):
     """ Cut mesh into connected components based on ``comp_ids``.  If
     ``comp_ids`` is ``None``, cut mesh based on UV discontinuity.
@@ -18,9 +20,10 @@ def cut_mesh(mesh, comp_ids=None):
 
     cutter = MeshCutter(mesh.raw_mesh);
     if comp_ids is not None:
+        comp_ids = np.array(comp_ids);
         cutted_mesh = Mesh(cutter.cut_with_face_labels(comp_ids));
-        cutted_mesh.add_attribute(comp_ids);
-        cutted_mesh.set_attribute(comp_ids, mesh.get_attribute(comp_ids));
+        cutted_mesh.add_attribute("comp_ids");
+        cutted_mesh.set_attribute("comp_ids", comp_ids);
     else:
         cutted_mesh = Mesh(cutter.cut_at_uv_discontinuity());
         cutted_mesh.add_attribute("corner_texture");
