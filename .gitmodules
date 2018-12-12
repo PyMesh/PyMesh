@@ -66,3 +66,6 @@
 	path = third_party/libigl
 	url = https://github.com/PyMesh/libigl.git
 	shallow = true
+[submodule "third_party/jigsaw"]
+	path = third_party/jigsaw
+	url = https://github.com/PyMesh/jigsaw.git
