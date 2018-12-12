@@ -10,9 +10,12 @@ import os.path
 
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
-    parser.add_argument("--engine", help="Triangulation engine",
-            choices=("shewchuk_triangle", "cgal_constrained_delaunay",
-                "cgal_conforming_delaunay"), default="shewchuk_triangle");
+    parser.add_argument("--engine", help="Triangulation engine", choices=(
+                "triangle_conforming_delaunay",
+                "triangle_constrained_delaunay",
+                "cgal_constrained_delaunay",
+                "cgal_conforming_delaunay"),
+            default="triangle_conforming_delaunay");
     parser.add_argument("input_svg");
     parser.add_argument("output_mesh");
     return parser.parse_args();

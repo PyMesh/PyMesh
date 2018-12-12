@@ -1,19 +1,19 @@
-/* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
+/* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
 #ifdef WITH_TRIANGLE
 
 #include "../TriangulationTest.h"
 
-class ShewchukTriangulationTest : public TriangulationTest {
+class TriangleConstrainedDelaunayTest : public TriangulationTest {
 };
 
-TEST_F(ShewchukTriangulationTest, simple) {
+TEST_F(TriangleConstrainedDelaunayTest, simple) {
     MatrixFr points(3, 2);
     points << 0.0, 0.0,
               1.0, 0.0,
               0.0, 1.0;
 
-    Triangulation::Ptr t = Triangulation::create("shewchuk_triangle");
+    Triangulation::Ptr t = Triangulation::create("triangle_constrained_delaunay");
     t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
@@ -25,14 +25,14 @@ TEST_F(ShewchukTriangulationTest, simple) {
     assert_valid_triangulation(points, faces);
 }
 
-TEST_F(ShewchukTriangulationTest, simple2) {
+TEST_F(TriangleConstrainedDelaunayTest, simple2) {
     MatrixFr points(4, 2);
     points << 0.0, 0.0,
               0.5, 0.0,
               1.0, 0.0,
               0.0, 1.0;
 
-    Triangulation::Ptr t = Triangulation::create("shewchuk_triangle");
+    Triangulation::Ptr t = Triangulation::create("triangle_constrained_delaunay");
     t->set_points(points);
     t->run();
     MatrixFr vertices = t->get_vertices();
@@ -40,14 +40,14 @@ TEST_F(ShewchukTriangulationTest, simple2) {
     assert_valid_triangulation(vertices, faces);
 }
 
-TEST_F(ShewchukTriangulationTest, simple3) {
+TEST_F(TriangleConstrainedDelaunayTest, simple3) {
     MatrixFr points(4, 2);
     points << 0.0, 0.0,
               1.0, 0.0,
               1.0, 1.0,
               0.0, 1.0;
 
-    Triangulation::Ptr t = Triangulation::create("shewchuk_triangle");
+    Triangulation::Ptr t = Triangulation::create("triangle_constrained_delaunay");
     t->set_points(points);
     t->run();
     MatrixFr vertices = t->get_vertices();
@@ -56,13 +56,13 @@ TEST_F(ShewchukTriangulationTest, simple3) {
     assert_valid_triangulation(vertices, faces);
 }
 
-TEST_F(ShewchukTriangulationTest, DISABLED_degenerate) {
+TEST_F(TriangleConstrainedDelaunayTest, degenerate) {
     MatrixFr points(3, 2);
     points << 0.0, 0.0,
               0.5, 0.0,
               1.0, 0.0;
 
-    Triangulation::Ptr t = Triangulation::create("shewchuk_triangle");
+    Triangulation::Ptr t = Triangulation::create("triangle_constrained_delaunay");
     t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();

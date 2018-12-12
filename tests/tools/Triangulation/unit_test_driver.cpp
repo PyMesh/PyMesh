@@ -8,7 +8,8 @@
 #endif
 #endif
 #ifdef WITH_TRIANGLE
-#include "ShewchukTriangle/ShewchukTriangleTest.h"
+#include "ShewchukTriangle/ConformingDelaunayTest.h"
+#include "ShewchukTriangle/ConstrainedDelaunayTest.h"
 #endif
 #ifdef WITH_GEOGRAM
 #include "Geogram/GeogramDelaunayTriangulationTest.h"

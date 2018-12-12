@@ -7,15 +7,17 @@
 #include <Triangulation/Triangulation.h>
 
 namespace PyMesh {
+namespace Triangle {
 
-    class ShewchukTriangle : public Triangulation {
+    class ConformingDelaunay : public Triangulation {
         public:
-            ShewchukTriangle() = default;
-            virtual ~ShewchukTriangle() = default;
+            ConformingDelaunay() = default;
+            virtual ~ConformingDelaunay() = default;
 
         public:
             virtual void run();
     };
+}
 }
 
 #endif
