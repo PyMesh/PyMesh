@@ -3,6 +3,7 @@
 #include <gmock/gmock.h>
 #ifdef WITH_GEOGRAM
 #include "GeogramMeshIOTest.h"
+#include "GeogramMeshUtilsTest.h"
 #endif
 
 int main(int argc, char** argv) {
