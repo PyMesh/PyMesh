@@ -13,6 +13,7 @@ void Triangle::ConstrainedDelaunay::run() {
     triangle.set_segments(m_segments);
     triangle.set_split_boundary(false);
     triangle.set_max_num_steiner_points(0);
+    triangle.keep_convex_hull(true);
     triangle.set_min_angle(0);
     triangle.set_verbosity(0);
     triangle.run();

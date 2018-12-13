@@ -12,6 +12,7 @@ void Triangle::ConformingDelaunay::run() {
     triangle.set_points(m_points);
     triangle.set_segments(m_segments);
     triangle.set_conforming_delaunay(true);
+    triangle.keep_convex_hull(true);
     triangle.set_verbosity(0);
     triangle.run();
     m_vertices = triangle.get_vertices();
