@@ -21,6 +21,10 @@
 #include "Geogram/GeogramDelaunayTriangulation.h"
 #endif
 
+#ifdef WITH_JIGSAW
+#include "Jigsaw/Delaunay.h"
+#endif
+
 #include <Core/Exception.h>
 #include <sstream>
 
@@ -58,6 +62,12 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 #ifdef WITH_GEOGRAM
     if (engine_name == "geogram_delaunay") {
         return Ptr(new GeogramDelaunayTriangulation());
+    }
+#endif
+
+#ifdef WITH_JIGSAW
+    if (engine_name == "jigsaw_delaunay") {
+        return Ptr(new Jigsaw::Delaunay());
     }
 #endif
 

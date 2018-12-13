@@ -14,7 +14,8 @@ def parse_args():
                 "triangle_conforming_delaunay",
                 "triangle_constrained_delaunay",
                 "cgal_constrained_delaunay",
-                "cgal_conforming_delaunay"),
+                "cgal_conforming_delaunay",
+                "jigsaw_delaunay"),
             default="triangle_conforming_delaunay");
     parser.add_argument("input_svg");
     parser.add_argument("output_mesh");

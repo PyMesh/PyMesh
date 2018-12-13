@@ -6,6 +6,7 @@ ADD_SUBDIRECTORY(IGL)
 ADD_SUBDIRECTORY(CGAL)
 ADD_SUBDIRECTORY(ShewchukTriangle)
 ADD_SUBDIRECTORY(Geogram)
+ADD_SUBDIRECTORY(Jigsaw)
 
 ADD_LIBRARY(lib_Triangulation SHARED ${SRC_FILES} ${INC_FILES})
 SET_TARGET_PROPERTIES(lib_Triangulation PROPERTIES OUTPUT_NAME
@@ -19,6 +20,7 @@ TARGET_LINK_LIBRARIES(lib_Triangulation
         PyMesh::Tools::CGAL
         PyMesh::Tools::Triangle
         PyMesh::Tools::Geogram
+        PyMesh::Jigsaw
 )
 
 ADD_LIBRARY(PyMesh::Tools::Triangulation ALIAS lib_Triangulation)
