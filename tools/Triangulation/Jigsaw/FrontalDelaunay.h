@@ -6,10 +6,10 @@
 
 namespace PyMesh {
 namespace Jigsaw {
-    class Delaunay : public Triangulation {
+    class FrontalDelaunay : public Triangulation {
         public:
-            Delaunay() = default;
-            virtual ~Delaunay() = default;
+            FrontalDelaunay() = default;
+            virtual ~FrontalDelaunay() = default;
 
         public:
             virtual void run();

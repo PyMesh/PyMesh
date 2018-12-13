@@ -1,6 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 
-#include "Delaunay.h"
+#include "FrontalDelaunay.h"
 extern "C" {
 #include <lib_jigsaw.h>
 #include <jigsaw_msh_t.h>
@@ -9,7 +9,7 @@ extern "C" {
 
 using namespace PyMesh;
 
-void Jigsaw::Delaunay::run() {
+void Jigsaw::FrontalDelaunay::run() {
     jigsaw_msh_t input_mesh;
     jigsaw_jig_t input_jig;
     jigsaw_init_msh_t(&input_mesh);
@@ -17,7 +17,7 @@ void Jigsaw::Delaunay::run() {
     input_mesh._flags = JIGSAW_EUCLIDEAN_MESH;
     //input_jig._verbosity = 1;
     input_jig._mesh_dims = 2;
-    //input_jig._mesh_kern = JIGSAW_KERN_DELAUNAY;
+    input_jig._mesh_kern = JIGSAW_KERN_DELFRONT;
 
     const size_t num_pts = m_points.rows();
     jigsaw_alloc_vert2(&input_mesh._vert2, num_pts);

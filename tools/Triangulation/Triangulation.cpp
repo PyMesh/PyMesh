@@ -22,7 +22,7 @@
 #endif
 
 #ifdef WITH_JIGSAW
-#include "Jigsaw/Delaunay.h"
+#include "Jigsaw/FrontalDelaunay.h"
 #endif
 
 #include <Core/Exception.h>
@@ -66,8 +66,8 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 #endif
 
 #ifdef WITH_JIGSAW
-    if (engine_name == "jigsaw_delaunay") {
-        return Ptr(new Jigsaw::Delaunay());
+    if (engine_name == "jigsaw_frontal_delaunay") {
+        return Ptr(new Jigsaw::FrontalDelaunay());
     }
 #endif
 
