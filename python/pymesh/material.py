@@ -32,6 +32,13 @@ class Material:
         return Material(PyMesh.Material.create_orthotropic(
             density, young, poisson, shear));
 
+    @classmethod
+    def create_element_wise_isotropic(cls, density, mesh,
+            young_attribute_name, poisson_attribute_name):
+        return Material(PyMesh.Material.create_element_wise_isotropic(
+            density, mesh.raw_mesh,
+            young_attribute_name, poisson_attribute_name));
+
     def __init__(self, raw_material=None):
         self.raw_material = raw_material;
 
