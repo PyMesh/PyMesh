@@ -56,7 +56,7 @@ TEST_F(TriangleConstrainedDelaunayTest, simple3) {
     assert_valid_triangulation(vertices, faces);
 }
 
-TEST_F(TriangleConstrainedDelaunayTest, degenerate) {
+TEST_F(TriangleConstrainedDelaunayTest, DISABLED_degenerate) {
     MatrixFr points(3, 2);
     points << 0.0, 0.0,
               0.5, 0.0,

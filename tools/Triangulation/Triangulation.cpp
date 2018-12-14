@@ -25,6 +25,10 @@
 #include "Jigsaw/FrontalDelaunay.h"
 #endif
 
+#ifdef WITH_MMG
+#include "MMG/Delaunay.h"
+#endif
+
 #include <Core/Exception.h>
 #include <sstream>
 
@@ -68,6 +72,12 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 #ifdef WITH_JIGSAW
     if (engine_name == "jigsaw_frontal_delaunay") {
         return Ptr(new Jigsaw::FrontalDelaunay());
+    }
+#endif
+
+#ifdef WITH_MMG
+    if (engine_name == "mmg_delaunay") {
+        return Ptr(new MMG::Delaunay());
     }
 #endif
 
