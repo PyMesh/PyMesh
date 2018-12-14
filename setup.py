@@ -84,8 +84,8 @@ class cmake_build(build):
 
     def run(self):
         self.build_third_party();
-        #self.build_pymesh();
-        #build.run(self);
+        self.build_pymesh();
+        build.run(self);
 
 setup(
         name = "pymesh2",

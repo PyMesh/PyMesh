@@ -31,3 +31,11 @@ std::string IOUtils::next_line(std::ifstream& fin) {
             line[0] == '\n' || line[0] == '\r');
     return std::string(line);
 }
+
+void IOUtils::eat_white_space(std::ifstream& fin) {
+    char next = fin.peek();
+    while (next == '\n' || next == ' ' || next == '\t' || next == '\r') {
+        fin.get();
+        next = fin.peek();
+    }
+}

@@ -1,3 +1,4 @@
+/* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #include "MEDITParser.h"
 
 #include <fstream>
@@ -5,6 +6,7 @@
 #include <sstream>
 
 #include <Core/Exception.h>
+#include "IOUtils.h"
 
 using namespace PyMesh;
 
@@ -126,11 +128,11 @@ bool MEDITParser::parse_header(std::ifstream& fin) {
     std::string str_val;
     int int_val;
     fin >> str_val >> int_val;
-    if (str_val != "MeshVersionFormatted" || int_val != 1) {
+    if (str_val != "MeshVersionFormatted" || (int_val != 1 && int_val != 2)) {
         return false;
     }
-    fin >> str_val >> int_val;
-    if (str_val != "Dimension" || int_val != 3) {
+    fin >> str_val >> m_dim;
+    if (str_val != "Dimension" || (m_dim != 3 && m_dim != 2)) {
         return false;
     }
     return true;
@@ -142,7 +144,7 @@ bool MEDITParser::parse_vertices(std::ifstream& fin) {
     Float val;
     int ref;
     for (size_t i=0; i<num_vertices; i++) {
-        for (size_t j=0; j<3; j++) {
+        for (size_t j=0; j<m_dim; j++) {
             fin >> val;
             m_vertices.push_back(val);
         }
@@ -188,6 +190,7 @@ bool MEDITParser::skip_field(std::ifstream& fin) {
 
     size_t num_lines=0;
     fin >> num_lines;
+    IOUtils::eat_white_space(fin);
     for (size_t i=0; i<num_lines; i++) {
         fin.getline(line, LINE_SIZE);
         if (!fin.good()) return false;

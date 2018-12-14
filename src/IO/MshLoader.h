@@ -64,7 +64,6 @@ class MshLoader {
         void parse_unknown_field(std::ifstream& fin,
                 const std::string& fieldname);
 
-        void eat_white_space(std::ifstream& fin);
         int num_nodes_per_elem_type(int elem_type);
 
     private:

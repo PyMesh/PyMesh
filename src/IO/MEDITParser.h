@@ -19,11 +19,11 @@ class MEDITParser : public MeshParser {
 
         virtual bool parse(const std::string& filename);
 
-        virtual size_t dim() const { return 3; }
+        virtual size_t dim() const { return m_dim; }
         virtual size_t vertex_per_face() const { return m_vertex_per_face; }
         virtual size_t vertex_per_voxel() const { return m_vertex_per_voxel; }
 
-        virtual size_t num_vertices() const { return m_vertices.size() / 3; }
+        virtual size_t num_vertices() const { return m_vertices.size() / m_dim; }
         virtual size_t num_faces() const;
         virtual size_t num_voxels() const;
         virtual size_t num_attributes() const { return 0; }
@@ -49,6 +49,7 @@ class MEDITParser : public MeshParser {
         std::list<Float>  m_vertices;
         std::list<size_t> m_faces;
         std::list<size_t> m_voxels;
+        size_t m_dim;
         size_t m_vertex_per_face;
         size_t m_vertex_per_voxel;
 };

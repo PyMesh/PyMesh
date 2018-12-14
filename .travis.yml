@@ -152,7 +152,7 @@ script:
     - ccache --max-size=5.0G
     - ccache -V && ccache --show-stats && ccache --zero-stats
     - ./setup.py build
-      #- ./setup.py install --user --prefix=
-      #- python -c "import pymesh; pymesh.test()"
-      #- ccache --show-stats
+    - ./setup.py install --user --prefix=
+    - python -c "import pymesh; pymesh.test()"
+    - ccache --show-stats
 
