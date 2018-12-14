@@ -5,7 +5,7 @@
 using namespace PyMesh;
 
 void GeogramDelaunayTriangulation::run() {
-    GEO::Delaunay_var delaunay = GEO::Delaunay::create(2,"triangle");
+    GEO::Delaunay_var delaunay = GEO::Delaunay::create(2,"BDEL2d");
     delaunay->set_vertices(m_points.rows(), m_points.data());
     const size_t num_faces = delaunay->nb_cells();
     const GEO::signed_index_t* faces = delaunay->cell_to_v();
