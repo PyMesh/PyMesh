@@ -26,7 +26,7 @@ void MEDITWriter::write(
     std::ofstream fout(m_filename.c_str());
     fout.precision(16);
     fout << "MeshVersionFormatted 1" << std::endl;
-    fout << "Dimension 3" << std::endl;
+    fout << "Dimension " << dim << std::endl;
     if (!is_anonymous()) {
         fout << "# Generated with PyMesh" << std::endl;
     }
@@ -54,7 +54,6 @@ void MEDITWriter::write_vertices(
         for (size_t i=0; i<num_vertices; i++) {
             fout << vertices[i*dim  ] << " ";
             fout << vertices[i*dim+1] << " ";
-            fout << 0.0 << " ";
             fout << -1 << std::endl;
         }
     } else {
