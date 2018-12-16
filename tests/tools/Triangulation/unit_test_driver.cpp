@@ -5,6 +5,7 @@
 #ifdef WITH_CGAL
 #include "IGL/DelaunayTriangulationTest.h"
 #include "CGAL/ConstrainedDelaunayTest.h"
+#include "CGAL/ConformingDelaunayTest.h"
 #endif
 #endif
 #ifdef WITH_TRIANGLE
