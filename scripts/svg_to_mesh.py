@@ -55,7 +55,20 @@ def main():
     mesh = pymesh.triangulate_beta(wires.vertices, wires.edges,
             engine=args.engine);
 
-    pymesh.save_mesh(args.output_mesh, mesh);
+    arrangement = pymesh.Arrangement2();
+    arrangement.points = wires.vertices;
+    arrangement.segments = wires.edges;
+    arrangement.run();
+    mesh.add_attribute("face_centroid");
+    centroids = mesh.get_face_attribute("face_centroid");
+    r = arrangement.query(centroids);
+    cell_type = np.array([item[0] for item in r]);
+    cell_ids = np.array([item[1] for item in r]);
+    cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
+    mesh.add_attribute("cell");
+    mesh.set_attribute("cell", cell_ids);
+
+    pymesh.save_mesh(args.output_mesh, mesh, "cell");
 
 if __name__ == "__main__":
     main();

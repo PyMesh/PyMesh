@@ -17,6 +17,7 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
+from .Arrangement2 import Arrangement2
 from .Assembler import Assembler
 from .boolean import boolean
 from .compression import compress, decompress
