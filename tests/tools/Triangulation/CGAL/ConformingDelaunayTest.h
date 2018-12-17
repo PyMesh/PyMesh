@@ -4,35 +4,39 @@
 
 #include "../TriangulationTest.h"
 
-class ConformingDelaunayTest : public TriangulationTest {
+class CGALConformingDelaunayTest : public TriangulationTest {
 };
 
-TEST_F(ConformingDelaunayTest, simple) {
+TEST_F(CGALConformingDelaunayTest, simple) {
     simple("cgal_conforming_delaunay");
 }
 
-TEST_F(ConformingDelaunayTest, simple2) {
+TEST_F(CGALConformingDelaunayTest, simple2) {
     simple2("cgal_conforming_delaunay");
 }
 
-TEST_F(ConformingDelaunayTest, simple3) {
+TEST_F(CGALConformingDelaunayTest, simple3) {
     simple3("cgal_conforming_delaunay");
 }
 
-TEST_F(ConformingDelaunayTest, degenerate) {
+TEST_F(CGALConformingDelaunayTest, degenerate) {
     degenerate("cgal_conforming_delaunay");
 }
 
-TEST_F(ConformingDelaunayTest, intersecting_constraints) {
+TEST_F(CGALConformingDelaunayTest, intersecting_constraints) {
     intersecting_constraints("cgal_conforming_delaunay");
 }
 
-TEST_F(ConformingDelaunayTest, overlapping_segments) {
+TEST_F(CGALConformingDelaunayTest, overlapping_segments) {
     overlapping_segments("cgal_conforming_delaunay");
 }
 
-TEST_F(ConformingDelaunayTest, near_degeneracy) {
+TEST_F(CGALConformingDelaunayTest, near_degeneracy) {
     near_degeneracy("cgal_conforming_delaunay");
+}
+
+TEST_F(CGALConformingDelaunayTest, duplicated_vertices) {
+    duplicated_vertices("cgal_conforming_delaunay");
 }
 
 #endif

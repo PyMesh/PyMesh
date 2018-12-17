@@ -35,4 +35,8 @@ TEST_F(TriangleConstrainedDelaunayTest, near_degeneracy) {
     near_degeneracy("triangle_constrained_delaunay");
 }
 
+TEST_F(TriangleConstrainedDelaunayTest, duplicated_vertices) {
+    duplicated_vertices("triangle_constrained_delaunay");
+}
+
 #endif

@@ -33,7 +33,7 @@ void MMG::Delaunay::run() {
         throw RuntimeError("MMG2D_Set_solSize failed.");
     }
 
-    if (MMG2D_Set_iparameter(mmgMesh, mmgSol, MMG2D_IPARAM_verbose, 10) != 1) {
+    if (MMG2D_Set_iparameter(mmgMesh, mmgSol, MMG2D_IPARAM_verbose, 0) != 1) {
         throw RuntimeError("Setting MMG2D_IPARAM_verbose failed.");
     }
     if (MMG2D_Set_dparameter(mmgMesh, mmgSol, MMG2D_DPARAM_hmax, tol) != 1) {
@@ -115,7 +115,7 @@ void MMG::Delaunay::run() {
     // MMG is 1 based unfortunately.
     m_faces.array() -= 1;
 
-    MMG2D_saveMesh(mmgMesh, "mmg_debug.mesh");
+    //MMG2D_saveMesh(mmgMesh, "mmg_debug.mesh");
 
     MMG2D_Free_all(MMG5_ARG_start,
             MMG5_ARG_ppMesh,&mmgMesh,MMG5_ARG_ppMet,&mmgSol,

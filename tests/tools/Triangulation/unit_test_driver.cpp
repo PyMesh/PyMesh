@@ -15,6 +15,12 @@
 #ifdef WITH_GEOGRAM
 #include "Geogram/GeogramDelaunayTriangulationTest.h"
 #endif
+#ifdef WITH_JIGSAW
+#include "Jigsaw/FrontalDelaunayTest.h"
+#endif
+#ifdef WITH_MMG
+#include "MMG/DelaunayTest.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

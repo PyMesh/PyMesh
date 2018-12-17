@@ -35,4 +35,8 @@ TEST_F(TriangleConformingDelaunayTest, near_degeneracy) {
     near_degeneracy("triangle_conforming_delaunay");
 }
 
+TEST_F(TriangleConformingDelaunayTest, duplicated_vertices) {
+    duplicated_vertices("triangle_conforming_delaunay");
+}
+
 #endif
