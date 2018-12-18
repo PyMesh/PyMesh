@@ -90,26 +90,6 @@ matrix:
         - brew outdated cmake || brew upgrade cmake
       install:
         - pip2 install --user -r python/requirements.txt
-    - os: osx
-      osx_image: xcode8
-      compiler: clang
-      before_install:
-        - git submodule update --init
-        - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
-      install:
-        - pip install --user -r python/requirements.txt
-    - os: osx
-      osx_image: xcode7.3
-      compiler: clang
-      before_install:
-        - git submodule update --init
-        - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
-      install:
-        - pip install --user -r python/requirements.txt
     - os: linux
       dist: xenial
       python: "2.7"
