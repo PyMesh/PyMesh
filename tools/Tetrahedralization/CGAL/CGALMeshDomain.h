@@ -209,8 +209,8 @@ auto create_implicit_domain(
     Eigen::Vector3d centroid = vertices.colwise().sum() / num_vertices;
     Eigen::Vector3d bbox_min = vertices.colwise().minCoeff();
     Eigen::Vector3d bbox_max = vertices.colwise().maxCoeff();
-    double bbox_radius = (bbox_max - bbox_min).norm() / 2;
-    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), bbox_radius);
+    double sq_bbox_radius = (bbox_max - bbox_min).squaredNorm() / 4;
+    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), sq_bbox_radius);
     return std::make_unique<Domain>(oracle, bounding_sphere);
 }
 
@@ -227,8 +227,8 @@ auto create_implicit_domain_with_features(
     Eigen::Vector3d centroid = vertices.colwise().sum() / num_vertices;
     Eigen::Vector3d bbox_min = vertices.colwise().minCoeff();
     Eigen::Vector3d bbox_max = vertices.colwise().maxCoeff();
-    double bbox_radius = (bbox_max - bbox_min).norm() / 2;
-    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), bbox_radius);
+    double sq_bbox_radius = (bbox_max - bbox_min).squaredNorm() / 4;
+    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), sq_bbox_radius);
     auto domain  = std::make_unique<Domain>(oracle, bounding_sphere);
     // TODO: add polyline feature.
     return domain;
