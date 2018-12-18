@@ -24,6 +24,7 @@ class Oracle {
             assert(m_vertices.cols() == 3);
             m_aabb.init(m_vertices, m_faces);
             m_winding_number_hierarchy.set_mesh(m_vertices, m_faces);
+            m_winding_number_hierarchy.grow();
         }
 
     public:
