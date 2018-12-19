@@ -23,6 +23,7 @@ def parse_args():
             default="triangle_conforming_delaunay");
     parser.add_argument("--resolve-self-intersection", "-r", action="store_true");
     parser.add_argument("--with-frame", '-f', action="store_true");
+    parser.add_argument("--with-cell-label", "-c", action="store_true");
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="INFO");
@@ -92,13 +93,6 @@ def add_frame(wires):
     wires.load(vertices, edges);
     return wires;
 
-def resolve_self_intersection(wires):
-    arrangement = pymesh.Arrangement2();
-    arrangement.points = wires.vertices;
-    arrangement.segments = wires.edges;
-    arrangement.run();
-    return arrangement.wires, arrangement;
-
 def main():
     args = parse_args();
     logger = get_logger(args.log);
@@ -109,28 +103,38 @@ def main():
     if args.with_frame:
         wires = add_frame(wires);
 
-    arrangement = pymesh.Arrangement2();
-    arrangement.points = wires.vertices;
-    arrangement.segments = wires.edges;
-    arrangement.run();
     if args.resolve_self_intersection:
+        arrangement = pymesh.Arrangement2();
+        arrangement.points = wires.vertices;
+        arrangement.segments = wires.edges;
+        arrangement.run();
         wires = arrangement.wire_network;
+    else:
+        arrangement = None;
 
     wires.write_to_file(os.path.splitext(args.output_mesh)[0] + ".wire");
 
     mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
             engine=args.engine, with_timing=True);
 
-    mesh.add_attribute("face_centroid");
-    centroids = mesh.get_face_attribute("face_centroid");
-    r = arrangement.query(centroids);
-    cell_type = np.array([item[0] for item in r]);
-    cell_ids = np.array([item[1] for item in r]);
-    cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
-    mesh.add_attribute("cell");
-    mesh.set_attribute("cell", cell_ids);
+    if args.with_cell_label:
+        if arrangement is None:
+            arrangement = pymesh.Arrangement2();
+            arrangement.points = wires.vertices;
+            arrangement.segments = wires.edges;
+            arrangement.run();
+        mesh.add_attribute("face_centroid");
+        centroids = mesh.get_face_attribute("face_centroid");
+        r = arrangement.query(centroids);
+        cell_type = np.array([item[0] for item in r]);
+        cell_ids = np.array([item[1] for item in r]);
+        cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
+        mesh.add_attribute("cell");
+        mesh.set_attribute("cell", cell_ids);
 
-    pymesh.save_mesh(args.output_mesh, mesh, "cell");
+        pymesh.save_mesh(args.output_mesh, mesh, "cell");
+    else:
+        pymesh.save_mesh(args.output_mesh, mesh);
 
     logger.info("Running time: {}".format(t));
 
