@@ -7,6 +7,7 @@ import argparse
 import logging
 import pymesh
 import numpy as np
+from numpy.linalg import norm
 import os.path
 
 def parse_args():
@@ -21,6 +22,7 @@ def parse_args():
                 "mmg_delaunay"),
             default="triangle_conforming_delaunay");
     parser.add_argument("--resolve-self-intersection", "-r", action="store_true");
+    parser.add_argument("--with-frame", '-f', action="store_true");
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="INFO");
@@ -62,6 +64,36 @@ def cleanup(wires):
 
     return wires;
 
+def add_frame(wires):
+    vertices = wires.vertices;
+    edges = wires.edges;
+
+    bbox_min = np.amin(vertices, axis=0);
+    bbox_max = np.amax(vertices, axis=0);
+    bbox_center = 0.5 * (bbox_min + bbox_max);
+    diag_len = norm(bbox_max - bbox_min);
+    offset = np.ones(2) * diag_len / 1000;
+    bbox_min -= offset;
+    bbox_max += offset;
+
+    frame_vertices = np.array([
+        [bbox_min[0], bbox_min[1]],
+        [bbox_max[0], bbox_min[1]],
+        [bbox_max[0], bbox_max[1]],
+        [bbox_min[0], bbox_max[1]],
+        ]);
+    frame_edges = np.array([
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 0],
+        ]) + wires.num_vertices;
+
+    vertices = np.vstack([vertices, frame_vertices]);
+    edges = np.vstack([edges, frame_edges]);
+    wires.load(vertices, edges);
+    return wires;
+
 def resolve_self_intersection(wires):
     arrangement = pymesh.Arrangement2();
     arrangement.points = wires.vertices;
@@ -76,6 +108,8 @@ def main():
     wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
     wires = drop_zero_dim(wires);
     wires = cleanup(wires);
+    if args.with_frame:
+        wires = add_frame(wires);
 
     arrangement = pymesh.Arrangement2();
     arrangement.points = wires.vertices;
