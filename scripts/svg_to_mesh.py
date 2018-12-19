@@ -43,9 +43,8 @@ def drop_zero_dim(wires):
         vertices = wires.vertices;
         assert(np.all(vertices[:,2] == 0));
         vertices = vertices[:, [0,1]];
-        return wires.load(vertices, wires.edges);
-    else:
-        return wires;
+        wires.load(vertices, wires.edges);
+    return wires;
 
 def cleanup(wires):
     vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(wires.vertices, wires.edges, 0.0);
