@@ -1,5 +1,6 @@
 import numpy as np
 from PyMesh import DuplicatedVertexRemoval
+from PyMesh import unique_rows
 from ..meshio import form_mesh
 
 def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=None):
@@ -30,8 +31,7 @@ def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=Non
     """
 
     if tol == 0.0:
-        new_vertices, index_map = np.unique(vertices, return_inverse=True,
-                axis=0);
+        new_vertices, __, index_map = unique_rows(vertices);
         new_elements = index_map[elements];
         info = {
                 "num_vertex_merged": len(vertices) - len(new_vertices),
