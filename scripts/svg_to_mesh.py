@@ -4,6 +4,7 @@
 """
 
 import argparse
+import logging
 import pymesh
 import numpy as np
 import os.path
@@ -19,17 +20,33 @@ def parse_args():
                 "jigsaw_frontal_delaunay",
                 "mmg_delaunay"),
             default="triangle_conforming_delaunay");
+    parser.add_argument("--resolve-self-intersection", "-r", action="store_true");
+    parser.add_argument("--log", type=str, help="Logging level",
+            choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+            default="INFO");
     parser.add_argument("input_svg");
     parser.add_argument("output_mesh");
     return parser.parse_args();
 
-def cleanup(wires):
-    vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(wires.vertices, wires.edges, 0.0);
+def get_logger(level):
+    numeric_level = getattr(logging, level, None);
+    if not isinstance(numeric_level, int):
+        raise ValueError('Invalid log level: {}'.format(level));
+    logging.basicConfig(level=numeric_level);
+    return logging.getLogger("PyMesh.Triangulation");
 
+def drop_zero_dim(wires):
     # Trim zero dimension.
     if wires.dim == 3:
+        vertices = wires.vertices;
         assert(np.all(vertices[:,2] == 0));
         vertices = vertices[:, [0,1]];
+        return wires.load(vertices, wires.edges);
+    else:
+        return wires;
+
+def cleanup(wires):
+    vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(wires.vertices, wires.edges, 0.0);
 
     # Remove duplicated edges.
     ordered_edges = np.sort(edges, axis=1);
@@ -45,20 +62,33 @@ def cleanup(wires):
 
     return wires;
 
+def resolve_self_intersection(wires):
+    arrangement = pymesh.Arrangement2();
+    arrangement.points = wires.vertices;
+    arrangement.segments = wires.edges;
+    arrangement.run();
+    return arrangement.wires, arrangement;
+
 def main():
     args = parse_args();
-    wires = pymesh.wires.WireNetwork();
-    wires.load_from_file(args.input_svg);
-    wires = cleanup(wires);
-    wires.write_to_file(os.path.splitext(args.output_mesh)[0] + ".wire");
+    logger = get_logger(args.log);
 
-    mesh = pymesh.triangulate_beta(wires.vertices, wires.edges,
-            engine=args.engine);
+    wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
+    wires = drop_zero_dim(wires);
+    wires = cleanup(wires);
 
     arrangement = pymesh.Arrangement2();
     arrangement.points = wires.vertices;
     arrangement.segments = wires.edges;
     arrangement.run();
+    if args.resolve_self_intersection:
+        wires = arrangement.wire_network;
+
+    wires.write_to_file(os.path.splitext(args.output_mesh)[0] + ".wire");
+
+    mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
+            engine=args.engine, with_timing=True);
+
     mesh.add_attribute("face_centroid");
     centroids = mesh.get_face_attribute("face_centroid");
     r = arrangement.query(centroids);
@@ -69,6 +99,8 @@ def main():
     mesh.set_attribute("cell", cell_ids);
 
     pymesh.save_mesh(args.output_mesh, mesh, "cell");
+
+    logger.info("Running time: {}".format(t));
 
 if __name__ == "__main__":
     main();
