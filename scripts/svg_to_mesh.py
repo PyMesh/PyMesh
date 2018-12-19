@@ -51,8 +51,7 @@ def cleanup(wires):
 
     # Remove duplicated edges.
     ordered_edges = np.sort(edges, axis=1);
-    __, unique_edge_ids = np.unique(ordered_edges, return_index=True,
-            axis=0);
+    __, unique_edge_ids, __ = pymesh.unique_rows(ordered_edges);
     edges = edges[unique_edge_ids, :];
 
     # Remove topologically degenerate edges.
