@@ -304,7 +304,9 @@ bool STLParser::parse_binary(const std::string& filename) {
                     throw IOError("NaN or Inf detected in input file.");
                 }
             });
-    m_faces = VectorI::LinSpaced(m_vertices.size(), 0, m_vertices.size()-1);
+    if (!m_vertices.empty()) {
+        m_faces = VectorI::LinSpaced(m_vertices.size(), 0, m_vertices.size()-1);
+    }
 
     fin.close();
     return true;
