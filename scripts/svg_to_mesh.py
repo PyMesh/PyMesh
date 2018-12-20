@@ -9,6 +9,8 @@ import pymesh
 import numpy as np
 from numpy.linalg import norm
 import os.path
+from subprocess import check_call
+from time import time
 
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
@@ -19,7 +21,7 @@ def parse_args():
                 "cgal_conforming_delaunay",
                 "geogram_delaunay",
                 "jigsaw_frontal_delaunay",
-                "mmg_delaunay"),
+                "mmg_delaunay", "triwild"),
             default="triangle_conforming_delaunay");
     parser.add_argument("--resolve-self-intersection", "-r", action="store_true");
     parser.add_argument("--with-frame", '-f', action="store_true");
@@ -71,7 +73,7 @@ def add_frame(wires):
     bbox_max = np.amax(vertices, axis=0);
     bbox_center = 0.5 * (bbox_min + bbox_max);
     diag_len = norm(bbox_max - bbox_min);
-    offset = np.ones(2) * diag_len / 1000;
+    offset = np.ones(2) * diag_len / 20;
     bbox_min -= offset;
     bbox_max += offset;
 
@@ -100,7 +102,7 @@ def main():
     wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
     wires = drop_zero_dim(wires);
     wires = cleanup(wires);
-    if args.with_frame:
+    if args.with_frame and args.engine != "triwild":
         wires = add_frame(wires);
 
     if args.resolve_self_intersection:
@@ -112,10 +114,22 @@ def main():
     else:
         arrangement = None;
 
-    wires.write_to_file(os.path.splitext(args.output_mesh)[0] + ".wire");
+    basename = os.path.splitext(args.output_mesh)[0];
+    wire_file = basename + ".wire";
+    wires.write_to_file(wire_file);
 
-    mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
-            engine=args.engine, with_timing=True);
+    if args.engine == "triwild":
+        out_mesh = "{}.stl".format(basename);
+        command = "TriWild --choice TRI --input {} --output {}".format(
+                wire_file, out_mesh);
+        start_time = time();
+        check_call(command.split());
+        finish_time = time();
+        t = finish_time - start_time;
+        mesh = pymesh.load_mesh(out_mesh);
+    else:
+        mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
+                engine=args.engine, with_timing=True);
 
     if args.with_cell_label:
         if arrangement is None:
