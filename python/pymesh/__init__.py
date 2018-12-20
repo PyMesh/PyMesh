@@ -46,6 +46,7 @@ from .triangle import triangle
 from .tetgen import tetgen
 from .triangulate import triangulate_beta
 from .wires import *
+from .snap_rounding import snap_rounding
 from .SparseSolver import SparseSolver
 from .igl_utils import unique_rows
 
@@ -90,6 +91,7 @@ __all__ = [
         "do_intersect",
         "VoxelGrid",
         "HarmonicSolver",
+        "snap_rounding",
         "SparseSolver",
         "HashGrid",
         "compress",

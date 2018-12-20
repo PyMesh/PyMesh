@@ -13,6 +13,7 @@
 #include <CGAL/Gmpz.h>
 #include <CGAL/Gmpq.h>
 #include <CGAL/Arrangement2.h>
+#include <CGAL/SnapRounding2.h>
 #endif
 
 namespace py = pybind11;
@@ -54,6 +55,24 @@ void init_CGAL(py::module &m) {
         .value("SEGMENT", Arrangement2::SEGMENT)
         .value("CELL", Arrangement2::CELL)
         .export_values();
+
+    py::class_<SnapRounding2, std::shared_ptr<SnapRounding2> >(m, "SnapRounding2")
+        .def(py::init<>())
+        .def_property("points",
+                &SnapRounding2::get_points,
+                &SnapRounding2::set_points,
+                py::return_value_policy::reference_internal)
+        .def_property("segments",
+                &SnapRounding2::get_segments,
+                &SnapRounding2::set_segments,
+                py::return_value_policy::reference_internal)
+        .def("run", &SnapRounding2::run)
+        .def_property_readonly("vertices",
+                &SnapRounding2::get_vertices,
+                py::return_value_policy::reference_internal)
+        .def_property_readonly("edges",
+                &SnapRounding2::get_edges,
+                py::return_value_policy::reference_internal);
 
     py::class_<CGAL::Gmpz>(m, "Gmpz")
         .def(py::init<>())

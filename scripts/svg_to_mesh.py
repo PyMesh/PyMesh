@@ -106,11 +106,10 @@ def main():
         wires = add_frame(wires);
 
     if args.resolve_self_intersection:
-        arrangement = pymesh.Arrangement2();
-        arrangement.points = wires.vertices;
-        arrangement.segments = wires.edges;
-        arrangement.run();
-        wires = arrangement.wire_network;
+        bbox_min, bbox_max = wires.bbox;
+        tol = norm(bbox_max - bbox_min) / 1000;
+        vertices, edges = pymesh.snap_rounding(wires.vertices, wires.edges, tol);
+        wires.load(vertices, edges);
     else:
         arrangement = None;
 
