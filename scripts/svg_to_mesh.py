@@ -50,15 +50,17 @@ def drop_zero_dim(wires):
     return wires;
 
 def cleanup(wires):
-    vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(wires.vertices, wires.edges, 0.0);
+    tol = 1e-6;
+    vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(
+            wires.vertices, wires.edges, tol);
 
     # Remove duplicated edges.
     ordered_edges = np.sort(edges, axis=1);
     __, unique_edge_ids, __ = pymesh.unique_rows(ordered_edges);
     edges = edges[unique_edge_ids, :];
+    wires.load(vertices, edges);
 
     # Remove topologically degenerate edges.
-    wires.load(vertices, edges);
     is_not_topologically_degenerate = edges[:,0] != edges[:,1];
     if not np.all(is_not_topologically_degenerate):
         wires.filter_edges(is_not_topologically_degenerate);
