@@ -103,7 +103,6 @@ def main():
 
     wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
     wires = drop_zero_dim(wires);
-    wires = cleanup(wires);
     if args.with_frame and args.engine != "triwild":
         wires = add_frame(wires);
 
@@ -112,8 +111,7 @@ def main():
         tol = norm(bbox_max - bbox_min) / 1000;
         vertices, edges = pymesh.snap_rounding(wires.vertices, wires.edges, tol);
         wires.load(vertices, edges);
-    else:
-        arrangement = None;
+    wires = cleanup(wires);
 
     basename = os.path.splitext(args.output_mesh)[0];
     wire_file = basename + ".wire";
@@ -133,11 +131,10 @@ def main():
                 engine=args.engine, with_timing=True);
 
     if args.with_cell_label:
-        if arrangement is None:
-            arrangement = pymesh.Arrangement2();
-            arrangement.points = wires.vertices;
-            arrangement.segments = wires.edges;
-            arrangement.run();
+        arrangement = pymesh.Arrangement2();
+        arrangement.points = wires.vertices;
+        arrangement.segments = wires.edges;
+        arrangement.run();
         mesh.add_attribute("face_centroid");
         centroids = mesh.get_face_attribute("face_centroid");
         r = arrangement.query(centroids);

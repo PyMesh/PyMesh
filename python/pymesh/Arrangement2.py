@@ -33,7 +33,7 @@ class Arrangement2(PyMesh.Arrangement2):
         >>> arrangement.points = points;
         >>> arrangement.segments = segments;
         >>> arrangement.run();
-        >>> wire_network = arrangement.wire_networks;
+        >>> wire_network = arrangement.wire_network;
     """
 
     @property
