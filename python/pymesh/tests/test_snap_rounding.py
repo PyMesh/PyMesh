@@ -87,3 +87,28 @@ class SnapRoundingTest(TestCase):
         self.assertEqual(5, len(vertices));
         self.assertEqual(4, len(edges));
 
+    def test_degeneracy(self):
+        points = np.array([
+            [0.0, 0.0],
+            [0.0, 0.0],
+            ]);
+        segments = np.array([
+            [0, 1],
+            ]);
+
+        vertices, edges = snap_rounding(points, segments, 0.2);
+        self.assertEqual(0, len(vertices));
+        self.assertEqual(0, len(edges));
+
+    def test_near_degeneracy(self):
+        points = np.array([
+            [0.0, 0.0],
+            [0.0, 1e-12],
+            ]);
+        segments = np.array([
+            [0, 1],
+            ]);
+
+        vertices, edges = snap_rounding(points, segments, 0.2);
+        self.assertEqual(1, len(vertices));
+        self.assertEqual(0, len(edges));

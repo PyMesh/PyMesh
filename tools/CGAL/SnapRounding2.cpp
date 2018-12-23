@@ -31,9 +31,18 @@ void SnapRounding2::run(Float pixel_size, bool iterative) {
     std::vector<Segment_2> segments;
     segments.reserve(num_segments);
     for (size_t i=0; i<num_segments; i++) {
-        segments.emplace_back(
-                points[m_segments(i, 0)],
-                points[m_segments(i, 1)]);
+        Segment_2 s(points[m_segments(i, 0)], points[m_segments(i, 1)]);
+        if (s.is_degenerate()) {
+            // Warning: Degenearte segment will trigger CGAL assertion:
+            //   RuntimeError: CGAL ERROR: precondition violation!
+            //   Expr: ! is_degen
+            //   File: /.../CGAL/Arr_segment_traits_2.h
+            //   Line: 122
+            //
+            // Tested on CGAL 4.12.1.
+            continue;
+        }
+        segments.push_back(s);
     }
 
     Polyline_list_2 output_list;

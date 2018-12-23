@@ -125,7 +125,7 @@ def main():
         check_call(command.split());
         finish_time = time();
         t = finish_time - start_time;
-        mesh = pymesh.load_mesh(out_mesh);
+        mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
     else:
         mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
                 engine=args.engine, with_timing=True);
