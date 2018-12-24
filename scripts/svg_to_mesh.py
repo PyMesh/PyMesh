@@ -26,6 +26,7 @@ def parse_args():
     parser.add_argument("--resolve-self-intersection", "-r", action="store_true");
     parser.add_argument("--with-frame", '-f', action="store_true");
     parser.add_argument("--with-cell-label", "-c", action="store_true");
+    parser.add_argument("--with-triangulation", "-t", action="store_true");
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="INFO");
@@ -109,7 +110,11 @@ def main():
     if args.resolve_self_intersection:
         bbox_min, bbox_max = wires.bbox;
         tol = norm(bbox_max - bbox_min) / 1000;
+        start_time = time();
         vertices, edges = pymesh.snap_rounding(wires.vertices, wires.edges, tol);
+        finish_time = time();
+        t = finish_time - start_time;
+        logger.info("Snap rounding running time: {}".format(t));
         wires.load(vertices, edges);
     wires = cleanup(wires);
 
@@ -117,38 +122,44 @@ def main():
     wire_file = basename + ".wire";
     wires.write_to_file(wire_file);
 
-    if args.engine == "triwild":
-        out_mesh = "{}.stl".format(basename);
-        command = "TriWild --choice TRI --input {} --output {}".format(
-                wire_file, out_mesh);
-        start_time = time();
-        check_call(command.split());
-        finish_time = time();
-        t = finish_time - start_time;
-        mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
-    else:
-        mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
-                engine=args.engine, with_timing=True);
+    if args.with_triangulation:
+        if args.engine == "triwild":
+            out_mesh = "{}.stl".format(basename);
+            command = "TriWild --choice TRI --input {} --output {}".format(
+                    wire_file, out_mesh);
+            start_time = time();
+            check_call(command.split());
+            finish_time = time();
+            t = finish_time - start_time;
+            mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
+        else:
+            mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
+                    engine=args.engine, with_timing=True);
+        logger.info("Triangulation running time: {}".format(t));
 
-    if args.with_cell_label:
-        arrangement = pymesh.Arrangement2();
-        arrangement.points = wires.vertices;
-        arrangement.segments = wires.edges;
-        arrangement.run();
-        mesh.add_attribute("face_centroid");
-        centroids = mesh.get_face_attribute("face_centroid");
-        r = arrangement.query(centroids);
-        cell_type = np.array([item[0] for item in r]);
-        cell_ids = np.array([item[1] for item in r]);
-        cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
-        mesh.add_attribute("cell");
-        mesh.set_attribute("cell", cell_ids);
+        if args.with_cell_label:
+            start_time = time();
+            arrangement = pymesh.Arrangement2();
+            arrangement.points = wires.vertices;
+            arrangement.segments = wires.edges;
+            arrangement.run();
+            mesh.add_attribute("face_centroid");
+            centroids = mesh.get_face_attribute("face_centroid");
+            r = arrangement.query(centroids);
+            finish_time = time();
+            t = finish_time - start_time;
+            logger.info("Arrangement running time: {}".format(t));
 
-        pymesh.save_mesh(args.output_mesh, mesh, "cell");
-    else:
-        pymesh.save_mesh(args.output_mesh, mesh);
+            cell_type = np.array([item[0] for item in r]);
+            cell_ids = np.array([item[1] for item in r]);
+            cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
+            mesh.add_attribute("cell");
+            mesh.set_attribute("cell", cell_ids);
 
-    logger.info("Running time: {}".format(t));
+            pymesh.save_mesh(args.output_mesh, mesh, "cell");
+        else:
+            pymesh.save_mesh(args.output_mesh, mesh);
+
 
 if __name__ == "__main__":
     main();
