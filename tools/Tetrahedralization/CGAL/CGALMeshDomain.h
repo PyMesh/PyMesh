@@ -8,6 +8,7 @@
 #include <CGAL/Mesh_complex_3_in_triangulation_3.h>
 #include <CGAL/Mesh_criteria_3.h>
 #include <CGAL/Implicit_mesh_domain_3.h>
+#include <CGAL/Labeled_mesh_domain_3.h>
 #include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/Polyhedral_mesh_domain_3.h>
 #include <CGAL/Polyhedral_mesh_domain_with_features_3.h>
@@ -122,7 +123,7 @@ auto create_polyhedral_domain_with_feature(
 
     auto domain = std::make_unique<Domain>(P);
     domain->detect_features(180.0 - feature_angle);
-    domain->detect_borders();
+    //domain->detect_borders();
 
     return domain;
 }
@@ -200,7 +201,7 @@ void dump_edges(const C3t3& c3t3, std::string filename) {
 template<typename K, typename Oracle>
 auto create_implicit_domain(
         const MatrixFr& vertices, const MatrixIr& faces, Oracle& oracle) {
-    using Domain = CGAL::Implicit_mesh_domain_3<Oracle, K>;
+    using Domain = CGAL::Labeled_mesh_domain_3<K>;
     using Sphere = typename K::Sphere_3;
     using Point = typename K::Point_3;
 
@@ -217,7 +218,7 @@ auto create_implicit_domain(
 template<typename K, typename Oracle>
 auto create_implicit_domain_with_features(
         const MatrixFr& vertices, const MatrixIr& faces, Oracle& oracle) {
-    using ImplicitDomain = CGAL::Implicit_mesh_domain_3<Oracle, K>;
+    using ImplicitDomain = CGAL::Labeled_mesh_domain_3<K>;
     using Domain = CGAL::Mesh_domain_with_polyline_features_3<ImplicitDomain>;
     using Sphere = typename K::Sphere_3;
     using Point = typename K::Point_3;

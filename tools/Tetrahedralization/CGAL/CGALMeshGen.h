@@ -122,8 +122,8 @@ class CGALMeshGen<InexactKernel, CGALDomainType::IMPLICIT_WITH_FEATURES>
                     cell_size             =m_cell_size);
 
             auto c3t3 = CGAL::make_mesh_3<typename Traits::C3t3>(*domain, criteria);
-            std::cout << "Oracle is used " << oracle.get_counter()
-                << " times in total" << std::endl;
+            //std::cout << "Oracle is used " << oracle.get_counter()
+            //    << " times in total" << std::endl;
             extract_mesh<Traits>(c3t3, m_vertices, m_faces, m_voxels);
         }
 };
