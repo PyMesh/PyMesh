@@ -115,15 +115,18 @@ def resolve_self_intersection(wires, logger):
     wires.load(vertices, edges);
     return wires;
 
-def triangulate(wires, engine, logger):
+def triangulate(wires, engine, logger, wire_file):
+    basename = os.path.splitext(wire_file)[0];
     if engine == "triwild":
         out_mesh = "{}.stl".format(basename);
+        log_file = "{}_triwild.log".format(basename);
         command = "TriWild --choice TRI --input {} --output {}".format(
                 wire_file, out_mesh);
-        start_time = time();
-        check_call(command.split());
-        finish_time = time();
-        t = finish_time - start_time;
+        with open(log_file, 'w') as fout:
+            start_time = time();
+            check_call(command.split(), stdout=fout);
+            finish_time = time();
+            t = finish_time - start_time;
         mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
     else:
         mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
@@ -154,6 +157,7 @@ def compute_cell_labels(wires, mesh, logger):
 def main():
     args = parse_args();
     logger = get_logger(args.log);
+    logger.info("Triangulation engine: {}".format(args.engine));
 
     wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
     wires = drop_zero_dim(wires);
@@ -170,7 +174,7 @@ def main():
     wires.write_to_file(wire_file);
 
     if args.with_triangulation:
-        mesh = triangulate(wires, args.engine, logger);
+        mesh = triangulate(wires, args.engine, logger, wire_file);
 
         if args.with_cell_label:
             compute_cell_labels(wires, mesh, logger);
