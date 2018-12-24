@@ -14,6 +14,20 @@
 #include <CGAL/Polyhedral_mesh_domain_with_features_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
 
+// Clean up definition from CGAL/ImageIO/analyze_impl.h.
+// Otherwise it will cause Linux compilation problems.
+#undef DT_NONE
+#undef DT_UNKNOWN
+#undef DT_BINARY
+#undef DT_UNSIGNED_CHAR
+#undef DT_SIGNED_SHORT
+#undef DT_SIGNED_INT
+#undef DT_FLOAT
+#undef DT_COMPLEX
+#undef DT_DOUBLE
+#undef DT_RGB
+#undef DT_ALL
+
 namespace PyMesh {
 
 template<typename Domain>
