@@ -25,7 +25,8 @@ def parse_args():
             default="triangle_conforming_delaunay");
     parser.add_argument("--resolve-self-intersection", "-r", action="store_true");
     parser.add_argument("--with-frame", '-f', action="store_true");
-    parser.add_argument("--with-cell-label", "-c", action="store_true");
+    parser.add_argument("--with-cell-label", "-l", action="store_true");
+    parser.add_argument("--with-cleanup", "-c", action="store_true");
     parser.add_argument("--with-triangulation", "-t", action="store_true");
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
@@ -50,7 +51,8 @@ def drop_zero_dim(wires):
         wires.load(vertices, wires.edges);
     return wires;
 
-def cleanup(wires):
+def cleanup(wires, logger):
+    start_time = time();
     tol = 1e-6;
     vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(
             wires.vertices, wires.edges, tol);
@@ -65,6 +67,10 @@ def cleanup(wires):
     is_not_topologically_degenerate = edges[:,0] != edges[:,1];
     if not np.all(is_not_topologically_degenerate):
         wires.filter_edges(is_not_topologically_degenerate);
+
+    finish_time = time();
+    t = finish_time - start_time;
+    logger.info("Cleanup running time: {}".format(t));
 
     return wires;
 
@@ -98,68 +104,79 @@ def add_frame(wires):
     wires.load(vertices, edges);
     return wires;
 
+def resolve_self_intersection(wires, logger):
+    bbox_min, bbox_max = wires.bbox;
+    tol = norm(bbox_max - bbox_min) / 1000;
+    start_time = time();
+    vertices, edges = pymesh.snap_rounding(wires.vertices, wires.edges, tol);
+    finish_time = time();
+    t = finish_time - start_time;
+    logger.info("Snap rounding running time: {}".format(t));
+    wires.load(vertices, edges);
+    return wires;
+
+def triangulate(wires, engine, logger):
+    if engine == "triwild":
+        out_mesh = "{}.stl".format(basename);
+        command = "TriWild --choice TRI --input {} --output {}".format(
+                wire_file, out_mesh);
+        start_time = time();
+        check_call(command.split());
+        finish_time = time();
+        t = finish_time - start_time;
+        mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
+    else:
+        mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
+                engine=engine, with_timing=True);
+    logger.info("Triangulation running time: {}".format(t));
+
+    return mesh;
+
+def compute_cell_labels(wires, mesh, logger):
+    start_time = time();
+    arrangement = pymesh.Arrangement2();
+    arrangement.points = wires.vertices;
+    arrangement.segments = wires.edges;
+    arrangement.run();
+    mesh.add_attribute("face_centroid");
+    centroids = mesh.get_face_attribute("face_centroid");
+    r = arrangement.query(centroids);
+    finish_time = time();
+    t = finish_time - start_time;
+    logger.info("Arrangement running time: {}".format(t));
+
+    cell_type = np.array([item[0] for item in r]);
+    cell_ids = np.array([item[1] for item in r]);
+    cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
+    mesh.add_attribute("cell");
+    mesh.set_attribute("cell", cell_ids);
+
 def main():
     args = parse_args();
     logger = get_logger(args.log);
 
     wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
     wires = drop_zero_dim(wires);
+
     if args.with_frame and args.engine != "triwild":
         wires = add_frame(wires);
-
     if args.resolve_self_intersection:
-        bbox_min, bbox_max = wires.bbox;
-        tol = norm(bbox_max - bbox_min) / 1000;
-        start_time = time();
-        vertices, edges = pymesh.snap_rounding(wires.vertices, wires.edges, tol);
-        finish_time = time();
-        t = finish_time - start_time;
-        logger.info("Snap rounding running time: {}".format(t));
-        wires.load(vertices, edges);
-    wires = cleanup(wires);
+        wires = resolve_self_intersection(wires, logger);
+    if args.with_cleanup:
+        wires = cleanup(wires, logger);
 
     basename = os.path.splitext(args.output_mesh)[0];
     wire_file = basename + ".wire";
     wires.write_to_file(wire_file);
 
     if args.with_triangulation:
-        if args.engine == "triwild":
-            out_mesh = "{}.stl".format(basename);
-            command = "TriWild --choice TRI --input {} --output {}".format(
-                    wire_file, out_mesh);
-            start_time = time();
-            check_call(command.split());
-            finish_time = time();
-            t = finish_time - start_time;
-            mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
-        else:
-            mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
-                    engine=args.engine, with_timing=True);
-        logger.info("Triangulation running time: {}".format(t));
+        mesh = triangulate(wires, args.engine, logger);
 
         if args.with_cell_label:
-            start_time = time();
-            arrangement = pymesh.Arrangement2();
-            arrangement.points = wires.vertices;
-            arrangement.segments = wires.edges;
-            arrangement.run();
-            mesh.add_attribute("face_centroid");
-            centroids = mesh.get_face_attribute("face_centroid");
-            r = arrangement.query(centroids);
-            finish_time = time();
-            t = finish_time - start_time;
-            logger.info("Arrangement running time: {}".format(t));
-
-            cell_type = np.array([item[0] for item in r]);
-            cell_ids = np.array([item[1] for item in r]);
-            cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
-            mesh.add_attribute("cell");
-            mesh.set_attribute("cell", cell_ids);
-
+            compute_cell_labels(wires, mesh, logger);
             pymesh.save_mesh(args.output_mesh, mesh, "cell");
         else:
             pymesh.save_mesh(args.output_mesh, mesh);
-
 
 if __name__ == "__main__":
     main();
