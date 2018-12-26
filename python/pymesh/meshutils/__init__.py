@@ -11,6 +11,7 @@ from .edge_utils import chain_edges
 from .generate_box_mesh import generate_box_mesh
 from .generate_cylinder import generate_cylinder
 from .generate_dodecahedron import generate_dodecahedron
+from .generate_equilateral_triangle import generate_equilateral_triangle
 from .generate_icosphere import generate_icosphere
 from .generate_minimal_surface import generate_minimal_surface
 from .generate_tube import generate_tube
@@ -54,6 +55,7 @@ __all__ = [
         "generate_box_mesh",
         "generate_cylinder",
         "generate_dodecahedron",
+        "generate_equilateral_triangle",
         "generate_icosphere",
         "generate_minimal_surface",
         "generate_tube",
