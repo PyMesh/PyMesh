@@ -15,6 +15,7 @@
 #include "FaceIncircleRadiusAttribute.h"
 #include "FaceIndexAttribute.h"
 #include "FaceNormalAttribute.h"
+#include "FaceRadiusEdgeRatioAttribute.h"
 #include "FaceVoronoiAreaAttribute.h"
 #include "MeshAttribute.h"
 #include "VertexAreaAttribute.h"
@@ -91,6 +92,8 @@ MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         return std::make_shared<FaceIndexAttribute>(name);
     } else if (name == "face_normal") {
         return std::make_shared<FaceNormalAttribute>(name);
+    } else if (name == "face_radius_edge_ratio") {
+        return std::make_shared<FaceRadiusEdgeRatioAttribute>(name);
     } else if (name == "face_voronoi_area") {
         return std::make_shared<FaceVoronoiAreaAttribute>(name);
     } else if (name == "voxel_dihedral_angle") {
