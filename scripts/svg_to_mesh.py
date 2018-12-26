@@ -120,13 +120,12 @@ def triangulate(wires, engine, logger, wire_file):
     if engine == "triwild":
         out_mesh = "{}.stl".format(basename);
         log_file = "{}_triwild.log".format(basename);
-        command = "TriWild --choice TRI --input {} --output {}".format(
+        command = "TriWild --choice TRI --is-log 0 --input {} --output {}".format(
                 wire_file, out_mesh);
-        with open(log_file, 'w') as fout:
-            start_time = time();
-            check_call(command.split(), stdout=fout);
-            finish_time = time();
-            t = finish_time - start_time;
+        start_time = time();
+        check_call(command.split());
+        finish_time = time();
+        t = finish_time - start_time;
         mesh = pymesh.load_mesh(out_mesh, drop_zero_dim=True);
     else:
         mesh, t = pymesh.triangulate_beta(wires.vertices, wires.edges,
