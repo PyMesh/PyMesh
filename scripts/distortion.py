@@ -248,7 +248,7 @@ def output_to_csv_2D(mesh, csv_file):
         dirichlet = mesh.get_attribute("symmetric_Dirichlet");
         orientation = mesh.get_attribute("orientations");
 
-        for i in range(mesh.num_voxels):
+        for i in range(mesh.num_faces):
             writer.writerow([i,
                 edge_ratio[i],
                 radius_ratio[i],
