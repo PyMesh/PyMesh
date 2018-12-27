@@ -52,6 +52,8 @@ def drop_zero_dim(wires):
     return wires;
 
 def cleanup(wires, logger):
+    if wires.num_vertices == 0:
+        return wires;
     start_time = time();
     tol = 1e-6;
     vertices, edges, __ = pymesh.remove_duplicated_vertices_raw(
@@ -75,6 +77,8 @@ def cleanup(wires, logger):
     return wires;
 
 def add_frame(wires):
+    if wires.num_vertices == 0:
+        return wires;
     vertices = wires.vertices;
     edges = wires.edges;
 
@@ -105,6 +109,8 @@ def add_frame(wires):
     return wires;
 
 def resolve_self_intersection(wires, logger):
+    if wires.num_vertices == 0:
+        return wires;
     bbox_min, bbox_max = wires.bbox;
     tol = norm(bbox_max - bbox_min) / 1000;
     start_time = time();
@@ -116,6 +122,8 @@ def resolve_self_intersection(wires, logger):
     return wires;
 
 def triangulate(wires, engine, logger, wire_file):
+    if wires.num_vertices == 0:
+        return pymesh.form_mesh(np.zeros((0, 2)), np.zeros((0,3)));
     basename = os.path.splitext(wire_file)[0];
     if engine == "triwild":
         out_mesh = "{}.stl".format(basename);
@@ -161,6 +169,9 @@ def main():
     wires = pymesh.wires.WireNetwork.create_from_file(args.input_svg);
     wires = drop_zero_dim(wires);
 
+    if wires.num_vertices == 0:
+        logger.warn("Input is empty");
+
     if args.with_frame and args.engine != "triwild":
         wires = add_frame(wires);
     if args.resolve_self_intersection:
@@ -175,7 +186,7 @@ def main():
     if args.with_triangulation:
         mesh = triangulate(wires, args.engine, logger, wire_file);
 
-        if args.with_cell_label:
+        if mesh.num_vertices > 0 and args.with_cell_label:
             compute_cell_labels(wires, mesh, logger);
             pymesh.save_mesh(args.output_mesh, mesh, "cell");
         else:
