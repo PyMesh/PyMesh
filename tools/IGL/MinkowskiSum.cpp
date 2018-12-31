@@ -42,8 +42,11 @@ void MinkowskiSum::run(const MatrixFr& path) {
         MatrixIr F;
         VectorI J;
 
-        igl::copyleft::cgal::minkowski_sum(m_vertices, m_faces,
-                s, d, V, F, J);
+        igl::copyleft::cgal::minkowski_sum<
+            MatrixFr, MatrixIr,
+            Float, 3, 1,
+            Float, 3, 1,
+            MatrixFr, MatrixIr, VectorI>(m_vertices, m_faces, s, d, V, F, J);
         vertices.emplace_back(V);
         faces.emplace_back(F);
     }
