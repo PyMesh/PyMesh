@@ -94,8 +94,10 @@ Mesh::Ptr MeshCutter::cut_at_uv_discontinuity() const {
         throw RuntimeError("Comp ids size does not match the number of faces in mesh");
     }
 
-    auto p_hash = [](const Vector2F& p) {
-        return std::hash<Float>()(p[0] * 524287) ^ std::hash<Float>()(p[1]);
+    struct Vector2FHash {
+        size_t operator()(const Vector2F& p) const {
+            return std::hash<Float>()(p[0] * 524287) ^ std::hash<Float>()(p[1]);
+        }
     };
 
     auto get_corner_index = [&faces, vertex_per_face](size_t fid, size_t vid) {
@@ -107,8 +109,8 @@ Mesh::Ptr MeshCutter::cut_at_uv_discontinuity() const {
     };
 
     std::vector<size_t> added_vertices;
-    using UVMap = std::unordered_map<Vector2F, size_t, decltype(p_hash)>;
-    std::vector<UVMap> index_map(num_vertices, UVMap(8, p_hash));
+    using UVMap = std::unordered_map<Vector2F, size_t, Vector2FHash>;
+    std::vector<UVMap> index_map(num_vertices, UVMap(8));
     for (size_t i=0; i<num_vertices; i++) {
         const auto& adj_faces = m_mesh->get_vertex_adjacent_faces(i);
         const size_t num_adj_faces = adj_faces.size();
