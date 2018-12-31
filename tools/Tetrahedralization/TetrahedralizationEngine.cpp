@@ -26,7 +26,9 @@
 #endif
 
 #if WITH_MMG
+#if WITH_TETGEN
 #include "MMG/MMGEngine.h"
+#endif
 #endif
 
 #if WITH_TETWILD
@@ -63,15 +65,15 @@ TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
 #endif
 #if WITH_TETGEN
     if (engine_name == "tetgen") { return Ptr(new TetGenEngine); }
+#if WITH_MMG
+    if (engine_name == "mmg") { return Ptr(new MMGEngine); }
+#endif
 #endif
 #if WITH_GEOGRAM
     if (engine_name == "geogram") { return Ptr(new GeogramEngine); }
 #endif
 #if WITH_QUARTET
     if (engine_name == "quartet") { return Ptr(new QuartetEngine); }
-#endif
-#if WITH_MMG
-    if (engine_name == "mmg") { return Ptr(new MMGEngine); }
 #endif
 #if WITH_TETWILD
     if (engine_name == "tetwild") { return Ptr(new TetWildEngine); }

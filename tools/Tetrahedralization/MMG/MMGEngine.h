@@ -1,6 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
 #ifdef WITH_MMG
+#ifdef WITH_TETGEN
 
 #include <Tetrahedralization/TetrahedralizationEngine.h>
 
@@ -16,4 +17,5 @@ class MMGEngine : public TetrahedralizationEngine {
 
 }
 
+#endif
 #endif
