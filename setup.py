@@ -61,9 +61,9 @@ class cmake_build(build):
         os.chdir(build_dir);
         command = "cmake .. -DCMAKE_BUILD_TYPE=Release";
         check_call(command.split());
-        command = "make -j {}".format(num_cores);
+        command = "cmake --build . --config Release -- -j {}".format(num_cores);
         check_call(command.split());
-        command = "make install";
+        command = "cmake --build . --target install";
         check_call(command.split());
 
     def build_pymesh(self):
@@ -78,7 +78,7 @@ class cmake_build(build):
         command = "cmake .. -DCMAKE_BUILD_TYPE=Release -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
                 v=platform.python_version_tuple());
         check_call(command.split());
-        command = "make";
+        command = "cmake --build . --config Release";
         check_call(command.split());
         os.chdir(root_dir);
 
