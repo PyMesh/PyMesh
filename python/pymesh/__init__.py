@@ -43,7 +43,6 @@ from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
 from .aabb_tree import AABBTree, BVH, distance_to_mesh, do_intersect
 from .triangle import triangle
-from .tetgen import tetgen
 from .triangulate import triangulate_beta
 from .wires import *
 from .snap_rounding import snap_rounding
@@ -82,7 +81,6 @@ __all__ = [
         "slice_mesh",
         "triangle",
         "triangulate_beta",
-        "tetgen",
         "tetrahedralize",
         "minkowski_sum",
         "partition_into_cells",
@@ -104,4 +102,10 @@ __all__ = [
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
 __all__.append("wires");
+
+try:
+    from .tetgen import tetgen
+    __all__.append("tetgen");
+except:
+    pass;
 
