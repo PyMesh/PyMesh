@@ -21,7 +21,6 @@ class IsotropicPeriodicInflator : public PeriodicInflator {
         void clean_up_clipped_mesh();
         void refine_long_clip_box_edges();
         void remesh_boundary();
-        void reflect_old();
         void reflect();
         void merge_boundary();
         void ensure_periodicity();

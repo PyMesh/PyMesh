@@ -103,6 +103,7 @@ void PeriodicExploration::periodic_inflate(bool use_reflective_inflator) {
 }
 
 bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
+#ifdef WITH_TETGEN
     const size_t dim = m_vertices.cols();
     const size_t num_vertices = m_vertices.rows();
     TetgenWrapper tetgen;
@@ -144,6 +145,9 @@ bool PeriodicExploration::run_tetgen(Float max_tet_vol) {
     update_mesh();
 
     return true;
+#else
+    return false;
+#endif
 }
 
 bool PeriodicExploration::is_printable() {

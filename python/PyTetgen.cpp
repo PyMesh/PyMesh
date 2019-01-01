@@ -7,9 +7,10 @@
 #include <TetGen/TetgenWrapper.h>
 
 namespace py = pybind11;
-using namespace PyMesh;
 
 void init_TetgenWrapper(py::module& m) {
+#if WITH_TETGEN
+    using namespace PyMesh;
     py::class_<TetgenWrapper, std::shared_ptr<TetgenWrapper> > tetgen(m, "tetgen");
     tetgen
         .def(py::init<>())
@@ -88,4 +89,5 @@ void init_TetgenWrapper(py::module& m) {
         .def_property_readonly("flags",
                 &TetgenWrapper::generate_command_line_options)
         ;
+#endif
 }

@@ -13,7 +13,6 @@
 #include <MeshUtils/EdgeSplitter.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/SubMesh.h>
-#include <TetGen/TetgenWrapper.h>
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>
@@ -268,45 +267,6 @@ void IsotropicPeriodicInflator::ensure_periodicity() {
     MeshCleaner cleaner;
     cleaner.remove_isolated_vertices(m_vertices, m_faces);
     cleaner.remove_fin_faces(m_vertices, m_faces);
-}
-
-void IsotropicPeriodicInflator::reflect_old() {
-    TetgenWrapper tetgen;
-    tetgen.set_points(m_vertices);
-    tetgen.set_triangles(m_faces);
-    tetgen.set_max_tet_volume(0.01);
-    tetgen.set_verbosity(0);
-    tetgen.run();
-
-    auto vertices = tetgen.get_vertices();
-    auto voxels = tetgen.get_voxels();
-
-    size_t num_vertices = vertices.rows();
-
-    for (size_t i=0; i<3; i++) {
-        MatrixFr r_vts = vertices;
-        for (size_t j=0; j<num_vertices; j++) {
-            r_vts(j, i) = -r_vts(j, i) + 2 * m_octa_cell_bbox_min[i];
-        }
-
-        MatrixIr r_voxels = voxels.array() + num_vertices;
-        r_voxels.col(0).swap(r_voxels.col(1));
-
-        vertices = MatrixUtils::vstack<MatrixFr>({vertices, r_vts});
-        voxels = MatrixUtils::vstack<MatrixIr>({voxels, r_voxels});
-        num_vertices = vertices.rows();
-    }
-
-    DuplicatedVertexRemoval remover(vertices, voxels);
-    remover.run(1e-12);
-    vertices = remover.get_vertices();
-    voxels = remover.get_faces();
-
-    Boundary::Ptr bd = Boundary::extract_volume_boundary_raw(vertices, voxels);
-    m_vertices = vertices;
-    m_faces = bd->get_boundaries();
-
-    remove_isolated_vertices();
 }
 
 void IsotropicPeriodicInflator::update_face_sources() {

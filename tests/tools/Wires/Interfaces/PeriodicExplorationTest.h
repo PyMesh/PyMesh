@@ -55,6 +55,7 @@ class PeriodicExplorationTest : public WireTest {
 };
 
 TEST_F(PeriodicExplorationTest, brick5_periodic_timing) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -103,17 +104,19 @@ TEST_F(PeriodicExplorationTest, brick5_periodic_timing) {
             attr_names.push_back(attr_name);
         }
 
-        std::stringstream sin;
-        sin << "exploration_brick5_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_brick5_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         std::cout << ".";
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, brick5) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -162,17 +165,19 @@ TEST_F(PeriodicExplorationTest, brick5) {
             attr_names.push_back(attr_name);
         }
 
-        std::stringstream sin;
-        sin << "exploration_brick5_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_brick5_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         std::cout << ".";
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, pattern0050) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "pattern0050.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -215,14 +220,15 @@ TEST_F(PeriodicExplorationTest, pattern0050) {
             attr_names.push_back(attr_name);
         }
 
-        std::stringstream sin;
-        sin << "exploration_diamond_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_diamond_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         std::cout << ".";
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, finite_difference) {
@@ -284,6 +290,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
 }
 
 TEST_F(PeriodicExplorationTest, gradient_descent) {
+#if WITH_TETGEN
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -337,9 +344,9 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
             }
         }
 
-        std::stringstream sin;
-        sin << "exploration_isotropic_brick5_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_isotropic_brick5_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         VectorF dofs = explorer.get_dofs();
         dofs += grad * step_size;
@@ -349,6 +356,7 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, debug) {
@@ -392,6 +400,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
 }
 
 TEST_F(PeriodicExplorationTest, pattern0746) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "pattern0746.wire", 5, 0.5);
     explorer.with_all_isotropic_parameters(ParameterCommon::EDGE);
@@ -418,6 +427,7 @@ TEST_F(PeriodicExplorationTest, pattern0746) {
 
     MatrixFr vertices = explorer.get_vertices();
     ASSERT_LT(0, vertices.rows());
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, printability) {
