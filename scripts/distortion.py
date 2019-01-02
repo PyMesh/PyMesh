@@ -91,7 +91,7 @@ def compute_distortion_energies_2D(mesh):
     J_inv = map(invert_J, zip(Js, J_det));
     J_inv_F = np.array([np.trace(np.dot(Ji.T, Ji)) for Ji in J_inv]);
 
-    conformal_amips = np.divide(J_F, np.cbrt(np.square(J_det)));
+    conformal_amips = np.divide(J_F, J_det);
     finite_conformal_amips = np.isfinite(conformal_amips);
     symmetric_dirichlet = J_F + J_inv_F;
     finite_symmetric_dirichlet = np.isfinite(symmetric_dirichlet);
