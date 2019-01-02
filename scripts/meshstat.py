@@ -181,7 +181,7 @@ def print_extended_info(mesh, info):
         num_v_cc = 0;
     isolated_vertices = mesh.num_isolated_vertices;
     duplicated_faces = mesh.num_duplicated_faces;
-    unique_vertices = np.unique(mesh.vertices, axis=0);
+    unique_vertices = pymesh.unique_rows(mesh.vertices)[0];
     duplicated_vertices = mesh.num_vertices - len(unique_vertices);
 
     degenerated_indices = pymesh.get_degenerated_faces(mesh);
