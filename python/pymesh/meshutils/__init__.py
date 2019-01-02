@@ -37,6 +37,8 @@ from .split_long_edges import split_long_edges_raw
 from .face_utils import is_colinear
 from .face_utils import get_degenerated_faces
 from .face_utils import get_degenerated_faces_raw
+from .face_utils import get_triangle_orientations
+from .face_utils import get_triangle_orientations_raw
 from .subdivide import subdivide
 from .voxel_utils import get_tet_orientations
 from .voxel_utils import get_tet_orientations_raw
@@ -62,6 +64,8 @@ __all__ = [
         "generate_regular_tetrahedron",
         "get_degenerated_faces",
         "get_degenerated_faces_raw",
+        "get_triangle_orientations",
+        "get_triangle_orientations_raw",
         "get_tet_orientations",
         "get_tet_orientations_raw",
         "hex_to_tet",

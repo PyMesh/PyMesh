@@ -158,6 +158,8 @@ def print_quantile_info(mesh, info):
                 title="Voxel radius ratio", with_total=False);
 
 def print_voxel_info(mesh, info):
+    if mesh.dim == 2:
+        return;
     if (mesh.num_voxels == 0):
         print_section_header("Volume Estimation");
         volume = mesh.volume;
@@ -222,6 +224,12 @@ def print_extended_info(mesh, info):
             num_combinatorial_degenerated_faces;
     info["num_geometrical_degenerated_faces"] =\
             num_degenerated - num_combinatorial_degenerated_faces;
+
+    if mesh.dim == 2 and mesh.vertex_per_face == 3:
+        tri_orientations = pymesh.get_triangle_orientations(mesh);
+        num_inverted_tris = np.sum(tri_orientations < 0);
+        print_property("num inverted triangles:", num_inverted_tris, 0);
+        info["num_inverted_triangless"] = int(num_inverted_tris);
 
     if mesh.num_voxels > 0 and mesh.vertex_per_voxel == 4:
         tet_orientations = pymesh.get_tet_orientations(mesh);
@@ -320,7 +328,7 @@ def parse_args():
 
 def main():
     args = parse_args();
-    mesh = pymesh.load_mesh(args.input_mesh);
+    mesh = pymesh.load_mesh(args.input_mesh, drop_zero_dim=True);
     info = load_info(args.input_mesh);
 
     header = "Summary of {}".format(args.input_mesh);

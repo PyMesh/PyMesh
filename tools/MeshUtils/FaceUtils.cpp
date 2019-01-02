@@ -2,6 +2,7 @@
 #include "FaceUtils.h"
 
 #include <Predicates/predicates.h>
+#include <Core/Exception.h>
 
 using namespace PyMesh;
 
@@ -68,4 +69,26 @@ std::vector<size_t> FaceUtils::get_degenerated_faces(
         }
     }
     return result;
+}
+
+VectorF FaceUtils::get_triangle_orientations(
+        const MatrixFr& vertices, const MatrixIr& faces) {
+    const size_t num_faces = faces.rows();
+    const size_t dim = vertices.cols();
+    if (dim != 2) {
+        throw NotImplementedError(
+                "Triangle orientation is only well-defined in 2D");
+    }
+
+    exactinit();
+
+    VectorF results(num_faces);
+    for (size_t i=0; i<num_faces; i++) {
+        const auto& f = faces.row(i);
+        double v0_xy[2] = {vertices(f[0], 0), vertices(f[0], 1)};
+        double v1_xy[2] = {vertices(f[1], 0), vertices(f[1], 1)};
+        double v2_xy[2] = {vertices(f[2], 0), vertices(f[2], 1)};
+        results[i] = orient2d(v0_xy, v1_xy, v2_xy);
+    }
+    return results;
 }

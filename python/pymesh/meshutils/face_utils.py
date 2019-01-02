@@ -38,3 +38,26 @@ def get_degenerated_faces(mesh):
     """ A thin wrapper for :py:func:`get_degenerated_faces_raw`.
     """
     return get_degenerated_faces_raw(mesh.vertices, mesh.faces);
+
+def get_triangle_orientations_raw(vertices, faces):
+    """ Compute orientation of each triangle.  A triangle is considered as
+    positively oriented iff its three corners are counterclockwise ordered.
+
+    Args:
+        vertice (``numpy.ndarray``): n by 3 matrix representing vertices.
+        faces (``numpy.ndarray``): m by 3 matrix of vertex indices representing
+            triangles.
+
+    Returns:
+        A list of m floats, where
+            * Positive number => triangle is positively oriented.
+            *               0 => triangle is degenerate.
+            * Negative number => triangle is negatively oriented.
+    """
+    return PyMesh.get_triangle_orientations(vertices, faces);
+
+def get_triangle_orientations(mesh):
+    """ A thin wrapper of ``get_triangle_orientations_raw``.
+    """
+    return get_triangle_orientations_raw(mesh.vertices, mesh.faces);
+

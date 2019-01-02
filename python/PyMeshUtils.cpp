@@ -47,6 +47,7 @@ void init_MeshUtils(py::module& m) {
     m.def("is_colinear_2D", &FaceUtils::is_colinear_2D);
     m.def("is_colinear_3D", &FaceUtils::is_colinear_3D);
     m.def("get_degenerated_faces", &FaceUtils::get_degenerated_faces);
+    m.def("get_triangle_orientations", &FaceUtils::get_triangle_orientations);
     m.def("get_tet_orientations", &VoxelUtils::get_tet_orientations);
     m.def("is_vertex_manifold", &ManifoldCheck::is_vertex_manifold);
     m.def("is_edge_manifold", &ManifoldCheck::is_edge_manifold);
