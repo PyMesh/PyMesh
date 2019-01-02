@@ -2,7 +2,6 @@ include README* CMakeLists.txt Settings.cmake
 recursive-include src *
 recursive-include tools *
 recursive-include tests *
-recursive-include examples *
 recursive-include cmake *.cmake
 recursive-include cmake *.py
 recursive-include scripts *.py
