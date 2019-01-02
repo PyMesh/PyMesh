@@ -31,6 +31,8 @@ def parse_args():
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="INFO");
+    parser.add_argument("--with-features", '-F', action="store_true",
+            help="TriWild specific option to preserve features");
     parser.add_argument("input_svg");
     parser.add_argument("output_mesh");
     return parser.parse_args();
@@ -121,15 +123,20 @@ def resolve_self_intersection(wires, logger):
     wires.load(vertices, edges);
     return wires;
 
-def triangulate(wires, engine, logger, wire_file):
+def triangulate(wires, engine, logger, wire_file, json_file):
     if wires.num_vertices == 0:
         return pymesh.form_mesh(np.zeros((0, 2)), np.zeros((0,3)));
     basename = os.path.splitext(wire_file)[0];
     if engine == "triwild":
         out_mesh = "{}.stl".format(basename);
         log_file = "{}_triwild.log".format(basename);
-        command = "TriWild --choice TRI --is-log 0 --input {} --output {}".format(
-                wire_file, out_mesh);
+        if json_file is not None:
+            command = "TriWild --choice TRI --is-log 0 --feature-input {} --input {} --output {}".format(
+                    json_file, wire_file, out_mesh);
+        else:
+            command = "TriWild --choice TRI --is-log 0 --input {} --output {}".format(
+                    wire_file, out_mesh);
+        print(command);
         start_time = time();
         check_call(command.split());
         finish_time = time();
@@ -178,13 +185,18 @@ def main():
         wires = resolve_self_intersection(wires, logger);
     if args.with_cleanup:
         wires = cleanup(wires, logger);
+    if args.with_features:
+        json_file = "{}.json".format(os.path.splitext(args.input_svg)[0]);
+        assert(os.path.exists(json_file));
+    else:
+        json_file = None;
 
     basename = os.path.splitext(args.output_mesh)[0];
     wire_file = basename + ".wire";
     wires.write_to_file(wire_file);
 
     if args.with_triangulation:
-        mesh = triangulate(wires, args.engine, logger, wire_file);
+        mesh = triangulate(wires, args.engine, logger, wire_file, json_file);
 
         if mesh.num_vertices > 0 and args.with_cell_label:
             compute_cell_labels(wires, mesh, logger);
