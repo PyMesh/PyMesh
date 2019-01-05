@@ -200,7 +200,10 @@ def main():
             # Avoid data loss from conversion.
             assert(not args.with_cleanup);
             assert(not args.resolve_self_intersection);
-            wire_file = args.input_svg;
+            with open(args.input_svg, 'r') as fin:
+                data = fin.read();
+            with open(wire_file, 'w') as fout:
+                fout.write(data);
         mesh = triangulate(wires, args.engine, logger, wire_file, json_file);
 
         if mesh.num_vertices > 0 and args.with_cell_label:
