@@ -128,14 +128,14 @@ def triangulate(wires, engine, logger, wire_file, json_file):
         return pymesh.form_mesh(np.zeros((0, 2)), np.zeros((0,3)));
     basename = os.path.splitext(wire_file)[0];
     if engine == "triwild":
-        out_mesh = "{}.stl".format(basename);
+        out_mesh = "{}_linear.msh".format(basename);
         log_file = "{}_triwild.log".format(basename);
         if json_file is not None:
             command = "TriWild --choice TRI --is-log 0 --feature-input {} --input {} --output {}".format(
-                    json_file, wire_file, out_mesh);
+                    json_file, wire_file, basename);
         else:
             command = "TriWild --choice TRI --is-log 0 --input {} --output {}".format(
-                    wire_file, out_mesh);
+                    wire_file, basename);
         print(command);
         start_time = time();
         check_call(command.split());
