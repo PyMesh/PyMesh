@@ -196,6 +196,11 @@ def main():
     wires.write_to_file(wire_file);
 
     if args.with_triangulation:
+        if os.path.splitext(args.input_svg)[1] != ".svg" and args.with_features:
+            # Avoid data loss from conversion.
+            assert(not args.with_cleanup);
+            assert(not args.resolve_self_intersection);
+            wire_file = args.input_svg;
         mesh = triangulate(wires, args.engine, logger, wire_file, json_file);
 
         if mesh.num_vertices > 0 and args.with_cell_label:
