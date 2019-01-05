@@ -131,10 +131,10 @@ def triangulate(wires, engine, logger, wire_file, json_file):
         out_mesh = "{}_linear.msh".format(basename);
         log_file = "{}_triwild.log".format(basename);
         if json_file is not None:
-            command = "TriWild --choice TRI --is-log 0 --feature-input {} --input {} --output {}".format(
+            command = "TriWild --choice TRI --is-log 0 --int-edge-length 20 --feature-input {} --input {} --output {}".format(
                     json_file, wire_file, basename);
         else:
-            command = "TriWild --choice TRI --is-log 0 --input {} --output {}".format(
+            command = "TriWild --choice TRI --is-log 0 --int-edge-length 20 --input {} --output {}".format(
                     wire_file, basename);
         print(command);
         start_time = time();
