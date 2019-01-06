@@ -134,8 +134,8 @@ def triangulate(wires, engine, logger, wire_file, json_file):
             command = "TriWild --choice TRI --is-log 0 --int-edge-length 20 --feature-input {} --input {} --output {}".format(
                     json_file, wire_file, basename);
         else:
-            command = "TriWild --choice TRI --is-log 0 --int-edge-length 20 --input {} --output {}".format(
-                    wire_file, basename);
+            command = "TriWild --choice TRI --is-log 0 --log-file {} --int-edge-length 20 --output-debug-mesh=0 --skip-eps --input {} --output {}".format(
+                    log_file, wire_file, basename);
         print(command);
         start_time = time();
         check_call(command.split());
@@ -167,6 +167,30 @@ def compute_cell_labels(wires, mesh, logger):
     cell_ids[cell_type != pymesh.Arrangement2.ElementType.CELL] = -1;
     mesh.add_attribute("cell");
     mesh.set_attribute("cell", cell_ids);
+
+#def solve_heat_equation(mesh):
+#    cell_ids = mesh.get_attribute("cell").ravel().astype(int);
+#    mesh = pymesh.cut_mesh(mesh, cell_ids);
+#    bd_vertices = mesh.boundary_vertices.ravel();
+#    rhs = np.zeros(mesh.num_vertices);
+#    rhs[bd_vertices] = 1.0;
+#
+#    assembler = pymesh.Assembler(mesh);
+#    L = assembler.assemble("laplacian");
+#    M = assembler.assemble("mass");
+#
+#    mesh.add_attribute("face_area");
+#    t = np.mean(mesh.get_attribute("face_area").ravel());
+#
+#    solver = pymesh.SparseSolver.create("LDLT");
+#    solver.compute(M - t * L);
+#    s = solver.solve(rhs);
+#
+#    mesh.add_attribute("s");
+#    mesh.set_attribute("s", s);
+#    mesh.add_attribute("cell");
+#    mesh.set_attribute("cell", cell_ids);
+#    return mesh;
 
 def main():
     args = parse_args();
@@ -208,6 +232,7 @@ def main():
 
         if mesh.num_vertices > 0 and args.with_cell_label:
             compute_cell_labels(wires, mesh, logger);
+            #mesh = solve_heat_equation(mesh);
             pymesh.save_mesh(args.output_mesh, mesh, "cell");
         else:
             pymesh.save_mesh(args.output_mesh, mesh);
