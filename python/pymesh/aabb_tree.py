@@ -24,6 +24,23 @@ class AABBTree:
     def do_intersect_segments(self, vertices, edges):
         return self.__raw_tree.do_intersect_segments(vertices, edges).squeeze();
 
+class AABBTree2:
+    def __init__(self):
+        self.__raw_tree = None;
+
+    def load_data(self, points, segments):
+        self.__raw_tree = PyMesh.AABBTree2(points, segments);
+
+    def look_up(self, pts):
+        sq_dists, segment_indices = \
+                self.__raw_tree.look_up(pts);
+        return sq_dists.squeeze(), segment_indices.squeeze();
+
+    def look_up_with_closest_points(self, pts):
+        sq_dists, segment_indices, closest_pts = \
+                self.__raw_tree.look_up_with_closest_points(pts);
+        return sq_dists.squeeze(), segment_indices.squeeze(), closest_pts;
+
 class BVH:
     available_engines = PyMesh.BVHEngine.available_engines;
 

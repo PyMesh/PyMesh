@@ -6,6 +6,7 @@
 
 #if WITH_CGAL
 #include <CGAL/AABBTree.h>
+#include <CGAL/AABBTree2.h>
 #endif
 #include <BVH/BVHEngine.h>
 
@@ -34,6 +35,36 @@ void init_AABB(py::module &m) {
                 VectorF squared_dists;
                 VectorI closest_face_indices;
                 MatrixFr closest_points;
+                tree.look_up_with_closest_points(
+                        points,
+                        squared_dists,
+                        closest_face_indices,
+                        closest_points);
+                return std::make_tuple(
+                        squared_dists,
+                        closest_face_indices,
+                        closest_points);
+                });
+
+    py::class_<AABBTree2, std::shared_ptr<AABBTree2> >(m, "AABBTree2")
+        .def(py::init<const Matrix2Fr&, const Matrix2Ir&>())
+        .def("look_up",
+                [](AABBTree2& tree, const Matrix2Fr& points) {
+                VectorF squared_dists;
+                VectorI closest_face_indices;
+                tree.look_up(
+                        points,
+                        squared_dists,
+                        closest_face_indices);
+                return std::make_tuple(
+                        squared_dists,
+                        closest_face_indices);
+                })
+        .def("look_up_with_closest_points",
+                [](AABBTree2& tree, const Matrix2Fr& points) {
+                VectorF squared_dists;
+                VectorI closest_face_indices;
+                Matrix2Fr closest_points;
                 tree.look_up_with_closest_points(
                         points,
                         squared_dists,
