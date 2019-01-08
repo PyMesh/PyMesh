@@ -168,29 +168,18 @@ def compute_cell_labels(wires, mesh, logger):
     mesh.add_attribute("cell");
     mesh.set_attribute("cell", cell_ids);
 
-#def solve_heat_equation(mesh):
-#    cell_ids = mesh.get_attribute("cell").ravel().astype(int);
-#    mesh = pymesh.cut_mesh(mesh, cell_ids);
-#    bd_vertices = mesh.boundary_vertices.ravel();
-#    rhs = np.zeros(mesh.num_vertices);
-#    rhs[bd_vertices] = 1.0;
-#
-#    assembler = pymesh.Assembler(mesh);
-#    L = assembler.assemble("laplacian");
-#    M = assembler.assemble("mass");
-#
-#    mesh.add_attribute("face_area");
-#    t = np.mean(mesh.get_attribute("face_area").ravel());
-#
-#    solver = pymesh.SparseSolver.create("LDLT");
-#    solver.compute(M - t * L);
-#    s = solver.solve(rhs);
-#
-#    mesh.add_attribute("s");
-#    mesh.set_attribute("s", s);
-#    mesh.add_attribute("cell");
-#    mesh.set_attribute("cell", cell_ids);
-#    return mesh;
+def solve_heat_equation(mesh):
+    cell_ids = mesh.get_attribute("cell").ravel().astype(int);
+    cut_mesh = pymesh.cut_mesh(mesh, cell_ids);
+
+    tree = pymesh.AABBTree2();
+    tree.load_data(cut_mesh.vertices, cut_mesh.boundary_edges);
+    sq_dist, indices = tree.look_up(mesh.vertices);
+
+    mesh.add_attribute("sq_dist");
+    mesh.set_attribute("sq_dist", sq_dist);
+
+    return mesh;
 
 def main():
     args = parse_args();
@@ -220,7 +209,7 @@ def main():
     wires.write_to_file(wire_file);
 
     if args.with_triangulation:
-        if os.path.splitext(args.input_svg)[1] != ".svg" and args.with_features:
+        if os.path.splitext(args.input_svg)[1] != ".svg" and args.engine == "triwild":
             # Avoid data loss from conversion.
             assert(not args.with_cleanup);
             assert(not args.resolve_self_intersection);
@@ -232,8 +221,8 @@ def main():
 
         if mesh.num_vertices > 0 and args.with_cell_label:
             compute_cell_labels(wires, mesh, logger);
-            #mesh = solve_heat_equation(mesh);
-            pymesh.save_mesh(args.output_mesh, mesh, "cell");
+            mesh = solve_heat_equation(mesh);
+            pymesh.save_mesh(args.output_mesh, mesh, "cell", "sq_dist");
         else:
             pymesh.save_mesh(args.output_mesh, mesh);
 
