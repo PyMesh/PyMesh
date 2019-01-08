@@ -104,7 +104,7 @@ def print_edge_info(mesh, info):
     if (mesh.num_faces == 0): return;
     mesh.add_attribute("edge_length");
     edge_length = mesh.get_attribute("edge_length");
-    quantile_breakdown(edge_length, "edge_lengthlli", info,
+    quantile_breakdown(edge_length, "edge_length", info,
             title = "Edge Length", with_total=False);
 
 def print_face_info(mesh, info):
