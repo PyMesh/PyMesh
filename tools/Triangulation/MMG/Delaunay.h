@@ -13,6 +13,7 @@ namespace MMG {
 
         public:
             virtual void run();
+            virtual void refine(const MatrixFr& metric);
     };
 }
 }

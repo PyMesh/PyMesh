@@ -14,7 +14,10 @@ void init_Triangulation(py::module& m) {
         .def_static("create", &Triangulation::create)
         .def("set_points", &Triangulation::set_points)
         .def("set_segments", &Triangulation::set_segments)
+        .def("set_vertices", &Triangulation::set_vertices)
+        .def("set_faces", &Triangulation::set_faces)
         .def("run", &Triangulation::run)
+        .def("refine", &Triangulation::refine)
         .def("get_vertices", &Triangulation::get_vertices)
         .def("get_faces", &Triangulation::get_faces);
 }

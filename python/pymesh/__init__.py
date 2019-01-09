@@ -43,7 +43,7 @@ from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
 from .aabb_tree import AABBTree, AABBTree2, BVH, distance_to_mesh, do_intersect
 from .triangle import triangle
-from .triangulate import triangulate_beta
+from .triangulate import triangulate_beta, refine_triangulation
 from .wires import *
 from .snap_rounding import snap_rounding
 from .SparseSolver import SparseSolver
@@ -98,6 +98,7 @@ __all__ = [
         "map_vertex_attribute",
         "map_face_attribute",
         "map_corner_attribute",
+        "refine_triangulation",
         "unique_rows"
         ];
 __all__ += meshutils.__all__;

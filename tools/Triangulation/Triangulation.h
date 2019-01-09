@@ -29,6 +29,19 @@ namespace PyMesh {
                         "Triangulation algorithm is not implemented");
             }
 
+            virtual void refine(const MatrixFr& metric) {
+                throw NotImplementedError(
+                        "Refinement algorithm is not implemented");
+            }
+
+            void set_vertices(const Matrix2Fr& vertices) {
+                m_vertices = vertices;
+            }
+
+            void set_faces(const Matrix3Ir& faces) {
+                m_faces = faces;
+            }
+
             const Matrix2Fr& get_vertices() const {
                 return m_vertices;
             }
