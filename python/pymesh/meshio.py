@@ -4,6 +4,8 @@ import os.path
 from .Mesh import Mesh
 import PyMesh
 
+from save_svg import save_svg
+
 def load_mesh(filename, drop_zero_dim=False):
     """ Load mesh from a file.
 
@@ -164,8 +166,12 @@ def save_mesh(filename, mesh, *attributes, **setting):
         >>> box = pymesh.generate_box_mesh();
         >>> pymesh.save_mesh("tmp.stl", box, ascii=True);
     """
-    if os.path.splitext(filename)[1] == ".geogram":
+    ext = os.path.splitext(filename)[1];
+    if ext == ".geogram":
         PyMesh.save_geogram_mesh(filename, mesh.raw_mesh);
+        return;
+    elif ext == ".svg":
+        save_svg(filename, mesh);
         return;
     writer = PyMesh.MeshWriter.create(filename);
     for attr in attributes:
