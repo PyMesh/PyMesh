@@ -4,7 +4,7 @@ import os.path
 from .Mesh import Mesh
 import PyMesh
 
-from save_svg import save_svg
+from .save_svg import save_svg
 
 def load_mesh(filename, drop_zero_dim=False):
     """ Load mesh from a file.
