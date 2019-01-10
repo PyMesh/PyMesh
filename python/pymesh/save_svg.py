@@ -1,4 +1,4 @@
-from version import __version__
+from .version import __version__
 import logging
 
 def save_svg(filename, mesh):
