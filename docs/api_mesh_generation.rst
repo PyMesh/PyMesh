@@ -14,7 +14,7 @@ most of its powers.
 Tetrahedralization
 ------------------
 
-In contrast with 2D, tetrahedralization in 3D is a much hard problem.  Many
+In contrast with 2D, tetrahedralization in 3D is a much harder problem.  Many
 algorithms tries to tackle this problem from different angles.  No single
 algorithm or package standouts as the best.  We therefore offer a number of
 different engines for our users.
