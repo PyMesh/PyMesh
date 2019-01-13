@@ -119,6 +119,7 @@ setup(
         scripts=[
             "scripts/add_element_attribute.py",
             "scripts/add_index.py",
+            "scripts/arrangement_2d.py",
             "scripts/bbox.py",
             "scripts/box_gen.py",
             "scripts/boolean.py",
