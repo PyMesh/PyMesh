@@ -28,6 +28,7 @@ def parse_args():
     parser.add_argument("--with-cell-label", "-l", action="store_true");
     parser.add_argument("--with-cleanup", "-c", action="store_true");
     parser.add_argument("--with-triangulation", "-t", action="store_true");
+    parser.add_argument("--stage", type=int, default=1);
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="INFO");
@@ -123,7 +124,7 @@ def resolve_self_intersection(wires, logger):
     wires.load(vertices, edges);
     return wires;
 
-def triangulate(wires, engine, logger, wire_file, json_file):
+def triangulate(wires, engine, stage, logger, wire_file, json_file):
     if wires.num_vertices == 0:
         return pymesh.form_mesh(np.zeros((0, 2)), np.zeros((0,3)));
     basename = os.path.splitext(wire_file)[0];
@@ -131,11 +132,11 @@ def triangulate(wires, engine, logger, wire_file, json_file):
         out_mesh = "{}_linear.msh".format(basename);
         log_file = "{}_triwild.log".format(basename);
         if json_file is not None:
-            command = "TriWild --choice TRI --is-log 0 --log-file {} --int-edge-length 20 --feature-input {} --output-debug-mesh=0 --skip-eps --input {} --output {}".format(
-                    log_file, json_file, wire_file, basename);
+            command = "TriWild --choice TRI --is-log 0 --stage {} --log-file {} --int-edge-length 20 --feature-input {} --output-debug-mesh=0 --skip-eps --input {} --output {}".format(
+                    stage, log_file, json_file, wire_file, basename);
         else:
-            command = "TriWild --choice TRI --is-log 0 --log-file {} --int-edge-length 20 --output-debug-mesh=0 --skip-eps --input {} --output {}".format(
-                    log_file, wire_file, basename);
+            command = "TriWild --choice TRI --is-log 0 --stage {} --log-file {} --int-edge-length 20 --output-debug-mesh=0 --skip-eps --input {} --output {}".format(
+                    stage, log_file, wire_file, basename);
         print(command);
         start_time = time();
         check_call(command.split());
@@ -217,7 +218,7 @@ def main():
                 data = fin.read();
             with open(wire_file, 'w') as fout:
                 fout.write(data);
-        mesh = triangulate(wires, args.engine, logger, wire_file, json_file);
+        mesh = triangulate(wires, args.engine, args.stage, logger, wire_file, json_file);
 
         if mesh.num_vertices > 0 and args.with_cell_label:
             compute_cell_labels(wires, mesh, logger);
