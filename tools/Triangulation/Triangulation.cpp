@@ -15,6 +15,7 @@
 #ifdef WITH_TRIANGLE
 #include "ShewchukTriangle/ConformingDelaunay.h"
 #include "ShewchukTriangle/ConstrainedDelaunay.h"
+#include "ShewchukTriangle/Refiner.h"
 #endif
 
 #ifdef WITH_GEOGRAM
@@ -52,6 +53,8 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
         return Ptr(new Triangle::ConformingDelaunay());
     } else if (engine_name == "triangle_constrained_delaunay") {
         return Ptr(new Triangle::ConstrainedDelaunay());
+    } else if (engine_name == "triangle_refiner") {
+        return Ptr(new Triangle::Refiner());
     }
 #endif
 
