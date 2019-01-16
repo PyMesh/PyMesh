@@ -10,6 +10,7 @@ addons:
     homebrew:
         packages:
             - ccache
+            - cmake
 matrix:
   include:
     - os: osx
@@ -18,8 +19,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -28,8 +27,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
         - pip install --upgrade pip
       install:
         - pip install -r python/requirements.txt
@@ -39,8 +36,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
         - python --version
         - pip --version
       install:
@@ -51,8 +46,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
         - python --version
         - curl https://bootstrap.pypa.io/get-pip.py | sudo python
         - pip --version
@@ -64,8 +57,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
         - python --version
         - curl https://bootstrap.pypa.io/get-pip.py | sudo python
         - pip --version
@@ -77,8 +68,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
         - python --version
         - curl https://bootstrap.pypa.io/get-pip.py | sudo python
         - pip --version
@@ -90,8 +79,6 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew update
-        - brew outdated cmake || brew upgrade cmake
       install:
         - pip2 install --user -r python/requirements.txt
     - os: linux
