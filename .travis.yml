@@ -5,17 +5,17 @@ virtualenv:
 git:
     submodules: false
     depth: 1
+addons:
+    homebrew:
+        packages:
+            - ccache
+            - cmake
 cache: ccache
 matrix:
   include:
     - os: osx
       osx_image: xcode10
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
       before_install:
         - git submodule update --init
         - sw_vers
@@ -24,11 +24,6 @@ matrix:
     - os: osx
       osx_image: xcode9.4
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
       before_install:
         - git submodule update --init
         - sw_vers
@@ -38,11 +33,6 @@ matrix:
     - os: osx
       osx_image: xcode9.3
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
       before_install:
         - git submodule update --init
         - sw_vers
@@ -53,13 +43,8 @@ matrix:
     - os: osx
       osx_image: xcode9.2
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
-              update: true
       before_install:
+        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
         - python --version
@@ -70,13 +55,8 @@ matrix:
     - os: osx
       osx_image: xcode9.1
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
-              update: true
       before_install:
+        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
         - python --version
@@ -87,13 +67,8 @@ matrix:
     - os: osx
       osx_image: xcode9
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
-              update: true
       before_install:
+        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
         - python --version
@@ -104,13 +79,8 @@ matrix:
     - os: osx
       osx_image: xcode8.3
       compiler: clang
-      addons:
-          homebrew:
-              packages:
-                  - ccache
-                  - cmake
-              update: true
       before_install:
+        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
       install:
