@@ -162,4 +162,10 @@ To check PyMesh is installed correctly, run the following python unit tests::
 Once again, make sure all unit tests are passed, and report any unit test
 failures.
 
+### Feedback ###
+
+Thank you for using PyMesh!  Please consider help PyMesh improve by leaving
+[feedback]!
+
 [teaser]: docs/_static/pymesh_teaser.jpg
+[feedback]: https://docs.google.com/forms/d/e/1FAIpQLSc8YAzx1SL4t3qntzahYd0igPNGyIxw6N8eRs-PloYlwbPaXg/viewform?usp=pp_url
