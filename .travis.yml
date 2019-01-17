@@ -43,8 +43,13 @@ matrix:
     - os: osx
       osx_image: xcode9.2
       compiler: clang
+      addons:
+          homebrew:
+              packages:
+                  - ccache
+                  - cmake
+              update: true
       before_install:
-        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
         - python --version
@@ -55,8 +60,13 @@ matrix:
     - os: osx
       osx_image: xcode9.1
       compiler: clang
+      addons:
+          homebrew:
+              packages:
+                  - ccache
+                  - cmake
+              update: true
       before_install:
-        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
         - python --version
@@ -67,8 +77,13 @@ matrix:
     - os: osx
       osx_image: xcode9
       compiler: clang
+      addons:
+          homebrew:
+              packages:
+                  - ccache
+                  - cmake
+              update: true
       before_install:
-        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
         - python --version
@@ -79,8 +94,13 @@ matrix:
     - os: osx
       osx_image: xcode8.3
       compiler: clang
+      addons:
+          homebrew:
+              packages:
+                  - ccache
+                  - cmake
+              update: true
       before_install:
-        - brew outdated cmake || brew upgrade cmake
         - git submodule update --init
         - sw_vers
       install:
