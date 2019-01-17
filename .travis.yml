@@ -157,6 +157,5 @@ script:
     - ccache -V && ccache --show-stats && ccache --zero-stats
     - ./setup.py build
     - ./setup.py install --user --prefix=
-    - python -c "import pymesh; pymesh.test()"
-    - ccache --show-stats
+      #- python -c "import pymesh; pymesh.test()"
 
