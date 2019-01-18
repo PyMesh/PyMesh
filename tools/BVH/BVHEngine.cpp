@@ -31,7 +31,7 @@ BVHEngine::Ptr BVHEngine::create(const std::string& engine_name, size_t dim) {
             throw NotImplementedError(
                     "Only 3D meshes are supported by CGAL BVH");
         }
-        return std::make_shared<CGAL::AABBTree>();
+        return std::make_shared<_CGAL::AABBTree>();
     }
 #endif
 #if WITH_GEOGRAM

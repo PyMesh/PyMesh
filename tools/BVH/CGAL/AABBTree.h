@@ -13,7 +13,7 @@
 #include <memory>
 
 namespace PyMesh {
-namespace CGAL {
+namespace _CGAL {
 
 class AABBTree : public BVHEngine {
     public:

@@ -11,7 +11,7 @@
 #include <CGAL/Delaunay_mesher_2.h>
 #include <CGAL/Delaunay_mesh_face_base_2.h>
 
-using namespace PyMesh::CGAL;
+using namespace PyMesh::_CGAL;
 
 void ConformingDelaunay::run() {
     using K = ::CGAL::Exact_predicates_inexact_constructions_kernel;

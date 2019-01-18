@@ -5,7 +5,7 @@
 
 using namespace PyMesh;
 
-void PyMesh::CGAL::AABBTree::build() {
+void PyMesh::_CGAL::AABBTree::build() {
     m_triangles.clear();
     assert(m_faces.cols() == 3);
 
@@ -25,7 +25,7 @@ void PyMesh::CGAL::AABBTree::build() {
     m_tree->accelerate_distance_queries();
 }
 
-void PyMesh::CGAL::AABBTree::lookup(const MatrixFr& points,
+void PyMesh::_CGAL::AABBTree::lookup(const MatrixFr& points,
         VectorF& squared_distances,
         VectorI& closest_faces,
         MatrixFr& closest_points) const {

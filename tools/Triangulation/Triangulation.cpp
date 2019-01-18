@@ -60,9 +60,9 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
 
 #ifdef WITH_CGAL
     if (engine_name == "cgal_constrained_delaunay") {
-        return Ptr(new PyMesh::CGAL::ConstrainedDelaunay());
+        return Ptr(new PyMesh::_CGAL::ConstrainedDelaunay());
     } else if (engine_name == "cgal_conforming_delaunay") {
-        return Ptr(new PyMesh::CGAL::ConformingDelaunay());
+        return Ptr(new PyMesh::_CGAL::ConformingDelaunay());
     }
 #endif
 

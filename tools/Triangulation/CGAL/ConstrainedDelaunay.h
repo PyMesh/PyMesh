@@ -5,7 +5,7 @@
 #include <Triangulation/Triangulation.h>
 
 namespace PyMesh {
-namespace CGAL {
+namespace _CGAL {
     class ConstrainedDelaunay : public Triangulation {
         public:
             ConstrainedDelaunay() = default;

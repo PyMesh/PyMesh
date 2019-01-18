@@ -8,7 +8,7 @@
 #include <CGAL/Constrained_Delaunay_triangulation_2.h>
 #include <CGAL/Constrained_triangulation_plus_2.h>
 
-using namespace PyMesh::CGAL;
+using namespace PyMesh::_CGAL;
 
 void ConstrainedDelaunay::run() {
     using K = ::CGAL::Exact_predicates_exact_constructions_kernel;
