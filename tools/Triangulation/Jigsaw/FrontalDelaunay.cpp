@@ -19,7 +19,7 @@ void Jigsaw::FrontalDelaunay::run() {
     input_jig._mesh_dims = 2;
     input_jig._mesh_kern = JIGSAW_KERN_DELFRONT;
     input_jig._geom_feat = true;
-    input_jig._mesh_top1 = true;
+    //input_jig._mesh_top1 = true;
 
     const size_t num_pts = m_points.rows();
     jigsaw_alloc_vert2(&input_mesh._vert2, num_pts);
