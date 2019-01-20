@@ -15,9 +15,11 @@ void Jigsaw::FrontalDelaunay::run() {
     jigsaw_init_msh_t(&input_mesh);
     jigsaw_init_jig_t(&input_jig);
     input_mesh._flags = JIGSAW_EUCLIDEAN_MESH;
-    //input_jig._verbosity = 1;
+    input_jig._verbosity = 1;
     input_jig._mesh_dims = 2;
     input_jig._mesh_kern = JIGSAW_KERN_DELFRONT;
+    input_jig._geom_feat = true;
+    input_jig._mesh_top1 = true;
 
     const size_t num_pts = m_points.rows();
     jigsaw_alloc_vert2(&input_mesh._vert2, num_pts);
@@ -36,6 +38,20 @@ void Jigsaw::FrontalDelaunay::run() {
         // Again, not sure what does itag do...
         input_mesh._edge2._data[i]._itag = i;
     }
+
+    jigsaw_alloc_bound(&input_mesh._bound, 4);
+    input_mesh._bound._data[0]._itag = 0;
+    input_mesh._bound._data[0]._indx = 0;
+    input_mesh._bound._data[0]._kind = JIGSAW_EDGE2_TAG;
+    input_mesh._bound._data[1]._itag = 0;
+    input_mesh._bound._data[1]._indx = 1;
+    input_mesh._bound._data[1]._kind = JIGSAW_EDGE2_TAG;
+    input_mesh._bound._data[2]._itag = 0;
+    input_mesh._bound._data[2]._indx = 2;
+    input_mesh._bound._data[2]._kind = JIGSAW_EDGE2_TAG;
+    input_mesh._bound._data[3]._itag = 0;
+    input_mesh._bound._data[3]._indx = 3;
+    input_mesh._bound._data[3]._kind = JIGSAW_EDGE2_TAG;
 
     jigsaw_msh_t output_mesh;
     auto status = jigsaw_make_mesh(

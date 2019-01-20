@@ -9,6 +9,7 @@ INSTALL(TARGETS jigsaw
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin)
 INSTALL(FILES
+    ${JIGSAW_DIR}/inc/jigsaw_const.h
     ${JIGSAW_DIR}/inc/lib_jigsaw.h
     ${JIGSAW_DIR}/inc/jigsaw_msh_t.h
     ${JIGSAW_DIR}/inc/jigsaw_jig_t.h
