@@ -14,6 +14,7 @@ void init_predicates(py::module&);
 void init_ConvexHull(py::module&);
 void init_Boolean(py::module&);
 void init_SelfIntersectionResolver(py::module&);
+void init_SkeletonExtraction(py::module&);
 void init_Tetrahedralization(py::module&);
 void init_OuterHull(py::module&);
 void init_WindingNumber(py::module&);
@@ -47,6 +48,7 @@ PYBIND11_MODULE(PyMesh, m) {
     init_ConvexHull(m);
     init_Boolean(m);
     init_SelfIntersectionResolver(m);
+    init_SkeletonExtraction(m);
     init_Tetrahedralization(m);
     init_OuterHull(m);
     init_WindingNumber(m);

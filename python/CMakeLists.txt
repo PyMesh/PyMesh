@@ -17,6 +17,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyOuterHull.cpp
     PyPredicates.cpp
     PySelfIntersectionResolver.cpp
+    PySkeletonExtraction.cpp
     PySparseSolver.cpp
     PyTetgen.cpp
     PyTetrahedralization.cpp
@@ -37,6 +38,7 @@ TARGET_LINK_LIBRARIES(PyMesh PRIVATE
     PyMesh::Tools::Compression
     PyMesh::Tools::ConvexHull
     PyMesh::Tools::SelfIntersection
+    PyMesh::Tools::SkeletonExtraction
     PyMesh::Tools::Boolean
     PyMesh::Tools::BVH
     PyMesh::Tools::OuterHull

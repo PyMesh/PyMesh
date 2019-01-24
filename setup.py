@@ -165,6 +165,7 @@ setup(
             "scripts/scale_mesh.py",
             "scripts/self_union.py",
             "scripts/separate.py",
+            "scripts/skeleton.py",
             "scripts/slice_mesh.py",
             "scripts/subdivide.py",
             "scripts/submesh.py",

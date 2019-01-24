@@ -4,11 +4,13 @@
 #include <vector>
 
 #include<boost/shared_ptr.hpp>
+
+#ifdef WITH_CGAL
+
 #include<CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include<CGAL/Polygon_2.h>
 #include<CGAL/create_straight_skeleton_2.h>
 
-//#ifdef WITH_CGAL
 typedef CGAL::Exact_predicates_inexact_constructions_kernel K ;
 typedef K::Point_2                   Point ;
 typedef CGAL::Polygon_2<K>           Polygon_2;
@@ -17,18 +19,13 @@ typedef boost::shared_ptr<Ss> SsPtr ;
 
 using namespace PyMesh;
 
-CreateSkeleton2::CreateSkeleton2(const MatrixFr& vertices)
-:m_vertices(vertices)
-{}
-
-MatrixFr CreateSkeleton2::Compute_skeleton()
+void CreateSkeleton2::run(const MatrixFr& points)
 {
-    
     Polygon_2 poly;
-    std::size_t num_vertices = m_vertices.rows();
+    std::size_t num_vertices = points.rows();
 
     for (size_t i=0; i<num_vertices; i++) {
-        const VectorF& v = m_vertices.row(i);
+        const VectorF& v = points.row(i);
         poly.push_back( Point(v[0],v[1]) );
     }
 
@@ -58,12 +55,7 @@ MatrixFr CreateSkeleton2::Compute_skeleton()
         computed_edges(index,3) = skeleton_edges[index].second.y();
     }
 
-    return computed_edges;
+    m_edges = std::move(computed_edges);
 }
 
-MatrixFr CreateSkeleton2::Skeleton()
-{
-    return std::move(Compute_skeleton());
-}
-
-//#endif
+#endif

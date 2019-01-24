@@ -29,6 +29,7 @@ from .HashGrid import HashGrid
 from .material import Material
 from .selfintersection import resolve_self_intersection
 from .selfintersection import detect_self_intersection
+from .skeleton import skeleton
 from .outerhull import compute_outer_hull
 from .winding_number import compute_winding_number
 from .meshutils import *
