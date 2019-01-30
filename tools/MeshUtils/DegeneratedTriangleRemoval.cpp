@@ -22,7 +22,6 @@ using namespace DegeneratedTriangleRemovalHelper;
 DegeneratedTriangleRemoval::DegeneratedTriangleRemoval(
         const MatrixFr& vertices, const MatrixIr& faces) :
 m_vertices(vertices), m_faces(faces) {
-    assert(m_vertices.cols() == 3);
     assert(m_faces.cols() == 3);
     exactinit();
     init_ori_face_indices();
@@ -197,7 +196,11 @@ bool DegeneratedTriangleRemoval::is_degenerated(size_t i) const {
     const auto& v1 = m_vertices.row(f[1]);
     const auto& v2 = m_vertices.row(f[2]);
 
-    return FaceUtils::is_colinear_3D(v0, v1, v2);
+    if (m_vertices.cols() == 3) {
+        return FaceUtils::is_colinear_3D(v0, v1, v2);
+    } else {
+        return FaceUtils::is_colinear_2D(v0, v1, v2);
+    }
 }
 
 size_t DegeneratedTriangleRemoval::find_longest_edge(size_t fi) const {
