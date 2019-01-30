@@ -20,9 +20,16 @@
 using namespace PyMesh;
 
 // Static factory method
-MeshParser::Ptr MeshParser::create_parser(const std::string& filename) {
-    Ptr parser;
+
+MeshParser::Ptr MeshParser::create_parser(const std::string& filename)
+{
     std::string ext = IOUtils::get_extention(filename);
+    return MeshParser::create_parser_for_extension(filename, ext);
+}
+MeshParser::Ptr MeshParser::create_parser_for_extension(const std::string& filename, const std::string& extension)
+{
+    Ptr parser;
+    std::string ext = extension;
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
     if (ext == ".obj" || ext == ".eobj" || ext == ".pts" || ext == ".epts") {
         parser = std::make_shared<OBJParser>();

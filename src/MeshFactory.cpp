@@ -35,6 +35,25 @@ MeshFactory& MeshFactory::load_file(const std::string& filename) {
     return *this;
 }
 
+MeshFactory& MeshFactory::load_file_with_hint(const std::string& filename, const std::string& extension_hint) {
+    MeshParser::Ptr parser = MeshParser::create_parser_for_extension(filename, extension_hint);
+    assert(parser != NULL);
+    bool success = parser->parse(filename);
+    if (!success) {
+        std::stringstream err_msg;
+        err_msg << "Parsing " << filename << "with hint '" << extension_hint  << "' has failed.";
+        throw RuntimeError(err_msg.str());
+    }
+
+    m_mesh->set_geometry(std::make_shared<MeshGeometry>());
+    initialize_vertices(parser);
+    initialize_faces(parser);
+    initialize_voxels(parser);
+    initialize_attributes(parser);
+
+    return *this;
+}
+
 MeshFactory& MeshFactory::load_data(
         const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
         size_t dim, size_t num_vertex_per_face, size_t num_vertex_per_voxel) {

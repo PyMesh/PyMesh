@@ -12,6 +12,7 @@ class MeshParser {
     public:
         using Ptr = std::shared_ptr<MeshParser>;
         static Ptr create_parser(const std::string& filename);
+        static Ptr create_parser_for_extension(const std::string& filename, const std::string& extension);
 
     public:
         typedef std::vector<std::string> AttrNames;

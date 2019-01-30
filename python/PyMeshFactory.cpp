@@ -13,6 +13,8 @@ void init_MeshFactory(py::module &m) {
         .def(py::init<>())
         .def("load_file", &MeshFactory::load_file,
                 py::return_value_policy::reference_internal)
+        .def("load_file_with_hint", &MeshFactory::load_file_with_hint,
+             py::return_value_policy::reference_internal)
         .def("load_data", &MeshFactory::load_data,
                 py::return_value_policy::reference_internal)
         .def("with_connectivity", &MeshFactory::with_connectivity,
