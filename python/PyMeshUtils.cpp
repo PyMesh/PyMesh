@@ -149,7 +149,8 @@ void init_MeshUtils(py::module& m) {
         .def(py::init<const MatrixFr&, const MatrixIr&>())
         .def("run", &LongEdgeRemoval::run, "max_length"_a, "recursive"_a=true)
         .def("get_vertices", &LongEdgeRemoval::get_vertices)
-        .def("get_faces", &LongEdgeRemoval::get_faces);
+        .def("get_faces", &LongEdgeRemoval::get_faces)
+        .def("get_ori_faces", &LongEdgeRemoval::get_ori_faces);
 
     py::class_<FinFaceRemoval>(m, "FinFaceRemoval")
         .def(py::init<const MatrixFr&, const MatrixIr&>())

@@ -83,3 +83,40 @@ TEST_F(LongEdgeRemovalTest, triangle_2) {
     ASSERT_NO_LONG_EDGES(out_vertices, out_faces, max_length);
 }
 
+TEST_F(LongEdgeRemovalTest, ori_face) {
+    MatrixFr vertices(4, 2);
+    vertices << 0.0, 0.0,
+                1.0, 0.0,
+                0.0, 1.0,
+                1.0, 1.0;
+    MatrixIr faces(2, 3);
+    faces << 0, 1, 2,
+             2, 1, 3;
+
+    Float max_length = 0.1;
+    LongEdgeRemoval remover(vertices, faces);
+    remover.run(max_length);
+
+    auto out_vertices = remover.get_vertices();
+    auto out_faces = remover.get_faces();
+    const auto ori_faces = remover.get_ori_faces();
+
+    ASSERT_NO_LONG_EDGES(out_vertices, out_faces, max_length);
+
+    const size_t num_faces = out_faces.rows();
+    ASSERT_EQ(num_faces, ori_faces.size());
+    for (size_t i=0; i<num_faces; i++) {
+        const Vector3I f = out_faces.row(i);
+        const Vector2F c = (out_vertices.row(f[0]) +
+                out_vertices.row(f[1]) +
+                out_vertices.row(f[2])) / 3.0;
+        std::cout << c[0] << ", " << c[1] << std::endl;
+        std::cout << ori_faces[i] << std::endl;
+        if (c[0] + c[1] < 1.0) {
+            ASSERT_EQ(0, ori_faces[i]);
+        } else {
+            ASSERT_EQ(1, ori_faces[i]);
+        }
+    }
+}
+

@@ -34,6 +34,9 @@ namespace LongEdgeRemovalHelper {
 using namespace LongEdgeRemovalHelper;
 
 void LongEdgeRemoval::run(Float max_length, bool recursive) {
+    const size_t num_faces = m_faces.rows();
+    m_ori_faces = VectorI::LinSpaced(num_faces, 0, num_faces-1);
+
     size_t num_added_triangles = 0;
     do {
         init_edge_map();
@@ -92,7 +95,10 @@ void LongEdgeRemoval::split_long_edges(Float max_length) {
 
 size_t LongEdgeRemoval::retriangulate() {
     const size_t num_faces = m_faces.rows();
+    assert(num_faces == m_ori_faces.size());
+
     std::vector<VectorI> faces;
+    std::vector<size_t> face_marks;
     for (size_t i=0; i<num_faces; i++) {
         size_t v0_idx, v1_idx, v2_idx;
         auto chain = get_vertex_chain_around_triangle(
@@ -102,9 +108,22 @@ size_t LongEdgeRemoval::retriangulate() {
         } else {
             triangulate_chain(faces, chain, v0_idx, v1_idx, v2_idx);
         }
+        face_marks.push_back(faces.size());
     }
     m_faces = MatrixUtils::rowstack(faces);
     const size_t num_refined_faces = m_faces.rows();
+
+    VectorI ori_faces(num_refined_faces);
+    size_t counter = 0;
+    size_t fid = 0;
+    for (const auto mark : face_marks) {
+        for (; counter<mark; counter++) {
+            ori_faces[counter] = m_ori_faces[fid];
+        }
+        fid++;
+    }
+    m_ori_faces.swap(ori_faces);
+
     return num_refined_faces - num_faces;
 }
 

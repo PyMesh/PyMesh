@@ -18,6 +18,8 @@ class LongEdgeRemoval {
         MatrixFr get_vertices() const { return m_vertices; }
         MatrixIr get_faces() const { return m_faces; }
 
+        VectorI get_ori_faces() const { return m_ori_faces; }
+
     private:
         void init_edge_map();
         void split_long_edges(Float max_length);
@@ -32,6 +34,7 @@ class LongEdgeRemoval {
     private:
         MatrixFr m_vertices;
         MatrixIr m_faces;
+        VectorI  m_ori_faces;
 
         DupletMap<size_t> m_edge_map;
 };
