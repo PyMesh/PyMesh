@@ -3,14 +3,14 @@
 #include <sstream>
 #include <Core/Exception.h>
 
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 #include "IGL/IGLCSGTree.h"
 #endif 
 
 using namespace PyMesh;
 
 CSGTree::Ptr CSGTree::create(const std::string& engine_name) {
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
     if (engine_name == "igl") {
         return Ptr(new IGLCSGTree());
     }
@@ -23,7 +23,7 @@ CSGTree::Ptr CSGTree::create(const std::string& engine_name) {
 CSGTree::Ptr CSGTree::create_leaf(const std::string& engine_name,
         const MatrixFr& vertices,
         const MatrixIr& faces) {
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
     if (engine_name == "igl") {
         return Ptr(new IGLCSGTree(vertices, faces));
     }

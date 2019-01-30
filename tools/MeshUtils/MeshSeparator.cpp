@@ -34,7 +34,6 @@ size_t MeshSeparator::separate() {
 }
 
 void MeshSeparator::compute_connectivity() {
-    m_connectivity.clear();
     switch(m_connectivity_type) {
         case VERTEX:
             compute_vertex_connectivity();
@@ -49,16 +48,18 @@ void MeshSeparator::compute_connectivity() {
 }
 
 void MeshSeparator::compute_vertex_connectivity() {
+    m_vertex_connectivity.clear();
     const size_t num_elements = m_elements.rows();
     const size_t vertex_per_element = m_elements.cols();
     for (size_t i=0; i<num_elements; i++) {
         for (size_t j=0; j<vertex_per_element; j++) {
-            m_connectivity.insert(Connector(m_elements(i, j)), i);
+            m_vertex_connectivity.insert({m_elements(i, j)}, i);
         }
     }
 }
 
 void MeshSeparator::compute_face_connectivity() {
+    m_face_connectivity.clear();
     const size_t num_elements = m_elements.rows();
     const size_t vertex_per_element = m_elements.cols();
     if (vertex_per_element != 3 && vertex_per_element != 4) {
@@ -69,7 +70,7 @@ void MeshSeparator::compute_face_connectivity() {
     for (size_t i=0; i<num_elements; i++) {
         const auto& e = m_elements.row(i);
         for (size_t j=0; j<vertex_per_element; j++) {
-            m_connectivity.insert(Connector(e[j], e[(j+1)%vertex_per_element]), i);
+            m_face_connectivity.insert({e[j], e[(j+1)%vertex_per_element]}, i);
         }
     }
 }
@@ -80,26 +81,26 @@ void MeshSeparator::compute_voxel_connectivity() {
     if (vertex_per_element == 4) {
         for (size_t i=0; i<num_elements; i++) {
             const auto& voxel = m_elements.row(i);
-            m_connectivity.insert(Connector(voxel[0], voxel[1], voxel[2]), i);
-            m_connectivity.insert(Connector(voxel[1], voxel[2], voxel[3]), i);
-            m_connectivity.insert(Connector(voxel[2], voxel[3], voxel[0]), i);
-            m_connectivity.insert(Connector(voxel[3], voxel[0], voxel[1]), i);
+            m_tet_connectivity.insert({voxel[0], voxel[1], voxel[2]}, i);
+            m_tet_connectivity.insert({voxel[1], voxel[2], voxel[3]}, i);
+            m_tet_connectivity.insert({voxel[2], voxel[3], voxel[0]}, i);
+            m_tet_connectivity.insert({voxel[3], voxel[0], voxel[1]}, i);
         }
     } else if (vertex_per_element == 8) {
         for (size_t i=0; i<num_elements; i++) {
             const auto& voxel = m_elements.row(i);
-            m_connectivity.insert(
-                    Connector(voxel[0], voxel[1], voxel[2], voxel[3]), i);
-            m_connectivity.insert(
-                    Connector(voxel[4], voxel[5], voxel[6], voxel[7]), i);
-            m_connectivity.insert(
-                    Connector(voxel[0], voxel[4], voxel[7], voxel[3]), i);
-            m_connectivity.insert(
-                    Connector(voxel[1], voxel[5], voxel[6], voxel[2]), i);
-            m_connectivity.insert(
-                    Connector(voxel[0], voxel[1], voxel[4], voxel[5]), i);
-            m_connectivity.insert(
-                    Connector(voxel[3], voxel[2], voxel[6], voxel[7]), i);
+            m_hex_connectivity.insert(
+                    {voxel[0], voxel[1], voxel[2], voxel[3]}, i);
+            m_hex_connectivity.insert(
+                    {voxel[4], voxel[5], voxel[6], voxel[7]}, i);
+            m_hex_connectivity.insert(
+                    {voxel[0], voxel[4], voxel[7], voxel[3]}, i);
+            m_hex_connectivity.insert(
+                    {voxel[1], voxel[5], voxel[6], voxel[2]}, i);
+            m_hex_connectivity.insert(
+                    {voxel[0], voxel[1], voxel[4], voxel[5]}, i);
+            m_hex_connectivity.insert(
+                    {voxel[3], voxel[2], voxel[6], voxel[7]}, i);
         }
     } else {
         throw RuntimeError(
@@ -144,44 +145,45 @@ MatrixIr MeshSeparator::flood(size_t seed, VectorI& sources) {
 
 std::vector<size_t> MeshSeparator::get_adjacent_element(size_t index) {
     std::vector<size_t> neighbors;
+    neighbors.reserve(8);
     const auto& element = m_elements.row(index);
     const size_t vertex_per_element = element.size();
 
     switch (m_connectivity_type) {
         case VERTEX:
             for (size_t i=0; i<vertex_per_element; i++) {
-                Connector conn(element[i]);
-                AdjElements& neighbor = m_connectivity[conn];
+                Singleton conn(element[i]);
+                AdjElements& neighbor = m_vertex_connectivity[conn];
                 neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
             }
             break;
         case FACE:
             for (size_t i=0; i<vertex_per_element; i++) {
-                Connector conn(element[i], element[(i+1)%vertex_per_element]);
-                AdjElements& neighbor = m_connectivity[conn];
+                Duplet conn(element[i], element[(i+1)%vertex_per_element]);
+                AdjElements& neighbor = m_face_connectivity[conn];
                 neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
             }
             break;
         case VOXEL:
             if (vertex_per_element == 4) {
                 for (size_t i=0; i<vertex_per_element; i++) {
-                    Connector conn(element[i],
+                    Triplet conn(element[i],
                             element[(i+1)%vertex_per_element],
                             element[(i+2)%vertex_per_element]);
-                    AdjElements& neighbor = m_connectivity[conn];
+                    AdjElements& neighbor = m_tet_connectivity[conn];
                     neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
                 }
             } else if (vertex_per_element == 8) {
-                Connector connectors[] = {
-                    Connector(element[0], element[1], element[2], element[3]),
-                    Connector(element[4], element[5], element[6], element[7]),
-                    Connector(element[0], element[4], element[7], element[3]),
-                    Connector(element[1], element[5], element[6], element[2]),
-                    Connector(element[0], element[1], element[4], element[5]),
-                    Connector(element[3], element[2], element[6], element[7])
+                Quadruplet connectors[] = {
+                    {element[0], element[1], element[2], element[3]},
+                    {element[4], element[5], element[6], element[7]},
+                    {element[0], element[4], element[7], element[3]},
+                    {element[1], element[5], element[6], element[2]},
+                    {element[0], element[1], element[4], element[5]},
+                    {element[3], element[2], element[6], element[7]}
                 };
                 for (size_t i=0; i<6; i++) {
-                    AdjElements& neighbor = m_connectivity[connectors[i]];
+                    AdjElements& neighbor = m_hex_connectivity[connectors[i]];
                     neighbors.insert(neighbors.end(), neighbor.begin(), neighbor.end());
                 }
             } else {
@@ -197,5 +199,8 @@ void MeshSeparator::clear() {
     m_components.clear();
     m_sources.clear();
     m_visited.clear();
-    m_connectivity.clear();
+    m_vertex_connectivity.clear();
+    m_face_connectivity.clear();
+    m_tet_connectivity.clear();
+    m_hex_connectivity.clear();
 }

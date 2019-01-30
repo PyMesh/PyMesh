@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CGAL
 #include "CGALConvexHull2D.h"
 
 #include <sstream>
@@ -42,3 +43,5 @@ void CGALConvexHull2D::run(const MatrixFr& points) {
     compute_index_map(points);
     reorient_faces();
 }
+
+#endif

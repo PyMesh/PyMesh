@@ -2,6 +2,7 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 #include <TestBase.h>
 
 class EdgeDihedralAngleAttributeTest : public TestBase {

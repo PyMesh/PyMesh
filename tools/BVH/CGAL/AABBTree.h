@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 
 #include <Core/EigenTypedef.h>
 #include <BVH/BVHEngine.h>
@@ -12,7 +13,7 @@
 #include <memory>
 
 namespace PyMesh {
-namespace CGAL {
+namespace _CGAL {
 
 class AABBTree : public BVHEngine {
     public:
@@ -48,3 +49,5 @@ class AABBTree : public BVHEngine {
 
 }
 }
+
+#endif

@@ -65,3 +65,4 @@ if (draco_INCLUDE_DIRS AND draco_LIBRARY_DIRS AND draco_LIBRARIES AND
     draco_VERSION_STRING)
   set(draco_FOUND YES)
 endif ()
+

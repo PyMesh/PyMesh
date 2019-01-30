@@ -1,11 +1,18 @@
-############################ REQUIRED PACKAGES #################################
+# MKL
+IF (NOT MKL_FOUND)
+    FIND_PACKAGE(MKL)
+ENDIF (NOT MKL_FOUND)
 
 # Include Eigen
-IF (NOT EIGNE_FOUND)
+IF (NOT EIGEN_FOUND)
     FIND_PACKAGE(Eigen REQUIRED)
-ENDIF (NOT EIGNE_FOUND)
+ENDIF (NOT EIGEN_FOUND)
 
-############################ OPTIONAL PACKAGES #################################
+# TBB
+IF (NOT TBB_FOUND)
+    SET(TBB_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/)
+    FIND_PACKAGE(TBB REQUIRED)
+ENDIF (NOT TBB_FOUND)
 
 # OpenCL
 IF (NOT OPENCL_FOUND)
@@ -16,11 +23,6 @@ ENDIF (NOT OPENCL_FOUND)
 IF (NOT SPARSEHAHS_FOUND)
     FIND_PACKAGE(SparseHash)
 ENDIF (NOT SPARSEHAHS_FOUND)
-
-# Boost
-IF (NOT Boost_FOUND)
-    FIND_PACKAGE(Boost COMPONENTS system thread REQUIRED)
-ENDIF (NOT Boost_FOUND)
 
 # GMP
 IF (NOT GMP_FOUND)
@@ -34,18 +36,15 @@ ENDIF (NOT MPFR_FOUND)
 
 # CGAL
 IF (NOT CGAL_FOUND)
-    IF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL/UseCGAL.cmake)
-        SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL)
-    ELSEIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/CGAL/UseCGAL.cmake)
-        SET(CGAL_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/CGAL)
-    ELSE (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL/UseCGAL.cmake)
-        IF (DEFINED ENV{CGAL_PATH} AND NOT DEFINED ENV{CGAL_DIR})
-            SET(CGAL_DIR $ENV{CGAL_PATH})
-        ENDIF (DEFINED ENV{CGAL_PATH} AND NOT DEFINED ENV{CGAL_DIR})
-    ENDIF (EXISTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/CGAL/UseCGAL.cmake)
-    SET(CGAL_DONT_OVERRIDE_CMAKE_FLAGS TRUE CACHE BOOL
-        "Disable CGAL from overwriting my cmake flags")
-    FIND_PACKAGE(CGAL QUIET)
+    SET(CGAL_DIRS
+        "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL"
+        "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/cmake/CGAL"
+    )
+    IF (NOT Boost_FOUND)
+        SET(BOOST_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
+        FIND_PACKAGE(Boost COMPONENTS atomic chrono date_time system thread)
+    ENDIF (NOT Boost_FOUND)
+    FIND_PACKAGE(CGAL QUIET PATHS ${CGAL_DIRS} NO_DEFAULT_PATH)
 ENDIF (NOT CGAL_FOUND)
 
 # MMG
@@ -159,7 +158,11 @@ IF (NOT OPENMP_FOUND)
     ENDIF (OPENMP_FOUND)
 ENDIF (NOT OPENMP_FOUND)
 
-# MKL
-IF (NOT MKL_FOUND)
-    FIND_PACKAGE(MKL)
-ENDIF (NOT MKL_FOUND)
+# Fast winding number
+IF (NOT FAST_WINDING_NUMBER_FOUND)
+    FIND_PACKAGE(FastWindingNumber)
+ENDIF (NOT FAST_WINDING_NUMBER_FOUND)
+
+IF (NOT JIGSAW_FOUND)
+    FIND_PACKAGE(Jigsaw)
+ENDIF (NOT JIGSAW_FOUND)

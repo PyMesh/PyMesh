@@ -30,18 +30,22 @@ int triBoxOverlap(const Float boxcenter[2], const Float boxhalfsize[2], const Fl
     // * 3 edges of the triangle
     // If all 7 lines failed to separate the two shapes, they must overlap.
 
-    const Float center_v1[2] = {triverts[0][0] - boxcenter[0], triverts[0][1] - boxcenter[0]};
-    const Float center_v2[2] = {triverts[1][0] - boxcenter[0], triverts[1][1] - boxcenter[0]};
-    const Float center_v3[2] = {triverts[2][0] - boxcenter[0], triverts[2][1] - boxcenter[0]};
+    const Float center_v1[2] = {triverts[0][0] - boxcenter[0], triverts[0][1] - boxcenter[1]};
+    const Float center_v2[2] = {triverts[1][0] - boxcenter[0], triverts[1][1] - boxcenter[1]};
+    const Float center_v3[2] = {triverts[2][0] - boxcenter[0], triverts[2][1] - boxcenter[1]};
 
-    if (center_v1[0] > boxhalfsize[0] && center_v2[0] > boxhalfsize[0] && center_v3[0] > boxhalfsize[0])
+    if (center_v1[0] > boxhalfsize[0] && center_v2[0] > boxhalfsize[0] && center_v3[0] > boxhalfsize[0]) {
         return 0;
-    if (center_v1[0] < -boxhalfsize[0] && center_v2[0] < -boxhalfsize[0] && center_v3[0] < -boxhalfsize[0])
+    }
+    if (center_v1[0] < -boxhalfsize[0] && center_v2[0] < -boxhalfsize[0] && center_v3[0] < -boxhalfsize[0]) {
         return 0;
-    if (center_v1[1] > boxhalfsize[1] && center_v2[1] > boxhalfsize[1] && center_v3[1] > boxhalfsize[1])
+    }
+    if (center_v1[1] > boxhalfsize[1] && center_v2[1] > boxhalfsize[1] && center_v3[1] > boxhalfsize[1]) {
         return 0;
-    if (center_v1[1] < -boxhalfsize[1] && center_v2[1] < -boxhalfsize[1] && center_v3[1] < -boxhalfsize[1])
+    }
+    if (center_v1[1] < -boxhalfsize[1] && center_v2[1] < -boxhalfsize[1] && center_v3[1] < -boxhalfsize[1]) {
         return 0;
+    }
 
     const Float p1[2] = {boxcenter[0]+boxhalfsize[0], boxcenter[1]+boxhalfsize[1]};
     const Float p2[2] = {boxcenter[0]-boxhalfsize[0], boxcenter[1]+boxhalfsize[1]};
@@ -61,20 +65,23 @@ int triBoxOverlap(const Float boxcenter[2], const Float boxhalfsize[2], const Fl
     if ( outside_halfplane(p1, triverts[1], n1, ori) &&
          outside_halfplane(p2, triverts[1], n1, ori) &&
          outside_halfplane(p3, triverts[1], n1, ori) &&
-         outside_halfplane(p4, triverts[1], n1, ori) )
+         outside_halfplane(p4, triverts[1], n1, ori) ) {
         return 0;
+    }
 
     if ( outside_halfplane(p1, triverts[2], n2, ori) &&
          outside_halfplane(p2, triverts[2], n2, ori) &&
          outside_halfplane(p3, triverts[2], n2, ori) &&
-         outside_halfplane(p4, triverts[2], n2, ori) )
+         outside_halfplane(p4, triverts[2], n2, ori) ) {
         return 0;
+    }
 
     if ( outside_halfplane(p1, triverts[0], n3, ori) &&
          outside_halfplane(p2, triverts[0], n3, ori) &&
          outside_halfplane(p3, triverts[0], n3, ori) &&
-         outside_halfplane(p4, triverts[0], n3, ori) )
+         outside_halfplane(p4, triverts[0], n3, ori) ) {
         return 0;
+    }
 
     return 1;
 }

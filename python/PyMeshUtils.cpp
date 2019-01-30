@@ -6,9 +6,11 @@
 
 #include <Mesh.h>
 #include <MeshUtils/AttributeUtils.h>
+#include <MeshUtils/EdgeUtils.h>
 #include <MeshUtils/ObtuseTriangleRemoval.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/ManifoldCheck.h>
+#include <MeshUtils/MeshCutter.h>
 #include <MeshUtils/MeshUtils.h>
 #include <MeshUtils/MeshSeparator.h>
 #include <MeshUtils/MeshChecker.h>
@@ -45,9 +47,11 @@ void init_MeshUtils(py::module& m) {
     m.def("is_colinear_2D", &FaceUtils::is_colinear_2D);
     m.def("is_colinear_3D", &FaceUtils::is_colinear_3D);
     m.def("get_degenerated_faces", &FaceUtils::get_degenerated_faces);
+    m.def("get_triangle_orientations", &FaceUtils::get_triangle_orientations);
     m.def("get_tet_orientations", &VoxelUtils::get_tet_orientations);
     m.def("is_vertex_manifold", &ManifoldCheck::is_vertex_manifold);
     m.def("is_edge_manifold", &ManifoldCheck::is_edge_manifold);
+    m.def("chain_edges", &EdgeUtils::chain_edges);
 
     py::class_<ObtuseTriangleRemoval>(m, "ObtuseTriangleRemoval")
         .def(py::init<MatrixFr&, MatrixIr&>())
@@ -163,4 +167,9 @@ void init_MeshUtils(py::module& m) {
         .def("get_ori_face_indices",
                 &DegeneratedTriangleRemoval::get_ori_face_indices);
 
+    py::class_<MeshCutter>(m, "MeshCutter")
+        .def(py::init<Mesh::Ptr>())
+        .def("cut_with_face_labels", &MeshCutter::cut_with_face_labels)
+        .def("cut_at_uv_discontinuity", &MeshCutter::cut_at_uv_discontinuity);
 }
+

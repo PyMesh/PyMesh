@@ -1,8 +1,9 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 
 #include <Core/Exception.h>
-#include <TetrahedralizationEngine.h>
+#include <Tetrahedralization/TetrahedralizationEngine.h>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/make_mesh_3.h>
@@ -121,8 +122,8 @@ class CGALMeshGen<InexactKernel, CGALDomainType::IMPLICIT_WITH_FEATURES>
                     cell_size             =m_cell_size);
 
             auto c3t3 = CGAL::make_mesh_3<typename Traits::C3t3>(*domain, criteria);
-            std::cout << "Oracle is used " << oracle.get_counter()
-                << " times in total" << std::endl;
+            //std::cout << "Oracle is used " << oracle.get_counter()
+            //    << " times in total" << std::endl;
             extract_mesh<Traits>(c3t3, m_vertices, m_faces, m_voxels);
         }
 };
@@ -130,3 +131,5 @@ class CGALMeshGen<InexactKernel, CGALDomainType::IMPLICIT_WITH_FEATURES>
 
 
 }
+
+#endif

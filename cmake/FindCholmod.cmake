@@ -91,3 +91,4 @@ find_package_handle_standard_args(CHOLMOD DEFAULT_MSG
                                   CHOLMOD_INCLUDES CHOLMOD_LIBRARIES)
 
 mark_as_advanced(CHOLMOD_INCLUDES CHOLMOD_LIBRARIES AMD_LIBRARY COLAMD_LIBRARY)
+

@@ -1,14 +1,16 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CLIPPER
 
 #include <Boolean/BooleanEngine.h>
+
 #include <clipper.hpp>
 
 namespace PyMesh {
 
 class ClipperEngine : public BooleanEngine {
     public:
-        virtual ~ClipperEngine() {}
+        virtual ~ClipperEngine() = default;
 
     public:
         virtual void compute_union();
@@ -28,3 +30,5 @@ class ClipperEngine : public BooleanEngine {
 };
 
 }
+
+#endif

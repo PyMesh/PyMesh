@@ -5,7 +5,7 @@
 #include <vector>
 
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 using namespace PyMesh;
 using namespace MeshUtils;
@@ -21,10 +21,10 @@ MatrixI MeshUtils::extract_exterior_faces(const MatrixI& voxels) {
     for (size_t i=0; i<num_voxels; i++) {
         const VectorI& voxel = voxels.row(i);
         Triplet voxel_faces[4] = {
-            Triplet(voxel[0], voxel[2], voxel[1]),
-            Triplet(voxel[0], voxel[1], voxel[3]),
-            Triplet(voxel[0], voxel[3], voxel[2]),
-            Triplet(voxel[1], voxel[2], voxel[3])
+            {voxel[0], voxel[2], voxel[1]},
+            {voxel[0], voxel[1], voxel[3]},
+            {voxel[0], voxel[3], voxel[2]},
+            {voxel[1], voxel[2], voxel[3]}
         };
         for (size_t j=0; j<4; j++) {
             if (face_counter.find(voxel_faces[j]) == face_counter.end()) {

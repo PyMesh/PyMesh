@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL_AND_CGAL
 
 #include <Boolean/CSGTree.h>
 #include "../BooleanEngineTest.h"
@@ -160,3 +161,5 @@ TEST_F(IGLCSGTreeTest, nary_union) {
     assert_on_boundary(r_vertices, r_faces, left_end);
     assert_on_boundary(r_vertices, r_faces, right_end);
 }
+
+#endif

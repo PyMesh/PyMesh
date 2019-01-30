@@ -1,38 +1,25 @@
-# Include headers
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/Triangulation/)
-
-# Include IGL
-IF (LIBIGL_FOUND AND CGAL_FOUND)
-    INCLUDE_DIRECTORIES(${LIBIGL_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_IGL)
-    ADD_DEFINITIONS(-DWITH_CGAL)
-ENDIF (LIBIGL_FOUND AND CGAL_FOUND)
-
-# Include CGAL
-IF (CGAL_FOUND)
-    SET(BACKUP_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-    INCLUDE(${CGAL_USE_FILE})
-    SET(CMAKE_CXX_FLAGS ${BACKUP_CXX_FLAGS})
-    ADD_DEFINITIONS(-DWITH_CGAL)
-ENDIF (CGAL_FOUND)
-
-# Include Triangle
-IF (TRIANGLE_FOUND)
-    INCLUDE_DIRECTORIES(${Triangle_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_TRIANGLE)
-ENDIF (TRIANGLE_FOUND)
-
-# Include Geogram
-IF (GEOGRAM_FOUND)
-    INCLUDE_DIRECTORIES(${GEOGRAM_INCLUDE_DIR})
-    ADD_DEFINITIONS(-DWITH_GEOGRAM)
-ENDIF (GEOGRAM_FOUND)
-
 # Enumerate source files
 FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
 FILE(GLOB TEST_INC_FILES *_test.h)
 
-ADD_EXECUTABLE(triangulation_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(triangulation_tests Mesh lib_MeshUtils lib_triangulation ${GTEST_BOTH_LIBRARIES})
-ADD_CUSTOM_COMMAND(TARGET triangulation_tests POST_BUILD COMMAND triangulation_tests)
+ADD_EXECUTABLE(Triangulation_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(Triangulation_tests
+    PRIVATE
+        PyMesh::UnitTest
+        PyMesh::Tools::MeshUtils
+        PyMesh::Tools::Triangulation
+        PyMesh::Tools::IGL
+        PyMesh::Tools::CGAL
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::Geogram
+        PyMesh::Jigsaw
+        PyMesh::MMG
+)
+ADD_CUSTOM_TARGET(run_Triangulation_tests 
+    DEPENDS
+        Triangulation_tests
+    COMMAND
+        Triangulation_tests
+)
+
+

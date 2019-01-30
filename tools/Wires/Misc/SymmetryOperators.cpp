@@ -2,7 +2,7 @@
 #include "SymmetryOperators.h"
 
 #include <Misc/HashGrid.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 using namespace PyMesh;
 
@@ -21,11 +21,11 @@ namespace SymmetryOperatorsHelper {
         return grid;
     }
 
-    TripletMap<size_t> create_edge_lookup_map(const MatrixIr& edges) {
-        TripletMap<size_t> edge_map;
+    DupletMap<size_t> create_edge_lookup_map(const MatrixIr& edges) {
+        DupletMap<size_t> edge_map;
         const size_t num_edges = edges.rows();
         for (size_t i=0; i<num_edges; i++) {
-            Triplet key(edges(i, 0), edges(i, 1));
+            Duplet key(edges(i, 0), edges(i, 1));
             edge_map.insert(key, i);
         }
         return edge_map;
@@ -203,7 +203,7 @@ SymmetryOperators::SymmetryConnectivity SymmetryOperators::compute_edge_connecti
                     const VectorF& other_e1 = vertices.row(e1_idx);
                     if ((mapped_e1 - other_e1).squaredNorm() > tol) continue;
 
-                    Triplet key(e0_idx, e1_idx);
+                    Duplet key(e0_idx, e1_idx);
                     auto itr = edge_map.find(key);
                     if (itr != edge_map.end()) {
                         assert(itr->second.size() == 1);

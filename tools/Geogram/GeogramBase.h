@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_GEOGRAM
 
 #include <memory>
 
@@ -22,20 +23,17 @@ using GeoMeshPtr = std::shared_ptr<GeoMesh>;
 class GeogramBase {
     public:
         GeogramBase() {
-            if (!m_initialized) {
-                GEO::initialize();
-                GEO::CmdLine::import_arg_group("standard");
-                GEO::CmdLine::import_arg_group("pre");
-                GEO::CmdLine::import_arg_group("algo");
-                //GEO::Logger::instance()->set_quiet(true);
-                //GEO::Logger::instance()->unregister_all_clients();
-                m_initialized = true;
-            }
+            GEO::initialize();
+            GEO::CmdLine::import_arg_group("standard");
+            GEO::CmdLine::import_arg_group("pre");
+            GEO::CmdLine::import_arg_group("algo");
+            //GEO::Logger::instance()->set_quiet(true);
+            //GEO::Logger::instance()->unregister_all_clients();
         }
 
         virtual ~GeogramBase() = default;
-    private:
-        static bool m_initialized;
 };
 
 }
+
+#endif

@@ -5,7 +5,7 @@
 #include <map>
 #include <vector>
 
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 namespace PyMesh {
 
@@ -30,7 +30,7 @@ class SimpleSubdivision : public Subdivision {
         Vector3I get_edge_indices(const VectorI& face);
 
     protected:
-        std::map<Triplet, size_t> m_edge_index_map;
+        std::map<Duplet, size_t> m_edge_index_map;
         std::vector<ZSparseMatrix> m_subdivision_matrices;
 };
 

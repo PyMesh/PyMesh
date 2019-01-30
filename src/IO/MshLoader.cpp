@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <Core/Exception.h>
+#include "IOUtils.h"
 
 using namespace PyMesh;
 
@@ -40,7 +41,7 @@ MshLoader::MshLoader(const std::string& filename) {
     // Read in extra info from binary header.
     if (m_binary) {
         int one;
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         fin.read(reinterpret_cast<char*>(&one), sizeof(int));
         if (one != 1) {
             std::cerr << "Warning: binary msh file " << filename
@@ -109,7 +110,7 @@ void MshLoader::parse_nodes(std::ifstream& fin) {
     if (m_binary) {
         size_t num_bytes = (4+3*m_data_size) * num_nodes;
         char* data = new char[num_bytes];
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         fin.read(data, num_bytes);
 
         for (size_t i=0; i<num_nodes; i++) {
@@ -182,7 +183,7 @@ void MshLoader::parse_elements(std::ifstream& fin) {
     size_t nodes_per_element;
 
     if (m_binary) {
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         int elem_read = 0;
         while (elem_read < num_elements) {
             // Parse element header.
@@ -278,7 +279,7 @@ void MshLoader::parse_node_field(std::ifstream& fin) {
     fin >> num_string_tags;
     std::string* str_tags = new std::string[num_string_tags];
     for (size_t i=0; i<num_string_tags; i++) {
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         if (fin.peek() == '\"') {
             // Handle field name between quoates.
             char buf[128];
@@ -313,7 +314,7 @@ void MshLoader::parse_node_field(std::ifstream& fin) {
     if (m_binary) {
         size_t num_bytes = (num_components * m_data_size + 4) * num_entries;
         char* data = new char[num_bytes];
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         fin.read(data, num_bytes);
         for (size_t i=0; i<num_entries; i++) {
             int node_idx = *reinterpret_cast<int*>(&data[i*(4+num_components*m_data_size)]);
@@ -346,7 +347,7 @@ void MshLoader::parse_element_field(std::ifstream& fin) {
     fin >> num_string_tags;
     std::string* str_tags = new std::string[num_string_tags];
     for (size_t i=0; i<num_string_tags; i++) {
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         if (fin.peek() == '\"') {
             // Handle field name between quoates.
             char buf[128];
@@ -381,7 +382,7 @@ void MshLoader::parse_element_field(std::ifstream& fin) {
     if (m_binary) {
         size_t num_bytes = (num_components * m_data_size + 4) * num_entries;
         char* data = new char[num_bytes];
-        eat_white_space(fin);
+        IOUtils::eat_white_space(fin);
         fin.read(data, num_bytes);
         for (size_t i=0; i<num_entries; i++) {
             int elem_idx = *reinterpret_cast<int*>(&data[i*(4+num_components*m_data_size)]);
@@ -415,14 +416,6 @@ void MshLoader::parse_unknown_field(std::ifstream& fin,
     std::string buf("");
     while (buf != endmark && !fin.eof()) {
         fin >> buf;
-    }
-}
-
-void MshLoader::eat_white_space(std::ifstream& fin) {
-    char next = fin.peek();
-    while (next == '\n' || next == ' ' || next == '\t' || next == '\r') {
-        fin.get();
-        next = fin.peek();
     }
 }
 

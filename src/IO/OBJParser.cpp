@@ -2,10 +2,11 @@
 #include "OBJParser.h"
 #include <cstdio>
 #include <cassert>
-#include <iostream>
 #include <fstream>
-#include <sstream>
+#include <iostream>
+#include <limits>
 #include <list>
+#include <sstream>
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
@@ -191,8 +192,11 @@ bool OBJParser::parse_vertex_line(char* line) {
             return parse_vertex_normal(line);
         case 'p':
             return parse_vertex_parameter(line);
+        case 'c':
+            // Unofficial custom line.  Ignore.
+            return true;
         default:
-            throw IOError("Invalid vertex line");
+            throw IOError("Invalid vertex line: " + std::string(line));
     }
 }
 
@@ -254,6 +258,7 @@ bool OBJParser::parse_vertex_parameter(char* line) {
 
 bool OBJParser::parse_face_line(char* line) {
     const char WHITE_SPACE[] = " \t\n\r";
+    constexpr int INVALID = std::numeric_limits<int>::max();
     char* field = strtok(line, WHITE_SPACE);
     assert(field != NULL);
 
@@ -268,7 +273,7 @@ bool OBJParser::parse_face_line(char* line) {
     while (field != NULL) {
         // Note each vertex field could be in any of the following formats:
         // v_idx  or  v_idx/vt_idx  or  v_idx/vt_idx/vn_idx or v_idx//vn_idx
-        v_idx = vt_idx = vn_idx = 0;
+        v_idx = vt_idx = vn_idx = INVALID;
         v_idx = atoi(field);
         char* loc = strchr(field, '/');
         if (loc != NULL) {
@@ -281,7 +286,7 @@ bool OBJParser::parse_face_line(char* line) {
             }
         }
 
-        if (v_idx == 0) return false;
+        if (v_idx == INVALID) return false;
 
         // Negative index means relative index from the vertices read so
         // far.  -1 refers to the last vertex read in.
@@ -298,8 +303,10 @@ bool OBJParser::parse_face_line(char* line) {
         assert(vt_idx >= 0);
         assert(vn_idx >= 0);
         idx.push_back(v_idx-1); // OBJ has index starting from 1
-        if (vt_idx != 0) t_idx.push_back(vt_idx-1);
-        if (vn_idx != 0) n_idx.push_back(vn_idx-1);
+        if (vt_idx != INVALID) t_idx.push_back(vt_idx-1);
+        else t_idx.push_back(INVALID);
+        if (vn_idx != INVALID) n_idx.push_back(vn_idx-1);
+        else n_idx.push_back(INVALID);
 
         // Get next token
         field = strtok(NULL, WHITE_SPACE);
@@ -324,19 +331,40 @@ bool OBJParser::parse_face_line(char* line) {
         // N-gon detected, assuming it is convex and break it into triangles.
         std::cerr << num_idx_parsed << "-gon detected, converting to triangles"
             << std::endl;
-        earclip(idx);
+        const auto tris = earclip(idx);
+        for (const auto& t : tris) {
+            m_tris.emplace_back(Vector3I(idx[t[0]], idx[t[1]], idx[t[2]]));
+        }
+        if (!t_idx.empty()) {
+            assert(t_idx.size() == idx.size());
+            for (const auto& t : tris) {
+                m_tri_textures.push_back(
+                        Vector3I(t_idx[t[0]], t_idx[t[1]], t_idx[t[2]]));
+            }
+        }
+        if (!n_idx.empty()) {
+            assert(n_idx.size() == idx.size());
+            for (const auto& t : tris) {
+                m_tri_normals.push_back(
+                        Vector3I(n_idx[t[0]], n_idx[t[1]], n_idx[t[2]]));
+            }
+        }
     }
     return true;
 }
 
-void OBJParser::earclip(const std::vector<size_t>& idx) {
+OBJParser::FaceList OBJParser::earclip(const std::vector<size_t>& idx) {
     // This method implements the naive ear clipping algorithm with complexity
     // O(n^2).  It may be slow for large n.
     assert(idx.size() > 3);
     using List = std::list<size_t>;
     using Iterator = List::iterator;
+    FaceList tris;
     List active_idx;
-    std::copy(idx.begin(), idx.end(), std::back_inserter(active_idx));
+    const size_t num_idx = idx.size();
+    for (size_t i=0; i<num_idx; i++) {
+        active_idx.push_back(i);
+    }
 
     auto cyclic_next = [&active_idx](Iterator itr) {
         itr++;
@@ -350,44 +378,83 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
         itr--;
         return itr;
     };
-    auto can_clip = [this, &active_idx, &cyclic_prev, &cyclic_next](const Iterator& itr) {
+    auto estimate_normal = [this, &idx]() {
+        const size_t num_idx = idx.size();
+        assert(num_idx > 0);
+        Vector3F n(0.0, 0.0, 0.0);
+        Vector3F seed;
+        seed.segment(0, m_dim) = m_vertices[idx[0]];
+        for (size_t i=0; i<num_idx-1; i++) {
+            Vector3F vi,vj;
+            vi.segment(0, m_dim) = m_vertices[idx[i]];
+            vj.segment(0, m_dim) = m_vertices[idx[i+1]];
+            n += (vi - seed).cross(vj - seed);
+        }
+        n.normalize();
+        return n;
+    };
+    auto can_clip = [this, &idx, &cyclic_prev, &cyclic_next](const Iterator& itr, const Vector3F& normal) {
         const auto curr = itr;
         const auto next = cyclic_next(itr);
         const auto prev = cyclic_prev(itr);
-        const size_t i = *prev;
-        const size_t j = *curr;
-        const size_t k = *next;
+        const size_t i = idx[*prev];
+        const size_t j = idx[*curr];
+        const size_t k = idx[*next];
         Vector3F vi,vj,vk;
         vi.segment(0, m_dim) = m_vertices[i];
         vj.segment(0, m_dim) = m_vertices[j];
         vk.segment(0, m_dim) = m_vertices[k];
         const Vector3F nj = (vk-vj).cross(vi-vj);
         if (nj.norm() <= 0.0) return false; // Degenerate ear.
+        if (nj.dot(normal) <= 0.0) return false; // Concave face.
         for (Iterator itr = cyclic_next(next); itr != prev; itr=cyclic_next(itr)) {
-            const size_t l=*itr;
-            Vector3F vl;
+            const size_t l = idx[*itr];
+            const size_t m = idx[*cyclic_next(itr)];
+            Vector3F vl,vm;
             vl.segment(0, m_dim) = m_vertices[l];
-            const Vector3F nl = (vk-vl).cross(vi-vl);
-            if (nj.dot(nl) > 0.0) {
-                return false;
+            vm.segment(0, m_dim) = m_vertices[m];
+            if (l == k) {
+                const Vector3F n_mki = (vk-vm).cross(vi-vm);
+                const Vector3F n_mij = (vi-vm).cross(vj-vm);
+                const Vector3F n_mjk = (vj-vm).cross(vk-vm);
+                if (n_mki.dot(nj) > 0 && n_mij.dot(nj) > 0 && n_mjk.dot(nj) > 0) {
+                    return false;
+                }
+            } else if (m == i) {
+                const Vector3F n_lki = (vk-vl).cross(vi-vl);
+                const Vector3F n_lij = (vi-vl).cross(vj-vl);
+                const Vector3F n_ljk = (vj-vl).cross(vk-vl);
+                if (n_lki.dot(nj) > 0 && n_lij.dot(nj) > 0 && n_ljk.dot(nj) > 0) {
+                    return false;
+                }
+            } else {
+                const Vector3F nl = (vk-vl).cross(vi-vl);
+                const Vector3F nm = (vk-vm).cross(vi-vm);
+                const Vector3F ni = (vl-vi).cross(vm-vi);
+                const Vector3F nk = (vl-vk).cross(vm-vk);
+                const bool cross_ik = nm.dot(nl) < 0.0;
+                const bool cross_lm = ni.dot(nk) < 0.0;
+
+                if (cross_ik && cross_lm) return false;
             }
         }
         return true;
     };
 
-    auto clip = [this, &active_idx, &cyclic_next, &cyclic_prev](const Iterator& itr) {
+    auto clip = [&tris, &active_idx, &cyclic_next, &cyclic_prev](const Iterator& itr) {
         const auto curr = itr;
         const auto next = cyclic_next(itr);
         const auto prev = cyclic_prev(itr);
-        m_tris.emplace_back(Vector3I(*prev, *curr, *next));
+        tris.emplace_back(Vector3I(*prev, *curr, *next));
         active_idx.erase(curr);
     };
 
+    const Vector3F normal = estimate_normal();
     while (active_idx.size() > 3) {
         const size_t n = active_idx.size();
         for (Iterator itr=active_idx.begin(); itr!=active_idx.end(); itr++) {
             const auto curr = itr;
-            if (can_clip(curr)) {
+            if (can_clip(curr, normal)) {
                 clip(curr);
                 break;
             }
@@ -401,6 +468,7 @@ void OBJParser::earclip(const std::vector<size_t>& idx) {
     }
     assert(active_idx.size() == 3);
     clip(active_idx.begin());
+    return tris;
 }
 
 void OBJParser::unify_faces() {
@@ -451,17 +519,6 @@ void OBJParser::finalize_textures() {
             bad_texture = true;
             break;
         }
-        if (t.minCoeff() < 0 || t.maxCoeff() >= num_corner_textures) {
-            std::cerr << "Texture index out of bound." << std::endl;
-            bad_texture = true;
-            break;
-        }
-        //if (t.size() != m_texture_dim) {
-        //    std::cerr << t << std::endl;
-        //    std::cerr << "Texture has the wrong dimension." << std::endl;
-        //    bad_texture = true;
-        //    break;
-        //}
     }
 
     if (bad_texture) {
@@ -470,12 +527,20 @@ void OBJParser::finalize_textures() {
     }
 
     TextureVector textures;
+    const Vector2F INVALID_UV {
+        std::numeric_limits<Float>::quiet_NaN(),
+        std::numeric_limits<Float>::quiet_NaN()};
     for (const auto& t : m_textures) {
         for (size_t i=0; i<m_vertex_per_face; i++) {
-            textures.emplace_back(m_corner_textures[t[i]]);
+            if (t[i] >= 0 && t[i] < num_corner_textures) {
+                textures.emplace_back(m_corner_textures[t[i]]);
+            } else {
+                textures.emplace_back(INVALID_UV);
+            }
         }
     }
     std::swap(textures, m_corner_textures);
+    assert(m_corner_textures.size() == num_faces * m_vertex_per_face);
 }
 
 void OBJParser::finalize_normals() {

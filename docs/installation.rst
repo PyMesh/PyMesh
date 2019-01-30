@@ -6,10 +6,10 @@ Docker
 
 The easiest way of using PyMesh is through
 `docker <https://www.docker.com/>`_, where one can simply ``pull`` a
-`prebuild image of PyMesh <https://hub.docker.com/r/qnzhou/pymesh/>`_ from
+`prebuild image of PyMesh <https://hub.docker.com/r/pymesh/pymesh/>`_ from
 dockerhub::
 
-    $ docker run -it qnzhou/pymesh
+    $ docker run -it pymesh/pymesh
     Python 3.6.4 (default, Dec 21 2017, 01:35:12)
     [GCC 4.9.2] on linux
     Type "help", "copyright", "credits" or "license" for more information.
@@ -19,11 +19,15 @@ dockerhub::
 Download the Source
 -------------------
 
-The source code can be checked out from GitHub::
+The source code can be checked out from
+`GitHub <https://github.com/PyMesh/PyMesh>`_::
 
-    git clone https://github.com/qnzhou/PyMesh.git
+    git clone https://github.com/PyMesh/PyMesh.git
     cd PyMesh
     git submodule update --init
+    export PYMESH_PATH=`pwd`
+
+The rest of the document assumes PyMesh is located at ``$PYMESH_PATH``.
 
 Dependencies
 ------------
@@ -31,21 +35,64 @@ Dependencies
 PyMesh is based on the design philosophy that one should not reinvent the wheel.
 It depends a number of state-of-the-art open source libraries:
 
+System dependencies
+~~~~~~~~~~~~~~~~~~~
+
 * Python_: v2.7 or higher
 * NumPy_: v1.8 or higher
 * SciPy_: v0.13 or higher
 * Eigen_: v3.2 or higher
+* TBB_: 2018 Update 1 or later
+* GMP_: v6.1 or higher
+* MPFR_: v4.0 or higher
+* Boost_: 1.6 or higher (thread, system)
 
 .. _Python: https://www.python.org
 .. _NumPy: https://www.numpy.org
 .. _SciPy: https://www.scipy.org
 .. _Eigen: http://eigen.tuxfamily.org
+.. _TBB: https://www.threadingbuildingblocks.org/
+.. _GMP: https://gmplib.org/
+.. _MPFR: https://www.mpfr.org/
+.. _Boost: https://www.boost.org/
 
-The following libraries are not required, but highly recommended.  PyMesh
+On Linux, the system dependencies can be installed with `apt-get`::
+
+    apt-get install \
+        libeigen3-dev \
+        libgmp-dev \
+        libgmpxx4ldbl \
+        libmpfr-dev \
+        libboost-dev \
+        libboost-thread-dev \
+        libtbb-dev \
+        python3-dev
+
+On MacOS, the system dependencies can be installed with MacPorts_::
+
+    port install
+        python36 \
+        eigen3 \
+        gmp \
+        mpfr \
+        tbb \
+        boost
+
+.. _MacPorts: https://www.macports.org/
+
+Python dependencies such as NumPy and SciPy can be installed using `pip`::
+
+    pip install -r $PYMESH_PATH/python/requirements.txt
+
+Third party dependencies
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The following third-party libraries are not required, but highly recommended in
+order to use the full power of Pymesh.  PyMesh
 provides a thin wrapper to these libraries, and without them certain
 functionalities would be disabled. Most of these packages can be easily
-installed using package management softwares for your OS.  A copy of these
-libraries are also included in the `third_party` direcgtory.
+installed using package management software for your OS.  A copy of these
+libraries are also included in the ``third_party`` directory.
 
 * SparseHash_: is used to speed up hash grid.
 * CGAL_: is needed for self-intersection, convex hull, outer hull and boolean
@@ -75,6 +122,10 @@ libraries are also included in the `third_party` direcgtory.
 .. _Quartet: https://github.com/crawforddoran/quartet
 .. _MMG3D: https://www.mmgtools.org/
 
+All third party libraries are attached to the repo as submodules.  They are
+built as part of PyMesh automatically.  See `Building PyMesh`_ section for more
+instructions.
+
 Environment Variables
 ---------------------
 
@@ -97,10 +148,25 @@ variables:
 * ``GEOGRAM_PATH``: path to GeoGram.
 * ``QUARTET_PATH``: path to Quartet.
 
+.. _Building PyMesh:
+
 Building PyMesh
 ---------------
 
-To compile the optional third party libraries::
+Build with Setuptools
+~~~~~~~~~~~~~~~~~~~~~
+
+Setuptools builds both the main PyMesh module as well as all third party
+dependencies. To build PyMesh::
+
+    ./setup.py build
+
+
+Build with CMake
+~~~~~~~~~~~~~~~~
+
+If you are familiar with C++ and CMake, there is an alternative way of building
+PyMesh.  First compile and install all of the third party dependencies::
 
     cd $PYMESH_PATH/third_party
     mkdir build
@@ -124,87 +190,31 @@ PyMesh consists of several modules.  To build all modules and their
 corresponding unit tests::
 
     make
-    make all_tests
+    make tests
 
-Another way is to build each tool separately::
+PyMesh libraries are all located in ``$PYMESH_PATH/python/pymesh/lib``
+directory.
 
-    # MeshUtils tools
-    make MeshUtils
-    make MeshUtils_tests
-
-    # EigenUtils tools
-    make EigenUtils
-    make EigenUtils_tests
-
-    # Assembler tools
-    make assembler
-    make assembler_tests
-
-    # CGAL tools
-    make cgal
-    make cgal_tools
-
-    # Boolean tools
-    make boolean
-    make boolean_tests
-
-    # Convex hull tools
-    make convex_hull
-    make convex_hull_tests
-
-    # Envolope tools
-    make envolope
-    make envolope_tests
-
-    # Outer hull tools
-    make outer_hull
-    make outer_hull_tests
-
-    # SelfIntersection tools
-    make self_intersection
-    make self_intersection_tests
-
-    # SparseSolver tools
-    make SparseSolver
-    make SparseSolver_tests
-
-    # Tetrahedronization tools
-    make tetrahedronization
-    make tetrahedronization_tests
-
-    # Wire inflation tools
-    make wires
-    make wires_tests
-
-    # TetGen tools
-    make tetgen
-    make tetgen_tests
-
-    # Triangle tools
-    make triangle
-    make triangle_tests
-
-Make sure all unit tests are passed before using the library.  Please report
-unit tests failures on github.
 
 Install PyMesh
---------------
+~~~~~~~~~~~~~~
 
-The output of building PyMesh consists a set of C++ libraries and a python
-module. Installing the C++ library is currently not available.  However,
-installing the python package can be done::
+To install PyMesh in your system::
 
-    ./setup.py build # This an alternative way of calling cmake/make
-    ./setup.py install # This may require admin privilage.
+    ./setup.py install  # May require root privilege
 
 Alternatively, one can install PyMesh locally::
 
-    ./setup.py intall --user
+    ./setup.py install --user
 
+
+Post-installation check
+~~~~~~~~~~~~~~~~~~~~~~~
 
 To check PyMesh is installed correctly, one can run the unit tests::
 
     python -c "import pymesh; pymesh.test()"
 
-Once again, make sure all unit tests are passed, and report any unit test
+Please make sure all unit tests are passed, and report any unit test
 failures.
+

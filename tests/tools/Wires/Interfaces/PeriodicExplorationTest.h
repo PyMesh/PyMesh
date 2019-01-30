@@ -9,7 +9,7 @@
 #include <Mesh.h>
 #include <WireTest.h>
 #include <Wires/Interfaces/PeriodicExploration.h>
-#include <CGAL/AABBTree.h>
+#include <BVH/BVHEngine.h>
 
 class PeriodicExplorationTest : public WireTest {
     protected:
@@ -22,12 +22,16 @@ class PeriodicExplorationTest : public WireTest {
                 const MatrixFr& vertices_1,
                 const MatrixIr& faces_1,
                 const MatrixFr& vertices_2) {
-            AABBTree tree_1(vertices_1, faces_1);
+            const size_t dim = vertices_1.cols();
+            BVHEngine::Ptr tree_1 = BVHEngine::create("auto", dim);
+            tree_1->set_mesh(vertices_1, faces_1);
+            tree_1->build();
 
             VectorF squared_dist;
             VectorI closest_face_indices;
+            MatrixFr closest_points;
 
-            tree_1.look_up(vertices_2, squared_dist, closest_face_indices);
+            tree_1->lookup(vertices_2, squared_dist, closest_face_indices, closest_points);
             return squared_dist.maxCoeff();
         }
 
@@ -51,6 +55,7 @@ class PeriodicExplorationTest : public WireTest {
 };
 
 TEST_F(PeriodicExplorationTest, brick5_periodic_timing) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -99,17 +104,19 @@ TEST_F(PeriodicExplorationTest, brick5_periodic_timing) {
             attr_names.push_back(attr_name);
         }
 
-        std::stringstream sin;
-        sin << "exploration_brick5_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_brick5_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         std::cout << ".";
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, brick5) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "brick5.wire", 5, 0.25);
     explorer.with_parameters(
@@ -158,17 +165,19 @@ TEST_F(PeriodicExplorationTest, brick5) {
             attr_names.push_back(attr_name);
         }
 
-        std::stringstream sin;
-        sin << "exploration_brick5_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_brick5_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         std::cout << ".";
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, pattern0050) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "pattern0050.wire", 5, 0.5);
     explorer.with_all_parameters();
@@ -211,14 +220,15 @@ TEST_F(PeriodicExplorationTest, pattern0050) {
             attr_names.push_back(attr_name);
         }
 
-        std::stringstream sin;
-        sin << "exploration_diamond_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_diamond_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         std::cout << ".";
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, finite_difference) {
@@ -280,6 +290,7 @@ TEST_F(PeriodicExplorationTest, finite_difference) {
 }
 
 TEST_F(PeriodicExplorationTest, gradient_descent) {
+#if WITH_TETGEN
     std::cout << "This might take a few minutes ";
     std::cout.flush();
 
@@ -333,9 +344,9 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
             }
         }
 
-        std::stringstream sin;
-        sin << "exploration_isotropic_brick5_itr_" << i << ".msh";
-        save_mesh(sin.str(), mesh, attr_names);
+        //std::stringstream sin;
+        //sin << "exploration_isotropic_brick5_itr_" << i << ".msh";
+        //save_mesh(sin.str(), mesh, attr_names);
 
         VectorF dofs = explorer.get_dofs();
         dofs += grad * step_size;
@@ -345,6 +356,7 @@ TEST_F(PeriodicExplorationTest, gradient_descent) {
         std::cout.flush();
     }
     std::cout << " done!" << std::endl;
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, debug) {
@@ -388,6 +400,7 @@ TEST_F(PeriodicExplorationTest, DISABLED_debug2) {
 }
 
 TEST_F(PeriodicExplorationTest, pattern0746) {
+#if WITH_TETGEN
     PeriodicExploration explorer(
             m_data_dir + "pattern0746.wire", 5, 0.5);
     explorer.with_all_isotropic_parameters(ParameterCommon::EDGE);
@@ -414,6 +427,7 @@ TEST_F(PeriodicExplorationTest, pattern0746) {
 
     MatrixFr vertices = explorer.get_vertices();
     ASSERT_LT(0, vertices.rows());
+#endif
 }
 
 TEST_F(PeriodicExplorationTest, printability) {
@@ -493,13 +507,14 @@ TEST_F(PeriodicExplorationTest, shape_velocity) {
 
     ASSERT_EQ(reflected_shape_velocities.size(), normal_shape_velocities.size());
 
-    AABBTree tree(normal_vertices, non_periodic_normal_faces);
+    BVHEngine::Ptr tree = BVHEngine::create("auto", dim);
+    tree->set_mesh(normal_vertices, non_periodic_normal_faces);
+    tree->build();
 
     VectorF sq_dist;
     VectorI face_indices;
     MatrixFr closest_points;
-    tree.look_up_with_closest_points(reflected_vertices,
-            sq_dist, face_indices, closest_points);
+    tree->lookup(reflected_vertices, sq_dist, face_indices, closest_points);
 
     const size_t num_velocities = normal_shape_velocities.size();
     const size_t num_reflected_vertices = reflected_vertices.rows();

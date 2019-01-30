@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 #include <Mesh.h>
 #include <Core/EigenTypedef.h>
@@ -18,7 +19,8 @@ namespace PyMesh {
 class BVHEngine {
     public:
         typedef std::shared_ptr<BVHEngine> Ptr;
-        static Ptr create(const std::string& engine_name);
+        static Ptr create(const std::string& engine_name, size_t dim);
+        static std::vector<std::string> get_available_engines();
 
     public:
         virtual ~BVHEngine() = default;
@@ -29,11 +31,6 @@ class BVHEngine {
                 throw NotImplementedError(
                         "Only Triangle mesh is supported by BVH engine");
             }
-            if (vertices.cols() != 3) {
-                throw NotImplementedError(
-                        "Only 3D mesh is supported by BVH engine");
-            }
-
             m_vertices = vertices;
             m_faces = faces;
         }

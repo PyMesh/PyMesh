@@ -1,6 +1,5 @@
 from math import radians
 
-from .. import timethis
 from ..meshio import form_mesh
 from PyMesh import ObtuseTriangleRemoval
 

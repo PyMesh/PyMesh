@@ -4,7 +4,7 @@
 #include <limits>
 #include <iostream>
 #include <ConvexHull/ConvexHullEngine.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 
 using namespace PyMesh;
 
@@ -340,7 +340,7 @@ MatrixFr SimpleInflator::get_edge_thickness() const {
 void SimpleInflator::generate_joint(
         const MatrixFr& pts, const VectorI& source_ids, size_t vertex_index) {
     const size_t dim = m_wire_network->get_dim();
-    ConvexHullEngine::Ptr convex_hull = ConvexHullEngine::create(dim, "qhull");
+    ConvexHullEngine::Ptr convex_hull = ConvexHullEngine::create(dim, "auto");
     convex_hull->run(pts);
 
     MatrixFr vertices = convex_hull->get_vertices();

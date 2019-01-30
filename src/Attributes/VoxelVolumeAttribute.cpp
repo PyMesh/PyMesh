@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <tbb/tbb.h>
 
 #include <Core/EigenTypedef.h>
 #include <Mesh.h>
@@ -36,13 +37,21 @@ void VoxelVolumeAttribute::compute_from_mesh(Mesh& mesh) {
 
     if (num_voxels > 0) {
         if (num_vertex_per_voxel == 4) {
-            for (size_t i=0; i<num_voxels; i++) {
-                volumes[i] = compute_signed_tet_volume(mesh, i);
-            }
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, num_voxels),
+                [this, &mesh, &volumes](const tbb::blocked_range<size_t>& r) {
+                    for (size_t i=r.begin(); i<r.end(); i++) {
+                        volumes[i] = compute_signed_tet_volume(mesh, i);
+                    }
+                }
+            );
         } else if (num_vertex_per_voxel == 8) {
-            for (size_t i=0; i<num_voxels; i++) {
-                volumes[i] = compute_signed_hex_volume(mesh, i);
-            }
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, num_voxels),
+                [this, &mesh, &volumes](const tbb::blocked_range<size_t>& r) {
+                    for (size_t i=r.begin(); i<r.end(); i++) {
+                        volumes[i] = compute_signed_hex_volume(mesh, i);
+                    }
+                }
+            );
         } else {
             std::cerr << "Unknown voxel type with " << num_vertex_per_voxel
                 << " per voxel." << std::endl;

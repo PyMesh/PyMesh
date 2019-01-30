@@ -21,9 +21,9 @@ namespace OBJWriterHelper {
         size_t num_vertices = vertices.size() / dim;
         for (size_t i=0; i<num_vertices; i++) {
             const auto& v = vertices.segment(i*dim, dim);
-            fout << "v ";
+            fout << "v";
             for (size_t j=0; j<dim; j++) {
-                fout << v[j] << " ";
+                fout << " " << v[j];
             }
             fout << std::endl;
         }
@@ -52,9 +52,9 @@ namespace OBJWriterHelper {
         if (num_uvs == 0) {
             for (size_t i=0; i<num_faces; i++) {
                 const auto& f = faces.segment(i*vertex_per_face, vertex_per_face);
-                fout << "f ";
+                fout << "f";
                 for (size_t j=0; j<vertex_per_face; j++) {
-                    fout << f[j] + 1 << " ";
+                    fout << " " << f[j] + 1;
                 }
                 fout << std::endl;
             }

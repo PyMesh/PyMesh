@@ -13,6 +13,7 @@
 #include "LoopSubdivisionTest.h"
 #include "LongEdgeRemovalTest.h"
 #include "MeshCheckerTest.h"
+#include "MeshCutterTest.h"
 #include "MeshSeparatorTest.h"
 #include "ManifoldCheckTest.h"
 #include "ObtuseTriangleRemovalTest.h"

@@ -278,7 +278,7 @@ The output mesh look the same due to uniform thickness.
     thickness (right).
 
 Because per-vertex and per-edge uniform thickness assignments produce the same
-output, one does not need to explicity specify the ``per_vertex_thickness``
+output, one does not need to explicitly specify the ``per_vertex_thickness``
 flag::
 
     >>> inflator.inflate(0.5)
@@ -384,7 +384,7 @@ Regular tiling:
 
 Regular tiling refers to tiling according to a regular grid.  To tile a cube of
 size 15 with a 3x3x3 tiling of a given wire network (e.g. similar to putting a
-wire network in each cell of a rubic cube)::
+wire network in each cell of a Rubik's cube)::
 
     >>> tiler = Tiler(wire_network)
     >>> box_min = np.zeros(3)

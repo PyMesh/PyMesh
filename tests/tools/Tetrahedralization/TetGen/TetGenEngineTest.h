@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TETGEN
 
 #include <TestBase.h>
 #include <Tetrahedralization/TetrahedralizationEngine.h>
@@ -97,3 +98,5 @@ TEST_F(TetGenEngineTest, ball) {
     ASSERT_EQ(out_faces.cols(), 3);
     ASSERT_GT(out_voxels.rows(), 0);
 }
+
+#endif

@@ -66,3 +66,4 @@ IF ( NOT MMG_FOUND )
    " variable or the 'MMG_BUILD_DIR' CMake variable to your MMG directory path"
    " to help us to fill the MMG library paths.\n" )
 ENDIF ()
+

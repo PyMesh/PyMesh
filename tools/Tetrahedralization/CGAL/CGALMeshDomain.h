@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 #include <fstream>
 #include <memory>
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
@@ -7,10 +8,25 @@
 #include <CGAL/Mesh_complex_3_in_triangulation_3.h>
 #include <CGAL/Mesh_criteria_3.h>
 #include <CGAL/Implicit_mesh_domain_3.h>
+#include <CGAL/Labeled_mesh_domain_3.h>
 #include <CGAL/Mesh_domain_with_polyline_features_3.h>
 #include <CGAL/Polyhedral_mesh_domain_3.h>
 #include <CGAL/Polyhedral_mesh_domain_with_features_3.h>
 #include <CGAL/Polyhedron_incremental_builder_3.h>
+
+// Clean up definition from CGAL/ImageIO/analyze_impl.h.
+// Otherwise it will cause Linux compilation problems.
+#undef DT_NONE
+#undef DT_UNKNOWN
+#undef DT_BINARY
+#undef DT_UNSIGNED_CHAR
+#undef DT_SIGNED_SHORT
+#undef DT_SIGNED_INT
+#undef DT_FLOAT
+#undef DT_COMPLEX
+#undef DT_DOUBLE
+#undef DT_RGB
+#undef DT_ALL
 
 namespace PyMesh {
 
@@ -121,7 +137,7 @@ auto create_polyhedral_domain_with_feature(
 
     auto domain = std::make_unique<Domain>(P);
     domain->detect_features(180.0 - feature_angle);
-    domain->detect_borders();
+    //domain->detect_borders();
 
     return domain;
 }
@@ -199,7 +215,7 @@ void dump_edges(const C3t3& c3t3, std::string filename) {
 template<typename K, typename Oracle>
 auto create_implicit_domain(
         const MatrixFr& vertices, const MatrixIr& faces, Oracle& oracle) {
-    using Domain = CGAL::Implicit_mesh_domain_3<Oracle, K>;
+    using Domain = CGAL::Labeled_mesh_domain_3<K>;
     using Sphere = typename K::Sphere_3;
     using Point = typename K::Point_3;
 
@@ -208,15 +224,15 @@ auto create_implicit_domain(
     Eigen::Vector3d centroid = vertices.colwise().sum() / num_vertices;
     Eigen::Vector3d bbox_min = vertices.colwise().minCoeff();
     Eigen::Vector3d bbox_max = vertices.colwise().maxCoeff();
-    double bbox_radius = (bbox_max - bbox_min).norm() / 2;
-    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), bbox_radius);
+    double sq_bbox_radius = (bbox_max - bbox_min).squaredNorm() / 4;
+    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), sq_bbox_radius);
     return std::make_unique<Domain>(oracle, bounding_sphere);
 }
 
 template<typename K, typename Oracle>
 auto create_implicit_domain_with_features(
         const MatrixFr& vertices, const MatrixIr& faces, Oracle& oracle) {
-    using ImplicitDomain = CGAL::Implicit_mesh_domain_3<Oracle, K>;
+    using ImplicitDomain = CGAL::Labeled_mesh_domain_3<K>;
     using Domain = CGAL::Mesh_domain_with_polyline_features_3<ImplicitDomain>;
     using Sphere = typename K::Sphere_3;
     using Point = typename K::Point_3;
@@ -226,8 +242,8 @@ auto create_implicit_domain_with_features(
     Eigen::Vector3d centroid = vertices.colwise().sum() / num_vertices;
     Eigen::Vector3d bbox_min = vertices.colwise().minCoeff();
     Eigen::Vector3d bbox_max = vertices.colwise().maxCoeff();
-    double bbox_radius = (bbox_max - bbox_min).norm() / 2;
-    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), bbox_radius);
+    double sq_bbox_radius = (bbox_max - bbox_min).squaredNorm() / 4;
+    Sphere bounding_sphere(Point(centroid[0], centroid[1], centroid[2]), sq_bbox_radius);
     auto domain  = std::make_unique<Domain>(oracle, bounding_sphere);
     // TODO: add polyline feature.
     return domain;
@@ -304,3 +320,4 @@ void extract_mesh(const typename Traits::C3t3& c3t3,
 
 }
 
+#endif

@@ -1,12 +1,11 @@
-# Include this directory
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Enumerate source files
 FILE(GLOB SRC_FILES *.cpp)
 FILE(GLOB INC_FILES *.h)
 
 ADD_LIBRARY(lib_EigenUtils SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_EigenUtils PROPERTIES OUTPUT_NAME "EigenUtiles")
-TARGET_LINK_LIBRARIES(lib_EigenUtils Mesh)
-
-ADD_CUSTOM_TARGET(EigenUtils DEPENDS lib_EigenUtils)
+SET_TARGET_PROPERTIES(lib_EigenUtils PROPERTIES OUTPUT_NAME "PyMesh-EigenUtiles")
+TARGET_LINK_LIBRARIES(lib_EigenUtils 
+    PUBLIC
+        Mesh
+        PyMesh::Tools
+)

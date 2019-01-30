@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include "../TriangulationTest.h"
 
@@ -13,7 +14,7 @@ TEST_F(LexicographicTriangulationTest, simple) {
               0.0, 1.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_lexicographic");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(1, faces.rows());
@@ -32,7 +33,7 @@ TEST_F(LexicographicTriangulationTest, simple2) {
               0.0, 1.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_lexicographic");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(2, faces.rows());
@@ -47,7 +48,7 @@ TEST_F(LexicographicTriangulationTest, simple3) {
               0.0, 0.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_lexicographic");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(2, faces.rows());
@@ -61,9 +62,10 @@ TEST_F(LexicographicTriangulationTest, degenerate) {
               1.0, 0.0;
 
     Triangulation::Ptr t = Triangulation::create("igl_lexicographic");
-    t->set_vertices(points);
+    t->set_points(points);
     t->run();
     MatrixIr faces = t->get_faces();
     ASSERT_EQ(0, faces.rows());
 }
 
+#endif

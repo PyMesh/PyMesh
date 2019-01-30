@@ -1,9 +1,10 @@
 /* This file is part of PyMesh. Copyright (c) 2017 by Qingnan Zhou */
+#ifdef WITH_TRIANGLE
 #include "TriangleConvexHullEngine.h"
 
 #include <cassert>
 #include <Core/Exception.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 #include <MeshUtils/Boundary.h>
 
 using namespace PyMesh;
@@ -41,3 +42,5 @@ void TriangleConvexHullEngine::run(const MatrixFr& points) {
         m_faces(i, 1) = vertex_map[m_faces(i,1)];
     }
 }
+
+#endif

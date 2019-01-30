@@ -1,41 +1,25 @@
-# Include headers
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
-
-# Cork
-IF (CORK_FOUND)
-    INCLUDE_DIRECTORIES(${CORK_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_CORK)
-ENDIF (CORK_FOUND)
-
-# Clipper
-IF(CLIPPER_FOUND)
-    INCLUDE_DIRECTORIES(${CLIPPER_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_CLIPPER)
-ENDIF(CLIPPER_FOUND)
-
-# IGL
-IF(LIBIGL_FOUND AND CGAL_FOUND)
-    INCLUDE_DIRECTORIES(${LIBIGL_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_IGL)
-ENDIF(LIBIGL_FOUND AND CGAL_FOUND)
-
-# CGAL
-IF (CGAL_FOUND)
-    ADD_DEFINITIONS(-DWITH_CGAL)
-ENDIF (CGAL_FOUND)
-
-# Carve
-IF (CARVE_FOUND)
-    INCLUDE_DIRECTORIES(${CARVE_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_CARVE)
-ENDIF (CARVE_FOUND)
-
 # Enumerate source files
 FILE(GLOB_RECURSE TEST_SRC_FILES *.cpp)
 FILE(GLOB_RECURSE TEST_INC_FILES *.h *.inl)
 
-ADD_EXECUTABLE(boolean_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(boolean_tests ${GTEST_BOTH_LIBRARIES} Mesh lib_boolean
-    lib_MeshUtils)
-ADD_CUSTOM_COMMAND(TARGET boolean_tests POST_BUILD COMMAND boolean_tests)
+ADD_EXECUTABLE(Boolean_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(Boolean_tests
+    PRIVATE
+        PyMesh::UnitTest
+        PyMesh::Tools::Boolean
+        PyMesh::Cork
+        PyMesh::Clipper
+        PyMesh::Carve
+        PyMesh::BSP
+        PyMesh::TinyXML2
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::IGL
+        PyMesh::Tools::CGAL
+)
+ADD_CUSTOM_TARGET(run_Boolean_tests
+    DEPENDS
+        Boolean_tests
+    COMMAND
+        Boolean_tests
+)
+

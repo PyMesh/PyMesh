@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_DRACO
 
 #include "DracoCompressionEngine.h"
 
@@ -313,3 +314,5 @@ Mesh::Ptr DracoCompressionEngine::decompress(const std::string& data) const {
         throw NotImplementedError("Unsupported Draco mesh type.");
     }
 }
+
+#endif

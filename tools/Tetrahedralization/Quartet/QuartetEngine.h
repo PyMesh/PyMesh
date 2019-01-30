@@ -1,7 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_QUARTET
 
-#include <TetrahedralizationEngine.h>
+#include <Tetrahedralization/TetrahedralizationEngine.h>
 
 namespace PyMesh {
 
@@ -14,3 +15,5 @@ class QuartetEngine : public TetrahedralizationEngine {
 };
 
 }
+
+#endif

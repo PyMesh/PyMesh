@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_IGL_AND_CGAL
 #include "IGLEngine.h"
 
 #include <igl/copyleft/cgal/mesh_boolean.h>
@@ -71,3 +72,5 @@ void IGLEngine::serialize_xml(const std::string& filename) const {
     BooleanEngine::serialize_xml(filename);
 #endif
 }
+
+#endif

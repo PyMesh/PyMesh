@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_BSP
 
 #include <Boolean/BooleanEngine.h>
 
@@ -17,3 +18,5 @@ class BSPEngine : public BooleanEngine {
 };
 
 }
+
+#endif

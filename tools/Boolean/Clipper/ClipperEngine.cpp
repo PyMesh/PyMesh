@@ -1,9 +1,10 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_CLIPPER
 #include "ClipperEngine.h"
 #include <Core/Exception.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
-#include <triangle/TriangleWrapper.h>
+#include <Triangle/TriangleWrapper.h>
 
 #include <cassert>
 #include <iostream>
@@ -224,3 +225,4 @@ void ClipperEngine::extract_result(const ClipperLib::Paths& paths) {
     }
 }
 
+#endif

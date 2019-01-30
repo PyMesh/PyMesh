@@ -34,5 +34,17 @@ namespace FaceUtils {
     std::vector<size_t> get_degenerated_faces(
             const MatrixFr& vertices,
             const MatrixIr& faces);
+
+    /**
+     * Return orientation of each triangle.  A triangle is positively oriented
+     * iff its three corners are ordered counterclockwise.
+     *
+     *   * + value means face is positiviely oriented.
+     *   * 0 value means face is degenerate
+     *   * - value means face is negatively oriented.
+     */
+    VectorF  get_triangle_orientations(
+            const MatrixFr& vertices,
+            const MatrixIr& faces);
 }
 }

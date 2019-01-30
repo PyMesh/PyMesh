@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export DIST_DIR="dist"
-export PYMESH_IMAGE="qnzhou/pymesh"
+export PYMESH_IMAGE="pymesh/pymesh"
 export TAG="py3.6"
 
 mkdir -p $DIST_DIR

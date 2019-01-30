@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_IGL_AND_CGAL
 #include "IGLSelfIntersectionResolver.h"
 
 #include <igl/copyleft/cgal/remesh_self_intersections.h>
@@ -41,3 +42,5 @@ void IGLSelfIntersectionResolver::run() {
             final_vertices.rows() * final_vertices.cols(), m_vertices.data(),
             [](const Kernel::FT& val) { return CGAL::to_double(val); });
 }
+
+#endif

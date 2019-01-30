@@ -9,7 +9,7 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 using namespace PyMesh;
 
@@ -224,7 +224,7 @@ void VEGAParser::extract_faces_from_voxels() {
     }
     m_faces.clear();
 
-    typedef std::map<Triplet, int> FaceCounter;
+    typedef std::map<Triplet, unsigned short> FaceCounter;
     FaceCounter face_counter;
     for (const auto& voxel : m_voxels) {
         assert(voxel.size() == 4);
@@ -247,7 +247,7 @@ void VEGAParser::extract_faces_from_voxels() {
     std::vector<int> vertex_buffer;
     for (FaceCounter::const_iterator itr = face_counter.begin();
             itr!=face_counter.end(); itr++) {
-        assert(itr->second == 1 or itr->second == 2);
+        assert(itr->second == 1 || itr->second == 2);
         if (itr->second == 1) {
             const VectorI& f = itr->first.get_ori_data();
             m_faces.push_back(f);

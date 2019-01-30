@@ -7,7 +7,7 @@
 
 #include <Core/Exception.h>
 #include <Math/MatrixUtils.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 #include <MeshUtils/IndexHeap.h>
 
 using namespace PyMesh;
@@ -98,9 +98,9 @@ void EdgeSplitter::generate_edge_map() {
     for (size_t i=0; i<num_faces; i++) {
         const auto& f = m_faces.row(i);
 
-        m_edge_adj_faces.insert(Triplet(f[1], f[2]), i);
-        m_edge_adj_faces.insert(Triplet(f[2], f[0]), i);
-        m_edge_adj_faces.insert(Triplet(f[0], f[1]), i);
+        m_edge_adj_faces.insert({f[1], f[2]}, i);
+        m_edge_adj_faces.insert({f[2], f[0]}, i);
+        m_edge_adj_faces.insert({f[0], f[1]}, i);
     }
 }
 
@@ -109,8 +109,9 @@ void EdgeSplitter::set_all_faces_as_valid() {
     m_face_is_valid = std::vector<bool>(num_faces, true);
 }
 
+template<typename AdjacencyVector>
 void EdgeSplitter::split_edge(const VectorI& edge,
-        const std::vector<size_t>& adj_faces, Float max_length) {
+        const AdjacencyVector& adj_faces, Float max_length) {
     const auto v0 = m_vertices.row(edge[0]);
     const auto v1 = m_vertices.row(edge[1]);
     Float length = (v0 - v1).norm();

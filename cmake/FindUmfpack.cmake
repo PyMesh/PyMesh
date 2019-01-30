@@ -78,3 +78,4 @@ find_package_handle_standard_args(UMFPACK DEFAULT_MSG
                                   UMFPACK_INCLUDES UMFPACK_LIBRARIES)
 
 mark_as_advanced(UMFPACK_INCLUDES UMFPACK_LIBRARIES AMD_LIBRARY COLAMD_LIBRARY)
+

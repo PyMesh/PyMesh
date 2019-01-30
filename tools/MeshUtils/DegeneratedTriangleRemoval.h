@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 #include <Core/EigenTypedef.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 namespace PyMesh {
 
@@ -29,7 +29,7 @@ class DegeneratedTriangleRemoval {
     private:
         MatrixFr m_vertices;
         MatrixIr m_faces;
-        TripletMap<size_t> m_edge_map;
+        DupletMap<size_t> m_edge_map;
         VectorI m_ori_face_indices;
 };
 

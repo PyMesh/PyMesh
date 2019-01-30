@@ -11,21 +11,21 @@ class MultipletMapTest : public ::testing::Test {
     protected:
         virtual void SetUp() {
             for (size_t i=0; i<10; i++) {
-                m_multiplets.push_back(Multiplet(i, i, i, i));
+                m_multiplets.push_back(Quadruplet(i, i, i, i));
             }
         }
 
     protected:
-        std::vector<Multiplet> m_multiplets;
+        std::vector<Quadruplet> m_multiplets;
 };
 
 TEST_F(MultipletMapTest, Empty) {
-    MultipletMap<Float> empty;
+    MultipletMap<Quadruplet, int> empty;
     ASSERT_TRUE(empty.empty());
 }
 
 TEST_F(MultipletMapTest, UniqueKey) {
-    MultipletMap<int> mmap;
+    MultipletMap<Quadruplet, int> mmap;
     const size_t num_entries = m_multiplets.size();
     for (size_t i=0; i<num_entries; i++) {
         mmap.insert(m_multiplets[i], i);
@@ -41,7 +41,7 @@ TEST_F(MultipletMapTest, UniqueKey) {
 
 TEST_F(MultipletMapTest, KeyCollision) {
     const size_t N=5;
-    MultipletMap<int> mmap;
+    MultipletMap<Quadruplet, int> mmap;
     auto key = m_multiplets[0];
     for (size_t i=0; i<N; i++) {
         mmap.insert(key, i);

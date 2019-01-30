@@ -1,19 +1,17 @@
-# Include headers
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools/IGL/)
-
-# Include IGL
-INCLUDE_DIRECTORIES(${LIBIGL_INCLUDE_DIRS})
-
-# Include CGAL
-SET(BACKUP_CXX_FLAGS ${CMAKE_CXX_FLAGS})
-INCLUDE(${CGAL_USE_FILE})
-SET(CMAKE_CXX_FLAGS ${BACKUP_CXX_FLAGS})
-
 # Enumerate source files
 FILE(GLOB TEST_SRC_FILES unit_test_driver.cpp)
 FILE(GLOB TEST_INC_FILES *_test.h)
 
-ADD_EXECUTABLE(igl_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(igl_tests Mesh lib_MeshUtils lib_igl ${GTEST_BOTH_LIBRARIES})
-ADD_CUSTOM_COMMAND(TARGET igl_tests POST_BUILD COMMAND igl_tests)
+ADD_EXECUTABLE(IGL_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+TARGET_LINK_LIBRARIES(IGL_tests
+    PRIVATE
+        PyMesh::UnitTest
+        PyMesh::Tools::IGL
+        PyMesh::Tools::MeshUtils
+)
+ADD_CUSTOM_TARGET(run_IGL_tests
+    DEPENDS
+        IGL_tests
+    COMMAND
+        IGL_tests
+)

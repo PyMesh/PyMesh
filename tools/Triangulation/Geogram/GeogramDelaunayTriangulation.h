@@ -1,7 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_GEOGRAM
 
-#include "Triangulation.h"
+#include <Triangulation/Triangulation.h>
 #include <Geogram/GeogramBase.h>
 
 namespace PyMesh {
@@ -15,3 +16,5 @@ namespace PyMesh {
             virtual void run();
     };
 }
+
+#endif

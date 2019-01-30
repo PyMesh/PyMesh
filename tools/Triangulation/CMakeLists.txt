@@ -1,38 +1,28 @@
-# Include this directory
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Enumerate source files
 FILE(GLOB SRC_FILES *.cpp *.inl)
 FILE(GLOB INC_FILES *.h)
 
-SET(DEPENDENT_LIBS "")
+ADD_SUBDIRECTORY(IGL)
+ADD_SUBDIRECTORY(CGAL)
+ADD_SUBDIRECTORY(ShewchukTriangle)
+ADD_SUBDIRECTORY(Geogram)
+ADD_SUBDIRECTORY(Jigsaw)
+ADD_SUBDIRECTORY(MMG)
 
-# IGL and CGAL
-IF (LIBIGL_FOUND AND CGAL_FOUND)
-    INCLUDE_DIRECTORIES(${LIBIGL_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_IGL)
-    ADD_DEFINITIONS(-DWITH_CGAL)
-    LIST(APPEND DEPENDENT_LIBS cgal_wrapper)
-    ADD_SUBDIRECTORY(IGL)
-    ADD_SUBDIRECTORY(CGAL)
-ENDIF (LIBIGL_FOUND AND CGAL_FOUND)
+ADD_LIBRARY(lib_Triangulation SHARED ${SRC_FILES} ${INC_FILES})
+SET_TARGET_PROPERTIES(lib_Triangulation PROPERTIES OUTPUT_NAME
+    "PyMesh-Triangulation")
+TARGET_LINK_LIBRARIES(lib_Triangulation
+    PUBLIC
+        Mesh
+        PyMesh::Tools
+    PRIVATE
+        PyMesh::Tools::IGL
+        PyMesh::Tools::CGAL
+        PyMesh::Tools::Triangle
+        PyMesh::Tools::Geogram
+        PyMesh::Jigsaw
+        PyMesh::MMG
+)
 
-# Shewchuk's Triangle
-IF (TRIANGLE_FOUND)
-    LIST(APPEND DEPENDENT_LIBS lib_triangle_wrapper)
-    ADD_DEFINITIONS(-DWITH_TRIANGLE)
-    ADD_SUBDIRECTORY(ShewchukTriangle)
-ENDIF (TRIANGLE_FOUND)
-
-# Geogram
-IF (GEOGRAM_FOUND)
-    LIST(APPEND DEPENDENT_LIBS geogram)
-    ADD_DEFINITIONS(-DWITH_GEOGRAM)
-    ADD_SUBDIRECTORY(Geogram)
-ENDIF (GEOGRAM_FOUND)
-
-ADD_LIBRARY(lib_triangulation SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_triangulation PROPERTIES OUTPUT_NAME "triangulation")
-TARGET_LINK_LIBRARIES(lib_triangulation Mesh ${DEPENDENT_LIBS})
-
-ADD_CUSTOM_TARGET(triangulation DEPENDS lib_triangulation)
+ADD_LIBRARY(PyMesh::Tools::Triangulation ALIAS lib_Triangulation)

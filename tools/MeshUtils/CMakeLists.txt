@@ -1,18 +1,14 @@
-# Include this directory
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
-# Google sparse/dense hash
-IF (SPARSEHASH_FOUND)
-    ADD_DEFINITIONS(-DUSE_SPARSEHASH)
-    INCLUDE_DIRECTORIES(${SPARSEHASH_INCLUDE_DIR})
-ENDIF (SPARSEHASH_FOUND)
-
 # Enumerate source files
 FILE(GLOB SRC_FILES *.cpp)
 FILE(GLOB INC_FILES *.h)
 
 ADD_LIBRARY(lib_MeshUtils SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_MeshUtils PROPERTIES OUTPUT_NAME "MeshUtils")
-TARGET_LINK_LIBRARIES(lib_MeshUtils Mesh lib_predicates)
+SET_TARGET_PROPERTIES(lib_MeshUtils PROPERTIES OUTPUT_NAME "PyMesh-MeshUtils")
+TARGET_LINK_LIBRARIES(lib_MeshUtils
+    PUBLIC
+        Mesh
+        PyMesh::Tools
+        PyMesh::Tools::Predicates
+)
 
-ADD_CUSTOM_TARGET(MeshUtils DEPENDS lib_MeshUtils)
+ADD_LIBRARY(PyMesh::Tools::MeshUtils ALIAS lib_MeshUtils)

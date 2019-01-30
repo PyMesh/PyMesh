@@ -2,8 +2,8 @@
 #pragma once
 #include <vector>
 #include <Core/EigenTypedef.h>
-#include <Misc/Triplet.h>
-#include <Misc/TripletMap.h>
+#include <Misc/Multiplet.h>
+#include <Misc/MultipletMap.h>
 
 namespace PyMesh {
 class ObtuseTriangleRemoval {
@@ -33,8 +33,8 @@ class ObtuseTriangleRemoval {
         void finalize_faces();
 
     private:
-        typedef Triplet Edge;
-        typedef TripletMap<size_t> EdgeMapI;
+        typedef Duplet Edge;
+        typedef DupletMap<size_t> EdgeMapI;
         typedef EdgeMapI::ValueType AdjFaces;
 
         std::vector<Float> m_face_angles;

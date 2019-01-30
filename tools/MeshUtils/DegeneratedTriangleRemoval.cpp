@@ -81,7 +81,7 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
     // loop through faces, check if a face is a colinear.
     // If so, flip the longest edge.
 
-    auto comp = [&](const Triplet& e1, const Triplet& e2) -> bool{
+    auto comp = [&](const Duplet& e1, const Duplet& e2) -> bool{
         // Return true if e1 is longer than e2.
         auto v1 = m_vertices.row(e1.get_ori_data()[0]);
         auto v2 = m_vertices.row(e1.get_ori_data()[1]);
@@ -91,16 +91,15 @@ size_t DegeneratedTriangleRemoval::remove_line_faces() {
     };
 
     const size_t num_faces = m_faces.rows();
-    std::set<Triplet, decltype(comp)> edges_to_remove(comp);
+    std::set<Duplet, decltype(comp)> edges_to_remove(comp);
     std::vector<size_t> longest_edges(num_faces, INVALID);
     for (size_t fi=0; fi<num_faces; fi++) {
         if (!is_degenerated(fi)) continue;
         const auto& face = m_faces.row(fi);
-        const size_t fi_opp_v = find_longest_edge(fi);
-        const size_t vi_0 = face[(fi_opp_v+1)%3];
-        const size_t vi_1 = face[(fi_opp_v+2)%3];
-        Triplet edge(vi_0, vi_1);
-        edges_to_remove.insert(edge);
+        const auto fi_opp_v = find_longest_edge(fi);
+        const auto vi_0 = face[(fi_opp_v+1)%3];
+        const auto vi_1 = face[(fi_opp_v+2)%3];
+        edges_to_remove.insert(Duplet{vi_0, vi_1});
         longest_edges[fi] = fi_opp_v;
     }
 
@@ -186,9 +185,9 @@ void DegeneratedTriangleRemoval::init_edge_map() {
     assert(m_faces.cols() == 3);
     for (size_t i=0; i<num_faces; i++) {
         const auto& f = m_faces.row(i);
-        m_edge_map.insert(Triplet(f[0], f[1]), i);
-        m_edge_map.insert(Triplet(f[1], f[2]), i);
-        m_edge_map.insert(Triplet(f[2], f[0]), i);
+        m_edge_map.insert({f[0], f[1]}, i);
+        m_edge_map.insert({f[1], f[2]}, i);
+        m_edge_map.insert({f[2], f[0]}, i);
     }
 }
 

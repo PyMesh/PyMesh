@@ -11,6 +11,8 @@
 
 #include <EigenUtils/EigenSolver.h>
 
+using namespace PyMesh;
+
 class EigenUtilsTest : public ::testing::Test {
     protected:
         void ASSERT_MATRIX_EQ(const MatrixF& M1, const MatrixF& M2) {

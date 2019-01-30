@@ -33,13 +33,14 @@ class BVHTest : public TestBase {
                 typename BVHEngine::Ptr bvh,
                 bool reordered=false,
                 const Float tol=1.0e-12) {
+            const size_t dim = mesh->get_dim();
             const size_t num_faces = mesh->get_num_faces();
 
             mesh->add_attribute("face_centroid");
             VectorF flattened_centroids = mesh->get_attribute("face_centroid");
-            MatrixFr centroids(num_faces, 3);
+            MatrixFr centroids(num_faces, dim);
             std::copy(flattened_centroids.data(),
-                    flattened_centroids.data() + num_faces * 3,
+                    flattened_centroids.data() + num_faces * dim,
                     centroids.data());
 
             VectorF distances;
@@ -244,7 +245,7 @@ class BVHTest : public TestBase {
 #if WITH_CGAL
 TEST_F(BVHTest, cgal_aabb) {
     MeshPtr mesh = load_mesh("cube.obj");
-    auto bvh = BVHEngine::create("cgal");
+    auto bvh = BVHEngine::create("cgal", 3);
     ASSERT_TRUE(bool(bvh));
     init_bvh(mesh, bvh);
     assert_centroid_has_zero_dist(mesh, bvh);
@@ -258,12 +259,12 @@ TEST_F(BVHTest, cgal_aabb) {
 }
 
 TEST_F(BVHTest, cgal_simple) {
-    auto bvh = BVHEngine::create("cgal");
+    auto bvh = BVHEngine::create("cgal", 3);
     simple_triangle_test(bvh);
 }
 
 TEST_F(BVHTest, cgal_hinge) {
-    auto bvh = BVHEngine::create("cgal");
+    auto bvh = BVHEngine::create("cgal", 3);
     hinge_test(bvh);
 }
 #endif
@@ -271,7 +272,7 @@ TEST_F(BVHTest, cgal_hinge) {
 #if WITH_GEOGRAM
 TEST_F(BVHTest, geogram_aabb) {
     MeshPtr mesh = load_mesh("cube.obj");
-    auto bvh = BVHEngine::create("geogram");
+    auto bvh = BVHEngine::create("geogram", 3);
     ASSERT_TRUE(bool(bvh));
     init_bvh(mesh, bvh);
     assert_centroid_has_zero_dist(mesh, bvh, true);
@@ -285,12 +286,12 @@ TEST_F(BVHTest, geogram_aabb) {
 }
 
 TEST_F(BVHTest, geogram_simple) {
-    auto bvh = BVHEngine::create("geogram");
+    auto bvh = BVHEngine::create("geogram", 3);
     simple_triangle_test(bvh);
 }
 
 TEST_F(BVHTest, geogram_hinge) {
-    auto bvh = BVHEngine::create("geogram");
+    auto bvh = BVHEngine::create("geogram", 3);
     hinge_test(bvh);
 }
 #endif
@@ -298,7 +299,7 @@ TEST_F(BVHTest, geogram_hinge) {
 #if WITH_IGL
 TEST_F(BVHTest, igl_aabb) {
     MeshPtr mesh = load_mesh("cube.obj");
-    auto bvh = BVHEngine::create("igl");
+    auto bvh = BVHEngine::create("igl", 3);
     ASSERT_TRUE(bool(bvh));
     init_bvh(mesh, bvh);
     assert_centroid_has_zero_dist(mesh, bvh, true);
@@ -311,13 +312,22 @@ TEST_F(BVHTest, igl_aabb) {
     assert_vertex_has_zero_dist(mesh2, bvh, true);
 }
 
+TEST_F(BVHTest, igl_aabb_2D) {
+    MeshPtr mesh = load_mesh("square_2D.obj");
+    auto bvh = BVHEngine::create("igl", 2);
+    ASSERT_TRUE(bool(bvh));
+    init_bvh(mesh, bvh);
+    assert_centroid_has_zero_dist(mesh, bvh, true);
+    assert_vertex_has_zero_dist(mesh, bvh, true);
+}
+
 TEST_F(BVHTest, igl_simple) {
-    auto bvh = BVHEngine::create("igl");
+    auto bvh = BVHEngine::create("igl", 3);
     simple_triangle_test(bvh);
 }
 
 TEST_F(BVHTest, igl_hinge) {
-    auto bvh = BVHEngine::create("igl");
+    auto bvh = BVHEngine::create("igl", 3);
     hinge_test(bvh);
 }
 #endif

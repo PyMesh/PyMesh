@@ -1,7 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CLIPPER
 
-#include <Boolean/Clipper/ClipperEngine.h>
 #include "../BooleanEngineTest.h"
 
 class ClipperEngineTest : public BooleanEngineTest {
@@ -259,3 +259,4 @@ TEST_F(ClipperEngineTest, Jeremies_test_data) {
     ASSERT_LT(0, faces.rows());
 }
 
+#endif

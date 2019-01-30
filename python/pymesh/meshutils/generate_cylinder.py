@@ -12,7 +12,7 @@ def generate_cylinder(p0, p1, r0, r1, num_segments=16):
         p1 (``np.ndarray``): Top center.
         r0 (``float``): Bottom radius.
         r1 (``float``): Top radius.
-        num_segments (``int``): Number of segments to a discrete circle consists.
+        num_segments (``int``): Number of segments of discrete circle.
 
     Returns:
         The cylinder :py:class:`Mesh`.
@@ -39,7 +39,7 @@ def generate_cylinder(p0, p1, r0, r1, num_segments=16):
     top_rim = np.dot(rot, rim.T).T * r1 + p1;
 
     vertices = np.vstack([ [p0, p1], bottom_rim, top_rim ]);
-    
+
     bottom_fan = np.array([
         [0, (i+1)%num_segments+2, i+2]
         for i in range(num_segments) ], dtype=int);

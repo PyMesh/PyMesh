@@ -1,14 +1,15 @@
-[![CircleCI](https://circleci.com/gh/qnzhou/PyMesh/tree/master.svg?style=svg)](https://circleci.com/gh/qnzhou/PyMesh/tree/master)
-[![Build Status](https://travis-ci.org/qnzhou/PyMesh.svg?branch=master)](https://travis-ci.org/qnzhou/PyMesh)
-[![Documentation Status](https://readthedocs.org/projects/pymesh/badge/?version=latest)](http://pymesh.readthedocs.io/en/latest/?badge=latest)
+[![CircleCI](https://circleci.com/gh/PyMesh/PyMesh/tree/master.svg?style=svg)](https://circleci.com/gh/PyMesh/PyMesh/tree/master)
+[![Build Status](https://travis-ci.org/PyMesh/PyMesh.svg?branch=master)](https://travis-ci.org/PyMesh/PyMesh)
+[![Documentation Status](https://readthedocs.org/projects/pymesh/badge/?version=latest)](https://pymesh.readthedocs.io/en/latest/?badge=latest)
+
 
 ### About PyMesh ###
 
 **PyMesh** is a code base developed by Qingnan Zhou for his PhD research at New
 York University.  It is a rapid prototyping platform focused on geometry
-processing.  **PyMesh** is written using both C++ and python, where
+processing.  **PyMesh** is written with both C++ and Python, where
 computational intensive functionalities are realized in C++, and Python is used
-for create minimalistic and easy to use interfaces.
+for creating minimalistic and easy to use interfaces.
 
 ![PyMesh][teaser]
 (Model source: [Bust of Sappho](https://www.thingiverse.com/thing:14565))
@@ -22,7 +23,7 @@ for create minimalistic and easy to use interfaces.
 Perhaps the easiest way of trying out PyMesh is through
 [docker](https://www.docker.com/):
 
-    docker run -it qnzhou/pymesh
+    docker run -it pymesh/pymesh
     Python 3.6.4 (default, Feb 17 2018, 09:32:33)
     [GCC 4.9.2] on linux
     Type "help", "copyright", "credits" or "license" for more information.
@@ -30,7 +31,7 @@ Perhaps the easiest way of trying out PyMesh is through
 
 For example, to run [meshstat.py](scripts/meshstat.py):
 
-    docker run -it --rm -v `pwd`:/models qnzhou/pymesh meshstat.py -x /models/model.obj
+    docker run -it --rm -v `pwd`:/models pymesh/pymesh meshstat.py -x /models/model.obj
 
 This command mounts your current working directory to the `/models` directory
 in a docker container and executes the `meshstat.py` script on the mesh file
@@ -40,7 +41,7 @@ in a docker container and executes the `meshstat.py` script on the mesh file
 
 To retrieve the code:
 
-    git clone https://github.com/qnzhou/PyMesh.git
+    git clone https://github.com/PyMesh/PyMesh.git
     cd PyMesh
     git submodule update --init
 
@@ -79,6 +80,8 @@ PyMesh also has a number of optional dependencies:
   triangulations, Voronoi diagrams computations.
 * [Quartet](https://github.com/crawforddoran/quartet): A tetrahedral mesh
   generator that does isosurface stuffing with an acute tetrahedral tile.
+* [TBB](https://www.threadingbuildingblocks.org/): Thread building blocks from
+  Intel.
 * [Tetgen](http://wias-berlin.de/software/tetgen/): Tetrahedral mesh generation
   engine.
 * [Triangle](http://www.cs.cmu.edu/~quake/triangle.html): A two-Dimensional
@@ -139,7 +142,7 @@ Now we can build the main project.  It is recommended to build out of source:
 To build the PyMesh library:
 
     make
-    make all_tests
+    make tests
 
 Make sure all unit tests are passed before using the library.
 
@@ -159,4 +162,10 @@ To check PyMesh is installed correctly, run the following python unit tests::
 Once again, make sure all unit tests are passed, and report any unit test
 failures.
 
-[teaser]: pymesh_teaser.jpg
+### Feedback ###
+
+Thank you for using PyMesh!  Please consider help PyMesh improve by leaving
+[feedback]!
+
+[teaser]: docs/_static/pymesh_teaser.jpg
+[feedback]: https://docs.google.com/forms/d/e/1FAIpQLSc8YAzx1SL4t3qntzahYd0igPNGyIxw6N8eRs-PloYlwbPaXg/viewform?usp=pp_url

@@ -1,13 +1,14 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL_AND_CGAL
 
-#include <OuterHullEngine.h>
+#include <OuterHull/OuterHullEngine.h>
 
 namespace PyMesh {
 
 class IGLOuterHullEngine : public OuterHullEngine {
     public:
-        virtual ~IGLOuterHullEngine() {}
+        virtual ~IGLOuterHullEngine() = default;
 
     public:
         virtual void run();
@@ -20,3 +21,5 @@ class IGLOuterHullEngine : public OuterHullEngine {
 };
 
 }
+
+#endif

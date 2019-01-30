@@ -6,7 +6,7 @@
 
 #include <Mesh.h>
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 using namespace PyMesh;
 
@@ -36,17 +36,17 @@ void VertexValanceAttribute::compute_from_surface_mesh(Mesh& mesh) {
     VectorF& vertex_valance = m_values;
     vertex_valance = VectorF::Zero(num_vertices);
 
-    std::set<Triplet> edges;
+    std::set<Duplet> edges;
     for (size_t i=0; i<num_faces; i++) {
         VectorI face = mesh.get_face(i);
         for (size_t j=0; j<num_vertex_per_face; j++) {
-            Triplet edge(face[j], face[(j+1)%num_vertex_per_face]);
+            Duplet edge(face[j], face[(j+1)%num_vertex_per_face]);
             edges.insert(edge);
         }
     }
 
     for (auto edge : edges) {
-        const Vector3I& data = edge.get_ori_data();
+        const auto& data = edge.get_ori_data();
         vertex_valance[data[0]] ++;
         vertex_valance[data[1]] ++;
     }
@@ -61,16 +61,16 @@ void VertexValanceAttribute::compute_from_tet_mesh(Mesh& mesh) {
     VectorF& vertex_valance = m_values;
     vertex_valance = VectorF::Zero(num_vertices);
 
-    std::set<Triplet> edges;
+    std::set<Duplet> edges;
     for (size_t i=0; i<num_voxels; i++) {
         VectorI voxel = mesh.get_voxel(i);
-        Triplet edge[6] = {
-            Triplet(voxel[0], voxel[1]),
-            Triplet(voxel[0], voxel[2]),
-            Triplet(voxel[0], voxel[3]),
-            Triplet(voxel[1], voxel[2]),
-            Triplet(voxel[1], voxel[3]),
-            Triplet(voxel[2], voxel[3]) };
+        Duplet edge[6] = {
+            {voxel[0], voxel[1]},
+            {voxel[0], voxel[2]},
+            {voxel[0], voxel[3]},
+            {voxel[1], voxel[2]},
+            {voxel[1], voxel[3]},
+            {voxel[2], voxel[3]} };
         edges.insert(edge[0]);
         edges.insert(edge[1]);
         edges.insert(edge[2]);
@@ -80,7 +80,7 @@ void VertexValanceAttribute::compute_from_tet_mesh(Mesh& mesh) {
     }
 
     for (auto edge : edges) {
-        const Vector3I& data = edge.get_ori_data();
+        const auto& data = edge.get_ori_data();
         vertex_valance[data[0]] ++;
         vertex_valance[data[1]] ++;
     }
@@ -105,22 +105,22 @@ void VertexValanceAttribute::compute_from_hex_mesh(Mesh& mesh) {
     VectorF& vertex_valance = m_values;
     vertex_valance = VectorF::Zero(num_vertices);
 
-    std::set<Triplet> edges;
+    std::set<Duplet> edges;
     for (size_t i=0; i<num_voxels; i++) {
         VectorI voxel = mesh.get_voxel(i);
-        Triplet edge[12] = {
-            Triplet(voxel[0], voxel[1]),
-            Triplet(voxel[1], voxel[2]),
-            Triplet(voxel[2], voxel[3]),
-            Triplet(voxel[3], voxel[0]),
-            Triplet(voxel[4], voxel[5]),
-            Triplet(voxel[5], voxel[6]),
-            Triplet(voxel[6], voxel[7]),
-            Triplet(voxel[7], voxel[4]),
-            Triplet(voxel[0], voxel[4]),
-            Triplet(voxel[1], voxel[5]),
-            Triplet(voxel[2], voxel[6]),
-            Triplet(voxel[3], voxel[7]) };
+        Duplet edge[12] = {
+            {voxel[0], voxel[1]},
+            {voxel[1], voxel[2]},
+            {voxel[2], voxel[3]},
+            {voxel[3], voxel[0]},
+            {voxel[4], voxel[5]},
+            {voxel[5], voxel[6]},
+            {voxel[6], voxel[7]},
+            {voxel[7], voxel[4]},
+            {voxel[0], voxel[4]},
+            {voxel[1], voxel[5]},
+            {voxel[2], voxel[6]},
+            {voxel[3], voxel[7]} };
 
         edges.insert(edge[0]);
         edges.insert(edge[1]);
@@ -137,7 +137,7 @@ void VertexValanceAttribute::compute_from_hex_mesh(Mesh& mesh) {
     }
 
     for (auto edge : edges) {
-        const Vector3I& data = edge.get_ori_data();
+        const auto& data = edge.get_ori_data();
         vertex_valance[data[0]] ++;
         vertex_valance[data[1]] ++;
     }

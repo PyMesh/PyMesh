@@ -4,7 +4,7 @@
 #include <vector>
 
 #include <Core/EigenTypedef.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 namespace PyMesh {
 
@@ -99,7 +99,7 @@ class MeshChecker {
         MatrixIr m_faces;
         MatrixIr m_voxels;
         MatrixIr m_boundary_edges;
-        TripletMap<size_t> m_edge_face_adjacency;
+        DupletMap<size_t> m_edge_face_adjacency;
         std::vector<VectorI> m_boundary_loops;
         bool m_complex_bd;
 };

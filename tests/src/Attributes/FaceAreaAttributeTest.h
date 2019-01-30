@@ -43,7 +43,7 @@ class FaceAreaAttributeTest : public TestBase {
                     area += get_triangle_area(v0, v1, centroid);
                 }
 
-                ASSERT_FLOAT_EQ(area, areas[i]);
+                ASSERT_FLOAT_EQ(area, abs(areas[i]));
             }
         }
 };

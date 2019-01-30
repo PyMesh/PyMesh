@@ -7,7 +7,7 @@
 #ifdef WITH_CLIPPER
 #include "Clipper/ClipperEngineTest.h"
 #endif
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
 #include "IGL/IGLEngineTest.h"
 #include "IGL/IGLCSGTreeTest.h"
 #endif

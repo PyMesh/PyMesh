@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 
 #include <algorithm>
 #include <string>
@@ -272,3 +273,5 @@ TEST_F(CGALBooleanEngineTest, open_surface) {
     cgal_engine->set_mesh_2(tri_vertices, tri_faces);
     ASSERT_THROW(cgal_engine->compute_intersection(), RuntimeError);
 }
+
+#endif

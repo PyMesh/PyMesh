@@ -7,7 +7,6 @@
 #include <iostream>
 
 #include <Core/Exception.h>
-#include <Misc/Triplet.h>
 #include <Misc/Multiplet.h>
 
 using namespace PyMesh;
@@ -72,7 +71,7 @@ int MeshGeometry::project_out_zero_dim() {
 
 void MeshGeometry::extract_faces_from_tets() {
     const VectorI& voxels = m_voxels;
-    typedef std::map<Triplet, int> FaceCounter;
+    typedef std::map<Triplet, unsigned short> FaceCounter;
     FaceCounter face_counter;
 
     for (size_t i=0; i<voxels.size(); i+= m_vertex_per_voxel) {
@@ -81,10 +80,10 @@ void MeshGeometry::extract_faces_from_tets() {
         // each face should have normal pointing outward.
         assert(voxel.size() == 4);
         Triplet voxel_faces[4] = {
-            Triplet(voxel[0], voxel[2], voxel[1]),
-            Triplet(voxel[0], voxel[1], voxel[3]),
-            Triplet(voxel[0], voxel[3], voxel[2]),
-            Triplet(voxel[1], voxel[2], voxel[3])
+            {voxel[0], voxel[2], voxel[1]},
+            {voxel[0], voxel[1], voxel[3]},
+            {voxel[0], voxel[3], voxel[2]},
+            {voxel[1], voxel[2], voxel[3]}
         };
         for (size_t j=0; j<4; j++) {
             if (face_counter.find(voxel_faces[j]) == face_counter.end()) {
@@ -125,7 +124,7 @@ void MeshGeometry::extract_faces_from_tets() {
 
 void MeshGeometry::extract_faces_from_hexes() {
     const VectorI& voxels = m_voxels;
-    typedef std::map<Multiplet, int> FaceCounter;
+    typedef std::map<Quadruplet, int> FaceCounter;
     FaceCounter face_counter;
 
     for (size_t i=0; i<voxels.size(); i+= m_vertex_per_voxel) {
@@ -133,13 +132,13 @@ void MeshGeometry::extract_faces_from_hexes() {
         // Note that the order of vertices below are predefined by MSH format,
         // each face should have normal pointing outward.
         assert(voxel.size() == 8);
-        Multiplet voxel_faces[6] = {
-            Multiplet(Vector4I(voxel[0], voxel[1], voxel[5], voxel[4])), // Bottom
-            Multiplet(Vector4I(voxel[2], voxel[3], voxel[7], voxel[6])), // Top
-            Multiplet(Vector4I(voxel[0], voxel[4], voxel[7], voxel[3])), // Left
-            Multiplet(Vector4I(voxel[1], voxel[2], voxel[6], voxel[5])), // Right
-            Multiplet(Vector4I(voxel[4], voxel[5], voxel[6], voxel[7])), // Front
-            Multiplet(Vector4I(voxel[0], voxel[3], voxel[2], voxel[1]))  // Back
+        Quadruplet voxel_faces[6] = {
+            {voxel[0], voxel[1], voxel[5], voxel[4]}, // Bottom
+            {voxel[2], voxel[3], voxel[7], voxel[6]}, // Top
+            {voxel[0], voxel[4], voxel[7], voxel[3]}, // Left
+            {voxel[1], voxel[2], voxel[6], voxel[5]}, // Right
+            {voxel[4], voxel[5], voxel[6], voxel[7]}, // Front
+            {voxel[0], voxel[3], voxel[2], voxel[1]}  // Back
         };
 
         for (size_t j=0; j<6; j++) {

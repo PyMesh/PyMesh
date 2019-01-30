@@ -1,8 +1,12 @@
 # Find SparseHash (https://code.google.com/p/sparsehash/)
 # The following variables are set.
 #
-# SPARSEHASH_FOUND
-# SPARSEHASH_INCLUDE_DIRS
+#   SPARSEHASH_FOUND
+#   SPARSEHASH_INCLUDE_DIRS
+#
+# and the following target:
+#
+#   SPARSEHASH
 
 # Find include directory
 FIND_PATH(SPARSEHASH_INCLUDE_DIRS sparsehash/sparse_hash_map
@@ -18,3 +22,4 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(SparseHash
     SPARSEHASH_INCLUDE_DIRS)
 
 MARK_AS_ADVANCED(SPARSEHASH_INCLUDE_DIRS)
+

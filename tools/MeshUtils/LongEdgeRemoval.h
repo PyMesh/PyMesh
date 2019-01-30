@@ -3,7 +3,7 @@
 
 #include <vector>
 #include <Core/EigenTypedef.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 namespace PyMesh {
 
@@ -33,7 +33,7 @@ class LongEdgeRemoval {
         MatrixFr m_vertices;
         MatrixIr m_faces;
 
-        TripletMap<size_t> m_edge_map;
+        DupletMap<size_t> m_edge_map;
 };
 
 }

@@ -81,7 +81,7 @@ It is also possible to operate on a raw mesh::
 
     >>> vertices, faces, info = pymesh.split_long_edges(mesh, tol)
 
-This method is often used to elimiate long edges appearing in sliver
+This method is often used to eliminate long edges appearing in sliver
 triangles.  The following figure shows its effect.
 
 .. image:: _static/split_long_edges.png
@@ -94,11 +94,11 @@ Remeshing
 It is possible to completely remesh the input shape by calling
 ``pymesh.collapse_short_edges`` and ``pymesh.split_long_edges`` iteratively in
 an alternating fashion.  The script
-`fix_mesh.py <https://github.com/qnzhou/PyMesh/blob/master/scripts/fix_mesh.py>`_ is based on this idea.
+`fix_mesh.py <https://github.com/PyMesh/PyMesh/blob/master/scripts/fix_mesh.py>`_ is based on this idea.
 Its effects can be seen in a remesh of the `Ducky The Lop Eared Bunny
 <http://www.thingiverse.com/thing:752379>`_ example:
 
-.. image:: _static/ducky_bunny.png
+.. image:: _static/ducky_bunny.jpg
     :width: 90%
     :align: center
 
@@ -157,7 +157,7 @@ output.  To achieve this::
     ...     importance=weights)
 
 In the above example, we use the X coordinates as the importance weight.  When
-closeby vertices are merged, the coordinates of the vertex with the highest X
+close by vertices are merged, the coordinates of the vertex with the highest X
 values are used.
 
 As usual, one can operate directly on raw meshes::
@@ -189,3 +189,17 @@ To operate on raw meshes::
     ...     vertices, faces)
 
 
+Subdividing Mesh
+----------------
+
+PyMesh supports both simple and loop subdivision of a given triangular mesh::
+
+    >>> mesh = pymesh.subdivide(mesh, order=2, method="loop")
+    >>> mesh.get_attribute("ori_face_index")
+    array([ 0.,  0.,  0., ..., 95., 95., 95.])
+
+Here are some examples of different subdivision methods:
+
+.. image:: _static/subdivide.jpg
+    :width: 90%
+    :align: center

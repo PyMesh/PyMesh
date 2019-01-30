@@ -23,7 +23,7 @@ class Grid {
         Grid(const Float cell_size) {
             m_cell_size = Vector_f::Ones() * cell_size;
         }
-        virtual ~Grid() {}
+        virtual ~Grid() = default;
 
         void initialize(
                 const Vector_i& size, 

@@ -1,9 +1,3 @@
-# General lib locations
-LINK_DIRECTORIES(/opt/local/lib)
-
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/tools)
-
 FILE(GLOB SRC_FILES *.cpp)
 FILE(GLOB INC_FILES *.h)
 
@@ -15,8 +9,14 @@ ADD_SUBDIRECTORY(Materials)
 ADD_SUBDIRECTORY(Mesh)
 ADD_SUBDIRECTORY(ShapeFunctions)
 
-ADD_LIBRARY(lib_assembler SHARED ${SRC_FILES} ${INC_FILES})
-TARGET_LINK_LIBRARIES(lib_assembler Mesh lib_MeshUtils)
-SET_TARGET_PROPERTIES(lib_assembler PROPERTIES OUTPUT_NAME "assembler")
+ADD_LIBRARY(lib_Assembler SHARED ${SRC_FILES} ${INC_FILES})
+TARGET_LINK_LIBRARIES(lib_Assembler
+    PUBLIC
+        Mesh
+        PyMesh::Tools
+    PRIVATE
+        PyMesh::Tools::MeshUtils
+)
+SET_TARGET_PROPERTIES(lib_Assembler PROPERTIES OUTPUT_NAME "PyMesh-Assembler")
 
-ADD_CUSTOM_TARGET(assembler DEPENDS lib_assembler)
+ADD_LIBRARY(PyMesh::Tools::Assembler ALIAS lib_Assembler)

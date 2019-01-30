@@ -5,15 +5,14 @@
 #include <iostream>
 #include <sstream>
 
+#include <BVH/BVHEngine.h>
 #include <Boolean/BooleanEngine.h>
-#include <CGAL/AABBTree.h>
 #include <Math/MatrixUtils.h>
 #include <MeshUtils/Boundary.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
 #include <MeshUtils/EdgeSplitter.h>
 #include <MeshUtils/ShortEdgeRemoval.h>
 #include <MeshUtils/SubMesh.h>
-#include <tetgen/TetgenWrapper.h>
 #include <Wires/Misc/BoundaryRemesher.h>
 #include <Wires/Misc/BoxChecker.h>
 #include <Wires/Misc/MeshCleaner.h>
@@ -128,7 +127,7 @@ void IsotropicPeriodicInflator::clip_phantom_mesh_with_octa_cell() {
     create_box(m_octa_cell_bbox_min, m_octa_cell_bbox_max,
             box_vertices, box_faces);
 
-    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("igl");
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("auto");
     boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
     boolean_engine->set_mesh_2(box_vertices, box_faces);
     boolean_engine->compute_intersection();
@@ -270,45 +269,6 @@ void IsotropicPeriodicInflator::ensure_periodicity() {
     cleaner.remove_fin_faces(m_vertices, m_faces);
 }
 
-void IsotropicPeriodicInflator::reflect_old() {
-    TetgenWrapper tetgen;
-    tetgen.set_points(m_vertices);
-    tetgen.set_triangles(m_faces);
-    tetgen.set_max_tet_volume(0.01);
-    tetgen.set_verbosity(0);
-    tetgen.run();
-
-    auto vertices = tetgen.get_vertices();
-    auto voxels = tetgen.get_voxels();
-
-    size_t num_vertices = vertices.rows();
-
-    for (size_t i=0; i<3; i++) {
-        MatrixFr r_vts = vertices;
-        for (size_t j=0; j<num_vertices; j++) {
-            r_vts(j, i) = -r_vts(j, i) + 2 * m_octa_cell_bbox_min[i];
-        }
-
-        MatrixIr r_voxels = voxels.array() + num_vertices;
-        r_voxels.col(0).swap(r_voxels.col(1));
-
-        vertices = MatrixUtils::vstack<MatrixFr>({vertices, r_vts});
-        voxels = MatrixUtils::vstack<MatrixIr>({voxels, r_voxels});
-        num_vertices = vertices.rows();
-    }
-
-    DuplicatedVertexRemoval remover(vertices, voxels);
-    remover.run(1e-12);
-    vertices = remover.get_vertices();
-    voxels = remover.get_faces();
-
-    Boundary::Ptr bd = Boundary::extract_volume_boundary_raw(vertices, voxels);
-    m_vertices = vertices;
-    m_faces = bd->get_boundaries();
-
-    remove_isolated_vertices();
-}
-
 void IsotropicPeriodicInflator::update_face_sources() {
     BoxChecker box_checker(m_center_cell_bbox_min, m_center_cell_bbox_max);
     const size_t num_faces = m_faces.rows();
@@ -323,7 +283,8 @@ void IsotropicPeriodicInflator::update_face_sources() {
 
     VectorF squared_dists;
     VectorI closest_face_indices;
-    m_tree->look_up(face_centroids, squared_dists, closest_face_indices);
+    MatrixFr closest_points;
+    m_tree->lookup(face_centroids, squared_dists, closest_face_indices, closest_points);
 
     m_face_sources = VectorI::Zero(num_faces);
     for (size_t i=0; i<num_faces; i++) {

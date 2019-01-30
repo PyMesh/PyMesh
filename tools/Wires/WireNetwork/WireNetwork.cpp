@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#include "SVGParser.h"
 #include "WireNetwork.h"
 #include "WireParser.h"
 #include "WireWriter.h"
@@ -8,6 +9,7 @@
 #include <sstream>
 
 #include <Core/Exception.h>
+#include <IO/IOUtils.h>
 
 using namespace PyMesh;
 
@@ -55,18 +57,34 @@ WireNetwork::WireNetwork() : m_dim(0) {
 }
 
 WireNetwork::WireNetwork(const std::string& wire_file) {
-    WireParser parser;
-    parser.parse(wire_file);
+    const auto ext = IOUtils::get_extention(wire_file);
+    if (ext == ".svg") {
+        SVGParser parser;
+        parser.parse(wire_file);
 
-    size_t num_vertices = parser.get_num_vertices();
-    size_t num_edges = parser.get_num_edges();
-    m_dim = parser.get_dim();
+        size_t num_vertices = parser.get_num_vertices();
+        size_t num_edges = parser.get_num_edges();
+        m_dim = parser.get_dim();
 
-    m_vertices.resize(num_vertices, m_dim);
-    m_edges.resize(num_edges, 2);
+        m_vertices.resize(num_vertices, m_dim);
+        m_edges.resize(num_edges, 2);
 
-    parser.export_vertices(m_vertices.data());
-    parser.export_edges(m_edges.data());
+        parser.export_vertices(m_vertices.data());
+        parser.export_edges(m_edges.data());
+    } else {
+        WireParser parser;
+        parser.parse(wire_file);
+
+        size_t num_vertices = parser.get_num_vertices();
+        size_t num_edges = parser.get_num_edges();
+        m_dim = parser.get_dim();
+
+        m_vertices.resize(num_vertices, m_dim);
+        m_edges.resize(num_edges, 2);
+
+        parser.export_vertices(m_vertices.data());
+        parser.export_edges(m_edges.data());
+    }
 
     initialize();
 }

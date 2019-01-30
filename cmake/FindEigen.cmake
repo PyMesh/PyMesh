@@ -5,6 +5,9 @@
 #  EIGEN_INCLUDE_DIRS, where to find Eigen/Core, etc.
 #  EIGEN_FOUND, if false, do not try to use EIGEN.
 #
+# and the following target:
+#  EIGEN::Eigen
+#
 # Variables used by this module, they can change the default behavior and need
 # to be set before calling find_package:
 #
@@ -34,3 +37,4 @@ if(EIGEN_INCLUDE_DIRS)
 endif()
 
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(Eigen DEFAULT_MSG EIGEN_INCLUDE_DIRS)
+

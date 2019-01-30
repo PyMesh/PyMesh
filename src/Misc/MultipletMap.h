@@ -2,59 +2,63 @@
 #pragma once
 
 #include <limits>
+#include <mutex>
 #include <vector>
+#include <tbb/concurrent_vector.h>
 
-#include <unordered_map>
+#include <tbb/concurrent_unordered_map.h>
 
 #include <Core/Exception.h>
 #include <Misc/Multiplet.h>
 
 namespace PyMesh {
 
-template <typename T>
+template <typename KeyType, typename T>
 class MultipletMap {
     public:
         struct MultipletHashFunc {
-            int operator() (const Multiplet& trip) const {
-                return trip.hash();
+            inline int operator() (const KeyType& key) const {
+                return key.hash();
             }
         };
 
-        typedef std::vector<T> ValueType;
-        typedef std::unordered_map<Multiplet, ValueType, MultipletHashFunc> MultipletHashMap;
-        typedef typename MultipletHashMap::iterator iterator;
-        typedef typename MultipletHashMap::const_iterator const_iterator;
+        //using ValueType = std::vector<T>;
+        using ValueType = tbb::concurrent_vector<T>;
+        using MultipletHashMap = tbb::concurrent_unordered_map<
+            KeyType, ValueType, MultipletHashFunc>;
+        using iterator = typename MultipletHashMap::iterator;
+        using const_iterator = typename MultipletHashMap::const_iterator;
+        using range_type = typename MultipletHashMap::range_type;
+        using const_range_type = typename MultipletHashMap::const_range_type;
 
     public:
         MultipletMap() = default;
 
-        void insert(const Multiplet& t, T val) {
+        void insert(const KeyType& t, T val) {
             iterator itr = m_map.find(t);
             if (itr == m_map.end()) {
-                ValueType item;
-                item.push_back(val);
-                m_map[t] = item;
+                m_map.insert({t, {val}});
             } else {
-                m_map[t].push_back(val);
+                itr->second.emplace_back(val);
             }
         }
 
-        ValueType& operator[] (const Multiplet& t) {
+        ValueType& operator[] (const KeyType& t) {
             return m_map[t];
         }
 
-        const ValueType& get(const Multiplet& t) const {
+        const ValueType& get(const KeyType& t) const {
             const_iterator itr = m_map.find(t);
             if (itr == m_map.end())
                 throw RuntimeError("Key not found");
             return itr->second;
         }
 
-        iterator find(const Multiplet& t) {
+        iterator find(const KeyType& t) {
             return m_map.find(t);
         }
 
-        const_iterator find(const Multiplet& t) const {
+        const_iterator find(const KeyType& t) const {
             return m_map.find(t);
         }
 
@@ -77,8 +81,20 @@ class MultipletMap {
         iterator end() { return m_map.end(); }
         const_iterator end() const { return m_map.end(); }
 
+        range_type range() { return m_map.range(); }
+        const_range_type range() const { return m_map.range(); }
+
     private:
         MultipletHashMap m_map;
 };
+
+template<typename T>
+using SingletonMap = MultipletMap<Singleton, T>;
+template<typename T>
+using DupletMap = MultipletMap<Duplet, T>;
+template<typename T>
+using TripletMap = MultipletMap<Triplet, T>;
+template<typename T>
+using QaudrupletMap = MultipletMap<Quadruplet, T>;
 
 }

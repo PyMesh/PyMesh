@@ -1,28 +1,18 @@
-# Include this directory
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Enumerate source files
 FILE(GLOB SRC_FILES *.cpp *.inl)
 FILE(GLOB INC_FILES *.h)
 
-SET(DEPENDENT_LIBS "")
-SET(DEPENDENT_INCLUDES "")
+ADD_SUBDIRECTORY(IGL)
+ADD_LIBRARY(lib_OuterHull SHARED ${SRC_FILES} ${INC_FILES})
+SET_TARGET_PROPERTIES(lib_OuterHull PROPERTIES OUTPUT_NAME "PyMesh-OuterHull")
+TARGET_LINK_LIBRARIES(lib_OuterHull
+    PUBLIC
+        Mesh
+        PyMesh::Tools
+    PRIVATE
+        PyMesh::Tools::MeshUtils
+        PyMesh::Tools::IGL
+        PyMesh::Tools::SelfIntersection
+)
 
-# IGL and CGAL
-IF (LIBIGL_FOUND AND CGAL_FOUND)
-    LIST(APPEND DEPENDENT_INCLUDES ${LIBIGL_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_IGL)
-    LIST(APPEND DEPENDENT_LIBS cgal_wrapper)
-    ADD_SUBDIRECTORY(IGL)
-ELSEIF(NOT LIBIGL_FOUND)
-    MESSAGE(WARNING "libigl is missing, libigl outer hull support is skipped")
-ELSEIF(NOT CGAL_FOUND)
-    MESSAGE(WARNING "CGAL is missing, libigl outer hull support is skipped")
-ENDIF (LIBIGL_FOUND AND CGAL_FOUND)
-
-ADD_LIBRARY(lib_outer_hull SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_outer_hull PROPERTIES OUTPUT_NAME "outer_hull")
-TARGET_INCLUDE_DIRECTORIES(lib_outer_hull SYSTEM PRIVATE ${DEPENDENT_INCLUDES})
-TARGET_LINK_LIBRARIES(lib_outer_hull Mesh lib_MeshUtils lib_self_intersection ${DEPENDENT_LIBS})
-
-ADD_CUSTOM_TARGET(outer_hull DEPENDS lib_outer_hull)
+ADD_LIBRARY(PyMesh::Tools::OuterHull ALIAS lib_OuterHull)

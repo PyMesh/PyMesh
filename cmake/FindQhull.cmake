@@ -89,3 +89,4 @@ if(QHULL_FOUND)
   endif(NOT QHULL_USE_STATIC)
   #message(STATUS "QHULL found (include: ${QHULL_INCLUDE_DIRS}, lib: ${QHULL_LIBRARIES})")
 endif(QHULL_FOUND)
+

@@ -11,7 +11,7 @@
 using namespace PyMesh;
 
 OuterHullEngine::Ptr OuterHullEngine::create(const std::string& engine_name) {
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
     if (engine_name == "igl") {
         return std::make_shared<IGLOuterHullEngine>();
     }

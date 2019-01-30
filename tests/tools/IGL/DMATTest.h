@@ -1,8 +1,9 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL
 
 #include <TestBase.h>
-#include <DMAT.h>
+#include <IGL/DMAT.h>
 
 class DMATTest : public TestBase {
 };
@@ -78,3 +79,5 @@ TEST_F(DMATTest, ascii) {
     VectorF B = DMAT::load_matrix<VectorF>(tmp_name);
     ASSERT_MATRIX_EQ(A, B);
 }
+
+#endif

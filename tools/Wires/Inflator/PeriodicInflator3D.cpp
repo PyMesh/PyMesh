@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 
+#include <BVH/BVHEngine.h>
 #include <Boolean/BooleanEngine.h>
 #include <Math/ZSparseMatrix.h>
 #include <MeshFactory.h>
@@ -18,7 +19,6 @@ extern "C" {
 }
 
 #include "PeriodicBoundaryRemesher.h"
-#include <CGAL/AABBTree.h>
 #include <Wires/Misc/DistanceComputation.h>
 #include <Wires/Misc/BoxChecker.h>
 
@@ -69,7 +69,7 @@ void PeriodicInflator3D::clip_phantom_mesh() {
     MatrixIr box_faces;
     create_box(bbox_min, bbox_max, box_vertices, box_faces);
 
-    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("cork");
+    BooleanEngine::Ptr boolean_engine = BooleanEngine::create("auto");
     boolean_engine->set_mesh_1(m_phantom_vertices, m_phantom_faces);
     boolean_engine->set_mesh_2(box_vertices, box_faces);
     boolean_engine->compute_intersection();
@@ -92,7 +92,8 @@ void PeriodicInflator3D::update_face_sources() {
 
     VectorF squared_dists;
     VectorI closest_face_indices;
-    m_tree->look_up(face_centroids, squared_dists, closest_face_indices);
+    MatrixFr closest_points;
+    m_tree->lookup(face_centroids, squared_dists, closest_face_indices, closest_points);
 
     m_face_sources = VectorI::Zero(num_faces);
     for (size_t i=0; i<num_faces; i++) {

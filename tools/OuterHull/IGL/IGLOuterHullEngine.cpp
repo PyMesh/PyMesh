@@ -1,4 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
+#ifdef WITH_IGL_AND_CGAL
+
 #include "IGLOuterHullEngine.h"
 
 #include <algorithm>
@@ -101,3 +103,5 @@ void IGLOuterHullEngine::extract_outer_hull() {
     igl::copyleft::cgal::peel_outer_hull_layers(V, F, m_layers, m_face_is_flipped);
     m_faces = F;
 }
+
+#endif

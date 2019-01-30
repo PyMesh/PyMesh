@@ -1,26 +1,20 @@
-# Include this directory
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
-
 # Enumerate source files
 FILE(GLOB SRC_FILES *.cpp *.inl)
 FILE(GLOB INC_FILES *.h)
 
-SET(DEPENDENT_LIBS "")
+ADD_SUBDIRECTORY(IGL)
+ADD_SUBDIRECTORY(FastWindingNumber)
 
-# IGL and CGAL
-IF (LIBIGL_FOUND AND CGAL_FOUND)
-    INCLUDE_DIRECTORIES(${LIBIGL_INCLUDE_DIRS})
-    ADD_DEFINITIONS(-DWITH_IGL)
-    LIST(APPEND DEPENDENT_LIBS cgal_wrapper)
-    ADD_SUBDIRECTORY(IGL)
-ELSEIF(NOT LIBIGL_FOUND)
-    MESSAGE(WARNING "libigl is missing, libigl winding number support is skipped")
-ELSEIF(NOT CGAL_FOUND)
-    MESSAGE(WARNING "CGAL is missing, libigl winding number support is skipped")
-ENDIF (LIBIGL_FOUND AND CGAL_FOUND)
+ADD_LIBRARY(lib_WindingNumber SHARED ${SRC_FILES} ${INC_FILES})
+SET_TARGET_PROPERTIES(lib_WindingNumber PROPERTIES OUTPUT_NAME
+    "PyMesh-WindingNumber")
+TARGET_LINK_LIBRARIES(lib_WindingNumber
+    PUBLIC
+        Mesh
+        PyMesh::Tools
+    PRIVATE
+        PyMesh::Tools::IGL
+        PyMesh::FastWindingNumber
+)
 
-ADD_LIBRARY(lib_winding_number SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_winding_number PROPERTIES OUTPUT_NAME "winding_number")
-TARGET_LINK_LIBRARIES(lib_winding_number Mesh ${DEPENDENT_LIBS})
-
-ADD_CUSTOM_TARGET(winding_number DEPENDS lib_winding_number)
+ADD_LIBRARY(PyMesh::Tools::WindingNumber ALIAS lib_WindingNumber)

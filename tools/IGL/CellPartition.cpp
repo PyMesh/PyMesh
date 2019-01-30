@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2016 by Qingnan Zhou */
+#ifdef WITH_IGL_AND_CGAL
 #include "CellPartition.h"
 #include <Math/MatrixUtils.h>
 #include <igl/copyleft/cgal/extract_cells.h>
@@ -123,3 +124,5 @@ size_t CellPartition::get_num_patches() const {
     if (m_patches.size() > 0) return m_patches.maxCoeff();
     else return 0;
 }
+
+#endif

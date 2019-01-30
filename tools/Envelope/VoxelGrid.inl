@@ -12,8 +12,6 @@
 using namespace PyMesh;
 
 namespace VoxelGridHelper {
-    bool nonzero(short i) { return i!=0; }
-
     template<int DIM>
     VectorI append_cell_corners(
             const typename VoxelGrid<DIM>::Vector_f& cell_center,
@@ -127,7 +125,7 @@ void VoxelGrid<DIM>::create_grid() {
         this->lookup(centers.row(i)) += 1;
     }
 
-    flood_exterior_cells();
+    remove_cavities();
 }
 
 template<int DIM>
@@ -214,6 +212,20 @@ Mesh::Ptr VoxelGrid<DIM>::get_voxel_mesh() {
 }
 
 template<int DIM>
+void VoxelGrid<DIM>::remove_cavities() {
+    Mask mask = create_mask();
+
+    flood_from_base_cell(mask);
+    auto mask_itr = mask.begin();
+    auto data_itr = this->begin();
+    for (; mask_itr != mask.end(); mask_itr++, data_itr++) {
+        if (!*mask_itr) { *data_itr = 1; }
+    }
+    assert(data_itr == this->end());
+}
+
+
+template<int DIM>
 void VoxelGrid<DIM>::insert_triangle_mesh(Mesh::Ptr mesh) {
     const VectorF& vertices = mesh->get_vertices();
     const VectorI& faces = mesh->get_faces();
@@ -264,26 +276,13 @@ typename VoxelGrid<DIM>::Mask VoxelGrid<DIM>::create_mask() const {
     assert((mask.cell_size().array() == this->m_cell_size.array()).all());
     mask.initialize(this->size(), this->base_coordinates());
     std::transform(this->begin(), this->end(), mask.begin(),
-            std::ptr_fun<short, bool>(nonzero));
+            [](short i) { return i!=0; });
     return mask;
 }
 
 template<int DIM>
-void VoxelGrid<DIM>::flood_exterior_cells() {
-    Mask mask = create_mask();
-
-    flood_from_base_cell(mask);
-    auto mask_itr = mask.begin();
-    auto data_itr = this->begin();
-    for (; mask_itr != mask.end(); mask_itr++, data_itr++) {
-        if (!*mask_itr) { *data_itr = 1; }
-    }
-    assert(data_itr == this->end());
-}
-
-template<int DIM>
 void VoxelGrid<DIM>::flood_from_base_cell(VoxelGrid<DIM>::Mask& mask) {
-    Vector_f p = mask.base_coordinates();
+    const Vector_f& p = mask.base_coordinates();
     assert(this->is_inside(p));
     const Vector_i seed_idx = this->coordinate_to_index(p);
     if (mask(seed_idx)) return;

@@ -6,16 +6,21 @@
 #include <pybind11/operators.h>
 
 #include <Core/EigenTypedef.h>
-#include <CGAL/SelfIntersection.h>
 
+#if WITH_CGAL
+#include <CGAL/SelfIntersection.h>
 #include <CGAL/enum.h>
 #include <CGAL/Gmpz.h>
 #include <CGAL/Gmpq.h>
+#include <CGAL/Arrangement2.h>
+#include <CGAL/SnapRounding2.h>
+#endif
 
 namespace py = pybind11;
-using namespace PyMesh;
 
 void init_CGAL(py::module &m) {
+#if WITH_CGAL
+    using namespace PyMesh;
     py::class_<SelfIntersection, std::shared_ptr<SelfIntersection> >(m, "SelfIntersection")
         .def(py::init<const MatrixFr& , const MatrixIr&>())
         .def("detect_self_intersection",
@@ -25,6 +30,49 @@ void init_CGAL(py::module &m) {
                 &SelfIntersection::get_self_intersecting_pairs)
         .def("handle_intersection_candidate",
                 &SelfIntersection::handle_intersection_candidate);
+
+    py::class_<Arrangement2, std::shared_ptr<Arrangement2> > arrangement(m, "Arrangement2");
+    arrangement.def(py::init<>())
+        .def_property("points",
+                &Arrangement2::get_points,
+                &Arrangement2::set_points,
+                py::return_value_policy::reference_internal)
+        .def_property("segments",
+                &Arrangement2::get_segments,
+                &Arrangement2::set_segments,
+                py::return_value_policy::reference_internal)
+        .def("run", &Arrangement2::run)
+        .def_property_readonly("vertices",
+                &Arrangement2::get_vertices,
+                py::return_value_policy::reference_internal)
+        .def_property_readonly("edges",
+                &Arrangement2::get_edges,
+                py::return_value_policy::reference_internal)
+        .def("query", &Arrangement2::query);
+
+    py::enum_<Arrangement2::ElementType>(arrangement, "ElementType")
+        .value("POINT", Arrangement2::POINT)
+        .value("SEGMENT", Arrangement2::SEGMENT)
+        .value("CELL", Arrangement2::CELL)
+        .export_values();
+
+    py::class_<SnapRounding2, std::shared_ptr<SnapRounding2> >(m, "SnapRounding2")
+        .def(py::init<>())
+        .def_property("points",
+                &SnapRounding2::get_points,
+                &SnapRounding2::set_points,
+                py::return_value_policy::reference_internal)
+        .def_property("segments",
+                &SnapRounding2::get_segments,
+                &SnapRounding2::set_segments,
+                py::return_value_policy::reference_internal)
+        .def("run", &SnapRounding2::run)
+        .def_property_readonly("vertices",
+                &SnapRounding2::get_vertices,
+                py::return_value_policy::reference_internal)
+        .def_property_readonly("edges",
+                &SnapRounding2::get_edges,
+                py::return_value_policy::reference_internal);
 
     py::class_<CGAL::Gmpz>(m, "Gmpz")
         .def(py::init<>())
@@ -152,5 +200,5 @@ void init_CGAL(py::module &m) {
                 sout << v;
                 return sout.str();
                 }) ;
-
+#endif
 }

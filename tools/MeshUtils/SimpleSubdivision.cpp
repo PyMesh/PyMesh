@@ -105,7 +105,7 @@ void SimpleSubdivision::extract_edges() {
 void SimpleSubdivision::register_edges(const VectorI& face, size_t base_index) {
     const size_t vertex_per_face = face.size();
     for (size_t i=0; i<vertex_per_face; i++) {
-        Triplet edge(face[i], face[(i+1)%vertex_per_face]);
+        Duplet edge(face[i], face[(i+1)%vertex_per_face]);
         auto itr = m_edge_index_map.find(edge);
         if (itr == m_edge_index_map.end()) {
             size_t mid_edge_index = base_index + m_edge_index_map.size();
@@ -115,11 +115,11 @@ void SimpleSubdivision::register_edges(const VectorI& face, size_t base_index) {
 }
 
 Vector3I SimpleSubdivision::get_edge_indices(const VectorI& face) {
-    typedef std::map<Triplet, size_t>::const_iterator EdgeMapIterator;
+    typedef std::map<Duplet, size_t>::const_iterator EdgeMapIterator;
     EdgeMapIterator edges[3] = {
-        m_edge_index_map.find(Triplet(face[0], face[1])),
-        m_edge_index_map.find(Triplet(face[1], face[2])),
-        m_edge_index_map.find(Triplet(face[2], face[0]))
+        m_edge_index_map.find({face[0], face[1]}),
+        m_edge_index_map.find({face[1], face[2]}),
+        m_edge_index_map.find({face[2], face[0]})
     };
 
     assert(edges[0] != m_edge_index_map.end());

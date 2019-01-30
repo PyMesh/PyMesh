@@ -1,8 +1,10 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_MMG
+#ifdef WITH_TETGEN
 
 #include "MMGEngine.h"
 #include <Core/Exception.h>
-#include <tetgen/TetgenWrapper.h>
+#include <TetGen/TetgenWrapper.h>
 extern "C" {
 #include <mmg/libmmg.h>
 }
@@ -160,3 +162,6 @@ void MMGEngine::run() {
     m_voxels = m_voxels.topRows(count);
     m_voxels.col(0).swap(m_voxels.col(1));
 }
+
+#endif
+#endif

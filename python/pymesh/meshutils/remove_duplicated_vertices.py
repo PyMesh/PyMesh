@@ -1,5 +1,6 @@
 import numpy as np
 from PyMesh import DuplicatedVertexRemoval
+from PyMesh import unique_rows
 from ..meshio import form_mesh
 
 def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=None):
@@ -29,20 +30,29 @@ def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=Non
 
     """
 
-    remover = DuplicatedVertexRemoval(vertices, elements);
-    if importance is not None:
-        if (len(importance) != len(vertices)):
-            raise RuntimeError(
-                    "Vertex importance must be of the same size as vertices");
-        remover.set_importance_level(importance);
-    num_merged = remover.run(tol);
-    new_vertices = remover.get_vertices();
-    new_elements = remover.get_faces();
-    info = {
-            "num_vertex_merged": num_merged,
-            "index_map": remover.get_index_map().ravel(),
-            };
-    return new_vertices, new_elements, info;
+    if tol == 0.0:
+        new_vertices, __, index_map = unique_rows(vertices);
+        new_elements = index_map[elements];
+        info = {
+                "num_vertex_merged": len(vertices) - len(new_vertices),
+                "index_map": index_map
+                };
+        return new_vertices, new_elements, info;
+    else:
+        remover = DuplicatedVertexRemoval(vertices, elements);
+        if importance is not None:
+            if (len(importance) != len(vertices)):
+                raise RuntimeError(
+                        "Vertex importance must be of the same size as vertices");
+            remover.set_importance_level(importance);
+        num_merged = remover.run(tol);
+        new_vertices = remover.get_vertices();
+        new_elements = remover.get_faces();
+        info = {
+                "num_vertex_merged": num_merged,
+                "index_map": remover.get_index_map().ravel(),
+                };
+        return new_vertices, new_elements, info;
 
 def remove_duplicated_vertices(mesh, tol=1e-12, importance=None):
     """ Wrapper function of :func:`remove_duplicated_vertices_raw`.

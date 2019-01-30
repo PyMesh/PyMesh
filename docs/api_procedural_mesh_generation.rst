@@ -1,6 +1,11 @@
 Procedural Mesh Generation
 ==========================
 
+Equilateral triangle generation
+-------------------------------
+
+.. autofunction:: pymesh.generate_equilateral_triangle
+
 Box generation
 --------------
 

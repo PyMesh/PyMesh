@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_GEOGRAM
 
 #include "GeogramMeshUtils.h"
 #include <Core/Exception.h>
@@ -76,6 +77,33 @@ GeoMeshPtr GeogramMeshUtils::raw_to_geomesh(
     return geo_mesh;
 }
 
+GeoMeshPtr GeogramMeshUtils::wire_network_to_geomesh(
+        const MatrixFr& vertices, const Matrix2Ir& edges) {
+    const size_t dim = vertices.cols();
+    const size_t num_vertices = vertices.rows();
+    const size_t num_edges = edges.rows();
+
+    auto geo_mesh = std::make_shared<GeoMesh>(dim, false);
+    geo_mesh->vertices.clear();
+    geo_mesh->vertices.create_vertices(num_vertices);
+    geo_mesh->edges.clear();
+    geo_mesh->edges.create_edges(num_edges);
+
+    for (size_t i=0; i<num_vertices; i++) {
+        auto& p = geo_mesh->vertices.point(i);
+        for (size_t j=0; j<dim; j++) {
+            p[j] = vertices(i,j);
+        }
+    }
+
+    for (size_t i=0; i<num_edges; i++) {
+        geo_mesh->edges.set_vertex(i, 0, edges(i,0));
+        geo_mesh->edges.set_vertex(i, 1, edges(i,1));
+    }
+
+    return geo_mesh;
+}
+
 Mesh::Ptr GeogramMeshUtils::geomesh_to_mesh(const GeoMeshPtr geo_mesh) {
     constexpr size_t dim = 3;
     const size_t num_vertices = geo_mesh->vertices.nb();
@@ -120,3 +148,4 @@ Mesh::Ptr GeogramMeshUtils::geomesh_to_mesh(const GeoMeshPtr geo_mesh) {
                 dim, vertex_per_face, vertex_per_voxel).create();
 }
 
+#endif

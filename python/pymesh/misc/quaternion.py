@@ -8,8 +8,8 @@ class Quaternion:
     Attributes:
         w (``float``): same as ``quaternion[0]``.
         x (``float``): same as ``quaternion[1]``.
-        y (``float``): same as ``quaternion[1]``.
-        z (``float``): same as ``quaternion[2]``.
+        y (``float``): same as ``quaternion[2]``.
+        z (``float``): same as ``quaternion[3]``.
     """
 
     def __init__(self, quat=[1, 0, 0, 0]):
@@ -44,7 +44,7 @@ class Quaternion:
         """ Create the rotation to rotate v1 to v2
 
         Args:
-            v1 (``numpy.ndarray``): Vrom vector. Normalization not necessary.
+            v1 (``numpy.ndarray``): From vector. Normalization not necessary.
             v2 (``numpy.ndarray``): To vector. Normalization not necessary.
 
         Returns:

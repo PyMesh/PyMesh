@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_QHULL
 #include <ConvexHull/Qhull/QhullEngine.h>
 #include <Core/EigenTypedef.h>
 #include <ConvexHullEngineTest.h>
@@ -214,3 +215,5 @@ TEST_F(QhullEngineTest, 2D_square_2) {
     ASSERT_INDEX_MAP_IS_VALID(pts, vertices, engine.get_index_map());
     ASSERT_ORIENTATION_IS_VALID(vertices, faces);
 }
+
+#endif

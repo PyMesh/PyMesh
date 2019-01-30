@@ -1,7 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_QHULL
 
-#include <ConvexHullEngine.h>
+#include <ConvexHull/ConvexHullEngine.h>
 
 #include <mutex>
 
@@ -22,3 +23,5 @@ class QhullEngine : public ConvexHullEngine {
 };
 
 }
+
+#endif

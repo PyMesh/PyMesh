@@ -4,15 +4,15 @@
 #include <sstream>
 #include <Core/Exception.h>
 
-#ifdef WITH_IGL
-#include <IGL/IGLSelfIntersectionResolver.h>
+#ifdef WITH_IGL_AND_CGAL
+#include "IGL/IGLSelfIntersectionResolver.h"
 #endif
 
 using namespace PyMesh;
 
 SelfIntersectionResolver::Ptr SelfIntersectionResolver::create(
         const std::string& engine_name) {
-#ifdef WITH_IGL
+#ifdef WITH_IGL_AND_CGAL
     if (engine_name == "igl") {
         return Ptr(new IGLSelfIntersectionResolver);
     }

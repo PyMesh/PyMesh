@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_IGL_AND_CGAL
 
 #include "../BooleanEngineTest.h"
 
@@ -278,3 +279,5 @@ TEST_F(IGLEngineTest, face_source) {
     ASSERT_EQ(faces.rows(), face_sources.size());
     ASSERT_TRUE(face_sources.maxCoeff() < mesh->get_num_faces() * 2);
 }
+
+#endif

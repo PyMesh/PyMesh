@@ -4,7 +4,7 @@
 #include <Core/EigenTypedef.h>
 
 #include <vector>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 namespace PyMesh {
 namespace EdgeUtils {
@@ -14,6 +14,6 @@ namespace EdgeUtils {
      */
     std::vector<VectorI> chain_edges(const MatrixIr& edges);
 
-    TripletMap<size_t> compute_edge_face_adjacency(const MatrixIr& faces);
+    DupletMap<size_t> compute_edge_face_adjacency(const MatrixIr& faces);
 }
 }

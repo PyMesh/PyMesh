@@ -1,5 +1,6 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_CGAL
 
 #include <TestBase.h>
 #include <CGAL/AABBTree.h>
@@ -68,3 +69,5 @@ TEST_F(AABBTreeTest, cube) {
         ASSERT_FLOAT_EQ(0.0, (centroids.row(i) - closest_points.row(i)).norm());
     }
 }
+
+#endif

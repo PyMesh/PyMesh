@@ -7,10 +7,15 @@
 PyMesh --- Geometry Processing Library for Python
 =================================================
 
-PyMesh is a rapid prototyping platform focused on geometry processing.
+PyMesh_ is a rapid prototyping platform focused on geometry processing.
 It provides a set of common mesh processing functionalities and interfaces
 with a number of state-of-the-art open source packages to combine their power
 seamlessly under a single developing environment.
+
+.. _PyMesh: https://github.com/PyMesh/PyMesh
+
+.. image:: _static/pymesh_teaser.jpg
+    :align: center
 
 Mesh process should be simple in python.  PyMesh promotes human readable,
 minimalistic interface and works with native python data structures such as

@@ -1,7 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #pragma once
+#ifdef WITH_TETWILD
 
-#include <TetrahedralizationEngine.h>
+#include <Tetrahedralization/TetrahedralizationEngine.h>
 
 namespace PyMesh {
 
@@ -14,3 +15,5 @@ class TetWildEngine : public TetrahedralizationEngine {
 };
 
 }
+
+#endif

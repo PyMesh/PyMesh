@@ -41,6 +41,18 @@ using namespace ConvexHullEngineHelper;
 
 ConvexHullEngine::Ptr ConvexHullEngine::create(
         size_t dim, const std::string& library_name) {
+    if (library_name == "auto") {
+#if WITH_QHULL
+        return ConvexHullEngine::create(dim, "qhull");
+#elif WITH_CGAL
+        return ConvexHullEngine::create(dim, "cgal");
+#elif WITH_TRIANGLE
+        if (dim == 2) return ConvexHullEngine::create(dim, "triangle");
+#elif WITH_TETGEN
+        if (dim == 3) return ConvexHullEngine::create(dim, "tetgen");
+#endif
+    }
+
 #ifdef WITH_QHULL
     if (library_name == "qhull") {
         return std::make_shared<QhullEngine>();
@@ -106,6 +118,23 @@ bool ConvexHullEngine::supports(
     if ((library_name) == "tetgen") return true;
 #endif
     return false;
+}
+
+std::vector<std::string> ConvexHullEngine::get_available_engines() {
+    std::vector<std::string> engine_names;
+#ifdef WITH_QHULL
+    engine_names.push_back("qhull");
+#endif
+#ifdef WITH_CGAL
+    engine_names.push_back("cgal");
+#endif
+#ifdef WITH_TRIANGLE
+    engine_names.push_back("triangle");
+#endif
+#ifdef WITH_TETGEN
+    engine_names.push_back("tetgen");
+#endif
+    return engine_names;
 }
 
 void ConvexHullEngine::reorient_faces() {

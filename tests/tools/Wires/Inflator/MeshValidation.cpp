@@ -4,19 +4,19 @@
 #include <cassert>
 #include <iostream>
 #include <Misc/HashGrid.h>
-#include <Misc/TripletMap.h>
+#include <Misc/MultipletMap.h>
 
 namespace MeshValidationHelper {
-    typedef TripletMap<size_t> EdgeMap;
+    typedef DupletMap<size_t> EdgeMap;
     EdgeMap compute_edge_map(const MatrixIr& faces) {
         assert(faces.cols() == 3);
         EdgeMap result;
         const size_t num_faces = faces.rows();
         for (size_t i=0; i<num_faces; i++) {
             const Vector3I& f = faces.row(i);
-            Triplet e0(f[1], f[2]);
-            Triplet e1(f[2], f[0]);
-            Triplet e2(f[0], f[1]);
+            Duplet e0(f[1], f[2]);
+            Duplet e1(f[2], f[0]);
+            Duplet e2(f[0], f[1]);
 
             result.insert(e0, i);
             result.insert(e1, i);

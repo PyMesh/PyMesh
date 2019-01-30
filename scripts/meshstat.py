@@ -100,6 +100,13 @@ def quantile_breakdown(data, name, info, title=None, with_total=True):
     if with_total:
         info["total_{}".format(name)] = total;
 
+def print_edge_info(mesh, info):
+    if (mesh.num_faces == 0): return;
+    mesh.add_attribute("edge_length");
+    edge_length = mesh.get_attribute("edge_length");
+    quantile_breakdown(edge_length, "edge_length", info,
+            title = "Edge Length", with_total=False);
+
 def print_face_info(mesh, info):
     if (mesh.num_faces == 0): return;
     mesh.add_attribute("face_area");
@@ -117,10 +124,11 @@ def print_quantile_info(mesh, info):
     quantile_breakdown(aspect_ratios, "aspect_ratio", info,
             title = "Face Aspect Ratio", with_total=False);
 
-    mesh.add_attribute("edge_dihedral_angle");
-    dihedral_angles = mesh.get_attribute("edge_dihedral_angle");
-    quantile_breakdown(dihedral_angles, "dihedral_angle", info,
-            title = "Edge Dihedral Angle", with_total=False);
+    if mesh.dim == 3:
+        mesh.add_attribute("edge_dihedral_angle");
+        dihedral_angles = mesh.get_attribute("edge_dihedral_angle");
+        quantile_breakdown(dihedral_angles, "dihedral_angle", info,
+                title = "Edge Dihedral Angle", with_total=False);
 
     if (mesh.num_voxels > 0 and mesh.vertex_per_voxel == 4):
         mesh.add_attribute("voxel_dihedral_angle");
@@ -150,6 +158,8 @@ def print_quantile_info(mesh, info):
                 title="Voxel radius ratio", with_total=False);
 
 def print_voxel_info(mesh, info):
+    if mesh.dim == 2:
+        return;
     if (mesh.num_voxels == 0):
         print_section_header("Volume Estimation");
         volume = mesh.volume;
@@ -171,6 +181,8 @@ def print_extended_info(mesh, info):
         num_v_cc = 0;
     isolated_vertices = mesh.num_isolated_vertices;
     duplicated_faces = mesh.num_duplicated_faces;
+    unique_vertices = pymesh.unique_rows(mesh.vertices)[0];
+    duplicated_vertices = mesh.num_vertices - len(unique_vertices);
 
     degenerated_indices = pymesh.get_degenerated_faces(mesh);
     num_degenerated = len(degenerated_indices);
@@ -188,6 +200,7 @@ def print_extended_info(mesh, info):
     print_property("num connected surface components", num_f_cc);
     print_property("num connected volume components", num_v_cc);
     print_property("num isolated vertices", isolated_vertices, 0);
+    print_property("num duplicated vertices", duplicated_vertices, 0);
     print_property("num duplicated faces", duplicated_faces, 0);
     print_property("num boundary edges", mesh.num_boundary_edges);
     print_property("num boundary loops", mesh.num_boundary_loops);
@@ -202,6 +215,7 @@ def print_extended_info(mesh, info):
     info["num_connected_surface_components"] = num_f_cc;
     info["num_connected_volume_components"] = num_v_cc;
     info["num_isolated_vertices"] = isolated_vertices;
+    info["num_duplicated_vertices"] = duplicated_vertices;
     info["num_duplicated_faces"] = duplicated_faces;
     info["num_boundary_edges"] = mesh.num_boundary_edges;
     info["num_boundary_loops"] = mesh.num_boundary_loops;
@@ -210,6 +224,12 @@ def print_extended_info(mesh, info):
             num_combinatorial_degenerated_faces;
     info["num_geometrical_degenerated_faces"] =\
             num_degenerated - num_combinatorial_degenerated_faces;
+
+    if mesh.dim == 2 and mesh.vertex_per_face == 3:
+        tri_orientations = pymesh.get_triangle_orientations(mesh);
+        num_inverted_tris = np.sum(tri_orientations < 0);
+        print_property("num inverted triangles:", num_inverted_tris, 0);
+        info["num_inverted_triangles"] = int(num_inverted_tris);
 
     if mesh.num_voxels > 0 and mesh.vertex_per_voxel == 4:
         tet_orientations = pymesh.get_tet_orientations(mesh);
@@ -308,13 +328,14 @@ def parse_args():
 
 def main():
     args = parse_args();
-    mesh = pymesh.load_mesh(args.input_mesh);
+    mesh = pymesh.load_mesh(args.input_mesh, drop_zero_dim=True);
     info = load_info(args.input_mesh);
 
     header = "Summary of {}".format(args.input_mesh);
     print_header("{:=^55}".format(header));
     print_basic_info(mesh, info);
     print_bbox(mesh, info);
+    print_edge_info(mesh, info);
     print_face_info(mesh, info);
     print_voxel_info(mesh, info);
     if (args.extended):

@@ -1,14 +1,9 @@
-# General lib locations
-LINK_DIRECTORIES(/opt/local/lib)
-
 # Source files
-FILE(GLOB SRC_FILES predicates.c)
-FILE(GLOB INC_FILES predicates.h)
+SET(SRC_FILES predicates.c)
+SET(INC_FILES predicates.h)
 
-# Include this directory
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+ADD_LIBRARY(lib_Predicates STATIC ${SRC_FILES} ${INC_FILES})
+SET_TARGET_PROPERTIES(lib_Predicates PROPERTIES OUTPUT_NAME "PyMesh-Predicates")
+TARGET_LINK_LIBRARIES(lib_Predicates PUBLIC PyMesh::Tools)
 
-ADD_LIBRARY(lib_predicates STATIC ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_predicates PROPERTIES OUTPUT_NAME "predicates")
-
-ADD_CUSTOM_TARGET(predicates DEPENDS lib_predicates)
+ADD_LIBRARY(PyMesh::Tools::Predicates ALIAS lib_Predicates)

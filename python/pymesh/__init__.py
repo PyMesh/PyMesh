@@ -17,6 +17,7 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
+from .Arrangement2 import Arrangement2
 from .Assembler import Assembler
 from .boolean import boolean
 from .compression import compress, decompress
@@ -40,12 +41,17 @@ from .tetrahedralize import tetrahedralize
 from .matrixio import load_matrix, save_matrix
 from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
-from .aabb_tree import AABBTree, BVH, distance_to_mesh, do_intersect
+from .aabb_tree import AABBTree, AABBTree2, BVH, distance_to_mesh, do_intersect
 from .triangle import triangle
-from .tetgen import tetgen
-from .triangulate import triangulate_beta
+from .triangulate import triangulate_beta, refine_triangulation
 from .wires import *
+from .snap_rounding import snap_rounding
 from .SparseSolver import SparseSolver
+from .igl_utils import unique_rows
+
+from .map_attributes import map_vertex_attribute
+from .map_attributes import map_face_attribute
+from .map_attributes import map_corner_attribute
 
 __all__ = [
         "Mesh",
@@ -75,21 +81,33 @@ __all__ = [
         "slice_mesh",
         "triangle",
         "triangulate_beta",
-        "tetgen",
         "tetrahedralize",
         "minkowski_sum",
         "partition_into_cells",
         "AABBTree",
+        "AABBTree2",
         "distance_to_mesh",
         "do_intersect",
         "VoxelGrid",
         "HarmonicSolver",
+        "snap_rounding",
         "SparseSolver",
         "HashGrid",
         "compress",
-        "decompress"
+        "decompress",
+        "map_vertex_attribute",
+        "map_face_attribute",
+        "map_corner_attribute",
+        "refine_triangulation",
+        "unique_rows"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
 __all__.append("wires");
+
+try:
+    from .tetgen import tetgen
+    __all__.append("tetgen");
+except:
+    pass;
 

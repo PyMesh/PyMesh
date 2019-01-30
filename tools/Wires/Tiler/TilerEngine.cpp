@@ -9,13 +9,13 @@
 
 #include <Core/Exception.h>
 #include <MeshUtils/DuplicatedVertexRemoval.h>
-#include <Misc/Triplet.h>
+#include <Misc/Multiplet.h>
 
 using namespace PyMesh;
 
 namespace TilerEngineHelper {
     struct hash {
-        size_t operator()(const Triplet& value) const {
+        size_t operator()(const Duplet& value) const {
             return value.hash();
         }
     };
@@ -23,12 +23,12 @@ namespace TilerEngineHelper {
     std::vector<bool> create_duplication_mask(const MatrixIr& edges) {
         const size_t num_edges = edges.rows();
 
-        std::unordered_set<Triplet, hash> unique_set;
+        std::unordered_set<Duplet, hash> unique_set;
         std::vector<bool> mask(num_edges, false);
 
         for (size_t i=0; i<num_edges; i++) {
             const auto& edge = edges.row(i);
-            Triplet key(edge[0], edge[1]);
+            Duplet key(edge[0], edge[1]);
             auto itr = unique_set.find(key);
             if (itr == unique_set.end()) {
                 unique_set.insert(key);

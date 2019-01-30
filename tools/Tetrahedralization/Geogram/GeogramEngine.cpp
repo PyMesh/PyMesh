@@ -1,3 +1,4 @@
+#ifdef WITH_GEOGRAM
 #include "GeogramEngine.h"
 #include <Core/Exception.h>
 
@@ -63,3 +64,5 @@ void GeogramEngine::run() {
         m_voxels(i,3) = delaunay->cell_vertex(i,3);
     }
 }
+
+#endif

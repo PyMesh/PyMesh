@@ -7,7 +7,7 @@
 #include <vector>
 
 #include <MeshFactory.h>
-#include <CGAL/AABBTree.h>
+#include <BVH/BVHEngine.h>
 #include <Math/ZSparseMatrix.h>
 #include <Wires/Parameters/ParameterCommon.h>
 
@@ -88,7 +88,10 @@ void PeriodicInflator::generate_phantom_mesh() {
 }
 
 void PeriodicInflator::initialize_AABB_tree() {
-    m_tree = std::make_shared<AABBTree>(m_phantom_vertices, m_phantom_faces);
+    const size_t dim = m_parameter_manager->get_wire_network()->get_dim();
+    m_tree = BVHEngine::create("auto", dim);
+    m_tree->set_mesh(m_phantom_vertices, m_phantom_faces);
+    m_tree->build();
 }
 
 void PeriodicInflator::set_parameter(ParameterManager::Ptr manager) {
@@ -147,7 +150,7 @@ void PeriodicInflator::update_shape_velocities() {
     VectorF squared_dists;
     VectorI closest_face_indices;
     MatrixFr closest_pts;
-    m_tree->look_up_with_closest_points(
+    m_tree->lookup(
             m_vertices, squared_dists, closest_face_indices, closest_pts);
 
     typedef Eigen::Triplet<Float> T;

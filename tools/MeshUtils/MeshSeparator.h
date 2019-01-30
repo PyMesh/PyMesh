@@ -54,10 +54,16 @@ class MeshSeparator {
 
         ConnectivityType m_connectivity_type;
 
-        typedef Multiplet Connector;
-        typedef MultipletMap<size_t> ConnectorMap;
-        typedef ConnectorMap::ValueType AdjElements;
-        ConnectorMap m_connectivity;
+        using VertexConnector = Singleton;
+        using FaceConnector = Duplet;
+        using TetConnector = Triplet;
+        using HexConnector = Quadruplet;
+        using AdjElements = MultipletMap<Singleton, size_t>::ValueType;
+
+        MultipletMap<Singleton, size_t> m_vertex_connectivity;
+        MultipletMap<Duplet, size_t> m_face_connectivity;
+        MultipletMap<Triplet, size_t> m_tet_connectivity;
+        MultipletMap<Quadruplet, size_t> m_hex_connectivity;
 };
 
 }

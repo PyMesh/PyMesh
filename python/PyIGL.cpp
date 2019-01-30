@@ -7,6 +7,7 @@
 
 #include <Core/EigenTypedef.h>
 #include <IGL/HarmonicSolver.h>
+#include <igl/unique_rows.h>
 
 namespace py = pybind11;
 using namespace PyMesh;
@@ -41,4 +42,12 @@ void init_IGL(py::module &m) {
                 &HarmonicSolver::get_solution,
                 py::return_value_policy::reference_internal)
         ;
+
+    m.def("unique_rows",
+            [](const MatrixFr& A) {
+            MatrixFr C;
+            VectorI IA, IC;
+            igl::unique_rows(A, C, IA, IC);
+            return std::make_tuple(C, IA, IC);
+            });
 }

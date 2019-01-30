@@ -1,4 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
+#ifdef WITH_TETWILD
 #include "TetWildEngine.h"
 
 #include <array>
@@ -57,3 +58,5 @@ void TetWildEngine::run() {
     }
     m_faces.resize(0, 3);
 }
+
+#endif
