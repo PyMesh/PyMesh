@@ -31,7 +31,7 @@ MeshParser::Ptr MeshParser::create_parser_for_extension(const std::string& filen
     Ptr parser;
     std::string ext = extension;
     std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-    if (ext == ".obj" || ext == ".eobj" || ext == ".pts" || ext == ".epts") {
+    if (ext == ".obj") {
         parser = std::make_shared<OBJParser>();
     } else if (ext == ".off") {
         parser = std::make_shared<OFFParser>();
