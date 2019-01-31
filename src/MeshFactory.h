@@ -20,6 +20,7 @@ class MeshFactory {
     public:
         MeshFactory();
         MeshFactory& load_file(const std::string& filename);
+        MeshFactory& load_file_with_hint(const std::string& filename, const std::string& extension_hint);
         MeshFactory& load_data(
                 const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
                 size_t dim, size_t num_vertex_per_face, size_t num_vertex_per_voxel);

@@ -6,7 +6,7 @@ import PyMesh
 
 from .save_svg import save_svg
 
-def load_mesh(filename, drop_zero_dim=False):
+def load_mesh(filename, extension_hint=None, drop_zero_dim=False):
     """ Load mesh from a file.
 
     Args:
@@ -17,12 +17,18 @@ def load_mesh(filename, drop_zero_dim=False):
     Returns:
         A :py:class:`Mesh` object representing the loaded mesh.
     """
-    if os.path.splitext(filename)[1] == ".geogram":
+
+    ext = os.path.splitext(filename)[1] if extension_hint is None else extension_hint
+
+    if ext == ".geogram":
         return Mesh(PyMesh.load_geogram_mesh(filename));
     if not os.path.exists(filename):
         raise IOError("File not found: {}".format(filename));
     factory = PyMesh.MeshFactory();
-    factory.load_file(filename);
+    if extension_hint is None:
+        factory.load_file(filename);
+    else:
+        factory.load_file_with_hint(filename, extension_hint)
     if drop_zero_dim:
         factory.drop_zero_dim();
     return Mesh(factory.create());
