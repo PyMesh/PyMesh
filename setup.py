@@ -159,6 +159,7 @@ setup(
             "scripts/remove_degenerated_triangles.py",
             "scripts/remove_duplicated_faces.py",
             "scripts/remove_isolated_vertices.py",
+            "scripts/remove_nan.py",
             "scripts/resolve_self_intersection.py",
             "scripts/retriangulate.py",
             "scripts/rigid_transform.py",
