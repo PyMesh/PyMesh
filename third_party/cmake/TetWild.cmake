@@ -4,10 +4,13 @@ IF (TARGET TetWild)
     return()
 ENDIF (TARGET TetWild)
 
+ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/fmt)
+
 option(GTET_ISPC "Use ISPC" OFF)
 
 SET(TETWILD_DIR ${PROJECT_SOURCE_DIR}/TetWild/)
 SET(LIBIGL_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/libigl/include)
+SET(SPDLOG_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/spdlog/include)
 SET(MAIN_FILE ${TETWILD_DIR}/main.cpp)
 IF (NOT BOOST_FOUND)
     FIND_PACKAGE(Boost REQUIRED COMPONENTS atomic chrono date_time system thread)
@@ -18,63 +21,68 @@ IF (NOT CGAL_FOUND)
 ENDIF (NOT CGAL_FOUND)
 
 set(SOURCE_FILES
-    ${TETWILD_DIR}/BSPElements.h
-    ${TETWILD_DIR}/TetmeshElements.h
-    ${TETWILD_DIR}/Preprocess.cpp
-    ${TETWILD_DIR}/Preprocess.h
-    ${TETWILD_DIR}/DelaunayTetrahedralization.cpp
-    ${TETWILD_DIR}/DelaunayTetrahedralization.h
-    ${TETWILD_DIR}/MeshConformer.cpp
-    ${TETWILD_DIR}/MeshConformer.h
-    ${TETWILD_DIR}/BSPSubdivision.cpp
-    ${TETWILD_DIR}/BSPSubdivision.h
-    ${TETWILD_DIR}/SimpleTetrahedralization.cpp
-    ${TETWILD_DIR}/SimpleTetrahedralization.h
-    ${TETWILD_DIR}/MeshRefinement.cpp
-    ${TETWILD_DIR}/MeshRefinement.h
-    ${TETWILD_DIR}/LocalOperations.cpp
-    ${TETWILD_DIR}/LocalOperations.h
-    ${TETWILD_DIR}/EdgeSplitter.cpp
-    ${TETWILD_DIR}/EdgeSplitter.h
-    ${TETWILD_DIR}/EdgeCollapser.cpp
-    ${TETWILD_DIR}/EdgeCollapser.h
-    ${TETWILD_DIR}/EdgeRemover.cpp
-    ${TETWILD_DIR}/EdgeRemover.h
-    ${TETWILD_DIR}/VertexSmoother.cpp
-    ${TETWILD_DIR}/VertexSmoother.h
-    ${TETWILD_DIR}/InoutFiltering.cpp
-    ${TETWILD_DIR}/InoutFiltering.h
-    ${TETWILD_DIR}/CLI11.hpp
-    ${TETWILD_DIR}/pymesh/MshLoader.cpp
-    ${TETWILD_DIR}/pymesh/MshLoader.h
-    ${TETWILD_DIR}/pymesh/MshSaver.cpp
-    ${TETWILD_DIR}/pymesh/MshSaver.h
-    ${TETWILD_DIR}/pymesh/Exception.h
-    ${TETWILD_DIR}/heads.cpp
-    ${TETWILD_DIR}/heads.h
-    ${TETWILD_DIR}/tetwild.h
-    ${TETWILD_DIR}/tetwild.cpp
-    )
+    ${TETWILD_DIR}/include/tetwild/Args.h
+    ${TETWILD_DIR}/include/tetwild/Exception.h
+    ${TETWILD_DIR}/include/tetwild/Logger.h
+    ${TETWILD_DIR}/include/tetwild/tetwild.h
+    ${TETWILD_DIR}/src/tetwild/BSPSubdivision.cpp
+    ${TETWILD_DIR}/src/tetwild/BSPSubdivision.h
+    ${TETWILD_DIR}/src/tetwild/CGALTypes.h
+    ${TETWILD_DIR}/src/tetwild/Common.cpp
+    ${TETWILD_DIR}/src/tetwild/Common.h
+    ${TETWILD_DIR}/src/tetwild/DelaunayTetrahedralization.cpp
+    ${TETWILD_DIR}/src/tetwild/DelaunayTetrahedralization.h
+    ${TETWILD_DIR}/src/tetwild/DistanceQuery.cpp
+    ${TETWILD_DIR}/src/tetwild/DistanceQuery.h
+    ${TETWILD_DIR}/src/tetwild/EdgeCollapser.cpp
+    ${TETWILD_DIR}/src/tetwild/EdgeCollapser.h
+    ${TETWILD_DIR}/src/tetwild/EdgeRemover.cpp
+    ${TETWILD_DIR}/src/tetwild/EdgeRemover.h
+    ${TETWILD_DIR}/src/tetwild/EdgeSplitter.cpp
+    ${TETWILD_DIR}/src/tetwild/EdgeSplitter.h
+    ${TETWILD_DIR}/src/tetwild/ForwardDecls.h
+    ${TETWILD_DIR}/src/tetwild/InoutFiltering.cpp
+    ${TETWILD_DIR}/src/tetwild/InoutFiltering.h
+    ${TETWILD_DIR}/src/tetwild/LocalOperations.cpp
+    ${TETWILD_DIR}/src/tetwild/LocalOperations.h
+    ${TETWILD_DIR}/src/tetwild/Logger.cpp
+    ${TETWILD_DIR}/src/tetwild/MeshConformer.cpp
+    ${TETWILD_DIR}/src/tetwild/MeshConformer.h
+    ${TETWILD_DIR}/src/tetwild/MeshRefinement.cpp
+    ${TETWILD_DIR}/src/tetwild/MeshRefinement.h
+    ${TETWILD_DIR}/src/tetwild/Preprocess.cpp
+    ${TETWILD_DIR}/src/tetwild/Preprocess.h
+    ${TETWILD_DIR}/src/tetwild/SimpleTetrahedralization.cpp
+    ${TETWILD_DIR}/src/tetwild/SimpleTetrahedralization.h
+    ${TETWILD_DIR}/src/tetwild/State.cpp
+    ${TETWILD_DIR}/src/tetwild/State.h
+    ${TETWILD_DIR}/src/tetwild/TetmeshElements.cpp
+    ${TETWILD_DIR}/src/tetwild/TetmeshElements.h
+    ${TETWILD_DIR}/src/tetwild/tetwild.cpp
+    ${TETWILD_DIR}/src/tetwild/VertexSmoother.cpp
+    ${TETWILD_DIR}/src/tetwild/VertexSmoother.h
+    ${TETWILD_DIR}/src/tetwild/geogram/mesh_AABB.cpp
+    ${TETWILD_DIR}/src/tetwild/geogram/mesh_AABB.h
+    ${TETWILD_DIR}/extern/pymesh/MshLoader.cpp
+    ${TETWILD_DIR}/extern/pymesh/MshSaver.cpp
+)
 
 
-SET(OBJ_FILES "")
-if(GTET_ISPC)
-	add_custom_command(OUTPUT energy_ispc.o
-			COMMAND ispc ${CMAKE_SOURCE_DIR}/ispc/energy.ispc -h ${CMAKE_SOURCE_DIR}/ispc/energy.h -o energy_ispc.o DEPENDS ${CMAKE_SOURCE_DIR}/ispc/energy.ispc)
-	add_definitions(-DGTET_ISPC)
-    LIST(APPEND OBJ_FILES energy_ispc.o)
-endif(GTET_ISPC)
-ADD_LIBRARY(lib_tetwild SHARED ${SOURCE_FILES} ${OBJ_FILES})
-target_link_libraries(lib_tetwild geogram eigen CGAL Boost::system Boost::thread)
-target_include_directories(lib_tetwild SYSTEM PUBLIC ${LIBIGL_INCLUDE_DIRS})
+ADD_LIBRARY(lib_tetwild SHARED ${SOURCE_FILES})
+target_link_libraries(lib_tetwild geogram eigen CGAL Boost::system Boost::thread
+    fmt-header-only)
+target_include_directories(lib_tetwild SYSTEM
+    PUBLIC
+        ${TETWILD_DIR}/include/
+        ${LIBIGL_INCLUDE_DIRS}
+    PRIVATE
+        ${SPDLOG_INCLUDE_DIRS}
+        ${TETWILD_DIR}/src/
+        ${TETWILD_DIR}/extern/)
 set_target_properties(lib_tetwild PROPERTIES OUTPUT_NAME "TetWild")
-
-#add_executable(TetWild ${MAIN_FILE})
-#target_link_libraries(TetWild lib_tetwild)
 
 INSTALL(TARGETS lib_tetwild
     LIBRARY DESTINATION lib
     ARCHIVE DESTINATION lib
     RUNTIME DESTINATION bin)
-INSTALL(FILES ${TETWILD_DIR}/tetwild.h
-    DESTINATION include)
+INSTALL(DIRECTORY ${TETWILD_DIR}/include/ DESTINATION include)
