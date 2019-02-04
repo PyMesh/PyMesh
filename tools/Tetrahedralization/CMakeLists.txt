@@ -22,6 +22,7 @@ TARGET_LINK_LIBRARIES(lib_Tetrahedralization
         PyMesh::Quartet
         PyMesh::MMG
         PyMesh::TetWild
+        PyMesh::libigl
 )
 SET_TARGET_PROPERTIES(lib_Tetrahedralization PROPERTIES OUTPUT_NAME
     "PyMesh-Tetrahedronization")
