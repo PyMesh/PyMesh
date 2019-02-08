@@ -36,7 +36,7 @@ void GeogramEngine::run() {
 
     // Run!
     try {
-        delaunay->set_vertices(0,nil); // No additional vertex 
+        delaunay->set_vertices(0,nullptr); // No additional vertex 
     } catch (const GEO::Delaunay::InvalidInput& error_report) {
         size_t num_bad_faces = error_report.invalid_facets.size();
         std::stringstream err_msg;
