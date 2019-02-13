@@ -19,6 +19,8 @@ def parse_args():
     parser.add_argument("--log", type=str, help="Logging level",
             choices=["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
             default="INFO");
+    parser.add_argument("--remove-holes", action="store_true",
+            help="Remove triangles on the outside of the shape");
     parser.add_argument("input_svg");
     parser.add_argument("output_mesh");
     return parser.parse_args();
@@ -64,7 +66,7 @@ def cleanup(wires, logger):
 
     return wires;
 
-def triangulate(wires, logger):
+def triangulate(wires, logger, auto_hole_detection):
     bbox_min, bbox_max = wires.bbox;
     tol = norm(bbox_max - bbox_min) / 20;
 
@@ -74,6 +76,7 @@ def triangulate(wires, logger):
     engine.conforming_delaunay = True;
     engine.max_area = tol**2;
     engine.verbosity = 0;
+    engine.auto_hole_detection = auto_hole_detection;
 
     start_time = time();
     engine.run();
@@ -209,7 +212,8 @@ def main():
     wires = resolve_self_intersection(wires, logger);
     wires = cleanup(wires, logger);
 
-    mesh = triangulate(wires, logger);
+    mesh = triangulate(wires, logger, args.remove_holes);
+    pymesh.save_mesh("debug.msh", mesh);
     mesh = repousse(mesh, logger);
 
     pymesh.save_mesh(args.output_mesh, mesh);

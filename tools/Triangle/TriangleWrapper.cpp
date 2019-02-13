@@ -439,9 +439,11 @@ void TriangleWrapper::poke_holes(Regions& regions) {
     }
 
     MatrixIr faces(interior_faces.size(), 3);
+    VectorI interior_regions(interior_faces.size());
     size_t count=0;
     for (const auto& f_index : interior_faces) {
         faces.row(count) = m_faces.row(f_index);
+        interior_regions[count] = m_regions[f_index];
         count++;
     }
 
@@ -449,6 +451,8 @@ void TriangleWrapper::poke_holes(Regions& regions) {
     remover.run();
     m_vertices = remover.get_vertices();
     m_faces = remover.get_faces();
+
+    m_regions.swap(interior_regions);
 }
 
 bool TriangleWrapper::select_seed_point(const Region& region, VectorF& seed_p) {
