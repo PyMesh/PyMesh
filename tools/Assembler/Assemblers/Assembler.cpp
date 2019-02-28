@@ -14,6 +14,7 @@
 #include "EngineerStrainStressAssembler.h"
 #include "RigidMotionAssembler.h"
 #include "GradientAssembler.h"
+#include "GraphLaplacianAssembler.h"
 
 using namespace PyMesh;
 
@@ -36,6 +37,8 @@ Assembler::Ptr Assembler::create(const std::string& matrix_name) {
         return Ptr(new RigidMotionAssembler());
     } else if (matrix_name == "gradient") {
         return Ptr(new GradientAssembler());
+    } else if (matrix_name == "graph_laplacian") {
+        return Ptr(new GraphLaplacianAssembler());
     } else {
         std::stringstream err_msg;
         err_msg << "Assembling " << matrix_name << " is not supported yet.";

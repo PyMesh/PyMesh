@@ -26,6 +26,7 @@ class Assembler:
         * ``engineer_strain_stress``
         * ``rigid_motion``
         * ``gradient``
+        * ``graph_laplacian``
     """
     def __init__(self, mesh, material=None):
         if material is None:
