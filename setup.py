@@ -11,30 +11,26 @@ from subprocess import check_call
 import shutil
 import platform
 
-root_dir = os.path.abspath(os.path.dirname(__file__));
-package_dir = os.path.join(root_dir, "python/pymesh");
-exec(open(os.path.join(package_dir, 'version.py')).read())
+exec(open(os.path.join('python/pymesh/version.py')).read())
 
-num_cores = multiprocessing.cpu_count();
-num_cores = max(1, num_cores);
-num_cores = min(num_cores, int(os.environ.get("NUM_CORES", num_cores)));
+num_cores = multiprocessing.cpu_count()
+num_cores = max(1, num_cores)
+num_cores = min(num_cores, int(os.environ.get("NUM_CORES", num_cores)))
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
-        return False;
+        return False
 
     def has_ext_modules(self):
-        return True;
+        return True
 
 class CleanCommand(clean):
     def run(self):
-        install_dir = os.path.join(root_dir, "python/pymesh/third_party/lib");
-        if os.path.exists(install_dir) and os.path.isdir(install_dir):
-            shutil.rmtree(os.path.join(install_dir));
-
-        lib_dir = os.path.join(root_dir, "python/pymesh/lib");
-        if os.path.exists(lib_dir) and os.path.isdir(lib_dir):
-            shutil.rmtree(os.path.join(lib_dir));
+        for d in "python/pymesh/third_party/lib", "python/pymesh/lib":
+            try:
+                shutil.rmtree(d)
+            except Exception:
+                pass
 
 class dummy_ext(build_ext):
     """ This is a dummy class.  Cmake is responsible for building python
@@ -42,7 +38,7 @@ class dummy_ext(build_ext):
     are building an extension, not a pure lib.
     """
     def run(self):
-        pass;
+        pass
 
 class cmake_build(build):
     """
@@ -54,38 +50,43 @@ class cmake_build(build):
         """
         Config and build third party dependencies.
         """
-        build_dir = os.path.join(root_dir, "third_party/build");
-        if not os.path.isdir(build_dir):
-            os.makedirs(build_dir);
-
-        os.chdir(build_dir);
-        command = "cmake .. -DCMAKE_BUILD_TYPE=Release";
-        check_call(command.split());
-        command = "cmake --build . --config Release -- -j {}".format(num_cores);
-        check_call(command.split());
-        command = "cmake --build . --target install";
-        check_call(command.split());
+        self._build("third_party/build", '', True)
 
     def build_pymesh(self):
         """
         Config and build pymesh.
         """
-        build_dir = os.path.join(root_dir, "build");
-        if not os.path.isdir(build_dir):
-            os.makedirs(build_dir);
+        self._build(
+            "build",
+            " -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
+                v=platform.python_version_tuple()),
+            False,
+        )
 
-        os.chdir(build_dir);
-        command = "cmake .. -DCMAKE_BUILD_TYPE=Release -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
-                v=platform.python_version_tuple());
-        check_call(command.split());
-        command = "cmake --build . --config Release";
-        check_call(command.split());
-        os.chdir(root_dir);
+    def _build(self, build_dir, cmake_args, want_install):
+        """
+        Config and build in build_dir
+        """
+
+        cwd = os.getcwd()
+        try:
+            if not os.path.isdir(build_dir):
+                os.makedirs(build_dir)
+
+            os.chdir(build_dir)
+            commands = [
+                "cmake .. -DCMAKE_BUILD_TYPE=Release" + cmake_args,
+                "cmake --build . --config Release -- -j {}".format(num_cores),
+            ] + (["cmake --build . --target install"] if want_install else [])
+            for c in commands:
+                check_call(c.split())
+        finally:
+            os.chdir(cwd)
 
     def run(self):
-        self.build_third_party();
-        self.build_pymesh();
-        build.run(self);
+        self.build_third_party()
+        self.build_pymesh()
+        build.run(self)
 
 setup(
         name = "pymesh2",
@@ -180,4 +181,4 @@ setup(
         url = "https://github.com/qnzhou/PyMesh",
         download_url="https://github.com/qnzhou/PyMesh",
         distclass=BinaryDistribution,
-        );
+        )
