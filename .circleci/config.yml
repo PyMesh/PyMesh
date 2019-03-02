@@ -26,7 +26,7 @@ jobs:
             - run:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
-                    docker build -m 6g -t pymesh/pymesh:py3.6 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.6
+                    docker build -m 6g -t pymesh/pymesh:py3.6 --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.6
                     [ "$CIRCLE_BRANCH" != "master" ] || docker push pymesh/pymesh:py3.6
                 no_output_timeout: 1200
     "py3.6-slim":
@@ -47,7 +47,7 @@ jobs:
             - run:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
-                    docker build -m 6g -t pymesh/pymesh:py3.5 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.5
+                    docker build -m 6g -t pymesh/pymesh:py3.5 --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.5
                     [ "$CIRCLE_BRANCH" != "master" ] || docker push pymesh/pymesh:py3.5
                 no_output_timeout: 1200
     "py3.5-slim":
