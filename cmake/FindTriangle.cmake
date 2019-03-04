@@ -8,21 +8,18 @@
 
 # Find include directory.
 find_path (TRIANGLE_INCLUDE_DIRS triangle.h
+    PATHS
     $ENV{TRIANGLE_PATH}
     $ENV{TRIANGLE_PATH}/include
     ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include/
-    /opt/local/include
-    /usr/local/include
-    /usr/includes
-)
+    NO_DEFAULT_PATH)
 
 FIND_LIBRARY(TRIANGLE_LIBRARIES NAMES libtriangle.a triangle
-     PATHS $ENV{TRIANGLE_PATH}
-           $ENV{TRIANGLE_PATH}/lib
-           ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/
-           /opt/local/lib
-           /usr/local/lib
-           /usr/lib)
+    PATHS
+    $ENV{TRIANGLE_PATH}
+    $ENV{TRIANGLE_PATH}/lib
+    ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/
+    NO_DEFAULT_PATH)
 
 # Standard package handling
 include(FindPackageHandleStandardArgs)
