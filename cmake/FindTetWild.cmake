@@ -8,23 +8,23 @@
 #
 # It searches the environment variable $TETWILD_PATH automatically.
 
-FIND_PATH(TETWILD_INCLUDE_DIRS
-    name tetwild.h
+FIND_PATH(TETWILD_INCLUDE_DIRS tetwild.h
     PATHS
     $ENV{TETWILD_PATH}
     $ENV{TETWILD_PATH}/include
     ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/include/
-    /opt/local/include/
-    /usr/local/include/
-    /usr/include/)
+    PATH_SUFFIXES
+    tetwild
+    NO_DEFAULT_PATH)
 
 FIND_LIBRARY(TETWILD_LIBRARY TetWild
+    PATHS
     $ENV{TETWILD_PATH}
     $ENV{TETWILD_PATH}/lib/
     ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/
-    /opt/local/lib/
-    /usr/local/lib/
-    /usr/lib/)
+    PATH_SUFFIXES
+    tetwild
+    NO_DEFAULT_PATH)
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(TETWILD
