@@ -53,21 +53,26 @@ def slice_mesh(mesh, direction, N):
     slabs = boolean(boxes, mesh, "intersection");
 
     cross_secs = [];
-    source_faces = slabs.get_attribute("source_face").ravel();
     source = slabs.get_attribute("source").ravel();
     selected = source == 1;
     cross_section_faces = slabs.faces[selected];
     cross_section = form_mesh(slabs.vertices, cross_section_faces);
-    cross_secs = separate_mesh(cross_section);
 
-    cross_secs = [remove_isolated_vertices(m)[0] for m in cross_secs];
-    intersects = [np.dot(m.vertices[0], direction) for m in cross_secs];
-    order = np.argsort(intersects);
-    cross_secs = [cross_secs[i] for i in order];
+    intersects = np.dot(slabs.vertices, direction).ravel() - \
+            np.dot(center, direction);
+    eps = (max_val - min_val) / (2 * N);
 
-    for i in range(0, len(cross_secs), 2):
-        # Correct normal direction of every other slice.
-        m = cross_secs[i];
-        cross_secs[i] = form_mesh(m.vertices, m.faces[:, [0, 2, 1]]);
+    for i,val in enumerate(intercepts[:N]):
+        selected_vertices = np.logical_and(
+                intersects > val - eps,
+                intersects < val + eps);
+        selected_faces = np.all(selected_vertices[cross_section_faces], axis=1).ravel();
+        faces = cross_section_faces[selected_faces];
+        if i%2 == 0:
+            faces = faces[:,[0, 2, 1]];
+        m = form_mesh(slabs.vertices, faces);
+        m = remove_isolated_vertices(m)[0];
+        cross_secs.append(m);
+
     return cross_secs;
 
