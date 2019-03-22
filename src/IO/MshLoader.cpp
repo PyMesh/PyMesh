@@ -301,7 +301,12 @@ void MshLoader::parse_node_field(std::ifstream& fin) {
     for (size_t i=0; i<num_int_tags; i++)
         fin >> int_tags[i];
 
-    if (num_string_tags <= 0 || num_int_tags <= 2) { throw INVALID_FORMAT; }
+    if (num_string_tags <= 0 || num_int_tags <= 2) {
+        delete [] str_tags;
+        delete [] real_tags;
+        delete [] int_tags;
+        throw INVALID_FORMAT;
+    }
     std::string fieldname = str_tags[0];
     int num_components = int_tags[1];
     int num_entries = int_tags[2];
@@ -369,7 +374,12 @@ void MshLoader::parse_element_field(std::ifstream& fin) {
     for (size_t i=0; i<num_int_tags; i++)
         fin >> int_tags[i];
 
-    if (num_string_tags <= 0 || num_int_tags <= 2) { throw INVALID_FORMAT; }
+    if (num_string_tags <= 0 || num_int_tags <= 2) {
+        delete [] str_tags;
+        delete [] real_tags;
+        delete [] int_tags;
+        throw INVALID_FORMAT;
+    }
     std::string fieldname = str_tags[0];
     int num_components = int_tags[1];
     int num_entries = int_tags[2];
