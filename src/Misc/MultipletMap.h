@@ -16,12 +16,10 @@ namespace PyMesh {
 template <typename KeyType, typename T>
 class MultipletMap {
     public:
-        using MultipletHashFunc = MultipletHashFunc<KeyType>;
-
         //using ValueType = std::vector<T>;
         using ValueType = tbb::concurrent_vector<T>;
         using MultipletHashMap = tbb::concurrent_unordered_map<
-            KeyType, ValueType, MultipletHashFunc>;
+            KeyType, ValueType, MultipletHashFunc<KeyType>>;
         using iterator = typename MultipletHashMap::iterator;
         using const_iterator = typename MultipletHashMap::const_iterator;
         using range_type = typename MultipletHashMap::range_type;
