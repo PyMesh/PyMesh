@@ -18,7 +18,7 @@ from .generate_tube import generate_tube
 from .generate_regular_tetrahedron import generate_regular_tetrahedron
 from .hex_to_tet import hex_to_tet
 from .quad_to_tri import quad_to_tri
-from .manifold_check import is_vertex_manifold, is_edge_manifold
+from .manifold_check import is_vertex_manifold, is_edge_manifold, cut_to_manifold
 from .merge_meshes import merge_meshes
 from .mesh_to_graph import mesh_to_graph, mesh_to_dual_graph
 from .remove_degenerated_triangles import remove_degenerated_triangles
@@ -54,6 +54,7 @@ __all__ = [
         "collapse_short_edges",
         "collapse_short_edges_raw",
         "cut_mesh",
+        "cut_to_manifold",
         "generate_box_mesh",
         "generate_cylinder",
         "generate_dodecahedron",

@@ -94,3 +94,73 @@ TEST_F(NonmanifoldTest, hex) {
     ASSERT_TRUE((is_v_manifold.array() == 1).all());
     ASSERT_TRUE((is_e_manifold.array() == 1).all());
 }
+
+TEST_F(NonmanifoldTest, no_cut) {
+    Mesh::Ptr mesh = load_mesh("cube.obj");
+    Mesh::Ptr out_mesh = ManifoldCheck::cut_to_manifold(mesh);
+    ASSERT_EQ(mesh->get_num_vertices(), out_mesh->get_num_vertices());
+
+    const auto faces = MatrixUtils::reshape<MatrixIr>(
+            out_mesh->get_faces(),
+            out_mesh->get_num_faces(),
+            out_mesh->get_vertex_per_face());
+    const auto is_v_manifold = ManifoldCheck::is_vertex_manifold(faces);
+    const auto is_e_manifold = ManifoldCheck::is_edge_manifold(faces);
+    ASSERT_TRUE((is_v_manifold.array() == 1).all());
+    ASSERT_TRUE((is_e_manifold.array() == 1).all());
+}
+
+TEST_F(NonmanifoldTest, cut_nonmanifold_edge) {
+    MatrixFr vertices(5, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 2.0, 0.0,
+                0.0, 3.0, 0.0;
+    MatrixIr faces(3, 3);
+    faces << 0, 1, 2,
+             0, 1, 3,
+             0, 1, 4;
+
+    Mesh::Ptr mesh = load_data(vertices, faces);
+    Mesh::Ptr out_mesh = ManifoldCheck::cut_to_manifold(mesh);
+    ASSERT_EQ(9, out_mesh->get_num_vertices());
+    ASSERT_EQ(3, out_mesh->get_num_faces());
+
+    const auto out_faces = MatrixUtils::reshape<MatrixIr>(
+            out_mesh->get_faces(),
+            out_mesh->get_num_faces(),
+            out_mesh->get_vertex_per_face());
+    const auto is_v_manifold = ManifoldCheck::is_vertex_manifold(out_faces);
+    const auto is_e_manifold = ManifoldCheck::is_edge_manifold(out_faces);
+    ASSERT_TRUE((is_v_manifold.array() == 1).all());
+    ASSERT_TRUE((is_e_manifold.array() == 1).all());
+}
+
+TEST_F(NonmanifoldTest, cut_nonmanifold_vertex) {
+    MatrixFr vertices(5, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 2.0, 0.0,
+                0.0, 3.0, 0.0;
+    MatrixIr faces(3, 3);
+    faces << 0, 1, 2,
+             0, 1, 3,
+             0, 1, 4;
+
+    Mesh::Ptr mesh = load_data(vertices, faces);
+    Mesh::Ptr out_mesh = ManifoldCheck::cut_to_manifold(mesh);
+    ASSERT_EQ(9, out_mesh->get_num_vertices());
+    ASSERT_EQ(3, out_mesh->get_num_faces());
+
+    const auto out_faces = MatrixUtils::reshape<MatrixIr>(
+            out_mesh->get_faces(),
+            out_mesh->get_num_faces(),
+            out_mesh->get_vertex_per_face());
+    const auto is_v_manifold = ManifoldCheck::is_vertex_manifold(out_faces);
+    const auto is_e_manifold = ManifoldCheck::is_edge_manifold(out_faces);
+    ASSERT_TRUE((is_v_manifold.array() == 1).all());
+    ASSERT_TRUE((is_e_manifold.array() == 1).all());
+}
+

@@ -1,6 +1,8 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #include "ManifoldCheck.h"
 #include "EdgeUtils.h"
+#include "MeshCutter.h"
+#include <Math/MatrixUtils.h>
 
 using namespace PyMesh;
 
@@ -70,3 +72,32 @@ MatrixIr ManifoldCheck::is_edge_manifold(const MatrixIr& faces) {
     }
     return is_manifold;
 }
+
+
+Mesh::Ptr ManifoldCheck::cut_to_manifold(Mesh::Ptr mesh) {
+    const size_t num_faces = mesh->get_num_faces();
+    const size_t vertex_per_face = mesh->get_vertex_per_face();
+    if (vertex_per_face != 3) {
+        throw RuntimeError("Only triangle mesh is supported by cut_to_manifold.");
+    }
+    const MatrixIr& faces = MatrixUtils::reshape<MatrixIr>(
+            mesh->get_faces(), mesh->get_num_faces(), 3);
+    MatrixIr edge_manifold = is_edge_manifold(faces);
+
+    std::vector<std::vector<int>> non_manifold_edges;
+    for (size_t i=0; i<num_faces; i++) {
+        if (edge_manifold(i, 0) < 0.5) {
+            non_manifold_edges.push_back({faces(i,0), faces(i,1)});
+        }
+        if (edge_manifold(i, 1) < 0.5) {
+            non_manifold_edges.push_back({faces(i,1), faces(i,2)});
+        }
+        if (edge_manifold(i, 2) < 0.5) {
+            non_manifold_edges.push_back({faces(i,2), faces(i,0)});
+        }
+    }
+
+    MeshCutter cutter(mesh);
+    return cutter.cut_along_edges(non_manifold_edges);
+}
+
