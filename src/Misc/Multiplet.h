@@ -134,4 +134,11 @@ class Quadruplet : public Multiplet<int, 4> {
         }
 };
 
+template<typename KeyType>
+struct MultipletHashFunc {
+    inline int operator() (const KeyType& key) const {
+        return key.hash();
+    }
+};
+
 }

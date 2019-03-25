@@ -25,6 +25,12 @@ class MeshCutter {
          */
         Mesh::Ptr cut_at_uv_discontinuity() const;
 
+        /**
+         * Cut along edge chains.
+         */
+        Mesh::Ptr cut_along_edges(
+                const std::vector<std::vector<int>>& edge_chains) const;
+
     private:
         Mesh::Ptr m_mesh;
 };

@@ -198,3 +198,103 @@ TEST_F(MeshCutterTest, hex_s1) {
     ASSERT_EQ(num_faces, cutted_mesh->get_num_faces());
 }
 
+TEST_F(MeshCutterTest, quad) {
+    VectorF vertices(12);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0;
+    VectorI faces(6);
+    faces << 0, 1, 2,
+             1, 0, 3;
+    VectorI voxels;
+    MeshPtr mesh = MeshFactory().load_data(vertices, faces, voxels, 3, 3, 4).create();
+
+    std::vector<std::vector<int>> cut{{0, 1}};
+    MeshCutter cutter(mesh);
+    MeshPtr cutted_mesh = cutter.cut_along_edges(cut);
+
+    ASSERT_EQ(6, cutted_mesh->get_num_vertices());
+    ASSERT_EQ(2, cutted_mesh->get_num_faces());
+}
+
+TEST_F(MeshCutterTest, 3x3_quad) {
+    VectorF vertices(32);
+    vertices << 0.0, 0.0,
+                1.0, 0.0,
+                2.0, 0.0,
+                3.0, 0.0,
+                0.0, 1.0,
+                1.0, 1.0,
+                2.0, 1.0,
+                3.0, 1.0,
+                0.0, 2.0,
+                1.0, 2.0,
+                2.0, 2.0,
+                3.0, 2.0,
+                0.0, 3.0,
+                1.0, 3.0,
+                2.0, 3.0,
+                3.0, 3.0;
+    VectorI faces(18*3);
+    faces <<
+        0, 1, 5,
+        0, 5, 4,
+        1, 2, 6,
+        1, 6, 5,
+        2, 3, 7,
+        2, 7, 6,
+        4, 5, 9,
+        4, 9, 8,
+        5, 6, 10,
+        5, 10, 9,
+        6, 7, 11,
+        6, 11, 10,
+        8, 9, 13,
+        8, 13, 12,
+        9, 10, 14,
+        9, 14, 13,
+        10, 11, 15,
+        10, 15, 14;
+
+    //  12    13    14    15
+    //   +-----+-----+-----+
+    //   |   / |   / |   / |
+    //   | /  9| / 10| / 11|
+    // 8 +-----+-----+-----+
+    //   |   / |   / |   / |
+    //   | /  5| /  6| /  7|
+    // 4 +-----+-----+-----+
+    //   |   / |   / |   / |
+    //   | /  1| /  2| /  3|
+    // 0 +-----+-----+-----+
+
+    VectorI voxels;
+    MeshPtr mesh = MeshFactory().load_data(vertices, faces, voxels, 2, 3, 4).create();
+    MeshCutter cutter(mesh);
+
+    {
+        std::vector<std::vector<int>> cut{{1, 5, 9, 13}};
+        MeshPtr cutted_mesh = cutter.cut_along_edges(cut);
+        ASSERT_EQ(16+4, cutted_mesh->get_num_vertices());
+    }
+
+    {
+        std::vector<std::vector<int>> cut{{0, 1, 2, 3}};
+        MeshPtr cutted_mesh = cutter.cut_along_edges(cut);
+        ASSERT_EQ(16, cutted_mesh->get_num_vertices());
+    }
+
+    {
+        std::vector<std::vector<int>> cut{{0, 5, 10, 15}};
+        MeshPtr cutted_mesh = cutter.cut_along_edges(cut);
+        ASSERT_EQ(16+4, cutted_mesh->get_num_vertices());
+    }
+
+    {
+        std::vector<std::vector<int>> cut{{4, 5, 6, 7}, {0, 5, 10, 15}};
+        MeshPtr cutted_mesh = cutter.cut_along_edges(cut);
+        ASSERT_EQ(16+9, cutted_mesh->get_num_vertices());
+    }
+}
+

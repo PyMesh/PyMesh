@@ -4,6 +4,9 @@
 #ifdef WITH_IGL_AND_CGAL
 #include "MinkowskiSumTest.h"
 #endif
+#ifdef WITH_IGL
+#include "DiskCutter.h"
+#endif
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

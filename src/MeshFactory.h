@@ -24,6 +24,8 @@ class MeshFactory {
         MeshFactory& load_data(
                 const VectorF& vertices, const VectorI& faces, const VectorI& voxels,
                 size_t dim, size_t num_vertex_per_face, size_t num_vertex_per_voxel);
+        MeshFactory& load_matrices(
+                const MatrixFr& vertices, const MatrixIr& faces, const MatrixIr& voxels);
         MeshFactory& with_connectivity(const std::string& conn_type);
         MeshFactory& with_attribute(const std::string& attr_name);
         MeshFactory& drop_zero_dim();

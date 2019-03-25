@@ -1,11 +1,19 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
 #include "MeshCutter.h"
+#include "EdgeUtils.h"
 
 #include <cassert>
+#include <array>
 #include <iostream>
+#include <list>
+#include <vector>
+#include <queue>
 #include <unordered_map>
+#include <unordered_set>
+
 #include <MeshFactory.h>
 #include <Core/Exception.h>
+#include <Misc/MultipletMap.h>
 
 using namespace PyMesh;
 
@@ -162,6 +170,131 @@ Mesh::Ptr MeshCutter::cut_at_uv_discontinuity() const {
     }
 
     return MeshFactory().load_data(new_vertices, new_faces, m_mesh->get_voxels(),
+            dim, vertex_per_face, m_mesh->get_vertex_per_voxel()).create();
+}
+
+Mesh::Ptr MeshCutter::cut_along_edges(
+        const std::vector<std::vector<int>>& edge_chains) const {
+    std::unordered_set<Duplet, MultipletHashFunc<Duplet>> cut_edges;
+    for (const auto& chain : edge_chains) {
+        const auto chain_size = chain.size();
+        assert(chain_size >= 2);
+        for (size_t i=0; i < chain_size-1; i++) {
+            cut_edges.insert(Duplet(
+                    static_cast<int>(chain[i]),
+                    static_cast<int>(chain[i+1]) ));
+        }
+    }
+    auto is_cut_edge = [&cut_edges](const Duplet& e) {
+        return cut_edges.find(e) != cut_edges.end();
+    };
+
+    const size_t dim = m_mesh->get_dim();
+    const size_t vertex_per_face = m_mesh->get_vertex_per_face();
+    const size_t num_existing_vertices = m_mesh->get_num_vertices();
+    auto faces = m_mesh->get_faces(); // Intentional copy
+    const auto& vertices = m_mesh->get_vertices();
+    std::vector<size_t> new_vertices;
+
+    const size_t num_vertices = m_mesh->get_num_vertices();
+    for (size_t i=0; i<num_vertices; i++) {
+        const auto& adj_faces = m_mesh->get_vertex_adjacent_faces(i);
+        const auto num_adj_faces = adj_faces.size();
+        if (num_adj_faces == 0) continue;
+        DupletMap<int> edge_face_map;
+        std::unordered_map<int, std::array<Duplet, 2>> spokes;
+        for (size_t j=0; j<num_adj_faces; j++) {
+            std::array<Duplet, 2> es;
+            const auto fid = adj_faces[j];
+            const auto& f = faces.segment<3>(fid*3);
+            if (f[0] == i) {
+                es[0] = {f[0], f[1]};
+                es[1] = {f[0], f[2]};
+            } else if (f[1] == i) {
+                es[0] = {f[1], f[2]};
+                es[1] = {f[1], f[0]};
+            } else {
+                assert(f[2] == i);
+                es[0] = {f[2], f[0]};
+                es[1] = {f[2], f[1]};
+            }
+            spokes.insert({fid, es});
+            edge_face_map.insert(es[0], fid);
+            edge_face_map.insert(es[1], fid);
+        }
+
+        std::unordered_set<int> visited;
+        auto has_visited = [&visited](int fid) {
+            return visited.find(fid) != visited.end();
+        };
+        std::vector<std::list<int>> comps;
+
+        auto flood_across_edge = [
+            &is_cut_edge,
+            &has_visited,
+            &edge_face_map,
+            &visited
+        ](const Duplet& e, auto& Q) {
+            if (!is_cut_edge(e)) {
+                const auto& adj_f_to_e = edge_face_map[e];
+                for (auto adj_f : adj_f_to_e) {
+                    if (!has_visited(adj_f)) {
+                        Q.push(adj_f);
+                        visited.insert(adj_f);
+                    }
+                }
+            }
+        };
+
+        for (size_t j=0; j<num_adj_faces; j++) {
+            if (has_visited(adj_faces[j])) continue;
+
+            std::list<int> comp;
+            std::queue<int> Q;
+            Q.push(adj_faces[j]);
+            visited.insert(adj_faces[j]);
+            while(!Q.empty()) {
+                const auto fid = Q.front();
+                Q.pop();
+                comp.push_back(fid);
+
+                const auto& e0 = spokes[fid][0];
+                flood_across_edge(e0, Q);
+                const auto& e1 = spokes[fid][1];
+                flood_across_edge(e1, Q);
+            }
+            comps.push_back(comp);
+        }
+
+        const size_t num_comps = comps.size();
+        if (num_comps > 1) {
+            for (size_t j=1; j<num_comps; j++) {
+                const int new_vid = num_existing_vertices + new_vertices.size();
+                for (const auto fid : comps[j]) {
+                    if (faces[fid*vertex_per_face] == i)
+                        faces[fid*vertex_per_face] = new_vid;
+                    else if (faces[fid*vertex_per_face+1] == i)
+                        faces[fid*vertex_per_face+1] = new_vid;
+                    else if (faces[fid*vertex_per_face+2] == i)
+                        faces[fid*vertex_per_face+2] = new_vid;
+                    else {
+                        throw RuntimeError("faces does not contain the given vertex");
+                    }
+                }
+                new_vertices.push_back(i);
+            }
+        }
+    }
+
+    const size_t num_new_vertices = new_vertices.size();
+    VectorF out_vertices((num_existing_vertices + num_new_vertices)*dim);
+    out_vertices.segment(0, num_existing_vertices * dim) = vertices;
+    for (size_t i=0; i<num_new_vertices; i++) {
+        out_vertices.segment((num_existing_vertices+i)*dim, dim) =
+            vertices.segment(new_vertices[i]*dim, dim);
+    }
+
+    return MeshFactory().load_data(out_vertices, faces, m_mesh->get_voxels(),
             dim, vertex_per_face, m_mesh->get_vertex_per_voxel()).create();
 }
 

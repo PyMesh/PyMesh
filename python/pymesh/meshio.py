@@ -90,13 +90,7 @@ def form_mesh(vertices, faces, voxels=None):
     faces = deduce_face_type(faces, voxels);
 
     factory = PyMesh.MeshFactory();
-    factory.load_data(
-            vertices.ravel(order="C"),
-            faces.ravel(order="C"),
-            voxels.ravel(order="C"),
-            vertices.shape[1],
-            faces.shape[1],
-            voxels.shape[1]);
+    factory.load_matrices(vertices, faces, voxels);
     return Mesh(factory.create());
 
 def save_mesh_raw(filename, vertices, faces, voxels=None, **setting):

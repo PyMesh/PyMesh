@@ -17,6 +17,8 @@ void init_MeshFactory(py::module &m) {
              py::return_value_policy::reference_internal)
         .def("load_data", &MeshFactory::load_data,
                 py::return_value_policy::reference_internal)
+        .def("load_matrices", &MeshFactory::load_matrices,
+                py::return_value_policy::reference_internal)
         .def("with_connectivity", &MeshFactory::with_connectivity,
                 py::return_value_policy::reference_internal)
         .def("with_attribute", &MeshFactory::with_attribute,

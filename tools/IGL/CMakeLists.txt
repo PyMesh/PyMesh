@@ -9,6 +9,7 @@ TARGET_LINK_LIBRARIES(lib_IGL
         PyMesh::Tools
         PyMesh::libigl
         PyMesh::Tools::CGAL
+        PyMesh::Tools::MeshUtils
 )
 
 ADD_LIBRARY(PyMesh::Tools::IGL ALIAS lib_IGL)

@@ -8,6 +8,7 @@
 #include <Core/Exception.h>
 #include <Geometry/MeshGeometry.h>
 #include <IO/MeshParser.h>
+#include <Math/MatrixUtils.h>
 #include <Mesh.h>
 
 using namespace PyMesh;
@@ -71,6 +72,18 @@ MeshFactory& MeshFactory::load_data(
     }
 
     return *this;
+}
+
+MeshFactory& MeshFactory::load_matrices(
+        const MatrixFr& vertices, const MatrixIr& faces, const MatrixIr& voxels) {
+    const size_t dim = vertices.cols();
+    const size_t num_vertex_per_face = faces.cols();
+    const size_t num_vertex_per_voxel = voxels.cols();
+    return load_data(
+            MatrixUtils::flatten<VectorF>(vertices),
+            MatrixUtils::flatten<VectorI>(faces),
+            MatrixUtils::flatten<VectorI>(voxels),
+            dim, num_vertex_per_face, num_vertex_per_voxel);
 }
 
 MeshFactory& MeshFactory::with_connectivity(

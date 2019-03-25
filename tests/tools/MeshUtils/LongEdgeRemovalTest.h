@@ -110,8 +110,6 @@ TEST_F(LongEdgeRemovalTest, ori_face) {
         const Vector2F c = (out_vertices.row(f[0]) +
                 out_vertices.row(f[1]) +
                 out_vertices.row(f[2])) / 3.0;
-        std::cout << c[0] << ", " << c[1] << std::endl;
-        std::cout << ori_faces[i] << std::endl;
         if (c[0] + c[1] < 1.0) {
             ASSERT_EQ(0, ori_faces[i]);
         } else {

@@ -16,11 +16,7 @@ namespace PyMesh {
 template <typename KeyType, typename T>
 class MultipletMap {
     public:
-        struct MultipletHashFunc {
-            inline int operator() (const KeyType& key) const {
-                return key.hash();
-            }
-        };
+        using MultipletHashFunc = MultipletHashFunc<KeyType>;
 
         //using ValueType = std::vector<T>;
         using ValueType = tbb::concurrent_vector<T>;
