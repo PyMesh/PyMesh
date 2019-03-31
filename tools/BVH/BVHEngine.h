@@ -53,6 +53,23 @@ class BVHEngine {
             throw NotImplementedError("BVH algorithm is not implemented");
         }
 
+        /**
+         * For each point in points, lookup the closest points on mesh and the
+         * corresponding signed (un-squared) distances and faces.
+         * Warning: only work with IGL engine
+         */
+        virtual void lookup_signed(const MatrixFr& points,
+                const MatrixFr& face_normals,
+                const MatrixFr& vertex_normals,
+                const MatrixFr& edge_normals,
+                const VectorI& edge_map,
+                VectorF& signed_distances,
+                VectorI& closest_faces,
+                MatrixFr& closest_points,
+                MatrixFr& closest_face_normals) const {
+            throw NotImplementedError("BVH algorithm is not implemented");
+        }
+
     protected:
         MatrixFr m_vertices;
         MatrixIr m_faces;
