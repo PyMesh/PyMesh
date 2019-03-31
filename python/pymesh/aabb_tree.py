@@ -60,7 +60,7 @@ class BVH:
         return sq_dists.squeeze(), face_indices.squeeze(), closest_pts;
 
 
-def distance_to_mesh(mesh, pts, engine="auto"):
+def distance_to_mesh(mesh, pts, engine="auto", bvh=None):
     """ Compute the distance from a set of points to a mesh.
 
     Args:
@@ -70,6 +70,7 @@ def distance_to_mesh(mesh, pts, engine="auto"):
         engine (``string``): BVH engine name. Valid choices are "cgal",
             "geogram", "igl" if all dependencies are used. The default is
             "auto" where an available engine is automatically picked.
+        bvh (:class:`BVH`): BVH engine instance (optional)
 
     Returns:
         Three values are returned.
@@ -80,8 +81,9 @@ def distance_to_mesh(mesh, pts, engine="auto"):
                                   query point.
     """
 
-    bvh = BVH(engine, mesh.dim);
-    bvh.load_mesh(mesh);
+    if not bvh:
+        bvh = BVH(engine, mesh.dim);
+        bvh.load_mesh(mesh);
     squared_distances, face_indices, closest_points = bvh.lookup(pts);
     return squared_distances, face_indices, closest_points;
 
