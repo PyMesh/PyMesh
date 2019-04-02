@@ -41,13 +41,14 @@ from .tetrahedralize import tetrahedralize
 from .matrixio import load_matrix, save_matrix
 from .minkowski_sum import minkowski_sum
 from .cell_partition import partition_into_cells
-from .aabb_tree import AABBTree, AABBTree2, BVH, distance_to_mesh, do_intersect
+from .aabb_tree import AABBTree, AABBTree2, BVH, distance_to_mesh, signed_distance_to_mesh, do_intersect
 from .triangle import triangle
 from .triangulate import triangulate_beta, refine_triangulation
 from .wires import *
 from .snap_rounding import snap_rounding
 from .SparseSolver import SparseSolver
 from .igl_utils import unique_rows
+from .igl_utils import face_normals, vertex_normals, edge_normals
 
 from .map_attributes import map_vertex_attribute
 from .map_attributes import map_face_attribute
@@ -87,6 +88,7 @@ __all__ = [
         "AABBTree",
         "AABBTree2",
         "distance_to_mesh",
+        "signed_distance_to_mesh",
         "do_intersect",
         "VoxelGrid",
         "HarmonicSolver",
@@ -99,7 +101,10 @@ __all__ = [
         "map_face_attribute",
         "map_corner_attribute",
         "refine_triangulation",
-        "unique_rows"
+        "unique_rows",
+        "face_normals",
+        "vertex_normals",
+        "edge_normals"
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;

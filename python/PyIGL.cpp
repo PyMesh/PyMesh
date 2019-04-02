@@ -8,6 +8,9 @@
 #include <Core/EigenTypedef.h>
 #include <IGL/HarmonicSolver.h>
 #include <igl/unique_rows.h>
+#include <igl/per_face_normals.h>
+#include <igl/per_vertex_normals.h>
+#include <igl/per_edge_normals.h>
 
 namespace py = pybind11;
 using namespace PyMesh;
@@ -49,5 +52,30 @@ void init_IGL(py::module &m) {
             VectorI IA, IC;
             igl::unique_rows(A, C, IA, IC);
             return std::make_tuple(C, IA, IC);
+            });
+
+    m.def("face_normals",
+            [](const MatrixFr& V, const MatrixIr& F) {
+            MatrixFr FN;
+            igl::per_face_normals(V, F, FN);
+            return FN;
+            });
+
+    m.def("vertex_normals",
+            [](const MatrixFr& V, const MatrixIr& F, const MatrixFr& FN) {
+            MatrixFr VN;
+            igl::per_vertex_normals(
+                V, F, igl::PER_VERTEX_NORMALS_WEIGHTING_TYPE_ANGLE, FN, VN);
+            return VN;
+            });
+
+    m.def("edge_normals",
+            [](const MatrixFr& V, const MatrixIr& F, const MatrixFr& FN) {
+            MatrixFr EN;
+            MatrixIr E;
+            VectorI EMAP;
+            igl::per_edge_normals(
+                V, F, igl::PER_EDGE_NORMALS_WEIGHTING_TYPE_UNIFORM, FN, EN, E, EMAP);
+            return std::make_tuple(EN, E, EMAP);
             });
 }
