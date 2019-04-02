@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import argparse
+import logging
 import pymesh
 import numpy as np
 
@@ -16,9 +17,11 @@ def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
     if (mesh.vertex_per_face != 4):
-        raise IOError("input mesh is not a quad mesh");
-    mesh = pymesh.quad_to_tri(mesh, args.keep_symmetry);
-    pymesh.save_mesh(args.output_mesh, mesh, *mesh.get_attribute_names());
+        logging.warning("Input mesh is not quad mesh.");
+        pymesh.save_mesh(args.output_mesh, mesh, *mesh.get_attribute_names());
+    else:
+        mesh = pymesh.quad_to_tri(mesh, args.keep_symmetry);
+        pymesh.save_mesh(args.output_mesh, mesh, *mesh.get_attribute_names());
 
 if __name__ == "__main__":
     main();
