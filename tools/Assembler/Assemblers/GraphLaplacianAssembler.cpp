@@ -7,7 +7,7 @@ using namespace PyMesh;
 
 ZSparseMatrix GraphLaplacianAssembler::assemble(FESettingPtr setting) {
     typedef FESetting::FEMeshPtr FEMeshPtr;
-    typedef Eigen::Triplet<Float> T;
+    typedef Eigen::Triplet<Float, size_t> T;
     std::vector<T> entries;
 
     auto mesh = setting->get_mesh();
