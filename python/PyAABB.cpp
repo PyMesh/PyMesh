@@ -100,5 +100,30 @@ void init_BVH(py::module &m) {
                         squared_dists,
                         closest_face_indices,
                         closest_points);
+                })
+        .def("lookup_signed",
+                [](BVHEngine::Ptr tree, const MatrixFr& points, 
+                  const MatrixFr& face_normals,
+                  const MatrixFr& vertex_normals,
+                  const MatrixFr& edge_normals,
+                  const VectorI& edge_map) {
+                VectorF signed_dists;
+                VectorI closest_face_indices;
+                MatrixFr closest_points, closest_face_normals;
+                tree->lookup_signed(
+                        points,
+                        face_normals,
+                        vertex_normals,
+                        edge_normals,
+                        edge_map,
+                        signed_dists,
+                        closest_face_indices,
+                        closest_points,
+                        closest_face_normals);
+                return std::make_tuple(
+                        signed_dists,
+                        closest_face_indices,
+                        closest_points,
+                        closest_face_normals);
                 });
 }
