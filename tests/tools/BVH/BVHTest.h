@@ -312,7 +312,7 @@ TEST_F(BVHTest, igl_aabb) {
     assert_vertex_has_zero_dist(mesh2, bvh, true);
 }
 
-TEST_F(BVHTest, igl_aabb_2D) {
+TEST_F(BVHTest, DISABLED_igl_aabb_2D) {
     MeshPtr mesh = load_mesh("square_2D.obj");
     auto bvh = BVHEngine::create("igl", 2);
     ASSERT_TRUE(bool(bvh));
