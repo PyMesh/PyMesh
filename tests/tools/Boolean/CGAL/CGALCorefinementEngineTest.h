@@ -1,6 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 #ifdef WITH_CGAL
+#ifdef WITH_CGAL_COREFINEMENT
 
 #include <algorithm>
 #include <string>
@@ -228,4 +229,5 @@ TEST_F(CGALCorefinementEngineTest, overlap_difference) {
     assert_on_boundary(vertices, faces, -corner);
 }
 
+#endif
 #endif

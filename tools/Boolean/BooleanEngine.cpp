@@ -12,7 +12,9 @@
 #endif
 #ifdef WITH_CGAL
 #include "CGAL/CGALBooleanEngine.h"
+#ifdef WITH_CGAL_COREFINEMENT
 #include "CGAL/CGALCorefinementEngine.h"
+#endif
 #endif
 #ifdef WITH_CARVE
 #include "Carve/CarveEngine.h"
@@ -58,9 +60,11 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
 #endif
 #ifdef WITH_CGAL
     if (engine_name == "cgal") { return Ptr(new CGALBooleanEngine()); }
+#ifdef WITH_CGAL_COREFINEMENT
     if (engine_name == "corefinement") {
         return Ptr(new CGALCorefinementEngine());
     }
+#endif
 #endif
 #ifdef WITH_CARVE
     if (engine_name == "carve") { return Ptr(new CarveEngine()); }

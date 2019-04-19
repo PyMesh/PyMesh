@@ -1,6 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
 #ifdef WITH_CGAL
+#ifdef WITH_CGAL_COREFINEMENT
 
 #include <Boolean/BooleanEngine.h>
 
@@ -19,4 +20,5 @@ class CGALCorefinementEngine : public BooleanEngine {
 
 }
 
+#endif
 #endif

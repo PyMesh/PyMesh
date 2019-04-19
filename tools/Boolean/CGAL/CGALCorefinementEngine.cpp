@@ -1,5 +1,7 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #ifdef WITH_CGAL
+#ifdef WITH_CGAL_COREFINEMENT
+
 #include "CGALCorefinementEngine.h"
 #include "CGALUtils.h"
 
@@ -105,4 +107,5 @@ void CGALCorefinementEngine::compute_symmetric_difference() {
     throw NotImplementedError("Not implemented");
 }
 
+#endif
 #endif

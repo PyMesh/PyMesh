@@ -80,6 +80,7 @@ target_include_directories(lib_tetwild SYSTEM
         ${TETWILD_DIR}/src/
         ${TETWILD_DIR}/extern/)
 set_target_properties(lib_tetwild PROPERTIES OUTPUT_NAME "TetWild")
+target_compile_definitions(lib_tetwild PUBLIC -DCGAL_USE_GMP -DCGAL_DO_NOT_USE_BOOST_MP)
 
 INSTALL(TARGETS lib_tetwild
     LIBRARY DESTINATION lib
