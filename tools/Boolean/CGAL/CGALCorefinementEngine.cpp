@@ -8,103 +8,123 @@
 #include <vector>
 
 #include <CGAL/Union_find.h>
-#include <CGAL/internal/corefinement/connected_components.h>
-#include <CGAL/corefinement_operations.h>
+#include <CGAL/Polygon_mesh_processing/corefinement.h>
+#include <CGAL/Polygon_mesh_processing/triangulate_faces.h>
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 #include <CGAL/Polyhedron_3.h>
+#include <CGAL/Surface_mesh.h>
 
 #include <Core/Exception.h>
 
 using namespace PyMesh;
 
 namespace CGALCorefinementEngineHelper {
-    typedef CGAL::Exact_predicates_exact_constructions_kernel Kernel;
-    typedef CGAL::Polyhedron_3<Kernel>  Polyhedron;
-    typedef CGAL::Polyhedron_corefinement<Polyhedron> Corefinement;
+    using Kernel = CGAL::Exact_predicates_exact_constructions_kernel;
+    using SurfaceMesh = CGAL::Surface_mesh<Kernel::Point_3>;
+
+    SurfaceMesh mesh_to_surface_mesh(
+            const MatrixFr& vertices, const MatrixIr& faces) {
+        using Point = SurfaceMesh::Point;
+        using VertexIndex = SurfaceMesh::Vertex_index;
+
+        assert(vertices.cols() == 3);
+        assert(faces.cols() == 3);
+
+        SurfaceMesh out;
+        const size_t num_vertices = vertices.rows();
+        std::vector<VertexIndex> v_indices(num_vertices);
+        for (size_t i=0; i<num_vertices; i++) {
+            v_indices[i] = out.add_vertex({
+                        vertices(i,0), vertices(i,1), vertices(i,2)});
+        }
+
+        const size_t num_faces = faces.rows();
+        for (size_t i=0; i<num_faces; i++) {
+            out.add_face(
+                    v_indices[faces(i, 0)],
+                    v_indices[faces(i, 1)],
+                    v_indices[faces(i, 2)]);
+        }
+
+        return out;
+    }
+
+    void surface_mesh_to_mesh(const SurfaceMesh& M,
+            MatrixFr& vertices, MatrixIr& faces) {
+        const size_t num_vertices = M.number_of_vertices();
+        vertices.resize(num_vertices, 3);
+        for(const auto vit : M.vertices()) {
+            const auto& p = M.point(vit);
+            vertices.row(vit) <<
+                CGAL::to_double(p[0]),
+                CGAL::to_double(p[1]),
+                CGAL::to_double(p[2]);
+        }
+
+        const size_t num_faces = M.number_of_faces();
+        faces.resize(num_faces, 3);
+        for (const auto fit : M.faces()) {
+            auto he = M.halfedge(fit);
+            auto v0 = M.source(he);
+            he = M.next(he);
+            auto v1 = M.source(he);
+            he = M.next(he);
+            auto v2 = M.source(he);
+            faces.row(fit) << v0, v1, v2;
+        }
+    }
+
 }
 using namespace CGALCorefinementEngineHelper;
 
 void CGALCorefinementEngine::compute_union() {
-    Polyhedron mesh1 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_1, m_faces_1);
-    Polyhedron mesh2 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_2, m_faces_2);
+    using namespace CGAL::Polygon_mesh_processing;
+    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
+    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
+    SurfaceMesh out;
 
-    std::vector<std::pair <Polyhedron*,int> > result;                              
-    result.reserve(1);  
-    Corefinement coref;
-    CGAL::Emptyset_iterator polyline_output;
+    corefine_and_compute_union(mesh1, mesh2, out);
+    triangulate_faces(out);
 
-    coref(mesh1, mesh2, polyline_output,
-            std::back_inserter(result),
-            Corefinement::Join_tag);
-
-    if (result.size() == 1) {
-        CGALUtils::polyhedron_to_mesh(*result[0].first, m_vertices, m_faces);
-        delete result[0].first;
-    } else if (result.size() == 0) {
-        // empty mesh.
-    } else {
-        throw RuntimeError("More than one polyhedron is returned");
-    }
+    surface_mesh_to_mesh(out, m_vertices, m_faces);
 }
 
 void CGALCorefinementEngine::compute_intersection() {
-    Polyhedron mesh1 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_1, m_faces_1);
-    Polyhedron mesh2 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_2, m_faces_2);
+    using namespace CGAL::Polygon_mesh_processing;
+    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
+    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
+    SurfaceMesh out;
 
-    std::vector<std::pair <Polyhedron*,int> > result;                              
-    result.reserve(1);  
-    Corefinement coref;
-    CGAL::Emptyset_iterator polyline_output;
+    corefine_and_compute_intersection(mesh1, mesh2, out);
+    triangulate_faces(out);
 
-    coref(mesh1, mesh2, polyline_output,
-            std::back_inserter(result),
-            Corefinement::Intersection_tag);
-
-    if (result.size() == 1) {
-        CGALUtils::polyhedron_to_mesh(*result[0].first, m_vertices, m_faces);
-        delete result[0].first;
-    } else if (result.size() == 0) {
-        // empty mesh.
-    } else {
-        throw RuntimeError("More than one polyhedron is returned");
-    }
+    surface_mesh_to_mesh(out, m_vertices, m_faces);
 }
 
 void CGALCorefinementEngine::compute_difference() {
-    Polyhedron mesh1 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_1, m_faces_1);
-    Polyhedron mesh2 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_2, m_faces_2);
+    using namespace CGAL::Polygon_mesh_processing;
+    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
+    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
+    SurfaceMesh out;
 
-    std::vector<std::pair <Polyhedron*,int> > result;                              
-    result.reserve(1);  
-    Corefinement coref;
-    CGAL::Emptyset_iterator polyline_output;
+    corefine_and_compute_difference(mesh1, mesh2, out);
+    triangulate_faces(out);
 
-    coref(mesh1, mesh2, polyline_output,
-            std::back_inserter(result),
-            Corefinement::P_minus_Q_tag);
-
-    if (result.size() == 1) {
-        CGALUtils::polyhedron_to_mesh(*result[0].first, m_vertices, m_faces);
-        delete result[0].first;
-    } else if (result.size() == 0) {
-        // empty mesh.
-    } else {
-        throw RuntimeError("More than one polyhedron is returned");
-    }
+    surface_mesh_to_mesh(out, m_vertices, m_faces);
 }
 
 void CGALCorefinementEngine::compute_symmetric_difference() {
-    Polyhedron mesh1 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_1, m_faces_1);
-    Polyhedron mesh2 = CGALUtils::mesh_to_polyhedron<Kernel>(
-            m_vertices_2, m_faces_2);
-    throw NotImplementedError("Not implemented");
+    using namespace CGAL::Polygon_mesh_processing;
+    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
+    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
+    SurfaceMesh diff12, diff21, out;
+
+    corefine_and_compute_difference(mesh1, mesh2, diff12);
+    corefine_and_compute_difference(mesh2, mesh1, diff21);
+    corefine_and_compute_union(diff12, diff21, out);
+    triangulate_faces(out);
+
+    surface_mesh_to_mesh(out, m_vertices, m_faces);
 }
 
 #endif
