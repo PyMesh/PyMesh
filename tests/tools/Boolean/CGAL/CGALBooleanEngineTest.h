@@ -269,9 +269,11 @@ TEST_F(CGALBooleanEngineTest, open_surface) {
     tri_faces << 0, 1, 2;
 
     BooleanPtr cgal_engine = BooleanEngine::create("cgal");
-    cgal_engine->set_mesh_1(box_vertices, box_faces);
-    cgal_engine->set_mesh_2(tri_vertices, tri_faces);
-    ASSERT_THROW(cgal_engine->compute_intersection(), RuntimeError);
+    ASSERT_THROW({
+        cgal_engine->set_mesh_1(box_vertices, box_faces);
+        cgal_engine->set_mesh_2(tri_vertices, tri_faces);
+        cgal_engine->compute_intersection();
+    }, RuntimeError);
 }
 
 #endif

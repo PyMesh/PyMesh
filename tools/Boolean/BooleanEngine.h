@@ -20,11 +20,13 @@ class BooleanEngine {
         void set_mesh_1(const MatrixFr& vertices, const MatrixIr& faces) {
             m_vertices_1 = vertices;
             m_faces_1 = faces;
+            convert_mesh_to_native_format(MeshSelection::FIRST);
         }
 
         void set_mesh_2(const MatrixFr& vertices, const MatrixIr& faces) {
             m_vertices_2 = vertices;
             m_faces_2 = faces;
+            convert_mesh_to_native_format(MeshSelection::SECOND);
         }
 
         const MatrixFr get_vertices() const { return m_vertices; }
@@ -46,7 +48,7 @@ class BooleanEngine {
         }
         virtual VectorI get_face_sources() const {
             return VectorI::Zero(0);
-        };
+        }
 
         virtual void serialize_xml(const std::string& filename) const;
 
@@ -54,6 +56,10 @@ class BooleanEngine {
         void remove_duplicated_vertices();
         void remove_short_edges();
         void remove_isolated_vertices();
+
+    protected:
+        enum class MeshSelection { FIRST, SECOND };
+        virtual void convert_mesh_to_native_format(MeshSelection s) {}
 
     protected:
         MatrixFr m_vertices_1;

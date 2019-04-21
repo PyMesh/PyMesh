@@ -111,3 +111,4 @@ void BooleanEngine::remove_isolated_vertices() {
 void BooleanEngine::serialize_xml(const std::string& filename) const {
     throw NotImplementedError("Serialization is not supported");
 }
+

@@ -19,13 +19,11 @@
 using namespace PyMesh;
 
 namespace CGALCorefinementEngineHelper {
-    using Kernel = CGAL::Exact_predicates_exact_constructions_kernel;
-    using SurfaceMesh = CGAL::Surface_mesh<Kernel::Point_3>;
-
+    template<typename SurfaceMesh>
     SurfaceMesh mesh_to_surface_mesh(
             const MatrixFr& vertices, const MatrixIr& faces) {
-        using Point = SurfaceMesh::Point;
-        using VertexIndex = SurfaceMesh::Vertex_index;
+        using Point = typename SurfaceMesh::Point;
+        using VertexIndex = typename SurfaceMesh::Vertex_index;
 
         assert(vertices.cols() == 3);
         assert(faces.cols() == 3);
@@ -49,6 +47,7 @@ namespace CGALCorefinementEngineHelper {
         return out;
     }
 
+    template<typename SurfaceMesh>
     void surface_mesh_to_mesh(const SurfaceMesh& M,
             MatrixFr& vertices, MatrixIr& faces) {
         const size_t num_vertices = M.number_of_vertices();
@@ -79,11 +78,9 @@ using namespace CGALCorefinementEngineHelper;
 
 void CGALCorefinementEngine::compute_union() {
     using namespace CGAL::Polygon_mesh_processing;
-    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
-    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
     SurfaceMesh out;
 
-    corefine_and_compute_union(mesh1, mesh2, out);
+    corefine_and_compute_union(m_surface_mesh_1, m_surface_mesh_2, out);
     triangulate_faces(out);
 
     surface_mesh_to_mesh(out, m_vertices, m_faces);
@@ -91,11 +88,9 @@ void CGALCorefinementEngine::compute_union() {
 
 void CGALCorefinementEngine::compute_intersection() {
     using namespace CGAL::Polygon_mesh_processing;
-    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
-    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
     SurfaceMesh out;
 
-    corefine_and_compute_intersection(mesh1, mesh2, out);
+    corefine_and_compute_intersection(m_surface_mesh_1, m_surface_mesh_2, out);
     triangulate_faces(out);
 
     surface_mesh_to_mesh(out, m_vertices, m_faces);
@@ -103,11 +98,9 @@ void CGALCorefinementEngine::compute_intersection() {
 
 void CGALCorefinementEngine::compute_difference() {
     using namespace CGAL::Polygon_mesh_processing;
-    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
-    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
     SurfaceMesh out;
 
-    corefine_and_compute_difference(mesh1, mesh2, out);
+    corefine_and_compute_difference(m_surface_mesh_1, m_surface_mesh_2, out);
     triangulate_faces(out);
 
     surface_mesh_to_mesh(out, m_vertices, m_faces);
@@ -115,16 +108,33 @@ void CGALCorefinementEngine::compute_difference() {
 
 void CGALCorefinementEngine::compute_symmetric_difference() {
     using namespace CGAL::Polygon_mesh_processing;
-    SurfaceMesh mesh1 = mesh_to_surface_mesh(m_vertices_1, m_faces_1);
-    SurfaceMesh mesh2 = mesh_to_surface_mesh(m_vertices_2, m_faces_2);
     SurfaceMesh diff12, diff21, out;
 
-    corefine_and_compute_difference(mesh1, mesh2, diff12);
-    corefine_and_compute_difference(mesh2, mesh1, diff21);
+    corefine_and_compute_difference(m_surface_mesh_1, m_surface_mesh_2, diff12);
+    corefine_and_compute_difference(m_surface_mesh_2, m_surface_mesh_1, diff21);
     corefine_and_compute_union(diff12, diff21, out);
     triangulate_faces(out);
 
     surface_mesh_to_mesh(out, m_vertices, m_faces);
+}
+
+void CGALCorefinementEngine::convert_mesh_to_native_format(MeshSelection s) {
+    switch (s) {
+        case MeshSelection::FIRST:
+            {
+                m_surface_mesh_1 = mesh_to_surface_mesh<SurfaceMesh>(
+                        m_vertices_1, m_faces_1);
+            }
+            break;
+        case MeshSelection::SECOND:
+            {
+                m_surface_mesh_2 = mesh_to_surface_mesh<SurfaceMesh>(
+                        m_vertices_2, m_faces_2);
+            }
+            break;
+        default:
+            throw RuntimeError("Unsupported mesh selection!");
+    };
 }
 
 #endif
