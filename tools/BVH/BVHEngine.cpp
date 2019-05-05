@@ -44,23 +44,16 @@ BVHEngine::Ptr BVHEngine::create(const std::string& engine_name, size_t dim) {
     }
 #endif
 #if WITH_IGL
-    if (engine_name == "igl") {
-        if (dim != 3) {
-            throw NotImplementedError(
-                    "Only 3D meshes are supported by IGL BVH");
-        }
-        return std::make_shared<IGL::AABBTree<3>>();
-    }
-//     if (engine_name == "igl") {
-//         switch (dim) {
-//             case 2:
-//                 return std::make_shared<IGL::AABBTree<2>>();
-//             case 3:
-//                 return std::make_shared<IGL::AABBTree<3>>();
-//             default:
-//                 throw NotImplementedError("Only 2D and 3D meshes are supported");
-//         }
-//     }
+     if (engine_name == "igl") {
+         switch (dim) {
+             case 2:
+                 return std::make_shared<IGL::AABBTree<2>>();
+             case 3:
+                 return std::make_shared<IGL::AABBTree<3>>();
+             default:
+                 throw NotImplementedError("Only 2D and 3D meshes are supported");
+         }
+     }
 #endif
     throw NotImplementedError("BVH Engine (" + engine_name
             + ") is not supported.");

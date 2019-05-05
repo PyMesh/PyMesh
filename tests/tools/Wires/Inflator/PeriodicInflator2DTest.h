@@ -43,7 +43,7 @@ class PeriodicInflator2DTest : public WireTest {
         }
 };
 
-TEST_F(PeriodicInflator2DTest, DISABLED_square) {
+TEST_F(PeriodicInflator2DTest, square) {
     WireNetwork::Ptr network = load_wire_shared("square.wire");
     network->compute_connectivity();
     network->scale(Vector2F::Ones() * 5); // 5mm cell
@@ -92,7 +92,7 @@ TEST_F(PeriodicInflator2DTest, DISABLED_square) {
     ASSERT_PERIODIC(vertices);
 }
 
-TEST_F(PeriodicInflator2DTest, DISABLED_box) {
+TEST_F(PeriodicInflator2DTest, box) {
     WireNetwork::Ptr network = load_wire_shared("box.wire");
     network->compute_connectivity();
     network->scale(Vector2F::Ones() * 5); // 5mm cell
@@ -155,7 +155,7 @@ TEST_F(PeriodicInflator2DTest, DISABLED_box) {
     ASSERT_PERIODIC(vertices);
 }
 
-TEST_F(PeriodicInflator2DTest, DISABLED_star) {
+TEST_F(PeriodicInflator2DTest, star) {
     WireNetwork::Ptr network = load_wire_shared("star_2D.wire");
     network->compute_connectivity();
     network->scale(Vector2F::Ones() * 5); // 5mm cell
@@ -189,7 +189,7 @@ TEST_F(PeriodicInflator2DTest, DISABLED_star) {
             face_sources.cast<Float>());
 }
 
-TEST_F(PeriodicInflator2DTest, DISABLED_box_with_parameter) {
+TEST_F(PeriodicInflator2DTest, box_with_parameter) {
     WireNetwork::Ptr network = load_wire_shared("box.wire");
     network->center_at_origin();
     network->compute_connectivity();
