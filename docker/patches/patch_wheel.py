@@ -22,7 +22,7 @@ for f in os.listdir(lib_dir):
         else:
             continue;
         libname = libname.strip();
-        if libname[:4] == "/usr":
+        if libname[:4] == "/usr" or libname[:4] == "/lib":
             dependencies.append(libname);
 dependencies = set(dependencies);
 
