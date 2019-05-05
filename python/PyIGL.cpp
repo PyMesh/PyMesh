@@ -6,7 +6,7 @@
 #include <pybind11/operators.h>
 
 #include <Core/EigenTypedef.h>
-#include <igl/DiskCutter.h>
+#include <IGL/DiskCutter.h>
 #include <IGL/HarmonicSolver.h>
 #include <igl/unique_rows.h>
 #include <igl/per_face_normals.h>
