@@ -63,6 +63,8 @@ The following predicates are built on top of above fundamental predicates.
 .. autofunction:: pymesh.get_degenerated_faces_raw
 .. autofunction:: pymesh.get_tet_orientations
 .. autofunction:: pymesh.get_tet_orientations_raw
+.. autofunction:: pymesh.is_delaunay_raw
+.. autofunction:: pymesh.is_delaunay
 
 Mesh compression
 ----------------

@@ -27,7 +27,13 @@ Outer hull
 Mesh arrangement
 ----------------
 
+3D arrangement:
+
 .. autofunction:: pymesh.partition_into_cells
+
+2D arrangement:
+
+.. autoclass:: pymesh.Arrangement2
 
 Minkowski sum
 -------------
@@ -54,5 +60,4 @@ Distance to mesh query
 ----------------------
 
 .. autofunction:: pymesh.distance_to_mesh
-
 

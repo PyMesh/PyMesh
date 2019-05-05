@@ -304,6 +304,7 @@ class Mock(MagicMock):
 
 MOCK_MODULES = ['numpy', 'numpy.linalg', 'numpy.testing', 'PyMesh'];
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
+sys.modules['PyMesh'].Arrangement2 = object;
 sys.modules['PyMesh'].triangle = object;
 sys.modules['PyMesh'].tetgen = object;
 sys.modules['PyMesh'].SparseSolver = object;
