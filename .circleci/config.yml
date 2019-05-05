@@ -19,7 +19,7 @@ jobs:
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 ./build.sh
                 docker push pymesh/pymesh:py3.7-slim
-    "py3.7-test":
+    "py3.7-slim-test":
         machine: true
         steps:
             - run: |
@@ -49,6 +49,11 @@ jobs:
         machine: true
         steps:
             - run: |
+                docker run -it --rm pymesh/pymesh:py3.6 python -c "import pymesh; pymesh.test()"
+    "py3.6-slim-test":
+        machine: true
+        steps:
+            - run: |
                 docker run -it --rm pymesh/pymesh:py3.6-slim python -c "import pymesh; pymesh.test()"
     "py3.5":
         machine: true
@@ -69,7 +74,7 @@ jobs:
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 ./build.sh
                 docker push pymesh/pymesh:py3.5-slim
-    "py3.5-test":
+    "py3.5-slim-test":
         machine: true
         steps:
             - run: |
@@ -93,7 +98,7 @@ jobs:
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 ./build.sh
                 docker push pymesh/pymesh:py2.7-slim
-    "py2.7-test":
+    "py2.7-slim-test":
         machine: true
         steps:
             - run: |
@@ -119,37 +124,28 @@ workflows:
             - "py3.7-slim":
                 requires:
                     - "py3.7"
-                filters:
-                    branches:
-                        only: master
             - "py3.6-slim":
                 requires:
                     - "py3.6"
-                filters:
-                    branches:
-                        only: master
             - "py3.5-slim":
                 requires:
                     - "py3.5"
-                filters:
-                    branches:
-                        only: master
             - "py2.7-slim":
                 requires:
                     - "py2.7"
-                filters:
-                    branches:
-                        only: master
-            - "py3.7-test":
-                requires:
-                    - "py3.7-slim"
             - "py3.6-test":
                 requires:
+                    - "py3.6"
+            - "py3.7-slim-test":
+                requires:
+                    - "py3.7-slim"
+            - "py3.6-slim-test":
+                requires:
                     - "py3.6-slim"
-            - "py3.5-test":
+            - "py3.5-slim-test":
                 requires:
                     - "py3.5-slim"
-            - "py2.7-test":
+            - "py2.7-slim-test":
                 requires:
                     - "py2.7-slim"
 
