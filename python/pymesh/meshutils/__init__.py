@@ -42,6 +42,8 @@ from .face_utils import get_triangle_orientations_raw
 from .subdivide import subdivide
 from .voxel_utils import get_tet_orientations
 from .voxel_utils import get_tet_orientations_raw
+from .voxel_utils import is_delaunay
+from .voxel_utils import is_delaunay_raw
 
 __all__ = [
         "chain_edges",
@@ -72,6 +74,8 @@ __all__ = [
         "hex_to_tet",
         "quad_to_tri",
         "is_colinear",
+        "is_delaunay",
+        "is_delaunay_raw",
         "is_edge_manifold",
         "is_vertex_manifold",
         "merge_meshes",

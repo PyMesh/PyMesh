@@ -140,6 +140,7 @@ setup(
             "scripts/highlight_self_intersection.py",
             "scripts/highlight_zero_area_faces.py",
             "scripts/highlight_inverted_tets.py",
+            "scripts/highlight_delaunay.py",
             "scripts/hilbert_curve_gen.py",
             "scripts/icosphere_gen.py",
             "scripts/inflate.py",

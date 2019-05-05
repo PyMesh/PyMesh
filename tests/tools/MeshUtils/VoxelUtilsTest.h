@@ -22,3 +22,42 @@ TEST(VoxelUtilsTest, simple) {
     ASSERT_EQ(0, orientations[1]);
     ASSERT_GT(0, orientations[2]);
 }
+
+TEST(VoxelUtilsTest, delaunay) {
+    using namespace PyMesh;
+    MatrixFr vertices(7, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 1.0,
+                1.0, 1.0, 1.0,
+                1.1, 1.1, 1.1,
+                0.9, 0.9, 0.9;
+
+    {
+        MatrixIr tets(2, 4);
+        tets << 0, 1, 2, 3, // Positive
+                1, 2, 3, 4;
+        auto result = VoxelUtils::is_delaunay(vertices, tets);
+        ASSERT_EQ(0, result[0]);
+        ASSERT_EQ(0, result[1]);
+    }
+
+    {
+        MatrixIr tets(2, 4);
+        tets << 0, 1, 2, 3, // Positive
+                1, 2, 3, 5;
+        auto result = VoxelUtils::is_delaunay(vertices, tets);
+        ASSERT_EQ(1, result[0]);
+        ASSERT_EQ(1, result[1]);
+    }
+
+    {
+        MatrixIr tets(2, 4);
+        tets << 0, 1, 2, 3, // Positive
+                1, 2, 3, 6;
+        auto result = VoxelUtils::is_delaunay(vertices, tets);
+        ASSERT_EQ(-1, result[0]);
+        ASSERT_EQ(-1, result[1]);
+    }
+}

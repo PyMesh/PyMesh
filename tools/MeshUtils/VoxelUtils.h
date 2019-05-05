@@ -16,5 +16,9 @@ namespace VoxelUtils {
     VectorF get_tet_orientations(
             const MatrixFr& vertices, 
             const MatrixIr& tets);
+
+    VectorF is_delaunay(
+            const MatrixFr& vertices,
+            const MatrixIr& tets);
 }
 }
