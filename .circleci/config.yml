@@ -1,5 +1,24 @@
 version: 2
 jobs:
+    "development":
+        machine: true
+        steps:
+            - checkout
+            - run:
+                command: |
+                    docker login -u $DOCKER_USER -p $DOCKER_PASS
+                    docker build -m 6g -v `pwd`: -t pymesh/pymesh:development --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/development
+                    docker push pymesh/pymesh:development
+                no_output_timeout: 1200
+    "development-test":
+        machine: true
+        steps:
+            - checkout
+            - run: |
+                cd docker/development
+                docker login -u $DOCKER_USER -p $DOCKER_PASS
+                ./build.sh
+                docker run -it --rm pymesh/pymesh:development-slim python -c "import pymesh; pymesh.test()"
     "py3.7":
         machine: true
         steps:
@@ -45,11 +64,6 @@ jobs:
                 docker push pymesh/pymesh:py3.6-slim
                 docker tag pymesh/pymesh:py3.6-slim pymesh/pymesh
                 docker push pymesh/pymesh
-    "py3.6-test":
-        machine: true
-        steps:
-            - run: |
-                docker run -it --rm pymesh/pymesh:py3.6 python -c "import pymesh; pymesh.test()"
     "py3.6-slim-test":
         machine: true
         steps:
@@ -108,11 +122,22 @@ workflows:
     version: 2
     build_and_test_and_deploy:
         jobs:
+            - "development"
+            - "development-test":
+                filters:
+                    branches:
+                        only: development
+                requires:
+                    - "development"
+
             - "py3.7":
                 filters:
                     branches:
                         only: master
-            - "py3.6"
+            - "py3.6":
+                filters:
+                    branches:
+                        only: master
             - "py3.5":
                 filters:
                     branches:
@@ -121,6 +146,7 @@ workflows:
                 filters:
                     branches:
                         only: master
+
             - "py3.7-slim":
                 requires:
                     - "py3.7"
@@ -136,6 +162,7 @@ workflows:
             - "py3.6-test":
                 requires:
                     - "py3.6"
+
             - "py3.7-slim-test":
                 requires:
                     - "py3.7-slim"
