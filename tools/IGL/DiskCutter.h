@@ -12,7 +12,7 @@ namespace PyMesh {
 class DiskCutter {
     public:
         using Ptr = std::shared_ptr<DiskCutter>;
-        static Ptr create(const Mesh::Ptr& mesh);
+        static Ptr create(const Mesh::Ptr mesh);
         static Ptr create_raw(const MatrixFr& vertices, const MatrixIr& faces);
 
     public:

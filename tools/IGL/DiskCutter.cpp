@@ -11,6 +11,23 @@
 
 using namespace PyMesh;
 
+DiskCutter::Ptr DiskCutter::create(const Mesh::Ptr mesh) {
+    return DiskCutter::create_raw(
+            MatrixUtils::reshape<MatrixFr>(
+                mesh->get_vertices(),
+                mesh->get_num_vertices(),
+                mesh->get_dim()),
+            MatrixUtils::reshape<MatrixIr>(
+                mesh->get_faces(),
+                mesh->get_num_faces(),
+                mesh->get_vertex_per_face()));
+}
+
+DiskCutter::Ptr DiskCutter::create_raw(
+        const MatrixFr& vertices, const MatrixIr& faces) {
+    return std::make_shared<DiskCutter>(vertices, faces);
+}
+
 void DiskCutter::run() {
     std::vector<std::vector<int>> cuts;
     igl::cut_to_disk(m_faces, cuts);

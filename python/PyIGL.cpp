@@ -6,6 +6,7 @@
 #include <pybind11/operators.h>
 
 #include <Core/EigenTypedef.h>
+#include <igl/DiskCutter.h>
 #include <IGL/HarmonicSolver.h>
 #include <igl/unique_rows.h>
 #include <igl/per_face_normals.h>
@@ -45,6 +46,16 @@ void init_IGL(py::module &m) {
                 &HarmonicSolver::get_solution,
                 py::return_value_policy::reference_internal)
         ;
+
+    py::class_<DiskCutter, std::shared_ptr<DiskCutter> >(m, "DiskCutter")
+        .def(py::init<const MatrixFr&, const MatrixIr&>())
+        .def_static("create", &DiskCutter::create)
+        .def_static("create_raw", &DiskCutter::create_raw)
+        .def("run", &DiskCutter::run)
+        .def_property_readonly("vertices", &DiskCutter::get_vertices,
+                py::return_value_policy::reference_internal)
+        .def_property_readonly("faces", &DiskCutter::get_faces,
+                py::return_value_policy::reference_internal);
 
     m.def("unique_rows",
             [](const MatrixFr& A) {

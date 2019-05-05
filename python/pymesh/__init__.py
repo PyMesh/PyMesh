@@ -23,6 +23,7 @@ from .boolean import boolean
 from .compression import compress, decompress
 from .convex_hull import convex_hull
 from .CSGTree import CSGTree
+from .cut_to_disk import cut_to_disk
 from .exact_arithmetic import Gmpz, Gmpq
 from .HarmonicSolver import HarmonicSolver
 from .HashGrid import HashGrid
@@ -63,6 +64,7 @@ __all__ = [
         "save_mesh_raw",
         "boolean",
         "CSGTree",
+        "cut_to_disk"
         "Gmpq",
         "Gmpz",
         "load_matrix",
@@ -104,7 +106,7 @@ __all__ = [
         "unique_rows",
         "face_normals",
         "vertex_normals",
-        "edge_normals"
+        "edge_normals",
         ];
 __all__ += meshutils.__all__;
 __all__ += misc.__all__;
