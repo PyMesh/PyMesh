@@ -73,62 +73,63 @@ namespace CorkEngineHelper {
 using namespace CorkEngineHelper;
 
 CorkEngine::~CorkEngine() {
+    dispose_cork_mesh(m_mesh_1);
+    dispose_cork_mesh(m_mesh_2);
 }
 
 void CorkEngine::compute_union() {
-    CorkTriMesh mesh1 = create_cork_mesh(m_vertices_1, m_faces_1);
-    CorkTriMesh mesh2 = create_cork_mesh(m_vertices_2, m_faces_2);
     CorkTriMesh result;
 
-    computeUnion(mesh1, mesh2, &result);
+    computeUnion(m_mesh_1, m_mesh_2, &result);
     extract_data_from_cork_mesh(result, m_vertices, m_faces);
 
-    dispose_cork_mesh(mesh1);
-    dispose_cork_mesh(mesh2);
     dispose_cork_mesh(result);
     clean_up();
 }
 
 void CorkEngine::compute_intersection() {
-    CorkTriMesh mesh1 = create_cork_mesh(m_vertices_1, m_faces_1);
-    CorkTriMesh mesh2 = create_cork_mesh(m_vertices_2, m_faces_2);
     CorkTriMesh result;
 
-    computeIntersection(mesh1, mesh2, &result);
+    computeIntersection(m_mesh_1, m_mesh_2, &result);
     extract_data_from_cork_mesh(result, m_vertices, m_faces);
 
-    dispose_cork_mesh(mesh1);
-    dispose_cork_mesh(mesh2);
     dispose_cork_mesh(result);
     clean_up();
 }
 
 void CorkEngine::compute_difference() {
-    CorkTriMesh mesh1 = create_cork_mesh(m_vertices_1, m_faces_1);
-    CorkTriMesh mesh2 = create_cork_mesh(m_vertices_2, m_faces_2);
     CorkTriMesh result;
 
-    computeDifference(mesh1, mesh2, &result);
+    computeDifference(m_mesh_1, m_mesh_2, &result);
     extract_data_from_cork_mesh(result, m_vertices, m_faces);
 
-    dispose_cork_mesh(mesh1);
-    dispose_cork_mesh(mesh2);
     dispose_cork_mesh(result);
     clean_up();
 }
 
 void CorkEngine::compute_symmetric_difference() {
-    CorkTriMesh mesh1 = create_cork_mesh(m_vertices_1, m_faces_1);
-    CorkTriMesh mesh2 = create_cork_mesh(m_vertices_2, m_faces_2);
     CorkTriMesh result;
 
-    computeSymmetricDifference(mesh1, mesh2, &result);
+    computeSymmetricDifference(m_mesh_1, m_mesh_2, &result);
     extract_data_from_cork_mesh(result, m_vertices, m_faces);
 
-    dispose_cork_mesh(mesh1);
-    dispose_cork_mesh(mesh2);
     dispose_cork_mesh(result);
     clean_up();
+}
+
+void CorkEngine::convert_mesh_to_native_format(MeshSelection s) {
+    switch(s) {
+        case MeshSelection::FIRST:
+            dispose_cork_mesh(m_mesh_1);
+            m_mesh_1 = create_cork_mesh(m_vertices_1, m_faces_1);
+            break;
+        case MeshSelection::SECOND:
+            dispose_cork_mesh(m_mesh_2);
+            m_mesh_2 = create_cork_mesh(m_vertices_2, m_faces_2);
+            break;
+        default:
+            throw NotImplementedError("Invalid mesh selection!");
+    }
 }
 
 #endif

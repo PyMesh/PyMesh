@@ -86,8 +86,8 @@ namespace CarveEngineHelper {
 using namespace CarveEngineHelper;
 
 void CarveEngine::compute_union() {
-    CarveMeshPtr mesh_1 = create_mesh(m_vertices_1, m_faces_1);
-    CarveMeshPtr mesh_2 = create_mesh(m_vertices_2, m_faces_2);
+    CarveMeshPtr mesh_1 = m_mesh_1;
+    CarveMeshPtr mesh_2 = m_mesh_2;
     carve::csg::CSG csg;
     csg.hooks.registerHook(
             new carve::csg::CarveTriangulatorWithImprovement,
@@ -99,8 +99,8 @@ void CarveEngine::compute_union() {
 }
 
 void CarveEngine::compute_intersection() {
-    CarveMeshPtr mesh_1 = create_mesh(m_vertices_1, m_faces_1);
-    CarveMeshPtr mesh_2 = create_mesh(m_vertices_2, m_faces_2);
+    CarveMeshPtr mesh_1 = m_mesh_1;
+    CarveMeshPtr mesh_2 = m_mesh_2;
     carve::csg::CSG csg;
     csg.hooks.registerHook(
             new carve::csg::CarveTriangulatorWithImprovement,
@@ -112,8 +112,8 @@ void CarveEngine::compute_intersection() {
 }
 
 void CarveEngine::compute_difference() {
-    CarveMeshPtr mesh_1 = create_mesh(m_vertices_1, m_faces_1);
-    CarveMeshPtr mesh_2 = create_mesh(m_vertices_2, m_faces_2);
+    CarveMeshPtr mesh_1 = m_mesh_1;
+    CarveMeshPtr mesh_2 = m_mesh_2;
     carve::csg::CSG csg;
     csg.hooks.registerHook(
             new carve::csg::CarveTriangulatorWithImprovement,
@@ -125,8 +125,8 @@ void CarveEngine::compute_difference() {
 }
 
 void CarveEngine::compute_symmetric_difference() {
-    CarveMeshPtr mesh_1 = create_mesh(m_vertices_1, m_faces_1);
-    CarveMeshPtr mesh_2 = create_mesh(m_vertices_2, m_faces_2);
+    CarveMeshPtr mesh_1 = m_mesh_1;
+    CarveMeshPtr mesh_2 = m_mesh_2;
     carve::csg::CSG csg;
     csg.hooks.registerHook(
             new carve::csg::CarveTriangulatorWithImprovement,
@@ -135,6 +135,19 @@ void CarveEngine::compute_symmetric_difference() {
                 mesh_1.get(), mesh_2.get(),
                 carve::csg::CSG::SYMMETRIC_DIFFERENCE));
     extract_data(r, m_vertices, m_faces);
+}
+
+void CarveEngine::convert_mesh_to_native_format(MeshSelection s) {
+    switch(s) {
+        case MeshSelection::FIRST:
+            m_mesh_1 = create_mesh(m_vertices_1, m_faces_1);
+            break;
+        case MeshSelection::SECOND:
+            m_mesh_2 = create_mesh(m_vertices_2, m_faces_2);
+            break;
+        default:
+            throw NotImplementedError("Invalid mesh selection!");
+    }
 }
 
 #endif
