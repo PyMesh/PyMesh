@@ -18,7 +18,7 @@ jobs:
                 cd docker/development
                 docker login -u $DOCKER_USER -p $DOCKER_PASS
                 ./build.sh
-                docker run -it --rm pymesh/pymesh:development-slim python -c "import pymesh; pymesh.test()"
+                docker run -it --rm pymesh/pymesh:development-test python -c "import pymesh; pymesh.test()"
     "py3.7":
         machine: true
         steps:
