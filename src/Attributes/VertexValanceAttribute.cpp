@@ -23,7 +23,7 @@ void VertexValanceAttribute::compute_from_mesh(Mesh& mesh) {
     } else {
         std::stringstream err_msg;
         err_msg << "Vertex valance computation is not supported on mesh with "
-            << num_vertex_per_voxel << " verices per voxel";
+            << num_vertex_per_voxel << " vertices per voxel";
         throw NotImplementedError(err_msg.str());
     }
 }
