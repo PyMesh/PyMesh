@@ -40,7 +40,7 @@ matrix:
         - sw_vers
         - python --version
         - pip --version
-        - brew install ccache
+        - brew install ccache cmake
       install:
         - pip install --user -r python/requirements.txt
     - os: linux
