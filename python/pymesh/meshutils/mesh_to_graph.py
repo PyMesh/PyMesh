@@ -1,4 +1,5 @@
 import numpy as np
+from ..meshio import form_mesh
 
 def mesh_to_graph(mesh):
     """
@@ -11,6 +12,12 @@ def mesh_to_graph(mesh):
     Returns:
         The graph :math:`(V, E)`.
     """
+
+    if mesh.num_voxels > 0:
+        # Avoid extracting voxel edges.
+        vertices = mesh.vertices;
+        faces = mesh.faces;
+        mesh = form_mesh(vertices, faces);
 
     mesh.enable_connectivity();
     vertices = mesh.vertices;
