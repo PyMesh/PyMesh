@@ -40,7 +40,6 @@ void SVGParser::parse(const std::string& filename, bool keep_bbox) {
     }
     const auto width = image->width;
     const auto height = image->height;
-    const auto tol = Float(width + height) * 1.e-3;
 
     if (keep_bbox) { add_bbox(width, height); }
 
@@ -60,6 +59,10 @@ void SVGParser::parse(const std::string& filename, bool keep_bbox) {
                     !std::isfinite(p2[0]) || !std::isfinite(p2[1])) {
                     add_line_segment(p0, p3, i!=0);
                 } else {
+                    const auto tol = (
+                            (p1-p0).norm() +
+                            (p2-p1).norm() +
+                            (p3-p2).norm()) * 1e-3;
                     add_bezier_curve(p0, p1, p2, p3, tol, 0, i!=0);
                 }
             }
