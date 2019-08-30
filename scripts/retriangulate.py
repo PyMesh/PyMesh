@@ -23,10 +23,16 @@ def parse_args():
 def main():
     args = parse_args();
     mesh = pymesh.load_mesh(args.input_mesh);
-    mesh = pymesh.retriangulate(mesh,
-            args.max_area,
-            not args.no_split_boundary,
-            not args.no_steiner_points);
+    engine = pymesh.triangle();
+    engine.points = mesh.vertices;
+    engine.triangles = mesh.faces;
+    engine.max_area = args.max_area;
+    engine.split_boundary = not args.no_split_boundary;
+    if args.no_steiner_points:
+        engine.max_num_steiner_points = 0;
+
+    engine.run();
+    mesh = engine.mesh;
     pymesh.save_mesh(args.output_mesh, mesh);
 
 if __name__ == "__main__":
