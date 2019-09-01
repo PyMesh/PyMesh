@@ -13,7 +13,8 @@ RUN echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" >>
     libmpfr-dev \
     libgmpxx4ldbl \
     libboost-dev \
-    libboost-thread-dev && \
+    libboost-thread-dev \
+    zip unzip patchelf && \
     apt-get clean && \
     git clone --single-branch -b $BRANCH https://github.com/PyMesh/PyMesh.git
 
@@ -25,6 +26,6 @@ RUN git submodule update --init && \
     pip install -r $PYMESH_PATH/python/requirements.txt && \
     ./setup.py bdist_wheel && \
     rm -rf build third_party/build && \
+    python $PYMESH_PATH/docker/patches/patch_wheel.py && \
     pip install dist/pymesh2*.whl && \
-    python -c "import pymesh; pymesh.test()" && \
-    python $PYMESH_PATH/docker/patches/patch_wheel.py
+    python -c "import pymesh; pymesh.test()"
