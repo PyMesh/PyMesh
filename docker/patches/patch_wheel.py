@@ -3,39 +3,43 @@
 import zipfile
 import os
 import os.path
-from subprocess import check_output
+from subprocess import check_output, check_call
 import re
-
-dependencies = [];
-pymesh_lib_pattern = re.compile("libPyMesh-.*\.so");
-lib_dir = "/root/PyMesh/python/pymesh/lib"
-for f in os.listdir(lib_dir):
-    if pymesh_lib_pattern.match(f) is None:
-        continue;
-    libfile = os.path.join(lib_dir, f);
-    cmd = "ldd {}".format(libfile);
-    dep_libs = check_output(cmd.split()).decode('ASCII');
-    for lib in dep_libs.split("\n"):
-        fields = lib.split();
-        if len(fields) >= 3:
-            libname = fields[2];
-        else:
-            continue;
-        libname = libname.strip();
-        if libname[:4] == "/usr":
-            dependencies.append(libname);
-dependencies = set(dependencies);
-
-print("The following external dependencies are collected:");
-for d in dependencies:
-    print("    {}".format(d));
+import tempfile
 
 dist_dir = "/root/PyMesh/dist"
+tmp_dir = tempfile.gettempdir();
+pymesh_lib_pattern = re.compile("libPyMesh-.*\.so");
+
 for f in os.listdir(dist_dir):
-    wheelfile = os.path.join(dist_dir, f);
-    zfout = zipfile.ZipFile(wheelfile, 'a')
-    for dependency in dependencies:
-        assert(os.path.exists(dependency));
-        basename = os.path.basename(dependency);
-        zfout.write(dependency, os.path.join("pymesh/lib/", basename));
+    __, ext = os.path.splitext(f);
+    if (ext != ".whl"):
+        continue;
+    wheel_file = os.path.join(dist_dir, f);
+    extraction_dir = os.path.join(tmp_dir, "tmp_wheel");
+    cmd = "unzip -q -o {} -d {}".format(wheel_file, extraction_dir);
+    check_call(cmd.split());
+
+    cmd = "mv {} {}.old".format(wheel_file, wheel_file);
+    check_call(cmd.split());
+
+    lib_dir = os.path.join(extraction_dir, "pymesh/lib");
+    for lib_file in os.listdir(lib_dir):
+        if pymesh_lib_pattern.match(lib_file) is None:
+            continue;
+        cmd = "./package_dependencies.py {}".format(
+                os.path.join(lib_dir, lib_file));
+        check_call(cmd.split());
+
+    cmd = "rm -rf {}".format(os.path.join(extraction_dir, "pymesh/third_party"));
+    check_call(cmd.split());
+
+    contents = [];
+    for item in os.listdir(extraction_dir):
+        contents.append(item);
+    cmd = "zip -q -r {} {}".format(wheel_file, " ".join(contents));
+    check_call(cmd.split(), cwd=extraction_dir);
+
+    cmd = "rm -rf {}".format(extraction_dir);
+    check_call(cmd.split());
 
