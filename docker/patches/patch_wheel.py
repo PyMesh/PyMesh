@@ -29,7 +29,7 @@ for f in os.listdir(dist_dir):
             continue;
         cmd = "./package_dependencies.py {}".format(
                 os.path.join(lib_dir, lib_file));
-        check_call(cmd.split());
+        check_call(cmd.split(), cwd="/root/PyMesh/docker/patches");
 
     cmd = "rm -rf {}".format(os.path.join(extraction_dir, "pymesh/third_party"));
     check_call(cmd.split());
