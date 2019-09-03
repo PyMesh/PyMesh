@@ -9,11 +9,10 @@ namespace PyMesh {
 
 class VertexNormalAttribute : public MeshAttribute {
     public:
-        VertexNormalAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexNormalAttribute() {}
+        virtual ~VertexNormalAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         void compute_vertex_normals_from_face(Mesh& mesh);

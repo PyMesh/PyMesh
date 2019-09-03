@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VertexVolumeAttribute : public MeshAttribute {
     public:
-        VertexVolumeAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexVolumeAttribute() {}
+        virtual ~VertexVolumeAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         VectorF& get_voxel_volumes(Mesh& mesh);

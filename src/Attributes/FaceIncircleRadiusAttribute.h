@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class FaceIncircleRadiusAttribute : public MeshAttribute {
     public:
-        FaceIncircleRadiusAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~FaceIncircleRadiusAttribute() {}
+        virtual ~FaceIncircleRadiusAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

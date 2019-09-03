@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class FaceAspectRatioAttribute : public MeshAttribute {
     public:
-        FaceAspectRatioAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~FaceAspectRatioAttribute() {}
+        virtual ~FaceAspectRatioAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

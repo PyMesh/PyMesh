@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VertexIndexAttribute : public MeshAttribute {
     public:
-        VertexIndexAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexIndexAttribute() {}
+        virtual ~VertexIndexAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

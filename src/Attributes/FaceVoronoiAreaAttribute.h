@@ -10,11 +10,10 @@ namespace PyMesh {
  */
 class FaceVoronoiAreaAttribute : public MeshAttribute {
     public:
-        FaceVoronoiAreaAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~FaceVoronoiAreaAttribute() {}
+        virtual ~FaceVoronoiAreaAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         VectorF compute_triangle_voronoi_area(Mesh& mesh, size_t face_idx);

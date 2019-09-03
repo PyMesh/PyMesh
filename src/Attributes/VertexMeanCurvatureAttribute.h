@@ -9,11 +9,10 @@ namespace PyMesh {
 
 class VertexMeanCurvatureAttribute : public MeshAttribute {
     public:
-        VertexMeanCurvatureAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexMeanCurvatureAttribute() {}
+        virtual ~VertexMeanCurvatureAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         VectorF compute_laplacian_vectors(Mesh& mesh);

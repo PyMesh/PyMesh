@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class FaceAreaAttribute : public MeshAttribute {
     public:
-        FaceAreaAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~FaceAreaAttribute() {}
+        virtual ~FaceAreaAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

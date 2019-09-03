@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VertexValanceAttribute : public MeshAttribute {
     public:
-        VertexValanceAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexValanceAttribute() {}
+        virtual ~VertexValanceAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         void compute_from_surface_mesh(Mesh& mesh);

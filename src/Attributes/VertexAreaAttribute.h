@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VertexAreaAttribute : public MeshAttribute {
     public:
-        VertexAreaAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexAreaAttribute() {}
+        virtual ~VertexAreaAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         VectorF& get_face_areas(Mesh& mesh);

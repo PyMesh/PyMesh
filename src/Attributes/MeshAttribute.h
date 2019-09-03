@@ -18,17 +18,14 @@ class MeshAttribute {
         typedef std::shared_ptr<MeshAttribute> Ptr;
 
     public:
-        MeshAttribute(const std::string& name) : m_name(name) {}
-        virtual ~MeshAttribute() {}
+        virtual ~MeshAttribute() = default;
 
     public:
         virtual void compute_from_mesh(Mesh& mesh) {}
-        virtual const std::string& get_name() const { return m_name; }
         virtual VectorF& get_values() { return m_values; }
         virtual void set_values(VectorF& values) { m_values = values; }
 
     protected:
-        std::string m_name;
         VectorF m_values;
 };
 }

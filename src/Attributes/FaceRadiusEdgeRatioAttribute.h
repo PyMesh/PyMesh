@@ -9,12 +9,10 @@ class Mesh;
 
 class FaceRadiusEdgeRatioAttribute : public MeshAttribute {
     public:
-        FaceRadiusEdgeRatioAttribute(const std::string& name)
-            : MeshAttribute(name) {}
         virtual ~FaceRadiusEdgeRatioAttribute()=default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

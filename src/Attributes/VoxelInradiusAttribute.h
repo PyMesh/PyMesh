@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VoxelInradiusAttribute : public MeshAttribute {
     public:
-        VoxelInradiusAttribute(const std::string& name) : MeshAttribute(name) {}
         virtual ~VoxelInradiusAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

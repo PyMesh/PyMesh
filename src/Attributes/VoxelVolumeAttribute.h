@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VoxelVolumeAttribute : public MeshAttribute {
     public:
-        VoxelVolumeAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VoxelVolumeAttribute() {}
+        virtual ~VoxelVolumeAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         Float compute_signed_tet_volume(Mesh& mesh, size_t voxel_idx);

@@ -12,11 +12,10 @@ namespace PyMesh {
  */
 class EdgeLengthAttribute : public MeshAttribute {
     public:
-        EdgeLengthAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~EdgeLengthAttribute() {}
+        virtual ~EdgeLengthAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

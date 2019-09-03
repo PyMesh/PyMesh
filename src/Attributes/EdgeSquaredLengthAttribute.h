@@ -12,11 +12,10 @@ namespace PyMesh {
  */
 class EdgeSquaredLengthAttribute : public MeshAttribute {
     public:
-        EdgeSquaredLengthAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~EdgeSquaredLengthAttribute() {}
+        virtual ~EdgeSquaredLengthAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         VectorF compute_edge_squared_length_on_face(Mesh& mesh, size_t face_idx);

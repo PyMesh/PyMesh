@@ -9,12 +9,10 @@ class Mesh;
 
 class VoxelDihedralAngleAttribute : public MeshAttribute {
     public:
-        VoxelDihedralAngleAttribute(const std::string& name)
-            : MeshAttribute(name) {}
         virtual ~VoxelDihedralAngleAttribute()=default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

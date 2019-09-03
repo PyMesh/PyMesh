@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VoxelCircumCenterAttribute : public MeshAttribute {
     public:
-        VoxelCircumCenterAttribute(const std::string& name) : MeshAttribute(name) {}
         virtual ~VoxelCircumCenterAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

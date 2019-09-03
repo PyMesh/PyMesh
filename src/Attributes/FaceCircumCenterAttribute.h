@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class FaceCircumCenterAttribute : public MeshAttribute {
     public:
-        FaceCircumCenterAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~FaceCircumCenterAttribute() {}
+        virtual ~FaceCircumCenterAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

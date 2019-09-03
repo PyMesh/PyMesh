@@ -9,11 +9,10 @@ namespace PyMesh {
 
 class VertexLaplacianAttribute : public MeshAttribute {
     public:
-        VertexLaplacianAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VertexLaplacianAttribute() {}
+        virtual ~VertexLaplacianAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         VectorF compute_cotan_weights(const VectorF& v0,

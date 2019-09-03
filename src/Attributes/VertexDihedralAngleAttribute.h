@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VertexDihedralAngleAttribute : public MeshAttribute {
     public:
-        VertexDihedralAngleAttribute(const std::string& name) : MeshAttribute(name) { }
-        virtual ~VertexDihedralAngleAttribute() {}
+        virtual ~VertexDihedralAngleAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

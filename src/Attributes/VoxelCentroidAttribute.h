@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VoxelCentroidAttribute : public MeshAttribute {
     public:
-        VoxelCentroidAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~VoxelCentroidAttribute() {}
+        virtual ~VoxelCentroidAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

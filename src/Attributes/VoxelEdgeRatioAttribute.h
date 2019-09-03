@@ -9,12 +9,10 @@ class Mesh;
 
 class VoxelEdgeRatioAttribute : public MeshAttribute {
     public:
-        VoxelEdgeRatioAttribute(const std::string& name)
-            : MeshAttribute(name) {}
         virtual ~VoxelEdgeRatioAttribute()=default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

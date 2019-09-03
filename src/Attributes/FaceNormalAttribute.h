@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class FaceNormalAttribute : public MeshAttribute {
     public:
-        FaceNormalAttribute(const std::string& name) : MeshAttribute(name) {}
-        virtual ~FaceNormalAttribute() {}
+        virtual ~FaceNormalAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 
     private:
         Vector3F compute_triangle_normal(Mesh& mesh, size_t i);

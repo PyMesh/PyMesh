@@ -7,11 +7,10 @@ namespace PyMesh {
 
 class VertexVoronoiAreaAttribute : public MeshAttribute {
     public:
-        VertexVoronoiAreaAttribute(const std::string& name) : MeshAttribute(name) {}
         virtual ~VertexVoronoiAreaAttribute() = default;
 
     public:
-        virtual void compute_from_mesh(Mesh& mesh);
+        virtual void compute_from_mesh(Mesh& mesh) override;
 };
 
 }

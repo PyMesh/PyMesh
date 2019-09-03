@@ -45,81 +45,81 @@ using namespace PyMesh;
 MeshAttribute::Ptr PyMesh::MeshAttributeFactory::create(
         const std::string& name) {
     if (name == "vertex_normal") {
-        return std::make_shared<VertexNormalAttribute>(name);
+        return std::make_shared<VertexNormalAttribute>();
     } else if (name == "vertex_volume") {
-        return std::make_shared<VertexVolumeAttribute>(name);
+        return std::make_shared<VertexVolumeAttribute>();
     } else if (name == "vertex_area") {
-        return std::make_shared<VertexAreaAttribute>(name);
+        return std::make_shared<VertexAreaAttribute>();
     } else if (name == "vertex_laplacian") {
-        return std::make_shared<VertexLaplacianAttribute>(name);
+        return std::make_shared<VertexLaplacianAttribute>();
     } else if (name == "vertex_mean_curvature") {
-        return std::make_shared<VertexMeanCurvatureAttribute>(name);
+        return std::make_shared<VertexMeanCurvatureAttribute>();
     } else if (name == "vertex_gaussian_curvature") {
-        return std::make_shared<VertexGaussianCurvatureAttribute>(name);
+        return std::make_shared<VertexGaussianCurvatureAttribute>();
     } else if (name == "vertex_index") {
-        return std::make_shared<VertexIndexAttribute>(name);
+        return std::make_shared<VertexIndexAttribute>();
     } else if (name == "vertex_valance") {
-        return std::make_shared<VertexValanceAttribute>(name);
+        return std::make_shared<VertexValanceAttribute>();
     } else if (name == "vertex_dihedral_angle") {
-        return std::make_shared<VertexDihedralAngleAttribute>(name);
+        return std::make_shared<VertexDihedralAngleAttribute>();
     } else if (name == "vertex_voronoi_area") {
-        return std::make_shared<VertexVoronoiAreaAttribute>(name);
+        return std::make_shared<VertexVoronoiAreaAttribute>();
     } else if (name == "edge_length") {
-        return std::make_shared<EdgeLengthAttribute>(name);
+        return std::make_shared<EdgeLengthAttribute>();
     } else if (name == "edge_squared_length") {
-        return std::make_shared<EdgeSquaredLengthAttribute>(name);
+        return std::make_shared<EdgeSquaredLengthAttribute>();
     } else if (name == "edge_dihedral_angle") {
-        return std::make_shared<EdgeDihedralAngleAttribute>(name);
+        return std::make_shared<EdgeDihedralAngleAttribute>();
     } else if (name == "face_area") {
-        return std::make_shared<FaceAreaAttribute>(name);
+        return std::make_shared<FaceAreaAttribute>();
     } else if (name == "face_aspect_ratio") {
-        return std::make_shared<FaceAspectRatioAttribute>(name);
+        return std::make_shared<FaceAspectRatioAttribute>();
     } else if (name == "face_centroid") {
-        return std::make_shared<FaceCentroidAttribute>(name);
+        return std::make_shared<FaceCentroidAttribute>();
     } else if (name == "face_circumcenter") {
-        return std::make_shared<FaceCircumCenterAttribute>(name);
+        return std::make_shared<FaceCircumCenterAttribute>();
     } else if (name == "face_circumradius") {
-        return std::make_shared<FaceCircumRadiusAttribute>(name);
+        return std::make_shared<FaceCircumRadiusAttribute>();
     } else if (name == "face_edge_ratio") {
-        return std::make_shared<FaceEdgeRatioAttribute>(name);
+        return std::make_shared<FaceEdgeRatioAttribute>();
     } else if (name == "face_frame") {
-        return std::make_shared<FaceFrameAttribute>(name);
+        return std::make_shared<FaceFrameAttribute>();
     } else if (name == "face_incircle_center") {
-        return std::make_shared<FaceIncircleCenterAttribute>(name);
+        return std::make_shared<FaceIncircleCenterAttribute>();
     } else if (name == "face_incircle_radius") {
-        return std::make_shared<FaceIncircleRadiusAttribute>(name);
+        return std::make_shared<FaceIncircleRadiusAttribute>();
     } else if (name == "face_index") {
-        return std::make_shared<FaceIndexAttribute>(name);
+        return std::make_shared<FaceIndexAttribute>();
     } else if (name == "face_normal") {
-        return std::make_shared<FaceNormalAttribute>(name);
+        return std::make_shared<FaceNormalAttribute>();
     } else if (name == "face_radius_edge_ratio") {
-        return std::make_shared<FaceRadiusEdgeRatioAttribute>(name);
+        return std::make_shared<FaceRadiusEdgeRatioAttribute>();
     } else if (name == "face_voronoi_area") {
-        return std::make_shared<FaceVoronoiAreaAttribute>(name);
+        return std::make_shared<FaceVoronoiAreaAttribute>();
     } else if (name == "voxel_dihedral_angle") {
-        return std::make_shared<VoxelDihedralAngleAttribute>(name);
+        return std::make_shared<VoxelDihedralAngleAttribute>();
     } else if (name == "voxel_edge_ratio") {
-        return std::make_shared<VoxelEdgeRatioAttribute>(name);
+        return std::make_shared<VoxelEdgeRatioAttribute>();
     } else if (name == "voxel_face_index") {
-        return std::make_shared<VoxelFaceIndexAttribute>(name);
+        return std::make_shared<VoxelFaceIndexAttribute>();
     } else if (name == "voxel_centroid") {
-        return std::make_shared<VoxelCentroidAttribute>(name);
+        return std::make_shared<VoxelCentroidAttribute>();
     } else if (name == "voxel_circumcenter") {
-        return std::make_shared<VoxelCircumCenterAttribute>(name);
+        return std::make_shared<VoxelCircumCenterAttribute>();
     } else if (name == "voxel_circumradius") {
-        return std::make_shared<VoxelCircumRadiusAttribute>(name);
+        return std::make_shared<VoxelCircumRadiusAttribute>();
     } else if (name == "voxel_incenter") {
-        return std::make_shared<VoxelIncenterAttribute>(name);
+        return std::make_shared<VoxelIncenterAttribute>();
     } else if (name == "voxel_inradius") {
-        return std::make_shared<VoxelInradiusAttribute>(name);
+        return std::make_shared<VoxelInradiusAttribute>();
     } else if (name == "voxel_index") {
-        return std::make_shared<VoxelIndexAttribute>(name);
+        return std::make_shared<VoxelIndexAttribute>();
     } else if (name == "voxel_radius_edge_ratio") {
-        return std::make_shared<VoxelRadiusEdgeRatioAttribute>(name);
+        return std::make_shared<VoxelRadiusEdgeRatioAttribute>();
     } else if (name == "voxel_volume") {
-        return std::make_shared<VoxelVolumeAttribute>(name);
+        return std::make_shared<VoxelVolumeAttribute>();
     } else {
         // Generic attribute.
-        return std::make_shared<MeshAttribute>(name);
+        return std::make_shared<MeshAttribute>();
     }
 }
