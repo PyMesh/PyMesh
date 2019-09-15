@@ -50,6 +50,8 @@ class WireNetwork {
         VectorF get_bbox_min() const { return m_bbox_min; }
         VectorF get_bbox_max() const { return m_bbox_max; }
 
+        void drop_zero_dim();
+
         void filter_vertices(const std::vector<bool>& to_keep);
         void filter_edges(const std::vector<bool>& to_keep);
 

@@ -138,3 +138,29 @@ TEST_F(WireNetworkTest, IO) {
     ASSERT_FLOAT_EQ(0.0, (network.get_vertices() - tmp_network.get_vertices()).norm());
     ASSERT_FLOAT_EQ(0.0, (network.get_edges() - tmp_network.get_edges()).norm());
 }
+
+TEST_F(WireNetworkTest, DropZeroDim) {
+    MatrixFr vertices(4, 3);
+    vertices << 0.0, 0.0, 0.0,
+                1.0, 0.0, 0.0,
+                1.0, 1.0, 0.0,
+                0.0, 1.0, 0.0;
+    MatrixIr edges(4, 2);
+    edges << 0, 1,
+             1, 2,
+             2, 3,
+             3, 0;
+    auto wires = WireNetwork::create_raw(vertices, edges);
+
+    ASSERT_EQ(3, wires->get_dim());
+    ASSERT_EQ(4, wires->get_num_vertices());
+    ASSERT_EQ(4, wires->get_num_edges());
+
+    wires->drop_zero_dim();
+    ASSERT_EQ(2, wires->get_dim());
+    ASSERT_EQ(4, wires->get_num_vertices());
+    ASSERT_EQ(4, wires->get_num_edges());
+
+    const auto& vertices_2D = wires->get_vertices();
+    ASSERT_MATRIX_EQ(vertices_2D, vertices.leftCols(2));
+}

@@ -149,6 +149,30 @@ VectorF WireNetwork::center() const {
     return 0.5 * (get_bbox_min() + get_bbox_max());
 }
 
+void WireNetwork::drop_zero_dim() {
+    const size_t num_vertices = get_num_vertices();
+    std::vector<bool> to_keep(m_dim, false);
+    size_t num_cols_to_keep = 0;
+    for (size_t i=0; i<m_dim; i++) {
+        if (m_bbox_min[i] < m_bbox_max[i]) {
+            to_keep[i] = true;
+            num_cols_to_keep += 1;
+        }
+    }
+
+    MatrixFr vertices(num_vertices, num_cols_to_keep);
+    size_t count = 0;
+    for (size_t i=0; i<m_dim; i++) {
+        if (to_keep[i]) {
+            vertices.col(count) = m_vertices.col(i);
+            count++;
+        }
+    }
+    m_vertices.swap(vertices);
+    m_dim = num_cols_to_keep;
+    update_bbox();
+}
+
 void WireNetwork::filter_vertices(const std::vector<bool>& to_keep) {
     const size_t num_vertices = m_vertices.rows();
     MatrixFr vertices;
