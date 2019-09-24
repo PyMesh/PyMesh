@@ -4,7 +4,7 @@ Mesh Generation
 Triangulation
 -------------
 
-Triangulation is 2D is often solved using Shewchuk's `triangle library
+Triangulation in 2D is often solved using Shewchuk's `triangle library
 <https://www.cs.cmu.edu/~quake/triangle.html>`_.  It is both robust and
 flexible.  We provide a pythonic wrapper over Shewchuk's triangle that exposes
 most of its powers.
