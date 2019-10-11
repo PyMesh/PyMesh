@@ -4,6 +4,7 @@
 #include "AABBTreeTest.h"
 #include "AABBTree2Test.h"
 #include "ArrangementTest.h"
+#include "StraightSkeletonTest.h"
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
