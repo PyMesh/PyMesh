@@ -266,9 +266,10 @@ class WireNetwork(object):
 
     def __initialize_wires(self):
         self.raw_wires.compute_connectivity();
-        self.vertex_valance = np.array([
-                len(self.raw_wires.get_vertex_neighbors(i)) for i in
-                range(self.num_vertices) ], dtype=int);
+        if self.num_edges > 0:
+            self.vertex_valance = np.array([
+                    len(self.raw_wires.get_vertex_neighbors(i)) for i in
+                    range(self.num_vertices) ], dtype=int);
 
     @property
     def dim(self):

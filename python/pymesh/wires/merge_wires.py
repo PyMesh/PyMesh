@@ -9,7 +9,8 @@ def merge_wires(wire_networks):
     num_vertices = [w.num_vertices for w in wire_networks];
     offsets = np.cumsum([0] + num_vertices);
 
-    edges = [w.edges + offsets[i] for i,w in enumerate(wire_networks)];
+    edges = [w.edges.reshape((-1, 2)) + offsets[i]
+            for i,w in enumerate(wire_networks)];
 
     vertices = np.vstack(vertices);
     edges = np.vstack(edges);
