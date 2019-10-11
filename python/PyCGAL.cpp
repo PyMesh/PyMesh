@@ -14,6 +14,7 @@
 #include <CGAL/Gmpq.h>
 #include <CGAL/Arrangement2.h>
 #include <CGAL/SnapRounding2.h>
+#include <CGAL/StraightSkeleton.h>
 #endif
 
 namespace py = pybind11;
@@ -73,6 +74,17 @@ void init_CGAL(py::module &m) {
         .def_property_readonly("edges",
                 &SnapRounding2::get_edges,
                 py::return_value_policy::reference_internal);
+
+    py::class_<StraightSkeleton, std::shared_ptr<StraightSkeleton> >(m, "StraightSkeleton")
+        .def(py::init<>())
+        .def("run", &StraightSkeleton::run)
+        .def_property_readonly("points",
+                &StraightSkeleton::get_skeleton_vertices,
+                py::return_value_policy::reference_internal)
+        .def_property_readonly("segments",
+                &StraightSkeleton::get_skeleton_edges,
+                py::return_value_policy::reference_internal);
+
 
     py::class_<CGAL::Gmpz>(m, "Gmpz")
         .def(py::init<>())

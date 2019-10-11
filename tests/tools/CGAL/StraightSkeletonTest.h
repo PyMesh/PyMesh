@@ -19,7 +19,7 @@ TEST_F(StraightSkeletonTest, triangle) {
              2, 0;
 
     StraightSkeleton engine;
-    engine.compute(vertices, edges);
+    engine.run(vertices, edges);
 
     const auto& skeleton_vertices = engine.get_skeleton_vertices();
     const auto& skeleton_edges = engine.get_skeleton_edges();
@@ -44,7 +44,7 @@ TEST_F(StraightSkeletonTest, square) {
              3, 0;
 
     StraightSkeleton engine;
-    engine.compute(vertices, edges);
+    engine.run(vertices, edges);
 
     const auto& skeleton_vertices = engine.get_skeleton_vertices();
     const auto& skeleton_edges = engine.get_skeleton_edges();
@@ -69,7 +69,7 @@ TEST_F(StraightSkeletonTest, rectangle) {
              3, 0;
 
     StraightSkeleton engine;
-    engine.compute(vertices, edges);
+    engine.run(vertices, edges);
 
     const auto& skeleton_vertices = engine.get_skeleton_vertices();
     const auto& skeleton_edges = engine.get_skeleton_edges();

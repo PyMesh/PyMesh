@@ -48,6 +48,7 @@ from .triangulate import triangulate_beta, refine_triangulation
 from .wires import *
 from .snap_rounding import snap_rounding
 from .SparseSolver import SparseSolver
+from .straight_skeleton import straight_skeleton
 from .igl_utils import unique_rows
 from .igl_utils import face_normals, vertex_normals, edge_normals
 
@@ -96,6 +97,7 @@ __all__ = [
         "HarmonicSolver",
         "snap_rounding",
         "SparseSolver",
+        "straight_skeleton",
         "HashGrid",
         "compress",
         "decompress",

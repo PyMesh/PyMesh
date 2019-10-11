@@ -8,7 +8,7 @@ namespace PyMesh {
 
 class StraightSkeleton {
     public:
-        void compute (const MatrixFr& vertices, const MatrixIr& edges);
+        void run(const MatrixFr& vertices, const MatrixIr& edges);
 
         const MatrixFr& get_skeleton_vertices() const {
             return m_skeleton_vertices;

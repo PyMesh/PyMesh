@@ -16,7 +16,7 @@
 
 using namespace PyMesh;
 
-void StraightSkeleton::compute(const MatrixFr& vertices, const MatrixIr& edges) {
+void StraightSkeleton::run(const MatrixFr& vertices, const MatrixIr& edges) {
     using Kernel = CGAL::Exact_predicates_inexact_constructions_kernel;
     using Point_2 = Kernel::Point_2;
     using Polygon_2 = CGAL::Polygon_2<Kernel>;
