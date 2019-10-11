@@ -22,6 +22,14 @@ void StraightSkeleton::run(const MatrixFr& vertices, const MatrixIr& edges) {
     using Polygon_2 = CGAL::Polygon_2<Kernel>;
     using PolygonWithHoles = CGAL::Polygon_with_holes_2<Kernel>;
 
+    if (vertices.cols() != 2) {
+        throw NotImplementedError("Only 2D straight skeleton is supported.");
+    }
+    if (edges.cols() != 2) {
+        throw RuntimeError("Unexpected edge matrix with "
+                + std::to_string(edges.cols()) + " columns.");
+    }
+
     const size_t num_vertices = vertices.rows();
     const size_t num_edges = edges.rows();
     constexpr size_t INVALID = std::numeric_limits<size_t>::max();
@@ -71,7 +79,7 @@ void StraightSkeleton::run(const MatrixFr& vertices, const MatrixIr& edges) {
 
     const auto skeleton = CGAL::create_interior_straight_skeleton_2(domain);
     std::map<decltype(skeleton)::element_type::Vertex_handle, size_t> index_map;
-    
+
     const size_t num_nodes = skeleton->size_of_vertices();
     m_skeleton_vertices.resize(num_nodes, 2);
     size_t count = 0;
@@ -87,7 +95,7 @@ void StraightSkeleton::run(const MatrixFr& vertices, const MatrixIr& edges) {
     size_t num_segments = 0;
     for (auto itr=skeleton->halfedges_begin(); itr != skeleton->halfedges_end(); itr++) {
         if (itr->is_border() || itr->opposite()->is_border()) continue;
-        const size_t vid0 = index_map[itr->vertex()]; 
+        const size_t vid0 = index_map[itr->vertex()];
         const size_t vid1 = index_map[itr->opposite()->vertex()];
 
         if (vid0 < vid1) {
