@@ -10,7 +10,7 @@ def form_wires(vertices, edges):
     """
     return WireNetwork.create_from_data(vertices, edges);
 
-def save_wires(wire_files, wire_network):
+def save_wires(wire_file, wire_network):
     """ Save a WireNetwork object to file.
     """
     wire_network.write_to_file(wire_file);
