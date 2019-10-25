@@ -31,46 +31,46 @@ def compute_outer_hull(mesh, engine="auto", all_layers=False):
         * ``face_sources``: A per-face attribute that specifies the index of the
           source face in the input mesh.
     """
-    assert(mesh.dim == 3);
-    assert(mesh.vertex_per_face == 3);
+    assert(mesh.dim == 3)
+    assert(mesh.vertex_per_face == 3)
 
     if engine == "auto":
-        engine = "igl";
+        engine = "igl"
 
-    engine = PyMesh.OuterHullEngine.create(engine);
-    engine.set_mesh(mesh.vertices, mesh.faces);
-    engine.run();
+    engine = PyMesh.OuterHullEngine.create(engine)
+    engine.set_mesh(mesh.vertices, mesh.faces)
+    engine.run()
 
-    vertices = engine.get_vertices();
-    faces = engine.get_faces();
-    flipped = engine.get_face_is_flipped().squeeze();
-    ori_faces = engine.get_ori_face_indices().squeeze();
-    layers = engine.get_outer_hull_layers().squeeze();
-    to_flip = flipped != 0;
-    faces[to_flip] = np.fliplr(faces[to_flip]);
+    vertices = engine.get_vertices()
+    faces = engine.get_faces()
+    flipped = engine.get_face_is_flipped().squeeze()
+    ori_faces = engine.get_ori_face_indices().squeeze()
+    layers = engine.get_outer_hull_layers().squeeze()
+    to_flip = flipped != 0
+    faces[to_flip] = np.fliplr(faces[to_flip])
 
     def extract_layer(i):
-        selected_faces = layers == i;
-        o_faces = faces[selected_faces];
-        o_flipped = flipped[selected_faces];
-        o_ori_faces = ori_faces[selected_faces];
-        o_vertices, o_faces, __ = remove_isolated_vertices_raw(vertices, o_faces);
+        selected_faces = layers == i
+        o_faces = faces[selected_faces]
+        o_flipped = flipped[selected_faces]
+        o_ori_faces = ori_faces[selected_faces]
+        o_vertices, o_faces, __ = remove_isolated_vertices_raw(vertices, o_faces)
         o_vertices, o_faces, info = remove_degenerated_triangles_raw(
-                o_vertices, o_faces);
-        o_flipped = o_flipped[info["ori_face_indices"]];
-        o_ori_faces = o_ori_faces[info["ori_face_indices"]];
-        outer_hull = form_mesh(o_vertices, o_faces);
-        outer_hull.add_attribute("flipped");
-        outer_hull.set_attribute("flipped", o_flipped);
-        outer_hull.add_attribute("face_sources");
-        outer_hull.set_attribute("face_sources", o_ori_faces);
-        return outer_hull;
+                o_vertices, o_faces)
+        o_flipped = o_flipped[info["ori_face_indices"]]
+        o_ori_faces = o_ori_faces[info["ori_face_indices"]]
+        outer_hull = form_mesh(o_vertices, o_faces)
+        outer_hull.add_attribute("flipped")
+        outer_hull.set_attribute("flipped", o_flipped)
+        outer_hull.add_attribute("face_sources")
+        outer_hull.set_attribute("face_sources", o_ori_faces)
+        return outer_hull
 
     if not all_layers:
-        result = extract_layer(0);
+        result = extract_layer(0)
     else:
-        num_layers = np.amax(layers) + 1;
-        result = [extract_layer(i) for i in range(num_layers)];
+        num_layers = np.amax(layers) + 1
+        result = [extract_layer(i) for i in range(num_layers)]
 
-    return result;
+    return result
 

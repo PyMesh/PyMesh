@@ -6,7 +6,7 @@ def load_matrix(filename):
 
     .. _.dmat: http://libigl.github.io/libigl/file-formats/dmat/
     """
-    return PyMesh.load_matrix(filename);
+    return PyMesh.load_matrix(filename)
 
 def save_matrix(filename, matrix, in_ascii=False):
     """ Save matrix into file in `.dmat`_ format.
@@ -19,4 +19,4 @@ def save_matrix(filename, matrix, in_ascii=False):
 
     .. _.dmat: http://libigl.github.io/libigl/file-formats/dmat/
     """
-    return PyMesh.save_matrix(filename, matrix, in_ascii);
+    return PyMesh.save_matrix(filename, matrix, in_ascii)

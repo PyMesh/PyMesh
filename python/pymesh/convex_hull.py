@@ -30,42 +30,42 @@ def convex_hull(mesh, engine="auto", with_timing=False):
     """
 
     if engine == "auto":
-        engine = "qhull";
+        engine = "qhull"
 
-    engine = PyMesh.ConvexHullEngine.create(mesh.dim, engine);
-
-    if with_timing:
-        start_time = time();
-
-    engine.run(mesh.vertices);
+    engine = PyMesh.ConvexHullEngine.create(mesh.dim, engine)
 
     if with_timing:
-        finish_time = time();
-        running_time = finish_time - start_time;
+        start_time = time()
 
-    vertices = engine.get_vertices();
-    faces = engine.get_faces();
-    index_map = engine.get_index_map();
+    engine.run(mesh.vertices)
+
+    if with_timing:
+        finish_time = time()
+        running_time = finish_time - start_time
+
+    vertices = engine.get_vertices()
+    faces = engine.get_faces()
+    index_map = engine.get_index_map()
 
     if mesh.dim == 3:
-        convex_hull = form_mesh(vertices, faces);
-        convex_hull.add_attribute("source_vertex");
-        convex_hull.set_attribute("source_vertex", index_map);
+        convex_hull = form_mesh(vertices, faces)
+        convex_hull.add_attribute("source_vertex")
+        convex_hull.set_attribute("source_vertex", index_map)
     elif mesh.dim == 2:
-        tri = triangle();
-        tri.verbosity = 0;
-        tri.points = vertices;
-        tri.segments = faces;
-        tri.split_boundary = True;
-        tri.max_num_steiner_points = 0;
-        tri.run();
-        convex_hull = tri.mesh;
-        convex_hull.add_attribute("source_vertex");
-        convex_hull.set_attribute("source_vertex", index_map);
+        tri = triangle()
+        tri.verbosity = 0
+        tri.points = vertices
+        tri.segments = faces
+        tri.split_boundary = True
+        tri.max_num_steiner_points = 0
+        tri.run()
+        convex_hull = tri.mesh
+        convex_hull.add_attribute("source_vertex")
+        convex_hull.set_attribute("source_vertex", index_map)
     else:
-        raise NotImplementedError("Unsupported dimension: {}".format(mesh.dim));
+        raise NotImplementedError("Unsupported dimension: {}".format(mesh.dim))
 
     if with_timing:
-        return convex_hull, running_time;
+        return convex_hull, running_time
     else:
-        return convex_hull;
+        return convex_hull
