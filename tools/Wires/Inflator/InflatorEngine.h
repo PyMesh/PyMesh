@@ -62,6 +62,7 @@ class InflatorEngine {
         ThicknessType get_thickness_type() const { return m_thickness_type; }
 
         void set_profile(WireProfilePtr profile) { m_profile = profile; }
+        void set_max_aspect(Float aspect) { m_aspect_max = aspect; }
 
     protected:
         void clean_up();
@@ -82,6 +83,7 @@ class InflatorEngine {
         VectorF m_thickness;
         ThicknessType m_thickness_type;
         WireProfilePtr m_profile;
+        Float m_aspect_max;
         Subdivision::Ptr m_refiner;
         size_t m_subdiv_order;
         VectorF m_rel_correction;
