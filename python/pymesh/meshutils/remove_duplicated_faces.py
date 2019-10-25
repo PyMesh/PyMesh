@@ -42,13 +42,13 @@ def remove_duplicated_faces_raw(vertices, faces, fins_only=False):
               the input vertices.
 
     """
-    remover = FinFaceRemoval(vertices, faces);
-    if fins_only: remover.set_fins_only();
-    remover.run();
+    remover = FinFaceRemoval(vertices, faces)
+    if fins_only: remover.set_fins_only()
+    remover.run()
     info = {
             "ori_face_index": remover.get_face_indices().ravel(),
-            };
-    return remover.get_vertices(), remover.get_faces(), info;
+            }
+    return remover.get_vertices(), remover.get_faces(), info
 
 def remove_duplicated_faces(mesh, fins_only=False):
     """ Wrapper function of :func:`remove_duplicated_faces_raw`.
@@ -71,5 +71,5 @@ def remove_duplicated_faces(mesh, fins_only=False):
 
     """
     vertices, faces, info = remove_duplicated_faces_raw(
-            mesh.vertices, mesh.faces, fins_only);
-    return form_mesh(vertices, faces), info;
+            mesh.vertices, mesh.faces, fins_only)
+    return form_mesh(vertices, faces), info

@@ -6,21 +6,21 @@ from PyMesh import ObtuseTriangleRemoval
 class ObtuseTriangleRemover:
     def __init__(self, vertices, faces):
         if vertices.shape[1] != 3:
-            raise RuntimeError("Only 3D meshes are supported");
+            raise RuntimeError("Only 3D meshes are supported")
         if faces.shape[1] != 3:
-            raise RuntimeError("Only triangular meshes are supported");
+            raise RuntimeError("Only triangular meshes are supported")
 
-        self.vertices = vertices;
-        self.faces = faces;
+        self.vertices = vertices
+        self.faces = faces
 
     def remove_obtuse_triangles(self, max_angle, max_num_iterations):
-        max_angle = radians(max_angle);
-        remover = ObtuseTriangleRemoval(self.vertices, self.faces);
+        max_angle = radians(max_angle)
+        remover = ObtuseTriangleRemoval(self.vertices, self.faces)
         num_triangles_split = remover.run(
-                max_angle, max_num_iterations);
-        self.vertices = remover.get_vertices();
-        self.faces = remover.get_faces();
-        return num_triangles_split;
+                max_angle, max_num_iterations)
+        self.vertices = remover.get_vertices()
+        self.faces = remover.get_faces()
+        return num_triangles_split
 
 def remove_obtuse_triangles_raw(vertices, faces,
         max_angle=120,
@@ -48,14 +48,14 @@ def remove_obtuse_triangles_raw(vertices, faces,
             * ``num_triangle_split``: number of triangles split.
     """
     if max_angle < 90:
-        raise RuntimeError("max_angle must be greater than 90 degrees");
+        raise RuntimeError("max_angle must be greater than 90 degrees")
 
-    remover = ObtuseTriangleRemover(vertices, faces);
-    num_split = remover.remove_obtuse_triangles(max_angle, max_iterations);
+    remover = ObtuseTriangleRemover(vertices, faces)
+    num_split = remover.remove_obtuse_triangles(max_angle, max_iterations)
     info = {
             "num_triangle_split": num_split
-            };
-    return remover.vertices, remover.faces, info;
+            }
+    return remover.vertices, remover.faces, info
 
 def remove_obtuse_triangles(mesh, max_angle=120, max_iterations=5):
     """ Wrapper function of :func:`remove_obtuse_triangles_raw`.
@@ -79,5 +79,5 @@ def remove_obtuse_triangles(mesh, max_angle=120, max_iterations=5):
             * ``num_triangle_split``: number of triangles split.
     """
     vertices, faces, info = remove_obtuse_triangles_raw(
-            mesh.vertices, mesh.faces, max_angle, max_iterations);
-    return form_mesh(vertices, faces), info;
+            mesh.vertices, mesh.faces, max_angle, max_iterations)
+    return form_mesh(vertices, faces), info
