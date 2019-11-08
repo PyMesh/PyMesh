@@ -46,7 +46,7 @@ void HarmonicSolver::pre_process() {
             throw RuntimeError("In 2D, harmonic solver only supports triangle meshes");
         }
     } else if (dim == 3) {
-        if ((simplex_size != 4) || (simplex_size != 3)) {
+        if ((simplex_size != 4) && (simplex_size != 3)) {
             throw RuntimeError("In 3D, harmonic solver only supports tet meshes (volume) or triangle meshes (surface).");
         }
     } else {
