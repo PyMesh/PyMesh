@@ -10,7 +10,9 @@ using namespace PyMesh;
 
 HarmonicSolver::Ptr HarmonicSolver::create(const Mesh::Ptr mesh) {
     const size_t dim = mesh->get_dim();
-    if (dim == 2) {
+    const bool dim_valid = (dim == 2) || (dim == 3);
+    const bool is_surface_mesh = mesh->get_vertex_per_voxel() == 0;
+    if (dim_valid && is_surface_mesh) {
         const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
                 mesh->get_vertices(),
                 mesh->get_num_vertices(),
@@ -20,7 +22,7 @@ HarmonicSolver::Ptr HarmonicSolver::create(const Mesh::Ptr mesh) {
                 mesh->get_num_faces(),
                 mesh->get_vertex_per_face());
         return std::make_shared<HarmonicSolver>(vertices, faces);
-    } else if (dim == 3) {
+    } else if ((dim == 3) && !is_surface_mesh) {
         const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
                 mesh->get_vertices(),
                 mesh->get_num_vertices(),
@@ -48,11 +50,11 @@ void HarmonicSolver::pre_process() {
             throw RuntimeError("In 2D, harmonic solver only supports triangle meshes");
         }
     } else if (dim == 3) {
-        if (simplex_size != 4) {
-            throw RuntimeError("In 3D, harmonic solver only supports tet meshes");
+        if ((simplex_size != 4) || (simplex_size != 3)) {
+            throw RuntimeError("In 3D, harmonic solver only supports tet meshes (volume) or triangle meshes (surface).");
         }
     } else {
-        throw NotImplementedError("Harmonic solver does not support mesh with dimention " +
+        throw NotImplementedError("Harmonic solver does not support mesh with dimension " +
                 std::to_string(dim));
     }
 }
