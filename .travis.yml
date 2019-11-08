@@ -19,7 +19,7 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew install ccache
+        - brew install ccache || true
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -29,7 +29,8 @@ matrix:
         - git submodule update --init
         - sw_vers
         - pip install --upgrade pip
-        - brew install ccache
+        - rvm use 2.6
+        - brew install ccache || true
       install:
         - pip install -r python/requirements.txt
     - os: osx
