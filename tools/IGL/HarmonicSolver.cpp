@@ -9,25 +9,25 @@
 using namespace PyMesh;
 
 HarmonicSolver::Ptr HarmonicSolver::create(const Mesh::Ptr mesh) {
-    const bool is_surface_mesh = mesh->get_vertex_per_voxel() == 0;
+    const bool is_volume_mesh = (mesh->get_dim() == 3) && (mesh->get_num_voxels() > 0);
     HarmonicSolver::Ptr solver;
     const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
             mesh->get_vertices(),
             mesh->get_num_vertices(),
             mesh->get_dim());
     
-    if (is_surface_mesh) {
-        const MatrixIr faces = MatrixUtils::reshape<MatrixIr>(
-                mesh->get_faces(),
-                mesh->get_num_faces(),
-                mesh->get_vertex_per_face());
-        solver = std::make_shared<HarmonicSolver>(vertices, faces);
-    } else {
+    if (is_volume_mesh) {
         const MatrixIr voxels = MatrixUtils::reshape<MatrixIr>(
                 mesh->get_voxels(),
                 mesh->get_num_voxels(),
                 mesh->get_vertex_per_voxel());
         solver = std::make_shared<HarmonicSolver>(vertices, voxels);
+    } else {
+        const MatrixIr faces = MatrixUtils::reshape<MatrixIr>(
+                mesh->get_faces(),
+                mesh->get_num_faces(),
+                mesh->get_vertex_per_face());
+        solver = std::make_shared<HarmonicSolver>(vertices, faces);
     } 
     solver->pre_process(); // Check dimensions
     return solver;
