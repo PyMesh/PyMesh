@@ -29,6 +29,7 @@ matrix:
         - git submodule update --init
         - sw_vers
         - pip install --upgrade pip
+        - rvm install ruby-2.6
         - rvm use 2.6
         - brew install ccache || true
       install:
