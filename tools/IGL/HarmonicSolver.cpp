@@ -9,32 +9,28 @@
 using namespace PyMesh;
 
 HarmonicSolver::Ptr HarmonicSolver::create(const Mesh::Ptr mesh) {
-    const size_t dim = mesh->get_dim();
-    const bool dim_valid = (dim == 2) || (dim == 3);
     const bool is_surface_mesh = mesh->get_vertex_per_voxel() == 0;
-    if (dim_valid && is_surface_mesh) {
-        const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
-                mesh->get_vertices(),
-                mesh->get_num_vertices(),
-                mesh->get_dim());
+    HarmonicSolver::Ptr solver;
+    const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
+            mesh->get_vertices(),
+            mesh->get_num_vertices(),
+            mesh->get_dim());
+    
+    if (is_surface_mesh) {
         const MatrixIr faces = MatrixUtils::reshape<MatrixIr>(
                 mesh->get_faces(),
                 mesh->get_num_faces(),
                 mesh->get_vertex_per_face());
-        return std::make_shared<HarmonicSolver>(vertices, faces);
-    } else if ((dim == 3) && !is_surface_mesh) {
-        const MatrixFr vertices = MatrixUtils::reshape<MatrixFr>(
-                mesh->get_vertices(),
-                mesh->get_num_vertices(),
-                mesh->get_dim());
+        solver = std::make_shared<HarmonicSolver>(vertices, faces);
+    } else {
         const MatrixIr voxels = MatrixUtils::reshape<MatrixIr>(
                 mesh->get_voxels(),
                 mesh->get_num_voxels(),
                 mesh->get_vertex_per_voxel());
-        return std::make_shared<HarmonicSolver>(vertices, voxels);
-    } else {
-        throw NotImplementedError("Unsupported mesh dimension: " + std::to_string(dim));
-    }
+        solver = std::make_shared<HarmonicSolver>(vertices, voxels);
+    } 
+    solver->pre_process(); // Check dimensions
+    return solver;
 }
 
 HarmonicSolver::Ptr HarmonicSolver::create_raw(
