@@ -18,6 +18,7 @@ matrix:
       osx_image: xcode11.2
       compiler: clang
       before_install:
+        - brew install python
         - git submodule update --init
         - sw_vers
       install:
