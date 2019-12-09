@@ -51,6 +51,8 @@ def build(package):
         build_generic("Clipper/cpp");
     elif package == "tbb":
         build_generic("tbb", " -DTBB_BUILD_SHARED=On -DTBB_BUILD_STATIC=Off");
+    elif package == "draco":
+        build_generic("tbb", " -DCMAKE_POSITION_INDEPENDENT_CODE=On");
     else:
         build_generic(package);
 
