@@ -50,7 +50,7 @@ def build(package):
     elif package == "clipper":
         build_generic("Clipper/cpp");
     elif package == "tbb":
-        build_generic("tbb", " -DTBB_BUILD_SHARED=Off -DTBB_BUILD_STATIC=On");
+        build_generic("tbb", " -DTBB_BUILD_SHARED=On -DTBB_BUILD_STATIC=Off");
     else:
         build_generic(package);
 
