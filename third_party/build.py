@@ -30,6 +30,7 @@ def build_generic(libname, build_flags=""):
             " -S {}/third_party/{}".format(pymesh_dir, libname) + \
             " -B {}".format(build_dir) + \
             " -DBUILD_SHARED_LIBS=Off" + \
+            " -DCMAKE_POSITION_INDEPENDENT_CODE=On" + \
             build_flags + \
             " -DCMAKE_INSTALL_PREFIX={}/python/pymesh/third_party/".format(pymesh_dir);
     subprocess.check_call(cmd.split());
@@ -51,8 +52,6 @@ def build(package):
         build_generic("Clipper/cpp");
     elif package == "tbb":
         build_generic("tbb", " -DTBB_BUILD_SHARED=On -DTBB_BUILD_STATIC=Off");
-    elif package == "draco":
-        build_generic("tbb", " -DCMAKE_POSITION_INDEPENDENT_CODE=On");
     else:
         build_generic(package);
 
