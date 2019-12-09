@@ -9,6 +9,7 @@ import os
 import os.path
 import tempfile
 import shutil
+import sys
 
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
@@ -17,7 +18,7 @@ def parse_args():
     return parser.parse_args();
 
 def get_pymesh_dir():
-    return os.path.join(os.getcwd(), "..");
+    return os.path.join(sys.path[0], "..");
 
 def build_cgal():
     build_dir = tempfile.mkdtemp();
@@ -64,14 +65,17 @@ def build_generic(libname):
     # Clean up
     shutil.rmtree(build_dir)
 
-def main():
-    args = parse_args();
-    if args.package == "cgal":
+def build(package):
+    if package == "cgal":
         build_cgal();
-    elif args.package == "clipper":
+    elif package == "clipper":
         build_generic("Clipper/cpp");
     else:
-        build_generic(args.package);
+        build_generic(package);
+
+def main():
+    args = parse_args();
+    build(args.package);
 
 if __name__ == "__main__":
     main();
