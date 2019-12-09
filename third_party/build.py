@@ -14,36 +14,14 @@ import sys
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
     parser.add_argument("package", choices=["cgal", "cork", "carve", "eigen",
-        "quartet", "tetgen", "triangle", "qhull", "clipper", "geogram", "draco"]);
+        "quartet", "tetgen", "triangle", "qhull", "clipper", "geogram", "draco",
+        "tbb"]);
     return parser.parse_args();
 
 def get_pymesh_dir():
     return os.path.join(sys.path[0], "..");
 
-def build_cgal():
-    build_dir = tempfile.mkdtemp();
-    pymesh_dir = get_pymesh_dir();
-
-    # Configure cgal
-    cmd = "cmake" + \
-            " -S {}/third_party/cgal".format(pymesh_dir) + \
-            " -B {}".format(build_dir) + \
-            " -DWITH_CGAL_ImageIO=OFF" + \
-            " -DWITH_CGAL_Qt5=Off" + \
-            " -DCMAKE_INSTALL_PREFIX={}/python/pymesh/third_party/".format(pymesh_dir);
-    subprocess.check_call(cmd.split());
-
-    # Build cgal
-    cmd = "cmake --build {}".format(build_dir);
-    subprocess.check_call(cmd.split());
-
-    cmd = "cmake --build {} --target install".format(build_dir);
-    subprocess.check_call(cmd.split());
-
-    # Clean up
-    shutil.rmtree(build_dir)
-
-def build_generic(libname):
+def build_generic(libname, flags=""):
     build_dir = tempfile.mkdtemp();
     pymesh_dir = get_pymesh_dir();
 
@@ -52,6 +30,7 @@ def build_generic(libname):
             " -S {}/third_party/{}".format(pymesh_dir, libname) + \
             " -B {}".format(build_dir) + \
             " -DBUILD_SHARED_LIBS=Off" + \
+            build_flags + \
             " -DCMAKE_INSTALL_PREFIX={}/python/pymesh/third_party/".format(pymesh_dir);
     subprocess.check_call(cmd.split());
 
@@ -68,8 +47,11 @@ def build_generic(libname):
 def build(package):
     if package == "cgal":
         build_cgal();
+        build_generic("cgal", " -DWITH_CGAL_ImageIO=Off -DWITH_CGAL_Qt5=Off");
     elif package == "clipper":
         build_generic("Clipper/cpp");
+    elif package == "tbb":
+        build_generic("tbb", " -DTBB_BUILD_SHARED=Off -DTBB_BUILD_STATIC=On");
     else:
         build_generic(package);
 
