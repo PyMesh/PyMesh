@@ -18,11 +18,10 @@ matrix:
       osx_image: xcode11.2
       compiler: clang
       before_install:
-        - brew install python
         - git submodule update --init
         - sw_vers
       install:
-        - pip install --user -r python/requirements.txt
+        - pip3 install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode9.4
       compiler: clang
