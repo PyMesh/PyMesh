@@ -21,7 +21,7 @@ def parse_args():
 def get_pymesh_dir():
     return os.path.join(sys.path[0], "..");
 
-def build_generic(libname, flags=""):
+def build_generic(libname, build_flags=""):
     build_dir = tempfile.mkdtemp();
     pymesh_dir = get_pymesh_dir();
 
@@ -46,7 +46,6 @@ def build_generic(libname, flags=""):
 
 def build(package):
     if package == "cgal":
-        build_cgal();
         build_generic("cgal", " -DWITH_CGAL_ImageIO=Off -DWITH_CGAL_Qt5=Off");
     elif package == "clipper":
         build_generic("Clipper/cpp");
