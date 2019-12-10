@@ -21,8 +21,7 @@ matrix:
         - git submodule update --init
         - sw_vers
       install:
-        - pip3 install --user -r python/requirements.txt
-        - alias python=python3
+        - pip2 install --user -r python/requirements.txt
     - os: osx
       osx_image: xcode9.4
       compiler: clang
