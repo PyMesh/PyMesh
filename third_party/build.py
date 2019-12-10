@@ -15,7 +15,7 @@ def parse_args():
     parser = argparse.ArgumentParser(__doc__);
     parser.add_argument("package", choices=["cgal", "cork", "carve", "eigen",
         "quartet", "tetgen", "triangle", "qhull", "clipper", "geogram", "draco",
-        "tbb"]);
+        "tbb", "mmg"]);
     return parser.parse_args();
 
 def get_pymesh_dir():
