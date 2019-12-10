@@ -4,10 +4,10 @@
 
 #include <Core/EigenTypedef.h>
 
+#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/AABB_tree.h>
 #include <CGAL/AABB_traits.h>
 #include <CGAL/AABB_triangle_primitive.h>
-#include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 
 #include <cassert>
 #include <vector>
