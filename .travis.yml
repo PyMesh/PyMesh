@@ -23,7 +23,7 @@ matrix:
         - python3 -m venv pyenv
         - source pyenv/bin/activate
       install:
-        - pip install --user -r python/requirements.txt
+        - pip install -r python/requirements.txt
     - os: osx
       osx_image: xcode9.4
       compiler: clang
@@ -43,7 +43,7 @@ matrix:
         - python3 -m venv pyenv
         - source pyenv/bin/activate
       install:
-        - pip install --user -r python/requirements.txt
+        - pip install -r python/requirements.txt
     - os: linux
       dist: xenial
       python: "2.7"
