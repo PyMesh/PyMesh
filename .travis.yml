@@ -31,7 +31,7 @@ matrix:
         - git submodule update --init
         - sw_vers
         - python3 -m venv pyenv
-        - source pyenv/bin/activete
+        - source pyenv/bin/activate
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -41,7 +41,7 @@ matrix:
         - git submodule update --init
         - sw_vers
         - python3 -m venv pyenv
-        - source pyenv/bin/activete
+        - source pyenv/bin/activate
       install:
         - pip install --user -r python/requirements.txt
     - os: linux
@@ -85,6 +85,6 @@ script:
     - ccache --max-size=5.0G
     - ccache -V && ccache --show-stats && ccache --zero-stats
     - ./setup.py build
-    - ./setup.py install --user
+    - ./setup.py install
     - python -c "import pymesh; pymesh.test()"
 
