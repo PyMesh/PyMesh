@@ -40,7 +40,8 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - python3 -m venv pyenv
+        - pip install virtualenv
+        - virtualenv pyenv
         - source pyenv/bin/activate
       install:
         - pip install -r python/requirements.txt
