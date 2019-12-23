@@ -35,13 +35,12 @@ def build_generic(libname, build_flags="", cleanup=True):
 
     # Configure cgal
     cmd = "cmake" + \
-            " -S {}/third_party/{}".format(pymesh_dir, libname) + \
-            " -B {}".format(build_dir) + \
+            " {}/third_party/{}".format(pymesh_dir, libname) + \
             " -DBUILD_SHARED_LIBS=Off" + \
             " -DCMAKE_POSITION_INDEPENDENT_CODE=On" + \
             build_flags + \
             " -DCMAKE_INSTALL_PREFIX={}/python/pymesh/third_party/".format(pymesh_dir);
-    subprocess.check_call(cmd.split());
+    subprocess.check_call(cmd.split(), cwd=build_dir);
 
     # Build cgal
     cmd = "cmake --build {}".format(build_dir);
