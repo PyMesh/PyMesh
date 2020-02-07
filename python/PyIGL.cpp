@@ -15,7 +15,6 @@
 #include <igl/per_edge_normals.h>
 #include <igl/orientable_patches.h>
 #include <igl/orient_outward.h>
-#include <igl/per_edge_normals.h>
 
 namespace py = pybind11;
 using namespace PyMesh;
