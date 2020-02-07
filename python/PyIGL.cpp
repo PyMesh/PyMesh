@@ -4,7 +4,6 @@
 #include <pybind11/eigen.h>
 #include <pybind11/stl.h>
 #include <pybind11/operators.h>
-#include <iostream>
 
 #include <Core/EigenTypedef.h>
 #include <IGL/DiskCutter.h>
