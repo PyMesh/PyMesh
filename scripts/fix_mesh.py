@@ -2,7 +2,6 @@
 
 """
 Remesh the input mesh to remove degeneracies and improve triangle quality.
-
 """
 
 import argparse
