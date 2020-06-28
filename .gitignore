@@ -8,6 +8,7 @@
 *.o
 *.dia~
 *.dia.autosave
+*.egg-info
 .DS_Store
 
 lib/
