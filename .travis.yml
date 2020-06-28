@@ -87,5 +87,5 @@ script:
     - ccache -V && ccache --show-stats && ccache --zero-stats
     - ./setup.py build
     - ./setup.py install
-    - python -c "import pymesh; pymesh.test()"
+    - python -c "import pymesh; import sys; sys.exit(0 if pymesh.test().wasSuccessful() else 1)"
 
