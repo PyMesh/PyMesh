@@ -169,11 +169,7 @@ If you are familiar with C++ and CMake, there is an alternative way of building
 PyMesh.  First compile and install all of the third party dependencies::
 
     cd $PYMESH_PATH/third_party
-    mkdir build
-    cd build
-    cmake ..
-    make
-    make install
+    ./build.py all
 
 Third party dependencies will be installed in
 ``$PYMESH_PATH/python/pymesh/third_party`` directory.

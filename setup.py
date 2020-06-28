@@ -50,7 +50,21 @@ class cmake_build(build):
         """
         Config and build third party dependencies.
         """
-        self._build("third_party/build", '', True)
+        commands = [
+                "third_party/build.py cgal",
+                "third_party/build.py eigen",
+                "third_party/build.py triangle",
+                "third_party/build.py tetgen",
+                "third_party/build.py clipper",
+                "third_party/build.py qhull",
+                "third_party/build.py cork",
+                #"third_party/build.py carve",
+                "third_party/build.py draco",
+                "third_party/build.py tbb",
+                "third_party/build.py mmg",
+                ];
+        for c in commands:
+            check_call(c.split())
 
     def build_pymesh(self):
         """

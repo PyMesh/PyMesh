@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-from time import clock;
 from time import time;
 import functools
 

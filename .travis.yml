@@ -10,16 +10,18 @@ addons:
         packages:
             - ccache
             - cmake
+        update: true
 cache: ccache
 matrix:
   include:
     - os: osx
-      osx_image: xcode10
+      osx_image: xcode11.2
       compiler: clang
       before_install:
         - git submodule update --init
         - sw_vers
-        - brew install ccache
+        - python3 -m venv pyenv
+        - source pyenv/bin/activate
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -28,8 +30,8 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - pip install --upgrade pip
-        - brew install ccache
+        - python3 -m venv pyenv
+        - source pyenv/bin/activate
       install:
         - pip install -r python/requirements.txt
     - os: osx
@@ -38,12 +40,11 @@ matrix:
       before_install:
         - git submodule update --init
         - sw_vers
-        - python --version
-        - pip --version
-        - brew install ccache
-        - brew upgrade cmake
+        - pip install virtualenv
+        - virtualenv pyenv
+        - source pyenv/bin/activate
       install:
-        - pip install --user -r python/requirements.txt
+        - pip install -r python/requirements.txt
     - os: linux
       dist: xenial
       python: "2.7"
@@ -85,6 +86,6 @@ script:
     - ccache --max-size=5.0G
     - ccache -V && ccache --show-stats && ccache --zero-stats
     - ./setup.py build
-    - ./setup.py install --user --prefix=
+    - ./setup.py install
     - python -c "import pymesh; import sys; sys.exit(0 if pymesh.test().wasSuccessful() else 1)"
 

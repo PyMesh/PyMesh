@@ -5,6 +5,7 @@ from pymesh.meshutils import generate_box_mesh
 
 import numpy as np
 from numpy.linalg import norm
+import unittest
 
 class WindingNumberTest(TestCase):
     def test_cube(self):
@@ -24,6 +25,7 @@ class WindingNumberTest(TestCase):
         self.assert_array_almost_equal(
             [0, 0.125, 0.25, 0.5, 1], winding_numbers);
 
+    @unittest.skip("Faster winding number is temporarily unavailable")
     def test_fast_winding_number(self):
         mesh = generate_box_mesh(
                 np.array([0, 0, 0]), np.array([1, 1, 1]));

@@ -12,6 +12,8 @@
 #include <igl/per_face_normals.h>
 #include <igl/per_vertex_normals.h>
 #include <igl/per_edge_normals.h>
+#include <igl/orientable_patches.h>
+#include <igl/orient_outward.h>
 
 namespace py = pybind11;
 using namespace PyMesh;
@@ -88,5 +90,16 @@ void init_IGL(py::module &m) {
             igl::per_edge_normals(
                 V, F, igl::PER_EDGE_NORMALS_WEIGHTING_TYPE_UNIFORM, FN, EN, E, EMAP);
             return std::make_tuple(EN, E, EMAP);
+            });
+
+    
+    m.def("orient_outward",
+            [](const MatrixFr& V, const MatrixIr& F) {
+            VectorI C;
+            igl::orientable_patches(F, C);
+            MatrixIr FF;
+            VectorI I;
+            igl::orient_outward(V, F, C, FF, I);
+            return FF;
             });
 }
