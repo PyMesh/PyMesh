@@ -1,5 +1,5 @@
-[![CircleCI](https://circleci.com/gh/PyMesh/PyMesh/tree/master.svg?style=svg)](https://circleci.com/gh/PyMesh/PyMesh/tree/master)
-[![Build Status](https://travis-ci.org/PyMesh/PyMesh.svg?branch=master)](https://travis-ci.org/PyMesh/PyMesh)
+[![CircleCI](https://circleci.com/gh/PyMesh/PyMesh/tree/main.svg?style=svg)](https://circleci.com/gh/PyMesh/PyMesh/tree/main)
+[![Build Status](https://travis-ci.org/PyMesh/PyMesh.svg?branch=main)](https://travis-ci.org/PyMesh/PyMesh)
 [![Documentation Status](https://readthedocs.org/projects/pymesh/badge/?version=latest)](https://pymesh.readthedocs.io/en/latest/?badge=latest)
 
 

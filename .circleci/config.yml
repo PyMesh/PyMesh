@@ -27,7 +27,7 @@ jobs:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
                     docker build -m 6g -t pymesh/pymesh:py3.7 --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.7
-                    [ "$CIRCLE_BRANCH" != "master" ] || docker push pymesh/pymesh:py3.7
+                    [ "$CIRCLE_BRANCH" != "main" ] || docker push pymesh/pymesh:py3.7
                 no_output_timeout: 1200
     "py3.7-slim":
         machine: true
@@ -51,7 +51,7 @@ jobs:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
                     docker build -m 6g -t pymesh/pymesh:py3.6 --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.6
-                    [ "$CIRCLE_BRANCH" != "master" ] || docker push pymesh/pymesh:py3.6
+                    [ "$CIRCLE_BRANCH" != "main" ] || docker push pymesh/pymesh:py3.6
                 no_output_timeout: 1200
     "py3.6-slim":
         machine: true
@@ -77,7 +77,7 @@ jobs:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
                     docker build -m 6g -t pymesh/pymesh:py3.5 --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/py3.5
-                    [ "$CIRCLE_BRANCH" != "master" ] || docker push pymesh/pymesh:py3.5
+                    [ "$CIRCLE_BRANCH" != "main" ] || docker push pymesh/pymesh:py3.5
                 no_output_timeout: 1200
     "py3.5-slim":
         machine: true
@@ -101,7 +101,7 @@ jobs:
                 command: |
                     docker login -u $DOCKER_USER -p $DOCKER_PASS
                     docker build -m 6g -t pymesh/pymesh:py2.7 --build-arg NUM_CORES=1 --build-arg BRANCH=$CIRCLE_BRANCH docker/py2.7
-                    [ "$CIRCLE_BRANCH" != "master" ] || docker push pymesh/pymesh:py2.7
+                    [ "$CIRCLE_BRANCH" != "main" ] || docker push pymesh/pymesh:py2.7
                 no_output_timeout: 1200
     "py2.7-slim":
         machine: true
@@ -133,19 +133,19 @@ workflows:
             - "py3.7":
                 filters:
                     branches:
-                        only: master
+                        only: main
             - "py3.6":
                 filters:
                     branches:
-                        only: master
+                        only: main
             - "py3.5":
                 filters:
                     branches:
-                        only: master
+                        only: main
             - "py2.7":
                 filters:
                     branches:
-                        only: master
+                        only: main
 
             - "py3.7-slim":
                 requires:

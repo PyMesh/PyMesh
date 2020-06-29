@@ -1,6 +1,6 @@
 FROM python:3.6
 WORKDIR /root/
-ARG BRANCH="master"
+ARG BRANCH="main"
 ARG NUM_CORES=2
 
 RUN echo "deb http://ftp.us.debian.org/debian unstable main contrib non-free" >> /etc/apt/sources.list.d/unstable.list &&\
