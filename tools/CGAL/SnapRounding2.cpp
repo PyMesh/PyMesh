@@ -8,6 +8,7 @@
 #include <CGAL/Snap_rounding_traits_2.h>
 #include <CGAL/Snap_rounding_2.h>
 
+#ifdef WITH_CGAL
 using namespace PyMesh;
 
 void SnapRounding2::run(Float pixel_size, bool iterative) {
@@ -80,3 +81,5 @@ void SnapRounding2::run(Float pixel_size, bool iterative) {
         }
     }
 }
+
+#endif
