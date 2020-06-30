@@ -30,8 +30,8 @@ void EdgeDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
 
     if (!mesh.has_attribute("face_normal"))
         mesh.add_attribute("face_normal");
-    MatrixFr face_normals =
-        MatrixUtils::reshape<MatrixFr>(mesh.get_attribute("face_normal"),
+    Matrix3Fr face_normals =
+        MatrixUtils::reshape<Matrix3Fr>(mesh.get_attribute("face_normal"),
                 num_faces, dim);
     if (!face_normals.allFinite()) {
         std::cerr << "Warning: Face normal contains nan or inf!" << std::endl;
@@ -49,8 +49,8 @@ void EdgeDihedralAngleAttribute::compute_from_mesh(Mesh& mesh) {
     }
 
     auto angle = [&face_normals](size_t f1, size_t f2) {
-        const Eigen::Ref<Vector3F>& n1 = face_normals.row(f1);
-        const Eigen::Ref<Vector3F>& n2 = face_normals.row(f2);
+        const Eigen::Ref<Vector3F>& n1 = face_normals.row(f1).transpose();
+        const Eigen::Ref<Vector3F>& n2 = face_normals.row(f2).transpose();
         return atan2(n1.cross(n2).norm(), n1.dot(n2));
     };
 

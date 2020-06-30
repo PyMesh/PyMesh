@@ -10,12 +10,11 @@
 #include <vector>
 #include <Math/MatrixUtils.h>
 
-//#include <igl/cgal/outer_hull.h>
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+
 #include <igl/copyleft/cgal/peel_outer_hull_layers.h>
 #include <igl/copyleft/cgal/remesh_self_intersections.h>
 #include <igl/remove_unreferenced.h>
-
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 
 #include <SelfIntersection/SelfIntersectionResolver.h>
 

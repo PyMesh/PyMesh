@@ -2,6 +2,9 @@
 #ifdef WITH_IGL_AND_CGAL
 #include "CellPartition.h"
 #include <Math/MatrixUtils.h>
+
+#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+
 #include <igl/copyleft/cgal/extract_cells.h>
 #include <igl/copyleft/cgal/propagate_winding_numbers.h>
 #include <igl/copyleft/cgal/RemeshSelfIntersectionsParam.h>
@@ -9,8 +12,6 @@
 #include <igl/extract_manifold_patches.h>
 #include <igl/remove_unreferenced.h>
 #include <igl/unique_edge_map.h>
-
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
 
 using namespace PyMesh;
 

@@ -123,11 +123,7 @@ Let `$PYMESH_PATH` be the root directory of the repository.
 The first step is to compile the optional third party dependencies:
 
     cd $PYMESH_PATH/third_party
-    mkdir build
-    cd build
-    cmake ..
-    make
-    make install
+    build.py all
 
 Third party dependencies will be installed in
 `$PYMESH_PATH/python/pymesh/third_party` directory.
