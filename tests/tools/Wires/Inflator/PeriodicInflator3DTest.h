@@ -88,8 +88,11 @@ class PeriodicInflator3DTest : public WireTest {
 
         void ASSERT_MESH_IS_VALID() {
             using namespace MeshValidation;
+#ifdef WITH_IGL_AND_CGAL
+
             ASSERT_TRUE(is_water_tight(m_vertices, m_faces));
             ASSERT_TRUE(is_manifold(m_vertices, m_faces));
+#endif
             ASSERT_TRUE(is_periodic(m_vertices, m_faces));
             ASSERT_TRUE(face_source_is_valid(m_vertices, m_faces, m_face_sources));
         }
