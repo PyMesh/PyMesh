@@ -38,4 +38,4 @@ class Arrangement2(PyMesh.Arrangement2):
 
     @property
     def wire_network(self):
-        return WireNetwork.create_from_data(self.vertices, self.edges);
+        return WireNetwork.create_from_data(self.vertices, self.edges)

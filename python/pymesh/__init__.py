@@ -17,7 +17,6 @@ logging.getLogger(__name__).addHandler(NullHandler())
 
 from .Mesh import Mesh
 from .meshio import load_mesh, form_mesh, save_mesh, save_mesh_raw
-from .Arrangement2 import Arrangement2
 from .Assembler import Assembler
 from .boolean import boolean
 from .compression import compress, decompress
@@ -110,14 +109,23 @@ __all__ = [
         "vertex_normals",
         "edge_normals",
         "orient_faces",
-        ];
-__all__ += meshutils.__all__;
-__all__ += misc.__all__;
-__all__.append("wires");
+        ]
+__all__ += meshutils.__all__
+__all__ += misc.__all__
+__all__.append("wires")
+
+try:
+    from .Arrangement2 import Arrangement2
+    __all__.append("Arrangement2")
+except:
+    logging.getLogger(__name__).warning(
+            "Arrangement computation is unavailable")
 
 try:
     from .tetgen import tetgen
-    __all__.append("tetgen");
+    __all__.append("tetgen")
 except:
-    pass;
+    logging.getLogger(__name__).warning(
+            "TetGen is unavailable")
+
 
