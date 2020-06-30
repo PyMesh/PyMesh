@@ -1,6 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2018 by Qingnan Zhou */
-#ifdef WITH_MMG
-#ifdef WITH_TETGEN
+#if defined(WITH_MMG) && defined(WITH_TETGEN) && defined(WITH_IGL)
 
 #include "MMGEngine.h"
 #include <Core/Exception.h>
@@ -163,5 +162,4 @@ void MMGEngine::run() {
     m_voxels.col(0).swap(m_voxels.col(1));
 }
 
-#endif
 #endif

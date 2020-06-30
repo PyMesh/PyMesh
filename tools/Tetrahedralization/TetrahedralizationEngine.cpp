@@ -25,10 +25,8 @@
 #include "Quartet/QuartetEngine.h"
 #endif
 
-#if WITH_MMG
-#if WITH_TETGEN
+#if WITH_MMG && WITH_TETGEN && WITH_IGL
 #include "MMG/MMGEngine.h"
-#endif
 #endif
 
 #if WITH_TETWILD
@@ -65,7 +63,7 @@ TetrahedralizationEngine::Ptr TetrahedralizationEngine::create(
 #endif
 #if WITH_TETGEN
     if (engine_name == "tetgen") { return Ptr(new TetGenEngine); }
-#if WITH_MMG
+#if WITH_MMG && WITH_IGL
     if (engine_name == "mmg") { return Ptr(new MMGEngine); }
 #endif
 #endif

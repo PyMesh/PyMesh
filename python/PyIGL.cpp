@@ -19,6 +19,7 @@ namespace py = pybind11;
 using namespace PyMesh;
 
 void init_IGL(py::module &m) {
+#if WITH_IGL
     py::class_<HarmonicSolver, std::shared_ptr<HarmonicSolver> >(m, "HarmonicSolver")
         .def(py::init<const MatrixFr&, const MatrixIr&>())
         .def_static("create", &HarmonicSolver::create)
@@ -92,7 +93,7 @@ void init_IGL(py::module &m) {
             return std::make_tuple(EN, E, EMAP);
             });
 
-    
+
     m.def("orient_outward",
             [](const MatrixFr& V, const MatrixIr& F) {
             VectorI C;
@@ -102,4 +103,5 @@ void init_IGL(py::module &m) {
             igl::orient_outward(V, F, C, FF, I);
             return FF;
             });
+#endif
 }
