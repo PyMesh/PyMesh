@@ -19,9 +19,9 @@ def generate_icosphere(radius, center, refinement_order=0):
 
     .. _icosahedron: http://mathworld.wolfram.com/Icosahedron.html
     """
-    assert(isinstance(radius, Number));
-    assert(len(center) == 3);
-    r = (1.0 + math.sqrt(5.0)) / 2.0;
+    assert(isinstance(radius, Number))
+    assert(len(center) == 3)
+    r = (1.0 + math.sqrt(5.0)) / 2.0
     vertices = np.array([
         [-1.0,   r, 0.0],
         [ 1.0,   r, 0.0],
@@ -35,7 +35,7 @@ def generate_icosphere(radius, center, refinement_order=0):
         [  r, 0.0,  1.0],
         [ -r, 0.0, -1.0],
         [ -r, 0.0,  1.0],
-        ], dtype=float);
+        ], dtype=float)
 
     faces = np.array([
         [0, 11, 5],
@@ -58,12 +58,12 @@ def generate_icosphere(radius, center, refinement_order=0):
         [6, 2, 10],
         [8, 6, 7],
         [9, 8, 1],
-        ]);
+        ])
 
-    mesh = form_mesh(vertices, faces);
-    mesh = subdivide(mesh, refinement_order);
+    mesh = form_mesh(vertices, faces)
+    mesh = subdivide(mesh, refinement_order)
 
-    length = norm(mesh.vertices, axis=1).reshape((-1, 1));
-    vertices = mesh.vertices / length * radius + center;
+    length = norm(mesh.vertices, axis=1).reshape((-1, 1))
+    vertices = mesh.vertices / length * radius + center
 
-    return form_mesh(vertices, mesh.faces);
+    return form_mesh(vertices, mesh.faces)

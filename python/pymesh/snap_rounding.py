@@ -18,15 +18,15 @@ def snap_rounding(points, segments, pixel_size, use_iterative=True):
             * ``vertices``: Snap rounded vertices.
             * ``edges``: Edge connecting vertices.
     """
-    engine = PyMesh.SnapRounding2();
-    engine.points = points;
-    engine.segments = segments;
-    engine.run(pixel_size, use_iterative);
+    engine = PyMesh.SnapRounding2()
+    engine.points = points
+    engine.segments = segments
+    engine.run(pixel_size, use_iterative)
 
-    vertices = engine.vertices;
-    edges = engine.edges;
+    vertices = engine.vertices
+    edges = engine.edges
 
     vertices, edges, __ = remove_duplicated_vertices_raw(
-            vertices, edges, tol=pixel_size/2);
-    return vertices, edges;
+            vertices, edges, tol=pixel_size/2)
+    return vertices, edges
 

@@ -22,12 +22,12 @@ class TestCase(unittest.TestCase):
 
     def setUp(self):
         """ Initialize data and tmp directories. """
-        cur_path = os.path.dirname(__file__);
-        self.pymesh_path = os.path.join(cur_path, "../../");
-        self.pymesh_path = os.path.abspath(self.pymesh_path);
-        self.tmp_dir = tempfile.gettempdir();
+        cur_path = os.path.dirname(__file__)
+        self.pymesh_path = os.path.join(cur_path, "../../")
+        self.pymesh_path = os.path.abspath(self.pymesh_path)
+        self.tmp_dir = tempfile.gettempdir()
 
-        self.assertTrue(os.path.exists(self.pymesh_path));
+        self.assertTrue(os.path.exists(self.pymesh_path))
 
     def load_mesh(self, filename):
         """ Load mesh from file.
@@ -45,18 +45,18 @@ class TestCase(unittest.TestCase):
             class A(TestCase):
                 def test_A(self):
                     # To load cube.obj from test directory.
-                    mesh = self.load_mesh("cube.obj");
+                    mesh = self.load_mesh("cube.obj")
 
                     # To load cube.obj from the executable directory.
-                    mesh2 = self.load_mesh(os.path.abspath("./cube.msh"));
+                    mesh2 = self.load_mesh(os.path.abspath("./cube.msh"))
 
         """
-        self.assertTrue(os.path.exists(filename));
-        return load_mesh(filename);
+        self.assertTrue(os.path.exists(filename))
+        return load_mesh(filename)
 
     def form_mesh(self, vertices, faces, voxels=None):
         """ Convert raw mesh data into Mesh object. """
-        return form_mesh(vertices, faces, voxels);
+        return form_mesh(vertices, faces, voxels)
 
     def save_mesh(self, filename, mesh, *attributes, **setting):
         """ Save mesh to file.
@@ -73,9 +73,9 @@ class TestCase(unittest.TestCase):
             The absolute path to the saved file.
         """
         if not os.path.isabs(filename):
-            filename = os.path.join(self.tmp_dir, filename);
-        save_mesh(filename, mesh, *attributes, **setting);
-        return filename;
+            filename = os.path.join(self.tmp_dir, filename)
+        save_mesh(filename, mesh, *attributes, **setting)
+        return filename
 
     def save_mesh_raw(self, filename, vertices, faces, voxels=None, **setting):
         """ Save raw mesh data to file.
@@ -92,29 +92,29 @@ class TestCase(unittest.TestCase):
             The absolute path to the saved file.
         """
         if not os.path.isabs(filename):
-            filename = os.path.join(self.tmp_dir, filename);
-        save_mesh_raw(filename, vertices, faces, voxels, **setting);
-        return filename;
+            filename = os.path.join(self.tmp_dir, filename)
+        save_mesh_raw(filename, vertices, faces, voxels, **setting)
+        return filename
 
     def assert_mesh_equal(self, mesh1, mesh2, attr_names=[]):
-        self.assertEqual(mesh1.dim, mesh2.dim);
-        self.assertEqual(mesh1.vertex_per_face, mesh2.vertex_per_face);
+        self.assertEqual(mesh1.dim, mesh2.dim)
+        self.assertEqual(mesh1.vertex_per_face, mesh2.vertex_per_face)
         if (mesh1.num_voxels > 0 or mesh2.num_voxels > 0):
-            self.assertEqual(mesh1.vertex_per_voxel, mesh2.vertex_per_voxel);
-        numpy.testing.assert_array_equal(mesh1.vertices, mesh2.vertices);
-        numpy.testing.assert_array_equal(mesh1.faces, mesh2.faces);
-        numpy.testing.assert_array_equal(mesh1.voxels, mesh2.voxels);
+            self.assertEqual(mesh1.vertex_per_voxel, mesh2.vertex_per_voxel)
+        numpy.testing.assert_array_equal(mesh1.vertices, mesh2.vertices)
+        numpy.testing.assert_array_equal(mesh1.faces, mesh2.faces)
+        numpy.testing.assert_array_equal(mesh1.voxels, mesh2.voxels)
 
         for attr_name in attr_names:
-            self.assertTrue(mesh1.has_attribute(attr_name));
-            self.assertTrue(mesh2.has_attribute(attr_name));
+            self.assertTrue(mesh1.has_attribute(attr_name))
+            self.assertTrue(mesh2.has_attribute(attr_name))
             numpy.testing.assert_array_equal(
                     mesh1.get_attribute(attr_name),
-                    mesh2.get_attribute(attr_name));
+                    mesh2.get_attribute(attr_name))
 
     def assert_array_equal(self, array1, array2):
-        numpy.testing.assert_array_equal(array1, array2);
+        numpy.testing.assert_array_equal(array1, array2)
 
     def assert_array_almost_equal(self, array1, array2, decimal=6):
-        numpy.testing.assert_array_almost_equal(array1, array2, decimal);
+        numpy.testing.assert_array_almost_equal(array1, array2, decimal)
 

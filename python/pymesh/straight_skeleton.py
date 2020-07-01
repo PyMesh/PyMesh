@@ -9,10 +9,10 @@ def straight_skeleton(vertices, edges):
 
     Returns:
         2 values are returned:
-        
+
             * ``points``: Straight skeleton vertices.
             * ``segments``: Straight skeleton segments.
     """
-    engine = PyMesh.StraightSkeleton();
-    engine.run(vertices, edges);
-    return engine.points, engine.segments;
+    engine = PyMesh.StraightSkeleton()
+    engine.run(vertices, edges)
+    return engine.points, engine.segments

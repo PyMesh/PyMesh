@@ -25,41 +25,41 @@ class HarmonicSolver(PyMesh.HarmonicSolver):
             PDE.  (i.e. Solved functions evaluated on the input nodes.)
 
     Example:
-        >>> solver = pymesh.HarmonicSolver.create(mesh);
-        >>> solver.bd_indices = np.unique(mesh.faces.ravel());
-        >>> solver.bd_values = ...; # Set the corresponding value.
-        >>> solver.pre_process();
-        >>> solver.solve();
-        >>> sol = solver.solution;
+        >>> solver = pymesh.HarmonicSolver.create(mesh)
+        >>> solver.bd_indices = np.unique(mesh.faces.ravel())
+        >>> solver.bd_values = ... # Set the corresponding value.
+        >>> solver.pre_process()
+        >>> solver.solve()
+        >>> sol = solver.solution
     """
 
     @classmethod
     def create(cls, mesh):
         """ Create a harmonic solver using the input mesh as domain.
         """
-        return PyMesh.HarmonicSolver.create(mesh.raw_mesh);
+        return PyMesh.HarmonicSolver.create(mesh.raw_mesh)
 
     @property
     def mesh(self):
-        nodes = self.nodes;
-        elements = self.elements;
+        nodes = self.nodes
+        elements = self.elements
         if nodes.shape[1] == 2:
-            assert(elements.shape[1] == 3);
-            return form_mesh(nodes, elements);
+            assert(elements.shape[1] == 3)
+            return form_mesh(nodes, elements)
         else:
-            assert(nodes.shape[1] == 3);
-            assert(elements.shape[1] == 4);
-            return form_mesh(nodes, np.array([]), elements);
+            assert(nodes.shape[1] == 3)
+            assert(elements.shape[1] == 4)
+            return form_mesh(nodes, np.array([]), elements)
 
     @mesh.setter
     def mesh(self, mesh):
-        dim = mesh.dim;
+        dim = mesh.dim
         if dim == 2:
-            self.nodes = mesh.vertices;
-            self.elements = mesh.faces;
+            self.nodes = mesh.vertices
+            self.elements = mesh.faces
         else:
-            assert(dim == 3);
-            assert(mesh.num_voxels > 0);
-            self.nodes = mesh.vertices;
-            self.elements = mesh.voxels;
+            assert(dim == 3)
+            assert(mesh.num_voxels > 0)
+            self.nodes = mesh.vertices
+            self.elements = mesh.voxels
 

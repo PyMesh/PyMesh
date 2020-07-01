@@ -14,14 +14,14 @@ def subdivide(mesh, order=1, method="simple"):
         tracks the original face index from the input mesh.
 
     """
-    subdiv = PyMesh.Subdivision.create(method);
-    subdiv.subdivide(mesh.vertices, mesh.faces, order);
+    subdiv = PyMesh.Subdivision.create(method)
+    subdiv.subdivide(mesh.vertices, mesh.faces, order)
 
-    vertices = subdiv.get_vertices();
-    faces = subdiv.get_faces();
-    ori_face_indices = subdiv.get_face_indices().ravel();
+    vertices = subdiv.get_vertices()
+    faces = subdiv.get_faces()
+    ori_face_indices = subdiv.get_face_indices().ravel()
 
-    subdivided_mesh = form_mesh(vertices, faces);
-    subdivided_mesh.add_attribute("ori_face_index");
-    subdivided_mesh.set_attribute("ori_face_index", ori_face_indices);
-    return subdivided_mesh;
+    subdivided_mesh = form_mesh(vertices, faces)
+    subdivided_mesh.add_attribute("ori_face_index")
+    subdivided_mesh.set_attribute("ori_face_index", ori_face_indices)
+    return subdivided_mesh

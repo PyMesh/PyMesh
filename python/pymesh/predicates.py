@@ -5,7 +5,7 @@ This module wraps the exact predicates Jonathan Richard Shewchuk.
 """
 
 # The init function would be called when predicates module is imported.
-PyMesh.exactinit();
+PyMesh.exactinit()
 
 def orient_2D(p1, p2, p3):
     """ Determine the orientation 2D points p1, p2, p3
@@ -18,7 +18,7 @@ def orient_2D(p1, p2, p3):
         negative if (p1, p2, p3) is in clockwise order.
         0.0 if they are collinear.
     """
-    return PyMesh.orient2d(p1, p2, p3);
+    return PyMesh.orient2d(p1, p2, p3)
 
 def orient_3D(p1, p2, p3, p4):
     """ Determine the orientation 3D points p1, p2, p3, p4.
@@ -31,7 +31,7 @@ def orient_3D(p1, p2, p3, p4):
         negative if p4 is above the plane formed by (p1, p2, p3).
         0.0 if they are coplanar.
     """
-    return PyMesh.orient3d(p1, p2, p3, p4);
+    return PyMesh.orient3d(p1, p2, p3, p4)
 
 def in_circle(p1, p2, p3, p4):
     """ Determine if p4 is in the circle formed by p1, p2, p3.
@@ -45,7 +45,7 @@ def in_circle(p1, p2, p3, p4):
         negative p4 is outside of the circle.
         0.0 if they are cocircular.
     """
-    return PyMesh.incircle(p1, p2, p3, p4);
+    return PyMesh.incircle(p1, p2, p3, p4)
 
 def in_sphere(p1, p2, p3, p4, p5):
     """ Determine if p5 is in the sphere formed by p1, p2, p3, p4.
@@ -59,4 +59,4 @@ def in_sphere(p1, p2, p3, p4, p5):
         negative p5 is outside of the sphere.
         0.0 if they are cospherical.
     """
-    return PyMesh.insphere(p1, p2, p3, p4, p5);
+    return PyMesh.insphere(p1, p2, p3, p4, p5)

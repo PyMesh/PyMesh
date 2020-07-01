@@ -127,5 +127,3 @@ try:
 except:
     logging.getLogger(__name__).warning(
             "TetGen is unavailable")
-
-

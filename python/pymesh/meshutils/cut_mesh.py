@@ -18,16 +18,16 @@ def cut_mesh(mesh, comp_ids=None):
         The cutted output mesh object.
     """
 
-    cutter = MeshCutter(mesh.raw_mesh);
+    cutter = MeshCutter(mesh.raw_mesh)
     if comp_ids is not None:
-        comp_ids = np.array(comp_ids);
-        cutted_mesh = Mesh(cutter.cut_with_face_labels(comp_ids));
-        cutted_mesh.add_attribute("comp_ids");
-        cutted_mesh.set_attribute("comp_ids", comp_ids);
+        comp_ids = np.array(comp_ids)
+        cutted_mesh = Mesh(cutter.cut_with_face_labels(comp_ids))
+        cutted_mesh.add_attribute("comp_ids")
+        cutted_mesh.set_attribute("comp_ids", comp_ids)
     else:
-        cutted_mesh = Mesh(cutter.cut_at_uv_discontinuity());
-        cutted_mesh.add_attribute("corner_texture");
+        cutted_mesh = Mesh(cutter.cut_at_uv_discontinuity())
+        cutted_mesh.add_attribute("corner_texture")
         cutted_mesh.set_attribute("corner_texture",
-                mesh.get_attribute("corner_texture"));
-    return cutted_mesh;
+                mesh.get_attribute("corner_texture"))
+    return cutted_mesh
 
