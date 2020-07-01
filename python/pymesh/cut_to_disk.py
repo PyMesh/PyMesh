@@ -11,6 +11,6 @@ def cut_to_disk(mesh):
     Returns: The same mesh as input but cutted so it is topologically equivalent
     to a disk.
     """
-    cutter = PyMesh.DiskCutter.create(mesh.raw_mesh);
-    cutter.run();
-    return form_mesh(cutter.vertices, cutter.faces);
+    cutter = PyMesh.DiskCutter.create(mesh.raw_mesh)
+    cutter.run()
+    return form_mesh(cutter.vertices, cutter.faces)

@@ -110,14 +110,14 @@ __all__ = [
         "vertex_normals",
         "edge_normals",
         "orient_faces",
-        ];
-__all__ += meshutils.__all__;
-__all__ += misc.__all__;
-__all__.append("wires");
+        ]
+__all__ += meshutils.__all__
+__all__ += misc.__all__
+__all__.append("wires")
 
 try:
     from .tetgen import tetgen
-    __all__.append("tetgen");
+    __all__.append("tetgen")
 except:
-    pass;
+    pass
 

@@ -24,15 +24,15 @@ def remove_isolated_vertices_raw(vertices, elements):
               ``output_vertices`` has index ``ori_vertex_index[i]`` in the input
               vertex array.
     """
-    remover = IsolatedVertexRemoval(vertices, elements);
-    num_removed = remover.run();
-    vertices = remover.get_vertices();
-    elements = remover.get_faces();
+    remover = IsolatedVertexRemoval(vertices, elements)
+    num_removed = remover.run()
+    vertices = remover.get_vertices()
+    elements = remover.get_faces()
     info = {
             "num_vertex_removed": num_removed,
             "ori_vertex_index": remover.get_ori_vertex_indices().ravel(),
-            };
-    return vertices, elements, info;
+            }
+    return vertices, elements, info
 
 def remove_isolated_vertices(mesh):
     """ Wrapper function of :func:`remove_isolated_vertices_raw`.
@@ -55,11 +55,11 @@ def remove_isolated_vertices(mesh):
     """
     if mesh.num_voxels == 0:
         vertices, faces, info = remove_isolated_vertices_raw(
-                mesh.vertices, mesh.faces);
-        output_mesh = form_mesh(vertices, faces);
+                mesh.vertices, mesh.faces)
+        output_mesh = form_mesh(vertices, faces)
     else:
         vertices, voxels, info = remove_isolated_vertices_raw(
-                mesh.vertices, mesh.voxels);
-        output_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels);
-    return output_mesh, info;
+                mesh.vertices, mesh.voxels)
+        output_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels)
+    return output_mesh, info
 

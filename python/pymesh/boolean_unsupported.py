@@ -37,51 +37,51 @@ def which(program):
     return None
 
 def quick_csg(mesh_1, mesh_2, operation, with_timing=False):
-    exe_name = None;
+    exe_name = None
     for suffix in ["mac", "linux", "win.exe"]:
-        exe_name = which("mesh_csg_{}".format(suffix));
+        exe_name = which("mesh_csg_{}".format(suffix))
         if exe_name is not None:
-            break;
+            break
     if exe_name is None:
-        raise NotImplementedError("Cannot find QuickCSG executable.");
+        raise NotImplementedError("Cannot find QuickCSG executable.")
 
-    tmp_dir = tempfile.mkdtemp();
-    file_1 = os.path.join(tmp_dir, "mesh1.off");
-    file_2 = os.path.join(tmp_dir, "mesh2.off");
-    output_file = os.path.join(tmp_dir, "out.off");
+    tmp_dir = tempfile.mkdtemp()
+    file_1 = os.path.join(tmp_dir, "mesh1.off")
+    file_2 = os.path.join(tmp_dir, "mesh2.off")
+    output_file = os.path.join(tmp_dir, "out.off")
 
     # Use anoymous to avoid QuickCSG parsing errors.
-    save_mesh(file_1, mesh_1, anonymous=True);
-    save_mesh(file_2, mesh_2, anonymous=True);
+    save_mesh(file_1, mesh_1, anonymous=True)
+    save_mesh(file_2, mesh_2, anonymous=True)
 
     op_flag = {
             "union": "-union",
             "intersection": "-inter",
             "difference": "-diff 1",
             "symmetric_difference": "-xor",
-            };
+            }
     if operation not in op_flag:
         raise NotImplementedError("Unsupported boolean operation: {}"\
-                .format(operation));
+                .format(operation))
 
     command = "{} -tess3 {} -O {} {} {}".format(
-            exe_name, op_flag[operation], output_file, file_1, file_2);
+            exe_name, op_flag[operation], output_file, file_1, file_2)
     if with_timing:
-        start_time = time();
-    check_call(command.split());
+        start_time = time()
+    check_call(command.split())
     if with_timing:
-        finish_time = time();
-        running_time = finish_time - start_time;
+        finish_time = time()
+        running_time = finish_time - start_time
 
-    assert(os.path.exists(output_file));
-    mesh = load_mesh(output_file);
+    assert(os.path.exists(output_file))
+    mesh = load_mesh(output_file)
 
-    os.remove(file_1);
-    os.remove(file_2);
-    os.remove(output_file);
-    os.rmdir(tmp_dir);
+    os.remove(file_1)
+    os.remove(file_2)
+    os.remove(output_file)
+    os.rmdir(tmp_dir)
 
     if with_timing:
         return mesh, running_time
     else:
-        return mesh;
+        return mesh

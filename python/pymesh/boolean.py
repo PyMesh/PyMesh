@@ -7,12 +7,12 @@ from . import boolean_unsupported
 
 def _auto_select_engine(dim):
     if dim == 2:
-        engine = "clipper";
+        engine = "clipper"
     elif dim == 3:
-        engine = "igl";
+        engine = "igl"
     else:
-        raise NotImplementedError("Dimension {} is not supported".format(dim));
-    return engine;
+        raise NotImplementedError("Dimension {} is not supported".format(dim))
+    return engine
 
 def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
         exact_mesh_file=None):
@@ -59,54 +59,54 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
         * "source_face": An array of indices, one per output face, into the
           concatenated faces of the input meshes.
     """
-    assert(mesh_1.dim == mesh_2.dim);
-    assert(mesh_1.vertex_per_face == 3);
-    assert(mesh_2.vertex_per_face == 3);
-    dim = mesh_1.dim;
+    assert(mesh_1.dim == mesh_2.dim)
+    assert(mesh_1.vertex_per_face == 3)
+    assert(mesh_2.vertex_per_face == 3)
+    dim = mesh_1.dim
 
     if engine == "auto":
-        engine = _auto_select_engine(dim);
+        engine = _auto_select_engine(dim)
     elif engine == "quick_csg":
         return boolean_unsupported.quick_csg(mesh_1, mesh_2, operation,
-                with_timing);
+                with_timing)
 
-    engine = PyMesh.BooleanEngine.create(engine);
-    engine.set_mesh_1(mesh_1.vertices, mesh_1.faces);
-    engine.set_mesh_2(mesh_2.vertices, mesh_2.faces);
+    engine = PyMesh.BooleanEngine.create(engine)
+    engine.set_mesh_1(mesh_1.vertices, mesh_1.faces)
+    engine.set_mesh_2(mesh_2.vertices, mesh_2.faces)
 
     if with_timing:
-        start_time = time();
+        start_time = time()
 
     if (operation == "intersection"):
-        engine.compute_intersection();
+        engine.compute_intersection()
     elif (operation == "union"):
-        engine.compute_union();
+        engine.compute_union()
     elif (operation == "difference"):
-        engine.compute_difference();
+        engine.compute_difference()
     elif (operation == "symmetric_difference"):
-        engine.compute_symmetric_difference();
+        engine.compute_symmetric_difference()
     else:
         raise NotImplementedError(
-                "Unsupported operations: {}".format(operation));
+                "Unsupported operations: {}".format(operation))
 
     if with_timing:
-        finish_time = time();
-        running_time = finish_time - start_time;
+        finish_time = time()
+        running_time = finish_time - start_time
 
-    output_mesh = form_mesh(engine.get_vertices(), engine.get_faces());
-    face_sources = engine.get_face_sources();
+    output_mesh = form_mesh(engine.get_vertices(), engine.get_faces())
+    face_sources = engine.get_face_sources()
     if len(face_sources) != 0:
-        output_mesh.add_attribute("source_face");
-        output_mesh.set_attribute("source_face", face_sources);
-        output_mesh.add_attribute("source");
-        sources = face_sources < mesh_1.num_faces;
-        output_mesh.set_attribute("source", sources);
+        output_mesh.add_attribute("source_face")
+        output_mesh.set_attribute("source_face", face_sources)
+        output_mesh.add_attribute("source")
+        sources = face_sources < mesh_1.num_faces
+        output_mesh.set_attribute("source", sources)
 
     if exact_mesh_file is not None:
-        engine.serialize_xml(exact_mesh_file);
+        engine.serialize_xml(exact_mesh_file)
 
     if with_timing:
-        return output_mesh, running_time;
+        return output_mesh, running_time
     else:
-        return output_mesh;
+        return output_mesh
 

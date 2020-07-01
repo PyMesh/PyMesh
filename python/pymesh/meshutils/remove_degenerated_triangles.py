@@ -24,13 +24,13 @@ def remove_degenerated_triangles_raw(vertices, faces, num_iterations=5):
               to an input face that contains it.
     """
     if (faces.shape[1] != 3):
-        raise RuntimeError("Faces are not triangles!");
-    remover = DegeneratedTriangleRemoval(vertices, faces);
-    remover.run(num_iterations);
+        raise RuntimeError("Faces are not triangles!")
+    remover = DegeneratedTriangleRemoval(vertices, faces)
+    remover.run(num_iterations)
     info = {
             "ori_face_indices": remover.get_ori_face_indices().squeeze(),
-            };
-    return remover.get_vertices(), remover.get_faces(), info;
+            }
+    return remover.get_vertices(), remover.get_faces(), info
 
 def remove_degenerated_triangles(mesh, num_iterations=5):
     """ Wrapper function of :func:`remove_degenerated_triangles_raw`.
@@ -45,5 +45,5 @@ def remove_degenerated_triangles(mesh, num_iterations=5):
             * ``info``: Additional information dictionary.
     """
     vertices, faces, info = remove_degenerated_triangles_raw(
-            mesh.vertices, mesh.faces, num_iterations);
-    return form_mesh(vertices, faces), info;
+            mesh.vertices, mesh.faces, num_iterations)
+    return form_mesh(vertices, faces), info
