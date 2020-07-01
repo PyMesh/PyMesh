@@ -90,6 +90,7 @@ void SimpleInflator::initialize() {
     m_face_list.clear();
     m_face_source_list.clear();
     m_num_vertex_accumulated = 0;
+    m_aspect_max = 1.0;
 
     if (!m_wire_network->with_connectivity()) {
         m_wire_network->compute_connectivity();
@@ -203,7 +204,7 @@ void SimpleInflator::connect_end_loops() {
         Float edge_length = edge_lengths(i, 0);
         const auto& end_loops = m_end_loops[i];
         const size_t num_segments = std::max(1.0,
-                std::round(edge_length / ave_thickness));
+                std::round(edge_length / ave_thickness / m_aspect_max));
         MatrixFr pts((num_segments+1)*loop_size, dim);
 
         for (size_t j=0; j<num_segments+1; j++) {

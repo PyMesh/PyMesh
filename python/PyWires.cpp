@@ -164,7 +164,8 @@ void init_Wires(py::module &m) {
         .def("get_faces", &InflatorEngine::get_faces)
         .def("get_face_sources", &InflatorEngine::get_face_sources)
         .def("get_thickness_type", &InflatorEngine::get_thickness_type)
-        .def("set_profile", &InflatorEngine::set_profile);
+        .def("set_profile", &InflatorEngine::set_profile)
+        .def("set_aspect_max", &InflatorEngine::set_aspect_max);
 
     py::enum_<InflatorEngine::ThicknessType>(inflator, "ThicknessType")
         .value("PER_VERTEX", InflatorEngine::PER_VERTEX)
