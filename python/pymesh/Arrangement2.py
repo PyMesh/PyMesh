@@ -24,18 +24,18 @@ class Arrangement2(PyMesh.Arrangement2):
         ...     [1.0, 0.0],
         ...     [1.0, 1.0],
         ...     [0.0, 1.0],
-        ...     ]);
+        ...     ])
         >>> segments = np.array([
         ...     [0, 2],
         ...     [1, 3],
         ...     ])
-        >>> arrangement = pymesh.Arrangement2();
-        >>> arrangement.points = points;
-        >>> arrangement.segments = segments;
-        >>> arrangement.run();
-        >>> wire_network = arrangement.wire_network;
+        >>> arrangement = pymesh.Arrangement2()
+        >>> arrangement.points = points
+        >>> arrangement.segments = segments
+        >>> arrangement.run()
+        >>> wire_network = arrangement.wire_network
     """
 
     @property
     def wire_network(self):
-        return WireNetwork.create_from_data(self.vertices, self.edges);
+        return WireNetwork.create_from_data(self.vertices, self.edges)

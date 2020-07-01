@@ -9,8 +9,8 @@ try:
 
         * Addition/subtraction:
 
-            >>> a = pymesh.Gmpz(1);
-            >>> b = pymesh.Gmpz(2);
+            >>> a = pymesh.Gmpz(1)
+            >>> b = pymesh.Gmpz(2)
             >>> a + b
             3
             >>> a + 10
@@ -29,8 +29,8 @@ try:
 
         * Multiplication/division:
 
-            >>> a = pymesh.Gmpz(1);
-            >>> b = pymesh.Gmpz(2);
+            >>> a = pymesh.Gmpz(1)
+            >>> b = pymesh.Gmpz(2)
             >>> a * b
             2
             >>> b / a
@@ -48,14 +48,14 @@ try:
 
         * Bit operations:
 
-            >>> a = pymesh.Gmpz(1);
-            >>> b = a << 2;
+            >>> a = pymesh.Gmpz(1)
+            >>> b = a << 2
             >>> b
             4
             >>> b <<=100
             >>> b
             5070602400912917605986812821504
-            >>> b = pymesh.Gmpz(6);
+            >>> b = pymesh.Gmpz(6)
             >>> b & a
             0
             >>> b | a
@@ -63,45 +63,45 @@ try:
 
         * size query:
 
-            >>> a = pymesh.Gmpz(1);
+            >>> a = pymesh.Gmpz(1)
             >>> a.bit_size
             1L
-            >>> a <<= 100;
+            >>> a <<= 100
             >>> a.bit_size
             101L
 
         * Convert to double:
 
-            >>> a = pymesh.Gmpz(1);
+            >>> a = pymesh.Gmpz(1)
             >>> type(a)
             <class 'PyMesh.Gmpz'>
-            >>> x = a.to_double();
+            >>> x = a.to_double()
             >>> x
             1.0
             >>> type(x)
             <type 'float'>
 
     .. _GMP: https://gmplib.org/
-    """;
+    """
 
     Gmpq.__doc__ = """ Arbitrary precision fraction class from GMP_.
 
     Example:
 
-        >>> a = pymesh.Gmpq(0.5);
+        >>> a = pymesh.Gmpq(0.5)
         >>> a
         1/2
         >>> a.numerator
         1
         >>> a.denominator
         2
-        >>> a /= 3;
+        >>> a /= 3
         >>> a
         1/6
-        >>> a += a;
+        >>> a += a
         >>> a
         1/3
-        >>> x = a.to_double();
+        >>> x = a.to_double()
         >>> x
         0.3333333333333333
 
@@ -110,9 +110,9 @@ try:
 except:
     class Gmpz:
         def __init__(self):
-            raise NotImplementedError("Gmpz feature is disabled");
+            raise NotImplementedError("Gmpz feature is disabled")
 
     class Gmpq:
         def __init__(self):
-            raise NotImplementedError("Gmpq feature is disabled");
+            raise NotImplementedError("Gmpq feature is disabled")
 

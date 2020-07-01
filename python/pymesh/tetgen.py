@@ -75,26 +75,26 @@ class tetgen(PyMesh.tetgen):
 
     Example:
 
-        >>> input_mesh = pymesh.generate_icosphere(1.0, [0.0, 0.0, 0.0]);
-        >>> tetgen = pymesh.tetgen();
-        >>> tetgen.points = input_mesh.vertices; # Input points.
-        >>> tetgen.triangles = input_mesh.faces; # Input triangles
-        >>> tetgen.max_tet_volume = 0.01;
-        >>> tetgen.verbosity = 0;
-        >>> tetgen.run(); # Execute tetgen
-        >>> mesh = tetgen.mesh; # Extract output tetrahedral mesh.
+        >>> input_mesh = pymesh.generate_icosphere(1.0, [0.0, 0.0, 0.0])
+        >>> tetgen = pymesh.tetgen()
+        >>> tetgen.points = input_mesh.vertices # Input points.
+        >>> tetgen.triangles = input_mesh.faces # Input triangles
+        >>> tetgen.max_tet_volume = 0.01
+        >>> tetgen.verbosity = 0
+        >>> tetgen.run() # Execute tetgen
+        >>> mesh = tetgen.mesh # Extract output tetrahedral mesh.
 
     """
     @property
     def mesh(self):
-        return form_mesh(self.vertices, self.faces, self.voxels);
+        return form_mesh(self.vertices, self.faces, self.voxels)
 
     def __setattr__(self, key, value):
         if not hasattr(self, key):
             # Need to disable pesky dynamic attributes so that we can catch typo
             # early on.
             raise AttributeError(
-                    "Attribute '{}' does not exists!".format(key));
+                    "Attribute '{}' does not exists!".format(key))
         else:
             PyMesh.tetgen.__setattr__(self, key, value)
 

@@ -31,28 +31,28 @@ def remove_duplicated_vertices_raw(vertices, elements, tol=1e-12, importance=Non
     """
 
     if tol == 0.0:
-        new_vertices, __, index_map = unique_rows(vertices);
-        new_elements = index_map[elements];
+        new_vertices, __, index_map = unique_rows(vertices)
+        new_elements = index_map[elements]
         info = {
                 "num_vertex_merged": len(vertices) - len(new_vertices),
                 "index_map": index_map
-                };
-        return new_vertices, new_elements, info;
+                }
+        return new_vertices, new_elements, info
     else:
-        remover = DuplicatedVertexRemoval(vertices, elements);
+        remover = DuplicatedVertexRemoval(vertices, elements)
         if importance is not None:
             if (len(importance) != len(vertices)):
                 raise RuntimeError(
-                        "Vertex importance must be of the same size as vertices");
-            remover.set_importance_level(importance);
-        num_merged = remover.run(tol);
-        new_vertices = remover.get_vertices();
-        new_elements = remover.get_faces();
+                        "Vertex importance must be of the same size as vertices")
+            remover.set_importance_level(importance)
+        num_merged = remover.run(tol)
+        new_vertices = remover.get_vertices()
+        new_elements = remover.get_faces()
         info = {
                 "num_vertex_merged": num_merged,
                 "index_map": remover.get_index_map().ravel(),
-                };
-        return new_vertices, new_elements, info;
+                }
+        return new_vertices, new_elements, info
 
 def remove_duplicated_vertices(mesh, tol=1e-12, importance=None):
     """ Wrapper function of :func:`remove_duplicated_vertices_raw`.
@@ -80,11 +80,11 @@ def remove_duplicated_vertices(mesh, tol=1e-12, importance=None):
     """
     if mesh.num_voxels == 0:
         vertices, faces, info = remove_duplicated_vertices_raw(
-                mesh.vertices, mesh.faces, tol, importance);
-        out_mesh = form_mesh(vertices, faces);
+                mesh.vertices, mesh.faces, tol, importance)
+        out_mesh = form_mesh(vertices, faces)
     else:
         vertices, voxels, info = remove_duplicated_vertices_raw(
-                mesh.vertices, mesh.voxels, tol, importance);
-        output_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels);
+                mesh.vertices, mesh.voxels, tol, importance)
+        output_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels)
 
-    return out_mesh, info;
+    return out_mesh, info

@@ -39,21 +39,21 @@ class SparseSolver(PyMesh.SparseSolver):
 
         For direct solvers:
 
-        >>> M = scipy.sparse.eye(100); # Build matrix.
-        >>> rhs = numpy.ones(100); # build right hand side.
-        >>> solver = pymesh.SparseSolver.create("LDLT");
-        >>> solver.compute(M);
-        >>> x = solver.solve(rhs);
+        >>> M = scipy.sparse.eye(100) # Build matrix.
+        >>> rhs = numpy.ones(100) # build right hand side.
+        >>> solver = pymesh.SparseSolver.create("LDLT")
+        >>> solver.compute(M)
+        >>> x = solver.solve(rhs)
 
         For iterative solvers:
 
-        >>> M = scipy.sparse.eye(100); # Build matrix.
-        >>> rhs = numpy.ones(100); # build right hand side.
-        >>> solver = pymesh.SparseSolver.create("CG");
-        >>> solver.tolerance = 1e-10;
-        >>> solver.max_iterations = 50;
-        >>> solver.compute(M);
-        >>> x = solver.solve(rhs);
+        >>> M = scipy.sparse.eye(100) # Build matrix.
+        >>> rhs = numpy.ones(100) # build right hand side.
+        >>> solver = pymesh.SparseSolver.create("CG")
+        >>> solver.tolerance = 1e-10
+        >>> solver.max_iterations = 50
+        >>> solver.compute(M)
+        >>> x = solver.solve(rhs)
 
     .. _`Eigen::SimplicialLLT`: https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLLT.html
     .. _`Eigen::SimplicialLDLT`: https://eigen.tuxfamily.org/dox/classEigen_1_1SimplicialLDLT.html
@@ -72,8 +72,8 @@ class SparseSolver(PyMesh.SparseSolver):
     """
     @property
     def supported_solvers(self):
-        return self.get_supported_solvers();
+        return self.get_supported_solvers()
 
     @classmethod
     def get_supported_solvers(cls):
-        return PyMesh.SparseSolver.get_supported_solvers();
+        return PyMesh.SparseSolver.get_supported_solvers()

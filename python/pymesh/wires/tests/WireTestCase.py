@@ -7,7 +7,7 @@ import numpy as np
 
 class WireTestCase(TestCase):
     def setUp(self):
-        super(WireTestCase, self).setUp();
+        super(WireTestCase, self).setUp()
 
     def get_brick5(self):
         vertices = np.array([
@@ -31,7 +31,7 @@ class WireTestCase(TestCase):
             0.000000, -1.500000,  0.000000,
             0.000000,  0.000000,  1.500000,
             0.000000,  0.000000, -1.500000,
-            ], dtype=float).reshape((-1, 3));
+            ], dtype=float).reshape((-1, 3))
         edges = np.array([
             8, 9,
             14, 5,
@@ -63,8 +63,8 @@ class WireTestCase(TestCase):
             10, 18,
             13, 19,
             12, 20,
-            ], dtype=int).reshape((-1, 2)) - 1;
-        return WireNetwork.create_from_data(vertices, edges);
+            ], dtype=int).reshape((-1, 2)) - 1
+        return WireNetwork.create_from_data(vertices, edges)
 
     def get_star_3D(self):
         vertices = np.array([
@@ -77,7 +77,7 @@ class WireTestCase(TestCase):
             [1, 1, 1],
             [0, 1, 1],
             [0.5, 0.5, 0.5]
-            ], dtype=float);
+            ], dtype=float)
         edges = np.array([
             [0, 8],
             [1, 8],
@@ -87,8 +87,8 @@ class WireTestCase(TestCase):
             [5, 8],
             [6, 8],
             [7, 8],
-            ]);
-        return WireNetwork.create_from_data(vertices, edges);
+            ])
+        return WireNetwork.create_from_data(vertices, edges)
 
     def get_star_2D(self):
         vertices = np.array([
@@ -97,14 +97,14 @@ class WireTestCase(TestCase):
             [1, 1],
             [0, 1],
             [0.5, 0.5]
-            ], dtype=float);
+            ], dtype=float)
         edges = np.array([
             [0, 4],
             [1, 4],
             [2, 4],
             [3, 4],
-            ]);
-        return WireNetwork.create_from_data(vertices, edges);
+            ])
+        return WireNetwork.create_from_data(vertices, edges)
 
     def get_cross_3D(self):
         vertices = np.array([
@@ -115,7 +115,7 @@ class WireTestCase(TestCase):
             [ 0.0, 0.0, 0.5],
             [ 0.0, 0.0,-0.5],
             [ 0.0, 0.0, 0.0]
-            ], dtype=float);
+            ], dtype=float)
         edges = np.array([
             [0, 6],
             [1, 6],
@@ -123,8 +123,8 @@ class WireTestCase(TestCase):
             [3, 6],
             [4, 6],
             [5, 6],
-            ]);
-        return WireNetwork.create_from_data(vertices, edges);
+            ])
+        return WireNetwork.create_from_data(vertices, edges)
 
     def get_pattern1065(self):
         vertices = np.array([
@@ -167,7 +167,7 @@ class WireTestCase(TestCase):
             -0.250000, -0.250000, -0.250000,
             -0.250000, -0.250000, -0.500000,
             -0.500000, -0.250000, -0.250000,
-            ], dtype=float).reshape((-1, 3));
+            ], dtype=float).reshape((-1, 3))
         edges = np.array([
             3, 2,
             3, 4,
@@ -223,14 +223,14 @@ class WireTestCase(TestCase):
             14, 1,
             36, 14,
             36, 37,
-            ]).reshape((-1, 2)) -1;
-        return WireNetwork.create_from_data(vertices, edges);
+            ]).reshape((-1, 2)) -1
+        return WireNetwork.create_from_data(vertices, edges)
 
     def load_wires(self, wire_file):
-        wire_network = WireNetwork();
-        wire_network.load_from_file(wire_file);
-        return wire_network;
+        wire_network = WireNetwork()
+        wire_network.load_from_file(wire_file)
+        return wire_network
 
     def save_wires(self, wire_network, wire_file):
-        wire_network.write_to_file(wire_file);
+        wire_network.write_to_file(wire_file)
 

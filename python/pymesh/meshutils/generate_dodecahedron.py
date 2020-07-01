@@ -17,7 +17,7 @@ def generate_dodecahedron(radius, center):
     .. _dodecahedron: http://mathworld.wolfram.com/Dodecahedron.html
     """
 
-    #r = (1.0 + math.sqrt(5.0)) / 2.0;
+    #r = (1.0 + math.sqrt(5.0)) / 2.0
     vertices = np.array([
         -0.57735,  -0.57735,  0.57735,
         0.934172,  0.356822,  0,
@@ -39,7 +39,7 @@ def generate_dodecahedron(radius, center):
         0.57735,  -0.57735,  -0.57735,
         0.57735,  -0.57735,  0.57735,
         -0.57735,  -0.57735,  -0.57735,
-        ]).reshape((-1,3), order="C");
+        ]).reshape((-1,3), order="C")
     faces = np.array([
         19, 3, 2,
         12, 19, 2,
@@ -77,11 +77,11 @@ def generate_dodecahedron(radius, center):
         13, 1, 11,
         12, 13, 11,
         19, 12, 11,
-        ]).reshape((-1, 3), order="C")-1;
+        ]).reshape((-1, 3), order="C")-1
 
-    mesh = form_mesh(vertices, faces);
+    mesh = form_mesh(vertices, faces)
 
-    length = norm(mesh.vertices, axis=1).reshape((-1, 1));
-    vertices = mesh.vertices / length * radius + center;
+    length = norm(mesh.vertices, axis=1).reshape((-1, 1))
+    vertices = mesh.vertices / length * radius + center
 
-    return form_mesh(vertices, mesh.faces);
+    return form_mesh(vertices, mesh.faces)

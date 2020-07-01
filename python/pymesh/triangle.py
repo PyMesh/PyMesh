@@ -89,14 +89,14 @@ class triangle(PyMesh.triangle):
         ...     [1.0, 0.0],
         ...     [1.0, 1.0],
         ...     [0.0, 1.0],
-        ...     ]);
-        >>> tri = pymesh.triangle();
-        >>> tri.points = vertices;
-        >>> tri.max_area = 0.05;
-        >>> tri.split_boundary = False;
-        >>> tri.verbosity = 0;
-        >>> tri.run(); # Execute triangle.
-        >>> mesh = tri.mesh; # output triangulation.
+        ...     ])
+        >>> tri = pymesh.triangle()
+        >>> tri.points = vertices
+        >>> tri.max_area = 0.05
+        >>> tri.split_boundary = False
+        >>> tri.verbosity = 0
+        >>> tri.run() # Execute triangle.
+        >>> mesh = tri.mesh # output triangulation.
 
     References:
 
@@ -110,26 +110,26 @@ class triangle(PyMesh.triangle):
     """
     @property
     def mesh(self):
-        return form_mesh(self.vertices, self.faces);
+        return form_mesh(self.vertices, self.faces)
 
     @property
     def DIVIDE_AND_CONQUER(self):
-        return Algorithm.DIVIDE_AND_CONQUER; 
+        return Algorithm.DIVIDE_AND_CONQUER
 
     @property
     def SWEEPLINE(self):
-        return Algorithm.SWEEPLINE; 
+        return Algorithm.SWEEPLINE
 
     @property
     def INCREMENTAL(self):
-        return Algorithm.INCREMENTAL; 
+        return Algorithm.INCREMENTAL
 
     def __setattr__(self, key, value):
         if not hasattr(self, key):
             # Need to disable pesky dynamic attributes so that we can catch typo
             # early on.
             raise AttributeError(
-                    "Attribute '{}' does not exists!".format(key));
+                    "Attribute '{}' does not exists!".format(key))
         else:
             PyMesh.triangle.__setattr__(self, key, value)
 

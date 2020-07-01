@@ -23,11 +23,11 @@ def split_long_edges_raw(vertices, faces, max_edge_length):
             * ``ori_face_indices``: index array that maps output faces to their
               source input faces.
     """
-    remover = LongEdgeRemoval(vertices, faces);
-    remover.run(max_edge_length);
-    vertices = remover.get_vertices();
-    faces = remover.get_faces();
-    return vertices, faces, {"ori_face_indices": remover.get_ori_faces()};
+    remover = LongEdgeRemoval(vertices, faces)
+    remover.run(max_edge_length)
+    vertices = remover.get_vertices()
+    faces = remover.get_faces()
+    return vertices, faces, {"ori_face_indices": remover.get_ori_faces()}
 
 def split_long_edges(mesh, max_edge_length):
     """ Wrapper function of :func:`split_long_edges_raw`.
@@ -44,5 +44,5 @@ def split_long_edges(mesh, max_edge_length):
             * ``info``: Additional information dictionary.
     """
     vertices, faces, info = split_long_edges_raw(
-            mesh.vertices, mesh.faces, max_edge_length);
-    return form_mesh(vertices, faces), info;
+            mesh.vertices, mesh.faces, max_edge_length)
+    return form_mesh(vertices, faces), info
