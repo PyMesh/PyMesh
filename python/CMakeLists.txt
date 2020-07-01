@@ -27,7 +27,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyWindingNumber.cpp
     PyWires.cpp)
 TARGET_LINK_LIBRARIES(PyMesh PRIVATE
-    Mesh
+    PyMesh::Mesh
     PyMesh::Tools::Assembler
     PyMesh::Tools::MeshUtils
     PyMesh::Tools::CGAL

@@ -1,24 +1,25 @@
 # Enumerate source files
-FILE(GLOB_RECURSE SRC_FILES *.cpp *.c)
-FILE(GLOB_RECURSE INC_FILES */*.h)
+file(GLOB_RECURSE SRC_FILES *.cpp *.c)
+file(GLOB_RECURSE INC_FILES */*.h)
 
 # Add executable and library
-ADD_LIBRARY(Mesh SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(Mesh PROPERTIES OUTPUT_NAME "PyMesh-Mesh")
-TARGET_LINK_LIBRARIES(Mesh
+add_library(Mesh SHARED ${SRC_FILES} ${INC_FILES})
+set_target_properties(Mesh PROPERTIES OUTPUT_NAME "PyMesh-Mesh")
+add_library(PyMesh::Mesh ALIAS Mesh)
+
+target_link_libraries(Mesh
     PUBLIC
         PyMesh::Eigen
         PyMesh::TBB
 )
-TARGET_INCLUDE_DIRECTORIES(Mesh SYSTEM
+
+target_include_directories(Mesh SYSTEM
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
+
 # Google sparse/dense hash
-IF (SPARSEHASH_FOUND)
-    TARGET_LINK_LIBRARIES(Mesh
-        PRIVATE
-            PyMesh::SparseHash
-    )
-ENDIF (SPARSEHASH_FOUND)
+if (SPARSEHASH_FOUND)
+    target_link_libraries(Mesh PRIVATE PyMesh::SparseHash)
+endif (SPARSEHASH_FOUND)
 
