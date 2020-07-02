@@ -70,10 +70,10 @@ class cmake_build(build):
         """
         Config and build pymesh.
         """
+        python_version = "{v[0]}.{v[1]}".format(v=platform.python_version_tuple())
         self._build(
-            "build",
-            " -DPythonLibsNew_FIND_VERSION={v[0]}.{v[1]}".format(
-                v=platform.python_version_tuple()),
+            "build_{}".format(python_version),
+            " -DPythonLibsNew_FIND_VERSION={}".format(python_version),
             False,
         )
 
