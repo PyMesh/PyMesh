@@ -28,7 +28,7 @@ def extract_rpaths_darwin(lib_file):
 
 def extract_rpaths(lib_file):
     system_name = platform.system().lower()
-    if system_name == "posix":
+    if system_name == "linux":
         return []
     elif system_name == "darwin":
         return extract_rpaths_darwin(lib_file)
@@ -78,7 +78,7 @@ def get_dependencies_darwin(lib_file, dep_dir):
 
 def get_dependencies(lib_file, dep_dir):
     system_name = platform.system().lower()
-    if system_name == "posix":
+    if system_name == "linux":
         return get_dependencies_posix(lib_file, dep_dir)
     elif system_name == "darwin":
         return get_dependencies_darwin(lib_file, dep_dir)
@@ -119,7 +119,7 @@ def migrate_dependency_darwin(lib_file, dep_file, dep_dir, rpaths):
 
 def migrate_dependency(lib_file, dep_file, dep_dir, rpaths):
     system_name = platform.system().lower()
-    if system_name == "posix":
+    if system_name == "linux":
         return migrate_dependency_posix(lib_file, dpe_file, dep_dir, rpaths)
     elif system_name == "darwin":
         return migrate_dependency_darwin(lib_file, dep_file, dep_dir, rpaths)
@@ -147,7 +147,7 @@ def reset_rpath_darwin(lib_file, dep_dir, rpaths):
 
 def reset_rpath(lib_file, dep_dir, rpaths):
     system_name = platform.system().lower()
-    if system_name == "posix":
+    if system_name == "linux":
         return reset_rpath_posix(lib_file, dep_dir, rpaths)
     elif system_name == "darwin":
         return reset_rpath_darwin(lib_file, dep_dir, rpaths)
