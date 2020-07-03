@@ -1,18 +1,25 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(IGL)
-ADD_LIBRARY(lib_OuterHull SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_OuterHull PROPERTIES OUTPUT_NAME "PyMesh-OuterHull")
-TARGET_LINK_LIBRARIES(lib_OuterHull
+add_library(lib_OuterHull SHARED)
+add_library(PyMesh::OuterHull ALIAS lib_OuterHull)
+set_target_properties(lib_OuterHull PROPERTIES OUTPUT_NAME "PyMesh-OuterHull")
+target_link_libraries(lib_OuterHull
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
     PRIVATE
-        PyMesh::Tools::MeshUtils
-        PyMesh::Tools::IGL
-        PyMesh::Tools::SelfIntersection
+        PyMesh::MeshUtils
 )
 
-ADD_LIBRARY(PyMesh::Tools::OuterHull ALIAS lib_OuterHull)
+if (TARGET PyMesh::IGL AND TARGET PyMesh::SelfIntersection)
+    add_subdirectory(IGL)
+    target_link_libraries(lib_OuterHull
+        PRIVATE
+            PyMesh::IGL
+            PyMesh::SelfIntersection
+    )
+endif()
+
+target_sources(lib_OuterHull PUBLIC ${INC_FILES} ${SRC_FILES})

@@ -1,7 +1,7 @@
 # Find FastWindingNumber library (https://github.com/sideeffects/WindingNumber)
 # The following variables are set
 #
-# FAST_WINDING_NUMBER_FOUND
+# FastWindingNumber_FOUND
 # FAST_WINDING_NUMBER_INCLUDE_DIRS
 # FAST_WINDING_NUMBER_LIBRARIES
 #
@@ -31,7 +31,7 @@ IF (NOT TBB_FOUND)
 ENDIF (NOT TBB_FOUND)
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(FAST_WINDING_NUMBER
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(FastWindingNumber
     "FastWindingNumber library cannot be found.  Consider set FAST_WINDING_NUMBER_PATH environment variable"
     FAST_WINDING_NUMBER_INCLUDE_DIRS
     FAST_WINDING_NUMBER_LIBRARIES)

@@ -1,30 +1,44 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(Cork)
-ADD_SUBDIRECTORY(Clipper)
-ADD_SUBDIRECTORY(IGL)
-ADD_SUBDIRECTORY(CGAL)
-ADD_SUBDIRECTORY(Carve)
-ADD_SUBDIRECTORY(BSP)
+add_library(lib_Boolean SHARED)
+set_target_properties(lib_Boolean PROPERTIES OUTPUT_NAME "PyMesh-Boolean")
+add_library(PyMesh::Boolean ALIAS lib_Boolean)
 
-ADD_LIBRARY(lib_Boolean SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_Boolean PROPERTIES OUTPUT_NAME "PyMesh-Boolean")
-TARGET_LINK_LIBRARIES(lib_Boolean
-    PUBLIC
-        Mesh
-        PyMesh::Tools
-    PRIVATE
-        lib_MeshUtils
-        PyMesh::Cork
-        PyMesh::Clipper
-        PyMesh::Carve
-        PyMesh::BSP
-        PyMesh::TinyXML2
-        PyMesh::Tools::Triangle
-        PyMesh::Tools::IGL
-        PyMesh::Tools::CGAL
-)
+target_link_libraries(lib_Boolean PUBLIC PyMesh::Mesh PyMesh::Tools)
 
-ADD_LIBRARY(PyMesh::Tools::Boolean ALIAS lib_Boolean)
+if (TARGET PyMesh::third_party::Cork)
+    add_subdirectory(Cork)
+    target_link_libraries(lib_Boolean PUBLIC PyMesh::third_party::Cork)
+endif()
+
+if (TARGET PyMesh::third_party::Clipper AND
+        TARGET PyMesh::Triangle)
+    add_subdirectory(Clipper)
+    target_link_libraries(lib_Boolean PUBLIC
+        PyMesh::third_party::Clipper
+        PyMesh::Triangle)
+endif()
+
+if (TARGET PyMesh::IGL)
+    add_subdirectory(IGL)
+    target_link_libraries(lib_Boolean PUBLIC PyMesh::IGL)
+endif()
+
+if (TARGET PyMesh::CGAL)
+    add_subdirectory(CGAL)
+    target_link_libraries(lib_Boolean PUBLIC PyMesh::CGAL)
+endif()
+
+if (TARGET PyMesh::third_party::Carve)
+    add_subdirectory(Carve)
+    target_link_libraries(lib_Boolean PUBLIC PyMesh::third_party::Carve)
+endif()
+
+if (TARGET PyMesh::third_party::BSP)
+    add_subdirectory(BSP)
+    target_link_libraries(lib_Boolean PUBLIC PyMesh::third_party::BSP)
+endif()
+
+target_sources(lib_Boolean PUBLIC ${SRC_FILES} ${INC_FILES})

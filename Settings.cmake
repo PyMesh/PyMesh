@@ -21,6 +21,7 @@ SET(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 SET(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 # Include all libraries
+cmake_policy(SET CMP0074 NEW)
 FIND_PACKAGE(AllDependencies)
 
 # Options

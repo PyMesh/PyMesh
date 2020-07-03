@@ -1,28 +1,45 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(IGL)
-ADD_SUBDIRECTORY(CGAL)
-ADD_SUBDIRECTORY(ShewchukTriangle)
-ADD_SUBDIRECTORY(Geogram)
-ADD_SUBDIRECTORY(Jigsaw)
-ADD_SUBDIRECTORY(MMG)
-
-ADD_LIBRARY(lib_Triangulation SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_Triangulation PROPERTIES OUTPUT_NAME
+add_library(lib_Triangulation SHARED)
+add_library(PyMesh::Triangulation ALIAS lib_Triangulation)
+set_target_properties(lib_Triangulation PROPERTIES OUTPUT_NAME
     "PyMesh-Triangulation")
-TARGET_LINK_LIBRARIES(lib_Triangulation
+target_link_libraries(lib_Triangulation
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
-    PRIVATE
-        PyMesh::Tools::IGL
-        PyMesh::Tools::CGAL
-        PyMesh::Tools::Triangle
-        PyMesh::Tools::Geogram
-        PyMesh::Jigsaw
-        PyMesh::MMG
 )
 
-ADD_LIBRARY(PyMesh::Tools::Triangulation ALIAS lib_Triangulation)
+if (TARGET PyMesh::IGL)
+    add_subdirectory(IGL)
+    target_link_libraries(lib_Triangulation PRIVATE PyMesh::IGL)
+endif()
+
+if (TARGET PyMesh::CGAL)
+    add_subdirectory(CGAL)
+    target_link_libraries(lib_Triangulation PRIVATE PyMesh::CGAL)
+endif()
+
+if (TARGET PyMesh::Triangle)
+    add_subdirectory(ShewchukTriangle)
+    target_link_libraries(lib_Triangulation PRIVATE PyMesh::Triangle)
+endif()
+
+if (TARGET PyMesh::Geogram)
+    add_subdirectory(Geogram)
+    target_link_libraries(lib_Triangulation PRIVATE PyMesh::Geogram)
+endif()
+
+if (TARGET PyMesh::third_party::Jigsaw)
+    add_subdirectory(Jigsaw)
+    target_link_libraries(lib_Triangulation PRIVATE PyMesh::third_party::Jigsaw)
+endif()
+
+if (TARGET PyMesh::third_party::MMG)
+    add_subdirectory(MMG)
+    target_link_libraries(lib_Triangulation PRIVATE PyMesh::third_party::MMG)
+endif()
+
+target_sources(lib_Triangulation PUBLIC ${SRC_FILES} ${INC_FILES})

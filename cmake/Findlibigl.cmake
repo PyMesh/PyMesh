@@ -15,7 +15,7 @@ FIND_PATH(LIBIGL_INCLUDE_DIRS igl/igl_inline.h
     /usr/include/)
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(LIBIGL
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(libigl
     "LIBIGL library cannot be found.  Consider set LIBIGL_PATH environment variable"
     LIBIGL_INCLUDE_DIRS)
 

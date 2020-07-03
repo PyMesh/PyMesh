@@ -1,29 +1,28 @@
-FILE(GLOB SRC_FILES *.cpp)
-FILE(GLOB INC_FILES *.h)
-FILE(GLOB DEP_FILES *.i)
+if (TARGET PyMesh::Triangle AND TARGET PyMesh::TetGen)
+    file(GLOB SRC_FILES *.cpp)
+    file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(Attributes)
-ADD_SUBDIRECTORY(WireNetwork)
-ADD_SUBDIRECTORY(Tiler)
-ADD_SUBDIRECTORY(Misc)
-ADD_SUBDIRECTORY(Inflator)
-ADD_SUBDIRECTORY(Interfaces)
-ADD_SUBDIRECTORY(Parameters)
+    add_subdirectory(Attributes)
+    add_subdirectory(WireNetwork)
+    add_subdirectory(Tiler)
+    add_subdirectory(Misc)
+    add_subdirectory(Inflator)
+    add_subdirectory(Interfaces)
+    add_subdirectory(Parameters)
 
-ADD_LIBRARY(lib_Wires SHARED ${SRC_FILES} ${INC_FILES})
-TARGET_LINK_LIBRARIES(lib_Wires
-    PUBLIC
-        Mesh
-        PyMesh::Tools
-    PRIVATE
-        PyMesh::Tools::MeshUtils
-        PyMesh::Tools::ConvexHull
-        PyMesh::Tools::Triangle
-        PyMesh::Tools::Boolean
-        PyMesh::Tools::TetGen
-        PyMesh::Tools::BVH
-        Boost::boost
-)
-SET_TARGET_PROPERTIES(lib_Wires PROPERTIES OUTPUT_NAME "PyMesh-Wires")
-
-ADD_LIBRARY(PyMesh::Tools::Wires ALIAS lib_Wires)
+    add_library(lib_Wires SHARED ${SRC_FILES} ${INC_FILES})
+    add_library(PyMesh::Wires ALIAS lib_Wires)
+    target_link_libraries(lib_Wires
+        PUBLIC
+            PyMesh::Mesh
+            PyMesh::Tools
+        PRIVATE
+            PyMesh::MeshUtils
+            PyMesh::ConvexHull
+            PyMesh::Triangle
+            PyMesh::Boolean
+            PyMesh::TetGen
+            PyMesh::BVH
+    )
+    set_target_properties(lib_Wires PROPERTIES OUTPUT_NAME "PyMesh-Wires")
+endif()

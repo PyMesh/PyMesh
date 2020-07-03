@@ -1,15 +1,16 @@
-SET(SRC_FILES TriangleWrapper.cpp)
-SET(INC_FILES TriangleWrapper.h)
+set(SRC_FILES TriangleWrapper.cpp)
+set(INC_FILES TriangleWrapper.h)
 
-ADD_LIBRARY(lib_Triangle SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_Triangle PROPERTIES OUTPUT_NAME "PyMesh-Triangle")
-TARGET_LINK_LIBRARIES(lib_Triangle 
-    PUBLIC
-        Mesh
-        PyMesh::Tools
-        PyMesh::Triangle
-    PRIVATE
-        PyMesh::Tools::MeshUtils
-)
-
-ADD_LIBRARY(PyMesh::Tools::Triangle ALIAS lib_Triangle)
+if (TARGET PyMesh::third_party::Triangle)
+    add_library(lib_Triangle SHARED ${SRC_FILES} ${INC_FILES})
+    set_target_properties(lib_Triangle PROPERTIES OUTPUT_NAME "PyMesh-Triangle")
+    target_link_libraries(lib_Triangle 
+        PUBLIC
+            PyMesh::Mesh
+            PyMesh::Tools
+            PyMesh::third_party::Triangle
+        PRIVATE
+            PyMesh::MeshUtils
+    )
+    add_library(PyMesh::Triangle ALIAS lib_Triangle)
+endif ()

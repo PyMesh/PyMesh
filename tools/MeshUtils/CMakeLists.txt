@@ -1,14 +1,14 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp)
+file(GLOB INC_FILES *.h)
 
-ADD_LIBRARY(lib_MeshUtils SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_MeshUtils PROPERTIES OUTPUT_NAME "PyMesh-MeshUtils")
-TARGET_LINK_LIBRARIES(lib_MeshUtils
+add_library(lib_MeshUtils SHARED ${SRC_FILES} ${INC_FILES})
+set_target_properties(lib_MeshUtils PROPERTIES OUTPUT_NAME "PyMesh-MeshUtils")
+target_link_libraries(lib_MeshUtils
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
-        PyMesh::Tools::Predicates
+        PyMesh::Predicates
 )
 
-ADD_LIBRARY(PyMesh::Tools::MeshUtils ALIAS lib_MeshUtils)
+add_library(PyMesh::MeshUtils ALIAS lib_MeshUtils)

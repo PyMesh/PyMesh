@@ -1,9 +1,9 @@
 # Source files
-SET(SRC_FILES predicates.c)
-SET(INC_FILES predicates.h)
+set(SRC_FILES predicates.c)
+set(INC_FILES predicates.h)
 
-ADD_LIBRARY(lib_Predicates STATIC ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_Predicates PROPERTIES OUTPUT_NAME "PyMesh-Predicates")
-TARGET_LINK_LIBRARIES(lib_Predicates PUBLIC PyMesh::Tools)
+add_library(lib_Predicates STATIC ${SRC_FILES} ${INC_FILES})
+set_target_properties(lib_Predicates PROPERTIES OUTPUT_NAME "PyMesh-Predicates")
+target_link_libraries(lib_Predicates PUBLIC PyMesh::Tools)
 
-ADD_LIBRARY(PyMesh::Tools::Predicates ALIAS lib_Predicates)
+add_library(PyMesh::Predicates ALIAS lib_Predicates)

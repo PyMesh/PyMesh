@@ -1,17 +1,20 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(IGL)
-ADD_LIBRARY(lib_SelfIntersection SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_SelfIntersection PROPERTIES OUTPUT_NAME
+add_library(lib_SelfIntersection SHARED)
+add_library(PyMesh::SelfIntersection ALIAS lib_SelfIntersection)
+set_target_properties(lib_SelfIntersection PROPERTIES OUTPUT_NAME
     "PyMesh-SelfIntersection")
-TARGET_LINK_LIBRARIES(lib_SelfIntersection
+target_link_libraries(lib_SelfIntersection
     PUBLIC
         PyMesh::Tools
-        Mesh
-    PRIVATE
-        PyMesh::Tools::IGL
+        PyMesh::Mesh
 )
 
-ADD_LIBRARY(PyMesh::Tools::SelfIntersection ALIAS lib_SelfIntersection)
+if (TARGET PyMesh::IGL)
+    add_subdirectory(IGL)
+    target_link_libraries(lib_SelfIntersection PRIVATE PyMesh::IGL)
+endif()
+
+target_sources(lib_SelfIntersection PUBLIC ${INC_FILES} ${SRC_FILES})
