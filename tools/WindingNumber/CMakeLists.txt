@@ -23,4 +23,4 @@ if (TARGET PyMesh::third_party::FastWindingNumber)
         PyMesh::third_party::FastWindingNumber)
 endif()
 
-target_sources(lib_WindingNumber PUBLIC ${SRC_FILES} ${INC_FILES})
+target_sources(lib_WindingNumber PRIVATE ${SRC_FILES} ${INC_FILES})

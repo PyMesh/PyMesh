@@ -1,6 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
-#ifdef WITH_CGAL
 
 #include <algorithm>
 #include <string>
@@ -135,6 +134,7 @@ class CGALBooleanEngineTest : public BooleanEngineTest {
 };
 
 TEST_F(CGALBooleanEngineTest, disjoint_union) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -150,6 +150,7 @@ TEST_F(CGALBooleanEngineTest, disjoint_union) {
 }
 
 TEST_F(CGALBooleanEngineTest, disjoint_intersection) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -163,6 +164,7 @@ TEST_F(CGALBooleanEngineTest, disjoint_intersection) {
 }
 
 TEST_F(CGALBooleanEngineTest, disjoint_difference) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -178,6 +180,7 @@ TEST_F(CGALBooleanEngineTest, disjoint_difference) {
 }
 
 TEST_F(CGALBooleanEngineTest, disjoint_symmetric_difference) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -193,6 +196,7 @@ TEST_F(CGALBooleanEngineTest, disjoint_symmetric_difference) {
 }
 
 TEST_F(CGALBooleanEngineTest, overlap_union) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -209,6 +213,7 @@ TEST_F(CGALBooleanEngineTest, overlap_union) {
 }
 
 TEST_F(CGALBooleanEngineTest, overlap_intersection) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -225,6 +230,7 @@ TEST_F(CGALBooleanEngineTest, overlap_intersection) {
 }
 
 TEST_F(CGALBooleanEngineTest, overlap_difference) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -241,6 +247,7 @@ TEST_F(CGALBooleanEngineTest, overlap_difference) {
 }
 
 TEST_F(CGALBooleanEngineTest, overlap_symmetric_difference) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -257,6 +264,7 @@ TEST_F(CGALBooleanEngineTest, overlap_symmetric_difference) {
 }
 
 TEST_F(CGALBooleanEngineTest, open_surface) {
+    if (!BooleanEngine::supports("cgal")) return;
     MeshPtr mesh = load_mesh("cube.obj");
     MatrixFr box_vertices = extract_vertices(mesh);
     MatrixIr box_faces = extract_faces(mesh);
@@ -276,4 +284,3 @@ TEST_F(CGALBooleanEngineTest, open_surface) {
     }, RuntimeError);
 }
 
-#endif

@@ -1,7 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
-#ifdef WITH_CGAL
-#ifdef WITH_CGAL_COREFINEMENT
 
 #include <algorithm>
 #include <string>
@@ -136,6 +134,7 @@ class CGALCorefinementEngineTest : public BooleanEngineTest {
 };
 
 TEST_F(CGALCorefinementEngineTest, disjoint_union) {
+    if (!BooleanEngine::supports("corefinement")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -151,6 +150,7 @@ TEST_F(CGALCorefinementEngineTest, disjoint_union) {
 }
 
 TEST_F(CGALCorefinementEngineTest, disjoint_intersection) {
+    if (!BooleanEngine::supports("corefinement")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -164,6 +164,7 @@ TEST_F(CGALCorefinementEngineTest, disjoint_intersection) {
 }
 
 TEST_F(CGALCorefinementEngineTest, disjoint_difference) {
+    if (!BooleanEngine::supports("corefinement")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_disjoint_setting(mesh);
@@ -182,6 +183,7 @@ TEST_F(CGALCorefinementEngineTest, disjoint_difference) {
  * This test causes seg fault. Disable it for now... :(
  */
 TEST_F(CGALCorefinementEngineTest, DISABLED_overlap_union) {
+    if (!BooleanEngine::supports("corefinement")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -198,6 +200,7 @@ TEST_F(CGALCorefinementEngineTest, DISABLED_overlap_union) {
 }
 
 TEST_F(CGALCorefinementEngineTest, overlap_intersection) {
+    if (!BooleanEngine::supports("corefinement")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -214,6 +217,7 @@ TEST_F(CGALCorefinementEngineTest, overlap_intersection) {
 }
 
 TEST_F(CGALCorefinementEngineTest, overlap_difference) {
+    if (!BooleanEngine::supports("corefinement")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr cgal_engine = get_overlap_setting(mesh);
@@ -229,5 +233,3 @@ TEST_F(CGALCorefinementEngineTest, overlap_difference) {
     assert_on_boundary(vertices, faces, -corner);
 }
 
-#endif
-#endif

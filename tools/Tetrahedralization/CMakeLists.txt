@@ -46,4 +46,4 @@ if (TARGET PyMesh::third_party::TetWild)
         PyMesh::third_party::TetWild)
 endif()
 
-target_sources(lib_Tetrahedralization PUBLIC ${SRC_FILES} ${INC_FILES})
+target_sources(lib_Tetrahedralization PRIVATE ${SRC_FILES} ${INC_FILES})

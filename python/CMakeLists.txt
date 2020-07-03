@@ -29,6 +29,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
 target_link_libraries(PyMesh PRIVATE
     PyMesh::Mesh
     PyMesh::Assembler
+    PyMesh::Envelope
     PyMesh::MeshUtils
     PyMesh::Predicates
     PyMesh::Compression

@@ -7,6 +7,7 @@ target_link_libraries(Wires_tests
     PRIVATE
         PyMesh::UnitTest
         PyMesh::Wires
+        PyMesh::BVH
 )
 target_include_directories(Wires_tests
     PRIVATE

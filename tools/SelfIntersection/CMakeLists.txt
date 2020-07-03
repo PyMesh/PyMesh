@@ -17,4 +17,4 @@ if (TARGET PyMesh::IGL)
     target_link_libraries(lib_SelfIntersection PRIVATE PyMesh::IGL)
 endif()
 
-target_sources(lib_SelfIntersection PUBLIC ${INC_FILES} ${SRC_FILES})
+target_sources(lib_SelfIntersection PRIVATE ${INC_FILES} ${SRC_FILES})

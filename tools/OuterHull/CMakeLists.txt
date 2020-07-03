@@ -22,4 +22,4 @@ if (TARGET PyMesh::IGL AND TARGET PyMesh::SelfIntersection)
     )
 endif()
 
-target_sources(lib_OuterHull PUBLIC ${INC_FILES} ${SRC_FILES})
+target_sources(lib_OuterHull PRIVATE ${INC_FILES} ${SRC_FILES})

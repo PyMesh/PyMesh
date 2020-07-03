@@ -28,4 +28,4 @@ if (TARGET PyMesh::Triangle)
     target_link_libraries(lib_ConvexHull PUBLIC PyMesh::Triangle)
 endif ()
 
-target_sources(lib_ConvexHull PUBLIC ${SRC_FILES} ${INC_FILES})
+target_sources(lib_ConvexHull PRIVATE ${SRC_FILES} ${INC_FILES})

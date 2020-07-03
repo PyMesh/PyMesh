@@ -78,6 +78,57 @@ BooleanEngine::Ptr BooleanEngine::create(const std::string& engine_name) {
     throw NotImplementedError(err_msg.str());
 }
 
+bool BooleanEngine::supports(const std::string& engine_name) {
+#if WITH_IGL_AND_CGAL
+    if (engine_name == "igl") return true;
+#endif
+#if WITH_CORK
+    if (engine_name == "cork") return true;
+#endif
+#if WITH_CLIPPER
+    if (engine_name == "clipper") return true;
+#endif
+#if WITH_CGAL
+    if (engine_name == "cgal") return true;
+#endif
+#if WITH_CGAL_COREFINEMENT
+    if (engine_name == "corefinement") return true;
+#endif
+#if WITH_CARVE
+    if (engine_name == "carve") return true;
+#endif
+#if WITH_BSP
+    if (engine_name == "bsp") return true;
+#endif
+    return false;
+}
+
+std::vector<std::string> get_available_engines() {
+    std::vector<std::string> engine_names;
+#if WITH_IGL_AND_CGAL
+    engine_names.push_back("igl");
+#endif
+#if WITH_CORK
+    engine_names.push_back("cork");
+#endif
+#if WITH_CLIPPER
+    engine_names.push_back("clipper");
+#endif
+#if WITH_CGAL
+    engine_names.push_back("cgal");
+#endif
+#if WITH_CGAL_COREFINEMENT
+    engine_names.push_back("corefinement");
+#endif
+#if WITH_CARVE
+    engine_names.push_back("carve");
+#endif
+#if WITH_BSP
+    engine_names.push_back("bsp");
+#endif
+    return engine_names;
+}
+
 void BooleanEngine::clean_up() {
     remove_duplicated_vertices();
     remove_short_edges();

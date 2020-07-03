@@ -42,4 +42,4 @@ if (TARGET PyMesh::third_party::MMG)
     target_link_libraries(lib_Triangulation PRIVATE PyMesh::third_party::MMG)
 endif()
 
-target_sources(lib_Triangulation PUBLIC ${SRC_FILES} ${INC_FILES})
+target_sources(lib_Triangulation PRIVATE ${SRC_FILES} ${INC_FILES})

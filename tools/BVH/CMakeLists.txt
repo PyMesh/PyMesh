@@ -29,4 +29,4 @@ if (TARGET PyMesh::IGL)
     target_link_libraries(lib_BVH PRIVATE PyMesh::IGL)
 endif()
 
-target_sources(lib_BVH PUBLIC ${SRC_FILES} ${INC_FILES})
+target_sources(lib_BVH PRIVATE ${SRC_FILES} ${INC_FILES})

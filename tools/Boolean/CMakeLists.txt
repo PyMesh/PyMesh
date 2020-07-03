@@ -41,4 +41,4 @@ if (TARGET PyMesh::third_party::BSP)
     target_link_libraries(lib_Boolean PRIVATE PyMesh::third_party::BSP)
 endif()
 
-target_sources(lib_Boolean PUBLIC ${SRC_FILES} ${INC_FILES})
+target_sources(lib_Boolean PRIVATE ${SRC_FILES} ${INC_FILES})
