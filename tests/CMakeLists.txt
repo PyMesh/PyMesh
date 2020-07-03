@@ -29,7 +29,6 @@ target_compile_definitions(PyMesh::UnitTest
 
 add_subdirectory(src)
 add_subdirectory(tools)
-#add_subdirectory(learning_tests)
 
 add_custom_target(tests DEPENDS
     Mesh_tests

@@ -1,14 +1,14 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.11.0)
+cmake_minimum_required(VERSION 3.11.0)
 #set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CMAKE_COMMAND} -E time")
 
-PROJECT(PyMesh)
+project(PyMesh)
 
-INCLUDE(Settings.cmake)
+include(Settings.cmake)
 
 # Process code in each subdirectories
-ADD_SUBDIRECTORY(src)
-ADD_SUBDIRECTORY(tools)
-ADD_SUBDIRECTORY(python)
+add_subdirectory(src)
+add_subdirectory(tools)
+add_subdirectory(python)
 
-ADD_SUBDIRECTORY(tests EXCLUDE_FROM_ALL)
-#ADD_SUBDIRECTORY(examples EXCLUDE_FROM_ALL)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
+#add_subdirectory(examples EXCLUDE_FROM_ALL)
