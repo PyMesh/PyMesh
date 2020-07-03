@@ -14,7 +14,7 @@ target_link_libraries(lib_Compression
 
 if (TARGET PyMesh::third_party::Draco)
     add_subdirectory(Draco)
-    target_link_libraries(lib_Compression PRIVATE PyMesh::third_party::Draco)
+    target_link_libraries(lib_Compression PUBLIC PyMesh::third_party::Draco)
 endif()
 
 target_sources(lib_Compression PUBLIC ${SRC_FILES} ${INC_FILES})

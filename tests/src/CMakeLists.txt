@@ -1,14 +1,14 @@
 # Enumerate source files
-FILE(GLOB_RECURSE TEST_SRC_FILES unit_test_driver.cpp)
-FILE(GLOB_RECURSE TEST_INC_FILES *Test.h *.inl)
+file(GLOB_RECURSE TEST_SRC_FILES unit_test_driver.cpp)
+file(GLOB_RECURSE TEST_INC_FILES *Test.h *.inl)
 
-ADD_EXECUTABLE(Mesh_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(Mesh_tests
+add_executable(Mesh_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+target_link_libraries(Mesh_tests
     PRIVATE
-        Mesh
+        PyMesh::Mesh
         PyMesh::UnitTest
 )
-ADD_CUSTOM_TARGET(run_Mesh_tests
+add_custom_target(run_Mesh_tests
     COMMAND
         Mesh_tests
     DEPENDS

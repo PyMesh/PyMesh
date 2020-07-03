@@ -1,14 +1,14 @@
 # Enumerate source files
-FILE(GLOB_RECURSE TEST_SRC_FILES *.cpp)
-FILE(GLOB_RECURSE TEST_INC_FILES *.h *.inl)
+file(GLOB_RECURSE TEST_SRC_FILES *.cpp)
+file(GLOB_RECURSE TEST_INC_FILES *.h *.inl)
 
-ADD_EXECUTABLE(Geogram_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
-TARGET_LINK_LIBRARIES(Geogram_tests
+add_executable(Geogram_tests ${TEST_SRC_FILES} ${TEST_INC_FILES})
+target_link_libraries(Geogram_tests
     PRIVATE
         PyMesh::UnitTest
-        PyMesh::Tools::Geogram
+        PyMesh::Geogram
 )
-ADD_CUSTOM_TARGET(run_Geogram_tests
+add_custom_target(run_Geogram_tests
     DEPENDS
         Geogram_tests
     COMMAND

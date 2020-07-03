@@ -3,8 +3,9 @@
 
 #include <memory>
 #include <string>
-#include <Mesh.h>
+#include <vector>
 
+#include <Mesh.h>
 #include <Core/Exception.h>
 
 namespace PyMesh {
@@ -13,6 +14,8 @@ class CompressionEngine {
     public:
         using Ptr = std::shared_ptr<CompressionEngine>;
         static Ptr create(const std::string& engine_name);
+        static bool supports(const std::string& library_name);
+        static std::vector<std::string> get_available_engines();
 
     public:
         virtual ~CompressionEngine() = default;
