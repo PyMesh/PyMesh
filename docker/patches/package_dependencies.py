@@ -120,7 +120,7 @@ def migrate_dependency_darwin(lib_file, dep_file, dep_dir, rpaths):
 def migrate_dependency(lib_file, dep_file, dep_dir, rpaths):
     system_name = platform.system().lower()
     if system_name == "linux":
-        return migrate_dependency_posix(lib_file, dpe_file, dep_dir, rpaths)
+        return migrate_dependency_posix(lib_file, dep_file, dep_dir, rpaths)
     elif system_name == "darwin":
         return migrate_dependency_darwin(lib_file, dep_file, dep_dir, rpaths)
     else:
