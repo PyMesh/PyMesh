@@ -3,6 +3,8 @@
 
 #include <memory>
 #include <string>
+#include <vector>
+
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
