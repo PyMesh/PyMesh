@@ -151,3 +151,9 @@ endif ()
 if (NOT Jigsaw_FOUND)
     find_package(Jigsaw QUIET)
 endif ()
+
+# Nlohmann/json
+if (NOT TARGET nlohmann_json::nlohmann_json)
+    find_package(nlohmann_json QUIET REQUIRED
+        HINTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/nlohmann_json)
+endif()

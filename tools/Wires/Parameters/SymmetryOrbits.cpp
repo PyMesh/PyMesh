@@ -1,23 +1,24 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "SymmetryOrbits.h"
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
-
-typedef boost::property_tree::ptree PTree;
+#include <fstream>
+#include <nlohmann/json.hpp>
 
 using namespace PyMesh;
 
 SymmetryOrbits::SymmetryOrbits(const std::string& orbit_file) {
-    PTree orbit_config;
-    read_json(orbit_file, orbit_config);
+    nlohmann::json orbit_config;
+    std::ifstream fin(orbit_file.c_str());
+    fin >> orbit_config;
+    fin.close();
+
     auto v_orbit_config = orbit_config.find("vertex_orbits");
-    if (v_orbit_config != orbit_config.not_found()) {
-        for (const auto& child : v_orbit_config->second) {
-            VectorI orbit(child.second.size());
+    if (v_orbit_config != orbit_config.end()) {
+        for (const auto& child : *v_orbit_config) {
+            VectorI orbit(child.size());
             size_t count = 0;
-            for (auto val : child.second) {
-                orbit[count] = val.second.get_value<int>();
+            for (auto val : child) {
+                orbit[count] = val.get<int>();
                 count++;
             }
             m_vertex_orbits.push_back(orbit);
@@ -25,12 +26,12 @@ SymmetryOrbits::SymmetryOrbits(const std::string& orbit_file) {
     }
 
     auto e_orbit_config = orbit_config.find("edge_orbits");
-    if (e_orbit_config != orbit_config.not_found()) {
-        for (const auto& child : e_orbit_config->second) {
-            VectorI orbit(child.second.size());
+    if (e_orbit_config != orbit_config.end()) {
+        for (const auto& child : *e_orbit_config) {
+            VectorI orbit(child.size());
             size_t count=0;
-            for (auto val : child.second) {
-                orbit[count] = val.second.get_value<int>();
+            for (auto val : child) {
+                orbit[count] = val.get<int>();
                 count++;
             }
             m_edge_orbits.push_back(orbit);

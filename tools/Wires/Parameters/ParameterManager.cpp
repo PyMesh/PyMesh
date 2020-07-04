@@ -1,11 +1,11 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #include "ParameterManager.h"
 
-#include <boost/property_tree/ptree.hpp>
-#include <boost/property_tree/json_parser.hpp>
+#include <nlohmann/json.hpp>
 
 #include <cassert>
 #include <map>
+#include <fstream>
 #include <sstream>
 #include <string>
 #include <vector>
@@ -23,7 +23,6 @@ using namespace PyMesh;
 using namespace ParameterCommon;
 
 namespace ParameterManagerHelper {
-    typedef boost::property_tree::ptree PTree;
 
     std::string get_basename(const std::string& filename) {
         size_t pos = filename.find_last_of('.');
@@ -52,28 +51,28 @@ namespace ParameterManagerHelper {
     }
 
     void parse_offset_parameters(ParameterManager::Ptr manager,
-            PTree& config, SymmetryOrbits& orbits) {
-        std::string type = config.get<std::string>("type");
+            nlohmann::json& config, SymmetryOrbits& orbits) {
+        std::string type = config["type"].get<std::string>();
         if (type != "vertex_orbit") {
             std::stringstream err_msg;
             err_msg << "Invalid offset type: " << type;
             throw NotImplementedError(err_msg.str());
         }
 
-        PTree& effective_orbits = config.get_child("effective_orbits");
-        PTree& offset_percentages = config.get_child("offset_percentages");
+        auto& effective_orbits = config["effective_orbits"];
+        auto& offset_percentages = config["offset_percentages"];
         assert(effective_orbits.size() == offset_percentages.size());
 
         auto orbit_itr = effective_orbits.begin();
         auto offset_itr = offset_percentages.begin();
         while (orbit_itr != effective_orbits.end()) {
             assert(offset_itr != offset_percentages.end());
-            size_t orbit_index = orbit_itr->second.get_value<int>();
+            size_t orbit_index = orbit_itr->get<int>();
             const VectorI& roi = orbits.get_vertex_orbit(orbit_index);
             size_t coordinate_idx = 0;
-            for (auto coordinate_itr : offset_itr->second) {
+            for (auto coordinate_itr : *offset_itr) {
                 std::string offset =
-                    coordinate_itr.second.get_value<std::string>();
+                    coordinate_itr.get<std::string>();
                 Float val = parse_value(offset);
                 std::string formula = parse_formula(offset);
                 manager->add_offset_parameter(roi, formula, val, coordinate_idx);
@@ -85,9 +84,9 @@ namespace ParameterManagerHelper {
     }
 
     void parse_thickness_parameters(ParameterManager::Ptr manager,
-            PTree& config, SymmetryOrbits& orbits) {
-        std::string type = config.get<std::string>("type");
-        Float default_thickness = config.get<Float>("default");
+            nlohmann::json& config, SymmetryOrbits& orbits) {
+        std::string type = config["type"].get<std::string>();
+        Float default_thickness = config["default"].get<Float>();
         manager->set_default_thickness(default_thickness);
         if (type == "vertex_orbit") {
             manager->set_thickness_type(ParameterCommon::VERTEX);
@@ -99,14 +98,14 @@ namespace ParameterManagerHelper {
             throw NotImplementedError(err_msg.str());
         }
 
-        PTree& effective_orbits = config.get_child("effective_orbits");
-        PTree& thicknesses = config.get_child("thickness");
+        auto& effective_orbits = config["effective_orbits"];
+        auto& thicknesses = config["thickness"];
         auto orbit_itr = effective_orbits.begin();
         auto thickness_itr = thicknesses.begin();
         while (orbit_itr != effective_orbits.end()) {
             assert(thickness_itr != thicknesses.end());
 
-            size_t orbit_index = orbit_itr->second.get_value<int>();
+            size_t orbit_index = orbit_itr->get<int>();
             VectorI roi;
             if (type == "vertex_orbit") {
                 roi = orbits.get_vertex_orbit(orbit_index);
@@ -115,7 +114,7 @@ namespace ParameterManagerHelper {
             }
 
             std::string thickness =
-                thickness_itr->second.get_value<std::string>();
+                thickness_itr->get<std::string>();
             Float val = parse_value(thickness);
             std::string formula = parse_formula(thickness);
             manager->add_thickness_parameter(roi, formula, val);
@@ -248,16 +247,18 @@ ParameterManager::Ptr ParameterManager::create_from_setting_file(
     Ptr manager = create_empty_manager(wire_network, default_thickness);
     SymmetryOrbits orbits(orbit_file);
 
-    PTree config;
-    read_json(modifier_file, config);
+    nlohmann::json config;
+    std::ifstream fin(modifier_file.c_str());
+    fin >> config;
+    fin.close();
 
-    if (config.find("vertex_offset") != config.not_found()) {
+    if (config.find("vertex_offset") != config.end()) {
         parse_offset_parameters(manager,
-                config.get_child("vertex_offset"), orbits);
+                config["vertex_offset"], orbits);
     }
-    if (config.find("thickness") != config.not_found()) {
+    if (config.find("thickness") != config.end()) {
         parse_thickness_parameters(manager,
-                config.get_child("thickness"), orbits);
+                config["thickness"], orbits);
     }
     return manager;
 }
@@ -265,17 +266,20 @@ ParameterManager::Ptr ParameterManager::create_from_setting_file(
 ParameterManager::Ptr ParameterManager::create_from_dof_file(
         WireNetwork::Ptr wire_network, Float default_thickness,
         const std::string& dof_file) {
-    PTree dof_config;
-    read_json(dof_file, dof_config);
-    std::string dof_type = dof_config.get<std::string>("dof_type");
-    std::string thickness_type_str =
-        dof_config.get<std::string>("thickness_type");
+    nlohmann::json dof_config;
+    std::ifstream fin(dof_file.c_str());
+    fin >> dof_config;
+    fin.close();
 
-    PTree& dof_values = dof_config.get_child("dof");
+    std::string dof_type = dof_config["dof_type"].get<std::string>();
+    std::string thickness_type_str =
+        dof_config["thickness_type"].get<std::string>();
+
+    auto& dof_values = dof_config["dof"];
     VectorF dof = VectorF::Zero(dof_values.size());
     size_t count = 0;
     for (const auto& value : dof_values) {
-        dof[count] = value.second.get_value<Float>();
+        dof[count] = value.get<Float>();
         count++;
     }
     assert(count == dof.size());
@@ -460,45 +464,47 @@ MatrixIr ParameterManager::get_offset_dof_map() const {
 }
 
 void ParameterManager::save_dofs(const std::string& dof_file) const {
-    PTree dof_config;
+    nlohmann::json dof_config;
     switch (m_dof_type) {
         case ISOTROPIC:
-            dof_config.put("dof_type", "isotropic");
+            dof_config["dof_type"] = "isotropic";
             break;
         case ORTHOTROPIC:
-            dof_config.put("dof_type", "orthotropic");
+            dof_config["dof_type"] = "orthotropic";
             break;
         default:
             throw RuntimeError("Cannot save dof with unknown dof type");
     }
     switch (get_thickness_type()) {
         case ParameterCommon::VERTEX:
-            dof_config.put("thickness_type", "vertex");
+            dof_config["thickness_type"] = "vertex";
             break;
         case ParameterCommon::EDGE:
-            dof_config.put("thickness_type", "edge");
+            dof_config["thickness_type"] = "edge";
             break;
         default:
             throw RuntimeError("Unknown thickness type.");
     }
 
-    PTree dof_array;
+    nlohmann::json dof_array;
     const size_t num_dofs = get_num_dofs();
     VectorF dofs = get_dofs();
     for (size_t i=0; i<num_dofs; i++) {
-        PTree value;
-        value.put("", dofs[i]);
-        dof_array.push_back(std::make_pair("", value));
+        dof_array.push_back(dofs[i]);
     }
-    dof_config.add_child("dof", dof_array);
-    write_json(dof_file, dof_config);
+    dof_config["dof"] = dof_array;
+    std::ofstream fout(dof_file.c_str());
+    fout << dof_config.dump(4);
+    fout.close();
 }
 
 void ParameterManager::load_dofs(const std::string& dof_file) {
-    PTree dof_config;
-    read_json(dof_file, dof_config);
+    nlohmann::json dof_config;
+    std::ifstream fin(dof_file.c_str());
+    fin >> dof_config;
+    fin.close();
 
-    std::string dof_type = dof_config.get<std::string>("dof_type");
+    std::string dof_type = dof_config["dof_type"].get<std::string>();
     if (m_dof_type == UNKNOWN ||
             (m_dof_type == ISOTROPIC && dof_type != "isotropic") ||
             (m_dof_type == ORTHOTROPIC && dof_type != "orthotropic")) {
@@ -509,7 +515,7 @@ void ParameterManager::load_dofs(const std::string& dof_file) {
 
     TargetType thickness_type = get_thickness_type();
     std::string thickness_type_str =
-        dof_config.get<std::string>("thickness_type");
+        dof_config["thickness_type"].get<std::string>();
     if ((thickness_type == ParameterCommon::VERTEX &&
          thickness_type_str != "vertex") ||
         (thickness_type == ParameterCommon::EDGE &&
@@ -519,11 +525,11 @@ void ParameterManager::load_dofs(const std::string& dof_file) {
         throw RuntimeError(err_msg.str());
     }
 
-    PTree& dof_values = dof_config.get_child("dof");
+    auto& dof_values = dof_config["dof"];
     VectorF dof = VectorF::Zero(dof_values.size());
     size_t count = 0;
     for (const auto& value : dof_values) {
-        dof[count] = value.second.get_value<Float>();
+        dof[count] = value.get<Float>();
         count++;
     }
     assert(count == dof.size());

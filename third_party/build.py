@@ -14,7 +14,7 @@ import sys
 def get_third_party_dependencies():
     return ["cgal", "cork", "eigen",
         "tetgen", "triangle", "qhull", "clipper", "draco",
-        "tbb", "mmg"]
+        "tbb", "mmg", "json"]
 
 def parse_args():
     parser = argparse.ArgumentParser(__doc__);
@@ -66,6 +66,10 @@ def build(package, cleanup):
     elif package == "tbb":
         build_generic("tbb",
                 " -DTBB_BUILD_SHARED=On -DTBB_BUILD_STATIC=Off",
+                cleanup=cleanup);
+    elif package == "json":
+        build_generic("json",
+                " -DJSON_BuildTests=Off",
                 cleanup=cleanup);
     else:
         build_generic(package, cleanup=cleanup);

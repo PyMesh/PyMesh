@@ -23,6 +23,7 @@ if (TARGET PyMesh::Triangle AND TARGET PyMesh::TetGen)
             PyMesh::Boolean
             PyMesh::TetGen
             PyMesh::BVH
+            PyMesh::third_party::json
     )
     set_target_properties(lib_Wires PROPERTIES OUTPUT_NAME "PyMesh-Wires")
 endif()

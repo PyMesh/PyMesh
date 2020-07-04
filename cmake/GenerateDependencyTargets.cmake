@@ -312,3 +312,9 @@ if (JIGSAW_FOUND AND NOT TARGET PyMesh::third_party::Jigsaw)
     target_compile_definitions(PyMesh::third_party::Jigsaw
         INTERFACE -DWITH_JIGSAW)
 endif ()
+
+if (TARGET nlohmann_json::nlohmann_json)
+    add_library(PyMesh::third_party::json INTERFACE IMPORTED)
+    target_link_libraries(PyMesh::third_party::json INTERFACE nlohmann_json)
+endif()
+
