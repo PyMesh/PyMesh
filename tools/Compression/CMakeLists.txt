@@ -1,18 +1,20 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(Draco)
-
-ADD_LIBRARY(lib_Compression SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_Compression PROPERTIES OUTPUT_NAME
+add_library(lib_Compression SHARED)
+add_library(PyMesh::Compression ALIAS lib_Compression)
+set_target_properties(lib_Compression PROPERTIES OUTPUT_NAME
     "PyMesh-Compression")
-TARGET_LINK_LIBRARIES(lib_Compression
+target_link_libraries(lib_Compression
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
-    PRIVATE
-        PyMesh::Draco
 )
 
-ADD_LIBRARY(PyMesh::Tools::Compression ALIAS lib_Compression)
+if (TARGET PyMesh::third_party::Draco)
+    add_subdirectory(Draco)
+    target_link_libraries(lib_Compression PUBLIC PyMesh::third_party::Draco)
+endif()
+
+target_sources(lib_Compression PRIVATE ${SRC_FILES} ${INC_FILES})

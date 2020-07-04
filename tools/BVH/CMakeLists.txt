@@ -1,24 +1,32 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(CGAL)
-ADD_SUBDIRECTORY(Geogram)
-ADD_SUBDIRECTORY(IGL)
-
-ADD_LIBRARY(lib_BVH SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_BVH PROPERTIES OUTPUT_NAME "PyMesh-BVH")
-TARGET_LINK_LIBRARIES(lib_BVH
+add_library(lib_BVH SHARED)
+add_library(PyMesh::BVH ALIAS lib_BVH)
+set_target_properties(lib_BVH PROPERTIES OUTPUT_NAME "PyMesh-BVH")
+target_link_libraries(lib_BVH
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
-    PRIVATE
-        PyMesh::Tools::CGAL
-        PyMesh::Tools::Geogram
-        PyMesh::Tools::IGL
 )
-IF (WIN32)
+if (WIN32)
     TARGET_COMPILE_DEFINITIONS(lib_BVH PRIVATE -D_ENABLE_EXTENDED_ALIGNED_STORAGE)
-ENDIF (WIN32)
+endif (WIN32)
 
-ADD_LIBRARY(PyMesh::Tools::BVH ALIAS lib_BVH)
+if (TARGET PyMesh::CGAL)
+    add_subdirectory(CGAL)
+    target_link_libraries(lib_BVH PRIVATE PyMesh::CGAL)
+endif()
+
+if (TARGET PyMesh::Geogram)
+    add_subdirectory(Geogram)
+    target_link_libraries(lib_BVH PRIVATE PyMesh::Geogram)
+endif()
+
+if (TARGET PyMesh::IGL)
+    add_subdirectory(IGL)
+    target_link_libraries(lib_BVH PRIVATE PyMesh::IGL)
+endif()
+
+target_sources(lib_BVH PRIVATE ${SRC_FILES} ${INC_FILES})

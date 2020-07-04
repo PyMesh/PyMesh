@@ -24,7 +24,7 @@ FIND_LIBRARY(JIGSAW_LIBRARIES jigsaw
     /usr/lib/)
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(JIGSAW
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Jigsaw
     "Jigsaw library cannot be found.  Consider set JIGSAW_PATH environment variable"
     JIGSAW_INCLUDE_DIRS
     JIGSAW_LIBRARIES)

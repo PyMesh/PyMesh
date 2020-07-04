@@ -1,30 +1,49 @@
 # Source files
-FILE(GLOB SRC_FILES *.cpp)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(CGAL)
-ADD_SUBDIRECTORY(Geogram)
-ADD_SUBDIRECTORY(MMG)
-ADD_SUBDIRECTORY(Quartet)
-ADD_SUBDIRECTORY(TetGen)
-ADD_SUBDIRECTORY(TetWild)
-
-ADD_LIBRARY(lib_Tetrahedralization SHARED ${SRC_FILES} ${INC_FILES})
-TARGET_LINK_LIBRARIES(lib_Tetrahedralization
+add_library(lib_Tetrahedralization SHARED)
+add_library(PyMesh::Tetrahedralization ALIAS lib_Tetrahedralization)
+target_link_libraries(lib_Tetrahedralization
     PUBLIC
         Mesh
         PyMesh::Tools
     PRIVATE
-        PyMesh::Tools::MeshUtils
-        PyMesh::Tools::CGAL
-        PyMesh::Tools::TetGen
-        PyMesh::Tools::Geogram
-        PyMesh::Quartet
-        PyMesh::MMG
-        PyMesh::TetWild
-        PyMesh::libigl
+        PyMesh::MeshUtils
 )
-SET_TARGET_PROPERTIES(lib_Tetrahedralization PROPERTIES OUTPUT_NAME
+set_target_properties(lib_Tetrahedralization PROPERTIES OUTPUT_NAME
     "PyMesh-Tetrahedronization")
 
-ADD_LIBRARY(PyMesh::Tools::Tetrahedralization ALIAS lib_Tetrahedralization)
+if (TARGET PyMesh::CGAL)
+    add_subdirectory(CGAL)
+    target_link_libraries(lib_Tetrahedralization PRIVATE PyMesh::CGAL)
+endif()
+
+if (TARGET PyMesh::Geogram)
+    add_subdirectory(Geogram)
+    target_link_libraries(lib_Tetrahedralization PRIVATE PyMesh::Geogram)
+endif()
+
+if (TARGET PyMesh::third_party::MMG)
+    add_subdirectory(MMG)
+    target_link_libraries(lib_Tetrahedralization PRIVATE PyMesh::third_party::MMG)
+endif()
+
+if (TARGET PyMesh::third_party::Quartet)
+    add_subdirectory(Quartet)
+    target_link_libraries(lib_Tetrahedralization PRIVATE
+        PyMesh::third_party::Quartet)
+endif()
+
+if (TARGET PyMesh::TetGen)
+    add_subdirectory(TetGen)
+    target_link_libraries(lib_Tetrahedralization PRIVATE PyMesh::TetGen)
+endif()
+
+if (TARGET PyMesh::third_party::TetWild)
+    add_subdirectory(TetWild)
+    target_link_libraries(lib_Tetrahedralization PRIVATE
+        PyMesh::third_party::TetWild)
+endif()
+
+target_sources(lib_Tetrahedralization PRIVATE ${SRC_FILES} ${INC_FILES})

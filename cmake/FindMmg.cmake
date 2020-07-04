@@ -58,10 +58,10 @@ FIND_LIBRARY(MMG_LIBRARY
   )
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(MMG DEFAULT_MSG
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Mmg DEFAULT_MSG
   MMG_INCLUDE_DIR MMG_LIBRARY)
 
-IF ( NOT MMG_FOUND )
+IF ( NOT Mmg_FOUND )
    MESSAGE (WARNING "\nMMG not found: you can set the 'MMG_BUILD_DIR' environment"
    " variable or the 'MMG_BUILD_DIR' CMake variable to your MMG directory path"
    " to help us to fill the MMG library paths.\n" )

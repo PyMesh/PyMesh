@@ -1,16 +1,16 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp)
+file(GLOB INC_FILES *.h)
 
-ADD_LIBRARY(lib_CGAL SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_CGAL PROPERTIES OUTPUT_NAME "PyMesh-CGAL")
-TARGET_LINK_LIBRARIES(lib_CGAL
-    PUBLIC
-        Mesh
-        PyMesh::Tools
-        PyMesh::GMP
-        PyMesh::MPFR
-        PyMesh::CGAL
-)
+if (TARGET PyMesh::third_party::CGAL)
+    add_library(lib_CGAL SHARED ${SRC_FILES} ${INC_FILES})
+    set_target_properties(lib_CGAL PROPERTIES OUTPUT_NAME "PyMesh-CGAL")
+    target_link_libraries(lib_CGAL
+        PUBLIC
+            PyMesh::Mesh
+            PyMesh::Tools
+            PyMesh::third_party::CGAL
+    )
 
-ADD_LIBRARY(PyMesh::Tools::CGAL ALIAS lib_CGAL)
+    add_library(PyMesh::CGAL ALIAS lib_CGAL)
+endif ()

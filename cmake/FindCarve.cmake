@@ -2,7 +2,7 @@
 # (https://code.google.com/p/carve/)
 # The following variables are set
 #
-# CARVE_FOUND
+# Carve_FOUND
 # CARVE_INCLUDE_DIRS
 # CARVE_LIBRARIES
 #
@@ -27,7 +27,7 @@ FIND_LIBRARY(CARVE_LIBRARIES carve
     /usr/lib/)
 
 INCLUDE(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(CARVE
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Carve
     "Carve library cannot be found.  Consider set CARVE_PATH environment variable"
     CARVE_INCLUDE_DIRS
     CARVE_LIBRARIES)

@@ -1,6 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
-#ifdef WITH_CLIPPER
 
 #include "../BooleanEngineTest.h"
 
@@ -115,6 +114,7 @@ class ClipperEngineTest : public BooleanEngineTest {
 };
 
 TEST_F(ClipperEngineTest, disjoint_union) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_disjoint_setting(mesh);
@@ -130,6 +130,7 @@ TEST_F(ClipperEngineTest, disjoint_union) {
 }
 
 TEST_F(ClipperEngineTest, disjoint_intersection) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_disjoint_setting(mesh);
@@ -143,6 +144,7 @@ TEST_F(ClipperEngineTest, disjoint_intersection) {
 }
 
 TEST_F(ClipperEngineTest, disjoint_difference) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_disjoint_setting(mesh);
@@ -158,6 +160,7 @@ TEST_F(ClipperEngineTest, disjoint_difference) {
 }
 
 TEST_F(ClipperEngineTest, disjoint_symmetric_difference) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_disjoint_setting(mesh);
@@ -173,6 +176,7 @@ TEST_F(ClipperEngineTest, disjoint_symmetric_difference) {
 }
 
 TEST_F(ClipperEngineTest, overlap_union) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_overlap_setting(mesh);
@@ -189,6 +193,7 @@ TEST_F(ClipperEngineTest, overlap_union) {
 }
 
 TEST_F(ClipperEngineTest, overlap_intersection) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_overlap_setting(mesh);
@@ -205,6 +210,7 @@ TEST_F(ClipperEngineTest, overlap_intersection) {
 }
 
 TEST_F(ClipperEngineTest, overlap_difference) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_overlap_setting(mesh);
@@ -221,6 +227,7 @@ TEST_F(ClipperEngineTest, overlap_difference) {
 }
 
 TEST_F(ClipperEngineTest, overlap_symmetric_difference) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh = load_mesh("square_2D.obj");
 
     BooleanPtr clipper_engine = get_overlap_setting(mesh);
@@ -237,6 +244,7 @@ TEST_F(ClipperEngineTest, overlap_symmetric_difference) {
 }
 
 TEST_F(ClipperEngineTest, Jeremies_test_data) {
+    if (!BooleanEngine::supports("clipper")) return;
     MeshPtr mesh_1 = load_mesh("clipper_input_1.ply");
     MeshPtr mesh_2 = load_mesh("clipper_input_2.ply");
 
@@ -259,4 +267,3 @@ TEST_F(ClipperEngineTest, Jeremies_test_data) {
     ASSERT_LT(0, faces.rows());
 }
 
-#endif

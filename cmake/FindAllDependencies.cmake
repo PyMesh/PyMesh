@@ -1,169 +1,153 @@
 # MKL
-IF (NOT MKL_FOUND)
-    FIND_PACKAGE(MKL)
-ENDIF (NOT MKL_FOUND)
+if (NOT MKL_FOUND)
+    find_package(MKL)
+endif (NOT MKL_FOUND)
 
 # Include Eigen
-IF (NOT EIGEN_FOUND)
-    FIND_PACKAGE(Eigen REQUIRED)
-ENDIF (NOT EIGEN_FOUND)
+if (NOT EIGEN_FOUND)
+    find_package(Eigen REQUIRED)
+endif (NOT EIGEN_FOUND)
 
 # TBB
-IF (NOT TBB_FOUND)
-    SET(TBB_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/)
-    FIND_PACKAGE(TBB REQUIRED)
-ENDIF (NOT TBB_FOUND)
-
-# OpenCL
-IF (NOT OPENCL_FOUND)
-    FIND_PACKAGE(OpenCL)
-ENDIF (NOT OPENCL_FOUND)
+if (NOT TBB_FOUND)
+    set(TBB_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/)
+    find_package(TBB REQUIRED)
+endif (NOT TBB_FOUND)
 
 # SpraseHash
-IF (NOT SPARSEHAHS_FOUND)
-    FIND_PACKAGE(SparseHash)
-ENDIF (NOT SPARSEHAHS_FOUND)
+if (NOT SPARSEHAHS_FOUND)
+    find_package(SparseHash QUIET)
+endif (NOT SPARSEHAHS_FOUND)
 
 # GMP
-IF (NOT GMP_FOUND)
-    FIND_PACKAGE(GMP)
-ENDIF (NOT GMP_FOUND)
+if (NOT GMP_FOUND)
+    find_package(GMP QUIET)
+endif (NOT GMP_FOUND)
 
 # MPFR
-IF (NOT MPFR_FOUND)
-    FIND_PACKAGE(MPFR)
-ENDIF (NOT MPFR_FOUND)
+if (NOT MPFR_FOUND)
+    find_package(MPFR QUIET)
+endif (NOT MPFR_FOUND)
 
 # CGAL
-IF (NOT CGAL_FOUND)
-    SET(CGAL_DIRS
+if (NOT CGAL_FOUND)
+    set(CGAL_DIRS
         "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/CGAL"
         "${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib64/cmake/CGAL"
     )
-    IF (NOT Boost_FOUND)
-        SET(BOOST_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
-        FIND_PACKAGE(Boost COMPONENTS atomic chrono date_time system thread)
-    ENDIF (NOT Boost_FOUND)
-    FIND_PACKAGE(CGAL QUIET PATHS ${CGAL_DIRS} NO_DEFAULT_PATH)
-ENDIF (NOT CGAL_FOUND)
+    set(CGAL_DO_NOT_WARN_ABOUT_CMAKE_BUILD_TYPE TRUE)
+    if (NOT Boost_FOUND)
+        set(BOOST_ROOT ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
+        find_package(Boost COMPONENTS atomic chrono date_time system thread)
+    endif (NOT Boost_FOUND)
+    find_package(CGAL QUIET PATHS ${CGAL_DIRS} NO_DEFAULT_PATH)
+endif (NOT CGAL_FOUND)
 
 # MMG
-IF (NOT MMG_FOUND)
-    IF (DEFINED ENV{MMG_PATH})
-        SET(MMG_BUILD_DIR $ENV{MMG_PATH})
+if (NOT Mmg_FOUND)
+    if (DEFINED ENV{MMG_PATH})
+        set(MMG_BUILD_DIR $ENV{MMG_PATH})
     ELSE (DEFINED ENV{MMG_PATH})
-        SET(MMG_BUILD_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/)
-    ENDIF (DEFINED ENV{MMG_PATH})
-    FIND_PACKAGE(Mmg)
-ENDIF (NOT MMG_FOUND)
+        set(MMG_BUILD_DIR ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/)
+    endif (DEFINED ENV{MMG_PATH})
+    find_package(Mmg QUIET)
+endif ()
 
 # Qhull
-IF (NOT QHULL_FOUND)
-    SET(QHULL_USE_STATIC TRUE)
-    IF (DEFINED ENV{QHULL_PATH})
-        SET(QHULL_ROOT $ENV{QHULL_PATH})
-    ENDIF (DEFINED ENV{QHULL_PATH})
-    FIND_PACKAGE(Qhull)
-ENDIF (NOT QHULL_FOUND)
+if (NOT QHULL_FOUND)
+    set(QHULL_USE_STATIC TRUE)
+    if (DEFINED ENV{QHULL_PATH})
+        set(QHULL_ROOT $ENV{QHULL_PATH})
+    endif (DEFINED ENV{QHULL_PATH})
+    find_package(Qhull QUIET)
+endif (NOT QHULL_FOUND)
 
 # Quartet
-IF (NOT QUARTET_FOUND)
-    FIND_PACKAGE(Quartet)
-ENDIF (NOT QUARTET_FOUND)
+if (NOT QUARTET_FOUND)
+    find_package(Quartet QUIET)
+endif (NOT QUARTET_FOUND)
 
 # Triangle
-IF (NOT TRIANGLE_FOUND)
-    FIND_PACKAGE(Triangle)
-ENDIF (NOT TRIANGLE_FOUND)
+if (NOT TRIANGLE_FOUND)
+    find_package(Triangle QUIET)
+endif (NOT TRIANGLE_FOUND)
 
 # Tetgen
-IF (NOT TETGEN_FOUND)
-    FIND_PACKAGE(Tetgen)
-ENDIF (NOT TETGEN_FOUND)
+if (NOT TETGEN_FOUND)
+    find_package(Tetgen QUIET)
+endif (NOT TETGEN_FOUND)
 
 # Cork
-IF (NOT CORK_FOUND)
-    FIND_PACKAGE(Cork)
-ENDIF(NOT CORK_FOUND)
+if (NOT CORK_FOUND)
+    find_package(Cork QUIET)
+endif(NOT CORK_FOUND)
 
 # Clipper
-IF (NOT CLIPPER_FOUND)
-    FIND_PACKAGE(Clipper)
-ENDIF (NOT CLIPPER_FOUND)
+if (NOT CLIPPER_FOUND)
+    find_package(Clipper QUIET)
+endif (NOT CLIPPER_FOUND)
 
 # libigl
-IF (NOT LIBIGL_FOUND)
-    FIND_PACKAGE(libigl)
-ENDIF (NOT LIBIGL_FOUND)
+if (NOT libigl_FOUND)
+    find_package(libigl QUIET)
+endif ()
 
 # Carve
-IF (NOT CARVE_FOUND)
-    FIND_PACKAGE(Carve)
-ENDIF (NOT CARVE_FOUND)
+if (NOT Carve_FOUND)
+    find_package(Carve QUIET)
+endif ()
 
 # BSP
-IF (NOT BSP_FOUND)
-    FIND_PACKAGE(BSP)
-ENDIF (NOT BSP_FOUND)
+if (NOT BSP_FOUND)
+    find_package(BSP QUIET)
+endif (NOT BSP_FOUND)
 
 # SuiteSparse
-IF (NOT UMFPACK_FOUND)
-    FIND_PACKAGE(Umfpack)
-ENDIF (NOT UMFPACK_FOUND)
+if (NOT Umfpack_FOUND)
+    find_package(Umfpack QUIET)
+endif ()
 
 # Cholmod
-IF (NOT CHOLMOD_FOUND)
-    FIND_PACKAGE(Cholmod)
-ENDIF (NOT CHOLMOD_FOUND)
+if (NOT Cholmod_FOUND)
+    find_package(Cholmod QUIET)
+endif ()
 
 # Metis
-IF (NOT METIS_FOUND)
-    FIND_PACKAGE(Metis)
-ENDIF (NOT METIS_FOUND)
+if (NOT Metis_FOUND)
+    find_package(Metis QUIET)
+endif ()
 
 # tinyxml2
-IF (NOT TINYXML2_FOUND)
-    FIND_PACKAGE(tinyxml2)
-ENDIF (NOT TINYXML2_FOUND)
+if (NOT TINYXML2_FOUND)
+    find_package(tinyxml2 QUIET)
+endif (NOT TINYXML2_FOUND)
 
 # Lapack
-IF (NOT LAPACK_FOUND)
-    FIND_PACKAGE(LAPACK)
-ENDIF (NOT LAPACK_FOUND)
+if (NOT LAPACK_FOUND)
+    find_package(LAPACK QUIET)
+endif (NOT LAPACK_FOUND)
 
 # Geogram
-IF (NOT GEOGRAM_FOUND)
-    SET(GEOGRAM_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
-    FIND_PACKAGE(Geogram)
-ENDIF (NOT GEOGRAM_FOUND)
+if (NOT GEOGRAM_FOUND)
+    set(GEOGRAM_INSTALL_PREFIX ${PROJECT_SOURCE_DIR}/python/pymesh/third_party)
+    find_package(Geogram QUIET)
+endif (NOT GEOGRAM_FOUND)
 
 # Draco
-IF (NOT draco_FOUND)
-    FIND_PACKAGE(Draco)
-ENDIF (NOT draco_FOUND)
+if (NOT draco_FOUND)
+    find_package(Draco QUIET)
+endif (NOT draco_FOUND)
 
 # TetWild
-IF (NOT TETWILD_FOUND)
-    FIND_PACKAGE(TetWild)
-ENDIF (NOT TETWILD_FOUND)
-
-# openmp
-IF (NOT OPENMP_FOUND)
-    FIND_PACKAGE(OpenMP QUIET)
-    IF (OPENMP_FOUND)
-        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
-        SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
-        MESSAGE(STATUS "OpenMP found")
-    ELSE(OPENMP_FOUND)
-        MESSAGE(STATUS "OpenMP not found")
-    ENDIF (OPENMP_FOUND)
-ENDIF (NOT OPENMP_FOUND)
+if (NOT TetWild_FOUND)
+    find_package(TetWild QUIET)
+endif ()
 
 # Fast winding number
-IF (NOT FAST_WINDING_NUMBER_FOUND)
-    FIND_PACKAGE(FastWindingNumber)
-ENDIF (NOT FAST_WINDING_NUMBER_FOUND)
+if (NOT FastWindingNumber_FOUND)
+    find_package(FastWindingNumber QUIET)
+endif ()
 
-IF (NOT JIGSAW_FOUND)
-    FIND_PACKAGE(Jigsaw)
-ENDIF (NOT JIGSAW_FOUND)
+if (NOT Jigsaw_FOUND)
+    find_package(Jigsaw QUIET)
+endif ()

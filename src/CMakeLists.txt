@@ -9,8 +9,8 @@ add_library(PyMesh::Mesh ALIAS Mesh)
 
 target_link_libraries(Mesh
     PUBLIC
-        PyMesh::Eigen
-        PyMesh::TBB
+        PyMesh::third_party::Eigen
+        PyMesh::third_party::TBB
 )
 
 target_include_directories(Mesh SYSTEM
@@ -19,7 +19,7 @@ target_include_directories(Mesh SYSTEM
 )
 
 # Google sparse/dense hash
-if (SPARSEHASH_FOUND)
-    target_link_libraries(Mesh PRIVATE PyMesh::SparseHash)
-endif (SPARSEHASH_FOUND)
+if (TARGET PyMesh::third_party::SparseHash)
+    target_link_libraries(Mesh PRIVATE PyMesh::third_party::SparseHash)
+endif ()
 

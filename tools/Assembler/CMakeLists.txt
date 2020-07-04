@@ -1,22 +1,22 @@
-FILE(GLOB SRC_FILES *.cpp)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(Assemblers)
-ADD_SUBDIRECTORY(Elements)
-ADD_SUBDIRECTORY(FESetting)
-ADD_SUBDIRECTORY(Math)
-ADD_SUBDIRECTORY(Materials)
-ADD_SUBDIRECTORY(Mesh)
-ADD_SUBDIRECTORY(ShapeFunctions)
+add_subdirectory(Assemblers)
+add_subdirectory(Elements)
+add_subdirectory(FESetting)
+add_subdirectory(Math)
+add_subdirectory(Materials)
+add_subdirectory(Mesh)
+add_subdirectory(ShapeFunctions)
 
-ADD_LIBRARY(lib_Assembler SHARED ${SRC_FILES} ${INC_FILES})
-TARGET_LINK_LIBRARIES(lib_Assembler
+add_library(lib_Assembler SHARED ${SRC_FILES} ${INC_FILES})
+target_link_libraries(lib_Assembler
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
     PRIVATE
-        PyMesh::Tools::MeshUtils
+        PyMesh::MeshUtils
 )
-SET_TARGET_PROPERTIES(lib_Assembler PROPERTIES OUTPUT_NAME "PyMesh-Assembler")
+set_target_properties(lib_Assembler PROPERTIES OUTPUT_NAME "PyMesh-Assembler")
 
-ADD_LIBRARY(PyMesh::Tools::Assembler ALIAS lib_Assembler)
+add_library(PyMesh::Assembler ALIAS lib_Assembler)

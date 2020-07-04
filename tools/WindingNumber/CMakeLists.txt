@@ -1,20 +1,26 @@
 # Enumerate source files
-FILE(GLOB SRC_FILES *.cpp *.inl)
-FILE(GLOB INC_FILES *.h)
+file(GLOB SRC_FILES *.cpp *.inl)
+file(GLOB INC_FILES *.h)
 
-ADD_SUBDIRECTORY(IGL)
-ADD_SUBDIRECTORY(FastWindingNumber)
-
-ADD_LIBRARY(lib_WindingNumber SHARED ${SRC_FILES} ${INC_FILES})
-SET_TARGET_PROPERTIES(lib_WindingNumber PROPERTIES OUTPUT_NAME
+add_library(lib_WindingNumber SHARED)
+add_library(PyMesh::WindingNumber ALIAS lib_WindingNumber)
+set_target_properties(lib_WindingNumber PROPERTIES OUTPUT_NAME
     "PyMesh-WindingNumber")
-TARGET_LINK_LIBRARIES(lib_WindingNumber
+target_link_libraries(lib_WindingNumber
     PUBLIC
-        Mesh
+        PyMesh::Mesh
         PyMesh::Tools
-    PRIVATE
-        PyMesh::Tools::IGL
-        PyMesh::FastWindingNumber
 )
 
-ADD_LIBRARY(PyMesh::Tools::WindingNumber ALIAS lib_WindingNumber)
+if (TARGET PyMesh::IGL)
+    add_subdirectory(IGL)
+    target_link_libraries(lib_WindingNumber PRIVATE PyMesh::IGL)
+endif()
+
+if (TARGET PyMesh::third_party::FastWindingNumber)
+    add_subdirectory(FastWindingNumber)
+    target_link_libraries(lib_WindingNumber PRIVATE
+        PyMesh::third_party::FastWindingNumber)
+endif()
+
+target_sources(lib_WindingNumber PRIVATE ${SRC_FILES} ${INC_FILES})

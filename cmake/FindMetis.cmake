@@ -1,7 +1,7 @@
 # Find METIS library (http://glaros.dtc.umn.edu/gkhome/METIS/METIS/overview)
 # The following varaibles are set
 #
-# METIS_FOUND
+# Metis_FOUND
 # METIS_INCLUDE_DIRS
 # METIS_LIBRARIES
 #
@@ -32,7 +32,7 @@ SET(METIS_INCLUDE_DIRS ${METIS_INCLUDE_DIR})
 SET(METIS_LIBRARIES ${METIS_LIBRARY})
 
 include(FindPackageHandleStandardArgs)
-FIND_PACKAGE_HANDLE_STANDARD_ARGS(METIS
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(Metis
     "METIS library cannot be found.  Consider set METIS_PATH environment variable"
     METIS_INCLUDE_DIRS METIS_LIBRARIES)
 

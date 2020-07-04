@@ -1,6 +1,5 @@
 /* This file is part of PyMesh. Copyright (c) 2015 by Qingnan Zhou */
 #pragma once
-#ifdef WITH_IGL_AND_CGAL
 
 #include "../BooleanEngineTest.h"
 
@@ -128,6 +127,7 @@ class IGLEngineTest : public BooleanEngineTest {
 };
 
 TEST_F(IGLEngineTest, disjoint_union) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_disjoint_setting(mesh);
@@ -143,6 +143,7 @@ TEST_F(IGLEngineTest, disjoint_union) {
 }
 
 TEST_F(IGLEngineTest, disjoint_intersection) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_disjoint_setting(mesh);
@@ -156,6 +157,7 @@ TEST_F(IGLEngineTest, disjoint_intersection) {
 }
 
 TEST_F(IGLEngineTest, disjoint_difference) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_disjoint_setting(mesh);
@@ -171,6 +173,7 @@ TEST_F(IGLEngineTest, disjoint_difference) {
 }
 
 TEST_F(IGLEngineTest, disjoint_symmetric_difference) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_disjoint_setting(mesh);
@@ -186,6 +189,7 @@ TEST_F(IGLEngineTest, disjoint_symmetric_difference) {
 }
 
 TEST_F(IGLEngineTest, overlap_union) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_overlap_setting(mesh);
@@ -202,6 +206,7 @@ TEST_F(IGLEngineTest, overlap_union) {
 }
 
 TEST_F(IGLEngineTest, overlap_intersection) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_overlap_setting(mesh);
@@ -218,6 +223,7 @@ TEST_F(IGLEngineTest, overlap_intersection) {
 }
 
 TEST_F(IGLEngineTest, overlap_difference) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_overlap_setting(mesh);
@@ -234,6 +240,7 @@ TEST_F(IGLEngineTest, overlap_difference) {
 }
 
 TEST_F(IGLEngineTest, overlap_symmetric_difference) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
 
     BooleanPtr igl_engine = get_overlap_setting(mesh);
@@ -250,6 +257,7 @@ TEST_F(IGLEngineTest, overlap_symmetric_difference) {
 }
 
 TEST_F(IGLEngineTest, open_surface) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
     MatrixFr box_vertices = extract_vertices(mesh);
     MatrixIr box_faces = extract_faces(mesh);
@@ -270,6 +278,7 @@ TEST_F(IGLEngineTest, open_surface) {
 }
 
 TEST_F(IGLEngineTest, face_source) {
+    if (!BooleanEngine::supports("igl")) return;
     MeshPtr mesh = load_mesh("cube.obj");
     BooleanPtr igl_engine = get_disjoint_setting(mesh);
     igl_engine->compute_union();
@@ -280,4 +289,3 @@ TEST_F(IGLEngineTest, face_source) {
     ASSERT_TRUE(face_sources.maxCoeff() < mesh->get_num_faces() * 2);
 }
 
-#endif

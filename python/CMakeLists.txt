@@ -26,28 +26,45 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyVoxelGrid.cpp
     PyWindingNumber.cpp
     PyWires.cpp)
-TARGET_LINK_LIBRARIES(PyMesh PRIVATE
+target_link_libraries(PyMesh PRIVATE
     PyMesh::Mesh
-    PyMesh::Tools::Assembler
-    PyMesh::Tools::MeshUtils
-    PyMesh::Tools::CGAL
-    PyMesh::Tools::Geogram
-    PyMesh::Tools::IGL
-    PyMesh::Tools::Predicates
-    PyMesh::Tools::Compression
-    PyMesh::Tools::ConvexHull
-    PyMesh::Tools::SelfIntersection
-    PyMesh::Tools::Boolean
-    PyMesh::Tools::BVH
-    PyMesh::Tools::OuterHull
-    PyMesh::Tools::SparseSolver
-    PyMesh::Tools::TetGen
-    PyMesh::Tools::Tetrahedralization
-    PyMesh::Tools::Triangle
-    PyMesh::Tools::Triangulation
-    PyMesh::Tools::WindingNumber
-    PyMesh::Tools::Wires)
-TARGET_INCLUDE_DIRECTORIES(PyMesh SYSTEM PRIVATE
+    PyMesh::Assembler
+    PyMesh::Envelope
+    PyMesh::MeshUtils
+    PyMesh::Predicates
+    PyMesh::Compression
+    PyMesh::ConvexHull
+    PyMesh::SelfIntersection
+    PyMesh::Boolean
+    PyMesh::BVH
+    PyMesh::OuterHull
+    PyMesh::SparseSolver
+    PyMesh::Tetrahedralization
+    PyMesh::Triangulation
+    PyMesh::WindingNumber
+    PyMesh::Wires)
+
+if (TARGET PyMesh::CGAL)
+    target_link_libraries(PyMesh PRIVATE PyMesh::CGAL)
+endif()
+
+if (TARGET PyMesh::IGL)
+    target_link_libraries(PyMesh PRIVATE PyMesh::IGL)
+endif()
+
+if (TARGET PyMesh::Geogram)
+    target_link_libraries(PyMesh PRIVATE PyMesh::Geogram)
+endif()
+
+if (TARGET PyMesh::Triangle)
+    target_link_libraries(PyMesh PRIVATE PyMesh::Triangle)
+endif()
+
+if (TARGET PyMesh::TetGen)
+    target_link_libraries(PyMesh PRIVATE PyMesh::TetGen)
+endif()
+
+target_include_directories(PyMesh SYSTEM PRIVATE
     ${PROJECT_SOURCE_DIR}/src
     ${PROJECT_SOURCE_DIR}/tools
     ${EIGEN_INCLUDE_DIRS}

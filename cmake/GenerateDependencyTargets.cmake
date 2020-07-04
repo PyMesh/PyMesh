@@ -1,194 +1,168 @@
-IF (MKL_FOUND AND PYMESH_USE_MKL AND NOT TARGET PyMesh::MKL)
-    ADD_LIBRARY(PyMesh::MKL INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::MKL SYSTEM
+if (MKL_FOUND AND PYMESH_USE_MKL AND NOT TARGET PyMesh::third_party::MKL)
+    add_library(PyMesh::third_party::MKL INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::MKL SYSTEM
         INTERFACE ${MKL_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::MKL
+    target_link_libraries(PyMesh::third_party::MKL
         INTERFACE ${MKL_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::MKL
+    target_compile_definitions(PyMesh::third_party::MKL
         INTERFACE -DEIGEN_USE_MKL_ALL)
-ELSE (MKL_FOUND AND PYMESH_USE_MKL AND NOT TARGET PyMesh::MKL)
-    ADD_LIBRARY(PyMesh::MKL INTERFACE IMPORTED)
-ENDIF (MKL_FOUND AND PYMESH_USE_MKL AND NOT TARGET PyMesh::MKL)
+endif ()
 
 
-IF (EIGEN_FOUND AND NOT TARGET PyMesh::Eigen)
-    ADD_LIBRARY(PyMesh::Eigen INTERFACE IMPORTED)
-    TARGET_LINK_LIBRARIES(PyMesh::Eigen
-        INTERFACE PyMesh::MKL)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Eigen SYSTEM
+if (EIGEN_FOUND AND NOT TARGET PyMesh::third_party::Eigen)
+    add_library(PyMesh::third_party::Eigen INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Eigen SYSTEM
         INTERFACE ${EIGEN_INCLUDE_DIRS} ${EIGEN_INCLUDE_DIRS}/unsupported)
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Eigen
+    target_compile_definitions(PyMesh::third_party::Eigen
         INTERFACE -DEIGEN_YES_I_KNOW_SPARSE_MODULE_IS_NOT_STABLE_YET)
-ENDIF (EIGEN_FOUND AND NOT TARGET PyMesh::Eigen)
+    if (TARGET PyMesh::third_party::MKL)
+        target_link_libraries(PyMesh::third_party::Eigen
+            INTERFACE PyMesh::third_party::MKL)
+    endif()
+endif ()
 
 
-IF (GMP_FOUND AND NOT TARGET PyMesh::GMP)
-    ADD_LIBRARY(PyMesh::GMP INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::GMP SYSTEM
+if (GMP_FOUND AND NOT TARGET PyMesh::third_party::GMP)
+    add_library(PyMesh::third_party::GMP INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::GMP SYSTEM
         INTERFACE ${GMP_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::GMP
+    target_link_libraries(PyMesh::third_party::GMP
         INTERFACE ${GMP_LIBRARIES})
-ELSE (GMP_FOUND AND NOT TARGET PyMesh::GMP)
-    ADD_LIBRARY(PyMesh::GMP INTERFACE IMPORTED)
-ENDIF (GMP_FOUND AND NOT TARGET PyMesh::GMP)
+endif ()
 
 
-IF (MPFR_FOUND AND NOT TARGET PyMesh::MPFR)
-    ADD_LIBRARY(PyMesh::MPFR INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::MPFR SYSTEM
+if (MPFR_FOUND AND NOT TARGET PyMesh::third_party::MPFR)
+    add_library(PyMesh::third_party::MPFR INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::MPFR SYSTEM
         INTERFACE ${MPFR_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::MPFR
+    target_link_libraries(PyMesh::third_party::MPFR
         INTERFACE ${MPFR_LIBRARIES})
-ELSE (MPFR_FOUND AND NOT TARGET PyMesh::MPFR)
-    ADD_LIBRARY(PyMesh::MPFR INTERFACE IMPORTED)
-ENDIF (MPFR_FOUND AND NOT TARGET PyMesh::MPFR)
+endif ()
 
 
-IF (TBB_FOUND AND NOT TARGET PyMesh::TBB)
-    ADD_LIBRARY(PyMesh::TBB INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::TBB SYSTEM
+if (TBB_FOUND AND NOT TARGET PyMesh::third_party::TBB)
+    add_library(PyMesh::third_party::TBB INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::TBB SYSTEM
         INTERFACE ${TBB_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::TBB
+    target_link_libraries(PyMesh::third_party::TBB
         INTERFACE ${TBB_LIBRARIES})
-ELSE (TBB_FOUND AND NOT TARGET PyMesh::TBB)
-    ADD_LIBRARY(PyMesh::TBB INTERFACE IMPORTED)
-ENDIF (TBB_FOUND AND NOT TARGET PyMesh::TBB)
+endif ()
 
 
-IF (OPENCL_FOUND AND NOT TARGET PyMesh::OpenCL)
-    ADD_LIBRARY(PyMesh::OpenCL INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::OpenCL SYSTEM
-        INTERFACE ${OPENCL_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::OpenCL
-        INTERFACE ${OPENCL_LIBRARIES})
-ELSE (OPENCL_FOUND AND NOT TARGET PyMesh::OpenCL)
-    ADD_LIBRARY(PyMesh::OpenCL INTERFACE IMPORTED)
-ENDIF (OPENCL_FOUND AND NOT TARGET PyMesh::OpenCL)
-
-
-IF (SPARSEHASH_FOUND AND PYMESH_USE_SPARSEHASH AND NOT TARGET PyMesh::SparseHash)
-    ADD_LIBRARY(PyMesh::SparseHash INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::SparseHash SYSTEM
+if (SPARSEHASH_FOUND AND PYMESH_USE_SPARSEHASH AND
+        NOT TARGET PyMesh::third_party::SparseHash)
+    add_library(PyMesh::third_party::SparseHash INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::SparseHash SYSTEM
         INTERFACE ${SPARSEHASH_INCLUDE_DIRS})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::SparseHash
+    target_compile_definitions(PyMesh::third_party::SparseHash
         INTERFACE -DUSE_SPARSEHASH)
-ELSE (SPARSEHASH_FOUND AND PYMESH_USE_SPARSEHASH AND NOT TARGET PyMesh::SparseHash)
-    ADD_LIBRARY(PyMesh::SparseHash INTERFACE IMPORTED)
-ENDIF (SPARSEHASH_FOUND AND PYMESH_USE_SPARSEHASH AND NOT TARGET PyMesh::SparseHash)
+endif ()
 
 
-IF (BSP_FOUND AND PYMESH_USE_BSP AND NOT TARGET PyMesh::BSP)
-    ADD_LIBRARY(PyMesh::BSP INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::BSP SYSTEM
+if (BSP_FOUND AND PYMESH_USE_BSP AND NOT TARGET PyMesh::third_party::BSP)
+    add_library(PyMesh::third_party::BSP INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::BSP SYSTEM
         INTERFACE ${BSP_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::BSP
+    target_link_libraries(PyMesh::third_party::BSP
         INTERFACE ${BSP_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::BSP
+    target_compile_definitions(PyMesh::third_party::BSP
         INTERFACE -DWITH_BSP)
-ELSE (BSP_FOUND AND PYMESH_USE_BSP AND NOT TARGET PyMesh::BSP)
-    ADD_LIBRARY(PyMesh::BSP INTERFACE IMPORTED)
-ENDIF (BSP_FOUND AND PYMESH_USE_BSP AND NOT TARGET PyMesh::BSP)
+endif ()
 
 
-IF (MMG_FOUND AND PYMESH_USE_MMG AND NOT TARGET PyMesh::MMG)
-    ADD_LIBRARY(PyMesh::MMG INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::MMG SYSTEM
+if (MMG_FOUND AND PYMESH_USE_MMG AND NOT TARGET PyMesh::third_party::MMG)
+    add_library(PyMesh::third_party::MMG INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::MMG SYSTEM
         INTERFACE ${MMG_INCLUDE_DIR})
-    TARGET_LINK_LIBRARIES(PyMesh::MMG
+    target_link_libraries(PyMesh::third_party::MMG
         INTERFACE ${MMG_LIBRARY})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::MMG
+    target_compile_definitions(PyMesh::third_party::MMG
         INTERFACE -DWITH_MMG)
-ELSE (MMG_FOUND AND PYMESH_USE_MMG AND NOT TARGET PyMesh::MMG)
-    ADD_LIBRARY(PyMesh::MMG INTERFACE IMPORTED)
-ENDIF (MMG_FOUND AND PYMESH_USE_MMG AND NOT TARGET PyMesh::MMG)
+endif ()
 
 
-IF (QHULL_FOUND AND PYMESH_USE_QHULL AND NOT TARGET PyMesh::Qhull)
-    ADD_LIBRARY(PyMesh::Qhull INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Qhull SYSTEM
+if (QHULL_FOUND AND PYMESH_USE_QHULL AND NOT TARGET PyMesh::third_party::Qhull)
+    add_library(PyMesh::third_party::Qhull INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Qhull SYSTEM
         INTERFACE ${QHULL_INCLUDE_DIRS} ${QHULL_INCLUDE_DIRS}/libqhull)
-    TARGET_LINK_LIBRARIES(PyMesh::Qhull
+    target_link_libraries(PyMesh::third_party::Qhull
         INTERFACE ${QHULL_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Qhull
+    target_compile_definitions(PyMesh::third_party::Qhull
         INTERFACE -DWITH_QHULL)
-ELSE (QHULL_FOUND AND PYMESH_USE_QHULL AND NOT TARGET PyMesh::Qhull)
-    ADD_LIBRARY(PyMesh::Qhull INTERFACE IMPORTED)
-ENDIF (QHULL_FOUND AND PYMESH_USE_QHULL AND NOT TARGET PyMesh::Qhull)
+endif ()
 
 
-IF (QUARTET_FOUND AND PYMESH_USE_QUARTET AND NOT TARGET PyMesh::Quartet)
-    ADD_LIBRARY(PyMesh::Quartet INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Quartet SYSTEM
+if (QUARTET_FOUND AND PYMESH_USE_QUARTET AND NOT TARGET PyMesh::third_party::Quartet)
+    add_library(PyMesh::third_party::Quartet INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Quartet SYSTEM
         INTERFACE ${QUARTET_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Quartet
+    target_link_libraries(PyMesh::third_party::Quartet
         INTERFACE ${QUARTET_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Quartet
+    target_compile_definitions(PyMesh::third_party::Quartet
         INTERFACE -DWITH_QUARTET)
-ELSE (QUARTET_FOUND AND PYMESH_USE_QUARTET AND NOT TARGET PyMesh::Quartet)
-    ADD_LIBRARY(PyMesh::Quartet INTERFACE IMPORTED)
-ENDIF (QUARTET_FOUND AND PYMESH_USE_QUARTET AND NOT TARGET PyMesh::Quartet)
+endif ()
 
 
-IF (TRIANGLE_FOUND AND PYMESH_USE_TRIANGLE AND NOT TARGET PyMesh::Triangle)
-    ADD_LIBRARY(PyMesh::Triangle INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Triangle SYSTEM
+if (TRIANGLE_FOUND AND PYMESH_USE_TRIANGLE AND NOT TARGET PyMesh::third_party::Triangle)
+    add_library(PyMesh::third_party::Triangle INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Triangle SYSTEM
         INTERFACE ${TRIANGLE_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Triangle
+    target_link_libraries(PyMesh::third_party::Triangle
         INTERFACE ${TRIANGLE_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Triangle
+    target_compile_definitions(PyMesh::third_party::Triangle
         INTERFACE -DWITH_TRIANGLE)
-ELSE (TRIANGLE_FOUND AND PYMESH_USE_TRIANGLE AND NOT TARGET PyMesh::Triangle)
-    ADD_LIBRARY(PyMesh::Triangle INTERFACE IMPORTED)
-ENDIF (TRIANGLE_FOUND AND PYMESH_USE_TRIANGLE AND NOT TARGET PyMesh::Triangle)
+endif ()
 
 
-IF (TETGEN_FOUND AND PYMESH_USE_TETGEN AND NOT PyMesh::TetGen)
-    ADD_LIBRARY(PyMesh::TetGen INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::TetGen SYSTEM
+if (TETGEN_FOUND AND PYMESH_USE_TETGEN AND NOT PyMesh::third_party::TetGen)
+    add_library(PyMesh::third_party::TetGen INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::TetGen SYSTEM
         INTERFACE ${TETGEN_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::TetGen
+    target_link_libraries(PyMesh::third_party::TetGen
         INTERFACE ${TETGEN_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::TetGen
+    target_compile_definitions(PyMesh::third_party::TetGen
         INTERFACE -DTETLIBRARY -DWITH_TETGEN)
-ELSE (TETGEN_FOUND AND PYMESH_USE_TETGEN AND NOT PyMesh::TetGen)
-    ADD_LIBRARY(PyMesh::TetGen INTERFACE IMPORTED)
-ENDIF (TETGEN_FOUND AND PYMESH_USE_TETGEN AND NOT PyMesh::TetGen)
+endif ()
 
 
-IF (CORK_FOUND AND PYMESH_USE_CORK AND NOT TARGET PyMesh::Cork)
-    ADD_LIBRARY(PyMesh::Cork INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Cork SYSTEM
+if (CORK_FOUND AND PYMESH_USE_CORK AND NOT TARGET PyMesh::third_party::Cork)
+    add_library(PyMesh::third_party::Cork INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Cork SYSTEM
         INTERFACE ${CORK_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Cork
-        INTERFACE ${CORK_LIBRARIES} PyMesh::GMP)
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Cork
+    target_link_libraries(PyMesh::third_party::Cork
+        INTERFACE ${CORK_LIBRARIES} PyMesh::third_party::GMP)
+    target_compile_definitions(PyMesh::third_party::Cork
         INTERFACE -DWITH_CORK)
-ELSE (CORK_FOUND AND PYMESH_USE_CORK AND NOT TARGET PyMesh::Cork)
-    ADD_LIBRARY(PyMesh::Cork INTERFACE IMPORTED)
-ENDIF (CORK_FOUND AND PYMESH_USE_CORK AND NOT TARGET PyMesh::Cork)
+endif ()
 
 
-IF (CLIPPER_FOUND AND PYMESH_USE_CLIPPER AND NOT TARGET PyMesh::Clipper)
-    ADD_LIBRARY(PyMesh::Clipper INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Clipper SYSTEM
+if (CLIPPER_FOUND AND PYMESH_USE_CLIPPER AND NOT TARGET PyMesh::third_party::Clipper)
+    add_library(PyMesh::third_party::Clipper INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Clipper SYSTEM
         INTERFACE ${CLIPPER_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Clipper
+    target_link_libraries(PyMesh::third_party::Clipper
         INTERFACE ${CLIPPER_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Clipper
+    target_compile_definitions(PyMesh::third_party::Clipper
         INTERFACE -DWITH_CLIPPER)
-ELSE (CLIPPER_FOUND AND PYMESH_USE_CLIPPER AND NOT TARGET PyMesh::Clipper)
-    ADD_LIBRARY(PyMesh::Clipper INTERFACE IMPORTED)
-ENDIF (CLIPPER_FOUND AND PYMESH_USE_CLIPPER AND NOT TARGET PyMesh::Clipper)
+endif ()
 
 
-IF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
-    ADD_LIBRARY(PyMesh::CGAL INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::CGAL SYSTEM
+if (CGAL_FOUND AND PYMESH_USE_CGAL
+        AND TARGET PyMesh::third_party::GMP
+        AND TARGET PyMesh::third_party::MPFR
+        AND TARGET Boost::atomic
+        AND TARGET Boost::chrono
+        AND TARGET Boost::date_time
+        AND TARGET Boost::thread
+        AND TARGET Boost::system
+        AND NOT TARGET PyMesh::third_party::CGAL)
+    add_library(PyMesh::third_party::CGAL INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::CGAL SYSTEM
         INTERFACE ${CGAL_INCLUDE_DIRS} ${CGAL_3RD_PARTY_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::CGAL
+    target_link_libraries(PyMesh::third_party::CGAL
         INTERFACE
-            PyMesh::GMP
-            PyMesh::MPFR
+            PyMesh::third_party::GMP
+            PyMesh::third_party::MPFR
             Boost::atomic
             Boost::chrono
             Boost::date_time
@@ -197,7 +171,7 @@ IF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
             ${CGAL_LIBRARIES}
             ${CGAL_3RD_PARTY_LIBRARIES}
     )
-    TARGET_COMPILE_DEFINITIONS(PyMesh::CGAL
+    target_compile_definitions(PyMesh::third_party::CGAL
         INTERFACE
             ${CGAL_DEFINITIONS}
             ${CGAL_3RD_PARTY_DEFINITIONS}
@@ -205,162 +179,136 @@ IF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
             -DWITH_CGAL_COREFINEMENT
             -DCGAL_CONCURRENT_MESH_3
     )
-    IF (CGAL_HEADER_ONLY)
+    if (CGAL_HEADER_ONLY)
         # It seems CGAL does not capture this flag in ${CGAL_DEFINITIONS}...
-        TARGET_COMPILE_DEFINITIONS(PyMesh::CGAL
+        target_compile_definitions(PyMesh::third_party::CGAL
             INTERFACE -DCGAL_HEADER_ONLY)
-    ENDIF (CGAL_HEADER_ONLY)
-ELSE (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
-    ADD_LIBRARY(PyMesh::CGAL INTERFACE IMPORTED)
-ENDIF (CGAL_FOUND AND PYMESH_USE_CGAL AND NOT TARGET PyMesh::CGAL)
+    endif ()
+endif ()
 
 
-IF (LIBIGL_FOUND AND PYMESH_USE_LIBIGL AND NOT TARGET PyMesh::libigl)
-    ADD_LIBRARY(PyMesh::libigl INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::libigl SYSTEM
+if (LIBIGL_FOUND AND PYMESH_USE_LIBIGL AND NOT TARGET PyMesh::third_party::libigl)
+    add_library(PyMesh::third_party::libigl INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::libigl SYSTEM
         INTERFACE ${LIBIGL_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::libigl
-        INTERFACE PyMesh::CGAL)
-    TARGET_COMPILE_DEFINITIONS(PyMesh::libigl
+    target_compile_definitions(PyMesh::third_party::libigl
         INTERFACE -DWITH_IGL)
-    IF (CGAL_FOUND AND PYMESH_USE_CGAL)
-        TARGET_COMPILE_DEFINITIONS(PyMesh::libigl
+    if (TARGET PyMesh::third_party::CGAL)
+        target_link_libraries(PyMesh::third_party::libigl
+            INTERFACE PyMesh::third_party::CGAL)
+        target_compile_definitions(PyMesh::third_party::libigl
             INTERFACE -DWITH_IGL_AND_CGAL)
-    ENDIF (CGAL_FOUND AND PYMESH_USE_CGAL)
-ELSE (LIBIGL_FOUND AND PYMESH_USE_LIBIGL AND NOT TARGET PyMesh::libigl)
-    ADD_LIBRARY(PyMesh::libigl INTERFACE IMPORTED)
-ENDIF (LIBIGL_FOUND AND PYMESH_USE_LIBIGL AND NOT TARGET PyMesh::libigl)
+    endif ()
+endif ()
 
 
-IF (CARVE_FOUND AND PYMESH_USE_CARVE AND NOT TARGET PyMesh::Carve)
-    ADD_LIBRARY(PyMesh::Carve INTERFACE IMPORTED)
-    TARGET_LINK_LIBRARIES(PyMesh::Carve
+if (CARVE_FOUND AND PYMESH_USE_CARVE AND NOT TARGET PyMesh::third_party::Carve)
+    add_library(PyMesh::third_party::Carve INTERFACE IMPORTED)
+    target_link_libraries(PyMesh::third_party::Carve
         INTERFACE ${CARVE_LIBRARIES})
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Carve SYSTEM
+    target_include_directories(PyMesh::third_party::Carve SYSTEM
         INTERFACE ${CARVE_INCLUDE_DIRS})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Carve
+    target_compile_definitions(PyMesh::third_party::Carve
         INTERFACE -DWITH_CARVE)
-ELSE (CARVE_FOUND AND PYMESH_USE_CARVE AND NOT TARGET PyMesh::Carve)
-    ADD_LIBRARY(PyMesh::Carve INTERFACE IMPORTED)
-ENDIF (CARVE_FOUND AND PYMESH_USE_CARVE AND NOT TARGET PyMesh::Carve)
+endif ()
 
 
-IF (UMFPACK_FOUND AND PYMESH_USE_UMFPACK AND NOT TARGET PyMesh::Umfpack)
-    ADD_LIBRARY(PyMesh::Umfpack INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Umfpack SYSTEM
+if (UMFPACK_FOUND AND PYMESH_USE_UMFPACK AND NOT TARGET PyMesh::third_party::Umfpack)
+    add_library(PyMesh::third_party::Umfpack INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Umfpack SYSTEM
         INTERFACE ${UMFPACK_INCLUDES})
-    TARGET_LINK_LIBRARIES(PyMesh::Umfpack
+    target_link_libraries(PyMesh::third_party::Umfpack
         INTERFACE ${UMFPACK_LIBRARIES} ${AMD_LIBRARY} ${COLAMD_LIBRARY})
-ELSE (UMFPACK_FOUND AND PYMESH_USE_UMFPACK AND NOT TARGET PyMesh::Umfpack)
-    ADD_LIBRARY(PyMesh::Umfpack INTERFACE IMPORTED)
-ENDIF (UMFPACK_FOUND AND PYMESH_USE_UMFPACK AND NOT TARGET PyMesh::Umfpack)
+endif ()
 
 
-IF (CHOLMOD_FOUND AND PYMESH_USE_CHOLMOD AND NOT TARGET PyMesh::Cholmod)
-    ADD_LIBRARY(PyMesh::Cholmod INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Cholmod
+if (CHOLMOD_FOUND AND PYMESH_USE_CHOLMOD AND NOT TARGET PyMesh::third_party::Cholmod)
+    add_library(PyMesh::third_party::Cholmod INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Cholmod
         INTERFACE ${CHOLMOD_INCLUDES})
-    TARGET_LINK_LIBRARIES(PyMesh::Cholmod
+    target_link_libraries(PyMesh::third_party::Cholmod
         INTERFACE ${CHOLMOD_LIBRARIES} ${AMD_LIBRARY} ${COLAMD_LIBRARY})
-ELSE (CHOLMOD_FOUND AND PYMESH_USE_CHOLMOD AND NOT TARGET PyMesh::Cholmod)
-    ADD_LIBRARY(PyMesh::Cholmod INTERFACE IMPORTED)
-ENDIF (CHOLMOD_FOUND AND PYMESH_USE_CHOLMOD AND NOT TARGET PyMesh::Cholmod)
+endif ()
 
 
-IF (METIS_FOUND AND PYMESH_USE_METIS AND NOT TARGET PyMesh::Metis)
-    ADD_LIBRARY(PyMesh::Metis INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Metis SYSTEM
+if (METIS_FOUND AND PYMESH_USE_METIS AND NOT TARGET PyMesh::third_party::Metis)
+    add_library(PyMesh::third_party::Metis INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Metis SYSTEM
         INTERFACE ${METIS_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Metis
+    target_link_libraries(PyMesh::third_party::Metis
         INTERFACE ${METIS_LIBRARIES})
-ELSE (METIS_FOUND AND PYMESH_USE_METIS AND NOT TARGET PyMesh::Metis)
-    ADD_LIBRARY(PyMesh::Metis INTERFACE IMPORTED)
-ENDIF (METIS_FOUND AND PYMESH_USE_METIS AND NOT TARGET PyMesh::Metis)
+endif ()
 
 
-IF (TINYXML2_FOUND AND PYMESH_USE_TINYXML2 AND NOT TARGET PyMesh::TinyXML2)
-    ADD_LIBRARY(PyMesh::TinyXML2 INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::TinyXML2 SYSTEM
+if (TINYXML2_FOUND AND PYMESH_USE_TINYXML2 AND NOT TARGET PyMesh::third_party::TinyXML2)
+    add_library(PyMesh::third_party::TinyXML2 INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::TinyXML2 SYSTEM
         INTERFACE ${TINYXML2_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::TinyXML2
+    target_link_libraries(PyMesh::third_party::TinyXML2
         INTERFACE ${TINYXML2_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::TinyXML2
+    target_compile_definitions(PyMesh::third_party::TinyXML2
         INTERFACE -DWITH_TINYXML2)
-ELSE (TINYXML2_FOUND AND PYMESH_USE_TINYXML2 AND NOT TARGET PyMesh::TinyXML2)
-    ADD_LIBRARY(PyMesh::TinyXML2 INTERFACE IMPORTED)
-ENDIF (TINYXML2_FOUND AND PYMESH_USE_TINYXML2 AND NOT TARGET PyMesh::TinyXML2)
+endif ()
 
 
-IF (GEOGRAM_FOUND AND PYMESH_USE_GEOGRAM AND NOT TARGET PyMesh::Geogram)
-    ADD_LIBRARY(PyMesh::Geogram INTERFACE IMPORTED)
-    TARGET_LINK_LIBRARIES(PyMesh::Geogram
+if (GEOGRAM_FOUND AND PYMESH_USE_GEOGRAM AND NOT TARGET PyMesh::third_party::Geogram)
+    add_library(PyMesh::third_party::Geogram INTERFACE IMPORTED)
+    target_link_libraries(PyMesh::third_party::Geogram
         INTERFACE Geogram::geogram)
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Geogram
+    target_compile_definitions(PyMesh::third_party::Geogram
         INTERFACE -DWITH_GEOGRAM)
-ELSE (GEOGRAM_FOUND AND PYMESH_USE_GEOGRAM AND NOT TARGET PyMesh::Geogram)
-    ADD_LIBRARY(PyMesh::Geogram INTERFACE IMPORTED)
-ENDIF (GEOGRAM_FOUND AND PYMESH_USE_GEOGRAM AND NOT TARGET PyMesh::Geogram)
+endif ()
 
 
-IF (draco_FOUND AND PYMESH_USE_DRACO AND NOT TARGET PyMesh::Draco)
-    ADD_LIBRARY(PyMesh::Draco INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Draco SYSTEM
+if (draco_FOUND AND PYMESH_USE_DRACO AND NOT TARGET PyMesh::third_party::Draco)
+    add_library(PyMesh::third_party::Draco INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Draco SYSTEM
         INTERFACE ${draco_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Draco
+    target_link_libraries(PyMesh::third_party::Draco
         INTERFACE ${draco_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Draco
+    target_compile_definitions(PyMesh::third_party::Draco
         INTERFACE -DWITH_DRACO)
-ELSE (draco_FOUND AND PYMESH_USE_DRACO AND NOT TARGET PyMesh::Draco)
-    ADD_LIBRARY(PyMesh::Draco INTERFACE IMPORTED)
-ENDIF (draco_FOUND AND PYMESH_USE_DRACO AND NOT TARGET PyMesh::Draco)
+endif ()
 
 
-IF (TETWILD_FOUND AND PYMESH_USE_TETWILD AND NOT TARGET PyMesh::TetWild)
-    ADD_LIBRARY(PyMesh::TetWild INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::TetWild SYSTEM
+if (TETWILD_FOUND AND PYMESH_USE_TETWILD
+        AND TARGET PyMesh::third_party::CGAL
+        AND TARGET PyMesh::third_party::libigl
+        AND TARGET PyMesh::third_party::Geogram
+        AND NOT TARGET PyMesh::third_party::TetWild)
+    add_library(PyMesh::third_party::TetWild INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::TetWild SYSTEM
         INTERFACE ${TETWILD_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::TetWild
+    target_link_libraries(PyMesh::third_party::TetWild
         INTERFACE
             ${TETWILD_LIBRARY}
-            PyMesh::CGAL
-            PyMesh::libigl
-            PyMesh::Geogram
+            PyMesh::third_party::CGAL
+            PyMesh::third_party::libigl
+            PyMesh::third_party::Geogram
     )
-    TARGET_COMPILE_DEFINITIONS(PyMesh::TetWild
+    target_compile_definitions(PyMesh::third_party::TetWild
         INTERFACE -DWITH_TETWILD)
-ELSE (TETWILD_FOUND AND PYMESH_USE_TETWILD AND NOT TARGET PyMesh::TetWild)
-    ADD_LIBRARY(PyMesh::TetWild INTERFACE IMPORTED)
-ENDIF (TETWILD_FOUND AND PYMESH_USE_TETWILD AND NOT TARGET PyMesh::TetWild)
+endif ()
 
 
-IF (FAST_WINDING_NUMBER_FOUND AND PYMESH_USE_FastWindingNumber AND NOT TARGET
-        PyMesh::FastWindingNumber)
-    ADD_LIBRARY(PyMesh::FastWindingNumber INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::FastWindingNumber SYSTEM
-        INTERFACE
-            ${FAST_WINDING_NUMBER_INCLUDE_DIRS}
-    )
-    TARGET_LINK_LIBRARIES(PyMesh::FastWindingNumber
-        INTERFACE
-            ${FAST_WINDING_NUMBER_LIBRARIES}
-            PyMesh::TBB
-    )
-    TARGET_COMPILE_DEFINITIONS(PyMesh::FastWindingNumber
+if (FAST_WINDING_NUMBER_FOUND AND PYMESH_USE_FastWindingNumber
+        AND TARGET PyMesh::third_party::TBB
+        AND NOT TARGET PyMesh::third_party::FastWindingNumber)
+    add_library(PyMesh::third_party::FastWindingNumber INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::FastWindingNumber SYSTEM
+        INTERFACE ${FAST_WINDING_NUMBER_INCLUDE_DIRS})
+    target_link_libraries(PyMesh::third_party::FastWindingNumber
+        INTERFACE ${FAST_WINDING_NUMBER_LIBRARIES} PyMesh::third_party::TBB)
+    target_compile_definitions(PyMesh::third_party::FastWindingNumber
         INTERFACE -DWITH_FAST_WINDING_NUMBER)
-ELSE (FAST_WINDING_NUMBER_FOUND AND PYMESH_USE_FastWindingNumber AND NOT TARGET
-        PyMesh::FastWindingNumber)
-    ADD_LIBRARY(PyMesh::FastWindingNumber INTERFACE IMPORTED)
-ENDIF (FAST_WINDING_NUMBER_FOUND AND PYMESH_USE_FastWindingNumber AND NOT TARGET
-    PyMesh::FastWindingNumber)
+endif ()
 
-IF (JIGSAW_FOUND)
-    ADD_LIBRARY(PyMesh::Jigsaw INTERFACE IMPORTED)
-    TARGET_INCLUDE_DIRECTORIES(PyMesh::Jigsaw SYSTEM
+if (JIGSAW_FOUND AND NOT TARGET PyMesh::third_party::Jigsaw)
+    add_library(PyMesh::third_party::Jigsaw INTERFACE IMPORTED)
+    target_include_directories(PyMesh::third_party::Jigsaw SYSTEM
         INTERFACE ${JIGSAW_INCLUDE_DIRS})
-    TARGET_LINK_LIBRARIES(PyMesh::Jigsaw
+    target_link_libraries(PyMesh::third_party::Jigsaw
         INTERFACE ${JIGSAW_LIBRARIES})
-    TARGET_COMPILE_DEFINITIONS(PyMesh::Jigsaw
+    target_compile_definitions(PyMesh::third_party::Jigsaw
         INTERFACE -DWITH_JIGSAW)
-ELSE (JIGSAW_FOUND)
-    ADD_LIBRARY(PyMesh::Jigsaw INTERFACE IMPORTED)
-ENDIF (JIGSAW_FOUND)
+endif ()
