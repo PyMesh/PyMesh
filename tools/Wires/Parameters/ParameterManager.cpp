@@ -72,7 +72,7 @@ namespace ParameterManagerHelper {
             size_t coordinate_idx = 0;
             for (auto coordinate_itr : *offset_itr) {
                 std::string offset =
-                    coordinate_itr.get<std::string>();
+                    coordinate_itr.dump();
                 Float val = parse_value(offset);
                 std::string formula = parse_formula(offset);
                 manager->add_offset_parameter(roi, formula, val, coordinate_idx);
@@ -114,7 +114,7 @@ namespace ParameterManagerHelper {
             }
 
             std::string thickness =
-                thickness_itr->get<std::string>();
+                thickness_itr->dump();
             Float val = parse_value(thickness);
             std::string formula = parse_formula(thickness);
             manager->add_thickness_parameter(roi, formula, val);
