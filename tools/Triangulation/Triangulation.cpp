@@ -89,3 +89,56 @@ Triangulation::Ptr Triangulation::create(const std::string& engine_name) {
         << " is not supported";
     throw NotImplementedError(err_msg.str());
 }
+
+bool Triangulation::supports(const std::string& engine_name) {
+#ifdef WITH_IGL_AND_CGAL
+    if (engine_name == "igl_lexicographic") return true;
+    if (engine_name == "igl_delaunay") return true;
+#endif
+#ifdef WITH_TRIANGLE
+    if (engine_name == "triangle_conforming_delaunay") return true;
+    if (engine_name == "triangle_constrained_delaunay") return true;
+    if (engine_name == "triangle_refiner") return true;
+#endif
+#ifdef WITH_CGAL
+    if (engine_name == "cgal_constrained_delaunay") return true;
+    if (engine_name == "cgal_conforming_delaunay") return true;
+#endif
+#ifdef WITH_GEOGRAM
+    if (engine_name == "geogram_delaunay") return true;
+#endif
+#ifdef WITH_JIGSAW
+    if (engine_name == "jigsaw_frontal_delaunay") return true;
+#endif
+#ifdef WITH_MMG
+    if (engine_name == "mmg_delaunay") return true;
+#endif
+    return false;
+}
+
+std::vector<std::string> Triangulation::get_available_engines() {
+    std::vector<std::string> engine_names;
+#ifdef WITH_IGL_AND_CGAL
+    engine_names.push_back("igl_lexicographic");
+    engine_names.push_back("igl_delaunay");
+#endif
+#ifdef WITH_TRIANGLE
+    engine_names.push_back("triangle_conforming_delaunay");
+    engine_names.push_back("triangle_constrained_delaunay");
+    engine_names.push_back("triangle_refiner");
+#endif
+#ifdef WITH_CGAL
+    engine_names.push_back("cgal_constrained_delaunay");
+    engine_names.push_back("cgal_conforming_delaunay");
+#endif
+#ifdef WITH_GEOGRAM
+    engine_names.push_back("geogram_delaunay");
+#endif
+#ifdef WITH_JIGSAW
+    engine_names.push_back("jigsaw_frontal_delaunay");
+#endif
+#ifdef WITH_MMG
+    engine_names.push_back("mmg_delaunay");
+#endif
+    return engine_names;
+}

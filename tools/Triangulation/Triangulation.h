@@ -2,6 +2,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
 
@@ -10,6 +11,8 @@ namespace PyMesh {
         public:
             typedef std::shared_ptr<Triangulation> Ptr;
             static Ptr create(const std::string& engine_name);
+            static bool supports(const std::string& engine_name);
+            static std::vector<std::string> get_available_engines();
 
         public:
             Triangulation() = default;
