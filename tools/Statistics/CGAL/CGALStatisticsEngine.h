@@ -3,30 +3,33 @@
 #ifdef WITH_CGAL
 
 #include <Statistics/StatisticsEngine.h>
+#include <Statistics/MeshStatistics.h>
 
 #include <CGAL/Exact_predicates_exact_constructions_kernel.h>
+#include <CGAL/array.h>
 #include <CGAL/Polyhedron_3.h>
-#include <CGAL/Nef_polyhedron_3.h>
+#include <CGAL/Surface_mesh.h>
+#include <CGAL/Simple_cartesian.h>
+#include <CGAL/Nef_polyhedron_2.h>
+
+typedef Kernel::Point_3                                 Point;
+typedef CGAL::Surface_mesh<Point>                       Mesh;
 
 namespace PyMesh {
 
-class CGALStatisticsEngine : public StatisticsEngine {
-    public:
-        virtual ~CGALStatisticsEngine() = default;
+    class CGALStatisticsEngine : public StatisticsEngine {
+        public:
+            virtual ~CGALStatisticsEngine() = default;
 
-    public:
-        virtual void compute_statistics() override;
+        public:
+            virtual MeshStatistics compute_statistics() override;
 
-    protected:
-        virtual void convert_mesh_to_native_format() override;
+        protected:
+            virtual void convert_mesh_to_native_format() override;
 
-    private:
-        using Kernel = CGAL::Exact_predicates_exact_constructions_kernel;
-        using Nef_polyhedron = CGAL::Nef_polyhedron_3<Kernel>;
-
-        Mesh m_mesh
-        Nef_polyhedron m_nef_mesh;
-};
+        private:
+            Mesh m_mesh
+    };
 
 }
 

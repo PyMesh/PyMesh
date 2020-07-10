@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include "MeshStatistics.h"
+
 
 namespace PyMesh {
 
@@ -29,7 +31,7 @@ class StatisticsEngine {
         const MatrixIr get_faces() const { return m_faces; }
 
     public:
-        virtual void compute_statistics() {
+        virtual MeshStatistics compute_statistics() {
             throw NotImplementedError("Statistics computations are not implemented");
         }
 
