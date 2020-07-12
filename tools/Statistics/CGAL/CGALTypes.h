@@ -17,11 +17,6 @@ typedef CGAL::Polyhedron_3<Kernel>                      Polyhedron;
 typedef Kernel::Point_3                                 Point;
 typedef CGAL::Surface_mesh<Point>                       Mesh;
 
-typedef std::array<double, 3>                           Point_type;
-typedef std::array<int, 3>                              Polygon_type;
-typedef CGAL::Simple_cartesian<double>                  Kernel;
-typedef CGAL::Polyhedron_3<Kernel>                      Polyhedron;
-
 typedef boost::graph_traits<Mesh>::face_descriptor      face_descriptor;
 typedef boost::graph_traits<Mesh>::vertex_descriptor    vertex_descriptor;
 typedef boost::graph_traits<Mesh>::halfedge_descriptor  halfedge_descriptor;
