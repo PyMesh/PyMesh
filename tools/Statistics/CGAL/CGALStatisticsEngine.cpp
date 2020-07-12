@@ -4,21 +4,15 @@
 
 #include <Core/EigenTypedef.h>
 #include <Core/Exception.h>
+#include <CGAL/Polygon_mesh_processing/measure.h>
+#include <CGAL/Polygon_mesh_processing/self_intersections.h>
+
 #include "CGALUtils.h"
+#include "CGALTypes.h"
 #include "statistics_helpers.h"
 
+
 using namespace PyMesh;
-
-typedef std::array<double, 3>                           Point_type;
-typedef std::array<int, 3>                              Polygon_type;
-typedef CGAL::Simple_cartesian<double>                  Kernel;
-typedef CGAL::Polyhedron_3<Kernel>                      Polyhedron;
-
-typedef boost::graph_traits<Mesh>::face_descriptor      face_descriptor;
-typedef boost::graph_traits<Mesh>::vertex_descriptor    vertex_descriptor;
-typedef boost::graph_traits<Mesh>::halfedge_descriptor  halfedge_descriptor;
-typedef boost::graph_traits<Mesh>::edge_descriptor      edge_descriptor;
-
 
 void CGALStatisticsEngine::convert_mesh_to_native_format() {
     Polyhedron polyhedron = CGALUtils::mesh_to_polyhedron<Kernel>(m_vertices, m_faces);
@@ -38,20 +32,15 @@ MeshStatistics CGALStatisticsEngine::compute_statistics() {
 
     angles(&m_mesh, ms.minAngle, ms.maxAngle, ms.meanAngle);
 
-    ms.isTriangularMesh = CGAL::is_triangle_mesh(m_mesh);
-
-    if(ms.isTriangularMesh) {
+    if(ms.isTriangularMesh = CGAL::is_triangle_mesh(m_mesh)) {
         faces_area(&m_mesh, ms.minArea, ms.maxArea, ms.meanArea, ms.medArea);
         faces_aspect_ratio(&m_mesh, ms.minAltitude, ms.minAspectRatio, ms.maxAspectRatio, ms.meanAspectRatio);
-
 
         ms.numDegeneratedFaces = nb_degenerate_faces(&m_mesh);
         ms.area = CGAL::Polygon_mesh_processing::area(m_mesh);
         ms.selfIntersect = CGAL::Polygon_mesh_processing::does_self_intersect(m_mesh);
 
-        ms.isClosed = CGAL::is_closed(m_mesh);
-
-        if(ms.isClosed) {
+        if(ms.isClosed = CGAL::is_closed(m_mesh)) {
             ms.volume = CGAL::Polygon_mesh_processing::volume(m_mesh);
             std::ptrdiff_t s(num_vertices(m_mesh)),
                     a(num_halfedges(m_mesh) / 2),
@@ -81,7 +70,6 @@ MeshStatistics CGALStatisticsEngine::compute_statistics() {
         if(is_border(hd, m_mesh))
             ++ms.numBorders;
     }
-
     return ms;
 }
 

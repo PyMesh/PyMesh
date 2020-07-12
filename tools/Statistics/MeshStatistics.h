@@ -6,17 +6,30 @@
  */
 class MeshStatistics {
 
+public:
     int nbVertices;
     int nbEdges;
     int nbFacets;
 
-    double minEdgeLength, maxEdgeLength, meanEdgeLength, medianEdgeLength;
+    double minEdgeLength;
+    double maxEdgeLength;
+    double meanEdgeLength;
+    double medianEdgeLength;
     unsigned int nbNullLengthEdge;
 
-    double minAngle, maxAngle, meanAngle;
+    double minAngle;
+    double maxAngle;
+    double meanAngle;
 
-    double minArea, maxArea, medArea, meanArea;
-    double minAltitude, minAspectRatio, maxAspectRatio, meanAspectRatio;
+    double minArea;
+    double maxArea;
+    double medArea;
+    double meanArea;
+
+    double minAltitude;
+    double minAspectRatio;
+    double maxAspectRatio;
+    double meanAspectRatio;
 
     int numDegeneratedFaces;
     double area;
@@ -28,10 +41,8 @@ class MeshStatistics {
     bool isClosed;
     bool hasNonManifoldVertices;
 
-    int numComponents, numBorders;
-
+    int numComponents;
+    int numBorders;
 };
-
-MeshStatistics computeMeshStatistics(Polyhedron &polyhedron);
 
 #endif //PYMESH_MESHSTATISTICS_H

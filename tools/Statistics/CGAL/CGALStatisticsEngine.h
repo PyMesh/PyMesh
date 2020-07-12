@@ -4,16 +4,8 @@
 
 #include <Statistics/StatisticsEngine.h>
 #include <Statistics/MeshStatistics.h>
+#include "CGALTypes.h"
 
-#include <CGAL/Exact_predicates_exact_constructions_kernel.h>
-#include <CGAL/array.h>
-#include <CGAL/Polyhedron_3.h>
-#include <CGAL/Surface_mesh.h>
-#include <CGAL/Simple_cartesian.h>
-#include <CGAL/Nef_polyhedron_2.h>
-
-typedef Kernel::Point_3                                 Point;
-typedef CGAL::Surface_mesh<Point>                       Mesh;
 
 namespace PyMesh {
 
@@ -28,7 +20,7 @@ namespace PyMesh {
             virtual void convert_mesh_to_native_format() override;
 
         private:
-            Mesh m_mesh
+            Mesh m_mesh;
     };
 
 }

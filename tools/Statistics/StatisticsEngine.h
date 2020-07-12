@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 
+#include <Core/EigenTypedef.h>
+#include <Core/Exception.h>
 #include "MeshStatistics.h"
 
 
@@ -35,10 +37,8 @@ class StatisticsEngine {
             throw NotImplementedError("Statistics computations are not implemented");
         }
 
-        virtual void serialize_xml(const std::string& filename) const;
-
     protected:
-        virtual void convert_mesh_to_native_format(MeshSelection s) {}
+        virtual void convert_mesh_to_native_format() {}
 
     protected:
         MatrixFr m_vertices;

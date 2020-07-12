@@ -40,8 +40,3 @@ std::vector<std::string> get_available_engines() {
     return engine_names;
 }
 
-
-void StatisticsEngine::serialize_xml(const std::string& filename) const {
-    throw NotImplementedError("Serialization is not supported");
-}
-
