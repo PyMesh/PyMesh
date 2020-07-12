@@ -15,8 +15,7 @@
 using namespace PyMesh;
 
 void CGALStatisticsEngine::convert_mesh_to_native_format() {
-    Polyhedron polyhedron = CGALUtils::mesh_to_polyhedron<Kernel>(m_vertices, m_faces);
-    CGAL::copy_face_graph(polyhedron, m_mesh);
+    m_mesh = CGALUtils::mesh_to_surface<Point>(m_vertices, m_faces);
 }
 
 MeshStatistics CGALStatisticsEngine::compute_statistics() {

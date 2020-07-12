@@ -101,6 +101,32 @@ namespace CGALUtils {
             f_count++;
         }
     }
+
+    template<typename Point>
+    CGAL::Surface_mesh<Point> mesh_to_surface(
+            const MatrixFr& vertices, const MatrixIr& faces) {
+        typedef CGAL::Surface_mesh<Point> Surface;
+        typedef typename CGAL::Surface_mesh<Point>::Vertex_index VI;
+
+        const size_t num_vertices = vertices.rows();
+        const size_t num_faces = faces.rows();
+        assert(m_vertices.cols() == 3);
+        assert(m_faces.cols() == 3);
+
+        Surface surface;
+        for (size_t i = 0; i < num_vertices; i++) {
+            const VectorF& v = vertices.row(i);
+            surface.add_vertex(Point(v[0], v[1], v[2]));
+        }
+
+        for (size_t i = 0; i < num_faces; i++) {
+            const VectorI& f = faces.row(i);
+            surface.add_face(VI(f[0]), VI(f[1]), VI(f[2]));
+        }
+
+        return surface;
+    }
+
 }
 }
 
