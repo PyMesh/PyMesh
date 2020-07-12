@@ -30,6 +30,7 @@ void init_FEM(py::module&);
 void init_TetgenWrapper(py::module&);
 void init_IGL(py::module&);
 void init_SparseSolver(py::module&);
+void init_Statistics(py::module&);
 void init_HashGrid(py::module&);
 void init_BVH(py::module&);
 void init_Geogram(py::module&);
@@ -63,6 +64,7 @@ PYBIND11_MODULE(PyMesh, m) {
     init_TetgenWrapper(m);
     init_IGL(m);
     init_SparseSolver(m);
+    init_Statistics(m);
     init_HashGrid(m);
     init_BVH(m);
     init_Geogram(m);

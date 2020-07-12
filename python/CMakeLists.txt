@@ -18,6 +18,7 @@ PYBIND11_ADD_MODULE(PyMesh module.cpp
     PyPredicates.cpp
     PySelfIntersectionResolver.cpp
     PySparseSolver.cpp
+    PyStatistics.cpp
     PyTetgen.cpp
     PyTetrahedralization.cpp
     PyTriangle.cpp
@@ -42,7 +43,8 @@ target_link_libraries(PyMesh PRIVATE
     PyMesh::Tetrahedralization
     PyMesh::Triangulation
     PyMesh::WindingNumber
-    PyMesh::Wires)
+    PyMesh::Wires
+    PyMesh::Statistics)
 
 if (TARGET PyMesh::CGAL)
     target_link_libraries(PyMesh PRIVATE PyMesh::CGAL)
