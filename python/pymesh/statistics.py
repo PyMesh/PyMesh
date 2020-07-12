@@ -12,14 +12,14 @@ def statistics(mesh, engine="auto", with_timing=False):
 
         engine (``string``): (optional) Statistics engine name.  Valid engines include:
 
-            * ``auto``: Using the default boolean engine
+            * ``auto``: Using the default engine for statistics.
               (``cgal`` by default).  This is the default.
-            * ``cgal``: `CGAL 3D boolean operations on Nef Polyhedra
-              <http://doc.cgal.org/latest/Nef_3/index.html>`_
+            * ``cgal``: `Statistics computations on Surface_mesh
+              <https://doc.cgal.org/latest/Surface_mesh/classCGAL_1_1Surface__mesh.html>`_
 
         with_timing (``boolean``): (optional) Whether to time the code.
 
-    Returns: Mesh Statistics PyMesh.Statistics
+    Returns: Mesh Statistics PyMesh.MeshStatistics
     """
     assert (mesh.vertex_per_face == 3)
 
