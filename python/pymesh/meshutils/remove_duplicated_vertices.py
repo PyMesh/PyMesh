@@ -85,6 +85,6 @@ def remove_duplicated_vertices(mesh, tol=1e-12, importance=None):
     else:
         vertices, voxels, info = remove_duplicated_vertices_raw(
                 mesh.vertices, mesh.voxels, tol, importance)
-        output_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels)
+        out_mesh = form_mesh(vertices, np.zeros((0, 3)), voxels)
 
     return out_mesh, info
