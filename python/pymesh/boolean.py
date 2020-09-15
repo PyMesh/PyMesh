@@ -36,9 +36,9 @@ def boolean(mesh_1, mesh_2, operation, engine="auto", with_timing=False,
             * ``cork``: `Cork 3D boolean libary
               <https://github.com/gilbo/cork>`_
             * ``cgal``: `CGAL 3D boolean operations on Nef Polyhedra
-              <http://doc.cgal.org/latest/Nef_3/index.html>`_
-            * ``corefinement``: The undocumented CGAL boolean function that does
-              not use Nef Polyhedra.
+              <https://doc.cgal.org/latest/Nef_3/index.html>`_
+            * ``corefinement``: The corefinement boolean engine from the Polygon Mesh Processing package of CGAL
+              <https://doc.cgal.org/latest/Polygon_mesh_processing/#title13>`_
             * ``igl``: `libigl's 3D boolean support
               <https://github.com/libigl/libigl>`_
             * ``clipper``: `Clipper 2D boolean library
