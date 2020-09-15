@@ -40,10 +40,10 @@ and ``"symmetric_difference"``.  PyMesh supports the following boolean engines:
 
 * ``"igl"``: Boolean module from libigl, which is also the default engine for 3D
   inputs.
-* ``"cgal"``: Naf polyhedron implementation from CGAL.
+* ``"cgal"``: Nef polyhedron implementation from CGAL.
 * ``"cork"``: Cork boolean library.
 * ``"carve"``: Carve boolean library.
-* ``"corefinement"``: The unpublished boolean engine also from CGAL.
+* ``"corefinement"``: The corefinement boolean engine from the Polygon Mesh Processing package of CGAL.
 * ``"clipper"``: 2D boolean engine for polygons, the default engine for 2D
   inputs.
 
