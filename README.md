@@ -128,6 +128,13 @@ The first step is to compile the optional third party dependencies:
 Third party dependencies will be installed in
 `$PYMESH_PATH/python/pymesh/third_party` directory.
 
+To successfully complete the build above on Ubuntu 20.04, you will need to install these dependencies first:
+
+    sudo apt install build-essential cmake
+    sudo apt install libgmp-dev
+    sudo apt install libmpfr-dev
+    sudo apt install libboost-dev
+
 Now we can build the main project.  It is recommended to build out of source:
 
     cd $PYMESH_PATH
