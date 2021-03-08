@@ -60,6 +60,23 @@ class Mesh(object):
         """
         self.__mesh = raw_mesh
 
+    def __setitem__(self, key, value):
+        """ Set an attribute of the mesh. Creates it if not present.
+        """
+        if not self.has_attribute(key):
+            self.add_attribute(key)
+        self.set_attribute(key, value)
+
+    def __getitem__(self, key):
+        """ Same as get_attribute but using dictionary-style interface
+        """
+        return self.get_attribute(key)
+
+    def __delitem__(self, key):
+        """ Same as remove_attribute but using dictionary-style interface
+        """
+        return self.remove_attribute(key)
+
     def add_attribute(self, name):
         """ Add an attribute to mesh.
         """
