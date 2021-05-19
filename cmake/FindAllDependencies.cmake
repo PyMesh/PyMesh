@@ -154,6 +154,7 @@ endif ()
 
 # Nlohmann/json
 if (NOT TARGET nlohmann_json::nlohmann_json)
+    include(GNUInstallDirs)
     find_package(nlohmann_json QUIET REQUIRED
-        HINTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/lib/cmake/nlohmann_json)
+        HINTS ${PROJECT_SOURCE_DIR}/python/pymesh/third_party/${CMAKE_INSTALL_LIBDIR}/cmake/nlohmann_json)
 endif()
