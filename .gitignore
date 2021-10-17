@@ -15,6 +15,7 @@ lib/
 bin/
 swig/
 build/
+Build/
 build_*/
 dist/
 python/pymesh/lib
