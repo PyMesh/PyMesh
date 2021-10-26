@@ -9,6 +9,7 @@
 *.dia~
 *.dia.autosave
 *.egg-info
+.vscode
 .DS_Store
 
 lib/
