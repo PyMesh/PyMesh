@@ -9,12 +9,14 @@
 *.dia~
 *.dia.autosave
 *.egg-info
+.vscode
 .DS_Store
 
 lib/
 bin/
 swig/
 build/
+Build/
 build_*/
 dist/
 python/pymesh/lib
