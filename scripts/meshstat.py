@@ -41,7 +41,7 @@ def print_basic_info(mesh, info):
     info["vertex_per_voxel"] = mesh.vertex_per_voxel;
 
 def print_bbox(mesh, info):
-    print_section_header("Boundding box");
+    print_section_header("Bounding box");
     if mesh.num_vertices == 0:
         print_red("Cannot compute bbox on empty mesh.");
         return;
