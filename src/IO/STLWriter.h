@@ -45,6 +45,13 @@ class STLWriter : public MeshWriter {
                 size_t dim,
                 size_t vertex_per_face,
                 size_t vertex_per_voxel);
+        
+        // Returns the normal for the face with vertices v0, v1, v2.
+        Vector3F face_normal(
+                const Vector3F& v0,
+                const Vector3F& v1,
+                const Vector3F& v2
+        );
 
     private:
         bool m_in_ascii;
