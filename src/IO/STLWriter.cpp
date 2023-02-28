@@ -91,7 +91,8 @@ void STLWriter::write_ascii(
         Vector3F v0 = get_vertex(f[0]);
         Vector3F v1 = get_vertex(f[1]);
         Vector3F v2 = get_vertex(f[2]);
-        fout << "facet normal 0 0 0" << std::endl;
+        Vector3F normal = face_normal(v0, v1, v2);
+        fout << "facet normal " << normal[0] << " " << normal[1] << " " << normal[2] << std::endl;
         fout << "outer loop" << std::endl;
         fout << "vertex " << v0[0] << " " << v0[1] << " " << v0[2] << std::endl;
         fout << "vertex " << v1[0] << " " << v1[1] << " " << v1[2] << std::endl;
@@ -124,8 +125,8 @@ void STLWriter::write_binary(
         return v;
     };
 
-    auto write_vertex = [&](size_t vid) {
-        Eigen::Vector3f v = get_vertex(vid).cast<float>();
+    auto write_vector3 = [&](Vector3F& vert) {
+        Eigen::Vector3f v = vert.cast<float>();
         fout.write((char*)&v[0], sizeof(float));
         fout.write((char*)&v[1], sizeof(float));
         fout.write((char*)&v[2], sizeof(float));
@@ -136,17 +137,26 @@ void STLWriter::write_binary(
     uint32_t num_faces = faces.rows() / vertex_per_face;
     fout.write((char*)&num_faces, sizeof(uint32_t));
     for (size_t i=0; i<num_faces; i++) {
-        // Normal vector.
-        fout.write((char*)&zero_f, sizeof(float));
-        fout.write((char*)&zero_f, sizeof(float));
-        fout.write((char*)&zero_f, sizeof(float));
+        Vector3I f = faces.segment<3>(i * 3);
+        Vector3F v0 = get_vertex(f[0]);
+        Vector3F v1 = get_vertex(f[1]);
+        Vector3F v2 = get_vertex(f[2]);
+        Vector3F normal = face_normal(v0, v1, v2);
 
-        Vector3I f = faces.segment<3>(i*3);
-        write_vertex(f[0]);
-        write_vertex(f[1]);
-        write_vertex(f[2]);
+        write_vector3(normal);
+        write_vector3(v0);
+        write_vector3(v1);
+        write_vector3(v2);
 
         fout.write((char*)&zero_16, sizeof(uint16_t));
     }
 }
 
+Vector3F STLWriter::face_normal(
+        const Vector3F& v0,
+        const Vector3F& v1,
+        const Vector3F& v2) {
+    Vector3F u = v1 - v0;
+    Vector3F v = v2 - v1;
+    return u.cross(v).normalized();
+}
