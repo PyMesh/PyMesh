@@ -23,6 +23,7 @@ def fix_mesh(mesh, detail="normal"):
     print("Target resolution: {} mm".format(target_len))
 
     count = 0
+    mesh, __ = pymesh.remove_duplicated_vertices(mesh)
     mesh, __ = pymesh.remove_degenerated_triangles(mesh, 100)
     mesh, __ = pymesh.split_long_edges(mesh, target_len)
     num_vertices = mesh.num_vertices
