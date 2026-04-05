@@ -32,15 +32,15 @@
 	shallow = false
 [submodule "third_party/cgal"]
 	path = third_party/cgal
-	url = https://github.com/PyMesh/cgal.git
+	url = https://github.com/Erhannis/cgal.git
 	shallow = false
 [submodule "third_party/pybind11"]
 	path = third_party/pybind11
-	url = https://github.com/PyMesh/pybind11.git
+	url = https://github.com/Erhannis/pybind11.git
 	shallow = true
 [submodule "third_party/mmg"]
 	path = third_party/mmg
-	url = https://github.com/PyMesh/mmg.git
+	url = https://github.com/Erhannis/mmg.git
 	shallow = true
 [submodule "third_party/geogram"]
 	path = third_party/geogram
@@ -48,7 +48,7 @@
 	shallow = true
 [submodule "third_party/draco"]
 	path = third_party/draco
-	url = https://github.com/PyMesh/draco.git
+	url = https://github.com/Erhannis/draco.git
 	shallow = true
 [submodule "third_party/TetWild"]
 	path = third_party/TetWild
@@ -60,7 +60,7 @@
 	shallow = true
 [submodule "third_party/tbb"]
 	path = third_party/tbb
-	url = https://github.com/PyMesh/tbb.git
+	url = https://github.com/Erhannis/tbb.git
 	shallow = true
 [submodule "libigl"]
 	path = third_party/libigl
